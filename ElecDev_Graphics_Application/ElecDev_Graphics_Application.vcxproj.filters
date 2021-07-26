@@ -7,7 +7,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
+    <ClCompile Include="Source\Engines\Engine2D\DesignEngine\designEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
