@@ -14,3 +14,6 @@ Window: GLFWWindow, [https://www.glfw.org/].
 Mal baie.
 
 # Roadmap:
+
+Setup ImGUI and OpenGL.  
+Create first basic app with simple GUI interface and simple OpenGL drawing.
