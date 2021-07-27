@@ -6,15 +6,18 @@
 #include <stdio.h>
 
 // ImGUI (GUI software). 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "Core/imgui.h"
+#include "Implementations/imgui_impl_glfw.h"
+#include "Implementations/imgui_impl_opengl3.h"
 
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
 
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
+
+// GUI includes.
+#include "GUI/toolbar.h"
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                             */
