@@ -4,6 +4,8 @@
 
 // General.
 #include <stdio.h>
+#include <vector>
+#include <iostream>
 
 // ImGUI (GUI software). 
 #include "Core/imgui.h"
@@ -17,7 +19,16 @@
 #include <GLFW/glfw3.h>
 
 // GUI includes.
-#include "GUI/toolbar.h"
+
+// OpenGL includes.
+#include "Graphics/OpenGL/Shaders/shaderHandler.h"
+#include "Graphics/OpenGL/Shaders/shadersSource.h"
+
+/*=======================================================================================================================================*/
+/* Defines                                                                                                                               */
+/*=======================================================================================================================================*/
+
+#define PI 3.14159265358979323846
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                             */
@@ -27,6 +38,37 @@
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
+// Create an OpenGL triangle.
+void create_triangle(unsigned int& vbo, unsigned int& vao, unsigned int& ebo)
+{
+
+    // create the triangle
+    float triangle_vertices[] = {
+        0.0f, 0.25f, 0.0f,	// position vertex 1
+        1.0f, 0.0f, 0.0f,	 // color vertex 1
+        0.25f, -0.25f, 0.0f,  // position vertex 1
+        0.0f, 1.0f, 0.0f,	 // color vertex 1
+        -0.25f, -0.25f, 0.0f, // position vertex 1
+        0.0f, 0.0f, 1.0f,	 // color vertex 1
+    };
+    unsigned int triangle_indices[] = {
+        0, 1, 2 };
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangle_indices), triangle_indices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 // This removes the console that keeps opening with the app.
@@ -109,6 +151,22 @@ int main(int, char**)
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    // Inits.
+    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+    int screen_width, screen_height;
+    glfwGetFramebufferSize(window, &screen_width, &screen_height);
+    glViewport(0, 0, screen_width, screen_height);
+
+    // Create geometries.
+    unsigned int vbo, vao, ebo;
+    create_triangle(vbo, vao, ebo);
+
+    // Shaders.
+    Shader triangle_shader;
+    triangle_shader.init(simpleVertexShader, simpleFragmentShader);
+
+    /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI setup.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -117,7 +175,7 @@ int main(int, char**)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls.
 
-    // Setup Dear ImGui style.
+    // Setup ImGui style.
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();  // Set mode to light.
 
@@ -151,69 +209,40 @@ int main(int, char**)
 /* Loop                                                                                                                                  */
 /*=======================================================================================================================================*/
 
-    // Main loop
+    // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
     {
-        // Poll and handle events (inputs, window resize, etc.).
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         glfwPollEvents();
+        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        // Start the Dear ImGui frame
+        // feed inputs to dear imgui, start new frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+        // rendering our geometries
+        triangle_shader.use();
+        glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
+        // render your GUI
+        ImGui::Begin("Demo window");
+        ImGui::Button("Hello!");
+        ImGui::End();
 
-            ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-            ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-            ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-            if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
-            ImGui::End();
-        }
-
-        // Rendering
+        // Render dear imgui into screen
         ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
         glfwSwapBuffers(window);
     }
+
+/*=======================================================================================================================================*/
 
     // Cleanup.
     ImGui_ImplOpenGL3_Shutdown();

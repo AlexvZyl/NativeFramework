@@ -96,12 +96,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\lib-vc2019</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -113,14 +113,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\lib-vc2019</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -130,12 +130,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\lib-vc2019</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -147,50 +147,54 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\lib-vc2019</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Engines\Engine2D\DesignEngine\designEngine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
-    <ClCompile Include="Source\External\ImGUI\imgui.cpp" />
-    <ClCompile Include="Source\External\ImGUI\imgui_demo.cpp" />
-    <ClCompile Include="Source\External\ImGUI\imgui_draw.cpp" />
-    <ClCompile Include="Source\External\ImGUI\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Source\External\ImGUI\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Source\External\ImGUI\imgui_tables.cpp" />
-    <ClCompile Include="Source\External\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Shaders\shaderHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Shaders\shadersSource.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\External\GLAD\include\glad\glad.h" />
-    <ClInclude Include="Source\External\GLAD\include\KHR\khrplatform.h" />
-    <ClInclude Include="Source\External\GLFW\include\GLFW\glfw3.h" />
-    <ClInclude Include="Source\External\GLFW\include\GLFW\glfw3native.h" />
-    <ClInclude Include="Source\External\ImGUI\imconfig.h" />
-    <ClInclude Include="Source\External\ImGUI\imgui.h" />
-    <ClInclude Include="Source\External\ImGUI\imgui_impl_glfw.h" />
-    <ClInclude Include="Source\External\ImGUI\imgui_impl_opengl3.h" />
-    <ClInclude Include="Source\External\ImGUI\imgui_internal.h" />
-    <ClInclude Include="Source\External\ImGUI\imstb_rectpack.h" />
-    <ClInclude Include="Source\External\ImGUI\imstb_textedit.h" />
-    <ClInclude Include="Source\External\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
+    <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
+    <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
+    <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3native.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imconfig.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imgui.h" />
+    <ClInclude Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imgui_internal.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imstb_rectpack.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Shaders\shaderHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Shaders\shadersSource.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Source\External\GLFW\lib-vc2019\glfw3.lib" />
-    <Library Include="Source\External\GLFW\lib-vc2019\glfw3dll.lib" />
-    <Library Include="Source\External\GLFW\lib-vc2019\glfw3_mt.lib" />
+    <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
+    <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
+    <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\External\GLFW\lib-vc2019\glfw3.dll" />
+    <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
