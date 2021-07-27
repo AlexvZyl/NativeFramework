@@ -37,10 +37,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Shaders\shaderHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Shaders\shadersSource.cpp">
+    <ClCompile Include="Source\GUI\toolbar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,8 +54,7 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_rectpack.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Shaders\shaderHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Shaders\shadersSource.h" />
+    <ClInclude Include="Source\GUI\toolbar.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
