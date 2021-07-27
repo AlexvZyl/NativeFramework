@@ -16,29 +16,51 @@
     <ClCompile Include="Source\openGL_GLFW_ImGUI_Example.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui.cpp">
+    <ClCompile Include="Source\External\GLAD\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_demo.cpp">
+    <ClCompile Include="Source\External\ImGUI\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_draw.cpp">
+    <ClCompile Include="Source\External\ImGUI\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_impl_glfw.cpp">
+    <ClCompile Include="Source\External\ImGUI\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_impl_opengl3.cpp">
+    <ClCompile Include="Source\External\ImGUI\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_tables.cpp">
+    <ClCompile Include="Source\External\ImGUI\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_widgets.cpp">
+    <ClCompile Include="Source\External\ImGUI\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\glad.c">
+    <ClCompile Include="Source\External\ImGUI\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\External\GLAD\include\glad\glad.h" />
+    <ClInclude Include="Source\External\GLAD\include\KHR\khrplatform.h" />
+    <ClInclude Include="Source\External\GLFW\include\GLFW\glfw3.h" />
+    <ClInclude Include="Source\External\GLFW\include\GLFW\glfw3native.h" />
+    <ClInclude Include="Source\External\ImGUI\imconfig.h" />
+    <ClInclude Include="Source\External\ImGUI\imgui.h" />
+    <ClInclude Include="Source\External\ImGUI\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\External\ImGUI\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\External\ImGUI\imgui_internal.h" />
+    <ClInclude Include="Source\External\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="Source\External\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="Source\External\ImGUI\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Source\External\GLFW\lib-vc2019\glfw3dll.lib" />
+    <Library Include="Source\External\GLFW\lib-vc2019\glfw3_mt.lib" />
+    <Library Include="Source\External\GLFW\lib-vc2019\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\External\GLFW\lib-vc2019\glfw3.dll" />
   </ItemGroup>
 </Project>
