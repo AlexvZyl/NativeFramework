@@ -1,19 +1,37 @@
 # Description:
 
-This is the graphics application that is to be used with the ElecDev software.
+This is the graphics application that is to be used with the ElecDev software.  It is built to be a standalone executable that can interface with Excel.
 
-# Technical detail:
+# Software And Dependencies:
 
-Language: C++, [https://en.wikipedia.org/wiki/C%2B%2B].  
-GUI Library: ImGUI, [https://github.com/ocornut/imgui].  
-Graphics backend: OpenGL, [https://www.opengl.org//].  
-Window: GLFWWindow, [https://www.glfw.org/].  
+* Language: C++, [https://en.wikipedia.org/wiki/C%2B%2B].  
+* GUI Library: ImGUI, [https://github.com/ocornut/imgui].  
+* Graphics Backend: OpenGL, [https://www.opengl.org//].  
+* Window: GLFWWindow, [https://www.glfw.org/].  
+* OpenGL Loader: [https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library#glad_.28Multi-Language_GL.2FGLES.2FEGL.2FGLX.2FWGL_Loader-Generator.29], [https://glad.dav1d.de/].
 
-# Estimated money to be made:
+# OpenGL Learning Resources:
 
-Mal baie.
+
+* LearnOpenGL: [https://learnopengl.com/Introduction].
+* The Cherno: [https://www.youtube.com/user/TheChernoProject].
+
+**IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!
 
 # Roadmap:
 
-Setup ImGUI and OpenGL.  
-Create first basic app with simple GUI interface and simple OpenGL drawing.
+* Setup ImGUI, GLAD, GLFW and OpenGL. ✓
+* Create first basic app with simple GUI interface and simple OpenGL drawing.
+* Port software from the PyQt interface.
+* Interface with Excel.
+* Improve engine with a better UI:
+  * Auto alignment.
+  * Move components.
+* Add symbol library.
+* Add template circuits.
+* Able to enter a circuit and define it from the inside.  Add as many layers as needed.
+* 3D Drawings.
+
+# Estimated Money To Be Made:
+
+Mal baie.
