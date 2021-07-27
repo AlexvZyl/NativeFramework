@@ -169,7 +169,6 @@
     <ClCompile Include="Source\External\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
-    <ClCompile Include="Source\openGL_GLFW_ImGUI_Example.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\GLAD\include\glad\glad.h" />

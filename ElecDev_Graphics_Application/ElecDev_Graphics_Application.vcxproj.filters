@@ -13,9 +13,6 @@
     <ClCompile Include="Source\mainApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\openGL_GLFW_ImGUI_Example.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\External\GLAD\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
