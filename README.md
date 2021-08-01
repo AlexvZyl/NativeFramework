@@ -37,6 +37,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Add template circuits.
 * Able to enter a circuit and define it from the inside.  Add as many layers as needed.
 * 3D Drawings.
+* VERY long term: port to Vulkan,[https://www.vulkan.org/].
 
 ---
 
