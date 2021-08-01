@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+This is where the drawing enigine is handled.  This is only used to draw elements to the screen.
+The interactive engine (the one where elements can be drawn is handled in designEngine).
+*/
+
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
