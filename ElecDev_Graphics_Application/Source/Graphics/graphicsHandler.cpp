@@ -16,81 +16,61 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Design engine.
 #include <designEngine.h>
 
+// Class.
 #include <graphicsHandler.h>
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Graphics Handler Class.
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------
+//  Functions.
+//--------------------------------------------------------------------------------------------------------------
 
-class GraphicsHandler
+// Constructor.
+GraphicsHandler::GraphicsHandler()
 {
-public:
+	activeEngine = "Animation";
+};
 
-	//--------------------------------------------------------------------------------------------------------------
-	//  Variables.
-	//--------------------------------------------------------------------------------------------------------------
-
-	// Variable that holds the active engine.
-	std::string activeEngine;
-
-	// Different drawing engines.
-	DrawingEngineGL drawingEngine;
-	DesignEngineGL designEngine;
-
-	//--------------------------------------------------------------------------------------------------------------
-	//  Functions.
-	//--------------------------------------------------------------------------------------------------------------
-
-	// Constructor.
-	GraphicsHandler()
+// Function that handles which engine should be active.
+void GraphicsHandler::renderGraphics()
+{
+	//  Run engine that has been set as active.
+	if (activeEngine == "DrawingEngine")
 	{
-		activeEngine = "Animation";
-	};
-
-	// Function that handles which engine should be active.
-	void renderGraphics()
-	{
-		//  Run engine that has been set as active.
-		if (activeEngine == "DrawingEngine")
-		{
-			drawingEngine.test();
-		}
-		else if (activeEngine == "DesignEngine")
-		{
-			// Run designEngine.
-		}
-		else if (activeEngine == "Animation")
-		{
-			// Run some sort of cool place holder animation.
-		}
-		else
-		{
-			std::cout << "ERROR: Please supply a valid engine name.\n";
-		};
-	};
-
-	// Function that closes the engine passed.
-	void closeEngine(std::string engine)
-	{	
-		// Close the active engine.
-		if (activeEngine == "DrawingEngine")
-		{
-			// Close.
-		}
-		else if (activeEngine == "DesignEngine")
-		{
-			// Close.
-		}
-		else if (activeEngine == "Animatin")
-		{
-			// Close animation.
-		}
-		else
-		{
-			std::cout << "ERROR: Please supply a valid engine name.\n";
-		};
-		
+		drawingEngine.test();
 	}
+	else if (activeEngine == "DesignEngine")
+	{
+		// Run designEngine.
+	}
+	else if (activeEngine == "Animation")
+	{
+		// Run some sort of cool place holder animation.
+	}
+	else
+	{
+		std::cout << "ERROR: Please supply a valid engine name.\n";
+	};
+};
+
+// Function that closes the engine passed.
+void GraphicsHandler::closeEngine(std::string engine)
+{
+	// Close the active engine.
+	if (activeEngine == "DrawingEngine")
+	{
+		// Close.
+	}
+	else if (activeEngine == "DesignEngine")
+	{
+		// Close.
+	}
+	else if (activeEngine == "Animatin")
+	{
+		// Close animation.
+	}
+	else
+	{
+		std::cout << "ERROR: Please supply a valid engine name.\n";
+	};
 
 };
 
