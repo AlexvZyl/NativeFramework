@@ -1,13 +1,10 @@
-/*
-This is where the drawing enigine is handled.  This is only used to draw elements to the screen.
-The interactive engine (the one where elements can be drawn is handled in designEngine).
-*/
+#pragma once
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
 
-class DesignEngineGL
+class DrawingEngineGL
 {
 public:
 
@@ -21,30 +18,19 @@ public:
 	//  API
 	//----------------------------------------------------------------------------------------------------------------------
 
-		// Adds a line to the VBO object.
-	void drawLine()
-	{
-		return;
-	}
+	// Adds a line to the VBO object.
+	void drawLine();
 
 	// Adds a circle to the VBO object.
-	void drawCircle()
-	{
-		return;
-	}
+	void drawCircle();
+
 
 	// Adds text to the VBO object.
-	void drawText()
-	{
-		return;
-	}
+	void drawText();
 
 	// Displays the new drawing to the screen.
 	// Required after each new element has been added.
-	void display()
-	{
-
-	}
+	void display();
 
 	//----------------------------------------------------------------------------------------------------------------------
 

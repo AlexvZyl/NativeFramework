@@ -168,6 +168,8 @@
     <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp" />
+    <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\GUI\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
@@ -184,6 +186,9 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_rectpack.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
+    <ClInclude Include="Source\Graphics\graphicsHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
   </ItemGroup>
   <ItemGroup>
