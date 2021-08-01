@@ -12,9 +12,11 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include <iostream>
 
 // Drawing engine.
-#include "OpenGL/Engine2D/DrawingEngine/drawingEngine.h"
+#include <drawingEngine.h>
 // Design engine.
-#include "OpenGL/Engine2D/DesignEngine/designEngine.h"
+#include <designEngine.h>
+
+#include <graphicsHandler.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Graphics Handler Class.
@@ -28,8 +30,10 @@ public:
 	//  Variables.
 	//--------------------------------------------------------------------------------------------------------------
 
+	// Variable that holds the active engine.
 	std::string activeEngine;
 
+	// Different drawing engines.
 	DrawingEngineGL drawingEngine;
 	DesignEngineGL designEngine;
 
@@ -37,11 +41,11 @@ public:
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
 
-	// Constructor (Inits the class).
+	// Constructor.
 	GraphicsHandler()
 	{
-
-	}
+		activeEngine = "Animation";
+	};
 
 	// Function that handles which engine should be active.
 	void renderGraphics()
@@ -49,7 +53,7 @@ public:
 		//  Run engine that has been set as active.
 		if (activeEngine == "DrawingEngine")
 		{
-			// Run drawingEngine.
+			drawingEngine.test();
 		}
 		else if (activeEngine == "DesignEngine")
 		{
@@ -76,6 +80,10 @@ public:
 		else if (activeEngine == "DesignEngine")
 		{
 			// Close.
+		}
+		else if (activeEngine == "Animatin")
+		{
+			// Close animation.
 		}
 		else
 		{
