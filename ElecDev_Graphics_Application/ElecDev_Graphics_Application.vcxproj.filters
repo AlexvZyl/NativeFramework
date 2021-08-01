@@ -37,7 +37,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GUI\toolbar.cpp">
+    <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp">
@@ -46,7 +46,10 @@
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GUI\ribbons.cpp">
+    <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\guiHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -63,13 +66,14 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_rectpack.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
-    <ClInclude Include="Source\GUI\toolbar.h" />
+    <ClInclude Include="Source\GUI\Toolbar\toolbar.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
     <ClInclude Include="Source\Graphics\graphicsHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
     <ClInclude Include="Source\GUI\notify.h" />
-    <ClInclude Include="Source\GUI\ribbons.h" />
-    <ClInclude Include="Source\GUI\stb_image.h" />
+    <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
+    <ClInclude Include="Source\GUI\Ribbons\stb_image.h" />
+    <ClInclude Include="Source\GUI\guiHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
