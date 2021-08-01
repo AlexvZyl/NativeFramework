@@ -12,7 +12,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include <iostream>
 
 // Class include.
-#include <graphicsHandler.h>
+#include "graphicsHandler.h"
 
 //--------------------------------------------------------------------------------------------------------------
 //  Functions.

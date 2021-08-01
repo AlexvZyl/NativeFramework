@@ -14,22 +14,22 @@ The interactive engine (the one where elements can be drawn is handled in design
 //  API
 //----------------------------------------------------------------------------------------------------------------------
 
-	// Adds a line to the VBO object.
+// Adds a line to the VBO object.
 void DesignEngineGL::drawLine()
 {
-	return;
+	
 }
 
 // Adds a circle to the VBO object.
 void DesignEngineGL::drawCircle()
 {
-	return;
+	
 }
 
 // Adds text to the VBO object.
 void DesignEngineGL::drawText()
 {
-	return;
+	
 }
 
 // Displays the new drawing to the screen.
