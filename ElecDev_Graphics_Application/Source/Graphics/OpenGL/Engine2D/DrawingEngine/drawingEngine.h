@@ -35,7 +35,6 @@ public:
 	// Adds a circle to the VBO object.
 	void drawCircle();
 
-
 	// Adds text to the VBO object.
 	void drawText();
 

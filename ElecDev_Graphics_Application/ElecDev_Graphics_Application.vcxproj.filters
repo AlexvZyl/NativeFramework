@@ -72,5 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
+    <None Include="Source\Graphics\OpenGL\Shaders\basicShader.shader" />
   </ItemGroup>
 </Project>

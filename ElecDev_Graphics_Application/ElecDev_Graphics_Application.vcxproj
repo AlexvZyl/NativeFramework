@@ -198,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
+    <None Include="Source\Graphics\OpenGL\Shaders\basicShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
