@@ -46,6 +46,9 @@
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GUI\ribbons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
@@ -64,6 +67,9 @@
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
     <ClInclude Include="Source\Graphics\graphicsHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
+    <ClInclude Include="Source\GUI\notify.h" />
+    <ClInclude Include="Source\GUI\ribbons.h" />
+    <ClInclude Include="Source\GUI\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />

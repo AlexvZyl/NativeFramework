@@ -170,6 +170,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp" />
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
+    <ClCompile Include="Source\GUI\ribbons.cpp" />
     <ClCompile Include="Source\GUI\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
@@ -189,6 +190,9 @@
     <ClInclude Include="Source\Graphics\graphicsHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
+    <ClInclude Include="Source\GUI\notify.h" />
+    <ClInclude Include="Source\GUI\ribbons.h" />
+    <ClInclude Include="Source\GUI\stb_image.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
   </ItemGroup>
   <ItemGroup>
