@@ -20,7 +20,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 
 // OpenGL
 #include <glad/glad.h>
-#include "OpenGL/ErrorHandler/errorHandler.h"
+#include <ErrorHandler/errorHandler.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Inits.
@@ -34,8 +34,11 @@ GraphicsHandler::GraphicsHandler()
 
 // Function that does the necessary inits for OpenGL and the engines.
 void GraphicsHandler::initGraphics() 
-{
-	
+{	
+	// Compile shader.
+	std::string shaderPath = "\\Shaders\\conanShader.shader";
+	ShaderProgramSource conanShader = this->parseShader(shaderPath);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
