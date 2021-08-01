@@ -4,51 +4,52 @@ The interactive engine (the one where elements can be drawn is handled in design
 */
 
 //----------------------------------------------------------------------------------------------------------------------
-//  The drawingEngine class.
+//  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-class DrawingEngineGL
-{	
-public:
+// Class include.
+#include "drawingEngine.h"
 
 //---------------------------------------------------------------------------------------------------------------------
-//  Variables.
+//  Testing.
 //----------------------------------------------------------------------------------------------------------------------
 
-	int x;
+void DrawingEngineGL::test()
+{
+		
+}
 
 //---------------------------------------------------------------------------------------------------------------------
 //  API
 //----------------------------------------------------------------------------------------------------------------------
 
-	// Adds a line to the VBO object.
-	void drawLine() 
-	{
-		return;
-	}
+// Adds a line to the VBO object.
+void DrawingEngineGL::drawLine()
+{
+	return;
+}
 
-	// Adds a circle to the VBO object.
-	void drawCircle()
-	{
-		return;
-	}
+// Adds a circle to the VBO object.
+void DrawingEngineGL::drawCircle()
+{
+	return;
+}
 
-	// Adds text to the VBO object.
-	void drawText()
-	{
-		return;
-	}
+// Adds text to the VBO object.
+void DrawingEngineGL::drawText()
+{
+	return;
+}
 
-	// Displays the new drawing to the screen.
-	// Required after each new element has been added.
-	void display() 
-	{
+// Displays the new drawing to the screen.
+// Required after each new element has been added.
+void DrawingEngineGL::display()
+{
 		
-	}
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 
-};
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.
