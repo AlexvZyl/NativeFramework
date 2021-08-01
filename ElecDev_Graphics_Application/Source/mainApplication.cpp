@@ -22,7 +22,7 @@
 #include "GUI/toolbar.h"
 
 // Graphics handler include.
-#include <graphicsHandler.h>
+#include "Graphics/graphicsHandler.h"
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */

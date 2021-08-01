@@ -7,10 +7,10 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Drawing engine.
-#include <drawingEngine.h>
 // Design engine.
-#include <designEngine.h>
+#include "OpenGL/Engine2D/DesignEngine/designEngine.h"
+// Drawing engine.
+#include "OpenGL/Engine2D/DrawingEngine/drawingEngine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Graphics Handler Class.

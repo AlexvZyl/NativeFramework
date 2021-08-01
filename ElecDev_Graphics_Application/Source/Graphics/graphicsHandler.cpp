@@ -11,12 +11,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include <string>
 #include <iostream>
 
-// Drawing engine.
-#include <drawingEngine.h>
-// Design engine.
-#include <designEngine.h>
-
-// Class.
+// Class include.
 #include <graphicsHandler.h>
 
 //--------------------------------------------------------------------------------------------------------------
