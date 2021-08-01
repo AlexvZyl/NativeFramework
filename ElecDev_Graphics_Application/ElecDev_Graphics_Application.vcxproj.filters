@@ -5,18 +5,72 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\mainApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\GLAD\src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\toolbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\graphicsHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
+    <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
+    <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
+    <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3native.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imconfig.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imgui.h" />
+    <ClInclude Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.h" />
+    <ClInclude Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imgui_internal.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imstb_rectpack.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
+    <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
+    <ClInclude Include="Source\GUI\toolbar.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
+    <ClInclude Include="Source\Graphics\graphicsHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
+    <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />
+    <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
   </ItemGroup>
 </Project>
