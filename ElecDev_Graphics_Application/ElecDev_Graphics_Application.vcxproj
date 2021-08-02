@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\GUI\guiHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp" />
@@ -172,10 +173,12 @@
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Shaders\shaderHandler.cpp" />
-    <ClCompile Include="Source\GUI\toolbar.cpp" />
+    <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
+    <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\GUI\guiHandler.h" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
@@ -194,6 +197,10 @@
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Shaders\shaderHandler.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
+    <ClInclude Include="Source\GUI\notify.h" />
+    <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
+    <ClInclude Include="Source\GUI\Ribbons\stb_image.h" />
+    <ClInclude Include="Source\GUI\Toolbar\toolbar.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
