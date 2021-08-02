@@ -3,6 +3,8 @@
 /*=======================================================================================================================================*/
 #include <GLFW/glfw3.h>
 #include <Core/imgui.h>
+#include <string>
+
 
 
 #pragma once
@@ -64,6 +66,8 @@ public:
     GLuint image3_texture;
     bool ret3;
 
+	std::string sideBarFlag;
+
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
@@ -73,6 +77,9 @@ public:
 
 	// Function that handles which engine should be active.
 	void renderRibbons();
+	bool topBar();
+	bool sideBar();
+	bool blockDiagram();
 	bool BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize);
 	bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 };

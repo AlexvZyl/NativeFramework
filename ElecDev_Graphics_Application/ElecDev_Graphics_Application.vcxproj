@@ -194,6 +194,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h" />
+    <ClInclude Include="Source\GUI\notify.h" />
     <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
