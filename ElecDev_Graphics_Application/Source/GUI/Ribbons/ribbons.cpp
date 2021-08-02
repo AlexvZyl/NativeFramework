@@ -53,6 +53,8 @@ Ribbons::Ribbons() {
     this->unsaved_document = false;
     this->my_tool_active = true;
 
+    this->drawToggle = false;
+
     //Load textures
     this->image1_width = 0;
     this->image1_height = 0;
@@ -78,41 +80,34 @@ void Ribbons::renderRibbons()
 {
 
     // Menu
-    ImGui::Begin("Ribbons", &this->my_tool_active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
-    ImGui::SetWindowPos(ImVec2(0, 50));
+    ImGui::Begin("Tools", &this->my_tool_active,  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::SetWindowPos(ImVec2(0, 20));
 
     //Create Image Buttons
     if (ImGui::ImageButton((void*)image1_texture, ImVec2(50, 50))){
-
-        ImGui::SetWindowPos(ImVec2(0, 50));
             
     }
 
-    Ribbons::BeginButtonDropDown("Draw", "Draw\nMCC", ImVec2(50,50));
+    if (Ribbons::BeginDrawButtonDropDown("Draw", ImVec2(60, 35))) {
+
+        ImGui::Button("MEH");
+    }
 
     if (ImGui::ImageButton((void*)image2_texture, ImVec2(50, 50))) {
 
-        ImGui::SetWindowPos(ImVec2(0, 50));
 
     }
-    Ribbons::BeginButtonDropDown("Block", "Bloack\nDiagram", ImVec2(50, 50));
 
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(50, 50))) {
 
-        ImGui::SetWindowPos(ImVec2(0, 50));
 
     }
-    Ribbons::BeginButtonDropDown("Bucket", "Draw\nCircuit\nBuckets", ImVec2(50, 50));
-
-
-
 
     ImGui::End();
 
-
 }
 
-bool Ribbons::BeginButtonDropDown(const char* label, const char* name, ImVec2 buttonSize)
+bool Ribbons::BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize)
 {
 
     ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -123,10 +118,10 @@ bool Ribbons::BeginButtonDropDown(const char* label, const char* name, ImVec2 bu
     float y = ImGui::GetCursorPosY();
 
     ImVec2 size(buttonSize.x, buttonSize.x/2);
-    bool pressed = ImGui::Button(name);
+    bool pressed = ImGui::Button("Draw\nMCC", buttonSize);
 
     // Arrow
-    ImVec2 center(window->Pos.x + x + buttonSize.x, window->Pos.y + y + buttonSize.y / 4);
+    ImVec2 center(window->Pos.x + x + buttonSize.x*0.9, window->Pos.y + y + buttonSize.y / 4);
     float r = 8.f;
     center.y += r * 0.25f;
     ImVec2 a = center + ImVec2(0, 1) * r;
@@ -137,10 +132,24 @@ bool Ribbons::BeginButtonDropDown(const char* label, const char* name, ImVec2 bu
     window->DrawList->AddTriangleFilled(a, b, c, ImGui::GetColorU32(ImGuiCol_Text));
 
     // Popup
+    ImVec2 popupPos;
+
+    popupPos.x = window->Pos.x + x + buttonSize.x/4;
+    popupPos.y = window->Pos.y + y + buttonSize.y;
+
+    ImGui::SetNextWindowPos(popupPos);
 
     if (pressed)
     {
-        ImGui::OpenPopup(label);
+        this->drawToggle = !this->drawToggle;
+    }
+
+    if (this->drawToggle)
+    {
+        ImGui::Begin("Draw MCC", &this->my_tool_active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+        //ImGui::SetWindowPos(popupPos);
+        ImGui::Button("asjdjd");
+        ImGui::End();
     }
 
 
