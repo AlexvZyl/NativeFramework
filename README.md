@@ -18,7 +18,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 * The Cherno: [https://www.youtube.com/user/TheChernoProject].
 * Udemy course: [https://www.udemy.com/course/graphics-with-modern-opengl/].  Only buy the courses when they are on discount!
 * OpenGL Docs: [http://docs.gl/].
-* Important video on OpenGL error handling: [https://www.youtube.com/watch?v=FBbPWSOQ0-w].
 
 ***IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!*
 
