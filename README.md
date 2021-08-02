@@ -9,6 +9,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Graphics Backend: OpenGL, [https://www.opengl.org//].  
 * Window: GLFWWindow, [https://www.glfw.org/].  
 * OpenGL Loader (GLAD): [https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library#glad_.28Multi-Language_GL.2FGLES.2FEGL.2FGLX.2FWGL_Loader-Generator.29], [https://glad.dav1d.de/].
+* OpenGL Maths (GLM): [https://github.com/g-truc/glm].
 
 *Note: The ImGUI docs can be found in the ImGUI.h file, it is not online or on the Git repo!*
 
