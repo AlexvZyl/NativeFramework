@@ -60,8 +60,16 @@ void DrawingEngineGL::renderLoop()
     // rendering our geometries
 	this->basicShader.use();
     glBindVertexArray(this->VAO);
-    GLCall( glDrawElements(GL_TRIANGLES, 3, GL_INT, 0) );
+    GLCall( glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0) );
     glBindVertexArray(0);
+
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(-1.0f,1.0f);
+	glVertex2f(1.0f, 1.0f);
+	glVertex2f(1.0f, -1.0f);
+	glVertex2f(-1.0f, -1.0f);
+	glEnd();
+
 }
 
 //---------------------------------------------------------------------------------------------------------------------
