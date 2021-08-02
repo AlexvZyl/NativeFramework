@@ -31,11 +31,15 @@
 // GLFW error handler.
 static void glfw_error_callback(int error, const char* description)
 {
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+    fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
 }
 
-// This removes the console that keeps opening with the app.
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+// This removes the console that keeps opening with the app if it is not in debug mode.
+#ifdef	_DEBUG
+    #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
+#else
+    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#endif
 
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
@@ -43,7 +47,6 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-
     // Setup window.
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -109,7 +112,7 @@ int main(int, char**)
     // OpenGL loader error handler.
     if (err)
     {
-        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
+        fprintf(stderr, "[OPENGL ERROR] Failed to initialize OpenGL loader!\n");
         return 1;
     }
 
@@ -126,7 +129,6 @@ int main(int, char**)
 
     // Create graphics handler object.
     GraphicsHandler graphicsHandler;
-
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI setup.
@@ -165,6 +167,9 @@ int main(int, char**)
         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Handle graphics (OpenGL engines: Drawing and Designing).
+        graphicsHandler.renderGraphics();
+
         // Feed inputs to ImGUI, start new frame.
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -181,10 +186,7 @@ int main(int, char**)
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glfwSwapBuffers(window);
-
-        // Handle graphics (OpenGL engines: Drawing and Designing).
-        graphicsHandler.renderGraphics();
-
+        
     }
 
 /*=======================================================================================================================================*/

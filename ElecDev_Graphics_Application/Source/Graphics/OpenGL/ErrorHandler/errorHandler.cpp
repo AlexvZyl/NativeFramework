@@ -7,11 +7,6 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-// General.
-#include <iostream>
-
-// OpenGL.
-#include <glad/glad.h>
 #include <ErrorHandler/errorHandler.h>
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -21,23 +16,21 @@
 // Clear the error flags.
 void glClearErrors()
 {
-	// Run the loop while there is an error.
-	while (!glGetError());
-
+	// Clear the errors.
+	while (glGetError() != GL_NO_ERROR);
 }
 
 // Check the error that occured.
-bool  glCheckError(const char* function, const char* file, const char* line)
+bool  glCheckError(const char* function, const char* file, int line)
 {
 	while (GLenum error = glGetError())
 	{
 		// Print the error.
-		std::cout << "\n[OPENGL ERROR (HEX)] : {" << std::hex << error << std::dec << "}\n" <<
-			"[FUNCTION] : {" << function << "}\n" <<
-			"[FILE] : {" << file << "}\n" <<
-			"[LINE] : {" << line << "}\n";
+		std::cout <<  "\n[OPENGL ERROR](HEX) : " << std::hex << error << std::dec << "\n" <<
+						"[FUNCTION] : " << function << "\n" <<
+						"[FILE] : " << file << "\n" <<
+						"[LINE] : " << line << "\n";
 	}
-
 	return true;
 }
 
