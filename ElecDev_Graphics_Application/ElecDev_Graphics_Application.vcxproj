@@ -212,6 +212,11 @@
     <None Include="Source\Graphics\OpenGL\Shaders\basicShader.shader" />
     <None Include="Source\Graphics\OpenGL\Shaders\conanShader.shader" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Source\GUI\Images\component.png" />
+    <Image Include="Source\GUI\Images\Draw_Circuit_Buckets.png" />
+    <Image Include="Source\GUI\Images\Draw_MCC.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -47,6 +47,8 @@ public:
 	bool unsaved_document;
 	bool my_tool_active;
 
+	bool drawToggle;
+
     int image1_width;
     int image1_height;
     GLuint image1_texture;
@@ -71,6 +73,6 @@ public:
 
 	// Function that handles which engine should be active.
 	void renderRibbons();
-	bool BeginButtonDropDown(const char* label, const char* name, ImVec2 buttonSize);
+	bool BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize);
 	bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 };
