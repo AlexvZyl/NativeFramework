@@ -8,7 +8,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * GUI Library: ImGUI, [https://github.com/ocornut/imgui].  
 * Graphics Backend: OpenGL, [https://www.opengl.org//].  
 * Window: GLFWWindow, [https://www.glfw.org/].  
-* OpenGL Loader: [https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library#glad_.28Multi-Language_GL.2FGLES.2FEGL.2FGLX.2FWGL_Loader-Generator.29], [https://glad.dav1d.de/].
+* OpenGL Loader (GLAD): [https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library#glad_.28Multi-Language_GL.2FGLES.2FEGL.2FGLX.2FWGL_Loader-Generator.29], [https://glad.dav1d.de/].
 
 *Note: The ImGUI docs can be found in the ImGUI.h file, it is not online or on the Git repo!*
 
@@ -16,8 +16,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 * LearnOpenGL: [https://learnopengl.com/Introduction].
 * The Cherno: [https://www.youtube.com/user/TheChernoProject].
-* Nice Udemy course: [https://www.udemy.com/course/graphics-with-modern-opengl/].  Only buy the courses when they are on discount!
+* Udemy course: [https://www.udemy.com/course/graphics-with-modern-opengl/].  Only buy the courses when they are on discount!
 * OpenGL Docs: [http://docs.gl/].
+* Important video on OpenGL error handling: [https://www.youtube.com/watch?v=FBbPWSOQ0-w].
 
 ***IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!*
 
@@ -36,6 +37,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Add template circuits.
 * Able to enter a circuit and define it from the inside.  Add as many layers as needed.
 * 3D Drawings.
+* VERY long term: port to Vulkan, [https://www.vulkan.org/].
 
 ---
 
