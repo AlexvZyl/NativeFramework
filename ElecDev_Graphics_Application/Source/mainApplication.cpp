@@ -19,7 +19,7 @@
 #include <GLFW/glfw3.h>
 
 // GUI includes.
-#include "GUI/toolbar.h"
+#include "GUI/guiHandler.h"
 
 // Graphics handler include.
 #include "Graphics/graphicsHandler.h"
@@ -129,6 +129,7 @@ int main(int, char**)
 
     // Create graphics handler object.
     GraphicsHandler graphicsHandler;
+    GUIHandler guiHandler;
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI setup.
@@ -176,7 +177,7 @@ int main(int, char**)
         ImGui::NewFrame();
 
         // Render Toolbar.
-        renderToolbar();
+        guiHandler.renderGraphics();
 
         // Render ImGUI into screen.
         ImGui::Render();
