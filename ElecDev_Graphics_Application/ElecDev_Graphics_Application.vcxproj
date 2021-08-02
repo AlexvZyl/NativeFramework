@@ -171,6 +171,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp" />
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Shaders\shaderHandler.cpp" />
     <ClCompile Include="Source\GUI\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Shaders\shaderHandler.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
   </ItemGroup>
   <ItemGroup>

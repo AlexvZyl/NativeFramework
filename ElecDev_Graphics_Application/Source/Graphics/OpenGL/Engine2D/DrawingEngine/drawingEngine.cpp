@@ -7,18 +7,21 @@ The interactive engine (the one where elements can be drawn is handled in design
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-// General.
-#include <iostream>	
-
-// Class include.
 #include "drawingEngine.h"
+
+// Error handler.
+#include <ErrorHandler/errorHandler.h>
 
 //---------------------------------------------------------------------------------------------------------------------
 //  Testing.
 //----------------------------------------------------------------------------------------------------------------------
 
-void DrawingEngineGL::test()
-{
+DrawingEngineGL::DrawingEngineGL()
+{	
+	// Create shader.
+	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\Shaders\\basicShader.shader";
+	Shader basicShader(shaderFilePath);
+	this->basicShader = basicShader;
 
 	// create our geometries
 	unsigned int vbo, vao, ebo;
@@ -34,6 +37,7 @@ void DrawingEngineGL::test()
 	};
 	unsigned int triangle_indices[] = {
 		0, 1, 2 };
+
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
@@ -48,15 +52,16 @@ void DrawingEngineGL::test()
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	this->VAO = vao;
+};
 
-
-
-    //// rendering our geometries
-    //triangle_shader.use();
-    //glBindVertexArray(vao);
-    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-    //glBindVertexArray(0);
-
+void DrawingEngineGL::renderLoop()
+{
+    // rendering our geometries
+	this->basicShader.use();
+    glBindVertexArray(this->VAO);
+    GLCall( glDrawElements(GL_TRIANGLES, 3, GL_INT, 0) );
+    glBindVertexArray(0);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -89,6 +94,7 @@ void DrawingEngineGL::display()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+
 
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -49,6 +49,9 @@
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Graphics\OpenGL\Shaders\shaderHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
@@ -68,6 +71,7 @@
     <ClInclude Include="Source\Graphics\graphicsHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Shaders\shaderHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
