@@ -18,6 +18,8 @@
 
 // OpenGL.
 #include <glad/glad.h>
+#include <glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Shader class.
@@ -43,6 +45,8 @@ public:
     void setInt(const std::string& name, int value) const;
 
     void setFloat(const std::string& name, float value) const;
+
+    void setMat4(const std::string& name, glm::mat4 value) const;
 
 private:
 
