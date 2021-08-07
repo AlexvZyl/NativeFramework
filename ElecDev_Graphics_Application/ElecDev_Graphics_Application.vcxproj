@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\GUI\GraphicsWindow\graphicsWindow.cpp" />
     <ClCompile Include="Source\GUI\guiHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
@@ -177,6 +178,7 @@
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\GUI\GraphicsWindow\graphicsWindow.h" />
     <ClInclude Include="Source\GUI\guiHandler.h" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />

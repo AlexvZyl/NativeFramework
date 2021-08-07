@@ -55,6 +55,9 @@
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GUI\GraphicsWindow\graphicsWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
@@ -79,6 +82,7 @@
     <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h" />
     <ClInclude Include="Source\GUI\notify.h" />
+    <ClInclude Include="Source\GUI\GraphicsWindow\graphicsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
