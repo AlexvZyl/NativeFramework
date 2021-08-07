@@ -19,6 +19,63 @@
     <ClCompile Include="Source\mainApplication.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mainApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\GLAD\src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\graphicsHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\guiHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI\GraphicsWindow\graphicsWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -326,6 +383,7 @@
     <ClInclude Include="Source\External\glm\vec3.hpp" />
     <ClInclude Include="Source\External\glm\vec4.hpp" />
     <ClInclude Include="Source\External\glm\vector_relational.hpp" />
+    <ClInclude Include="Source\GUI\GraphicsWindow\graphicsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
