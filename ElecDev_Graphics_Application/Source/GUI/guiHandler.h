@@ -8,7 +8,6 @@
 
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
-#include "GraphicsWindow/graphicsWindow.h"
 
 
 
@@ -27,7 +26,6 @@ public:
 
 	Toolbar toolbar;
 	Ribbons ribbons;
-	GraphicsWindow graphicsWindow;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
