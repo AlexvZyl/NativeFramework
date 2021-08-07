@@ -12,12 +12,19 @@ The interactive engine (the one where elements can be drawn is handled in design
 // Error handler.
 #include <ErrorHandler/errorHandler.h>
 
-//---------------------------------------------------------------------------------------------------------------------
-//  Testing.
+//----------------------------------------------------------------------------------------------------------------------
+//  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
-DrawingEngineGL::DrawingEngineGL()
+// Default.
+DrawingEngineGL::DrawingEngineGL() {};
+
+// With GLFW window.
+DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 {	
+	// Save pointer to GLFW window.
+	this->window = window;
+
 	// Create shader.
 	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\Shaders\\basicShader.shader";
 	GLCall( Shader basicShader(shaderFilePath) );
@@ -28,6 +35,8 @@ DrawingEngineGL::DrawingEngineGL()
 	GLCall( this->basicShader.setMat4("worldMatrix", this->modelMatrix) );
 	GLCall( this->basicShader.setMat4("projectionMatrix", this->projectionMatrix) );
 	GLCall( this->basicShader.setMat4("viewMatrix", this->viewMatrix) );
+
+	std::cout << "[OPENGL SHADER] Shaders compiled.\n";
 
 	// create our geometries
 	unsigned int vbo, vao, ebo;
@@ -62,6 +71,10 @@ DrawingEngineGL::DrawingEngineGL()
 	this->VAO = vao;
 };
 
+//----------------------------------------------------------------------------------------------------------------------
+//  Rendering.
+//----------------------------------------------------------------------------------------------------------------------
+
 void DrawingEngineGL::renderLoop()
 {
     // rendering our geometries
@@ -80,7 +93,7 @@ void DrawingEngineGL::renderLoop()
 
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 //  API
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -110,8 +123,35 @@ void DrawingEngineGL::display()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Coordinate systems.
+//----------------------------------------------------------------------------------------------------------------------
 
+// Function that takes pixel coordinates as input and return the coordinates in the world.
+float* DrawingEngineGL::pixelCoordsToWorldCoords(int pixelCoords[2]) 
+{
+	float worldCoords[2];  //  The coordinates in the world.
 
+	// Find the viewpwort dimensions.
+	int viewport[2];
+	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+
+	// First apply the viewport transform the the pixels.
+	worldCoords[0] = (pixelCoords[0] - viewport[0]) / (viewport[0] / 2);
+	worldCoords[1] = (pixelCoords[1] - viewport[1]) / (viewport[1] / 2);
+
+	std::cout << worldCoords << std::endl;
+
+	return worldCoords;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Mouse events.
+//----------------------------------------------------------------------------------------------------------------------
+
+void DrawingEngineGL::mousePressLeft()
+{
+	
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

@@ -12,6 +12,14 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Drawing engine.
 #include "OpenGL/Engine2D/DrawingEngine/drawingEngine.h"
 
+//  General.
+#include <string>
+
+// OpenGL
+#include <glad/glad.h>
+#include <ErrorHandler/errorHandler.h>
+#include "Shaders/shaderHandler.h"
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Graphics Handler Class.
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,23 +39,38 @@ public:
 	DrawingEngineGL drawingEngine;
 	DesignEngineGL designEngine;
 
+	// The GLFW window from the main application.
+	GLFWwindow* window;
+
 	//-----------------------------------------------------------------------------------------------------------------
-	//  Inits.
+	//  Constructors.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// Constructor.
+	// Constructor with GLFW window.
+	GraphicsHandler(GLFWwindow* window);
+	// Default constructor.
 	GraphicsHandler();
 
 	//-----------------------------------------------------------------------------------------------------------------
-	//  Engines.
+	//  Functions.
+	//-----------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Function that handles which engine should be active.
 	void renderGraphics();
 
-	// Function that closes the engine passed.
-	void closeEngine(std::string engine);
+	// Function that sets the new active engine.
+	void setEngine(std::string engine);
 
+	// Function that closes the engine passed.
+	void closeEngine();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	//  Mouse events.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// Mouse press events.
+	void mousePressEvent(GLFWwindow* window, int button, int action, int mods);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

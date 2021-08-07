@@ -1,38 +1,45 @@
-/*  
+/*
 This file will control all of the graphics engines and all of the API's, as well as the unitialization.
 This is so that the main loop that will containt both ImGUI calls and pure OpenGL calls can remain clean.
 */
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Includes.
+//  Class include.
 //----------------------------------------------------------------------------------------------------------------------
 
-//  General.
-#include <string>
-
-// Class include.
 #include "graphicsHandler.h"
 
-// OpenGL
-#include <glad/glad.h>
-#include <ErrorHandler/errorHandler.h>
-#include "Shaders/shaderHandler.h"
-
 //----------------------------------------------------------------------------------------------------------------------
-//  Inits.
+//  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Constructor.
-GraphicsHandler::GraphicsHandler()
+// Default.
+GraphicsHandler::GraphicsHandler() {};
+
+// With GLFW window.
+GraphicsHandler::GraphicsHandler(GLFWwindow* window)
 {
+	// Create engines.
+	DrawingEngineGL drawingEngine(this->window);
+	this->drawingEngine = drawingEngine;
+	//DesignEngineGL designEngine(this->window);
+	//this->designEngine = designEngine;
+
+	// Set the default active engine.  (Should be set to animation when one is available.)
 	activeEngine = "DrawingEngine";
+
+	// Store pointer to GLFW window.
+	this->window = window;
+
+	// Setup mouse button callback.
+	//glfwSetMouseButtonCallback(window, this->mousePressEvent);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Main loop & engines handler.
+//  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// [MAIN DRAWING FUNCTION] Function that handles which engine should be active.
+// [LOOP FUNCTION] Function that handles which engine should be active and is placed into the OpenGL loop.
 void GraphicsHandler::renderGraphics()
 {
 
@@ -57,27 +64,64 @@ void GraphicsHandler::renderGraphics()
 };
 
 // Function that closes the engine passed.
-void GraphicsHandler::closeEngine(std::string engine)
+void GraphicsHandler::setEngine(std::string engine)
 {
-	// Close the active engine.
+	// Close the current active engine.
+	this->closeEngine();
+
+	// Set the new active engine.
 	if (activeEngine == "DrawingEngine")
 	{
-		// Close.
+		// Init.
 	}
 	else if (activeEngine == "DesignEngine")
 	{
-		// Close.
+		// Init.
 	}
 	else if (activeEngine == "Animatin")
 	{
-		// Close animation.
+		// Init.
 	}
 	else
 	{
 		std::cout << "[ENGINES ERROR] Please supply a valid engine name.\n";
 	};
-
 };
+
+// Function that closes the engine passed.
+void GraphicsHandler::closeEngine()
+{
+	// Close the active engine.
+	if (this->activeEngine == "DrawingEngine")
+	{
+		// Close.
+	}
+	else if (this->activeEngine == "DesignEngine")
+	{
+		// Close.
+	}
+	else if (this->activeEngine == "Animation")
+	{
+		// Close animation.
+	}
+	else
+	{
+		std::cout << "[ENGINES ERROR] Error occured closing the active engine.\n";
+	};
+};
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Mouse events.
+//----------------------------------------------------------------------------------------------------------------------
+
+void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods) 
+{
+	// Left mouse button press.
+	if ((button==GLFW_MOUSE_BUTTON_LEFT) && (action==GLFW_PRESS))
+	{
+		this->drawingEngine.mousePressLeft();
+	}
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

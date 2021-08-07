@@ -15,6 +15,9 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include <Shaders/shaderHandler.h>
 #include <glm.hpp>
 
+// General.
+#include <iostream>
+
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
@@ -24,18 +27,18 @@ class DrawingEngineGL
 public:
 
 	//---------------------------------------------------------------------------------------------------------------------
-	// Matrices.
+	// MPV Matrices.
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	// MVP Matrices.
 	glm::mat4 modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
-												// kept an identity matrix for now.
+													// kept an identity matrix for now.
 	glm::mat4 viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
-												// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
+													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
 	glm::mat4 projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
-												// going to be visible to the screen?
+													// going to be visible to the screen?
 	glm::mat4 viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
-												// coordinates to the OpenGL uniform coordinate system.
+													// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
 	glm::mat4 sccalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
@@ -43,18 +46,39 @@ public:
 	glm::mat4 rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
 
 	//---------------------------------------------------------------------------------------------------------------------
-	//  Variables.
+	//  Mouse handler variables.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	// Saves the previous mouse event coordinates (in world coordinates).
+	int prevMouseEventWorldCoords[2] = {NULL, NULL};
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Shaders.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	Shader basicShader;
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Buffers.
+	//---------------------------------------------------------------------------------------------------------------------
+	
 	unsigned int VAO;
 
 	//---------------------------------------------------------------------------------------------------------------------
-	//  Constructor.
+	//  Misc variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	DrawingEngineGL();
+	GLFWwindow* window;
 
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Constructors.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	// Default.
+	DrawingEngineGL();
+	// Wiith GLFW window.
+	DrawingEngineGL(GLFWwindow* window);
+	
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Rendering.
 	//---------------------------------------------------------------------------------------------------------------------
@@ -79,6 +103,17 @@ public:
 	void display();
 
 	//---------------------------------------------------------------------------------------------------------------------
+	//  Coordinate systems.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	float* pixelCoordsToWorldCoords(int pixelCoords[2]);
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Mouse events.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	// Event handler for a mouse left press.
+	void mousePressLeft();
 
 };
 
