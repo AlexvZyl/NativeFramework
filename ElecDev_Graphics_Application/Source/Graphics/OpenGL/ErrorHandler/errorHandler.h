@@ -6,18 +6,29 @@
 // on it in the terminal.
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Includes.
+//----------------------------------------------------------------------------------------------------------------------
+
+// General.
+#include <iostream>
+
+// OpenGL.
+#include <glad/glad.h>
+
+//----------------------------------------------------------------------------------------------------------------------
 //  Compiler settings.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Breakpoint at OpenGL error.
 #define	ASSERT(x) if (!(x)) __debugbreak();
-// Create macro for each OpenGL call.  Only runs if 
+
+// Create macro for each OpenGL call.  Only runs if in debug mode.
 #ifdef	_DEBUG
-#define glCall(x)	glClearErrors();\
-					x;\
-					ASSERT(glCheckError(#x, __FILE__, __LINE__));
+	#define GLCall(x)	glClearErrors();\
+						x;\
+						ASSERT(glCheckError(#x, __FILE__, __LINE__));
 #else
-glCall(x)	x;
+	glCall(x)			x;
 #endif // _DEBUG
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -28,7 +39,7 @@ glCall(x)	x;
 void glClearErrors();
 
 // Check the error that occured.
-bool  glCheckError(const char* function, const char* file, const char* line);
+bool  glCheckError(const char* function, const char* file, int line);
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

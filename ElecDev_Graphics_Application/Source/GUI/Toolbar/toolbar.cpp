@@ -84,4 +84,3 @@ void Toolbar::renderToolbar()
     ImGui::End();
 
 };
-

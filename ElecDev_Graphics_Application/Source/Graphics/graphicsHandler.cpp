@@ -1,58 +1,52 @@
-/*  
+/*
 This file will control all of the graphics engines and all of the API's, as well as the unitialization.
 This is so that the main loop that will containt both ImGUI calls and pure OpenGL calls can remain clean.
 */
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Includes.
+//  Class include.
 //----------------------------------------------------------------------------------------------------------------------
 
-//  General.
-#include <string>
-
-// File streaming.
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
-// Class include.
 #include "graphicsHandler.h"
 
-// OpenGL
-#include <glad/glad.h>
-#include <ErrorHandler/errorHandler.h>
-
 //----------------------------------------------------------------------------------------------------------------------
-//  Inits.
+//  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Constructor.
-GraphicsHandler::GraphicsHandler()
+// Default.
+GraphicsHandler::GraphicsHandler() {};
+
+// With GLFW window.
+GraphicsHandler::GraphicsHandler(GLFWwindow* window)
 {
-	activeEngine = "Animation";
+	// Create engines.
+	DrawingEngineGL drawingEngine(this->window);
+	this->drawingEngine = drawingEngine;
+	//DesignEngineGL designEngine(this->window);
+	//this->designEngine = designEngine;
+
+	// Set the default active engine.  (Should be set to animation when one is available.)
+	activeEngine = "DrawingEngine";
+
+	// Store pointer to GLFW window.
+	this->window = window;
+
+	// Setup mouse button callback.
+	//glfwSetMouseButtonCallback(window, this->mousePressEvent);
 };
 
-// Function that does the necessary inits for OpenGL and the engines.
-void GraphicsHandler::initGraphics() 
-{	
-	// Compile shader.
-	std::string shaderPath = "\\Shaders\\conanShader.shader";
-	ShaderProgramSource conanShader = this->parseShader(shaderPath);
-
-}
-
 //----------------------------------------------------------------------------------------------------------------------
-//  Main loop & engines handler.
+//  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// [MAIN DRAWING FUNCTION] Function that handles which engine should be active.
+// [LOOP FUNCTION] Function that handles which engine should be active and is placed into the OpenGL loop.
 void GraphicsHandler::renderGraphics()
 {
 
 	//  Run engine that has been set as active.
 	if (activeEngine == "DrawingEngine")
 	{
-		drawingEngine.test();
+		drawingEngine.renderLoop();
 	}
 	else if (activeEngine == "DesignEngine")
 	{
@@ -64,77 +58,69 @@ void GraphicsHandler::renderGraphics()
 	}
 	else
 	{
-		std::cout << "ERROR: Please supply a valid engine name.\n";
+		std::cout << "[ENGINES ERROR] Please supply a valid engine name.\n";
 	};
 
 };
 
 // Function that closes the engine passed.
-void GraphicsHandler::closeEngine(std::string engine)
+void GraphicsHandler::setEngine(std::string engine)
 {
-	// Close the active engine.
+	// Close the current active engine.
+	this->closeEngine();
+
+	// Set the new active engine.
 	if (activeEngine == "DrawingEngine")
 	{
-		// Close.
+		// Init.
 	}
 	else if (activeEngine == "DesignEngine")
 	{
-		// Close.
+		// Init.
 	}
 	else if (activeEngine == "Animatin")
+	{
+		// Init.
+	}
+	else
+	{
+		std::cout << "[ENGINES ERROR] Please supply a valid engine name.\n";
+	};
+};
+
+// Function that closes the engine passed.
+void GraphicsHandler::closeEngine()
+{
+	// Close the active engine.
+	if (this->activeEngine == "DrawingEngine")
+	{
+		// Close.
+	}
+	else if (this->activeEngine == "DesignEngine")
+	{
+		// Close.
+	}
+	else if (this->activeEngine == "Animation")
 	{
 		// Close animation.
 	}
 	else
 	{
-		std::cout << "ERROR: Please supply a valid engine name.\n";
+		std::cout << "[ENGINES ERROR] Error occured closing the active engine.\n";
 	};
-
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Shaders.
+//  Mouse events.
 //----------------------------------------------------------------------------------------------------------------------
 
-ShaderProgramSource GraphicsHandler::parseShader(std::string& filePath)
-{	
-
-	// Shader mode handler. Used as an index for the shaderStream.
-	enum class ShaderType
+void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods) 
+{
+	// Left mouse button press.
+	if ((button==GLFW_MOUSE_BUTTON_LEFT) && (action==GLFW_PRESS))
 	{
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
-	};
-	ShaderType shaderType = ShaderType::NONE;
-
-	// Read shader from file.
-	std::ifstream fileStream(filePath);
-	// Stream that contains the shader.
-	std::stringstream shaderStream[2];
-
-	// Run through all of the lines.
-	std::string line;
-	while (std::getline(fileStream, line))
-	{	
-		// Find shader keyword and set shader type.
-		if (line.find("#shader") != std::string::npos) 
-		{	
-			// Check for vertex shader.
-			if (line.find("vertex") != std::string::npos)
-				shaderType = ShaderType::VERTEX;
-			// Check for fragment shader.
-			else if (line.find("fragment") != std::string::npos)
-				shaderType = ShaderType::FRAGMENT;
-		}
-
-		// Any other line of code.
-		else
-		{
-			shaderStream[(int)shaderType] << line << "\n";
-		}
+		this->drawingEngine.mousePressLeft();
 	}
-
-	return { shaderStream[0].str(), shaderStream[1].str() };
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -7,18 +7,36 @@ The interactive engine (the one where elements can be drawn is handled in design
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-// General.
-#include <iostream>	
-
-// Class include.
 #include "drawingEngine.h"
 
-//---------------------------------------------------------------------------------------------------------------------
-//  Testing.
+// Error handler.
+#include <ErrorHandler/errorHandler.h>
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
-void DrawingEngineGL::test()
-{
+// Default.
+DrawingEngineGL::DrawingEngineGL() {};
+
+// With GLFW window.
+DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
+{	
+	// Save pointer to GLFW window.
+	this->window = window;
+
+	// Create shader.
+	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\Shaders\\basicShader.shader";
+	GLCall( Shader basicShader(shaderFilePath) );
+	GLCall( this->basicShader = basicShader );
+
+	// Assign matrices to shader.
+	GLCall( this->basicShader.use() );
+	GLCall( this->basicShader.setMat4("worldMatrix", this->modelMatrix) );
+	GLCall( this->basicShader.setMat4("projectionMatrix", this->projectionMatrix) );
+	GLCall( this->basicShader.setMat4("viewMatrix", this->viewMatrix) );
+
+	std::cout << "[OPENGL SHADER] Shaders compiled.\n";
 
 	// create our geometries
 	unsigned int vbo, vao, ebo;
@@ -34,6 +52,8 @@ void DrawingEngineGL::test()
 	};
 	unsigned int triangle_indices[] = {
 		0, 1, 2 };
+
+	// Assign Buffers.
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
@@ -48,18 +68,32 @@ void DrawingEngineGL::test()
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	this->VAO = vao;
+};
 
+//----------------------------------------------------------------------------------------------------------------------
+//  Rendering.
+//----------------------------------------------------------------------------------------------------------------------
 
+void DrawingEngineGL::renderLoop()
+{
+    // rendering our geometries
+	GLCall( this->basicShader.use() );
+    glBindVertexArray(this->VAO);
+    GLCall( glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0) );
+    glBindVertexArray(0);
 
-    //// rendering our geometries
-    //triangle_shader.use();
-    //glBindVertexArray(vao);
-    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-    //glBindVertexArray(0);
+	// Draw temporary border.
+	GLCall ( glBegin(GL_LINE_LOOP) );
+	glVertex2f(-1.0f,1.0f);
+	glVertex2f(1.0f, 1.0f);
+	glVertex2f(1.0f, -1.0f);
+	glVertex2f(-1.0f, -1.0f);
+	glEnd();
 
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 //  API
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -89,7 +123,35 @@ void DrawingEngineGL::display()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Coordinate systems.
+//----------------------------------------------------------------------------------------------------------------------
 
+// Function that takes pixel coordinates as input and return the coordinates in the world.
+float* DrawingEngineGL::pixelCoordsToWorldCoords(int pixelCoords[2]) 
+{
+	float worldCoords[2];  //  The coordinates in the world.
+
+	// Find the viewpwort dimensions.
+	int viewport[2];
+	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+
+	// First apply the viewport transform the the pixels.
+	worldCoords[0] = (pixelCoords[0] - viewport[0]) / (viewport[0] / 2);
+	worldCoords[1] = (pixelCoords[1] - viewport[1]) / (viewport[1] / 2);
+
+	std::cout << worldCoords << std::endl;
+
+	return worldCoords;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Mouse events.
+//----------------------------------------------------------------------------------------------------------------------
+
+void DrawingEngineGL::mousePressLeft()
+{
+	
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.
