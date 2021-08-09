@@ -23,7 +23,24 @@
 
 // Graphics handler include.
 #include <Graphics/graphicsHandler.h>
-#include "EventHandlers/MouseEvents/mouseEventHandler.h"
+
+/*=======================================================================================================================================*/
+/* Compiler settings.                                                                                                                    */
+/*=======================================================================================================================================*/
+
+// This removes the console that keeps opening with the app if it is not in debug mode.
+#ifdef	_DEBUG
+#pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
+#else
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#endif
+
+/*=======================================================================================================================================*/
+/* Variables/Globals/Defines.                                                                                                            */
+/*=======================================================================================================================================*/
+
+// Defined here, assigned in the main function where it has access to the window.
+GraphicsHandler graphicsHandler;
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */
@@ -35,12 +52,21 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
 }
 
-// This removes the console that keeps opening with the app if it is not in debug mode.
-#ifdef	_DEBUG
-    #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
-#else
-    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#endif
+/*=======================================================================================================================================*/
+/* Mouse events wrapping.                                                                                                                         */
+/*=======================================================================================================================================*/
+
+// Handle mouse press events ftom GLFW.
+void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
+{  
+    graphicsHandler.mousePressEvent(window, button, action, mods);
+}
+
+// Handle mouse press events ftom GLFW.
+void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
+{
+    graphicsHandler.mouseMoveEvent(window, xpos, ypos);
+}
 
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
@@ -148,9 +174,14 @@ int main(int, char**)
     int display_w, display_h;
 
     // Create graphics handler object.
-    GraphicsHandler graphicsHandler(window);
-    // Mouse handler init.
-    MouseEventHandler mouseEventHandler(&graphicsHandler);
+    // For now a global variable is used to be able to have mouse callbacks with a method.
+    // The callbacks cannot be used with a method, so it has to call a normal function.
+    GraphicsHandler gH(window);
+    graphicsHandler = gH;
+
+    // Setup mouse callbacks.
+    glfwSetMouseButtonCallback(window, mousePressEvent); // Mouse press event.
+    glfwSetCursorPosCallback(window, mouseMoveEvent); //  Mouse move event.
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other setups.
@@ -194,7 +225,7 @@ int main(int, char**)
         
     }
 
-    /*s===================================================================================================================================*/
+    /*===================================================================================================================================*/
 
     // Cleanup.
     ImGui_ImplOpenGL3_Shutdown();

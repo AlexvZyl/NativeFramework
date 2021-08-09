@@ -65,6 +65,17 @@ public:
 
 	// Function that closes the engine passed.
 	void closeEngine();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	//  Mouse events.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// Handle mouse press events.
+	void mousePressEvent(GLFWwindow* window, int button, int action, int mods);
+
+	// Handle mouse move events.
+	void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos);
+
 };
 
 //----------------------------------------------------------------------------------------------------------------------
