@@ -154,6 +154,9 @@ int main(int, char**)
     // Other inits.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+    // Mouse handler init.
+    MouseEventHandler mouseEventHandler(&graphicsHandler);
+
     // Set background color.
     float backGroundColor[] = { (float) 245 / 255, (float) 245 / 255, (float) 245 / 255 };
 

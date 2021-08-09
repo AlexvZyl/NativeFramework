@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 This file will control all of the graphics engines and all of the API's, as well as the unitialization.
 This is so that the main loop that will containt both ImGUI calls and pure OpenGL calls can remain clean.
@@ -19,7 +21,6 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include <glad/glad.h>
 #include <ErrorHandler/errorHandler.h>
 #include "Shaders/shaderHandler.h"
-#include <GLFW/glfw3.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Graphics Handler Class.
