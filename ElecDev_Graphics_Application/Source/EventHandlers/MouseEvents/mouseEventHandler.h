@@ -4,10 +4,8 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-// Design engine.
-#include <Graphics/OpenGL/Engine2D/DesignEngine/designEngine.h>
-// Drawing engine.
-#include <Graphics/OpenGL/Engine2D/DrawingEngine/drawingEngine.h>
+// Graphics Handler.
+#include <Graphics/graphicsHandler.h>
 
 /*=======================================================================================================================================*/
 /* Hnadler Class.                                                                                                                         */
@@ -19,8 +17,7 @@ class MouseEventHandler
 	//  Variables.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	DrawingEngineGL drawingEngine;
-	DesignEngineGL designEngine;
+	GraphicsHandler* graphicsHandler;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Functions.
@@ -29,7 +26,7 @@ class MouseEventHandler
 	// Default constructor.
 	MouseEventHandler();
 	// Constructor.
-	MouseEventHandler(DrawingEngineGL* drawingEngine, DesignEngineGL* designEngine);
+	MouseEventHandler(GraphicsHandler* graphicsHandler);
 };
 
 /*=======================================================================================================================================*/
