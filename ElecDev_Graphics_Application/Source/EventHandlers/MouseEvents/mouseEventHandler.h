@@ -29,6 +29,7 @@ public:
 	MouseEventHandler();
 	// Constructor.
 	MouseEventHandler(GraphicsHandler* graphicsHandler);
+
 };
 
 /*=======================================================================================================================================*/
