@@ -22,7 +22,8 @@
 #include "GUI/guiHandler.h"
 
 // Graphics handler include.
-#include "Graphics/graphicsHandler.h"
+#include <Graphics/graphicsHandler.h>
+#include "EventHandlers/MouseEvents/mouseEventHandler.h"
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */
@@ -130,7 +131,6 @@ int main(int, char**)
 
     // Setup ImGui style.
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();  // Set mode to light.
 
     // Setup Platform/Renderer backends.
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -149,7 +149,7 @@ int main(int, char**)
 
     // Create graphics handler object.
     GraphicsHandler graphicsHandler(window);
-    
+
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other inits.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -178,7 +178,7 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Render Toolbar.
+        // Render ImGUI components.
         guiHandler.renderGraphics();
 
         // Render ImGUI into screen.

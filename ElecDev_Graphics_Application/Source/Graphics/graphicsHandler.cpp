@@ -10,7 +10,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "graphicsHandler.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Constructors.
+//  Constructors & setup.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Default.
@@ -30,9 +30,6 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window)
 
 	// Store pointer to GLFW window.
 	this->window = window;
-
-	// Setup mouse button callback.
-	//glfwSetMouseButtonCallback(window, this->mousePressEvent);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -109,19 +106,6 @@ void GraphicsHandler::closeEngine()
 		std::cout << "[ENGINES ERROR] Error occured closing the active engine.\n";
 	};
 };
-
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse events.
-//----------------------------------------------------------------------------------------------------------------------
-
-void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods) 
-{
-	// Left mouse button press.
-	if ((button==GLFW_MOUSE_BUTTON_LEFT) && (action==GLFW_PRESS))
-	{
-		this->drawingEngine.mousePressLeft();
-	}
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

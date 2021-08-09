@@ -96,12 +96,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -113,14 +113,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -130,12 +130,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -147,18 +147,19 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\EventHandlers\MouseEvents\mouseEventHandler.cpp" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
     <ClCompile Include="Source\GUI\guiHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
@@ -179,6 +180,25 @@
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\EventHandlers\MouseEvents\mouseEventHandler.h" />
+    <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\arg.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\bind.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\bind_cc.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\bind_mf2_cc.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\bind_mf_cc.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\bind_template.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\detail\result_traits.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\make_adaptable.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\mem_fn.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\mem_fn_cc.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\mem_fn_template.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\mem_fn_vw.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\placeholders.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\protect.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\std_placeholders.hpp" />
+    <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
     <ClInclude Include="Source\External\glm\common.hpp" />
     <ClInclude Include="Source\External\glm\detail\compute_common.hpp" />
     <ClInclude Include="Source\External\glm\detail\compute_vector_relational.hpp" />
