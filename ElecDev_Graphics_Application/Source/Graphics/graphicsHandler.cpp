@@ -120,9 +120,10 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 
 	// Check if left press.
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-
+	{
 		// Call active engine.
 		drawingEngine.mousePressLeft(mousePos);
+	}
 }
 
 // Handle mouse move events.

@@ -18,6 +18,9 @@ The interactive engine (the one where elements can be drawn is handled in design
 // General.
 #include <iostream>
 
+// Error handling.
+#include <ErrorHandler/errorHandler.h>
+
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------

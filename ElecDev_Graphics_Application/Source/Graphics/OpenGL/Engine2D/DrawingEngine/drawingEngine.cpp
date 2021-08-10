@@ -148,8 +148,7 @@ void DrawingEngineGL::mouseMoveEvent(double pixelCoords[2], int buttonState)
 		// Find current mouse position in the world.
 		glm::vec4 currMousePosVec = this->pixelCoordsToWorldCoords(pixelCoords);
 		// Calculate distance to translate.
-		glm::vec3 translateVec({(currMousePosVec[0]-this->prevMouseEventWorldCoords[0]),((currMousePosVec[1]-this->prevMouseEventWorldCoords[1])),0});
-		std::cout << "[MOUSE HANDLER][WORLD VEC]: " << translateVec[0] << "," << translateVec[1] << "\n";
+		glm::vec3 translateVec({(currMousePosVec[0]-this->prevMouseEventWorldCoords[0]),(currMousePosVec[1]-this->prevMouseEventWorldCoords[1]),0});
 		// Translate to the view matrix.
 		this->viewMatrix = glm::translate(this->viewMatrix, translateVec);
 
@@ -171,7 +170,10 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	// Find the viewpwort dimensions.
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
-	// First apply the viewport transform the the pixels.
+	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
+	pixelCoords[1] = (double)viewport[1] - pixelCoords[1];
+
+	// Apply the viewport transform the the pixels.
 	screenCoords[0] = (pixelCoords[0] - viewport[0] / 2) / (viewport[0] / 2);
 	screenCoords[1] = (pixelCoords[1] - viewport[1] / 2) / (viewport[1] / 2);
 	// Convert to screen vector.
@@ -180,8 +182,6 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	// Apply MVP matrices.
 	glm::mat4 MVPinverse = glm::inverse(this->modelMatrix * this->viewMatrix * this->projectionMatrix);
 	glm::vec4 worldVec = MVPinverse * screenVec;
-
-	//std::cout << "[MOUSE HANDLER][WORLD COORDS]: " << worldVec[0] << "," << worldVec[1] << "\n";
 
 	return worldVec;
 }
