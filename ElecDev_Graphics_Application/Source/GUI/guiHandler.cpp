@@ -21,5 +21,5 @@ void GUIHandler::renderGraphics()
 {
 	this->toolbar.renderToolbar();
 	this->ribbons.renderRibbons();
-	this->graphicsWindow.renderGraphics();
+	//this->graphicsWindow.renderGraphics();
 };
