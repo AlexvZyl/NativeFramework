@@ -1,3 +1,5 @@
+#include "../Helper/stateMachine.h"
+
 #pragma once
 
 /*=======================================================================================================================================*/
@@ -5,6 +7,7 @@
 /*=======================================================================================================================================*/
 
 // This function initializes the toolbar.
+
 
 
 class Toolbar
@@ -44,7 +47,9 @@ public:
     bool unsaved_document;
     bool my_tool_active;
 
-    Toolbar();
+    stateMachine states;
+
+    Toolbar(stateMachine states);
 
 	// Function that handles which engine should be active.
 	void renderToolbar();

@@ -11,6 +11,7 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
+#include "../Helper/stateMachine.h"
 
 
 /*=======================================================================================================================================*/
@@ -19,7 +20,9 @@
 
 
 // Constructor.
-Ribbons::Ribbons() {
+Ribbons::Ribbons(stateMachine states) {
+
+    this->states = states;
 
     this->show_app_main_menu_bar = false;
     this->show_app_documents = false;
@@ -80,7 +83,7 @@ Ribbons::Ribbons() {
 
 void Ribbons::renderRibbons()
 {
-
+    
     topBar();
     sideBar();
 
@@ -91,20 +94,35 @@ bool Ribbons::topBar() {
     // Menu
     ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
     bool* p_open = NULL;
-    ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
     
     ImGui::SetWindowSize(ImVec2(mainWindow.x+1,70));
     ImGui::SetWindowPos(ImVec2(-1, 18));
 
     //Create Image Buttons
-    if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30))) {
-        this->sideBarFlag = "Draw MCC";
+    if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30))) {\
+
+        if (this->sideBarFlag == "Draw MCC") {
+
+            this->sideBarFlag = "None";
+        }
+        else {
+
+            this->sideBarFlag = "Draw MCC";
+        }
     }
     ImGui::SameLine();
 
     if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30))) {
 
-        this->sideBarFlag = "Block Diagram";
+        if (this->sideBarFlag == "Block Diagram") {
+            this->sideBarFlag = "None";
+        }
+        else {
+            this->sideBarFlag = "Block Diagram";
+        }
+
+        
 
     }
     ImGui::SameLine();
@@ -130,8 +148,44 @@ bool Ribbons::sideBar() {
 
     }
 
+    if (this->sideBarFlag == "Draw MCC")
+    {
+        MCC();
+    }
+
     return true;
 
+}
+
+bool Ribbons::MCC() {
+    bool close = true;
+    ImGui::Begin("Drawing MCC", &close, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
+    if (!close)
+    {
+        this->sideBarFlag = "None";
+    }
+    if (this->states.toolsExpanded) {
+        ImGui::SetWindowPos(ImVec2(0, 90));
+    }
+    else {
+        ImGui::SetWindowPos(ImVec2(0, 40));
+    }
+
+    ImGui::Button("New MCC");
+
+    ImGui::Text("---------------------");
+
+    ImGui::Button("Redraw MCC"); 
+
+    ImGui::Text("---------------------");
+
+    ImGui::Button("Draw in AutoCAD"); 
+
+    ImGui::Text("---------------------");
+
+    ImGui::End();
+
+    return true;
 }
 
 bool Ribbons::blockDiagram() {
@@ -142,7 +196,13 @@ bool Ribbons::blockDiagram() {
     {
         this->sideBarFlag = "None";
     }
-    ImGui::SetWindowPos(ImVec2(0, 90));
+    if (this->states.toolsExpanded) {
+        ImGui::SetWindowPos(ImVec2(0, 90));
+    }
+    else {
+        ImGui::SetWindowPos(ImVec2(0, 40));
+    }
+    
 
     ImGui::Text("General:");
     ImGui::Button("Recenter"); ImGui::SameLine();

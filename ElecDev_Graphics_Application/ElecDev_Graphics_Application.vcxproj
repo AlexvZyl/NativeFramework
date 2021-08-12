@@ -177,6 +177,7 @@
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
+    <ClCompile Include="Source\Helper\stateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
@@ -502,6 +503,7 @@
     <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h" />
     <ClInclude Include="Source\GUI\Toolbar\toolbar.h" />
+    <ClInclude Include="Source\Helper\stateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />

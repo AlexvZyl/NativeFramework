@@ -19,6 +19,7 @@
     <ClCompile Include="Source\mainApplication.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <ClCompile Include="Source\Helper\stateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -344,6 +345,7 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\protect.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\std_placeholders.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
+    <ClInclude Include="Source\Helper\stateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />

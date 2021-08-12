@@ -9,6 +9,8 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+#include "Core/imgui.h"
+
 // Design engine.
 #include "OpenGL/Engine2D/DesignEngine/designEngine.h"
 // Drawing engine.
@@ -21,6 +23,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include <glad/glad.h>
 #include <ErrorHandler/errorHandler.h>
 #include "Shaders/shaderHandler.h"
+#include "Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Graphics Handler Class.
@@ -33,6 +36,8 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Variables.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	stateMachineGraphics states;
 
 	// Variable that holds the active engine.
 	std::string activeEngine;
@@ -49,7 +54,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Constructor with GLFW window.
-	GraphicsHandler(GLFWwindow* window);
+	GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states);
 	// Default constructor.
 	GraphicsHandler();
 

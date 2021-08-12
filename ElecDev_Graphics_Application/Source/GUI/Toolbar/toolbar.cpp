@@ -8,11 +8,13 @@
 #include <cmath>
 #include <cfenv>
 #include "toolbar.h"
+#include "../Helper/stateMachine.h"
 
 
 // Constructor.
-Toolbar::Toolbar()
+Toolbar::Toolbar(stateMachine states)
 {
+    this->states = states;
     this->my_tool_active = true;
     this->show_app_main_menu_bar = false;
     this->show_app_documents = false;
@@ -68,15 +70,13 @@ void Toolbar::renderToolbar()
         {
             if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { my_tool_active = false; }
+            if (ImGui::MenuItem("Close", "Ctrl+W")) { exit(1); }
             ImGui::EndMenu();
         }
 
-        if (ImGui::BeginMenu("meh"))
+        if (ImGui::BeginMenu("View"))
         {
-            if (ImGui::MenuItem("aa..", "Ctrl+O")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Sasve", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Claose", "Ctrl+W")) { my_tool_active = false; }
+            if (ImGui::MenuItem("Test 1")) { /* Do stuff */ }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();

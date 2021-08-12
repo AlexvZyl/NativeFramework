@@ -147,8 +147,12 @@ int main(int, char**)
     // ImGUI setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+    stateMachineGraphics states;
+    states.gui = false;
+    states.mode = 0;
+
     // Create GUI handler object.
-    GUIHandler guiHandler;
+    GUIHandler guiHandler(&states);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -176,7 +180,7 @@ int main(int, char**)
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    GraphicsHandler gH(window);
+    GraphicsHandler gH(window,&states);
     graphicsHandler = gH;
 
     // Setup mouse callbacks.

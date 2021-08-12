@@ -11,6 +11,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // Error handler.
 #include <ErrorHandler/errorHandler.h>
+#include "../Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors.

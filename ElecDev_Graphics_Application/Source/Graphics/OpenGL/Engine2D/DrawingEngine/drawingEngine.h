@@ -20,6 +20,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // Error handling.
 #include <ErrorHandler/errorHandler.h>
+#include "../Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -76,6 +77,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructors.
 	//---------------------------------------------------------------------------------------------------------------------
+
 
 	// Default.
 	DrawingEngineGL();
