@@ -160,7 +160,7 @@ bool Ribbons::blockDiagram() {
     ImGui::Text("Component Removal:");
     ImGui::Button("New Cable"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
-    ImGui::Button("Undo");
+    ImGui::Button("Undo"); 
 
     ImGui::Text("------------------------------------");
 

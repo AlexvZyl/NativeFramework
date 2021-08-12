@@ -18,9 +18,6 @@ The interactive engine (the one where elements can be drawn is handled in design
 // General.
 #include <iostream>
 
-// Error handling.
-#include <ErrorHandler/errorHandler.h>
-
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
@@ -53,7 +50,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Saves the previous mouse event coordinates (in world coordinates).
-	double prevMouseEventWorldCoords[2] = {NULL, NULL};
+	int prevMouseEventWorldCoords[2] = {NULL, NULL};
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Shaders.
@@ -106,20 +103,17 @@ public:
 	void display();
 
 	//---------------------------------------------------------------------------------------------------------------------
+	//  Coordinate systems.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	float* pixelCoordsToWorldCoords(int pixelCoords[2]);
+
+	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse events.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Event handler for a mouse left press.
-	void mousePressLeft(double pixelCoords[2]);
-
-	// Event handler for a mouse move event.
-	void mouseMoveEvent(double pixelCoords[2], int buttonState);
-
-	//---------------------------------------------------------------------------------------------------------------------
-	//  Coordinate systems.
-	//---------------------------------------------------------------------------------------------------------------------
-
-	glm::vec4 pixelCoordsToWorldCoords(double pixelCoords[2]);
+	void mousePressLeft();
 
 };
 

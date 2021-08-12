@@ -10,7 +10,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "graphicsHandler.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Constructors & setup.
+//  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Default.
@@ -20,7 +20,7 @@ GraphicsHandler::GraphicsHandler() {};
 GraphicsHandler::GraphicsHandler(GLFWwindow* window)
 {
 	// Create engines.
-	DrawingEngineGL drawingEngine(window);
+	DrawingEngineGL drawingEngine(this->window);
 	this->drawingEngine = drawingEngine;
 	//DesignEngineGL designEngine(this->window);
 	//this->designEngine = designEngine;
@@ -30,6 +30,9 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window)
 
 	// Store pointer to GLFW window.
 	this->window = window;
+
+	// Setup mouse button callback.
+	//glfwSetMouseButtonCallback(window, this->mousePressEvent);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,34 +111,16 @@ void GraphicsHandler::closeEngine()
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Mouse event handler.
+//  Mouse events.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Handle mouse press events.
-void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
+void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods) 
 {
-	// Find cursos position.
-	double mousePos[2];
-	glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
-
-	// Check if left press.
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	// Left mouse button press.
+	if ((button==GLFW_MOUSE_BUTTON_LEFT) && (action==GLFW_PRESS))
 	{
-		// Call active engine.
-		drawingEngine.mousePressLeft(mousePos);
+		this->drawingEngine.mousePressLeft();
 	}
-}
-
-// Handle mouse move events.
-void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
-{
-	// Find cursos position.
-	double mousePos[2] = {xpos, ypos};
-	// Check button state.
-	int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-
-	// Call active engine.
-	drawingEngine.mouseMoveEvent(mousePos, buttonState);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
