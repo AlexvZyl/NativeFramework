@@ -1,3 +1,5 @@
+#pragma once
+
 /*
 This file will control all of the graphics engines and all of the API's, as well as the unitialization.
 This is so that the main loop that will containt both ImGUI calls and pure OpenGL calls can remain clean.
@@ -43,7 +45,7 @@ public:
 	GLFWwindow* window;
 
 	//-----------------------------------------------------------------------------------------------------------------
-	//  Constructors.
+	//  Constructors and setup.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Constructor with GLFW window.
@@ -53,7 +55,6 @@ public:
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Functions.
-	//-----------------------------------------------------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Function that handles which engine should be active.
@@ -69,8 +70,12 @@ public:
 	//  Mouse events.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	// Mouse press events.
+	// Handle mouse press events.
 	void mousePressEvent(GLFWwindow* window, int button, int action, int mods);
+
+	// Handle mouse move events.
+	void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos);
+
 };
 
 //----------------------------------------------------------------------------------------------------------------------

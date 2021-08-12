@@ -77,6 +77,9 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 
 void DrawingEngineGL::renderLoop()
 {
+	// Apply translation to shader.
+	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
+
     // rendering our geometries
 	GLCall( this->basicShader.use() );
     glBindVertexArray(this->VAO);
@@ -123,34 +126,64 @@ void DrawingEngineGL::display()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Mouse events.
+//----------------------------------------------------------------------------------------------------------------------
+
+// Event handler for a mouse left click.
+void DrawingEngineGL::mousePressLeft(double pixelCoords[2])
+{
+	// Find current click in world coords.
+	glm::vec4 currmousePosVec = this->pixelCoordsToWorldCoords(pixelCoords);
+	// Save current mouse pos click.
+	this->prevMouseEventWorldCoords[0] = currmousePosVec[0];
+	this->prevMouseEventWorldCoords[1] = currmousePosVec[1];
+}
+
+// Event handler for a mouse move event.
+void DrawingEngineGL::mouseMoveEvent(double pixelCoords[2], int buttonState)
+{
+	// Check if left mouse is pressed.
+	if (buttonState == GLFW_PRESS)
+	{
+		// Find current mouse position in the world.
+		glm::vec4 currMousePosVec = this->pixelCoordsToWorldCoords(pixelCoords);
+		// Calculate distance to translate.
+		glm::vec3 translateVec({(currMousePosVec[0]-this->prevMouseEventWorldCoords[0]),(currMousePosVec[1]-this->prevMouseEventWorldCoords[1]),0});
+		// Translate to the view matrix.
+		this->viewMatrix = glm::translate(this->viewMatrix, translateVec);
+
+		// Save mouse click position.
+		this->prevMouseEventWorldCoords[0] = currMousePosVec[0];
+		this->prevMouseEventWorldCoords[1] = currMousePosVec[1];
+	}
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //  Coordinate systems.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Function that takes pixel coordinates as input and return the coordinates in the world.
-float* DrawingEngineGL::pixelCoordsToWorldCoords(int pixelCoords[2]) 
+glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 {
-	float worldCoords[2];  //  The coordinates in the world.
-
+	// The coordinates on the screen.
+	double screenCoords[2];  
 	// Find the viewpwort dimensions.
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
+	pixelCoords[1] = (double)viewport[1] - pixelCoords[1];
 
-	// First apply the viewport transform the the pixels.
-	worldCoords[0] = (pixelCoords[0] - viewport[0]) / (viewport[0] / 2);
-	worldCoords[1] = (pixelCoords[1] - viewport[1]) / (viewport[1] / 2);
+	// Apply the viewport transform the the pixels.
+	screenCoords[0] = (pixelCoords[0] - viewport[0] / 2) / (viewport[0] / 2);
+	screenCoords[1] = (pixelCoords[1] - viewport[1] / 2) / (viewport[1] / 2);
+	// Convert to screen vector.
+	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
 
-	std::cout << worldCoords << std::endl;
+	// Apply MVP matrices.
+	glm::mat4 MVPinverse = glm::inverse(this->modelMatrix * this->viewMatrix * this->projectionMatrix);
+	glm::vec4 worldVec = MVPinverse * screenVec;
 
-	return worldCoords;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse events.
-//----------------------------------------------------------------------------------------------------------------------
-
-void DrawingEngineGL::mousePressLeft()
-{
-	
+	return worldVec;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
