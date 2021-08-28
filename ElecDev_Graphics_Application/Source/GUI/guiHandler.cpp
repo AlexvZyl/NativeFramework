@@ -9,7 +9,7 @@
 #include "guiHandler.h"
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
-#include "Helper/stateMachine.h"
+#include "../Helper/stateMachine.h"
 // Constructor.
 GUIHandler::GUIHandler(stateMachineGraphics* states)
 {
@@ -26,6 +26,7 @@ void GUIHandler::renderGraphics()
 	ImGui::Begin("FPS");
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
 	ImGui::SetWindowPos(ImVec2(ImGui::GetMainViewport()->WorkSize.x -160, 0));
-	ImGui::End();
+	ImGui::SetNextWindowSize(ImVec2(30, 10));
+	ImGui::End();	
 	
 };

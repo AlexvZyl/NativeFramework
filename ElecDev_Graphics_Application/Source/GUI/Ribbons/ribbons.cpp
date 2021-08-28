@@ -63,19 +63,19 @@ Ribbons::Ribbons(stateMachine states) {
     this->image1_height = 0;
     this->image1_texture = 0;
     this->ret1 = this->LoadTextureFromFile("Source\\GUI\\Images\\Draw_MCC.png", &this->image1_texture, &this->image1_width, &this->image1_height);
-    IM_ASSERT(ret1);
+    //IM_ASSERT(ret1);
 
     this->image2_width = 0;
     this->image2_height = 0;
     this->image2_texture = 0;
     this->ret2 = this->LoadTextureFromFile("Source\\GUI\\Images\\component.png", &this->image2_texture, &this->image2_width, &this->image2_height);
-    IM_ASSERT(ret2);
+    //IM_ASSERT(ret2);
 
     this->image3_width = 0;
     this->image3_height = 0;
     this->image3_texture = 0;
     this->ret3 = this->LoadTextureFromFile("Source\\GUI\\Images\\Draw_Circuit_buckets.png", &this->image3_texture, &this->image3_width, &this->image3_height);
-    IM_ASSERT(ret3);
+    //IM_ASSERT(ret3);
 
     this->sideBarFlag = "";
 }
@@ -94,7 +94,7 @@ bool Ribbons::topBar() {
     // Menu
     ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
     bool* p_open = NULL;
-    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
     
     ImGui::SetWindowSize(ImVec2(mainWindow.x+1,70));
     ImGui::SetWindowPos(ImVec2(-1, 18));

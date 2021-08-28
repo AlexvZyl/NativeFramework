@@ -59,7 +59,7 @@ void Toolbar::renderToolbar()
 {
     ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
     Toolbar:
-    ImGui::Begin("Toolbar", &this->my_tool_active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::Begin("Toolbar", &this->my_tool_active, ImGuiWindowFlags_NoBringToFrontOnFocus  | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
     ImGui::SetWindowSize(ImVec2(mainWindow.x+1, 30));
     ImGui::SetWindowPos(ImVec2(-1, 0));
     
