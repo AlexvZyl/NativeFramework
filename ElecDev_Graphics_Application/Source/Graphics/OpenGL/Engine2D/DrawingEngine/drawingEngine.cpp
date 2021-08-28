@@ -101,12 +101,15 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	// Find the viewpwort dimensions.
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+	// Account for pixel offset.
+	float viewportOffset[2] = { viewport[0] + 1, viewport[1] + 1 };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
-	pixelCoords[1] = (double)viewport[1] - pixelCoords[1];
-
+	double pixelCoordsTemp[2] = { pixelCoords[0] + 1, (double)viewport[1] - pixelCoords[1] + 1};
+	std::cout << viewportOffset[0] << " , " << viewportOffset[1] << std::endl;
+	
 	// Apply the viewport transform the the pixels.
-	screenCoords[0] = (pixelCoords[0] - viewport[0] / 2) / (viewport[0] / 2); 
-	screenCoords[1] = (pixelCoords[1] - viewport[1] / 2) / (viewport[1] / 2);
+	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
+	screenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
 	// Convert to screen vector.
 	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
 

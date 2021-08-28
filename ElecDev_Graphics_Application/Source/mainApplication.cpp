@@ -56,7 +56,7 @@ static void glfw_error_callback(int error, const char* description)
 }
 
 /*=======================================================================================================================================*/
-/* Mouse events wrapping.                                                                                                                */
+/* Mouse events callbacks.                                                                                                               */
 /*=======================================================================================================================================*/
 
 // Handle mouse press events ftom GLFW.
@@ -73,6 +73,16 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
     graphicsHandler.mouseScrollEvent(window, xoffset, yoffset);
+}
+
+/*=======================================================================================================================================*/
+/* GLFW window events callbacks.                                                                                                         */
+/*=======================================================================================================================================*/
+
+// The GLFW window resize callback.
+void glfwResizeEvent(GLFWwindow* window, int width, int height)
+{
+    graphicsHandler.resizeEvent(window, width, height);
 }
 
 /*=======================================================================================================================================*/
@@ -113,6 +123,8 @@ int main(int, char**)
     #endif
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    // GLFW setup. 
+    /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
     // Create window with graphics context
     GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
@@ -120,6 +132,9 @@ int main(int, char**)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync.
+
+    // Set window resize callback function.
+    glfwSetWindowSizeCallback(window, glfwResizeEvent);
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Initialize OpenGL loader.

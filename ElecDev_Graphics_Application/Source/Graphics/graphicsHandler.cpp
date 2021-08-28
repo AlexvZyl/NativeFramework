@@ -173,5 +173,18 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Window event handler.
+//----------------------------------------------------------------------------------------------------------------------
+
+void GraphicsHandler::resizeEvent(GLFWwindow* window, int width, int height) 
+{
+	// SHOULD CALL ONLY ON ACTIVE ENGINE.
+
+
+	// Adjust projection matrix according to new screen.
+	this->drawingEngine.projectionMatrix;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //  EOF.
 //----------------------------------------------------------------------------------------------------------------------

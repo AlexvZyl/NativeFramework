@@ -94,11 +94,6 @@ void DrawingEngineGL::mouseScrollEvent(double pixelCoords[2], int yOffset)
 	glm::vec4 mouseWorldCoordsPost = this->pixelCoordsToWorldCoords(pixelCoords);
 	// Translate the world so that the zoom happens on the mouse position. 
 	glm::vec3 translateVector = glm::vec3((double)mouseWorldCoordsPost[0] - (double)mouseWorldCoordsPre[0], (double)mouseWorldCoordsPost[1] - (double)mouseWorldCoordsPre[1], 0);
-	// Adjust translate vector for when zooming out.
-	if (yOffset < 0) 
-	{ 
-		translateVector = { -1 * translateVector[0], translateVector[1], 0 };
-	}
 	//  Apply translation vector.
 	this->translationMatrix = glm::translate(this->translationMatrix, translateVector);
 }
