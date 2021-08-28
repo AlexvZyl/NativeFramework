@@ -9,6 +9,8 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 
 #include "graphicsHandler.h"
 
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors & setup.
 //----------------------------------------------------------------------------------------------------------------------
@@ -17,8 +19,10 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 GraphicsHandler::GraphicsHandler() {};
 
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(GLFWwindow* window)
+GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states)
 {
+	this->states = *states;
+
 	// Create engines.
 	DrawingEngineGL drawingEngine(window);
 	this->drawingEngine = drawingEngine;
@@ -114,28 +118,39 @@ void GraphicsHandler::closeEngine()
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
-	// Find cursos position.
-	double mousePos[2];
-	glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
-
-	// Check if left press.
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	if (!ImGui::GetIO().WantCaptureMouse)
 	{
-		// Call active engine.
-		drawingEngine.mousePressLeft(mousePos);
+		// Find cursos position.
+		double mousePos[2];
+		glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
+
+		// Check if left press.
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		{
+			// Call active engine.
+			drawingEngine.mousePressLeft(mousePos);
+		}
 	}
+		
+	
+
+	
 }
 
 // Handle mouse move events.
 void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-	// Find cursos position.
-	double mousePos[2] = {xpos, ypos};
-	// Check button state.
-	int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+	if (!ImGui::GetIO().WantCaptureMouse)
+	{
 
-	// Call active engine.
-	drawingEngine.mouseMoveEvent(mousePos, buttonState);
+		// Find cursos position.
+		double mousePos[2] = { xpos, ypos };
+		// Check button state.
+		int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+
+		// Call active engine.
+		drawingEngine.mouseMoveEvent(mousePos, buttonState);
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------

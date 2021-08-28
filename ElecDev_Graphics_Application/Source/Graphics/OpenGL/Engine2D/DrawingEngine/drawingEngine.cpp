@@ -11,6 +11,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // Error handler.
 #include <ErrorHandler/errorHandler.h>
+#include "../Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors.
@@ -29,6 +30,14 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\Shaders\\basicShader.shader";
 	GLCall( Shader basicShader(shaderFilePath) );
 	GLCall( this->basicShader = basicShader );
+
+	this->projectionMatrix = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+	this->modelMatrix = glm::mat4(1.0f);
+	this->viewMatrix = glm::mat4(1.0f);
+	this->viewportMatrix = glm::mat4(1.0f);
+	this->scalingMatrix = glm::mat4(1.0f);
+	this->translationMatrix = glm::mat4(1.0f);
+	this->rotationMatrix = glm::mat4(1.0f);
 
 	// Assign matrices to shader.
 	GLCall( this->basicShader.use() );
@@ -78,6 +87,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 void DrawingEngineGL::renderLoop()
 {
 	// Apply translation to shader.
+	this->viewMatrix = this->translationMatrix * this->rotationMatrix * this->scalingMatrix;
 	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
 
     // rendering our geometries
@@ -150,7 +160,7 @@ void DrawingEngineGL::mouseMoveEvent(double pixelCoords[2], int buttonState)
 		// Calculate distance to translate.
 		glm::vec3 translateVec({(currMousePosVec[0]-this->prevMouseEventWorldCoords[0]),(currMousePosVec[1]-this->prevMouseEventWorldCoords[1]),0});
 		// Translate to the view matrix.
-		this->viewMatrix = glm::translate(this->viewMatrix, translateVec);
+		this->translationMatrix = glm::translate(this->translationMatrix, translateVec);
 
 		// Save mouse click position.
 		this->prevMouseEventWorldCoords[0] = currMousePosVec[0];
@@ -174,14 +184,14 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	pixelCoords[1] = (double)viewport[1] - pixelCoords[1];
 
 	// Apply the viewport transform the the pixels.
-	screenCoords[0] = (pixelCoords[0] - viewport[0] / 2) / (viewport[0] / 2);
+	screenCoords[0] = (pixelCoords[0] - viewport[0] / 2) / (viewport[0] / 2); 
 	screenCoords[1] = (pixelCoords[1] - viewport[1] / 2) / (viewport[1] / 2);
 	// Convert to screen vector.
 	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
 
 	// Apply MVP matrices.
 	glm::mat4 MVPinverse = glm::inverse(this->modelMatrix * this->viewMatrix * this->projectionMatrix);
-	glm::vec4 worldVec = MVPinverse * screenVec;
+	glm::vec4 worldVec = screenVec * MVPinverse ;
 
 	return worldVec;
 }

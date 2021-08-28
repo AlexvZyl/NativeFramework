@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <Core/imgui.h>
 #include <string>
-
+#include "../Helper/stateMachine.h"
 
 
 #pragma once
@@ -68,17 +68,20 @@ public:
 
 	std::string sideBarFlag;
 
+	stateMachine states;
+
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	Ribbons();
+	Ribbons(stateMachine states);
 
 	// Function that handles which engine should be active.
 	void renderRibbons();
 	bool topBar();
 	bool sideBar();
+	bool MCC();
 	bool blockDiagram();
 	bool BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize);
 	bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);

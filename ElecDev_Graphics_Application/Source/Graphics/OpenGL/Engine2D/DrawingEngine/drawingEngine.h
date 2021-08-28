@@ -20,6 +20,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // Error handling.
 #include <ErrorHandler/errorHandler.h>
+#include "../Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -34,19 +35,21 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	// MVP Matrices.
-	glm::mat4 modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
+	glm::mat4 modelMatrix;		// The model matrix that places the object in the world.  Is going to be 
 													// kept an identity matrix for now.
-	glm::mat4 viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
+	glm::mat4 viewMatrix;			// The matrix that handles the camera movement.
 													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-	glm::mat4 projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
+
+	glm::mat4 projectionMatrix; // The matrix that handles the clipping plane (which part of the world is
+
 													// going to be visible to the screen?
-	glm::mat4 viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
+	glm::mat4 viewportMatrix;		// The matrix that handles the viewport transform.  Converts screen pixel
 													// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
-	glm::mat4 sccalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
-	glm::mat4 translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
-	glm::mat4 rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
+	glm::mat4 scalingMatrix;		// Handles camera scaling.
+	glm::mat4 translationMatrix;	// Handles camera translations.
+	glm::mat4 rotationMatrix;		// Handles camera rotations.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse handler variables.
@@ -76,6 +79,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructors.
 	//---------------------------------------------------------------------------------------------------------------------
+
 
 	// Default.
 	DrawingEngineGL();

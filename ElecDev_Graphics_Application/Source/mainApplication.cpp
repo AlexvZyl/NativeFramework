@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <vector>
 #include <iostream>
+#include <string>
 
 // ImGUI (GUI software). 
 #include "Core/imgui.h"
@@ -22,7 +23,7 @@
 #include "GUI/guiHandler.h"
 
 // Graphics handler include.
-#include <Graphics/graphicsHandler.h>
+#include <../Graphics/graphicsHandler.h>
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
@@ -147,8 +148,12 @@ int main(int, char**)
     // ImGUI setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+    stateMachineGraphics states;
+    states.gui = false;
+    states.mode = 0;
+
     // Create GUI handler object.
-    GUIHandler guiHandler;
+    GUIHandler guiHandler(&states);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -176,7 +181,7 @@ int main(int, char**)
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    GraphicsHandler gH(window);
+    GraphicsHandler gH(window,&states);
     graphicsHandler = gH;
 
     // Setup mouse callbacks.
@@ -194,11 +199,16 @@ int main(int, char**)
     /* Loop                                                                                                                              */
     /*===================================================================================================================================*/
 
+    std::string interfacePython = "";
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
     {   
+
+        
+
         // Check for events.
-        glfwPollEvents();
+        glfwWaitEvents();
+        //glfwPollEvents();
         // Init colors.
         glClearColor(backGroundColor[0], backGroundColor[1], backGroundColor[2], 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -214,6 +224,19 @@ int main(int, char**)
         // Render ImGUI components.
         guiHandler.renderGraphics();
 
+        /*std::cin >> interfacePython;
+
+        ImGui::Begin("Interface Window Example");
+
+        ImGui::Text("(%s)", interfacePython);
+
+        ImGui::SetWindowPos(ImVec2(ImGui::GetMainViewport()->WorkSize.x - 160, 0));
+        ImGui::SetNextWindowSize(ImVec2(30, 10));
+
+        ImGui::End();*/
+
+        
+
         // Render ImGUI into screen.
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -222,6 +245,7 @@ int main(int, char**)
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glfwSwapBuffers(window);
+        //glFinish();
         
     }
 
