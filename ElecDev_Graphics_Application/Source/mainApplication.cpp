@@ -41,6 +41,8 @@
 /*=======================================================================================================================================*/
 
 // Defined here, assigned in the main function where it has access to the window.
+// Used as a global variable so that the mouse event callbacks from GLFW can have
+// access to it.
 GraphicsHandler graphicsHandler;
 
 /*=======================================================================================================================================*/
@@ -54,7 +56,7 @@ static void glfw_error_callback(int error, const char* description)
 }
 
 /*=======================================================================================================================================*/
-/* Mouse events wrapping.                                                                                                                         */
+/* Mouse events wrapping.                                                                                                                */
 /*=======================================================================================================================================*/
 
 // Handle mouse press events ftom GLFW.
@@ -67,6 +69,10 @@ void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
     graphicsHandler.mouseMoveEvent(window, xpos, ypos);
+}
+void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
+{
+    graphicsHandler.mouseScrollEvent(window, xoffset, yoffset);
 }
 
 /*=======================================================================================================================================*/
@@ -187,6 +193,7 @@ int main(int, char**)
     // Setup mouse callbacks.
     glfwSetMouseButtonCallback(window, mousePressEvent); // Mouse press event.
     glfwSetCursorPosCallback(window, mouseMoveEvent); //  Mouse move event.
+    glfwSetScrollCallback(window, mouseScrollEvent); // Mouse scroll event.
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other setups.
@@ -203,9 +210,6 @@ int main(int, char**)
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
     {   
-
-        
-
         // Check for events.
         glfwWaitEvents();
         //glfwPollEvents();
@@ -234,9 +238,7 @@ int main(int, char**)
         ImGui::SetNextWindowSize(ImVec2(30, 10));
 
         ImGui::End();*/
-
         
-
         // Render ImGUI into screen.
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

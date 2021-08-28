@@ -35,16 +35,14 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	// MVP Matrices.
-	glm::mat4 modelMatrix;		// The model matrix that places the object in the world.  Is going to be 
-													// kept an identity matrix for now.
+	glm::mat4 modelMatrix;			// The model matrix that places the object in the world.  Is going to be 
+									// kept an identity matrix for now.
 	glm::mat4 viewMatrix;			// The matrix that handles the camera movement.
-													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-
-	glm::mat4 projectionMatrix; // The matrix that handles the clipping plane (which part of the world is
-
-													// going to be visible to the screen?
+									// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
+	glm::mat4 projectionMatrix;		// The matrix that handles the clipping plane (which part of the world is
+									// going to be visible to the screen?
 	glm::mat4 viewportMatrix;		// The matrix that handles the viewport transform.  Converts screen pixel
-													// coordinates to the OpenGL uniform coordinate system.
+									// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
 	glm::mat4 scalingMatrix;		// Handles camera scaling.
@@ -65,6 +63,12 @@ public:
 	Shader basicShader;
 
 	//---------------------------------------------------------------------------------------------------------------------
+	//  Mouse event variables.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	float scaleRate;
+
+	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
 	
@@ -79,7 +83,6 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructors.
 	//---------------------------------------------------------------------------------------------------------------------
-
 
 	// Default.
 	DrawingEngineGL();
@@ -113,11 +116,15 @@ public:
 	//  Mouse events.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// Event handler for a mouse left press.
+	// Event handler mouse presses.
 	void mousePressLeft(double pixelCoords[2]);
+	void mousePressRight(double pixelCoords[2]);
 
 	// Event handler for a mouse move event.
 	void mouseMoveEvent(double pixelCoords[2], int buttonState);
+
+	// Event handler for a mouse move event.
+	void mouseScrollEvent(double pixelCoords[2], int yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.

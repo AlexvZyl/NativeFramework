@@ -20,6 +20,9 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
     <ClCompile Include="Source\Helper\stateMachine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\mouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\engineAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />

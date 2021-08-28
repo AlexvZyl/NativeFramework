@@ -9,8 +9,6 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 
 #include "graphicsHandler.h"
 
-
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors & setup.
 //----------------------------------------------------------------------------------------------------------------------
@@ -20,7 +18,8 @@ GraphicsHandler::GraphicsHandler() {};
 
 // With GLFW window.
 GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states)
-{
+{	
+	// Set state machine variable.
 	this->states = *states;
 
 	// Create engines.
@@ -117,7 +116,8 @@ void GraphicsHandler::closeEngine()
 
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
-{
+{	
+	// Check if not above ImGUI element.
 	if (!ImGui::GetIO().WantCaptureMouse)
 	{
 		// Find cursos position.
@@ -130,19 +130,22 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 			// Call active engine.
 			drawingEngine.mousePressLeft(mousePos);
 		}
-	}
-		
-	
 
-	
+		// Check if left press.
+		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+		{
+			// Call active engine.
+			drawingEngine.mousePressRight(mousePos);
+		}
+	}
 }
 
 // Handle mouse move events.
 void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
+	// Check if not above ImGUI element.
 	if (!ImGui::GetIO().WantCaptureMouse)
 	{
-
 		// Find cursos position.
 		double mousePos[2] = { xpos, ypos };
 		// Check button state.
@@ -150,6 +153,22 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 
 		// Call active engine.
 		drawingEngine.mouseMoveEvent(mousePos, buttonState);
+	}
+}
+
+// Handle mouse scroll events.
+void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset) 
+{	
+	// Check if not above ImGUI element.
+	if (!ImGui::GetIO().WantCaptureMouse) 
+	{
+		// Find cursos position.
+		double mousePos[2];
+		glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
+
+		// Call current active engine zoom function.
+		// STILL NEEDS TO BE ABLE TO SELECT CORRECT ACTIVE ENGINE.
+		drawingEngine.mouseScrollEvent(mousePos, yoffset);
 	}
 }
 

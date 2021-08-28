@@ -31,6 +31,11 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	GLCall( Shader basicShader(shaderFilePath) );
 	GLCall( this->basicShader = basicShader );
 
+	// Find the viewpwort dimensions.
+	int viewport[2];
+	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+
+	// Matrices.
 	this->projectionMatrix = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 	this->modelMatrix = glm::mat4(1.0f);
 	this->viewMatrix = glm::mat4(1.0f);
@@ -45,7 +50,11 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	GLCall( this->basicShader.setMat4("projectionMatrix", this->projectionMatrix) );
 	GLCall( this->basicShader.setMat4("viewMatrix", this->viewMatrix) );
 
+	// Print success message.
 	std::cout << "[OPENGL SHADER] Shaders compiled.\n";
+
+	// Mouse event variables.
+	this->scaleRate = 0.1;
 
 	// create our geometries
 	unsigned int vbo, vao, ebo;
@@ -81,94 +90,6 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Rendering.
-//----------------------------------------------------------------------------------------------------------------------
-
-void DrawingEngineGL::renderLoop()
-{
-	// Apply translation to shader.
-	this->viewMatrix = this->translationMatrix * this->rotationMatrix * this->scalingMatrix;
-	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
-
-    // rendering our geometries
-	GLCall( this->basicShader.use() );
-    glBindVertexArray(this->VAO);
-    GLCall( glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0) );
-    glBindVertexArray(0);
-
-	// Draw temporary border.
-	GLCall ( glBegin(GL_LINE_LOOP) );
-	glVertex2f(-1.0f,1.0f);
-	glVertex2f(1.0f, 1.0f);
-	glVertex2f(1.0f, -1.0f);
-	glVertex2f(-1.0f, -1.0f);
-	glEnd();
-
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-//  API
-//----------------------------------------------------------------------------------------------------------------------
-
-// Adds a line to the VBO object.
-void DrawingEngineGL::drawLine()
-{
-	return;
-}
-
-// Adds a circle to the VBO object.
-void DrawingEngineGL::drawCircle()
-{
-	return;
-}
-
-// Adds text to the VBO object.
-void DrawingEngineGL::drawText()
-{
-	return;
-}
-
-// Displays the new drawing to the screen.
-// Required after each new element has been added.
-void DrawingEngineGL::display()
-{
-		
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse events.
-//----------------------------------------------------------------------------------------------------------------------
-
-// Event handler for a mouse left click.
-void DrawingEngineGL::mousePressLeft(double pixelCoords[2])
-{
-	// Find current click in world coords.
-	glm::vec4 currmousePosVec = this->pixelCoordsToWorldCoords(pixelCoords);
-	// Save current mouse pos click.
-	this->prevMouseEventWorldCoords[0] = currmousePosVec[0];
-	this->prevMouseEventWorldCoords[1] = currmousePosVec[1];
-}
-
-// Event handler for a mouse move event.
-void DrawingEngineGL::mouseMoveEvent(double pixelCoords[2], int buttonState)
-{
-	// Check if left mouse is pressed.
-	if (buttonState == GLFW_PRESS)
-	{
-		// Find current mouse position in the world.
-		glm::vec4 currMousePosVec = this->pixelCoordsToWorldCoords(pixelCoords);
-		// Calculate distance to translate.
-		glm::vec3 translateVec({(currMousePosVec[0]-this->prevMouseEventWorldCoords[0]),(currMousePosVec[1]-this->prevMouseEventWorldCoords[1]),0});
-		// Translate to the view matrix.
-		this->translationMatrix = glm::translate(this->translationMatrix, translateVec);
-
-		// Save mouse click position.
-		this->prevMouseEventWorldCoords[0] = currMousePosVec[0];
-		this->prevMouseEventWorldCoords[1] = currMousePosVec[1];
-	}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 //  Coordinate systems.
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -190,6 +111,7 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
 
 	// Apply MVP matrices.
+	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
 	glm::mat4 MVPinverse = glm::inverse(this->modelMatrix * this->viewMatrix * this->projectionMatrix);
 	glm::vec4 worldVec = screenVec * MVPinverse ;
 

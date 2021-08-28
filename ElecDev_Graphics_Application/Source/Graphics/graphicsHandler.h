@@ -81,6 +81,9 @@ public:
 	// Handle mouse move events.
 	void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos);
 
+	// Handle mouse move events.
+	void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset);
+
 };
 
 //----------------------------------------------------------------------------------------------------------------------
