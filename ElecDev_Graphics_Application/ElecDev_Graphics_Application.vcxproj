@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\buffers.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\engineAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\renderer.cpp" />

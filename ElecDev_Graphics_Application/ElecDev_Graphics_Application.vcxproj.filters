@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\engineAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\renderer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Peripherals\buffers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />

@@ -105,7 +105,6 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	float viewportOffset[2] = { viewport[0] + 1, viewport[1] + 1 };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
 	double pixelCoordsTemp[2] = { pixelCoords[0] + 1, (double)viewport[1] - pixelCoords[1] + 1};
-	std::cout << viewportOffset[0] << " , " << viewportOffset[1] << std::endl;
 	
 	// Apply the viewport transform the the pixels.
 	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);

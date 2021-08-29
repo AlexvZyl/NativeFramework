@@ -126,6 +126,8 @@ int main(int, char**)
     // GLFW setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+    // Enable 4x MSAA.
+    glfwWindowHint(GLFW_SAMPLES, 16);
     // Create window with graphics context
     GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
     if (window == NULL)
@@ -179,7 +181,8 @@ int main(int, char**)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls.
+    // Enable keyboard controls.
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     // Setup ImGui style.
     ImGui::StyleColorsDark();
@@ -209,6 +212,9 @@ int main(int, char**)
     glfwSetMouseButtonCallback(window, mousePressEvent); // Mouse press event.
     glfwSetCursorPosCallback(window, mouseMoveEvent); //  Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent); // Mouse scroll event.
+
+    // Enable MSAA.
+    glEnable(GL_MULTISAMPLE);
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other setups.
