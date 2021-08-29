@@ -174,7 +174,7 @@
     <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\drawingEngineCore.cpp" />
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Shaders\shaderHandler.cpp" />

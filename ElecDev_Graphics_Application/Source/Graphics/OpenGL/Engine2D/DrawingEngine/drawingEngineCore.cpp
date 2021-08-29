@@ -38,10 +38,21 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	this->viewportDimensions[0] = viewport[0];
 	this->viewportDimensions[1] = viewport[1];
 
-	// Matrices.
-	this->projectionMatrix = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-	float projValuesTemp[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
+	// Matrices setup.
+	//----------------------------------------------------------
+	
+	// Find the minimum value of the viewport dimensions.
+	int minValue;
+	if (viewport[0] < viewport[1]) { minValue = viewport[0]; }
+	else { minValue = viewport[1]; }
+	// Scale the projection values according to the viewport aspect ratio.
+	float projValuesTemp[6] = {(float)-viewport[0]/minValue, (float)viewport[0]/minValue, (float)-viewport[1]/minValue, (float)viewport[1]/minValue,-1.0, 1.0 };
+	// Save projection values to be used with resizing of the window.
 	for (int i = 0; i < 6; i++) { this->projectionValues[i] = projValuesTemp[i]; }
+	// Create projection matrix.
+	this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], -1.0f, 1.0f);
+
+	// Assign original projection values.
 	this->modelMatrix = glm::mat4(1.0f);
 	this->viewMatrix = glm::mat4(1.0f);
 	this->viewportMatrix = glm::mat4(1.0f);
@@ -109,7 +120,7 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	// Account for pixel offset.
 	float viewportOffset[2] = { viewport[0] + 1, viewport[1] + 1 };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
-	double pixelCoordsTemp[2] = { pixelCoords[0] + 1, (double)viewport[1] - pixelCoords[1] + 1};
+	double pixelCoordsTemp[2] = { pixelCoords[0] + 1, (double)viewport[1] - pixelCoords[1] + 1 };
 	
 	// Apply the viewport transform the the pixels.
 	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
@@ -139,9 +150,7 @@ void DrawingEngineGL::resizeEvent(int width, int height)
 	this->viewportDimensions[1] = height;
 	
 	// Scale projection values.
-	std::cout << this->projectionValues[0] << " , ";
 	this->projectionValues[0] *= scalingFactor[0];
-	std::cout << this->projectionValues[0] << "\n";
 	this->projectionValues[1] *= scalingFactor[0];
 	this->projectionValues[2] *= scalingFactor[1];
 	this->projectionValues[3] *= scalingFactor[1];
