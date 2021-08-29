@@ -70,7 +70,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	std::cout << "[OPENGL SHADER] Shaders compiled.\n\n";
 
 	// Mouse event variables.
-	this->scaleRate = 0.1;
+	this->scaleRate = 0.35;
 
 	// create our geometries
 	unsigned int vbo, vao, ebo;
@@ -118,9 +118,9 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
 	// Account for pixel offset.
-	float viewportOffset[2] = { (float)viewport[0] - 0.5, (float)viewport[1] - 0.5 };
+	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
-	double pixelCoordsTemp[2] = { pixelCoords[0] + 0.5, (double)viewport[1] - pixelCoords[1] + 0.5 };
+	double pixelCoordsTemp[2] = { pixelCoords[0] , (double)viewport[1] - pixelCoords[1] };
 	
 	// Apply the viewport transform the the pixels.
 	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);

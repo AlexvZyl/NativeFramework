@@ -88,7 +88,7 @@ public:
 
 	// Default.
 	DrawingEngineGL();
-	// Wiith GLFW window.
+	// With GLFW window.
 	DrawingEngineGL(GLFWwindow* window);
 	
 	//---------------------------------------------------------------------------------------------------------------------
