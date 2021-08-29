@@ -176,7 +176,7 @@ int main(int, char**)
     states.mode = 0;
 
     // Create GUI handler object.
-    GUIHandler guiHandler(&states);
+    GUIHandler guiHandler(&states, &graphicsHandler);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

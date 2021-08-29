@@ -10,12 +10,15 @@
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
 #include "../Helper/stateMachine.h"
+
 // Constructor.
-GUIHandler::GUIHandler(stateMachineGraphics* states)
+GUIHandler::GUIHandler(stateMachineGraphics* states, GraphicsHandler graphicsIn)
 {
 	this->statesG = *states;
 	this->states.toolsExpanded = false;
 	this->states.toolsMode = 0;
+
+	this->graphics = graphicsIn;
 	
 };
 
