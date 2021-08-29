@@ -31,7 +31,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	Shader basicShader(shaderFilePath);
 	this->basicShader = basicShader;
 
-	// Find the viewpwort dimensions.
+	// Find the viewpwort dimensions and store it.
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
 	// Store the value to use when viewport changes.
@@ -118,9 +118,9 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
 	// Account for pixel offset.
-	float viewportOffset[2] = { viewport[0] + 1, viewport[1] + 1 };
+	float viewportOffset[2] = { (float)viewport[0] - 0.5, (float)viewport[1] - 0.5 };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
-	double pixelCoordsTemp[2] = { pixelCoords[0] + 1, (double)viewport[1] - pixelCoords[1] + 1 };
+	double pixelCoordsTemp[2] = { pixelCoords[0] + 0.5, (double)viewport[1] - pixelCoords[1] + 0.5 };
 	
 	// Apply the viewport transform the the pixels.
 	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
@@ -145,7 +145,7 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 void DrawingEngineGL::resizeEvent(int width, int height)
 {
 	// Calculate the value of the scaling.
-	float scalingFactor[2] = { width / this->viewportDimensions[0], height / this->viewportDimensions[1] };
+	float scalingFactor[2] = { (float)width / this->viewportDimensions[0], (float)height / (float)this->viewportDimensions[1] };
 	this->viewportDimensions[0] = width;
 	this->viewportDimensions[1] = height;
 	
@@ -157,7 +157,9 @@ void DrawingEngineGL::resizeEvent(int width, int height)
 
 	// Create new projection matrix.
 	this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], this->projectionValues[4], this->projectionValues[5]);
-	// Assign new projection matrix to shader.
+	// Scale the drawing so that it stays the same size relative to the viewport.
+	this->projectionMatrix = glm::scale(this->projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
+	// Assign change to shader(s).
 	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
 
 }
