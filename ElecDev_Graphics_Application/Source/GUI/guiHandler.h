@@ -9,6 +9,7 @@
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
 #include "../Helper/stateMachine.h"
+#include <../Graphics/graphicsHandler.h>
 
 
 
@@ -29,6 +30,8 @@ public:
 
 	stateMachineGraphics statesG;
 
+	GraphicsHandler graphics;
+
 	Toolbar toolbar = Toolbar(states);
 	Ribbons ribbons = Ribbons(states);
 
@@ -39,7 +42,7 @@ public:
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	GUIHandler(stateMachineGraphics* states);
+	GUIHandler(stateMachineGraphics* states, GraphicsHandler graphicsIn);
 
 	// Function that handles which engine should be active.
 	void renderGraphics();
