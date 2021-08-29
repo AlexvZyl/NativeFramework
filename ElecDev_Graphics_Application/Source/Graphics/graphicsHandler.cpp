@@ -10,7 +10,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "graphicsHandler.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Constructors & setup.
+//  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Default.
@@ -23,7 +23,7 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 	this->states = *states;
 
 	// Create engines.
-	DrawingEngineGL drawingEngine(window);
+	DrawingEngineGL drawingEngine(this->window);
 	this->drawingEngine = drawingEngine;
 	//DesignEngineGL designEngine(this->window);
 	//this->designEngine = designEngine;
@@ -33,6 +33,9 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 
 	// Store pointer to GLFW window.
 	this->window = window;
+
+	// Setup mouse button callback.
+	//glfwSetMouseButtonCallback(window, this->mousePressEvent);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -111,7 +114,7 @@ void GraphicsHandler::closeEngine()
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Mouse event handler.
+//  Mouse events.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Handle mouse press events.

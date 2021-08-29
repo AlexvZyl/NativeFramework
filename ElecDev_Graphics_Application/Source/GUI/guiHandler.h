@@ -8,7 +8,7 @@
 
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
-#include "../Helper/stateMachine.h"
+#include "GraphicsWindow/graphicsWindow.h"
 
 
 
@@ -25,21 +25,16 @@ public:
 	//  Variables.
 	//--------------------------------------------------------------------------------------------------------------
 
-	stateMachine states;
-
-	stateMachineGraphics statesG;
-
-	Toolbar toolbar = Toolbar(states);
-	Ribbons ribbons = Ribbons(states);
-
-	
+	Toolbar toolbar;
+	Ribbons ribbons;
+	GraphicsWindow graphicsWindow;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	GUIHandler(stateMachineGraphics* states);
+	GUIHandler();
 
 	// Function that handles which engine should be active.
 	void renderGraphics();

@@ -84,6 +84,12 @@ void glfwResizeEvent(GLFWwindow* window, int width, int height)
 {
     graphicsHandler.resizeEvent(window, width, height);
 }
+// This removes the console that keeps opening with the app if it is not in debug mode.
+#ifdef	_DEBUG
+    #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
+#else
+    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#endif
 
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
@@ -186,6 +192,7 @@ int main(int, char**)
 
     // Setup ImGui style.
     ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();  // Set mode to light.
 
     // Setup Platform/Renderer backends.
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -216,8 +223,10 @@ int main(int, char**)
     // Enable MSAA.
     glEnable(GL_MULTISAMPLE);
 
+    GraphicsHandler graphicsHandler(window);
+    
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // Other setups.
+    // Other inits.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
     // Set background color.
@@ -246,7 +255,7 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Render ImGUI components.
+        // Render Toolbar.
         guiHandler.renderGraphics();
 
         /*std::cin >> interfacePython;
@@ -272,7 +281,7 @@ int main(int, char**)
         
     }
 
-    /*===================================================================================================================================*/
+    /*s===================================================================================================================================*/
 
     // Cleanup.
     ImGui_ImplOpenGL3_Shutdown();
