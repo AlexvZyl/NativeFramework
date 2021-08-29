@@ -28,15 +28,20 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 
 	// Create shader.
 	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\Shaders\\basicShader.shader";
-	GLCall( Shader basicShader(shaderFilePath) );
-	GLCall( this->basicShader = basicShader );
+	Shader basicShader(shaderFilePath);
+	this->basicShader = basicShader;
 
 	// Find the viewpwort dimensions.
 	int viewport[2];
 	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+	// Store the value to use when viewport changes.
+	this->viewportDimensions[0] = viewport[0];
+	this->viewportDimensions[1] = viewport[1];
 
 	// Matrices.
 	this->projectionMatrix = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+	float projValuesTemp[6] = {-1.0, 1.0, -1.0, 1.0, -1.0, 1.0};
+	for (int i = 0; i < 6; i++) { this->projectionValues[i] = projValuesTemp[i]; }
 	this->modelMatrix = glm::mat4(1.0f);
 	this->viewMatrix = glm::mat4(1.0f);
 	this->viewportMatrix = glm::mat4(1.0f);
@@ -45,13 +50,13 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	this->rotationMatrix = glm::mat4(1.0f);
 
 	// Assign matrices to shader.
-	GLCall( this->basicShader.use() );
-	GLCall( this->basicShader.setMat4("worldMatrix", this->modelMatrix) );
-	GLCall( this->basicShader.setMat4("projectionMatrix", this->projectionMatrix) );
-	GLCall( this->basicShader.setMat4("viewMatrix", this->viewMatrix) );
+	this->basicShader.use();
+	this->basicShader.setMat4("worldMatrix", this->modelMatrix);
+	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
 
 	// Print success message.
-	std::cout << "[OPENGL SHADER] Shaders compiled.\n";
+	std::cout << "[OPENGL SHADER] Shaders compiled.\n\n";
 
 	// Mouse event variables.
 	this->scaleRate = 0.1;
@@ -118,6 +123,34 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	glm::vec4 worldVec = screenVec * MVPinverse ;
 
 	return worldVec;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Window functions.
+//----------------------------------------------------------------------------------------------------------------------
+
+// Function that handles engine resizing.
+// Viewport changes are made in the main Applicatioon since it affects everything.
+void DrawingEngineGL::resizeEvent(int width, int height)
+{
+	// Calculate the value of the scaling.
+	float scalingFactor[2] = { width / this->viewportDimensions[0], height / this->viewportDimensions[1] };
+	this->viewportDimensions[0] = width;
+	this->viewportDimensions[1] = height;
+	
+	// Scale projection values.
+	std::cout << this->projectionValues[0] << " , ";
+	this->projectionValues[0] *= scalingFactor[0];
+	std::cout << this->projectionValues[0] << "\n";
+	this->projectionValues[1] *= scalingFactor[0];
+	this->projectionValues[2] *= scalingFactor[1];
+	this->projectionValues[3] *= scalingFactor[1];
+
+	// Create new projection matrix.
+	this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], this->projectionValues[4], this->projectionValues[5]);
+	// Assign new projection matrix to shader.
+	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------

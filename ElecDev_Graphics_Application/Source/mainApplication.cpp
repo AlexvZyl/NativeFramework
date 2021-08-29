@@ -126,7 +126,7 @@ int main(int, char**)
     // GLFW setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-    // Enable 4x MSAA.
+    // Enable 16x MSAA.
     glfwWindowHint(GLFW_SAMPLES, 16);
     // Create window with graphics context
     GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
