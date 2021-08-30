@@ -247,7 +247,7 @@ int main(int, char**)
         ImGui::NewFrame();
 
         // Render ImGUI components.
-        guiHandler.renderGraphics();
+        //guiHandler.renderGraphics();
 
         /*std::cin >> interfacePython;
 

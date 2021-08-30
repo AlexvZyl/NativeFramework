@@ -1,6 +1,10 @@
+#pragma once
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
+
+#include <../Graphics/graphicsHandler.h>
 
 //  General.
 #include <string>
@@ -9,11 +13,7 @@
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
 #include "../Helper/stateMachine.h"
-#include <../Graphics/graphicsHandler.h>
 
-
-
-#pragma once
 //----------------------------------------------------------------------------------------------------------------------
 //  GUI Handler Class.
 //----------------------------------------------------------------------------------------------------------------------
@@ -35,14 +35,12 @@ public:
 	Toolbar toolbar = Toolbar(states);
 	Ribbons ribbons = Ribbons(states);
 
-	
-
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	GUIHandler(stateMachineGraphics* states, GraphicsHandler graphicsIn);
+	GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHandler);
 
 	// Function that handles which engine should be active.
 	void renderGraphics();

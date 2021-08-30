@@ -13,6 +13,9 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include <ErrorHandler/errorHandler.h>
 #include "../Helper/stateMachine.h"
 
+// Mat print.
+#include <glm/gtx/string_cast.hpp>
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
@@ -70,7 +73,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	std::cout << "[OPENGL SHADER] Shaders compiled.\n\n";
 
 	// Mouse event variables.
-	this->scaleRate = 0.35;
+	this->scaleRate = 0.3;
 
 	// create our geometries
 	unsigned int vbo, vao, ebo;
@@ -144,10 +147,13 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 // Viewport changes are made in the main Applicatioon since it affects everything.
 void DrawingEngineGL::resizeEvent(int width, int height)
 {
+	std::cout << "Previous : " << viewportDimensions[0] << " , " << viewportDimensions[1] << std::endl;
+	std::cout << "Current : " << width << " , " << height << std::endl;
 	// Calculate the value of the scaling.
 	float scalingFactor[2] = { (float)width / this->viewportDimensions[0], (float)height / (float)this->viewportDimensions[1] };
 	this->viewportDimensions[0] = width;
 	this->viewportDimensions[1] = height;
+	std::cout << "Scaling : " << scalingFactor[0] << " , " << scalingFactor[1] << std::endl << std::endl;
 	
 	// Scale projection values.
 	this->projectionValues[0] *= scalingFactor[0];
@@ -155,14 +161,32 @@ void DrawingEngineGL::resizeEvent(int width, int height)
 	this->projectionValues[2] *= scalingFactor[1];
 	this->projectionValues[3] *= scalingFactor[1];
 
-	// Create new projection matrix.
-	this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], this->projectionValues[4], this->projectionValues[5]);
-	// Scale the drawing so that it stays the same size relative to the viewport.
-	this->projectionMatrix = glm::scale(this->projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
-	// Assign change to shader(s).
-	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+	std::cout << "Mat before : " << glm::to_string(this->projectionMatrix) << std::endl;
 
+	// Arrange order of sacling based on if it should be division or multiplication.
+	if (scalingFactor[1] < 1)  //  Minimizing.
+	{
+		// Create new projection matrix.
+		this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], this->projectionValues[4], this->projectionValues[5]);
+		//// Scale the drawing so that it stays the same size relative to the viewport.
+		//this->projectionMatrix = glm::scale(this->projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
+	
+	}
+	else  //  Maximizing.
+	{
+		// Create new projection matrix.
+		this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], this->projectionValues[4], this->projectionValues[5]);
+		// Scale the drawing so that it stays the same size relative to the viewport.
+		this->projectionMatrix = glm::scale(this->projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
+	}
+
+	std::cout << "Mat after : " << glm::to_string(this->projectionMatrix) << std::endl << std::endl;
+		
 }
+
+
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

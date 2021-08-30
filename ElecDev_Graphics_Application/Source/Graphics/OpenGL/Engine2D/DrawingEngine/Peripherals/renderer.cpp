@@ -22,8 +22,11 @@ void DrawingEngineGL::renderLoop()
 	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
 	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
 
+	// Assign change to shader(s).
+	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+
 	// rendering our geometries
-	GLCall(this->basicShader.use());
+	this->basicShader.use();
 	GLCall(glBindVertexArray(this->VAO));
 	GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
 	GLCall(glBindVertexArray(0));
@@ -37,3 +40,7 @@ void DrawingEngineGL::renderLoop()
 	glEnd();
 
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+//  EOF.
+//----------------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 #pragma once
+
 struct stateMachine
 {
 	bool toolsExpanded;
