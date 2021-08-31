@@ -24,6 +24,17 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ---
 
+## To Do / Fixing
+
+# Alex
+* Use the docking branch from ImGUI.
+* Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
+
+# Raynhardt 
+*
+
+---
+
 ## Roadmap
 
 * Setup ImGUI, GLAD, GLFW and OpenGL. ✓
