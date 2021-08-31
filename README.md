@@ -27,6 +27,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 ## To Do / Fixing
 
 #### Alex
+* Mouse events are handled by making the GraphicsHandler object global.  Find another way.
 * Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
 
 #### Raynhardt 
