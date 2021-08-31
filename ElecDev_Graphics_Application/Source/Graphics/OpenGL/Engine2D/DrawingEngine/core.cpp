@@ -7,21 +7,14 @@ The interactive engine (the one where elements can be drawn is handled in design
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "drawingEngine.h"
-
-// Error handler.
-#include <ErrorHandler/errorHandler.h>
-#include "../Helper/stateMachine.h"
-
-// Mat print.
-#include <glm/gtx/string_cast.hpp>
+#include "core.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Default.
-DrawingEngineGL::DrawingEngineGL() {};
+//DrawingEngineGL::DrawingEngineGL() {};
 
 // With GLFW window.
 DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
@@ -30,7 +23,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	this->window = window;
 
 	// Create shader.
-	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\Shaders\\basicShader.shader";
+	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
 	Shader basicShader(shaderFilePath);
 	this->basicShader = basicShader;
 
@@ -75,9 +68,6 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	// Mouse event variables.
 	this->scaleRate = 0.3;
 
-	// create our geometries
-	unsigned int vbo, vao, ebo;
-
 	// create the triangle
 	float triangle_vertices[] = {
 		0.0f, 0.25f, 0.0f,	// position vertex 1
@@ -90,23 +80,42 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	unsigned int triangle_indices[] = {
 		0, 1, 2 };
 
-	// Assign Buffers.
-	glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &ebo);
-	glBindVertexArray(vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(triangle_indices), triangle_indices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	this->VAO = vao;
+	VertexArray VAO;
+	VertexBuffer VBO(triangle_vertices, 4 * 2 * sizeof(float));
+	VertexBufferLayout VBL;
+	VBL.push<float>(2);
+	VAO.addBuffer(VBO, VBL);
+	IndexBuffer IBO(triangle_indices, 3);
+
+	this->VAO = VAO;
+	this->IBO = IBO;
 };
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Rendering.
+//----------------------------------------------------------------------------------------------------------------------
+
+void DrawingEngineGL::renderLoop()
+{
+	// Apply camera movements to shader.
+	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
+	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
+
+	// rendering our geometries
+	this->basicShader.use();
+	this->VAO.bind();
+	GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
+	GLCall(glBindVertexArray(0));
+
+	// Draw temporary border.
+	GLCall(glBegin(GL_LINE_LOOP));
+	glVertex2f(-1.0f, 1.0f);
+	glVertex2f(1.0f, 1.0f);
+	glVertex2f(1.0f, -1.0f);
+	glVertex2f(-1.0f, -1.0f);
+	glEnd();
+
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Coordinate systems.
@@ -147,21 +156,16 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 // Viewport changes are made in the main Applicatioon since it affects everything.
 void DrawingEngineGL::resizeEvent(int width, int height)
 {
-	std::cout << "Previous : " << viewportDimensions[0] << " , " << viewportDimensions[1] << std::endl;
-	std::cout << "Current : " << width << " , " << height << std::endl;
 	// Calculate the value of the scaling.
-	float scalingFactor[2] = { (float)width / this->viewportDimensions[0], (float)height / (float)this->viewportDimensions[1] };
+	double scalingFactor[2] = { (double)width / (double)this->viewportDimensions[0], (double)height / (double)this->viewportDimensions[1] };
 	this->viewportDimensions[0] = width;
 	this->viewportDimensions[1] = height;
-	std::cout << "Scaling : " << scalingFactor[0] << " , " << scalingFactor[1] << std::endl << std::endl;
-	
+		
 	// Scale projection values.
 	this->projectionValues[0] *= scalingFactor[0];
 	this->projectionValues[1] *= scalingFactor[0];
 	this->projectionValues[2] *= scalingFactor[1];
 	this->projectionValues[3] *= scalingFactor[1];
-
-	std::cout << "Mat before : " << glm::to_string(this->projectionMatrix) << std::endl;
 
 	// Arrange order of sacling based on if it should be division or multiplication.
 	if (scalingFactor[1] < 1)  //  Minimizing.
@@ -180,13 +184,10 @@ void DrawingEngineGL::resizeEvent(int width, int height)
 		this->projectionMatrix = glm::scale(this->projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
 	}
 
-	std::cout << "Mat after : " << glm::to_string(this->projectionMatrix) << std::endl << std::endl;
-		
+	// Apply changes to shaders.
+	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+	
 }
-
-
-
-
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

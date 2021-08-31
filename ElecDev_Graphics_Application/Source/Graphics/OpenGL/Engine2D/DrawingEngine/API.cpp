@@ -1,12 +1,12 @@
 /*
-This is where the drawing enigine rendering is handled.
+Engine API.
 */
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Engine2D/DrawingEngine/drawingEngine.h"
+#include "Engine2D/DrawingEngine/core.h"
 
 // Error handler.
 #include <ErrorHandler/errorHandler.h>
@@ -16,28 +16,28 @@ This is where the drawing enigine rendering is handled.
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-void DrawingEngineGL::renderLoop()
+// Adds a line to the VBO object.
+void DrawingEngineGL::drawLine()
 {
-	// Apply translation to shader.
-	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
-	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
+	return;
+}
 
-	// Assign change to shader(s).
-	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+// Adds a circle to the VBO object.
+void DrawingEngineGL::drawCircle()
+{
+	return;
+}
 
-	// rendering our geometries
-	this->basicShader.use();
-	GLCall(glBindVertexArray(this->VAO));
-	GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
-	GLCall(glBindVertexArray(0));
+// Adds text to the VBO object.
+void DrawingEngineGL::drawText()
+{
+	return;
+}
 
-	// Draw temporary border.
-	GLCall(glBegin(GL_LINE_LOOP));
-	glVertex2f(-1.0f, 1.0f);
-	glVertex2f(1.0f, 1.0f);
-	glVertex2f(1.0f, -1.0f);
-	glVertex2f(-1.0f, -1.0f);
-	glEnd();
+// Displays the new drawing to the screen.
+// Required after each new element has been added.
+void DrawingEngineGL::display()
+{
 
 }
 

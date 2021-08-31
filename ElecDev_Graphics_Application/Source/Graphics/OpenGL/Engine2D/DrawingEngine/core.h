@@ -12,7 +12,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 // OpenGL.
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Shaders/shaderHandler.h>
+#include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
 
 // General.
@@ -21,6 +21,12 @@ The interactive engine (the one where elements can be drawn is handled in design
 // Error handling.
 #include <ErrorHandler/errorHandler.h>
 #include "../Helper/stateMachine.h"
+
+// Buffers.
+#include "Buffers/vertexBuffer.h"
+#include "Buffers/vertexArray.h"
+#include "Buffers/vertexBufferLayout.h"
+#include "Buffers/indexBuffer.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -72,7 +78,8 @@ public:
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
 	
-	unsigned int VAO;
+	VertexArray VAO;
+	IndexBuffer IBO;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
