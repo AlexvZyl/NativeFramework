@@ -13,6 +13,7 @@
 class VertexBuffer
 {
 private:
+
 	unsigned int rendererID;
 
 public:
@@ -23,8 +24,8 @@ public:
 	~VertexBuffer();
 
 	// Functions.
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

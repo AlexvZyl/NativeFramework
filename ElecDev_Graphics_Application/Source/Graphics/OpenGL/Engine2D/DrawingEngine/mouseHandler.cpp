@@ -6,7 +6,7 @@ This is where the drawing enigine mouse events are handled.
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Engine2D/DrawingEngine/drawingEngine.h"
+#include "Engine2D/DrawingEngine/core.h"
 
 // Error handler.
 #include <ErrorHandler/errorHandler.h>

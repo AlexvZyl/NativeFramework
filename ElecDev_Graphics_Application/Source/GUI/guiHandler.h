@@ -30,7 +30,7 @@ public:
 
 	stateMachineGraphics statesG;
 
-	GraphicsHandler graphics;
+	GraphicsHandler* graphics;
 
 	Toolbar toolbar = Toolbar(states);
 	Ribbons ribbons = Ribbons(states);

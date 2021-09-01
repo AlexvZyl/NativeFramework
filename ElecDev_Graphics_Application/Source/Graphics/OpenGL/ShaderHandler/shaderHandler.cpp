@@ -13,12 +13,6 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Default constructor.
-Shader::Shader() 
-{
-    return;
-};
-
 // Constructor generates the shaders.
 Shader::Shader(std::string& filePath)
 {

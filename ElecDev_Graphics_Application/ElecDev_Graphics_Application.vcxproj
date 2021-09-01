@@ -162,7 +162,7 @@
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\indexBuffer.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexArray.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\engineAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexBuffer.cpp" />
     <ClCompile Include="Source\GUI\guiHandler.cpp" />

@@ -18,7 +18,7 @@ GUIHandler::GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHa
 	this->states.toolsExpanded = false;
 	this->states.toolsMode = 0;
 
-	this->graphics = *graphicsHandler;
+	this->graphics = graphicsHandler;
 	
 };
 

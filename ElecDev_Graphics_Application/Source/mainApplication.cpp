@@ -40,10 +40,10 @@
 /* Variables/Globals/Defines.                                                                                                            */
 /*=======================================================================================================================================*/
 
-// Defined here, assigned in the main function where it has access to the window.
-// Used as a global variable so that the mouse event callbacks from GLFW can have
-// access to it.
-GraphicsHandler graphicsHandler;
+//// Defined here, assigned in the main function where it has access to the window.
+//// Used as a global variable so that the mouse event callbacks from GLFW can have
+//// access to it.
+GraphicsHandler* graphicsHandler;
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */
@@ -62,17 +62,17 @@ static void glfw_error_callback(int error, const char* description)
 // Handle mouse press events ftom GLFW.
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {  
-    graphicsHandler.mousePressEvent(window, button, action, mods);
+    graphicsHandler->mousePressEvent(window, button, action, mods);
 }
 
 // Handle mouse press events ftom GLFW.
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-    graphicsHandler.mouseMoveEvent(window, xpos, ypos);
+    graphicsHandler->mouseMoveEvent(window, xpos, ypos);
 }
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
-    graphicsHandler.mouseScrollEvent(window, xoffset, yoffset);
+    graphicsHandler->mouseScrollEvent(window, xoffset, yoffset);
 }
 
 /*=======================================================================================================================================*/
@@ -82,7 +82,7 @@ void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 // The GLFW window resize callback.
 void glfwResizeEvent(GLFWwindow* window, int width, int height)
 {
-    graphicsHandler.resizeEvent(window, width, height);
+    graphicsHandler->resizeEvent(window, width, height);
 }
 
 /*=======================================================================================================================================*/
@@ -168,15 +168,22 @@ int main(int, char**)
     }
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // ImGUI setup. 
+    // ImGUI & OpenGL setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+    // Create the state machine variables.
     stateMachineGraphics states;
     states.gui = false;
     states.mode = 0;
 
+    // Create graphics handler object.
+    // For now a global variable is used to be able to have mouse callbacks with a method.
+    // The callbacks cannot be used with a method, so it has to call a normal function.
+    GraphicsHandler gH(window, &states);
+    graphicsHandler = &gH;
+    
     // Create GUI handler object.
-    GUIHandler guiHandler(&states, &graphicsHandler);
+    GUIHandler guiHandler(&states, graphicsHandler);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -191,22 +198,12 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // OpenGL setup.
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
     // Viewport.
     int screen_width, screen_height;
     glfwGetFramebufferSize(window, &screen_width, &screen_height);
     glViewport(0, 0, screen_width, screen_height);
     // Variables used in loop.
     int display_w, display_h;
-
-    // Create graphics handler object.
-    // For now a global variable is used to be able to have mouse callbacks with a method.
-    // The callbacks cannot be used with a method, so it has to call a normal function.
-    GraphicsHandler gH(window,&states);
-    graphicsHandler = gH;
 
     // Setup mouse callbacks.
     glfwSetMouseButtonCallback(window, mousePressEvent); // Mouse press event.
@@ -239,7 +236,7 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Handle graphics (OpenGL engines: Drawing and Designing).
-        graphicsHandler.renderGraphics();
+        graphicsHandler->renderGraphics();
 
         // Feed inputs to ImGUI, start new frame.
         ImGui_ImplOpenGL3_NewFrame();

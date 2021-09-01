@@ -23,6 +23,9 @@ public:
 	// Destructor.
 	~IndexBuffer();
 
+	// Default constructor.
+	IndexBuffer();
+
 	// Functions.
 	void bind() const;
 	void unbind() const;

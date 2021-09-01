@@ -13,26 +13,23 @@ The interactive engine (the one where elements can be drawn is handled in design
 //  Constructors.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Default.
-//DrawingEngineGL::DrawingEngineGL() {};
-
 // With GLFW window.
-DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
+DrawingEngineGL::DrawingEngineGL(GLFWwindow* windowIn)
 {	
 	// Save pointer to GLFW window.
-	this->window = window;
+	this->window = windowIn;
 
 	// Create shader.
 	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
-	Shader basicShader(shaderFilePath);
-	this->basicShader = basicShader;
+	Shader basicShaderTemp(shaderFilePath);
+	basicShader = &basicShaderTemp;
 
 	// Find the viewpwort dimensions and store it.
 	int viewport[2];
-	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+	glfwGetWindowSize(window, &viewport[0], &viewport[1]);
 	// Store the value to use when viewport changes.
-	this->viewportDimensions[0] = viewport[0];
-	this->viewportDimensions[1] = viewport[1];
+	viewportDimensions[0] = viewport[0];
+	viewportDimensions[1] = viewport[1];
 
 	// Matrices setup.
 	//----------------------------------------------------------
@@ -44,38 +41,38 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	// Scale the projection values according to the viewport aspect ratio.
 	float projValuesTemp[6] = {(float)-viewport[0]/minValue, (float)viewport[0]/minValue, (float)-viewport[1]/minValue, (float)viewport[1]/minValue,-1.0, 1.0 };
 	// Save projection values to be used with resizing of the window.
-	for (int i = 0; i < 6; i++) { this->projectionValues[i] = projValuesTemp[i]; }
+	for (int i = 0; i < 6; i++) { projectionValues[i] = projValuesTemp[i]; }
 	// Create projection matrix.
-	this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], -1.0f, 1.0f);
+	projectionMatrix = glm::ortho(projectionValues[0], projectionValues[1], projectionValues[2], projectionValues[3], -1.0f, 1.0f);
 
 	// Assign original projection values.
-	this->modelMatrix = glm::mat4(1.0f);
-	this->viewMatrix = glm::mat4(1.0f);
-	this->viewportMatrix = glm::mat4(1.0f);
-	this->scalingMatrix = glm::mat4(1.0f);
-	this->translationMatrix = glm::mat4(1.0f);
-	this->rotationMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::mat4(1.0f);
+	viewMatrix = glm::mat4(1.0f);
+	viewportMatrix = glm::mat4(1.0f);
+	scalingMatrix = glm::mat4(1.0f);
+	translationMatrix = glm::mat4(1.0f);
+	rotationMatrix = glm::mat4(1.0f);
 
 	// Assign matrices to shader.
-	this->basicShader.use();
-	this->basicShader.setMat4("worldMatrix", this->modelMatrix);
-	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
-	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
+	basicShader->use();
+	basicShader->setMat4("worldMatrix", modelMatrix);
+	basicShader->setMat4("projectionMatrix", projectionMatrix);
+	basicShader->setMat4("viewMatrix", viewMatrix);
 
 	// Print success message.
 	std::cout << "[OPENGL SHADER] Shaders compiled.\n\n";
 
 	// Mouse event variables.
-	this->scaleRate = 0.3;
+	scaleRate = 0.3;
 
 	// create the triangle
 	float triangle_vertices[] = {
-		0.0f, 0.25f, 0.0f,	// position vertex 1
-		1.0f, 0.0f, 0.0f,	 // color vertex 1
-		0.25f, -0.25f, 0.0f,  // position vertex 1
-		0.0f, 1.0f, 0.0f,	 // color vertex 1
-		-0.25f, -0.25f, 0.0f, // position vertex 1
-		0.0f, 0.0f, 1.0f,	 // color vertex 1
+		0.0f,	0.25f,	0.0f,	// position vertex 1
+		1.0f,	0.0f,	0.0f,	// color vertex 1
+		0.25f, -0.25f,	0.0f,	// position vertex 1
+		0.0f,	1.0f,	0.0f,	// color vertex 1
+		-0.25f,-0.25f,	0.0f,	// position vertex 1
+		0.0f,	0.0f,	1.0f,	// color vertex 1
 	};
 	unsigned int triangle_indices[] = {
 		0, 1, 2 };
@@ -83,7 +80,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 	VertexArray VAO;
 	VertexBuffer VBO(triangle_vertices, 4 * 2 * sizeof(float));
 	VertexBufferLayout VBL;
-	VBL.push<float>(2);
+	VBL.push<float>(3);
 	VAO.addBuffer(VBO, VBL);
 	IndexBuffer IBO(triangle_indices, 3);
 
@@ -98,12 +95,12 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* window)
 void DrawingEngineGL::renderLoop()
 {
 	// Apply camera movements to shader.
-	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
-	this->basicShader.setMat4("viewMatrix", this->viewMatrix);
+	viewMatrix = scalingMatrix * rotationMatrix * translationMatrix;
+	basicShader->setMat4("viewMatrix", viewMatrix);
 
 	// rendering our geometries
-	this->basicShader.use();
-	this->VAO.bind();
+	basicShader->use();
+	VAO.bind();
 	GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
 	GLCall(glBindVertexArray(0));
 
@@ -128,7 +125,7 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	double screenCoords[2];  
 	// Find the viewpwort dimensions.
 	int viewport[2];
-	glfwGetWindowSize(this->window, &viewport[0], &viewport[1]);
+	glfwGetWindowSize(window, &viewport[0], &viewport[1]);
 	// Account for pixel offset.
 	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
@@ -141,8 +138,8 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
 
 	// Apply MVP matrices.
-	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
-	glm::mat4 MVPinverse = glm::inverse(this->modelMatrix * this->viewMatrix * this->projectionMatrix);
+	viewMatrix = scalingMatrix * rotationMatrix * translationMatrix;
+	glm::mat4 MVPinverse = glm::inverse(modelMatrix * viewMatrix * projectionMatrix);
 	glm::vec4 worldVec = screenVec * MVPinverse ;
 
 	return worldVec;
@@ -185,7 +182,7 @@ void DrawingEngineGL::resizeEvent(int width, int height)
 	}
 
 	// Apply changes to shaders.
-	this->basicShader.setMat4("projectionMatrix", this->projectionMatrix);
+	basicShader->setMat4("projectionMatrix", projectionMatrix);
 	
 }
 

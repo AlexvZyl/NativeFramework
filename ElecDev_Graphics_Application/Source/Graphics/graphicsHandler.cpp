@@ -13,18 +13,15 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  Constructors & setup.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Default.
-GraphicsHandler::GraphicsHandler() {};
-
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states)
+GraphicsHandler::GraphicsHandler(GLFWwindow* windowIn, stateMachineGraphics* statesIn)
 {	
 	// Set state machine variable.
-	this->states = *states;
+	states = *statesIn;
 
 	// Create engines.
-	DrawingEngineGL drawingEngine(window);
-	this->drawingEngine = drawingEngine;
+	DrawingEngineGL dE(window);
+	drawingEngine = &dE;
 	//DesignEngineGL designEngine(this->window);
 	//this->designEngine = designEngine;
 
@@ -32,7 +29,7 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 	activeEngine = "DrawingEngine";
 
 	// Store pointer to GLFW window.
-	this->window = window;
+	window = windowIn;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -46,7 +43,7 @@ void GraphicsHandler::renderGraphics()
 	//  Run engine that has been set as active.
 	if (activeEngine == "DrawingEngine")
 	{
-		drawingEngine.renderLoop();
+		drawingEngine->renderLoop();
 	}
 	else if (activeEngine == "DesignEngine")
 	{
@@ -67,7 +64,7 @@ void GraphicsHandler::renderGraphics()
 void GraphicsHandler::setEngine(std::string engine)
 {
 	// Close the current active engine.
-	this->closeEngine();
+	closeEngine();
 
 	// Set the new active engine.
 	if (activeEngine == "DrawingEngine")
@@ -128,14 +125,14 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			drawingEngine.mousePressLeft(mousePos);
+			drawingEngine->mousePressLeft(mousePos);
 		}
 
 		// Check if left press.
 		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			drawingEngine.mousePressRight(mousePos);
+			drawingEngine->mousePressRight(mousePos);
 		}
 	}
 }
@@ -152,7 +149,7 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 		int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 
 		// Call active engine.
-		drawingEngine.mouseMoveEvent(mousePos, buttonState);
+		drawingEngine->mouseMoveEvent(mousePos, buttonState);
 	}
 }
 
@@ -168,7 +165,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 
 		// Call current active engine zoom function.
 		// STILL NEEDS TO BE ABLE TO SELECT CORRECT ACTIVE ENGINE.
-		drawingEngine.mouseScrollEvent(mousePos, yoffset);
+		drawingEngine->mouseScrollEvent(mousePos, yoffset);
 	}
 }
 
@@ -179,7 +176,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 void GraphicsHandler::resizeEvent(GLFWwindow* window, int width, int height) 
 {
 	// Call resize on active engine.
-	this->drawingEngine.resizeEvent(width, height);
+	drawingEngine->resizeEvent(width, height);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

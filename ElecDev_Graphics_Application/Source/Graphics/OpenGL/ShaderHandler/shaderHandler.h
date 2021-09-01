@@ -33,9 +33,7 @@ public:
 
     // Constructor that generates shaders.
     Shader(std::string& filePath);
-    // Empty constructor.
-    Shader();
-
+    
     // Use the shader.
     void use();
 
