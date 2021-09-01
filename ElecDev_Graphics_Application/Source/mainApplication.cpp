@@ -187,6 +187,7 @@ int main(int, char**)
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    glEnable(GL_MULTISAMPLE);
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
