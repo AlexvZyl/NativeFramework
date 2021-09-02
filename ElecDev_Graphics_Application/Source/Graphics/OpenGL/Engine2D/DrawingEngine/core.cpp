@@ -26,7 +26,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* windowIn)
 
 	// Find the viewpwort dimensions and store it.
 	int viewport[2];
-	glfwGetWindowSize(windowIn, &viewport[0], &viewport[1]);
+	glfwGetWindowSize(window, &viewport[0], &viewport[1]);
 	// Store the value to use when viewport changes.
 	viewportDimensions[0] = viewport[0];
 	viewportDimensions[1] = viewport[1];
@@ -84,8 +84,8 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* windowIn)
 	VAO.addBuffer(VBO, VBL);
 	IndexBuffer IBO(triangle_indices, 3);
 
-	this->VAO = &VAO;
-	this->IBO = &IBO;
+	this->VAO = VAO;
+	this->IBO = IBO;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ void DrawingEngineGL::renderLoop()
 
 	// rendering our geometries
 	basicShader->use();
-	VAO->bind();
+	VAO.bind();
 	GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
 	GLCall(glBindVertexArray(0));
 

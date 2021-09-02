@@ -19,6 +19,9 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* windowIn, stateMachineGraphics* sta
 	// Set state machine variable.
 	states = *statesIn;
 
+	// Store pointer to GLFW window.
+	window = windowIn;
+
 	// Create engines.
 	DrawingEngineGL dE(window);
 	drawingEngine = &dE;
@@ -28,8 +31,6 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* windowIn, stateMachineGraphics* sta
 	// Set the default active engine.  (Should be set to animation when one is available.)
 	activeEngine = "DrawingEngine";
 
-	// Store pointer to GLFW window.
-	window = windowIn;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
