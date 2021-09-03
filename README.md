@@ -30,7 +30,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Mouse events are handled by making the GraphicsHandler object global.  Find another way.
 * Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
 * OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
-* Unbinding is not necessary, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
+* Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
 
 #### Raynhardt 
 * Use the docking branch from ImGUI.
