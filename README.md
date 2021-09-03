@@ -40,14 +40,14 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 * Structure code: ✓
   * Main app ✓
-  * OpenGL ✓ 
-  * Drawing and Design engine ✓
   * Handlers (GUI and Graphics) ✓
+  * Drawing and Design engine ✓
 * Setup project with dependancies: ✓
   * ImGUI ✓ 
   * GLAD ✓ 
   * GLFW ✓ 
   * OpenGL ✓
+  * GLM ✓
 * Setup mouse event handler:
   * Srcoll, move and press events for drawing engine. ✓
   * Srcoll, move and press events for design engine.
@@ -72,7 +72,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Add template circuits.
 * Able to enter a circuit and define it from the inside.  Add as many layers as needed.
 * 3D Drawings.
-* VERY long term: port to Vulkan, [https://www.vulkan.org/].
+* VERY long term: Port to Vulkan, [https://www.vulkan.org/].
 
 ---
 
