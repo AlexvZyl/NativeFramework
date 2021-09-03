@@ -56,8 +56,12 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Basic shader ✓ 
   * Error handler ✓
   * Shader handler ✓
-  * Buffers: VAO, VBO, IBO
-* GUI interface
+  * Buffers: 
+    * Vertex Array Objects
+    * Vertex Buffer Objects 
+    * Vertex Buffer Layouts
+    * Index Buffer Objects
+  * GUI interface
   * Bind all user inputs to OpenGL actions and state machine updates
 * Interface with Excel.
   * Requires exe file that has resource files included.
