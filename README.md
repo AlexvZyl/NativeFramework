@@ -41,7 +41,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Structure code with the main app, OpenGL engines and handlers (GUI and Graphics). ✓
 * Setup ImGUI, GLAD, GLFW and OpenGL. ✓
 * Setup mouse event handler:
-  * Srcoll, move and press events for drawing engine.
+  * Srcoll, move and press events for drawing engine. ✓
   * Srcoll, move and press events for design engine.
 * GUI State Machine.
 * Create first basic app with simple GUI interface and simple OpenGL drawing.
