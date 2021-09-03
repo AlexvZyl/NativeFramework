@@ -75,6 +75,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Read available drawings from excel file.
   * Draw and redraw MCC's.
 * Implement batch rendering.
+* Add virtual mouse point that snaps to parts of the drawings to make editing easier.
 * Port software from the PyQt interface.
   * Create a state machine for type of user interface 
 * Improve engine with a better UI:
