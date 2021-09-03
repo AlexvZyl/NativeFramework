@@ -14,7 +14,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Design engine.
 #include "OpenGL/Engine2D/DesignEngine/designEngine.h"
 // Drawing engine.
-#include "OpenGL/Engine2D/DrawingEngine/drawingEngine.h"
+#include "OpenGL/Engine2D/BaseEngine/core.h"
 
 //  General.
 #include <string>
@@ -22,7 +22,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // OpenGL
 #include <glad/glad.h>
 #include <ErrorHandler/errorHandler.h>
-#include "Shaders/shaderHandler.h"
+#include "ShaderHandler/shaderHandler.h"
 #include "../Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -37,17 +37,18 @@ public:
 	//  Variables.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	stateMachineGraphics states;
+	// State machine variable.
+	stateMachineGraphics* m_states;
 
 	// Variable that holds the active engine.
-	std::string activeEngine;
+	std::string m_activeEngine;
 
 	// Different drawing engines.
-	DrawingEngineGL drawingEngine;
-	DesignEngineGL designEngine;
+	BaseEngineGL* m_drawingEngine;
+	DesignEngineGL* m_designEngine;
 
 	// The GLFW window from the main application.
-	GLFWwindow* window;
+	GLFWwindow* m_window;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Constructors and setup.
@@ -55,8 +56,8 @@ public:
 
 	// Constructor with GLFW window.
 	GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states);
-	// Default constructor.
-	GraphicsHandler();
+	// Destructor.
+	~GraphicsHandler();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Functions.
@@ -69,7 +70,7 @@ public:
 	void setEngine(std::string engine);
 
 	// Function that closes the engine passed.
-	void closeEngine();
+	void closeActiveEngine();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Mouse events.

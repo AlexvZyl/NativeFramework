@@ -13,14 +13,9 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Default constructor.
-Shader::Shader() 
-{
-    return;
-};
-
 // Constructor generates the shaders.
 Shader::Shader(std::string& filePath)
+    : m_filePath(filePath), m_rendererID(0)
 {
 
     // Shader mode handler. Used as an index for the shaderSource.
@@ -30,8 +25,11 @@ Shader::Shader(std::string& filePath)
     };
     ShaderType shaderType = ShaderType::NONE;
 
+    // Parse the shader.
+    //----------------------------------------------------------------------------
+
     // Read shader from file.
-    std::ifstream fileStream(filePath);
+    std::ifstream fileStream(m_filePath);
     // Stream that contains the shader.
     std::stringstream shaderSource[2];
 
@@ -63,57 +61,99 @@ Shader::Shader(std::string& filePath)
     const char* vShaderCode = vShaderString.c_str();
     const char* fShaderCode = fShaderString.c_str();
 
+    //----------------------------------------------------------------------------
+
+    // Compile the shader program.
+    compileShader(vShaderCode, fShaderCode); 
+
+}
+
+// Destructor
+Shader::~Shader()
+{
+    std::cout << "[OPENGL][SHADER] Destructor called.\n\n";
+    //GLCall(glDeleteProgram(m_rendererID));
+}
+
+// Compiles the shader program.
+void Shader::compileShader(const char* vShaderCode, const char* fShaderCode)
+{
     // Compile the shaders.
     unsigned int vertex, fragment;
 
     // Vertex shader.
-    GLCall( vertex = glCreateShader(GL_VERTEX_SHADER) );
-    GLCall( glShaderSource(vertex, 1, &vShaderCode, NULL) );
-    GLCall( glCompileShader(vertex) );
+    GLCall(vertex = glCreateShader(GL_VERTEX_SHADER));
+    GLCall(glShaderSource(vertex, 1, &vShaderCode, NULL));
+    GLCall(glCompileShader(vertex));
     checkCompileErrors(vertex, "VERTEX");
 
     // Fragment Shader.
-    GLCall( fragment = glCreateShader(GL_FRAGMENT_SHADER) );
-    GLCall( glShaderSource(fragment, 1, &fShaderCode, NULL) );
-    GLCall( glCompileShader(fragment) );
+    GLCall(fragment = glCreateShader(GL_FRAGMENT_SHADER));
+    GLCall(glShaderSource(fragment, 1, &fShaderCode, NULL));
+    GLCall(glCompileShader(fragment));
     checkCompileErrors(fragment, "FRAGMENT");
 
     // Shader Program.
-    GLCall( ID = glCreateProgram() );
-    GLCall( glAttachShader(ID, vertex) );
-    GLCall( glAttachShader(ID, fragment) );
-    GLCall( glLinkProgram(ID) );
-    checkCompileErrors(ID, "PROGRAM");
+    GLCall(m_rendererID = glCreateProgram());
+    GLCall(glAttachShader(m_rendererID, vertex));
+    GLCall(glAttachShader(m_rendererID, fragment));
+    GLCall(glLinkProgram(m_rendererID));
+    checkCompileErrors(m_rendererID, "PROGRAM");
 
     // Delete the shaders as they're linked into our program now and no longer necessary.
-    GLCall( glDeleteShader(vertex) );
-    GLCall( glDeleteShader(fragment) );
+    GLCall(glDeleteShader(vertex));
+    GLCall(glDeleteShader(fragment));
 }
 
 // Use the shader.
-void Shader::use()
+void Shader::bind()
 {
-    GLCall( glUseProgram(ID) );
+    GLCall( glUseProgram( m_rendererID ) );
+}
+
+// Use the shader.
+void Shader::unbind()
+{
+    GLCall(glUseProgram(0));
 }
 
 // Utility uniform functions.
-void Shader::setBool(const std::string& name, bool value) const
+void Shader::setBool(const std::string& name, bool value)
 {
-    GLCall( glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value) );
+    GLCall( glUniform1i(glGetUniformLocation(m_rendererID, name.c_str()), (int)value) );
 }
-void Shader::setInt(const std::string& name, int value) const
+void Shader::setInt(const std::string& name, int value)
 {
-    GLCall( glUniform1i(glGetUniformLocation(ID, name.c_str()), value) );
+    GLCall( glUniform1i(glGetUniformLocation(m_rendererID, name.c_str()), value) );
 }
-void Shader::setFloat(const std::string& name, float value) const
+void Shader::setFloat(const std::string& name, float value)
 {
-    GLCall( glUniform1f(glGetUniformLocation(ID, name.c_str()), value) );
+    GLCall( glUniform1f(glGetUniformLocation(m_rendererID, name.c_str()), value) );
 }
-void Shader::setMat4(const std::string& name, glm::mat4 value) const
+void Shader::setMat4(const std::string& name, glm::mat4 value)
 {
-    GLCall( glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value) ) );
+    // Check if the uniform exists.
+    GLCall ( glUniformMatrix4fv( getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value) ) );
 }
-// Utility function for checking shader compilation/linking errors.
+
+// Get the uniform location.
+int Shader::getUniformLocation(const std::string& name)
+{
+    // Only find uniform location if it has not been cached.
+    if (m_uniformLocationCache.find(name) != m_uniformLocationCache.end())
+        return m_uniformLocationCache[name];
+    
+    // Find uniform.
+    GLCall(int location = glGetUniformLocation(m_rendererID, name.c_str()));
+    if (location == -1) { std::cout << "[SHADER ERROR] Uniform '" << name << "' does not exist.\n"; }
+    // Add the uniform to the cache.
+    m_uniformLocationCache[name] = location;
+
+    // Return the uniform location.
+    return location;
+}
+
+// Check shader compiling and linking errors.
 void Shader::checkCompileErrors(unsigned int shader, std::string type)
 {
     int success;
@@ -124,8 +164,14 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             GLCall( glGetShaderInfoLog(shader, 1024, NULL, infoLog) );
-            std::cout << "[OPENGL ERROR][SHADER COMPILATION] Type: " << type << "\n" << infoLog << "\n";
+            std::cout << "[OPENGL][ERROR][SHADER COMPILATION] Type: " << type << "\n" << infoLog << "\n";
         }
+        else 
+        {
+            // Print success message.
+            std::cout << "[OPENGL][SHADERS][" << type <<  "] Compiled succesfully.\n";
+        }
+
     }
     else
     {
@@ -133,7 +179,12 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             GLCall( glGetProgramInfoLog(shader, 1024, NULL, infoLog) );
-            std::cout << "[OPENGL ERROR][SHADER LINKING] Type: " << type << "\n" << infoLog << "\n";
+            std::cout << "[OPENGL][ERROR][SHADER LINKING] Type: " << type << "\n" << infoLog << "\n";
+        }
+        else
+        {
+            // Print success message.
+            std::cout << "[OPENGL][SHADERS][" << type << "] Linked succesfully.\n\n";
         }
     }
 }

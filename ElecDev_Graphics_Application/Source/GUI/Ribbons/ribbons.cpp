@@ -94,7 +94,8 @@ bool Ribbons::topBar() {
     // Menu
     ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
     bool* p_open = NULL;
-    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+    ImGui::SetNextWindowBgAlpha(1);
+    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
     
     ImGui::SetWindowSize(ImVec2(mainWindow.x+1,70));
     ImGui::SetWindowPos(ImVec2(-1, 18));
@@ -191,7 +192,7 @@ bool Ribbons::MCC() {
 bool Ribbons::blockDiagram() {
 
     bool close = true;
-    ImGui::Begin("Drawing GUI", &close, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Drawing GUI", &close);
     if (!close)
     {
         this->sideBarFlag = "None";

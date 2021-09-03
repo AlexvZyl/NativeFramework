@@ -12,7 +12,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 // OpenGL.
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Shaders/shaderHandler.h>
+#include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
 
 // General.
@@ -22,11 +22,17 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include <ErrorHandler/errorHandler.h>
 #include "../Helper/stateMachine.h"
 
+// Buffers.
+#include "Buffers/vertexBuffer.h"
+#include "Buffers/vertexArray.h"
+#include "Buffers/vertexBufferLayout.h"
+#include "Buffers/indexBuffer.h"
+
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
 
-class DrawingEngineGL
+class BaseEngineGL
 {
 public:
 
@@ -35,62 +41,60 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	// MVP Matrices.
-	glm::mat4 modelMatrix;			// The model matrix that places the object in the world.  Is going to be 
-									// kept an identity matrix for now.
-	glm::mat4 viewMatrix;			// The matrix that handles the camera movement.
-									// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-	glm::mat4 projectionMatrix;		// The matrix that handles the clipping plane (which part of the world is
-									// going to be visible to the screen?
-	glm::mat4 viewportMatrix;		// The matrix that handles the viewport transform.  Converts screen pixel
-									// coordinates to the OpenGL uniform coordinate system.
+	glm::mat4 m_modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
+													// kept an identity matrix for now.
+	glm::mat4 m_viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
+													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
+	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
+													// going to be visible to the screen?
+	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
+													// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
-	glm::mat4 scalingMatrix;		// Handles camera scaling.
-	glm::mat4 translationMatrix;	// Handles camera translations.
-	glm::mat4 rotationMatrix;		// Handles camera rotations.
+	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
+	glm::mat4 m_translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
+	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse handler variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Saves the previous mouse event coordinates (in world coordinates).
-	double prevMouseEventWorldCoords[2] = {NULL, NULL};
+	double m_prevMouseEventWorldCoords[2] = {NULL, NULL};
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Shaders.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	Shader basicShader;
+	Shader* m_basicShader;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse event variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	float scaleRate;
+	float m_scaleRate;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
-	
-	unsigned int VAO;
+
+	VertexArray* m_linesVAO;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	GLFWwindow* window;
-	float viewportDimensions[2];
-	float projectionValues[6];
+	GLFWwindow* m_window;
+	float m_viewportDimensions[2];
+	float m_projectionValues[6];
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructors.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// Default.
-	DrawingEngineGL();
 	// With GLFW window.
-	DrawingEngineGL(GLFWwindow* window);
-	
+	BaseEngineGL(GLFWwindow* window);
+		
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Rendering.
 	//---------------------------------------------------------------------------------------------------------------------
@@ -103,13 +107,10 @@ public:
 
 	// Adds a line to the VBO object.
 	void drawLine();
-
 	// Adds a circle to the VBO object.
 	void drawCircle();
-
 	// Adds text to the VBO object.
 	void drawText();
-
 	// Displays the new drawing to the screen.
 	// Required after each new element has been added.
 	void display();
@@ -118,20 +119,17 @@ public:
 	//  Mouse events.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// Event handler mouse presses.
+	// Handling mouse events.
 	void mousePressLeft(double pixelCoords[2]);
 	void mousePressRight(double pixelCoords[2]);
-
-	// Event handler for a mouse move event.
 	void mouseMoveEvent(double pixelCoords[2], int buttonState);
-
-	// Event handler for a mouse move event.
 	void mouseScrollEvent(double pixelCoords[2], int yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.
 	//---------------------------------------------------------------------------------------------------------------------
 
+	// Convert pixel coordinates to world coordinates.
 	glm::vec4 pixelCoordsToWorldCoords(double pixelCoords[2]);
 
 	//---------------------------------------------------------------------------------------------------------------------

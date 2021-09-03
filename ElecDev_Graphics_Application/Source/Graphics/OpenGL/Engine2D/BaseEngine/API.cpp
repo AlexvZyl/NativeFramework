@@ -6,37 +6,33 @@ Engine API.
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Engine2D/DrawingEngine/drawingEngine.h"
-
-// Error handler.
-#include <ErrorHandler/errorHandler.h>
-#include "../Helper/stateMachine.h"
+#include "Engine2D/BaseEngine/core.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Adds a line to the VBO object.
-void DrawingEngineGL::drawLine()
+void BaseEngineGL::drawLine()
 {
 	return;
 }
 
 // Adds a circle to the VBO object.
-void DrawingEngineGL::drawCircle()
+void BaseEngineGL::drawCircle()
 {
 	return;
 }
 
 // Adds text to the VBO object.
-void DrawingEngineGL::drawText()
+void BaseEngineGL::drawText()
 {
 	return;
 }
 
 // Displays the new drawing to the screen.
 // Required after each new element has been added.
-void DrawingEngineGL::display()
+void BaseEngineGL::display()
 {
 
 }
