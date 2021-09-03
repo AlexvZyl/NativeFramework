@@ -39,7 +39,11 @@ This is the graphics application that is to be used with the ElecDev software.  
 ## Roadmap
 
 * Structure code with the main app, OpenGL engines and handlers (GUI and Graphics). ✓
-* Setup ImGUI, GLAD, GLFW and OpenGL. ✓
+* Setup project with dependancies: ✓
+  * ImGUI ✓ 
+  * GLAD ✓ 
+  * GLFW ✓ 
+  * OpenGL ✓
 * Setup mouse event handler:
   * Srcoll, move and press events for drawing engine. ✓
   * Srcoll, move and press events for design engine.
