@@ -29,6 +29,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 #### Alex
 * Mouse events are handled by making the GraphicsHandler object global.  Find another way.
 * Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
+* OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
 
 #### Raynhardt 
 * Use the docking branch from ImGUI.
