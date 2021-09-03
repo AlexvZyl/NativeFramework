@@ -37,10 +37,13 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Roadmap
 
+* Structure code with the mian app and handlers (GUI and Graphics). ✓
 * Setup ImGUI, GLAD, GLFW and OpenGL. ✓
+* GUI State Machine.
 * Create first basic app with simple GUI interface and simple OpenGL drawing.
-* * Error handler.
-* * Shader handler.
+  * Error handler. ✓
+  * Shader handler. ✓
+  * Buffers: VAO, VBO, IBO.
 * Interface with Excel.
 * Port software from the PyQt interface.
 * Improve engine with a better UI:
