@@ -38,7 +38,11 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Roadmap
 
-* Structure code with the main app, OpenGL engines and handlers (GUI and Graphics). ✓
+* Structure code: ✓
+  * Main app ✓
+  * OpenGL ✓ 
+  * Drawing and Design engine ✓
+  * Handlers (GUI and Graphics) ✓
 * Setup project with dependancies: ✓
   * ImGUI ✓ 
   * GLAD ✓ 
