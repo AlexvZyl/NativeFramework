@@ -5,33 +5,27 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <ErrorHandler/errorHandler.h>
-#include "vertexBuffer.h"
-#include "vertexBufferLayout.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Vertex Array Class.
+//  Vertex Buffer Class.
 //----------------------------------------------------------------------------------------------------------------------
 
-class VertexArray
+class VertexBuffer
 {
 private:
 
-	unsigned int rendererID;
+	unsigned int m_rendererID;
 
 public:
-
+	
 	// Constructor.
-	VertexArray();
-
+	VertexBuffer(const void* data, unsigned int size);
 	// Destructor.
-	~VertexArray();
+	~VertexBuffer();
 
-	// Add VBO to VAO.
-	void addBuffer(VertexBuffer& vB, const VertexBufferLayout& vBL);
-
+	// Functions.
 	void bind() const;
 	void unbind() const;
-
 };
 
 //----------------------------------------------------------------------------------------------------------------------

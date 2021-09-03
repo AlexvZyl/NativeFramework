@@ -13,25 +13,23 @@
 class IndexBuffer
 {
 private:
-	unsigned int rendererID;
-	unsigned int count;
+	unsigned int m_rendererID;
+	unsigned int m_count;
 
 public:
 
 	// Constructor.
 	IndexBuffer(const unsigned int* data, unsigned int count);
-	// Destructor.
-	~IndexBuffer();
 
-	// Default constructor.
-	IndexBuffer();
+	 // Destructor.
+	~IndexBuffer();
 
 	// Functions.
 	void bind() const;
 	void unbind() const;
 	
 	// Get count value.
-	inline unsigned int GetCount() const { return count; }
+	inline unsigned int GetCount() const { return m_count; }
 };
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -14,20 +14,16 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //----------------------------------------------------------------------------------------------------------------------
 
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(GLFWwindow* windowIn, stateMachineGraphics* statesIn)
-{	
-	// Set state machine variable.
-	states = statesIn;
-	// Store pointer to GLFW window.
-	window = windowIn;
-
+GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states)
+	: m_window(window), m_states(states)
+{
 	// Create engines.
-	drawingEngine = new DrawingEngineGL(window);
+	m_drawingEngine = new BaseEngineGL(m_window);
 	//DesignEngineGL designEngine(this->window);
 	//this->designEngine = designEngine;
 
 	// Set the default active engine.  (Should be set to animation when one is available.)
-	activeEngine = "DrawingEngine";
+	m_activeEngine = "DrawingEngine";
 };
 
 // Destructor.
@@ -42,15 +38,15 @@ void GraphicsHandler::renderGraphics()
 {
 
 	//  Run engine that has been set as active.
-	if (activeEngine == "DrawingEngine")
+	if (m_activeEngine == "DrawingEngine")
 	{
-		drawingEngine->renderLoop();
+		m_drawingEngine->renderLoop();
 	}
-	else if (activeEngine == "DesignEngine")
+	else if (m_activeEngine == "DesignEngine")
 	{
 		// Run designEngine.
 	}
-	else if (activeEngine == "Animation")
+	else if (m_activeEngine == "Animation")
 	{
 		// Run some sort of cool place holder animation.
 	}
@@ -68,15 +64,15 @@ void GraphicsHandler::setEngine(std::string engine)
 	closeActiveEngine();
 
 	// Set the new active engine.
-	if (activeEngine == "DrawingEngine")
+	if (m_activeEngine == "DrawingEngine")
 	{
 		// Init.
 	}
-	else if (activeEngine == "DesignEngine")
+	else if (m_activeEngine == "DesignEngine")
 	{
 		// Init.
 	}
-	else if (activeEngine == "Animatin")
+	else if (m_activeEngine == "Animatin")
 	{
 		// Init.
 	}
@@ -90,15 +86,15 @@ void GraphicsHandler::setEngine(std::string engine)
 void GraphicsHandler::closeActiveEngine()
 {
 	// Close the active engine.
-	if (this->activeEngine == "DrawingEngine")
+	if (m_activeEngine == "DrawingEngine")
 	{
 		// Close.
 	}
-	else if (this->activeEngine == "DesignEngine")
+	else if (m_activeEngine == "DesignEngine")
 	{
 		// Close.
 	}
-	else if (this->activeEngine == "Animation")
+	else if (m_activeEngine == "Animation")
 	{
 		// Close animation.
 	}
@@ -126,14 +122,14 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			drawingEngine->mousePressLeft(mousePos);
+			m_drawingEngine->mousePressLeft(mousePos);
 		}
 
 		// Check if left press.
 		if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			drawingEngine->mousePressRight(mousePos);
+			m_drawingEngine->mousePressRight(mousePos);
 		}
 	}
 }
@@ -150,7 +146,7 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 		int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 
 		// Call active engine.
-		drawingEngine->mouseMoveEvent(mousePos, buttonState);
+		m_drawingEngine->mouseMoveEvent(mousePos, buttonState);
 	}
 }
 
@@ -166,7 +162,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 
 		// Call current active engine zoom function.
 		// STILL NEEDS TO BE ABLE TO SELECT CORRECT ACTIVE ENGINE.
-		drawingEngine->mouseScrollEvent(mousePos, yoffset);
+		m_drawingEngine->mouseScrollEvent(mousePos, yoffset);
 	}
 }
 
@@ -177,7 +173,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 void GraphicsHandler::resizeEvent(GLFWwindow* window, int width, int height) 
 {
 	// Call resize on active engine.
-	drawingEngine->resizeEvent(width, height);
+	m_drawingEngine->resizeEvent(width, height);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

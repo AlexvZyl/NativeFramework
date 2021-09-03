@@ -2,38 +2,36 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "indexBuffer.h"
+#include "vertexBuffer.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Vertex Buffer Class.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Default constructor.
-IndexBuffer::IndexBuffer() {}
-
 // Constructor.
-IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int totalIndeces)
-	: count(totalIndeces)
+VertexBuffer::VertexBuffer(const void* data, unsigned int size) 
 {
-	GLCall(glGenBuffers(1, &rendererID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW)); // Assuming sizeof(unsigned int) sizeof(GLuint)!
+	GLCall(glGenBuffers(1, &m_rendererID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_rendererID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 }
 
 // Destructor.
-IndexBuffer::~IndexBuffer()
+VertexBuffer::~VertexBuffer() 
 {
-	GLCall(glDeleteBuffers(1, &rendererID));
+	GLCall(glDeleteBuffers(1, &m_rendererID));
 }
 
-void IndexBuffer::bind() const
+// Bind the vertex bufer.
+void VertexBuffer::bind() const
 {
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, rendererID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_rendererID));
 }
 
-void IndexBuffer::unbind() const
+// Unbind the vertex buffer.
+void VertexBuffer::unbind() const 
 {
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

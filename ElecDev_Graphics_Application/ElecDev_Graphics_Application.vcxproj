@@ -160,11 +160,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\indexBuffer.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexArray.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\mouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\indexBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArray.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexBuffer.cpp" />
     <ClCompile Include="Source\GUI\guiHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
@@ -175,7 +175,7 @@
     <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\core.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp" />
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.cpp" />
@@ -485,10 +485,10 @@
     <ClInclude Include="Source\External\glm\vec3.hpp" />
     <ClInclude Include="Source\External\glm\vec4.hpp" />
     <ClInclude Include="Source\External\glm\vector_relational.hpp" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\indexBuffer.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexArray.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexBuffer.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\Buffers\vertexBufferLayout.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\indexBuffer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArray.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexBuffer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexBufferLayout.h" />
     <ClInclude Include="Source\GUI\guiHandler.h" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
@@ -504,7 +504,7 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
     <ClInclude Include="Source\Graphics\graphicsHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DrawingEngine\core.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />

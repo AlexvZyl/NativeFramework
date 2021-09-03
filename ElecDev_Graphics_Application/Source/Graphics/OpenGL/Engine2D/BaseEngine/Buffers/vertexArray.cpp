@@ -11,13 +11,13 @@
 // Constructor.
 VertexArray::VertexArray() 
 {
-	GLCall(glGenVertexArrays(1, &rendererID));
+	GLCall(glGenVertexArrays(1, &m_rendererID));
 }
 
 // Desonstructor.
 VertexArray::~VertexArray()
 {
-	GLCall(glDeleteVertexArrays(1, &rendererID));
+	GLCall(glDeleteVertexArrays(1, &m_rendererID));
 }
 
 // Add VBO to VAO.
@@ -43,7 +43,7 @@ void VertexArray::addBuffer(VertexBuffer& vB, const VertexBufferLayout& vBL)
 
 void VertexArray::bind() const 
 {
-	GLCall(glBindVertexArray(rendererID));
+	GLCall(glBindVertexArray(m_rendererID));
 }
 
 

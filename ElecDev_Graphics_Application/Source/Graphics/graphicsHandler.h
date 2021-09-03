@@ -14,7 +14,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Design engine.
 #include "OpenGL/Engine2D/DesignEngine/designEngine.h"
 // Drawing engine.
-#include "OpenGL/Engine2D/DrawingEngine/core.h"
+#include "OpenGL/Engine2D/BaseEngine/core.h"
 
 //  General.
 #include <string>
@@ -38,17 +38,17 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// State machine variable.
-	stateMachineGraphics* states;
+	stateMachineGraphics* m_states;
 
 	// Variable that holds the active engine.
-	std::string activeEngine;
+	std::string m_activeEngine;
 
 	// Different drawing engines.
-	DrawingEngineGL* drawingEngine;
-	DesignEngineGL* designEngine;
+	BaseEngineGL* m_drawingEngine;
+	DesignEngineGL* m_designEngine;
 
 	// The GLFW window from the main application.
-	GLFWwindow* window;
+	GLFWwindow* m_window;
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Constructors and setup.

@@ -1,37 +1,40 @@
+/*
+Engine API.
+*/
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "vertexBuffer.h"
+#include "Engine2D/BaseEngine/core.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Vertex Buffer Class.
+//  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Constructor.
-VertexBuffer::VertexBuffer(const void* data, unsigned int size) 
+// Adds a line to the VBO object.
+void BaseEngineGL::drawLine()
 {
-	GLCall(glGenBuffers(1, &rendererID));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, rendererID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+	return;
 }
 
-// Destructor.
-VertexBuffer::~VertexBuffer() 
+// Adds a circle to the VBO object.
+void BaseEngineGL::drawCircle()
 {
-	GLCall(glDeleteBuffers(1, &rendererID));
+	return;
 }
 
-// Bind the vertex bufer.
-void VertexBuffer::bind() const
+// Adds text to the VBO object.
+void BaseEngineGL::drawText()
 {
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, rendererID));
+	return;
 }
 
-// Unbind the vertex buffer.
-void VertexBuffer::unbind() const 
+// Displays the new drawing to the screen.
+// Required after each new element has been added.
+void BaseEngineGL::display()
 {
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------

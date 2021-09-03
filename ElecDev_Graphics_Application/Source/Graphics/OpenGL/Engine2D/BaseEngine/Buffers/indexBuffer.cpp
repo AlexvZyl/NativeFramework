@@ -1,32 +1,37 @@
-#pragma once
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include <ErrorHandler/errorHandler.h>
+#include "indexBuffer.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Vertex Buffer Class.
 //----------------------------------------------------------------------------------------------------------------------
 
-class VertexBuffer
+// Constructor.
+IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count)
+	: m_count(count)
 {
-private:
+	GLCall(glGenBuffers(1, &m_rendererID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW)); // Assuming sizeof(unsigned int) sizeof(GLuint)!
+}
 
-	unsigned int rendererID;
+// Destructor.
+IndexBuffer::~IndexBuffer()
+{
+	GLCall(glDeleteBuffers(1, &m_rendererID));
+}
 
-public:
-	
-	// Constructor.
-	VertexBuffer(const void* data, unsigned int size);
-	// Destructor.
-	~VertexBuffer();
+void IndexBuffer::bind() const
+{
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID));
+}
 
-	// Functions.
-	void bind() const;
-	void unbind() const;
-};
+void IndexBuffer::unbind() const
+{
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

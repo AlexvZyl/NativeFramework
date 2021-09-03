@@ -192,7 +192,7 @@ bool Ribbons::MCC() {
 bool Ribbons::blockDiagram() {
 
     bool close = true;
-    ImGui::Begin("Drawing GUI", &close, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Drawing GUI", &close);
     if (!close)
     {
         this->sideBarFlag = "None";

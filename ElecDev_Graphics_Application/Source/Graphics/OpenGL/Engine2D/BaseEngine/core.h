@@ -32,7 +32,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
 
-class DrawingEngineGL
+class BaseEngineGL
 {
 public:
 
@@ -41,60 +41,59 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	// MVP Matrices.
-	glm::mat4 modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
+	glm::mat4 m_modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
 													// kept an identity matrix for now.
-	glm::mat4 viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
+	glm::mat4 m_viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
 													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-	glm::mat4 projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
+	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
 													// going to be visible to the screen?
-	glm::mat4 viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
+	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
 													// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
-	glm::mat4 scalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
-	glm::mat4 translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
-	glm::mat4 rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
+	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
+	glm::mat4 m_translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
+	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse handler variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Saves the previous mouse event coordinates (in world coordinates).
-	double prevMouseEventWorldCoords[2] = {NULL, NULL};
+	double m_prevMouseEventWorldCoords[2] = {NULL, NULL};
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Shaders.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	Shader* basicShader;
+	Shader* m_basicShader;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse event variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	float scaleRate;
+	float m_scaleRate;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
-	
-	VertexArray* VAO;
-	IndexBuffer* IBO;
+
+	VertexArray* m_linesVAO;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	GLFWwindow* window;
-	float viewportDimensions[2];
-	float projectionValues[6];
+	GLFWwindow* m_window;
+	float m_viewportDimensions[2];
+	float m_projectionValues[6];
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructors.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// With GLFW window.
-	DrawingEngineGL(GLFWwindow* window);
+	BaseEngineGL(GLFWwindow* window);
 		
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Rendering.

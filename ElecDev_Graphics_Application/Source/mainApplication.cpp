@@ -40,9 +40,9 @@
 /* Variables/Globals/Defines.                                                                                                            */
 /*=======================================================================================================================================*/
 
-//// Defined here, assigned in the main function where it has access to the window.
-//// Used as a global variable so that the mouse event callbacks from GLFW can have
-//// access to it.
+// Defined here, assigned in the main function where it has access to the window.
+// Used as a global variable so that the mouse event callbacks from GLFW can have
+// access to it.
 GraphicsHandler* graphicsHandler;
 
 /*=======================================================================================================================================*/
@@ -236,14 +236,14 @@ int main(int, char**)
         glClearColor(backGroundColor[0], backGroundColor[1], backGroundColor[2], 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Handle graphics (OpenGL engines: Drawing and Designing).
-        graphicsHandler->renderGraphics();
-
         // Feed inputs to ImGUI, start new frame.
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
+        // Handle graphics (OpenGL engines: Drawing and Designing).
+        graphicsHandler->renderGraphics();
+
          //Render ImGUI components.
         guiHandler.renderGraphics();
 

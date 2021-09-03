@@ -1,41 +1,38 @@
-/*
-Engine API.
-*/
+#pragma once
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Engine2D/DrawingEngine/core.h"
+#include <ErrorHandler/errorHandler.h>
+#include "vertexBuffer.h"
+#include "vertexBufferLayout.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Functions.
+//  Vertex Array Class.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Adds a line to the VBO object.
-void DrawingEngineGL::drawLine()
+class VertexArray
 {
-	return;
-}
+private:
 
-// Adds a circle to the VBO object.
-void DrawingEngineGL::drawCircle()
-{
-	return;
-}
+	unsigned int m_rendererID;
 
-// Adds text to the VBO object.
-void DrawingEngineGL::drawText()
-{
-	return;
-}
+public:
 
-// Displays the new drawing to the screen.
-// Required after each new element has been added.
-void DrawingEngineGL::display()
-{
+	// Constructor.
+	VertexArray();
 
-}
+	// Destructor.
+	~VertexArray();
+
+	// Add VBO to VAO.
+	void addBuffer(VertexBuffer& vB, const VertexBufferLayout& vBL);
+
+	void bind() const;
+	void unbind() const;
+
+};
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.
