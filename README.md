@@ -67,6 +67,9 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Requires exe file that has resource files included.
   * Write byte encoder/decoder.
   * Write thread handler from python side for non-pause interface
+* MCC Drawings:
+  * Read available drawings from excel file.
+  * Draw and redraw MCC's.
 * Port software from the PyQt interface.
   * Create a state machine for type of user interface 
 * Improve engine with a better UI:
