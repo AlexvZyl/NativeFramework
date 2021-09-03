@@ -38,7 +38,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 ## Roadmap
 
 * Setup ImGUI, GLAD, GLFW and OpenGL. ✓
-* Create first basic app with simple GUI interface and simple OpenGL drawing. ✓
+* Create first basic app with simple GUI interface and simple OpenGL drawing.
+* * Error handler.
+* * Shader handler.
 * Interface with Excel.
 * Port software from the PyQt interface.
 * Improve engine with a better UI:
