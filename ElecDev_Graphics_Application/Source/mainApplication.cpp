@@ -128,7 +128,7 @@ int main(int, char**)
 
     // Enable 16x MSAA.
     glfwWindowHint(GLFW_SAMPLES, 16);
-    // Create window with graphics context
+    // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
     if (window == NULL)
         return 1;
@@ -171,23 +171,8 @@ int main(int, char**)
     // ImGUI & OpenGL setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-    // Create the state machine variables.
-    stateMachineGraphics states;
-    states.gui = false;
-    states.mode = 0;
-
-    // Create graphics handler object.
-    // For now a global variable is used to be able to have mouse callbacks with a method.
-    // The callbacks cannot be used with a method, so it has to call a normal function.
-    GraphicsHandler gH(window, &states);
-    graphicsHandler = &gH;
-    
-    // Create GUI handler object.
-    GUIHandler guiHandler(&states, graphicsHandler);
-
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    glEnable(GL_MULTISAMPLE);
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -214,6 +199,19 @@ int main(int, char**)
     // Enable MSAA.
     glEnable(GL_MULTISAMPLE);
 
+    // Create the state machine variables.
+    stateMachineGraphics states;
+    states.gui = false;
+    states.mode = 0;
+
+    // Create graphics handler object.
+    // For now a global variable is used to be able to have mouse callbacks with a method.
+    // The callbacks cannot be used with a method, so it has to call a normal function.
+    graphicsHandler = new GraphicsHandler(window, &states);
+
+    // Create GUI handler object.
+    GUIHandler guiHandler(&states, graphicsHandler);
+        
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other setups.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -225,13 +223,15 @@ int main(int, char**)
     /* Loop                                                                                                                              */
     /*===================================================================================================================================*/
 
+    // [MISSING COMMENT]
     std::string interfacePython = "";
+
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
     {   
         // Check for events.
-        glfwWaitEvents();
-        //glfwPollEvents();
+        //glfwWaitEvents();
+        glfwPollEvents();
         // Init colors.
         glClearColor(backGroundColor[0], backGroundColor[1], backGroundColor[2], 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -243,8 +243,8 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        // Render ImGUI components.
+        
+         //Render ImGUI components.
         guiHandler.renderGraphics();
 
         /*std::cin >> interfacePython;
@@ -258,11 +258,11 @@ int main(int, char**)
 
         ImGui::End();*/
         
-        // Render ImGUI into screen.
+         //Render ImGUI into screen.
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        // Viewport.
+        // Assign values to viewport.
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glfwSwapBuffers(window);
@@ -273,9 +273,9 @@ int main(int, char**)
     /*===================================================================================================================================*/
 
     // Cleanup.
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    //ImGui_ImplOpenGL3_Shutdown();
+    //ImGui_ImplGlfw_Shutdown();
+    //ImGui::DestroyContext();
 
     // Close application.
     glfwDestroyWindow(window);

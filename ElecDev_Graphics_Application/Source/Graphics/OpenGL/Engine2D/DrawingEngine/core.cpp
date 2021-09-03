@@ -21,8 +21,7 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* windowIn)
 
 	// Create shader.
 	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
-	Shader basicShaderTemp(shaderFilePath);
-	basicShader = &basicShaderTemp;
+	basicShader = new Shader(shaderFilePath);
 
 	// Find the viewpwort dimensions and store it.
 	int viewport[2];
@@ -41,29 +40,19 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* windowIn)
 	// Scale the projection values according to the viewport aspect ratio.
 	float projValuesTemp[6] = {(float)-viewport[0]/minValue, (float)viewport[0]/minValue, (float)-viewport[1]/minValue, (float)viewport[1]/minValue,-1.0, 1.0 };
 	// Save projection values to be used with resizing of the window.
-	for (int i = 0; i < 6; i++) { projectionValues[i] = projValuesTemp[i]; }
+	for (int i = 0; i < 6; i++) { this->projectionValues[i] = projValuesTemp[i]; }
 	// Create projection matrix.
-	projectionMatrix = glm::ortho(projectionValues[0], projectionValues[1], projectionValues[2], projectionValues[3], -1.0f, 1.0f);
-
-	// Assign original projection values.
-	modelMatrix = glm::mat4(1.0f);
-	viewMatrix = glm::mat4(1.0f);
-	viewportMatrix = glm::mat4(1.0f);
-	scalingMatrix = glm::mat4(1.0f);
-	translationMatrix = glm::mat4(1.0f);
-	rotationMatrix = glm::mat4(1.0f);
+	this->projectionMatrix = glm::ortho(this->projectionValues[0], this->projectionValues[1], this->projectionValues[2], this->projectionValues[3], -1.0f, 1.0f);
 
 	// Assign matrices to shader.
-	basicShader->use();
-	basicShader->setMat4("worldMatrix", modelMatrix);
-	basicShader->setMat4("projectionMatrix", projectionMatrix);
-	basicShader->setMat4("viewMatrix", viewMatrix);
-
-	// Print success message.
-	std::cout << "[OPENGL SHADER] Shaders compiled.\n\n";
-
+	basicShader->bind();
+	basicShader->setMat4("worldMatrix", this->modelMatrix);
+	basicShader->setMat4("projectionMatrix", this->projectionMatrix);
+	basicShader->setMat4("viewMatrix", this->viewMatrix);
+	basicShader->unbind();
+		
 	// Mouse event variables.
-	scaleRate = 0.3;
+	this->scaleRate = 0.3;
 
 	// create the triangle
 	float triangle_vertices[] = {
@@ -77,15 +66,12 @@ DrawingEngineGL::DrawingEngineGL(GLFWwindow* windowIn)
 	unsigned int triangle_indices[] = {
 		0, 1, 2 };
 
-	VertexArray VAO;
+	VAO = new VertexArray();
+	IBO = new IndexBuffer(triangle_indices, 3);
 	VertexBuffer VBO(triangle_vertices, 4 * 2 * sizeof(float));
 	VertexBufferLayout VBL;
 	VBL.push<float>(3);
-	VAO.addBuffer(VBO, VBL);
-	IndexBuffer IBO(triangle_indices, 3);
-
-	this->VAO = VAO;
-	this->IBO = IBO;
+	VAO->addBuffer(VBO, VBL);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -96,13 +82,13 @@ void DrawingEngineGL::renderLoop()
 {
 	// Apply camera movements to shader.
 	viewMatrix = scalingMatrix * rotationMatrix * translationMatrix;
-	basicShader->setMat4("viewMatrix", viewMatrix);
-
+		
 	// rendering our geometries
-	basicShader->use();
-	VAO.bind();
-	GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
-	GLCall(glBindVertexArray(0));
+	basicShader->bind();
+	basicShader->setMat4("viewMatrix", viewMatrix);
+	VAO->bind();
+	//GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
+	VAO->unbind();
 
 	// Draw temporary border.
 	GLCall(glBegin(GL_LINE_LOOP));
@@ -111,6 +97,8 @@ void DrawingEngineGL::renderLoop()
 	glVertex2f(1.0f, -1.0f);
 	glVertex2f(-1.0f, -1.0f);
 	glEnd();
+
+	basicShader->unbind();
 
 }
 
@@ -138,8 +126,8 @@ glm::vec4 DrawingEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
 
 	// Apply MVP matrices.
-	viewMatrix = scalingMatrix * rotationMatrix * translationMatrix;
-	glm::mat4 MVPinverse = glm::inverse(modelMatrix * viewMatrix * projectionMatrix);
+	this->viewMatrix = this->scalingMatrix * this->rotationMatrix * this->translationMatrix;
+	glm::mat4 MVPinverse = glm::inverse(this->modelMatrix * this->viewMatrix * this->projectionMatrix);
 	glm::vec4 worldVec = screenVec * MVPinverse ;
 
 	return worldVec;
@@ -182,7 +170,7 @@ void DrawingEngineGL::resizeEvent(int width, int height)
 	}
 
 	// Apply changes to shaders.
-	basicShader->setMat4("projectionMatrix", projectionMatrix);
+	basicShader->setMat4("projectionMatrix", this->projectionMatrix);
 	
 }
 

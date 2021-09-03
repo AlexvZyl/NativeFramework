@@ -8,10 +8,6 @@ This is where the drawing enigine mouse events are handled.
 
 #include "Engine2D/DrawingEngine/core.h"
 
-// Error handler.
-#include <ErrorHandler/errorHandler.h>
-#include "../Helper/stateMachine.h"
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Mouse Press event.
 //----------------------------------------------------------------------------------------------------------------------

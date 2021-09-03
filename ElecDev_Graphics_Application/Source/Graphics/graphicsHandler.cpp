@@ -17,21 +17,21 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 GraphicsHandler::GraphicsHandler(GLFWwindow* windowIn, stateMachineGraphics* statesIn)
 {	
 	// Set state machine variable.
-	states = *statesIn;
-
+	states = statesIn;
 	// Store pointer to GLFW window.
 	window = windowIn;
 
 	// Create engines.
-	DrawingEngineGL dE(window);
-	drawingEngine = &dE;
+	drawingEngine = new DrawingEngineGL(window);
 	//DesignEngineGL designEngine(this->window);
 	//this->designEngine = designEngine;
 
 	// Set the default active engine.  (Should be set to animation when one is available.)
 	activeEngine = "DrawingEngine";
-
 };
+
+// Destructor.
+GraphicsHandler::~GraphicsHandler() {};
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.
@@ -65,7 +65,7 @@ void GraphicsHandler::renderGraphics()
 void GraphicsHandler::setEngine(std::string engine)
 {
 	// Close the current active engine.
-	closeEngine();
+	closeActiveEngine();
 
 	// Set the new active engine.
 	if (activeEngine == "DrawingEngine")
@@ -87,7 +87,7 @@ void GraphicsHandler::setEngine(std::string engine)
 };
 
 // Function that closes the engine passed.
-void GraphicsHandler::closeEngine()
+void GraphicsHandler::closeActiveEngine()
 {
 	// Close the active engine.
 	if (this->activeEngine == "DrawingEngine")

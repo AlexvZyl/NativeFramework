@@ -38,7 +38,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// State machine variable.
-	stateMachineGraphics states;
+	stateMachineGraphics* states;
 
 	// Variable that holds the active engine.
 	std::string activeEngine;
@@ -56,6 +56,8 @@ public:
 
 	// Constructor with GLFW window.
 	GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states);
+	// Destructor.
+	~GraphicsHandler();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Functions.
@@ -68,7 +70,7 @@ public:
 	void setEngine(std::string engine);
 
 	// Function that closes the engine passed.
-	void closeEngine();
+	void closeActiveEngine();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Mouse events.
