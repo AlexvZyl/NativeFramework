@@ -48,9 +48,9 @@ This is the graphics application that is to be used with the ElecDev software.  
   * GLFW ✓ 
   * OpenGL ✓
   * GLM ✓
-* Implement matrix mathematics
-  * Translation, rotation & scaling
-  * Viewport, Model, View and Porjection matrices
+* Implement matrix mathematics ✓
+  * Translation, rotation & scaling ✓
+  * Viewport, Model, View and Porjection matrices ✓
 * Setup mouse event handler:
   * Srcoll, move and press events for drawing engine. ✓
   * Srcoll, move and press events for design engine.
