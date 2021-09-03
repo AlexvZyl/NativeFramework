@@ -53,9 +53,10 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Srcoll, move and press events for design engine.
 * GUI State Machine.
 * Create first basic app with simple GUI interface and simple OpenGL drawing.
-  * Error handler. ✓
-  * Shader handler. ✓
-  * Buffers: VAO, VBO, IBO.
+  * Basic shader ✓ 
+  * Error handler ✓
+  * Shader handler ✓
+  * Buffers: VAO, VBO, IBO
 * Interface with Excel.
   * Requires exe file that has resource files included.
   * Write byte encoder/decoder.
