@@ -61,6 +61,10 @@ This is the graphics application that is to be used with the ElecDev software.  
     * Vertex Buffer Objects 
     * Vertex Buffer Layouts
     * Index Buffer Objects
+  * Drawing API:
+    * Lines
+    * Circles
+    * Text
   * GUI interface
   * Bind all user inputs to OpenGL actions and state machine updates
 * Interface with Excel.
