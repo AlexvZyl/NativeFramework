@@ -49,6 +49,8 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Shader handler. ✓
   * Buffers: VAO, VBO, IBO.
 * Interface with Excel.
+  * Requires exe file that has resource files included.
+  * Write byte encoder/decoder.
 * Port software from the PyQt interface.
 * Improve engine with a better UI:
   * Auto alignment.
