@@ -57,10 +57,14 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Error handler ✓
   * Shader handler ✓
   * Buffers: VAO, VBO, IBO
+* GUI interface
+  * Bind all user inputs to OpenGL actions and state machine updates
 * Interface with Excel.
   * Requires exe file that has resource files included.
   * Write byte encoder/decoder.
+  * Write thread handler from python side for non-pause interface
 * Port software from the PyQt interface.
+  * Create a state machine for type of user interface 
 * Improve engine with a better UI:
   * Auto alignment.
   * Move components.
@@ -72,4 +76,4 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ---
 
-*Estimated money to be made = Baie x Baie = Mal Baie.*
+*Estimated money to be made = Baie^Baie = Mal Baie.*
