@@ -22,8 +22,6 @@ class MousePoint
 private:
 	// VAO that contains the mouse point.
 	VertexArrayObject* m_VAO;
-	// GLFW window instance to draw to.
-	GLFWwindow* m_window;
 	// Mouse point color.
 	float m_color[4];
 	// Mouse point size.

@@ -57,7 +57,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	//---------------------------------------------------------------------------------------
 
 	float mouseColor[4] = {1.0f, 0.0f, 0.0f, 1.0f };
-	m_mousePoint = new MousePoint(m_window, mouseColor, 0.5);
+	m_mousePoint = new MousePoint(m_window, mouseColor, 0.01);
 
 	//---------------------------------------------------------------------------------------
 	// Buffers setup.
@@ -83,8 +83,8 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	m_linesVAO->writeData(v4, v1);
 
 	// Assign background data.
-	float lightColor[4] = { 0.9f, 0.9f, 0.9f, 1.0f };
-	float darkColor[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
+	float lightColor[4] = { 0.95f, 0.95f, 0.95f, 1.0f };
+	float darkColor[4] = { 0.75f, 0.75f, 0.75f, 1.0f };
 	VertexData v5(1.0f, 1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		// Top right.
 	VertexData v6(-1.0f, 1.0f, 0.0f, lightColor[0], lightColor[1], lightColor[2], lightColor[3]);	//  Top left.
 	VertexData v7(-1.0f, -1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		//  Bottom left.
@@ -92,7 +92,6 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	// Create background.
 	m_backgroundVAO->writeData(v5, v6, v7, v8);
-
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 };
@@ -106,7 +105,6 @@ BaseEngineGL::~BaseEngineGL()
 	delete m_backgroundVAO;
 }
 
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Rendering.
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,9 +114,6 @@ void BaseEngineGL::renderLoop()
 	// Draw background.
 	m_staticShader->bind();
 	m_backgroundVAO->render();
-	// Draw mouse point.
-	float coords[2] = {0,0};
-	m_mousePoint->render(coords);
 
 	// Apply camera movements to shader.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
@@ -127,6 +122,14 @@ void BaseEngineGL::renderLoop()
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
 	m_linesVAO->render();
+
+	// Update and draw mouse point.
+	m_staticShader->bind();
+	double coords[2];
+	glfwGetCursorPos(m_window, &coords[0], &coords[1]);
+	glm::vec4 mouseWorldCoords = pixelCoordsToWorldCoords(coords);
+	float drawCoords[2] = { mouseWorldCoords[0],  mouseWorldCoords[1] };
+	m_mousePoint->render(drawCoords);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
