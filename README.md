@@ -39,49 +39,50 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Roadmap
 
-* Structure code: ✓
-  * Main app ✓
-  * GUI Handler ✓
-  * Graphics Handler (Backend Engines) ✓
+* Structure code and setup handlers: ✓
+  * Main app. ✓
+  * GUI Handler. ✓
+  * Graphics Handler (Backend Engines). ✓
 * Setup project with dependancies: ✓
-  * ImGUI ✓ 
-  * GLAD ✓ 
-  * GLFW ✓ 
-  * OpenGL ✓
-  * GLM ✓
+  * ImGUI. ✓ 
+  * GLAD. ✓ 
+  * GLFW. ✓ 
+  * OpenGL. ✓
+  * GLM. ✓
+  * ImGUI Docking Branch.
 * Base Engine:
-  * Implement matrix mathematics ✓
-    * Translation, rotation & scaling ✓
-    * Viewport, Model, View and Porjection matrices ✓
-  * Basic shader ✓ 
-  * Error handler ✓
-  * Shader handler ✓
+  * Implement matrix mathematics. ✓
+    * Translation, rotation & scaling. ✓
+    * Viewport, Model, View and Porjection matrices. ✓
+  * Basic shader. ✓ 
+  * Error handler. ✓
+  * Shader handler. ✓
   * Implement class that handles VAO's. ✓
   * Implement batch rendering. ✓
   * Drawing API:
-    * Lines
-    * Circles
-    * Text
-  * Mouse event handler ✓
+    * Lines.
+    * Circles.
+    * Text.
+  * Mouse event handler. ✓
 * Implement State Machine that controls the application. ✓
-* Create first basic app with simple GUI interface and simple OpenGL drawing.
-  * Incorporate Base Engine ✓
-  * GUI interface controls OpenGL engines
-  * Bind all user inputs to OpenGL actions and state machine updates
-* Interface with Excel.
+* Add virtual mouse point that snaps to parts of the drawings to make editing easier.
+* Create first basic app with simple GUI interface and simple OpenGL drawing:
+  * Incorporate Base Engine. ✓
+  * GUI interface controls OpenGL engines.
+  * Bind all user inputs to OpenGL actions and state machine updates.
+* Interface with Excel:
   * Requires exe file that has resource files included.
   * Write byte encoder/decoder.
-  * Write thread handler from python side for non-pause interface
+  * Write thread handler from python side for non-pause interface.
 * MCC Drawings:
   * Read available drawings from excel file.
   * Draw and redraw MCC's.
-* Add virtual mouse point that snaps to parts of the drawings to make editing easier.
-* * Design Engine:
-  * Mouse event handler
-  * Component generation
-  * Cable generation
-* Port software from the PyQt interface.
-  * Create a state machine for type of user interface 
+* Design Engine:
+  * Mouse event handler.
+  * Component generation.
+  * Cable generation.
+* Port software from the PyQt interface:
+  * Create a state machine for type of user interface.
 * Improve engine with a better UI:
   * Auto alignment.
   * Move components.
