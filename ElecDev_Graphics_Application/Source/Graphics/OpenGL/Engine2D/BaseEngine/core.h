@@ -23,10 +23,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include "../Helper/stateMachine.h"
 
 // Buffers.
-#include "Buffers/vertexBuffer.h"
-#include "Buffers/vertexArray.h"
-#include "Buffers/vertexBufferLayout.h"
-#include "Buffers/indexBuffer.h"
+#include "Buffers/vertexArrayBuffer.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.

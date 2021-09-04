@@ -22,9 +22,7 @@
     <ClCompile Include="Source\Helper\stateMachine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexBuffer.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArray.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\indexBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArrayBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -351,10 +349,7 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\std_placeholders.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
     <ClInclude Include="Source\Helper\stateMachine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexBuffer.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArray.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexBufferLayout.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\indexBuffer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArrayBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />

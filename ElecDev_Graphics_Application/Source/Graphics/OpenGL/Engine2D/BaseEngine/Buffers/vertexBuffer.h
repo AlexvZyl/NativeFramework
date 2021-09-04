@@ -14,12 +14,13 @@ class VertexBuffer
 {
 private:
 
+	// The vertex buffer ID.
 	unsigned int m_rendererID;
 
 public:
 	
 	// Constructor.
-	VertexBuffer(const void* data, unsigned int size);
+	VertexBuffer(unsigned int size);
 	// Destructor.
 	~VertexBuffer();
 

@@ -26,6 +26,16 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "../Helper/stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Data structures
+//----------------------------------------------------------------------------------------------------------------------
+
+// Struct that contains the different OpenGL engines that can be used.
+enum class Engines
+{
+	ANIMATION, BASE_ENGINE, DESIGN_ENGINE
+};
+
+//----------------------------------------------------------------------------------------------------------------------
 //  Graphics Handler Class.
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -41,7 +51,7 @@ public:
 	stateMachineGraphics* m_states;
 
 	// Variable that holds the active engine.
-	std::string m_activeEngine;
+	Engines m_activeEngine;
 
 	// Different drawing engines.
 	BaseEngineGL* m_drawingEngine;

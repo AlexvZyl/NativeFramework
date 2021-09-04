@@ -65,9 +65,9 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* windowIn)
 		2, 3, 0
 	};
 
-	m_linesVAO = new VertexArray();
-	VertexBuffer VBO(posititions, 4 * 2 * sizeof(float));
-	VertexBufferLayout VBL;
+	//m_linesVAO = new VertexArray();
+	//VertexBuffer VBO(posititions, 4 * 2 * sizeof(float));
+	//VertexBufferLayout VBL;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ void BaseEngineGL::renderLoop()
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
 
 	// Bind vao and draw.
-	m_linesVAO->bind();
+	//m_linesVAO->bind();
 	//GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
 
 	// Draw temporary border.
