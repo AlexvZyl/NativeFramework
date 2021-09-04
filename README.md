@@ -82,7 +82,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * MCC Drawings:
   * Read available drawings from excel file.
   * Draw and redraw MCC's.
-* Design Engine:
+* Expand Base engine with Design Engine child:
   * Mouse event handler.
   * Component generation.
   * Cable generation.
