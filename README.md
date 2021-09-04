@@ -41,34 +41,32 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 * Structure code: ✓
   * Main app ✓
-  * Handlers (GUI and Graphics) ✓
-  * Drawing and Design engine ✓
+  * GUI Handler ✓
+  * Graphics Handler (Backend Engines) ✓
 * Setup project with dependancies: ✓
   * ImGUI ✓ 
   * GLAD ✓ 
   * GLFW ✓ 
   * OpenGL ✓
   * GLM ✓
-* Implement matrix mathematics ✓
-  * Translation, rotation & scaling ✓
-  * Viewport, Model, View and Porjection matrices ✓
 * Base Engine:
-  * Mouse event handler ✓
-* Design Engine:
-  * Mouse event handler
-  * Component generation
-  * Cable generation
-* Implement State Machine that controls the application. ✓
-* Create first basic app with simple GUI interface and simple OpenGL drawing.
+  * Implement matrix mathematics ✓
+    * Translation, rotation & scaling ✓
+    * Viewport, Model, View and Porjection matrices ✓
   * Basic shader ✓ 
   * Error handler ✓
   * Shader handler ✓
   * Implement class that handles VAO's. ✓
+  * Implement batch rendering. ✓
   * Drawing API:
     * Lines
     * Circles
     * Text
-  * GUI interface
+  * Mouse event handler ✓
+* Implement State Machine that controls the application. ✓
+* Create first basic app with simple GUI interface and simple OpenGL drawing.
+  * Incorporate Base Engine ✓
+  * GUI interface controls OpenGL engines
   * Bind all user inputs to OpenGL actions and state machine updates
 * Interface with Excel.
   * Requires exe file that has resource files included.
@@ -77,8 +75,11 @@ This is the graphics application that is to be used with the ElecDev software.  
 * MCC Drawings:
   * Read available drawings from excel file.
   * Draw and redraw MCC's.
-* Implement batch rendering.
 * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
+* * Design Engine:
+  * Mouse event handler
+  * Component generation
+  * Cable generation
 * Port software from the PyQt interface.
   * Create a state machine for type of user interface 
 * Improve engine with a better UI:
