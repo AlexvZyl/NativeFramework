@@ -64,8 +64,8 @@ This is the graphics application that is to be used with the ElecDev software.  
     * Circles.
     * Text.
   * Mouse event handler. ✓
+  * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
 * Implement State Machine that controls the application. ✓
-* Add virtual mouse point that snaps to parts of the drawings to make editing easier.
 * Create first basic app with simple GUI interface and simple OpenGL drawing:
   * Incorporate Base Engine. ✓
   * GUI interface controls OpenGL engines.
