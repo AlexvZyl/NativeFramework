@@ -14,6 +14,7 @@
 #include "Implementations/imgui_impl_opengl3.h"
 
 // GLAD (OpenGL loader).
+//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 #include <glad/glad.h>
 
 // Include GLFW (window) after OpenGL definition.
@@ -126,7 +127,7 @@ int main(int, char**)
     // GLFW setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-    // Enable 16x MSAA.
+    // Enable 16x MSAA.-
     glfwWindowHint(GLFW_SAMPLES, 16);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
@@ -183,6 +184,7 @@ int main(int, char**)
     // Setup Platform/Renderer backends.
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
+    glfwMakeContextCurrent(window);
 
     // Viewport.
     int screen_width, screen_height;
@@ -192,9 +194,9 @@ int main(int, char**)
     int display_w, display_h;
 
     // Setup mouse callbacks.
-    glfwSetMouseButtonCallback(window, mousePressEvent); // Mouse press event.
-    glfwSetCursorPosCallback(window, mouseMoveEvent); //  Mouse move event.
-    glfwSetScrollCallback(window, mouseScrollEvent); // Mouse scroll event.
+    glfwSetMouseButtonCallback(window, mousePressEvent);// Mouse press event.
+    glfwSetCursorPosCallback(window, mouseMoveEvent);   //  Mouse move event.
+    glfwSetScrollCallback(window, mouseScrollEvent);    // Mouse scroll event.
 
     // Enable MSAA.
     glEnable(GL_MULTISAMPLE);
@@ -217,7 +219,7 @@ int main(int, char**)
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
     // Set background color.
-    float backGroundColor[] = { (float) 245 / 255, (float) 245 / 255, (float) 245 / 255 };
+    float backGroundColor[] = { (float) 0 / 255, (float) 0 / 255, (float) 0 / 255 };
 
     /*===================================================================================================================================*/
     /* Loop                                                                                                                              */

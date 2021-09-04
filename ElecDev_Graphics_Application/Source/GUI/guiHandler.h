@@ -45,4 +45,7 @@ public:
 	// Function that handles which engine should be active.
 	void renderGraphics();
 
+	// Set custom theme.
+	void setTheme();
+
 };

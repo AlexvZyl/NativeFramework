@@ -2,9 +2,13 @@
 #version 330 core
 
 layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 colorData;
+
+out vec4 colorFragment;
 
 void main()
 {
+	colorFragment = colorData;
 	gl_Position = position;
 };
 
@@ -13,7 +17,9 @@ void main()
 
 layout(location = 0) out vec4 color;
 
+in vec4 colorFragment;
+
 void main()
 {
-	color = vec4(0.0, 0.0, 0.0, 1.0);
+	color = colorFragment;
 };

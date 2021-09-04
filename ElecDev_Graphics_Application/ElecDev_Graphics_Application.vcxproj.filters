@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Source\GUI\guiHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
-    <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp" />
@@ -22,12 +21,11 @@
     <ClCompile Include="Source\Helper\stateMachine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArrayBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.cpp" />
+    <ClCompile Include="Source\External\GLAD\src\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
-    <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
-    <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3native.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imconfig.h" />
@@ -349,7 +347,9 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\std_placeholders.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
     <ClInclude Include="Source\Helper\stateMachine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Buffers\vertexArrayBuffer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.h" />
+    <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
+    <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />

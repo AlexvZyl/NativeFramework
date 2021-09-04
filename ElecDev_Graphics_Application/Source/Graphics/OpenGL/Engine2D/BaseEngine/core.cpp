@@ -10,18 +10,23 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include "core.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Constructors.
+//  Constructor & Destructor.
 //----------------------------------------------------------------------------------------------------------------------
 
 // With GLFW window.
-BaseEngineGL::BaseEngineGL(GLFWwindow* windowIn)
+BaseEngineGL::BaseEngineGL(GLFWwindow* window)
+	:m_window(window)
 {	
-	// Save pointer to GLFW window.
-	m_window = windowIn;
+	// Create basic shader.
+	std::string basicShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
+	m_basicShader = new Shader(basicShaderPath);
+	// Create static shader.
+	std::string staticShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\staticShader.shader";
+	m_staticShader = new Shader(staticShaderPath);
 
-	// Create shader.
-	std::string shaderFilePath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
-	m_basicShader = new Shader(shaderFilePath);
+	//---------------------------------------------------------------------------------------
+	// Matrices setup.
+	//---------------------------------------------------------------------------------------
 
 	// Find the viewpwort dimensions and store it.
 	int viewport[2];
@@ -29,9 +34,6 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* windowIn)
 	// Store the value to use when viewport changes.
 	m_viewportDimensions[0] = viewport[0];
 	m_viewportDimensions[1] = viewport[1];
-
-	// Matrices setup.
-	//----------------------------------------------------------
 	
 	// Find the minimum value of the viewport dimensions.
 	int minValue;
@@ -49,26 +51,54 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* windowIn)
 	m_basicShader->setMat4("worldMatrix", m_modelMatrix);
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
-		
-	// Mouse event variables.
-	m_scaleRate = 0.3;
 
-	// Create Square.
-	float posititions[] = {
-		-0.5f,	-0.5f,
-		 0.5f,	-0.5f,
-		 0.5f,	-0.5f,
-		-0.5f,	 0.5f
-	};
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
+	//---------------------------------------------------------------------------------------
+	// Buffers setup.
+	//---------------------------------------------------------------------------------------
 
-	//m_linesVAO = new VertexArray();
-	//VertexBuffer VBO(posititions, 4 * 2 * sizeof(float));
-	//VertexBufferLayout VBL;
+	m_linesVAO = new VertexArrayObject(ModelType::LINES, 100);
+	m_backgroundVAO = new VertexArrayObject(ModelType::QUAD, 100);
+
+	//---------------------------------------------------------------------------------------
+	// Test code.
+	//---------------------------------------------------------------------------------------
+
+	// Assign vertex data.
+	VertexData v1( 1.0f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
+	VertexData v2(-1.0f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
+	VertexData v3(-1.0f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
+	VertexData v4( 1.0f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
+
+	// Create lines VAO.
+	m_linesVAO->writeData(v1, v2);
+	m_linesVAO->writeData(v2, v3);
+	m_linesVAO->writeData(v3, v4);
+	m_linesVAO->writeData(v4, v1);
+
+	// Assign background data.
+	float lightColor[4] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	float darkColor[4] = { 0.7f, 0.7f, 0.7f, 1.0f };
+	VertexData v5(1.0f, 1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		// Top right.
+	VertexData v6(-1.0f, 1.0f, 0.0f, lightColor[0], lightColor[1], lightColor[2], lightColor[3]);	//  Top left.
+	VertexData v7(-1.0f, -1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		//  Bottom left.
+	VertexData v8(1.0f, -1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		//  Bottom right.
+
+	// Create background.
+	m_backgroundVAO->writeData(v5, v6, v7, v8);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 };
+
+// Delete and free memory.
+BaseEngineGL::~BaseEngineGL() 
+{
+	delete m_basicShader;
+	delete m_staticShader;
+	delete m_linesVAO;
+	delete m_backgroundVAO;
+}
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Rendering.
@@ -76,25 +106,17 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* windowIn)
 
 void BaseEngineGL::renderLoop()
 {
+	// Draw background.
+	m_staticShader->bind();
+	m_backgroundVAO->render();
+
 	// Apply camera movements to shader.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
 	
 	// Bind basic shader and apply changes.
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
-
-	// Bind vao and draw.
-	//m_linesVAO->bind();
-	//GLCall(glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0));
-
-	// Draw temporary border.
-	GLCall(glBegin(GL_LINE_LOOP));
-	glVertex2f(-1.0f, 1.0f);
-	glVertex2f(1.0f, 1.0f);
-	glVertex2f(1.0f, -1.0f);
-	glVertex2f(-1.0f, -1.0f);
-	glEnd();
-
+	m_linesVAO->render();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -165,7 +187,6 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	// Apply changes to shaders.
 	m_basicShader->bind();
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
-	
 }
 
 //----------------------------------------------------------------------------------------------------------------------

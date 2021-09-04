@@ -11,6 +11,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // OpenGL.
 #include <glad/glad.h>
+//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 #include <GLFW/glfw3.h>
 #include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
@@ -23,7 +24,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include "../Helper/stateMachine.h"
 
 // Buffers.
-#include "Buffers/vertexArrayBuffer.h"
+#include "vertexArrayObject.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -64,18 +65,20 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	Shader* m_basicShader;
+	Shader* m_staticShader;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse event variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	float m_scaleRate;
+	float m_scaleRate=0.3;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	VertexArray* m_linesVAO;
+	VertexArrayObject* m_linesVAO;
+	VertexArrayObject* m_backgroundVAO;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
@@ -86,11 +89,12 @@ public:
 	float m_projectionValues[6];
 
 	//---------------------------------------------------------------------------------------------------------------------
-	//  Constructors.
+	//  Constructor & Destructor.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// With GLFW window.
 	BaseEngineGL(GLFWwindow* window);
+	~BaseEngineGL();
 		
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Rendering.

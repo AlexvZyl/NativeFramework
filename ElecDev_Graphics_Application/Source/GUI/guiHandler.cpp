@@ -14,6 +14,9 @@
 // Constructor.
 GUIHandler::GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHandler)
 {
+    // Set the custom theme.
+    setTheme();
+ 
 	this->statesG = *states;
 	this->states.toolsExpanded = false;
 	this->states.toolsMode = 0;
@@ -32,3 +35,16 @@ void GUIHandler::renderGraphics()
 	ImGui::SetNextWindowSize(ImVec2(30, 10));
 	ImGui::End();	
 };
+
+void GUIHandler::setTheme() 
+{
+    //imGuiIO.Fonts->AddFontFromFileTTF("../data/Fonts/Ruda-Bold.ttf", 15.0f, &config);
+    ImGui::GetStyle().FrameRounding = 4.0f;
+    ImGui::GetStyle().GrabRounding = 4.0f;
+	ImGui::GetStyle().ChildRounding = 4.0f;
+	ImGui::GetStyle().WindowRounding = 4.0f;
+
+
+
+
+}
