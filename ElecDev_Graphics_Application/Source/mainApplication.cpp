@@ -62,7 +62,7 @@ static void glfw_error_callback(int error, const char* description)
 
 // Handle mouse press events ftom GLFW.
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
-{  
+{
     graphicsHandler->mousePressEvent(window, button, action, mods);
 }
 
@@ -101,33 +101,33 @@ int main(int, char**)
     // OpenGL Version select.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-    #if defined(IMGUI_IMPL_OPENGL_ES2)
-        // GL ES 2.0 + GLSL 100.
-        const char* glsl_version = "#version 100";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-    #elif defined(__APPLE__)
-        // GL 3.2 + GLSL 150.
-        const char* glsl_version = "#version 150";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac.
-    #else
-        // GL 3.0 + GLSL 130.
-        const char* glsl_version = "#version 130";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
-        //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only.
-    #endif
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+    // GL ES 2.0 + GLSL 100.
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+    // GL 3.2 + GLSL 150.
+    const char* glsl_version = "#version 150";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac.
+#else
+    // GL 3.0 + GLSL 130.
+    const char* glsl_version = "#version 130";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only.
+#endif
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // GLFW setup. 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+// GLFW setup. 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-    // Enable 16x MSAA.-
+// Enable 16x MSAA.-
     glfwWindowHint(GLFW_SAMPLES, 16);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
@@ -143,25 +143,25 @@ int main(int, char**)
     // Initialize OpenGL loader.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-    #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-        bool err = gl3wInit() != 0;
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-        bool err = glewInit() != GLEW_OK;
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-        bool err = gladLoadGL() == 0;
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
-        bool err = gladLoadGL(glfwGetProcAddress) == 0; // glad2 recommend using the windowing library loader instead of the (optionally) bundled one.
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
-        bool err = false;
-        glbinding::Binding::initialize();
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
-        bool err = false;
-        glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)glfwGetProcAddress(name); });
-    #else
-        bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-    #endif
+#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
+    bool err = gl3wInit() != 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
+    bool err = glewInit() != GLEW_OK;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
+    bool err = gladLoadGL() == 0;
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
+    bool err = gladLoadGL(glfwGetProcAddress) == 0; // glad2 recommend using the windowing library loader instead of the (optionally) bundled one.
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
+    bool err = false;
+    glbinding::Binding::initialize();
+#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
+    bool err = false;
+    glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)glfwGetProcAddress(name); });
+#else
+    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
+#endif
 
-    // OpenGL loader error handler.
+// OpenGL loader error handler.
     if (err)
     {
         fprintf(stderr, "[OPENGL ERROR] Failed to initialize OpenGL loader!\n");
@@ -172,11 +172,16 @@ int main(int, char**)
     // ImGUI & OpenGL setup. 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //io.ConfigViewportsNoAutoMerge = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
 
     // Setup ImGui style.
     ImGui::StyleColorsDark();
@@ -213,13 +218,13 @@ int main(int, char**)
 
     // Create GUI handler object.
     GUIHandler guiHandler(&states, graphicsHandler);
-        
+
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other setups.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
     // Set background color.
-    float backGroundColor[] = { (float) 0 / 255, (float) 0 / 255, (float) 0 / 255 };
+    float backGroundColor[] = { (float)0 / 255, (float)0 / 255, (float)0 / 255 };
 
     /*===================================================================================================================================*/
     /* Loop                                                                                                                              */
@@ -230,7 +235,7 @@ int main(int, char**)
 
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
-    {   
+    {
         // Check for events.
         //glfwWaitEvents();
         glfwPollEvents();
@@ -242,34 +247,41 @@ int main(int, char**)
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        
+
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();
 
-         //Render ImGUI components.
+        //Render ImGUI components.
         guiHandler.renderGraphics();
 
         /*std::cin >> interfacePython;
-
         ImGui::Begin("Interface Window Example");
-
         ImGui::Text("(%s)", interfacePython);
-
         ImGui::SetWindowPos(ImVec2(ImGui::GetMainViewport()->WorkSize.x - 160, 0));
         ImGui::SetNextWindowSize(ImVec2(30, 10));
-
         ImGui::End();*/
-        
-         //Render ImGUI into screen.
+
+        //Render ImGUI into screen.
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Update and Render additional Platform Windows
+        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
 
         // Assign values to viewport.
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glfwSwapBuffers(window);
         //glFinish();
-        
+
     }
 
     /*===================================================================================================================================*/

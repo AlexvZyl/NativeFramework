@@ -21,8 +21,7 @@
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
 //  2021-XX-XX: Platform: Added support for multiple windows via the ImGuiPlatformIO interface.
-//  2021-08-17: *BREAKING CHANGE*: Now using glfwSetWindowFocusCallback() to calling io.AddFocusEvent(). If you called ImGui_ImplGlfw_InitXXX() with install_callbacks = false, you MUST install glfwSetWindowFocusCallback() and forward it to the backend via ImGui_ImplGlfw_WindowFocusCallback().
-//  2021-07-29: *BREAKING CHANGE*: Now using glfwSetCursorEnterCallback(). MousePos is correctly reported when the host platform window is hovered but not focused. If you called ImGui_ImplGlfw_InitXXX() with install_callbacks = false, you MUST install glfwSetWindowFocusCallback() callback and forward it to the backend via ImGui_ImplGlfw_CursorEnterCallback().
+//  2021-07-29: *BREAKING CHANGE*: Inputs: MousePos is correctly reported when the host platform window is hovered but not focused (using glfwSetCursorEnterCallback). If you called ImGui_ImplGlfw_InitXXX() with install_callbacks = false, you MUST install the glfwSetCursorEnterCallback() callback and the forward to the backend via ImGui_ImplGlfw_CursorEnterCallback().
 //  2021-06-29: Reorganized backend to pull data from a single structure to facilitate usage with multiple-contexts (all g_XXXX access changed to bd->XXXX).
 //  2020-01-17: Inputs: Disable error callback while assigning mouse cursors because some X11 setup don't have them and it generates errors.
 //  2019-12-05: Inputs: Added support for new mouse cursors added in GLFW 3.4+ (resizing cursors, not allowed cursor).
@@ -97,7 +96,6 @@ struct ImGui_ImplGlfw_Data
     bool                    WantUpdateMonitors;
 
     // Chain GLFW callbacks: our callbacks will call the user's previously installed callbacks, if any.
-    GLFWwindowfocusfun      PrevUserCallbackWindowFocus;
     GLFWcursorenterfun      PrevUserCallbackCursorEnter;
     GLFWmousebuttonfun      PrevUserCallbackMousebutton;
     GLFWscrollfun           PrevUserCallbackScroll;
@@ -189,22 +187,11 @@ void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int a
 #endif
 }
 
-void ImGui_ImplGlfw_WindowFocusCallback(GLFWwindow* window, int focused)
-{
-    ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
-    if (bd->PrevUserCallbackWindowFocus != NULL && window == bd->Window)
-        bd->PrevUserCallbackWindowFocus(window, focused);
-
-    ImGuiIO& io = ImGui::GetIO();
-    io.AddFocusEvent(focused != 0);
-}
-
 void ImGui_ImplGlfw_CursorEnterCallback(GLFWwindow* window, int entered)
 {
     ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
-    if (bd->PrevUserCallbackCursorEnter != NULL && window == bd->Window)
+    if (bd->PrevUserCallbackCursorEnter != NULL)
         bd->PrevUserCallbackCursorEnter(window, entered);
-
     if (entered)
         bd->MouseWindow = window;
     if (!entered && bd->MouseWindow == window)
@@ -299,7 +286,6 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     glfwSetErrorCallback(prev_error_callback);
 
     // Chain GLFW callbacks: our callbacks will call the user's previously installed callbacks, if any.
-    bd->PrevUserCallbackWindowFocus = NULL;
     bd->PrevUserCallbackMousebutton = NULL;
     bd->PrevUserCallbackScroll = NULL;
     bd->PrevUserCallbackKey = NULL;
@@ -308,7 +294,6 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     if (install_callbacks)
     {
         bd->InstalledCallbacks = true;
-        bd->PrevUserCallbackWindowFocus = glfwSetWindowFocusCallback(window, ImGui_ImplGlfw_WindowFocusCallback);
         bd->PrevUserCallbackCursorEnter = glfwSetCursorEnterCallback(window, ImGui_ImplGlfw_CursorEnterCallback);
         bd->PrevUserCallbackMousebutton = glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
         bd->PrevUserCallbackScroll = glfwSetScrollCallback(window, ImGui_ImplGlfw_ScrollCallback);
@@ -358,7 +343,6 @@ void ImGui_ImplGlfw_Shutdown()
 
     if (bd->InstalledCallbacks)
     {
-        glfwSetWindowFocusCallback(bd->Window, bd->PrevUserCallbackWindowFocus);
         glfwSetCursorEnterCallback(bd->Window, bd->PrevUserCallbackCursorEnter);
         glfwSetMouseButtonCallback(bd->Window, bd->PrevUserCallbackMousebutton);
         glfwSetScrollCallback(bd->Window, bd->PrevUserCallbackScroll);
@@ -385,7 +369,7 @@ static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
     io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     io.MouseHoveredViewport = 0;
 
-    // Update mouse buttons
+    // Update mouse button
     // (if a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame)
     for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
     {
@@ -400,11 +384,10 @@ static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
 
 #ifdef __EMSCRIPTEN__
         const bool focused = true;
+        IM_ASSERT(platform_io.Viewports.Size == 1);
 #else
         const bool focused = glfwGetWindowAttrib(window, GLFW_FOCUSED) != 0;
 #endif
-        GLFWwindow* mouse_window = (bd->MouseWindow == window || focused) ? window : NULL;
-
         // Update mouse buttons
         if (focused)
             for (int i = 0; i < IM_ARRAYSIZE(io.MouseDown); i++)
@@ -416,10 +399,10 @@ static void ImGui_ImplGlfw_UpdateMousePosAndButtons()
             glfwSetCursorPos(window, (double)(mouse_pos_prev.x - viewport->Pos.x), (double)(mouse_pos_prev.y - viewport->Pos.y));
 
         // Set Dear ImGui mouse position from OS position
-        if (mouse_window != NULL)
+        if (bd->MouseWindow == window || focused)
         {
             double mouse_x, mouse_y;
-            glfwGetCursorPos(mouse_window, &mouse_x, &mouse_y);
+            glfwGetCursorPos(window, &mouse_x, &mouse_y);
             if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
             {
                 // Multi-viewport mode: mouse position in OS absolute coordinates (io.MousePos is (0,0) when the mouse is on the upper-left of the primary monitor)
@@ -668,7 +651,6 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
     glfwSetWindowPos(vd->Window, (int)viewport->Pos.x, (int)viewport->Pos.y);
 
     // Install GLFW callbacks for secondary viewports
-    glfwSetWindowFocusCallback(vd->Window, ImGui_ImplGlfw_WindowFocusCallback);
     glfwSetCursorEnterCallback(vd->Window, ImGui_ImplGlfw_CursorEnterCallback);
     glfwSetMouseButtonCallback(vd->Window, ImGui_ImplGlfw_MouseButtonCallback);
     glfwSetScrollCallback(vd->Window, ImGui_ImplGlfw_ScrollCallback);
@@ -913,7 +895,6 @@ static int ImGui_ImplGlfw_CreateVkSurface(ImGuiViewport* viewport, ImU64 vk_inst
 {
     ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
     ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
-    IM_UNUSED(bd);
     IM_ASSERT(bd->ClientApi == GlfwClientApi_Vulkan);
     VkResult err = glfwCreateWindowSurface((VkInstance)vk_instance, vd->Window, (const VkAllocationCallbacks*)vk_allocator, (VkSurfaceKHR*)out_vk_surface);
     return (int)err;

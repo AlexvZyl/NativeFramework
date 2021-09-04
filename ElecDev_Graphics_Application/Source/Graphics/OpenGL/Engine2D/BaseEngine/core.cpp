@@ -53,6 +53,13 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
 
 	//---------------------------------------------------------------------------------------
+	//  Mouse point setup.
+	//---------------------------------------------------------------------------------------
+
+	float mouseColor[4] = {1.0f, 0.0f, 0.0f, 1.0f };
+	m_mousePoint = new MousePoint(m_window, mouseColor, 0.5);
+
+	//---------------------------------------------------------------------------------------
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
@@ -109,6 +116,9 @@ void BaseEngineGL::renderLoop()
 	// Draw background.
 	m_staticShader->bind();
 	m_backgroundVAO->render();
+	// Draw mouse point.
+	float coords[2] = {0,0};
+	m_mousePoint->render(coords);
 
 	// Apply camera movements to shader.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;

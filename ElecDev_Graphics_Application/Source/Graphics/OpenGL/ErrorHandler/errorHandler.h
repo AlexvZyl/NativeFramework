@@ -13,7 +13,6 @@
 #include <iostream>
 
 // OpenGL.
-//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 #include <glad/glad.h>
 
 //----------------------------------------------------------------------------------------------------------------------

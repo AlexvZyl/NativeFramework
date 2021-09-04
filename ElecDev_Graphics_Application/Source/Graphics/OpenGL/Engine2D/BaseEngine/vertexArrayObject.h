@@ -5,7 +5,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <ErrorHandler/errorHandler.h>
-//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 #include <glad/glad.h>
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -63,12 +62,13 @@ private:
 	unsigned int m_vBID;
 	// Data type used in this VAO.
 	ModelType m_modelType;
+	
+public:
+
 	// Total vertices available.
 	unsigned int m_maxVertices;
-	// POinter that shows where in the buffer data need to be written.
-	GLsizei m_bufferPtr=0;
-
-public:
+	// Pointer that shows where in the buffer data need to be written.
+	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
 	VertexArrayObject(ModelType type, unsigned int bufferCount);

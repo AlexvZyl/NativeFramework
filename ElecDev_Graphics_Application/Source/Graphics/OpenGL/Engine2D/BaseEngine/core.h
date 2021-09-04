@@ -11,7 +11,6 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // OpenGL.
 #include <glad/glad.h>
-//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 #include <GLFW/glfw3.h>
 #include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
@@ -25,6 +24,9 @@ The interactive engine (the one where elements can be drawn is handled in design
 
 // Buffers.
 #include "vertexArrayObject.h"
+
+// Mouse pointer object.
+#include "mousePoint.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -68,10 +70,11 @@ public:
 	Shader* m_staticShader;
 
 	//---------------------------------------------------------------------------------------------------------------------
-	//  Mouse event variables.
+	//  Mouse variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	float m_scaleRate=0.3;
+	MousePoint* m_mousePoint;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.

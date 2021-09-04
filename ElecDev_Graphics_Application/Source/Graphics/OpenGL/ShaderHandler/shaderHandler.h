@@ -18,7 +18,6 @@
 
 // OpenGL.
 #include <ErrorHandler/errorHandler.h>
-//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -348,8 +349,9 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
     <ClInclude Include="Source\Helper\stateMachine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.h" />
-    <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.h" />
+    <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />

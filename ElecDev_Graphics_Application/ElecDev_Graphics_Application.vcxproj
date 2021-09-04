@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp" />
@@ -485,6 +486,7 @@
     <ClInclude Include="Source\External\glm\vec3.hpp" />
     <ClInclude Include="Source\External\glm\vec4.hpp" />
     <ClInclude Include="Source\External\glm\vector_relational.hpp" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.h" />
     <ClInclude Include="Source\GUI\guiHandler.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
