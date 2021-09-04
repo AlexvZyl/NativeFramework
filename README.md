@@ -52,10 +52,13 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Implement matrix mathematics ✓
   * Translation, rotation & scaling ✓
   * Viewport, Model, View and Porjection matrices ✓
-* Setup mouse event handler:
-  * Srcoll, move and press events for drawing engine. ✓
-  * Srcoll, move and press events for design engine.
-* Implement State Machine that controls the application.
+* Base Engine:
+  * Mouse event handler ✓
+* Design Engine:
+  * Mouse event handler
+  * Component generation
+  * Cable generation
+* Implement State Machine that controls the application. ✓
 * Create first basic app with simple GUI interface and simple OpenGL drawing.
   * Basic shader ✓ 
   * Error handler ✓
