@@ -57,7 +57,12 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Basic shader. ✓ 
   * Error handler. ✓
   * Shader handler. ✓
-  * Implement class that handles VAO's. ✓
+  * Implement class that handles VAO's:
+    * Lines ✓
+    * Triangles
+    * Quads ✓
+    * Circles
+    * Text
   * Implement batch rendering. ✓
   * Drawing API:
     * Lines.
