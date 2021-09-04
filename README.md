@@ -60,11 +60,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Basic shader ✓ 
   * Error handler ✓
   * Shader handler ✓
-  * Buffers: 
-    * Vertex Array Objects
-    * Vertex Buffer Objects 
-    * Vertex Buffer Layouts
-    * Index Buffer Objects
+  * Implement class that handles VAO's. ✓
   * Drawing API:
     * Lines
     * Circles
