@@ -35,7 +35,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Use the docking branch from ImGUI. ✓
 
 #### Raynhardt 
-
+*
 
 ---
 
@@ -60,15 +60,20 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Error handler. ✓
   * Shader handler. ✓
   * Implement class that handles VAO's:
-    * Lines ✓
-    * Triangles
-    * Quads ✓
-    * Circles
-    * Text
+    * Lines. ✓
+    * Triangles.
+    * Quads. ✓
+    * Circles. ✓
+    * Text.
   * Implement batch rendering. ✓
   * Drawing API:
-    * Lines.
-    * Circles.
+    * Lines. ✓
+    * Clear circles.
+    * Filled circles.
+    * Clear quads.
+    * Filled quads.
+    * Clear triangles.
+    * Filled triangles.
     * Text.
   * Mouse event handler. ✓
   * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
