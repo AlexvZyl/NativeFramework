@@ -11,6 +11,7 @@
 //  Data Structures.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Types of Vertex Arrays that can be created.
 enum class BufferType 
 {
 	LINES=GL_LINES, TRIANGLE_CLEAR=GL_LINES, TRIANGLE_FILLED=GL_TRIANGLES, QUAD_CLEAR=GL_LINE_LOOP, QUAD_FILLED=GL_QUADS, CIRCLE_CLEAR= GL_LINES, CIRCLE_FILLED = GL_TRIANGLES, TEXT=GL_QUADS
@@ -71,7 +72,7 @@ public:
 	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
-	VertexArrayObject(BufferType type, unsigned int bufferCount);
+	VertexArrayObject(BufferType type, unsigned int maxVertices);
 
 	// Destructor.
 	~VertexArrayObject();
