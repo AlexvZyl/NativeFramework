@@ -42,9 +42,5 @@ void GUIHandler::setTheme()
     ImGui::GetStyle().FrameRounding = 4.0f;
     ImGui::GetStyle().GrabRounding = 4.0f;
 	ImGui::GetStyle().ChildRounding = 4.0f;
-	ImGui::GetStyle().WindowRounding = 4.0f;
-
-
-
-
+	//ImGui::GetStyle().WindowRounding = 4.0f;
 }

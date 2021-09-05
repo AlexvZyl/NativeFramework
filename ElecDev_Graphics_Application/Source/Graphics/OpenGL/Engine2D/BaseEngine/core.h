@@ -29,6 +29,12 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include "mousePoint.h"
 
 //----------------------------------------------------------------------------------------------------------------------
+//  Globals.
+//----------------------------------------------------------------------------------------------------------------------
+
+const double PI = 3.141592653589793238463;
+
+//----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -73,15 +79,32 @@ public:
 	//  Mouse variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	float m_scaleRate=0.3;
 	MousePoint* m_mousePoint;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
 
+	// Lines.
 	VertexArrayObject* m_linesVAO;
+	// Background.
 	VertexArrayObject* m_backgroundVAO;
+	// Triangles.
+	VertexArrayObject* m_trianglesClearVAO;
+	VertexArrayObject* m_trianglesFilledVAO;
+	// Quads.
+	VertexArrayObject* m_quadsFilledVAO;
+	VertexArrayObject* m_quadsClearVAO;
+	// Circles.
+	VertexArrayObject* m_circlesFilledVAO;
+	VertexArrayObject* m_circlesClearVAO;
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Settings.
+	//---------------------------------------------------------------------------------------------------------------------
+	
+	float m_scaleRate = 0.3;
+	unsigned int m_circleResolution = 35;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
@@ -109,14 +132,15 @@ public:
 	//  API
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// Adds a line to the VBO object.
-	void drawLine();
-	// Adds a circle to the VBO object.
-	void drawCircle();
-	// Adds text to the VBO object.
+	// Functions supported by the base engine.
+	void drawLine(float position1[2], float position2[2], float color[4]);
+	void drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]);
+	void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]);
+	void drawQuadClear(float position[2], float width, float height, float color[4]);
+	void drawQuadFilled(float position[2], float width, float height, float color[4]);
+	void drawCircleFilled(float position[2], float radius, float color[4]);
+	void drawCircleClear(float position[2], float radius, float color[4]);
 	void drawText();
-	// Displays the new drawing to the screen.
-	// Required after each new element has been added.
 	void display();
 
 	//---------------------------------------------------------------------------------------------------------------------

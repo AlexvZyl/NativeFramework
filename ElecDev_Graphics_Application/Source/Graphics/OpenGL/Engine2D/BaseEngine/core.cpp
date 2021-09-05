@@ -8,6 +8,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "core.h"
+#include <numbers>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
@@ -63,46 +64,54 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	m_linesVAO = new VertexArrayObject(ModelType::LINES, 100);
-	m_backgroundVAO = new VertexArrayObject(ModelType::QUAD, 100);
+	int size = 2000000;
+	// Lines.
+	m_linesVAO = new VertexArrayObject(DrawType::LINES, size);
+	// Background.
+	m_backgroundVAO = new VertexArrayObject(DrawType::QUAD_FILLED, 4);
+	// Triangles.
+	m_trianglesClearVAO = new VertexArrayObject(DrawType::TRIANGLE_CLEAR, size);
+	m_trianglesFilledVAO = new VertexArrayObject(DrawType::TRIANGLE_FILLED, size);
+	// Quads.
+	m_quadsClearVAO = new VertexArrayObject(DrawType::QUAD_CLEAR, size);
+	m_quadsFilledVAO = new VertexArrayObject(DrawType::QUAD_FILLED, size);
+	// Circles.
+	m_circlesFilledVAO = new VertexArrayObject(DrawType::CIRCLE_FILLED, size*m_circleResolution);
+	m_circlesClearVAO = new VertexArrayObject(DrawType::CIRCLE_CLEAR, size*m_circleResolution);
 
 	//---------------------------------------------------------------------------------------
-	// Test code.
+	// Background. setup.
 	//---------------------------------------------------------------------------------------
-
-	// Assign vertex data.
-	VertexData v1( 1.0f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
-	VertexData v2(-1.0f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
-	VertexData v3(-1.0f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
-	VertexData v4( 1.0f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f);
-
-	// Create lines VAO.
-	m_linesVAO->writeData(v1, v2);
-	m_linesVAO->writeData(v2, v3);
-	m_linesVAO->writeData(v3, v4);
-	m_linesVAO->writeData(v4, v1);
 
 	// Assign background data.
-	float lightColor[4] = { 0.95f, 0.95f, 0.95f, 1.0f };
-	float darkColor[4] = { 0.75f, 0.75f, 0.75f, 1.0f };
-	VertexData v5(1.0f, 1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		// Top right.
-	VertexData v6(-1.0f, 1.0f, 0.0f, lightColor[0], lightColor[1], lightColor[2], lightColor[3]);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		//  Bottom left.
-	VertexData v8(1.0f, -1.0f, 0.0f, darkColor[0], darkColor[1], darkColor[2], darkColor[3]);		//  Bottom right.
-
+	float bgColor1[4] = { 0.4f, 0.7f, 0.9f, 1.0f };
+	float bgColor2[4] = { 0.75f, 0.75f, 1.0f, 1.0f };
+	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	// Top right.
+	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
+	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Bottom left.
+	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
 	// Create background.
 	m_backgroundVAO->writeData(v5, v6, v7, v8);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 };
 
 // Delete and free memory.
 BaseEngineGL::~BaseEngineGL() 
 {
+	// Delete shaders.
 	delete m_basicShader;
 	delete m_staticShader;
+	// Delete VAO's.
 	delete m_linesVAO;
 	delete m_backgroundVAO;
+	delete m_trianglesClearVAO;
+	delete m_trianglesFilledVAO;
+	delete m_quadsClearVAO;
+	delete m_quadsFilledVAO;
+	delete m_circlesClearVAO;
+	delete m_circlesFilledVAO;
+	// Delete others.
+	delete m_mousePoint;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -115,21 +124,30 @@ void BaseEngineGL::renderLoop()
 	m_staticShader->bind();
 	m_backgroundVAO->render();
 
-	// Apply camera movements to shader.
+	// Apply camera movements to shader(s).
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	
 	// Bind basic shader and apply changes.
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
+	// Lines.
 	m_linesVAO->render();
+	// Triangles.
+	m_trianglesClearVAO->render();
+	m_trianglesFilledVAO->render();
+	// Quads.
+	m_quadsClearVAO->render();
+	m_quadsFilledVAO->render();
+	// Circles.
+	m_circlesFilledVAO->render();
+	m_circlesClearVAO->render();
 
 	// Update and draw mouse point.
-	m_staticShader->bind();
-	double coords[2];
-	glfwGetCursorPos(m_window, &coords[0], &coords[1]);
-	glm::vec4 mouseWorldCoords = pixelCoordsToWorldCoords(coords);
-	float drawCoords[2] = { mouseWorldCoords[0],  mouseWorldCoords[1] };
-	m_mousePoint->render(drawCoords);
+	//m_staticShader->bind();
+	//double coords[2];
+	//glfwGetCursorPos(m_window, &coords[0], &coords[1]);
+	//glm::vec4 mouseWorldCoords = pixelCoordsToWorldCoords(coords);
+	//float drawCoords[2] = { mouseWorldCoords[0],  mouseWorldCoords[1] };
+	//m_mousePoint->render(drawCoords);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

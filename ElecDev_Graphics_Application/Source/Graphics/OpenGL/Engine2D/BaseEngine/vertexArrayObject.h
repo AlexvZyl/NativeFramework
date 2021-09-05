@@ -11,9 +11,9 @@
 //  Data Structures.
 //----------------------------------------------------------------------------------------------------------------------
 
-enum class ModelType
+enum class DrawType 
 {
-	LINES, TRIANGLES, QUAD 
+	LINES=GL_LINES, TRIANGLE_CLEAR=GL_LINES, TRIANGLE_FILLED=GL_TRIANGLES, QUAD_CLEAR=GL_LINE_LOOP, QUAD_FILLED=GL_QUADS, CIRCLE_CLEAR= GL_LINES, CIRCLE_FILLED = GL_TRIANGLES, TEXT=GL_QUADS
 };
 
 // Struct that contains the layout of the line vertex data.
@@ -61,7 +61,7 @@ private:
 	// VBO ID.
 	unsigned int m_vBID;
 	// Data type used in this VAO.
-	ModelType m_modelType;
+	DrawType m_drawType;
 	
 public:
 
@@ -71,15 +71,16 @@ public:
 	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
-	VertexArrayObject(ModelType type, unsigned int bufferCount);
+	VertexArrayObject(DrawType type, unsigned int bufferCount);
 
 	// Destructor.
 	~VertexArrayObject();
 
 	// Function that can dynamically write to the vertex buffer binded to this VAO.
-	void writeData(VertexData v1, VertexData v2);								
-	void writeData(VertexData v1, VertexData v2, VertexData v3);				
-	void writeData(VertexData v1, VertexData v2, VertexData v3, VertexData v4); 
+	void writeData(VertexData v);
+	void writeData(VertexData v1, VertexData v2);
+	void writeData(VertexData v1, VertexData v2, VertexData v3);
+	void writeData(VertexData v1, VertexData v2, VertexData v3, VertexData v4);
 
 	// Function that draws the data in the VAO based on the model type selected in the constructor.
 	void render();

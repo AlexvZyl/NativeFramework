@@ -19,6 +19,49 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 {
 	// Create engines.
 	m_drawingEngine = new BaseEngineGL(m_window);
+
+	//---------------------------------------------------------------------------------------
+	// Test code.
+	//---------------------------------------------------------------------------------------
+
+	for (int i = 0; i <= 10000; i++) 
+	{
+		// Draw clear triangle example.
+		float ctPos1[2] = { 1.0f+i, -1.0f+i };
+		float ctPos2[2] = { 1.5f+i, -1.0f+i };
+		float ctPos3[2] = { 1.5f+i, -0.5f+i };
+		float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+		m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
+
+		// Draw filled triangle example.
+		float ftPos1[2] = { -1.0f+i, -1.0f+i };
+		float ftPos2[2] = { -1.0f+i, -0.5+i };
+		float ftPos3[2] = { -1.5f+i, -1.0f+i };
+		float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
+		m_drawingEngine->drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
+
+		// Draw clear quad.
+		float cqCoords[2] = { 0.0f+i, 0.0f+i };
+		float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+		m_drawingEngine->drawQuadClear(cqCoords, 2, 2, cqColor);
+
+		// Draw filled quad.
+		float fqCoords[2] = { -1.0f+i, 1.0f+i };
+		float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+		m_drawingEngine->drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
+
+		// Draw filed ciricle.
+		float coords1[2] = { 0.0f+i, 0.0f+i };
+		float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
+		m_drawingEngine->drawCircleFilled(coords1, 0.2, color);
+		// Draw clear ciricle.
+		float coords2[2] = { i, -0.75f+i };
+		m_drawingEngine->drawCircleClear(coords2, 0.2, color);
+
+	}
+
+	//---------------------------------------------------------------------------------------
+
 	//DesignEngineGL designEngine(this->window);
 	//this->designEngine = designEngine;
 
@@ -29,7 +72,8 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 // Destructor.
 GraphicsHandler::~GraphicsHandler() 
 {
-	
+	// Delete engines.
+	delete m_drawingEngine;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

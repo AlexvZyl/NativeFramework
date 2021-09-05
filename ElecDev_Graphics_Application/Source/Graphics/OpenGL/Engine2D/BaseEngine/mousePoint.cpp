@@ -17,7 +17,7 @@ MousePoint::MousePoint(GLFWwindow* window, float color[4], float size)
 	: m_color{color[0], color[1], color[2], color[3]}, m_size(size)
 
 {
-	m_VAO = new VertexArrayObject(ModelType::QUAD, 10);
+	m_VAO = new VertexArrayObject(DrawType::QUAD_FILLED, 4);
 }
 
 // Destructor.
