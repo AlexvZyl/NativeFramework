@@ -9,8 +9,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor.
-VertexArrayObject::VertexArrayObject(DrawType type, unsigned int maxVertices)
-	: m_drawType(type), m_maxVertices(maxVertices)
+VertexArrayObject::VertexArrayObject(BufferType type, unsigned int maxVertices)
+	: m_BufferType(type), m_maxVertices(maxVertices)
 {
 	// Generate the VAO.
 	GLCall(glCreateVertexArrays(1, &m_vAID));
@@ -93,7 +93,7 @@ void VertexArrayObject::render()
 	// Bind the VAO.
 	bind();
 	// Draw call.
-	GLCall(glDrawArrays((GLenum)m_drawType, 0, m_bufferPtr));
+	GLCall(glDrawArrays((GLenum)m_BufferType, 0, m_bufferPtr));
 }
 
 // Bind the VAO.

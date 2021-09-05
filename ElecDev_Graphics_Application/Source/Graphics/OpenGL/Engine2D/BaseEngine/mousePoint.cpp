@@ -15,9 +15,8 @@ This code contains the class that handles the mouse point that snaps to componen
 // Constructor.
 MousePoint::MousePoint(GLFWwindow* window, float color[4], float size)
 	: m_color{color[0], color[1], color[2], color[3]}, m_size(size)
-
 {
-	m_VAO = new VertexArrayObject(DrawType::QUAD_FILLED, 4);
+	m_VAO = new VertexArrayObject(BufferType::QUAD_FILLED, 4);
 }
 
 // Destructor.

@@ -11,7 +11,7 @@
 //  Data Structures.
 //----------------------------------------------------------------------------------------------------------------------
 
-enum class DrawType 
+enum class BufferType 
 {
 	LINES=GL_LINES, TRIANGLE_CLEAR=GL_LINES, TRIANGLE_FILLED=GL_TRIANGLES, QUAD_CLEAR=GL_LINE_LOOP, QUAD_FILLED=GL_QUADS, CIRCLE_CLEAR= GL_LINES, CIRCLE_FILLED = GL_TRIANGLES, TEXT=GL_QUADS
 };
@@ -61,7 +61,7 @@ private:
 	// VBO ID.
 	unsigned int m_vBID;
 	// Data type used in this VAO.
-	DrawType m_drawType;
+	BufferType m_BufferType;
 	
 public:
 
@@ -71,7 +71,7 @@ public:
 	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
-	VertexArrayObject(DrawType type, unsigned int bufferCount);
+	VertexArrayObject(BufferType type, unsigned int bufferCount);
 
 	// Destructor.
 	~VertexArrayObject();

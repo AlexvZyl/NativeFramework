@@ -66,26 +66,26 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	int size = 90000;
 	// Lines.
-	m_linesVAO = new VertexArrayObject(DrawType::LINES, size);
+	m_linesVAO = new VertexArrayObject(BufferType::LINES, size);
 	// Background.
-	m_backgroundVAO = new VertexArrayObject(DrawType::QUAD_FILLED, 4);
+	m_backgroundVAO = new VertexArrayObject(BufferType::QUAD_FILLED, 4);
 	// Triangles.
-	m_trianglesClearVAO = new VertexArrayObject(DrawType::TRIANGLE_CLEAR, size);
-	m_trianglesFilledVAO = new VertexArrayObject(DrawType::TRIANGLE_FILLED, size);
+	m_trianglesClearVAO = new VertexArrayObject(BufferType::TRIANGLE_CLEAR, size);
+	m_trianglesFilledVAO = new VertexArrayObject(BufferType::TRIANGLE_FILLED, size);
 	// Quads.
-	m_quadsClearVAO = new VertexArrayObject(DrawType::QUAD_CLEAR, size);
-	m_quadsFilledVAO = new VertexArrayObject(DrawType::QUAD_FILLED, size);
+	m_quadsClearVAO = new VertexArrayObject(BufferType::QUAD_CLEAR, size);
+	m_quadsFilledVAO = new VertexArrayObject(BufferType::QUAD_FILLED, size);
 	// Circles.
-	m_circlesFilledVAO = new VertexArrayObject(DrawType::CIRCLE_FILLED, size*m_circleResolution);
-	m_circlesClearVAO = new VertexArrayObject(DrawType::CIRCLE_CLEAR, size*m_circleResolution);
+	m_circlesFilledVAO = new VertexArrayObject(BufferType::CIRCLE_FILLED, size*m_circleResolution);
+	m_circlesClearVAO = new VertexArrayObject(BufferType::CIRCLE_CLEAR, size*m_circleResolution);
 
 	//---------------------------------------------------------------------------------------
 	// Background. setup.
 	//---------------------------------------------------------------------------------------
 
 	// Assign background data.
-	float bgColor1[4] = { 0.4f, 0.7f, 0.9f, 1.0f };
-	float bgColor2[4] = { 0.75f, 0.75f, 1.0f, 1.0f };
+	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
+	float bgColor2[4] = { (float)209 / 255, (float)219 / 255, (float)249 / 255, 1.0f };
 	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	// Top right.
 	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
 	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Bottom left.
