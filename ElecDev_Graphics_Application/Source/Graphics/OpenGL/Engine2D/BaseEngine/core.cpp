@@ -64,7 +64,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int size = 2000000;
+	int size = 90000;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(DrawType::LINES, size);
 	// Background.
