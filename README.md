@@ -31,9 +31,11 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
 * OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
 * Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
+* GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.
+* Use the docking branch from ImGUI. ✓
 
 #### Raynhardt 
-* Use the docking branch from ImGUI.
+*
 
 ---
 
@@ -58,15 +60,20 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Error handler. ✓
   * Shader handler. ✓
   * Implement class that handles VAO's:
-    * Lines ✓
-    * Triangles
-    * Quads ✓
-    * Circles
-    * Text
+    * Lines. ✓
+    * Triangles.
+    * Quads. ✓
+    * Circles. ✓
+    * Text.
   * Implement batch rendering. ✓
   * Drawing API:
-    * Lines.
-    * Circles.
+    * Lines. ✓
+    * Clear circles.
+    * Filled circles.
+    * Clear quads.
+    * Filled quads.
+    * Clear triangles.
+    * Filled triangles.
     * Text.
   * Mouse event handler. ✓
   * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
