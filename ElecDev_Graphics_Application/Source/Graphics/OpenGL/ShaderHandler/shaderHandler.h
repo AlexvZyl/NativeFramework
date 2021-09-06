@@ -19,7 +19,7 @@
 // OpenGL.
 #include <ErrorHandler/errorHandler.h>
 //#include <glad/glad.h>
-#include <GLEW/include/GL/glew.h>
+#include <GLEW/Includes/GL/glew.h>
 #include <glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

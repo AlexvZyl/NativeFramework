@@ -14,7 +14,7 @@
 
 // OpenGL.
 //#include <glad/glad.h>
-#include <GLEW/include/GL/glew.h>
+#include <GLEW/Includes/GL/glew.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Compiler settings.

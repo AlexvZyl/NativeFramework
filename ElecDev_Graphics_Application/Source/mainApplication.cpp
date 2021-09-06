@@ -16,7 +16,7 @@
 // GLAD (OpenGL loader).
 //#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
 //#include <glad/glad.h>
-#include <GLEW/include/GL/glew.h>
+#include <GLEW/Includes/GL/glew.h>
 
 
 // Include GLFW (window) after OpenGL definition.
