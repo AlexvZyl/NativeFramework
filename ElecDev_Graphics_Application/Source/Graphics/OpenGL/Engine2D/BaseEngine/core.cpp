@@ -64,11 +64,11 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int size = 90000;
+	int size = 1000;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(BufferType::LINES, size);
 	// Background.
-	m_backgroundVAO = new VertexArrayObject(BufferType::QUAD_FILLED, 4);
+	m_backgroundVAO = new VertexArrayObject(BufferType::QUAD_FILLED, 8);
 	// Triangles.
 	m_trianglesClearVAO = new VertexArrayObject(BufferType::TRIANGLE_CLEAR, size);
 	m_trianglesFilledVAO = new VertexArrayObject(BufferType::TRIANGLE_FILLED, size);
@@ -76,8 +76,8 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	m_quadsClearVAO = new VertexArrayObject(BufferType::QUAD_CLEAR, size);
 	m_quadsFilledVAO = new VertexArrayObject(BufferType::QUAD_FILLED, size);
 	// Circles.
+	m_circlesClearVAO = new VertexArrayObject(BufferType::CIRCLE_CLEAR, size * m_circleResolution);
 	m_circlesFilledVAO = new VertexArrayObject(BufferType::CIRCLE_FILLED, size*m_circleResolution);
-	m_circlesClearVAO = new VertexArrayObject(BufferType::CIRCLE_CLEAR, size*m_circleResolution);
 
 	//---------------------------------------------------------------------------------------
 	// Background. setup.

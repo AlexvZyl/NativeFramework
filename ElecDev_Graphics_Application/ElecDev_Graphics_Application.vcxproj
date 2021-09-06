@@ -96,12 +96,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW/src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -113,14 +113,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW/src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -130,12 +130,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW/src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -147,14 +147,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\Boost\Libraries</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW/src;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -204,6 +204,10 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\eglew.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\glew.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\glxew.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\wglew.h" />
     <ClInclude Include="Source\External\glm\common.hpp" />
     <ClInclude Include="Source\External\glm\detail\compute_common.hpp" />
     <ClInclude Include="Source\External\glm\detail\compute_vector_relational.hpp" />
@@ -512,11 +516,16 @@
     <ClInclude Include="Source\Helper\stateMachine.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="Source\External\GLEW\Libraries\glew32.lib" />
+    <Library Include="Source\External\GLEW\Libraries\glew32s.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Source\External\GLEW\bin\glew32.dll" />
+    <None Include="Source\External\GLEW\Libraries\glew32.dll" />
+    <None Include="Source\External\GLEW\lib\glew32.dll" />
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
     <None Include="Source\External\glm\detail\func_common.inl" />
     <None Include="Source\External\glm\detail\func_common_simd.inl" />

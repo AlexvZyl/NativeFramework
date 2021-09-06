@@ -5,7 +5,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <ErrorHandler/errorHandler.h>
-#include <glad/glad.h>
+//#include <glad/glad.h>
+#include <GLEW/include/GL/glew.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Data Structures.
@@ -14,7 +15,7 @@
 // Types of Vertex Arrays that can be created.
 enum class BufferType 
 {
-	LINES=GL_LINES, TRIANGLE_CLEAR=GL_LINES, TRIANGLE_FILLED=GL_TRIANGLES, QUAD_CLEAR=GL_LINE_LOOP, QUAD_FILLED=GL_QUADS, CIRCLE_CLEAR= GL_LINES, CIRCLE_FILLED = GL_TRIANGLES, TEXT=GL_QUADS
+	LINES=GL_LINES, TRIANGLE_CLEAR=GL_LINES, TRIANGLE_FILLED=GL_TRIANGLES, QUAD_CLEAR=GL_LINES, QUAD_FILLED=GL_QUADS, CIRCLE_CLEAR= GL_LINES, CIRCLE_FILLED = GL_TRIANGLES, TEXT=GL_QUADS
 };
 
 // Struct that contains the layout of the line vertex data.

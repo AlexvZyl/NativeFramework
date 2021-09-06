@@ -15,7 +15,9 @@
 
 // GLAD (OpenGL loader).
 //#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
-#include <glad/glad.h>
+//#include <glad/glad.h>
+#include <GLEW/include/GL/glew.h>
+
 
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
@@ -164,9 +166,12 @@ int main(int, char**)
     // OpenGL loader error handler.
     if (err)
     {
-        fprintf(stderr, "[OPENGL ERROR] Failed to initialize OpenGL loader!\n");
+        fprintf(stderr, "[OPENGL][ERROR] Failed to initialize OpenGL loader!\n");
         return 1;
     }
+
+    // Print OpenGL version.
+    std::cout << "[OPENGL][LOADER] Loaded: " << glGetString(GL_VERSION) << ".\n\n";
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI & OpenGL setup. 

@@ -13,7 +13,8 @@
 #include <iostream>
 
 // OpenGL.
-#include <glad/glad.h>
+//#include <glad/glad.h>
+#include <GLEW/include/GL/glew.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Compiler settings.

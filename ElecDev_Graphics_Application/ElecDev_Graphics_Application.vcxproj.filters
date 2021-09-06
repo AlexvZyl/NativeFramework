@@ -352,11 +352,17 @@
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.h" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\eglew.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\glew.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\glxew.h" />
+    <ClInclude Include="Source\External\GLEW\include\GL\wglew.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />
+    <Library Include="Source\External\GLEW\Libraries\glew32.lib" />
+    <Library Include="Source\External\GLEW\Libraries\glew32s.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
@@ -499,6 +505,9 @@
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
     <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\basicShader.shader" />
+    <None Include="Source\External\GLEW\Libraries\glew32.dll" />
+    <None Include="Source\External\GLEW\bin\glew32.dll" />
+    <None Include="Source\External\GLEW\lib\glew32.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\GUI\Images\component.png" />

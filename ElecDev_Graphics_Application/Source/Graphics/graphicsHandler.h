@@ -20,7 +20,8 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include <string>
 
 // OpenGL
-#include <glad/glad.h>
+#include <GLEW/include/GL/glew.h>
+//#include <glad/glad.h>
 #include <ErrorHandler/errorHandler.h>
 #include "ShaderHandler/shaderHandler.h"
 #include "../Helper/stateMachine.h"

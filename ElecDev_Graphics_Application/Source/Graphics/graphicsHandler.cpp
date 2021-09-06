@@ -24,7 +24,7 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 	// Test code.
 	//---------------------------------------------------------------------------------------
 
-	for (int i = 0; i <= 10000; i++) 
+	for (int i = 0; i <= 1; i++) 
 	{
 		// Draw clear triangle example.
 		float ctPos1[2] = { 1.0f+i, -1.0f+i };

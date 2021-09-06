@@ -10,7 +10,8 @@ The interactive engine (the one where elements can be drawn is handled in design
 //----------------------------------------------------------------------------------------------------------------------
 
 // OpenGL.
-#include <glad/glad.h>
+//#include <glad/glad.h>
+#include <GLEW/include/GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
