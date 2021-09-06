@@ -85,7 +85,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	// Assign background data.
 	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
-	float bgColor2[4] = { (float)209 / 255, (float)219 / 255, (float)249 / 255, 1.0f };
+	float bgColor2[4] = { (float)230 / 255, (float)240 / 255, (float)255 / 255, 1.0f };
 	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	// Top right.
 	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
 	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Bottom left.
