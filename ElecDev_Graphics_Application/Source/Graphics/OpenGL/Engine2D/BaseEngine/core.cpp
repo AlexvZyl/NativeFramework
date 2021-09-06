@@ -91,7 +91,8 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Bottom left.
 	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
 	// Create background.
-	m_backgroundVAO->writeData(v5, v6, v7, v8);
+	m_backgroundVAO->writeData(v5, v6, v7);
+	m_backgroundVAO->writeData(v7, v8, v5);
 
 };
 

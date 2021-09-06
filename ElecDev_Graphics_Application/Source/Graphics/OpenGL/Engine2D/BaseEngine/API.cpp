@@ -68,7 +68,8 @@ void BaseEngineGL::drawQuadFilled(float position[2], float width, float height, 
 	VertexData v2(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
-	m_quadsFilledVAO->writeData(v1, v2, v3, v4);
+	m_quadsFilledVAO->writeData(v1, v2, v3);
+	m_quadsFilledVAO->writeData(v3, v4, v1);
 }
 
 // Draws a filled circle.
