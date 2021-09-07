@@ -14,9 +14,7 @@
 #include "Implementations/imgui_impl_opengl3.h"
 
 // GLAD (OpenGL loader).
-//#include <ImGUI/Implementations/imgui_impl_opengl3_loader.h>
-//#include <glad/glad.h>
-#include <GLEW/Includes/GL/glew.h>
+#include <glad/glad.h>
 
 
 // Include GLFW (window) after OpenGL definition.
@@ -171,7 +169,7 @@ int main(int, char**)
     }
 
     // Print OpenGL version.
-    std::cout << "[OPENGL][LOADER] Loaded: " << glGetString(GL_VERSION) << ".\n\n";
+    std::cout << "[OPENGL][INFO] Loaded OpenGL version: " << glGetString(GL_VERSION) << ".\n\n";
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI & OpenGL setup. 

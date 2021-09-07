@@ -8,7 +8,6 @@ The interactive engine (the one where elements can be drawn is handled in design
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "core.h"
-#include <numbers>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
@@ -17,13 +16,24 @@ The interactive engine (the one where elements can be drawn is handled in design
 // With GLFW window.
 BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	:m_window(window)
-{	
+{
+	//---------------------------------------------------------------------------------------
+	// Setup shaders.
+	//---------------------------------------------------------------------------------------
+	 
 	// Create basic shader.
 	std::string basicShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
+	std::cout << "[OPENGL][SHADERS] Compiling Basic Shader...\n";
 	m_basicShader = new Shader(basicShaderPath);
 	// Create static shader.
 	std::string staticShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\staticShader.shader";
+	std::cout << "[OPENGL][SHADERS] Compiling Static Shader...\n";
 	m_staticShader = new Shader(staticShaderPath);
+	// Create texture shader.
+	std::string textureShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\textureShader.shader";
+	std::cout << "[OPENGL][SHADERS] Compiling Texture Shader...\n";
+	m_textureShader = new Shader(textureShaderPath);
+	std::cout << "[OPENGL][SHADERS] Done.\n\n";
 
 	//---------------------------------------------------------------------------------------
 	// Matrices setup.
@@ -35,52 +45,45 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Store the value to use when viewport changes.
 	m_viewportDimensions[0] = viewport[0];
 	m_viewportDimensions[1] = viewport[1];
-	
+
 	// Find the minimum value of the viewport dimensions.
 	int minValue;
 	if (viewport[0] < viewport[1]) { minValue = viewport[0]; }
 	else { minValue = viewport[1]; }
 	// Scale the projection values according to the viewport aspect ratio.
-	float projValuesTemp[6] = {(float)-viewport[0]/minValue, (float)viewport[0]/minValue, (float)-viewport[1]/minValue, (float)viewport[1]/minValue,-1.0, 1.0 };
+	float projValuesTemp[6] = { (float)-viewport[0] / minValue, (float)viewport[0] / minValue, (float)-viewport[1] / minValue, (float)viewport[1] / minValue,-1.0, 1.0 };
 	// Save projection values to be used with resizing of the window.
 	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
 	// Create projection matrix.
 	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], -1.0f, 1.0f);
 
-	// Assign matrices to shader.
+	// Assign matrices to basic shader.
 	m_basicShader->bind();
 	m_basicShader->setMat4("worldMatrix", m_modelMatrix);
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
-
-	//---------------------------------------------------------------------------------------
-	//  Mouse point setup.
-	//---------------------------------------------------------------------------------------
-
-	float mouseColor[4] = {1.0f, 0.0f, 0.0f, 1.0f };
-	m_mousePoint = new MousePoint(m_window, mouseColor, 0.01);
+	// Assign matrices to texture shader.
+	m_textureShader->bind();
+	m_textureShader->setMat4("worldMatrix", m_modelMatrix);
+	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
 
 	//---------------------------------------------------------------------------------------
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int size = 1000;
+	int size = 1000*1000*10;
 	// Lines.
-	m_linesVAO = new VertexArrayObject(BufferType::LINES, size);
-	// Background.
-	m_backgroundVAO = new VertexArrayObject(BufferType::QUAD_FILLED, 8);
+	m_linesVAO = new VertexArrayObject(GL_LINES, size);
 	// Triangles.
-	m_trianglesClearVAO = new VertexArrayObject(BufferType::TRIANGLE_CLEAR, size);
-	m_trianglesFilledVAO = new VertexArrayObject(BufferType::TRIANGLE_FILLED, size);
-	// Quads.
-	m_quadsClearVAO = new VertexArrayObject(BufferType::QUAD_CLEAR, size);
-	m_quadsFilledVAO = new VertexArrayObject(BufferType::QUAD_FILLED, size);
-	// Circles.
-	m_circlesClearVAO = new VertexArrayObject(BufferType::CIRCLE_CLEAR, size * m_circleResolution);
-	m_circlesFilledVAO = new VertexArrayObject(BufferType::CIRCLE_FILLED, size*m_circleResolution);
+	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES, size);
+	// Textured Triangles.
+	m_texTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, size, true);
+	// Background.
+	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
 
 	//---------------------------------------------------------------------------------------
-	// Background. setup.
+	// Background setup.
 	//---------------------------------------------------------------------------------------
 
 	// Assign background data.
@@ -90,10 +93,30 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
 	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Bottom left.
 	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
+	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	// Create background.
-	m_backgroundVAO->writeData(v5, v6, v7);
-	m_backgroundVAO->writeData(v7, v8, v5);
+	m_backgroundVAO->writeData(vertices);
 
+	//---------------------------------------------------------------------------------------
+	// Textures Setup.
+	//---------------------------------------------------------------------------------------
+
+	std::string texPath = "Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Textures\\circuit1.png";
+	m_texture = loadTexture(texPath);
+	TexturedVertexData v1(1.25f, 1.25f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	TexturedVertexData v2(1.25f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+	TexturedVertexData v3(0.75f, 0.75f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+	TexturedVertexData v4(0.75f, 1.25f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+	std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
+	m_texTrianglesVAO->writeData(verticesTex);
+
+	// Setup shader with textures.
+	m_textureShader->bind();
+	auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures");
+	int samplers[2] = { 0, 1 };
+	glUniform1iv(loc, 2, samplers);
+
+	//---------------------------------------------------------------------------------------
 };
 
 // Delete and free memory.
@@ -102,17 +125,15 @@ BaseEngineGL::~BaseEngineGL()
 	// Delete shaders.
 	delete m_basicShader;
 	delete m_staticShader;
+	delete m_textureShader;
 	// Delete VAO's.
+	// Lines.
 	delete m_linesVAO;
+	// Background.
 	delete m_backgroundVAO;
-	delete m_trianglesClearVAO;
-	delete m_trianglesFilledVAO;
-	delete m_quadsClearVAO;
-	delete m_quadsFilledVAO;
-	delete m_circlesClearVAO;
-	delete m_circlesFilledVAO;
-	// Delete others.
-	delete m_mousePoint;
+	// Triangles.
+	delete m_trianglesVAO;
+	delete m_texTrianglesVAO;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -121,34 +142,37 @@ BaseEngineGL::~BaseEngineGL()
 
 void BaseEngineGL::renderLoop()
 {
+	//---------------------------------------------------------------------------------------
 	// Draw background.
+	//---------------------------------------------------------------------------------------
 	m_staticShader->bind();
 	m_backgroundVAO->render();
 
-	// Apply camera movements to shader(s).
+	//---------------------------------------------------------------------------------------
+	// Matrix calculations.
+	//---------------------------------------------------------------------------------------
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	// Bind basic shader and apply changes.
+
+	//---------------------------------------------------------------------------------------
+	// Basic rendering.
+	//---------------------------------------------------------------------------------------
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
 	// Lines.
 	m_linesVAO->render();
 	// Triangles.
-	m_trianglesClearVAO->render();
-	m_trianglesFilledVAO->render();
-	// Quads.
-	m_quadsClearVAO->render();
-	m_quadsFilledVAO->render();
-	// Circles.
-	m_circlesFilledVAO->render();
-	m_circlesClearVAO->render();
+	m_trianglesVAO->render();
 
-	// Update and draw mouse point.
-	//m_staticShader->bind();
-	//double coords[2];
-	//glfwGetCursorPos(m_window, &coords[0], &coords[1]);
-	//glm::vec4 mouseWorldCoords = pixelCoordsToWorldCoords(coords);
-	//float drawCoords[2] = { mouseWorldCoords[0],  mouseWorldCoords[1] };
-	//m_mousePoint->render(drawCoords);
+	//---------------------------------------------------------------------------------------
+	// Textured rendering.
+	//---------------------------------------------------------------------------------------
+	m_textureShader->bind();
+	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
+	// Bind textures.
+	GLCall(glBindTextureUnit(1, m_texture));
+	m_texTrianglesVAO->render();
+
+	//---------------------------------------------------------------------------------------
 }
 
 //----------------------------------------------------------------------------------------------------------------------

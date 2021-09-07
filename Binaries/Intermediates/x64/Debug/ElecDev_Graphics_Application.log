@@ -1,53 +1,16 @@
-﻿  glad.c
-  ribbons.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\GUI\Ribbons\ribbons.cpp(104,8): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\GUI\Ribbons\ribbons.cpp(117,8): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\GUI\Ribbons\ribbons.cpp(131,8): warning C4312: 'type cast': conversion from 'GLuint' to 'void *' of greater size
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\GUI\Ribbons\ribbons.cpp(274,37): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  guiHandler.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(107,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-  API.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(107,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(78,20): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(80,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(81,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(82,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(83,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(96,20): warning C4018: '<=': signed/unsigned mismatch
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(98,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(99,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(100,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp(101,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  core.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(107,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-  The contents of <numbers> are available only with C++20 or later.
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(36,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(37,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(61,59): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(195,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(196,28): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(199,43): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(200,43): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(201,43): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp(202,43): warning C4244: '*=': conversion from 'double' to 'float', possible loss of data
-  mouseHandler.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(107,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-  mousePoint.cpp
-  vertexArrayObject.cpp
-  graphicsHandler.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(107,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(38,36): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(38,36): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(51,63): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(56,56): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(58,24): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(58,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(59,55): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(229,48): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-  mainApplication.cpp
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(107,20): warning C4305: 'initializing': truncation from 'double' to 'float'
-  Generating Code...
-C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.h(48): warning C4172: returning address of local variable or temporary: raw
-  LINK : C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\Binaries\Executables\x64\Debug\ElecDev_Graphics_Application.exe not found or not built by the last incremental link; performing full link
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  graphicsHandler.cpp
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(32,37): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h(93,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(40,40): warning C4838: conversion from 'double' to 'float' requires a narrowing conversion
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(40,40): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(53,64): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(58,57): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(60,25): warning C4838: conversion from 'int' to 'float' requires a narrowing conversion
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(60,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(61,56): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(64,86): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(65,86): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(66,86): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(67,86): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
+C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\Graphics\graphicsHandler.cpp(239,48): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   ElecDev_Graphics_Application.vcxproj -> C:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\Binaries\Executables\x64\Debug\ElecDev_Graphics_Application.exe

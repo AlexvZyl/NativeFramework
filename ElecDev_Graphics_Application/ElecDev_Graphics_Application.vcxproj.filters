@@ -23,7 +23,8 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -350,24 +351,22 @@
     <ClInclude Include="Source\Helper\stateMachine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mousePoint.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.h" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
     <ClInclude Include="Source\External\GLEW\include\GL\eglew.h" />
     <ClInclude Include="Source\External\GLEW\include\GL\glew.h" />
     <ClInclude Include="Source\External\GLEW\include\GL\glxew.h" />
     <ClInclude Include="Source\External\GLEW\include\GL\wglew.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />
-    <Library Include="Source\External\GLEW\Libraries\glew32.lib" />
-    <Library Include="Source\External\GLEW\Libraries\glew32s.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
     <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\staticShader.shader" />
-    <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\conanShader.shader" />
     <None Include="Source\External\glm\detail\func_common.inl" />
     <None Include="Source\External\glm\detail\func_common_simd.inl" />
     <None Include="Source\External\glm\detail\func_exponential.inl" />
@@ -505,13 +504,15 @@
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
     <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\basicShader.shader" />
-    <None Include="Source\External\GLEW\Libraries\glew32.dll" />
     <None Include="Source\External\GLEW\bin\glew32.dll" />
     <None Include="Source\External\GLEW\lib\glew32.dll" />
+    <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\GUI\Images\component.png" />
     <Image Include="Source\GUI\Images\Draw_Circuit_Buckets.png" />
     <Image Include="Source\GUI\Images\Draw_MCC.png" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Textures\circuit1.png" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Textures\elephant.png" />
   </ItemGroup>
 </Project>

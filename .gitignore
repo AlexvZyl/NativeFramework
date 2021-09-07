@@ -1,3 +1,4 @@
 .vs
-Binaries
+Binaries/
 ElecDev_Graphics_Application/imgui.ini
+Binaries/Executables/x64/Debug/ElecDev_Graphics_Application.exe

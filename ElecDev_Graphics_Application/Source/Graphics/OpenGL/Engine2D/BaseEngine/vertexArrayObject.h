@@ -4,48 +4,76 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+#include <vector>
 #include <ErrorHandler/errorHandler.h>
-//#include <glad/glad.h>
-#include <GLEW/Includes/GL/glew.h>
+#include <glad/glad.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Data Structures.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Types of Vertex Arrays that can be created.
-enum class BufferType 
-{
-	LINES=GL_LINES, TRIANGLE_CLEAR=GL_LINES, TRIANGLE_FILLED=GL_TRIANGLES, QUAD_CLEAR=GL_LINES, QUAD_FILLED=GL_TRIANGLES, CIRCLE_CLEAR= GL_LINES, CIRCLE_FILLED = GL_TRIANGLES, TEXT=GL_TRIANGLES
-};
-
-// Struct that contains the layout of the line vertex data.
+// Structr that contains the untextured vertex data.
 struct VertexData
 {
 	float position[3] = {0,0,0};
 	float color[4] = {0,0,0,0};
-	float raw[7] = {0,0,0,0,0,0,0};
 	
-	// Default constructor.
-	VertexData() {};
-	// Constructor for the vertex data structure.
-	VertexData(float v0, float v1, float v2, float v3, float v4, float v5, float v6)
+	// Vertex data without texture.
+	VertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3)
 	{
 		// Assign position.
-		position[0] = v0;
-		position[1] = v1;
-		position[2] = v2;
+		position[0] = pos0;
+		position[1] = pos1;
+		position[2] = pos2;
 		// Assign color.
-		color[0] = v3;
-		color[1] = v4;
-		color[2] = v5;
-		color[3] = v6;
+		color[0] = col0;
+		color[1] = col1;
+		color[2] = col2;
+		color[3] = col3;
 	}
 
 	// Convert the data so that OpenGL can store it in the VBO.
 	const void* rawData() 
 	{
 		float raw[7] = { position[0], position[1], position[2], color[0], color[1], color[2], color[3] };
-		return (const void*) raw;
+		return (const void*)raw;
+
+	}
+};
+
+// Struct that contains the textured vertex data.
+struct TexturedVertexData
+{
+	float position[3] = { 0,0,0 };
+	float color[4] = { 0,0,0,0 };
+	float texturePosition[2] = { 0,0 };
+	float textureID = 0.0f;
+
+	// Vertex data without texture.
+	TexturedVertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3, float texPos0, float texPos1, GLuint texID)
+	{
+		// Assign position.
+		position[0] = pos0;
+		position[1] = pos1;
+		position[2] = pos2;
+		// Assign color.
+		color[0] = col0;
+		color[1] = col1;
+		color[2] = col2;
+		color[3] = col3;
+		// Assign texture ID position.
+		texturePosition[0] = texPos0;
+		texturePosition[1] = texPos1;
+		// Assigne texture ID.
+		textureID = (float)texID;
+
+	}
+
+	// Convert the data so that OpenGL can store it in the VBO.
+	const void* rawData()
+	{
+		float raw[10] = { position[0], position[1], position[2], color[0], color[1], color[2], color[3], texturePosition[0], texturePosition[1], textureID };
+		return (const void*)raw;
 	}
 
 };
@@ -63,7 +91,7 @@ private:
 	// VBO ID.
 	unsigned int m_vBID;
 	// Data type used in this VAO.
-	BufferType m_BufferType;
+	GLenum m_BufferType;
 	
 public:
 
@@ -73,16 +101,16 @@ public:
 	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
-	VertexArrayObject(BufferType type, unsigned int maxVertices);
+	VertexArrayObject(GLenum type, unsigned int maxVertices, bool textured=false);
 
 	// Destructor.
 	~VertexArrayObject();
 
 	// Function that can dynamically write to the vertex buffer binded to this VAO.
-	void writeData(VertexData v);
-	void writeData(VertexData v1, VertexData v2);
-	void writeData(VertexData v1, VertexData v2, VertexData v3);
-	void writeData(VertexData v1, VertexData v2, VertexData v3, VertexData v4);
+	void writeData(std::vector<VertexData> vertices);
+	// For textured.
+	void writeData(std::vector<TexturedVertexData> vertices);
+
 
 	// Function that draws the data in the VAO based on the model type selected in the constructor.
 	void render();

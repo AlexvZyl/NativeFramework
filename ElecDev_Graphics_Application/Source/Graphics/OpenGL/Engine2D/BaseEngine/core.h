@@ -10,8 +10,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 //----------------------------------------------------------------------------------------------------------------------
 
 // OpenGL.
-//#include <glad/glad.h>
-#include <GLEW/Includes/GL/glew.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
@@ -26,14 +25,11 @@ The interactive engine (the one where elements can be drawn is handled in design
 // Buffers.
 #include "vertexArrayObject.h"
 
-// Mouse pointer object.
-#include "mousePoint.h"
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Globals.
 //----------------------------------------------------------------------------------------------------------------------
 
-const double PI = 3.141592653589793238463;
+const float PI = 3.14159265358979323;
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -75,12 +71,7 @@ public:
 
 	Shader* m_basicShader;
 	Shader* m_staticShader;
-
-	//---------------------------------------------------------------------------------------------------------------------
-	//  Mouse variables.
-	//---------------------------------------------------------------------------------------------------------------------
-
-	MousePoint* m_mousePoint;
+	Shader* m_textureShader;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
@@ -88,17 +79,12 @@ public:
 
 	// Lines.
 	VertexArrayObject* m_linesVAO;
-	// Background.
-	VertexArrayObject* m_backgroundVAO;
 	// Triangles.
-	VertexArrayObject* m_trianglesClearVAO;
-	VertexArrayObject* m_trianglesFilledVAO;
-	// Quads.
-	VertexArrayObject* m_quadsFilledVAO;
-	VertexArrayObject* m_quadsClearVAO;
-	// Circles.
-	VertexArrayObject* m_circlesFilledVAO;
-	VertexArrayObject* m_circlesClearVAO;
+	VertexArrayObject* m_trianglesVAO;
+	// Textured Triangles.
+	VertexArrayObject* m_texTrianglesVAO;
+	// Background has a seperate VAO since it should not move.
+	VertexArrayObject* m_backgroundVAO;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.
@@ -127,7 +113,9 @@ public:
 	//  Rendering.
 	//---------------------------------------------------------------------------------------------------------------------
 
+	GLuint m_texture;
 	void renderLoop();
+	GLuint loadTexture(const std::string& path);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
@@ -139,8 +127,8 @@ public:
 	void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]);
 	void drawQuadClear(float position[2], float width, float height, float color[4]);
 	void drawQuadFilled(float position[2], float width, float height, float color[4]);
-	void drawCircleFilled(float position[2], float radius, float color[4]);
 	void drawCircleClear(float position[2], float radius, float color[4]);
+	void drawCircleFilled(float position[2], float radius, float color[4]);
 	void drawText();
 	void display();
 

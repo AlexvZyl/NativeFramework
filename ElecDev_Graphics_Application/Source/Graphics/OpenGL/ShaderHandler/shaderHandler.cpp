@@ -165,12 +165,6 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
             GLCall( glGetShaderInfoLog(shader, 1024, NULL, infoLog) );
             std::cout << "[OPENGL][ERROR][SHADER COMPILATION] Type: " << type << "\n" << infoLog << "\n";
         }
-        else 
-        {
-            // Print success message.
-            std::cout << "[OPENGL][SHADERS][" << type <<  "] Compiled succesfully.\n";
-        }
-
     }
     else
     {
@@ -183,7 +177,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         else
         {
             // Print success message.
-            std::cout << "[OPENGL][SHADERS][" << type << "] Linked succesfully.\n\n";
+            std::cout << "[OPENGL][SHADERS] " << type << " linked succesfully.\n";
         }
     }
 }
