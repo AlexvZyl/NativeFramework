@@ -33,7 +33,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
 * GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.
 * Use the docking branch from ImGUI. ✓
-* Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex.
+* Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex. ✓
 
 #### Raynhardt 
 *
