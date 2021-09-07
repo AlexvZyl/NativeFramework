@@ -69,12 +69,13 @@ This is the graphics application that is to be used with the ElecDev software.  
   * Implement batch rendering. ✓
   * Drawing API:
     * Lines. ✓
-    * Clear circles.
-    * Filled circles.
-    * Clear quads.
-    * Filled quads.
-    * Clear triangles.
-    * Filled triangles.
+    * Clear circles. ✓
+    * Filled circles. ✓
+    * Clear quads. ✓
+    * Filled quads. ✓
+    * Clear triangles. ✓
+    * Filled triangles. ✓
+    * Textured quads.
     * Text.
   * Mouse event handler. ✓
   * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
