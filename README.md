@@ -77,7 +77,7 @@ This is the graphics application that is to be used with the ElecDev software.  
     * Filled quads. ✓
     * Clear triangles. ✓
     * Filled triangles. ✓
-    * Textured quads.
+    * Textured elements (Has functionality, needs API).
     * Text.
   * Mouse event handler. ✓
   * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
