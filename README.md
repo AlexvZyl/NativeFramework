@@ -27,16 +27,16 @@ This is the graphics application that is to be used with the ElecDev software.  
 ## To Do / Fixing
 
 #### Alex
-* Mouse events are handled by making the GraphicsHandler object global.  Find another way.
-* Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
-* OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
-* Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
-* GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.
-* Use the docking branch from ImGUI. ✓
-* Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex. ✓
-* Combine basic and textured rendering to reduce draw calls and shader switching.
-* Currently using an older version of the ImGUI docking banch, because they implemented an OpenGL loader that conflicts with GLAD.  Find out why this is a problem and fix.
-* Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
+* ⬜ Mouse events are handled by making the GraphicsHandler object global.  Find another way.
+* ⬜ Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
+* ⬜ OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
+* ⬜ Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
+* ⬜ GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.
+* ✅ Use the docking branch from ImGUI.
+* ✅ Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex.
+* ⬜ Combine basic and textured rendering to reduce draw calls and shader switching.
+* ⬜ Currently using an older version of the ImGUI docking banch, because they implemented an OpenGL loader that conflicts with GLAD.  Find out why this is a problem and fix.
+* ⬜ Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
 
 #### Raynhardt 
 *
@@ -45,69 +45,68 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Roadmap
 
-* Structure code and setup handlers: ✓
-  * Main app. ✓
-  * GUI Handler. ✓
-  * Graphics Handler (Backend Engines). ✓
-* Setup project with dependancies: ✓
-  * ImGUI. ✓ 
-  * GLAD. ✓ 
-  * GLFW. ✓ 
-  * OpenGL. ✓
-  * GLM. ✓
-  * ImGUI Docking Branch. ✓
-* Base Engine:
-  * Implement matrix mathematics. ✓
-    * Translation, rotation & scaling. ✓
-    * Viewport, Model, View and Porjection matrices. ✓
-  * Basic shader. ✓ 
-  * Error handler. ✓
-  * Shader handler. ✓
-  * Implement class that handles VAO's:
-    * Lines. ✓
-    * Triangles.
-    * Quads. ✓
-    * Circles. ✓
-    * Text.
-  * Implement batch rendering. ✓
-  * Drawing API:
-    * Lines. ✓
-    * Clear circles. ✓
-    * Filled circles. ✓
-    * Clear quads. ✓
-    * Filled quads. ✓
-    * Clear triangles. ✓
-    * Filled triangles. ✓
-    * Textured elements (Has functionality, needs API).
-    * Text.
-  * Mouse event handler. ✓
-  * Add virtual mouse point that snaps to parts of the drawings to make editing easier.
-* Implement State Machine that controls the application. ✓
-* Create first basic app with simple GUI interface and simple OpenGL drawing:
-  * Incorporate Base Engine. ✓
-  * GUI interface controls OpenGL engines.
-  * Bind all user inputs to OpenGL actions and state machine updates.
-* Interface with Excel:
-  * Requires exe file that has resource files included.
-  * Write byte encoder/decoder.
-  * Write thread handler from python side for non-pause interface.
-* MCC Drawings:
-  * Read available drawings from excel file.
-  * Draw and redraw MCC's.
-* Expand Base engine with Design Engine child:
-  * Mouse event handler.
-  * Component generation.
-  * Cable generation.
-* Port software from the PyQt interface:
-  * Create a state machine for type of user interface.
-* Improve engine with a better UI:
-  * Auto alignment.
-  * Move components.
-* Add symbol library.
-* Add template circuits.
-* Able to enter a circuit and define it from the inside.  Add as many layers as needed.
-* Long term: 3D Drawings.
-* VERY long term: Port to Vulkan, [https://www.vulkan.org/].
+* ✅ Structure code and setup handlers:
+  * ✅ Main app.
+  * ✅ GUI Handler.
+  * ✅ Graphics Handler (Backend Engines).
+* ✅ Setup project with dependancies:
+  * ✅ ImGUI.
+  * ✅ GLAD.
+  * ✅ GLFW.
+  * ✅ OpenGL.
+  * ✅ GLM.
+  * ✅ ImGUI Docking Branch.
+* ⬜ Base Engine:
+  * ✅ Implement matrix mathematics.
+    * ✅ Translation, rotation & scaling.
+    * ✅ Viewport, Model, View and Porjection matrices.
+  * ✅ Basic shader.
+  * ✅ Error handler.
+  * ✅ Shader handler.
+  * ⬜ Implement class that handles VAO's:
+    * ✅ Lines.
+    * ✅ Triangles.
+    * ✅ Textured triangles.
+    * ⬜ Text.
+  * ✅ Implement batch rendering.
+  * ⬜ Drawing API:
+    * ✅ Lines.
+    * ✅ Clear circles.
+    * ✅ Filled circles.
+    * ✅ Clear quads.
+    * ✅ Filled quads.
+    * ✅ Clear triangles.
+    * ✅ Filled triangles.
+    * ⬜ Textured elements (Has functionality, needs API).
+    * ⬜ Text.
+  * ✅ Mouse event handler.
+* ✅ Implement State Machine that controls the application.
+* ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
+  * ✅ Incorporate Base Engine.
+  * ⬜ GUI interface controls OpenGL engines.
+  * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
+* ⬜ Interface with Excel:
+  * ⬜ Requires exe file that has resource files included.
+  * ⬜ Write byte encoder/decoder.
+  * ⬜ Write thread handler from python side for non-pause interface.
+* ⬜ MCC Drawings:
+  * ⬜ Read available drawings from excel file.
+  * ⬜ Draw and redraw MCC's.
+* ⬜ Expand Base engine with Design Engine child:
+  * ⬜ Mouse event handler.
+  * ⬜ Component generation.
+  * ⬜ Cable generation.
+  * ⬜ Add virtual mouse point that snaps to parts of the drawings to make editing easier.
+* ⬜ Port software from the PyQt interface:
+  * ⬜ Create a state machine for type of user interface.
+* ⬜ Improve engine with a better UI:
+  * ⬜ Auto alignment.
+  * ⬜ Move components.
+* ⬜ Add symbol library.
+* ⬜ Add template circuits.
+* ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
+* ⬜ Long term: 3D Drawings.
+* ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].
 
 ---
 
