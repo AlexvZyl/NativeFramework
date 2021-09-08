@@ -95,7 +95,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ⬜ Read available drawings from excel file.
   * ⬜ Draw and redraw MCC's.
 
-*It is up and running!* 
+⬜ *It is up and running!* 
 
 ### Design Engine
 * ⬜ Optimize base engine.
