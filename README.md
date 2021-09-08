@@ -45,6 +45,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Roadmap
 
+### Base Engine
+
 * ✅ Structure code and setup handlers:
   * ✅ Main app.
   * ✅ GUI Handler.
@@ -92,6 +94,10 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ MCC Drawings:
   * ⬜ Read available drawings from excel file.
   * ⬜ Draw and redraw MCC's.
+
+*It is up and running!* 
+
+### Design Engine
 * ⬜ Expand Base engine with Design Engine child:
   * ⬜ Mouse event handler.
   * ⬜ Component generation.
@@ -105,7 +111,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Add symbol library.
 * ⬜ Add template circuits.
 * ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
-* ⬜ Long term: 3D Drawings.
+### Long Term Dreams
+* ⬜ 3D Drawings.
 * ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].
 
 ---
