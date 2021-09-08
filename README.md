@@ -35,6 +35,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Use the docking branch from ImGUI. ✓
 * Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex. ✓
 * Combine basic and textured rendering to reduce draw calls and shader switching.
+* Currently using an older version of the ImGUI docking banch, because they implemented an OpenGL loader that conflicts with GLAD.  Find out why this is a problem and fix.
 
 #### Raynhardt 
 *
@@ -53,7 +54,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   * GLFW. ✓ 
   * OpenGL. ✓
   * GLM. ✓
-  * ImGUI Docking Branch.
+  * ImGUI Docking Branch. ✓
 * Base Engine:
   * Implement matrix mathematics. ✓
     * Translation, rotation & scaling. ✓
