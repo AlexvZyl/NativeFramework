@@ -99,6 +99,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 ⬜ *It is up and running!* 
 
 ### Design Engine (Child of BaseEngine)
+
 * ⬜ Optimize base engine.
 * ⬜ Mouse event handler.
 * ⬜ Component generation and buffer management.
@@ -112,7 +113,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Add symbol library.
 * ⬜ Add template circuits.
 * ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
+
 ### Long Term Dreams
+
 * ⬜ 3D Drawings.
 * ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].
 
