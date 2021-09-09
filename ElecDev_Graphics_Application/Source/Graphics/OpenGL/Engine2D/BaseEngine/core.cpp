@@ -18,6 +18,23 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	:m_window(window)
 {
 	//---------------------------------------------------------------------------------------
+	// Setup FreeType.
+	//---------------------------------------------------------------------------------------
+
+	//FT_Library ft;
+	//if (FT_Init_FreeType(&ft))
+	//{
+	//	std::cout << "[ENGINES][ERROR] Could not init FreeType Library." << std::endl << std::endl;
+	//}
+
+	//FT_Face face;
+	//const char* fontPath = "Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\open-Regular.ttf";
+	//if (FT_New_Face(ft, fontPath, 0, &face))
+	//{
+	//	std::cout << "[ENGINES][ERROR]: Failed to load font from '" << fontPath << "'." << std::endl << std::endl;
+	//}
+
+	//---------------------------------------------------------------------------------------
 	// Setup shaders.
 	//---------------------------------------------------------------------------------------
 	 
@@ -101,7 +118,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Textures Setup.
 	//---------------------------------------------------------------------------------------
 
-	std::string texPath = "Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Textures\\circuit1.png";
+	std::string texPath = "Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Textures\\circuit1.png";
 	m_texture = loadTexture(texPath);
 	TexturedVertexData v1(1.25f, 1.25f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	TexturedVertexData v2(1.25f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
@@ -113,8 +130,9 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Setup shader with textures.
 	m_textureShader->bind();
 	auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures");
-	int samplers[2] = { 0, 1 };
-	glUniform1iv(loc, 2, samplers);
+	int samplers[4] = { 0, 1, 2, 3 };
+	glUniform1iv(loc, 4, samplers);
+	GLCall(glBindTextureUnit(1, m_texture));
 
 	//---------------------------------------------------------------------------------------
 };
@@ -143,33 +161,29 @@ BaseEngineGL::~BaseEngineGL()
 void BaseEngineGL::renderLoop()
 {
 	//---------------------------------------------------------------------------------------
-	// Draw background.
+	// Matrix calculations.
+	//---------------------------------------------------------------------------------------
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
+	
+	//---------------------------------------------------------------------------------------
+	// Draw static entities.
 	//---------------------------------------------------------------------------------------
 	m_staticShader->bind();
 	m_backgroundVAO->render();
 
 	//---------------------------------------------------------------------------------------
-	// Matrix calculations.
-	//---------------------------------------------------------------------------------------
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-
-	//---------------------------------------------------------------------------------------
-	// Basic rendering.
+	// Draw basic entities.
 	//---------------------------------------------------------------------------------------
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
-	// Lines.
 	m_linesVAO->render();
-	// Triangles.
 	m_trianglesVAO->render();
 
 	//---------------------------------------------------------------------------------------
-	// Textured rendering.
+	// Draw textured entities.
 	//---------------------------------------------------------------------------------------
 	m_textureShader->bind();
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
-	// Bind textures.
-	GLCall(glBindTextureUnit(1, m_texture));
 	m_texTrianglesVAO->render();
 
 	//---------------------------------------------------------------------------------------

@@ -24,17 +24,10 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 	// Test code.
 	//---------------------------------------------------------------------------------------
 
-	for (int i = 0; i <= 10; i++) 
+	for (int i = 0; i <= 3; i++) 
 	{
-		for (int k = 0; k <= 10; k++) 
+		for (int k = 0; k <= 3; k++) 
 		{
-			// Draw clear triangle example.
-			float ctPos1[2] = { 1.0f + i, -1.0f + k };
-			float ctPos2[2] = { 1.5f + i, -1.0f + k };
-			float ctPos3[2] = { 1.0f + i, -0.5f + k };
-			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-			m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
-
 			// Draw filled triangle example.
 			float ftPos1[2] = { -1.0f + i, -1.0f + k };
 			float ftPos2[2] = { -1.0f + i, -0.5 + k };
@@ -59,6 +52,13 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 			// Draw clear ciricle.
 			float coords2[2] = { i, -0.75f + k };
 			m_drawingEngine->drawCircleClear(coords2, 0.2, color);
+
+			// Draw clear triangle example.
+			float ctPos1[2] = { 1.0f + i, -1.0f + k };
+			float ctPos2[2] = { 1.5f + i, -1.0f + k };
+			float ctPos3[2] = { 1.0f + i, -0.5f + k };
+			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+			m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 				
 			// Render textures
 			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);

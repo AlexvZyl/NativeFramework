@@ -9,7 +9,7 @@ This code contains the class that handles the mouse point that snaps to componen
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <glad/glad.h>
-#include "../BaseEngine/vertexArrayObject.h"
+#include "../BaseEngine/Peripherals/vertexArrayObject.h"
 #include <GLFW/glfw3.h>
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -23,7 +23,11 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include "../Helper/stateMachine.h"
 
 // Buffers.
-#include "vertexArrayObject.h"
+#include "Peripherals/vertexArrayObject.h"
+
+// Text rendering.
+#include <ft2build.h>
+#include FT_FREETYPE_H  
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Globals.

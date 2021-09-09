@@ -37,7 +37,6 @@ struct VertexData
 	{
 		float raw[7] = { position[0], position[1], position[2], color[0], color[1], color[2], color[3] };
 		return (const void*)raw;
-
 	}
 };
 

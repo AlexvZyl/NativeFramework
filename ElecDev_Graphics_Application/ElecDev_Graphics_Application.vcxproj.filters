@@ -21,10 +21,11 @@
     <ClCompile Include="Source\Helper\stateMachine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\textures.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -349,7 +350,7 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\std_placeholders.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
     <ClInclude Include="Source\Helper\stateMachine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\vertexArrayObject.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.h" />
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h" />
@@ -357,12 +358,114 @@
     <ClInclude Include="Source\External\GLEW\include\GL\glew.h" />
     <ClInclude Include="Source\External\GLEW\include\GL\glxew.h" />
     <ClInclude Include="Source\External\GLEW\include\GL\wglew.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\stb_image.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\stb_image.h" />
+    <ClInclude Include="Source\External\freetype\Includes\dlg\dlg.h" />
+    <ClInclude Include="Source\External\freetype\Includes\dlg\output.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\ftconfig.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\ftheader.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\ftmodule.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\ftoption.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\ftstdlib.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\integer-types.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\mac-support.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\config\public-macros.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svbdf.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svcfftl.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svcid.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svfntfmt.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svgldict.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svgxval.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svkern.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svmetric.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svmm.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svotval.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svpfr.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svpostnm.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svprop.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svpscmap.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svpsinfo.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svsfnt.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svttcmap.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svtteng.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svttglyf.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\services\svwinfnt.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\autohint.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\cffotypes.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\cfftypes.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\compiler-macros.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftcalc.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftdebug.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftdrv.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftgloadr.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\fthash.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftmemory.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftobjs.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftpsprop.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftrfork.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftserv.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftstream.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\fttrace.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftvalid.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\psaux.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\pshints.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\sfnt.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\t1types.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\tttypes.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\internal\wofftypes.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\freetype.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftadvanc.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftbbox.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftbdf.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftbitmap.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftbzip2.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftcache.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftchapters.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftcid.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftcolor.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftdriver.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\fterrdef.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\fterrors.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftfntfmt.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftgasp.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftglyph.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftgxval.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftgzip.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftimage.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftincrem.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftlcdfil.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftlist.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftlogging.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftlzw.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftmac.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftmm.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftmodapi.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftmoderr.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftotval.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftoutln.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftparams.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftpfr.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftrender.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftsizes.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftsnames.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftstroke.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftsynth.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftsystem.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\fttrigon.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\fttypes.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ftwinfnt.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\t1tables.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\ttnameid.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\tttables.h" />
+    <ClInclude Include="Source\External\freetype\Includes\freetype\tttags.h" />
+    <ClInclude Include="Source\External\freetype\Includes\ft2build.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\texRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />
+    <Library Include="Source\External\freetype\Libraries\Dynamic\win64\freetype.lib" />
+    <Library Include="Source\External\freetype\Libraries\Static\win64\freetype.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
@@ -507,12 +610,27 @@
     <None Include="Source\External\GLEW\bin\glew32.dll" />
     <None Include="Source\External\GLEW\lib\glew32.dll" />
     <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\textureShader.shader" />
+    <None Include="Source\External\freetype\Libraries\Dynamic\win64\freetype.dll" />
+    <None Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\arial.fnt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\GUI\Images\component.png" />
     <Image Include="Source\GUI\Images\Draw_Circuit_Buckets.png" />
     <Image Include="Source\GUI\Images\Draw_MCC.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Textures\circuit1.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Textures\elephant.png" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit1.png" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\elephant.png" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\arial.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-Bold.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-BoldItalic.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-ExtraBold.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-ExtraBoldItalic.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-Italic.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-Light.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-LightItalic.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-Regular.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-Semibold.ttf" />
+    <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-SemiboldItalic.ttf" />
   </ItemGroup>
 </Project>
