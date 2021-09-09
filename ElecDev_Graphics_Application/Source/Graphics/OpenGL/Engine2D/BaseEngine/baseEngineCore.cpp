@@ -1,13 +1,8 @@
-/*
-This is where the drawing enigine is handled.  This is only used to draw elements to the screen.
-The interactive engine (the one where elements can be drawn is handled in designEngine).
-*/
-
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "core.h"
+#include "baseEngineCore.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
@@ -17,23 +12,6 @@ The interactive engine (the one where elements can be drawn is handled in design
 BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	:m_window(window)
 {
-	//---------------------------------------------------------------------------------------
-	// Setup FreeType.
-	//---------------------------------------------------------------------------------------
-
-	//FT_Library ft;
-	//if (FT_Init_FreeType(&ft))
-	//{
-	//	std::cout << "[ENGINES][ERROR] Could not init FreeType Library." << std::endl << std::endl;
-	//}
-
-	//FT_Face face;
-	//const char* fontPath = "Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\open-Regular.ttf";
-	//if (FT_New_Face(ft, fontPath, 0, &face))
-	//{
-	//	std::cout << "[ENGINES][ERROR]: Failed to load font from '" << fontPath << "'." << std::endl << std::endl;
-	//}
-
 	//---------------------------------------------------------------------------------------
 	// Setup shaders.
 	//---------------------------------------------------------------------------------------
@@ -115,11 +93,20 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	m_backgroundVAO->writeData(vertices);
 
 	//---------------------------------------------------------------------------------------
+	// Text rendering setup.
+	//---------------------------------------------------------------------------------------
+
+	// Create textRenderer instance with desired font.
+	m_textRenderer = new TextRenderer("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\open-sans\\OpenSans-Regular.ttf", 48);
+	// Clear memory no longer used.
+	m_textRenderer->clearFT();
+	
+	//---------------------------------------------------------------------------------------
 	// Textures Setup.
 	//---------------------------------------------------------------------------------------
 
-	std::string texPath = "Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Textures\\circuit1.png";
-	m_texture = loadTexture(texPath);
+	// Load texture from path.
+	m_texture = loadTexture("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Textures\\circuit1.png");
 	TexturedVertexData v1(1.25f, 1.25f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	TexturedVertexData v2(1.25f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
 	TexturedVertexData v3(0.75f, 0.75f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
@@ -152,6 +139,8 @@ BaseEngineGL::~BaseEngineGL()
 	// Triangles.
 	delete m_trianglesVAO;
 	delete m_texTrianglesVAO;
+	// Delete text renderer.
+	delete m_textRenderer;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

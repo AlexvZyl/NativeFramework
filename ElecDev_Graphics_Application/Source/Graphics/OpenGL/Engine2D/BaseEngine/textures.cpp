@@ -1,15 +1,19 @@
+/*
+Texture handling for the Base Engine.
+*/
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "core.h"
+#include "baseEngineCore.h"
 #include "Peripherals/stb_image.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Text rendering functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Function that lloads a texture from the file path.
+// Function that loads a texture from the file path.
 GLuint BaseEngineGL::loadTexture(const std::string& path) 
 {
 	int w, h, bits;

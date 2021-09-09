@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\GUI\guiHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngineCore.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp" />
@@ -10,7 +10,7 @@
     <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\core.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseEngineCore.cpp" />
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.cpp" />
@@ -40,8 +40,8 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
     <ClInclude Include="Source\Graphics\graphicsHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\core.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngineCore.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseEngineCore.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.h" />
     <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
@@ -458,7 +458,7 @@
     <ClInclude Include="Source\External\freetype\Includes\freetype\tttables.h" />
     <ClInclude Include="Source\External\freetype\Includes\freetype\tttags.h" />
     <ClInclude Include="Source\External\freetype\Includes\ft2build.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\texRenderer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
@@ -620,6 +620,8 @@
     <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit1.png" />
     <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\elephant.png" />
     <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\arial.png" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit2.jpg" />
+    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit3.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\open-sans\OpenSans-Bold.ttf" />

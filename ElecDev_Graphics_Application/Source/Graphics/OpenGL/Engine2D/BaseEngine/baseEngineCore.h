@@ -2,7 +2,7 @@
 
 /*
 This is where the drawing enigine is handled.  This is only used to draw elements to the screen.
-The interactive engine (the one where elements can be drawn is handled in designEngine).
+The interactive engine (the one where elements can be drawn is handled in DesignEngine).
 */
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -26,8 +26,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 #include "Peripherals/vertexArrayObject.h"
 
 // Text rendering.
-#include <ft2build.h>
-#include FT_FREETYPE_H  
+#include "Peripherals/textRenderer.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Globals.
@@ -50,17 +49,17 @@ public:
 	// MVP Matrices.
 	glm::mat4 m_modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
 													// kept an identity matrix for now.
-	glm::mat4 m_viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
+	glm::mat4 m_viewMatrix = glm::mat4(1.0f);		// The matrix that handles the camera movement.
 													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
 	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
 													// going to be visible to the screen?
-	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
+	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);	// The matrix that handles the viewport transform.  Converts screen pixel
 													// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
-	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
-	glm::mat4 m_translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
-	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
+	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);	// Handles camera scaling.
+	glm::mat4 m_translationMatrix = glm::mat4(1.0f);// Handles camera translations.
+	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);	// Handles camera rotations.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse handler variables.
@@ -73,9 +72,9 @@ public:
 	//  Shaders.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	Shader* m_basicShader;
-	Shader* m_staticShader;
-	Shader* m_textureShader;
+	Shader* m_basicShader;		// Renders movable elements without textures.
+	Shader* m_staticShader;		// Renders static elements.
+	Shader* m_textureShader;	// Renders movable elements with textures.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
@@ -94,8 +93,9 @@ public:
 	//  Settings.
 	//---------------------------------------------------------------------------------------------------------------------
 	
-	float m_scaleRate = 0.3;
-	unsigned int m_circleResolution = 35;
+	float m_scaleRate = 0.3;				// Determines how much is zoomed with each mouse wheel scroll.
+	unsigned int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
+											// demanding at high values.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
@@ -117,9 +117,13 @@ public:
 	//  Rendering.
 	//---------------------------------------------------------------------------------------------------------------------
 
+	// Variables.
 	GLuint m_texture;
-	void renderLoop();
+	// Objects.
+	TextRenderer* m_textRenderer;
+	// Functions.
 	GLuint loadTexture(const std::string& path);
+	void renderLoop();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
