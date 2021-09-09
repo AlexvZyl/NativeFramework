@@ -37,6 +37,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Combine basic and textured rendering to reduce draw calls and shader switching.
 * ⬜ Currently using an older version of the ImGUI docking banch, because they implemented an OpenGL loader that conflicts with GLAD.  Find out why this is a problem and fix.
 * ⬜ Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
+* ⬜ Implement "Improved Alpha-Tested Magnification for Vector Textures and Special Effects" from paper [https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf].
 
 #### Raynhardt 
 *
