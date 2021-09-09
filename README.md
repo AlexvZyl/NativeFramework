@@ -98,7 +98,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ⬜ *It is up and running!* 
 
-### Design Engine (Child of BaseEngine)
+### Design Engine (Child of Base Engine)
 
 * ⬜ Optimize base engine.
 * ⬜ Mouse event handler.
