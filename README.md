@@ -98,13 +98,12 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ⬜ *It is up and running!* 
 
-### Design Engine
+### Design Engine (Child of BaseEngine)
 * ⬜ Optimize base engine.
-* ⬜ Expand Base engine with Design Engine child:
-  * ⬜ Mouse event handler.
-  * ⬜ Component generation.
-  * ⬜ Cable generation.
-  * ⬜ Add virtual mouse point that snaps to parts of the drawings to make editing easier.
+* ⬜ Mouse event handler.
+* ⬜ Component generation and buffer management.
+* ⬜ Cable generation.
+* ⬜ Add virtual mouse point that snaps to parts of the drawings to make editing easier.
 * ⬜ Port software from the PyQt interface:
   * ⬜ Create a state machine for type of user interface.
 * ⬜ Improve engine with a better UI:
