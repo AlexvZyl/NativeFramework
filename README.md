@@ -39,6 +39,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
 * ⬜ Implement "Improved Alpha-Tested Magnification for Vector Textures and Special Effects" from paper [https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf].
 * ⬜ Font rendering is done with .fnt & .png files.  This works, but using .ttf files is more modern.  The fist option is used since it is faster to work with a font atlas.
+* ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
 
 #### Raynhardt 
 *
