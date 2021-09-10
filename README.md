@@ -83,6 +83,7 @@ This is the graphics application that is to be used with the ElecDev software.  
     * ✅ Clear triangles.
     * ✅ Filled triangles.
     * ⬜ Textured elements (Has functionality, needs API).
+    * ⬜ Text.
   * ⬜ Implement text rendering.
   * ✅ Mouse event handler.
 * ✅ Implement State Machine that controls the application.
