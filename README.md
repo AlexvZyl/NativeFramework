@@ -24,7 +24,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ---
 
-## To Do / Fixing
+## Fixing & Improving
 
 #### Alex
 * ⬜ Mouse events are handled by making the GraphicsHandler object global.  Find another way.
