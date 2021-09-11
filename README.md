@@ -43,6 +43,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Type casts throwing warning.  Fix.
 * ⬜ Buffer sizes are currently static, change to dynamic.
 * ⬜ Using index buffers might improve performance.
+* ⬜ Use SDF (Signed Distance Fields) when rendering text.
 
 #### Raynhardt 
 *
