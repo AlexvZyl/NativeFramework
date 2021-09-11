@@ -71,11 +71,10 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ✅ Basic shader.
   * ✅ Error handler.
   * ✅ Shader handler.
-  * ⬜ Implement class that handles VAO's:
+  * ✅ Implement class that handles VAO's:
     * ✅ Lines.
     * ✅ Triangles.
-    * ✅ Textured triangles.
-    * ⬜ Text.
+    * ✅ Textured triangles (Includes text).
   * ✅ Implement batch rendering.
   * ⬜ Drawing API:
     * ✅ Lines.
@@ -85,7 +84,7 @@ This is the graphics application that is to be used with the ElecDev software.  
     * ✅ Filled quads.
     * ✅ Clear triangles.
     * ✅ Filled triangles.
-    * ⬜ Textured elements (Has functionality, needs API).
+    * ✅ Textured elements (Has functionality, needs API).
     * ⬜ Text.
   * ✅ Mouse event handler.
 * ✅ Implement State Machine that controls the application.
