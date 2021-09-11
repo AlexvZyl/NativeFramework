@@ -28,6 +28,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	std::string textureShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\textureShader.shader";
 	std::cout << "[OPENGL][SHADERS] Compiling Texture Shader...\n";
 	m_textureShader = new Shader(textureShaderPath);
+	// Done.
 	std::cout << "[OPENGL][SHADERS] Done.\n\n";
 
 	//---------------------------------------------------------------------------------------
@@ -67,13 +68,13 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int size = 1000*1000*10;
+	int totVertices = 1000*1000*10;
 	// Lines.
-	m_linesVAO = new VertexArrayObject(GL_LINES, size);
+	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
 	// Triangles.
-	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES, size);
+	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices);
 	// Textured Triangles.
-	m_texTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, size, true);
+	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices, true);
 	// Background.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
 
@@ -93,33 +94,28 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	m_backgroundVAO->writeData(vertices);
 
 	//---------------------------------------------------------------------------------------
-	// Text rendering setup.
+	// Textures & Text setup.
 	//---------------------------------------------------------------------------------------
 
-	// Create textRenderer instance with desired font.
-	m_textRenderer = new TextRenderer("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\open-sans\\OpenSans-Regular.ttf", 48);
-	// Clear memory no longer used.
-	m_textRenderer->clearFT();
-	
-	//---------------------------------------------------------------------------------------
-	// Textures Setup.
-	//---------------------------------------------------------------------------------------
+	// Enable blending for alpha channels.
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Load texture from path.
-	m_texture = loadTexture("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Textures\\circuit1.png");
-	TexturedVertexData v1(1.25f, 1.25f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	TexturedVertexData v2(1.25f, 0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-	TexturedVertexData v3(0.75f, 0.75f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-	TexturedVertexData v4(0.75f, 1.25f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
-	std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-	m_texTrianglesVAO->writeData(verticesTex);
-
-	// Setup shader with textures.
 	m_textureShader->bind();
-	auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures");
-	int samplers[4] = { 0, 1, 2, 3 };
-	glUniform1iv(loc, 4, samplers);
-	GLCall(glBindTextureUnit(1, m_texture));
+	// Load font atlas as texture.
+	m_textAtlas = loadTexture("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.png", true);
+	// Load texture for testing.
+	m_texture = loadTexture("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Textures\\circuit1.png");
+
+	// Setup shader with textures (including font atlas).
+	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
+	int samplers[3] = { 0, 1, 2 };
+	GLCall(glUniform1iv(loc, 3, samplers));
+	GLCall(glBindTextureUnit(1, m_textAtlas));	// Text Atlas.
+	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
+
+	// Create texture renderer object.
+	m_textRenderer = new TextRenderer("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.fnt");
 
 	//---------------------------------------------------------------------------------------
 };
@@ -138,7 +134,7 @@ BaseEngineGL::~BaseEngineGL()
 	delete m_backgroundVAO;
 	// Triangles.
 	delete m_trianglesVAO;
-	delete m_texTrianglesVAO;
+	delete m_textureTrianglesVAO;
 	// Delete text renderer.
 	delete m_textRenderer;
 }
@@ -173,7 +169,7 @@ void BaseEngineGL::renderLoop()
 	//---------------------------------------------------------------------------------------
 	m_textureShader->bind();
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
-	m_texTrianglesVAO->render();
+	m_textureTrianglesVAO->render();
 
 	//---------------------------------------------------------------------------------------
 }
@@ -246,6 +242,8 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	// Apply changes to shaders.
 	m_basicShader->bind();
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_textureShader->bind();
+	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

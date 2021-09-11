@@ -42,7 +42,7 @@ void BaseEngineGL::drawTriangleFilled(float position1[2], float position2[2], fl
 	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
-	std::vector<VertexData> vertices = { v1, v2, v3,};
+	std::vector<VertexData> vertices = { v1, v2, v3 };
 	// Write to buffer.
 	m_trianglesVAO->writeData(vertices);
 }
@@ -107,9 +107,10 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 }
 
 // Adds text to the VBO object.
-void BaseEngineGL::drawText()
+void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale)
 {
-	return;
+	// Test the text rendering.
+	m_textRenderer->writeText(text, coords, m_textureTrianglesVAO, 1, color, scale);
 }
 
 // Displays the new drawing to the screen.

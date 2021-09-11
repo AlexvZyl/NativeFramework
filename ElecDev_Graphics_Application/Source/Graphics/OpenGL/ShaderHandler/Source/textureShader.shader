@@ -31,11 +31,26 @@ in vec4 f_color;
 in vec2 f_texCoord;
 in float f_texID;
 
-uniform sampler2D f_textures[4];
+const float width = 0.4;
+const float edge = 0.2;
+
+uniform sampler2D f_textures[3];
 
 void main()
 {
 	int index = int(f_texID);
-	o_color = texture(f_textures[index], f_texCoord);
-};
-
+	if (index == 0)
+	{
+		o_color = f_color;
+	}
+	else if (index == 1)
+	{
+		float distance = (1.0 - texture(f_textures[index], f_texCoord).a);
+		float alpha = (1.0 - smoothstep(width, width + edge, distance));
+		o_color = vec4(f_color[0], f_color[1], f_color[2], alpha);
+	}
+	else 
+	{
+		o_color = texture(f_textures[index], f_texCoord);
+	}
+}

@@ -75,19 +75,18 @@ public:
 	Shader* m_basicShader;		// Renders movable elements without textures.
 	Shader* m_staticShader;		// Renders static elements.
 	Shader* m_textureShader;	// Renders movable elements with textures.
+	Shader* m_textShader;		// Shader that renders text.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// Lines.
-	VertexArrayObject* m_linesVAO;
-	// Triangles.
-	VertexArrayObject* m_trianglesVAO;
-	// Textured Triangles.
-	VertexArrayObject* m_texTrianglesVAO;
-	// Background has a seperate VAO since it should not move.
-	VertexArrayObject* m_backgroundVAO;
+	
+	VertexArrayObject* m_linesVAO;				// Lines.
+	VertexArrayObject* m_trianglesVAO;			// Triangles.
+	VertexArrayObject* m_textureTrianglesVAO;	// Textured Triangles.
+	VertexArrayObject* m_textVAO;				// Handles text rendering.
+	VertexArrayObject* m_backgroundVAO;			// Background has a seperate VAO since it should not move.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.
@@ -119,10 +118,12 @@ public:
 
 	// Variables.
 	GLuint m_texture;
+	// Texture that contains all of the font information.
+	GLuint m_textAtlas;
 	// Objects.
 	TextRenderer* m_textRenderer;
 	// Functions.
-	GLuint loadTexture(const std::string& path);
+	GLuint loadTexture(const std::string& path, bool alpha=false);
 	void renderLoop();
 
 	//---------------------------------------------------------------------------------------------------------------------
@@ -137,7 +138,7 @@ public:
 	void drawQuadFilled(float position[2], float width, float height, float color[4]);
 	void drawCircleClear(float position[2], float radius, float color[4]);
 	void drawCircleFilled(float position[2], float radius, float color[4]);
-	void drawText();
+	void drawText(std::string text, float coords[2], float color[4], float scale);
 	void display();
 
 	//---------------------------------------------------------------------------------------------------------------------

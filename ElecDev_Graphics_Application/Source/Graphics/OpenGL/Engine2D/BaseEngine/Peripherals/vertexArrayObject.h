@@ -15,8 +15,9 @@
 // Structr that contains the untextured vertex data.
 struct VertexData
 {
-	float position[3] = {0,0,0};
-	float color[4] = {0,0,0,0};
+	float position[3] = { 0,0,0 };
+	float color[4] = { 0,0,0,0 };
+	float raw[7] = { 0,0,0,0,0,0,0 };
 	
 	// Vertex data without texture.
 	VertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3)
@@ -33,9 +34,15 @@ struct VertexData
 	}
 
 	// Convert the data so that OpenGL can store it in the VBO.
-	const void* rawData() 
+	const void* rawData()
 	{
-		float raw[7] = { position[0], position[1], position[2], color[0], color[1], color[2], color[3] };
+		raw[0] = position[0];
+		raw[1] = position[1];
+		raw[2] = position[2];
+		raw[3] = color[0];
+		raw[4] = color[1];
+		raw[5] = color[2];
+		raw[6] = color[3];
 		return (const void*)raw;
 	}
 };
@@ -47,9 +54,10 @@ struct TexturedVertexData
 	float color[4] = { 0,0,0,0 };
 	float texturePosition[2] = { 0,0 };
 	float textureID = 0.0f;
+	float raw[10] = { 0,0,0,0,0,0,0,0,0,0 };
 
 	// Vertex data without texture.
-	TexturedVertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3, float texPos0, float texPos1, GLuint texID)
+	TexturedVertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3, float texPos0, float texPos1, float texID)
 	{
 		// Assign position.
 		position[0] = pos0;
@@ -64,17 +72,24 @@ struct TexturedVertexData
 		texturePosition[0] = texPos0;
 		texturePosition[1] = texPos1;
 		// Assigne texture ID.
-		textureID = (float)texID;
-
+		textureID = texID;
 	}
 
 	// Convert the data so that OpenGL can store it in the VBO.
 	const void* rawData()
 	{
-		float raw[10] = { position[0], position[1], position[2], color[0], color[1], color[2], color[3], texturePosition[0], texturePosition[1], textureID };
+		raw[0] = position[0];
+		raw[1] = position[1];
+		raw[2] = position[2];
+		raw[3] = color[0];
+		raw[4] = color[1];
+		raw[5] = color[2];
+		raw[6] = color[3];
+		raw[7] = texturePosition[0];
+		raw[8] = texturePosition[1];
+		raw[9] = textureID;
 		return (const void*)raw;
 	}
-
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -90,7 +105,7 @@ private:
 	// VBO ID.
 	unsigned int m_vBID;
 	// Data type used in this VAO.
-	GLenum m_BufferType;
+	GLenum m_bufferType;
 	
 public:
 

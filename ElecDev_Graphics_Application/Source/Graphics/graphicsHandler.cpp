@@ -24,9 +24,9 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 	// Test code.
 	//---------------------------------------------------------------------------------------
 
-	for (int i = 0; i <= 3; i++) 
+	for (int i = 0; i <= 0; i++) 
 	{
-		for (int k = 0; k <= 3; k++) 
+		for (int k = 0; k <= 0; k++) 
 		{
 			// Draw filled triangle example.
 			float ftPos1[2] = { -1.0f + i, -1.0f + k };
@@ -59,14 +59,20 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 			float ctPos3[2] = { 1.0f + i, -0.5f + k };
 			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 			m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
-				
-			// Render textures
-			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+
+			// Test textures.
+			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
+			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
+			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
+			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
 			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-			m_drawingEngine->m_texTrianglesVAO->writeData(verticesTex);
+			m_drawingEngine->m_textureTrianglesVAO->writeData(verticesTex);
+
+			// Test the text rendering.
+			float pos[2] = { 0.5f+i, 0.5f+k };
+			std::string text = "Testing-Font and Different_characters! ";
+			float colorText[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			m_drawingEngine->drawText(text, pos, colorText, 1);
 		}
 	}
 
