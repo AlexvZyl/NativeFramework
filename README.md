@@ -42,6 +42,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
 * ⬜ Type casts throwing warning.  Fix.
 * ⬜ Buffer sizes are currently static, change to dynamic.
+* ⬜ Using index buffers might improve performance.
 
 #### Raynhardt 
 *
