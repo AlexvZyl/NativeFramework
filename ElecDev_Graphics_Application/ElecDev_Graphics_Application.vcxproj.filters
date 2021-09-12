@@ -18,7 +18,6 @@
     <ClCompile Include="Source\mainApplication.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
-    <ClCompile Include="Source\Helper\stateMachine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.cpp" />
@@ -350,7 +349,7 @@
     <ClInclude Include="Source\External\Boost\Includes\bind\protect.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\std_placeholders.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\storage.hpp" />
-    <ClInclude Include="Source\Helper\stateMachine.h" />
+    <ClInclude Include="Source\stateMachine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.h" />
     <ClInclude Include="Source\External\GLAD\Includes\KHR\khrplatform.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.h" />

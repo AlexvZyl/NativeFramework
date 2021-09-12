@@ -20,7 +20,7 @@ The interactive engine (the one where elements can be drawn is handled in Design
 
 // Error handling.
 #include <ErrorHandler/errorHandler.h>
-#include "../Helper/stateMachine.h"
+#include "../stateMachine.h"
 
 // Buffers.
 #include "Peripherals/vertexArrayObject.h"
