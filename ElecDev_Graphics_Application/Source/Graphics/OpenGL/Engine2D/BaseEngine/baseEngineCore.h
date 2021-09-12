@@ -24,6 +24,7 @@ The interactive engine (the one where elements can be drawn is handled in Design
 
 // Buffers.
 #include "Peripherals/vertexArrayObject.h"
+#include "Peripherals/frameBufferObject.h"
 
 // Text rendering.
 #include "Peripherals/textRenderer.h"
@@ -81,12 +82,14 @@ public:
 	//  Buffers.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	
+	// Vertex arrays.
 	VertexArrayObject* m_linesVAO;				// Lines.
 	VertexArrayObject* m_trianglesVAO;			// Triangles.
 	VertexArrayObject* m_textureTrianglesVAO;	// Textured Triangles.
 	VertexArrayObject* m_textVAO;				// Handles text rendering.
 	VertexArrayObject* m_backgroundVAO;			// Background has a seperate VAO since it should not move.
+	// Frame Buffer rendering.
+	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.

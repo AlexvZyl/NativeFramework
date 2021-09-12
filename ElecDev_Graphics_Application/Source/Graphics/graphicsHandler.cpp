@@ -41,7 +41,7 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 			m_drawingEngine->drawQuadClear(cqCoords, 2, 2, cqColor);
 
 			// Draw filled quad.
-			float fqCoords[2] = { -1.0f + i, 1.0f + k };
+			float fqCoords[2] = { -0.5f + i, 0.5f + k };
 			float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
 			m_drawingEngine->drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
 

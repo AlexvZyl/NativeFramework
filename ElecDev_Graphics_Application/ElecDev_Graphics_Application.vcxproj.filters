@@ -26,6 +26,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\textures.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\frameBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GUI\guiHandler.h" />
@@ -405,6 +406,8 @@
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\tttypes.h" />
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\wofftypes.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\frameBufferObject.h" />
+    <ClInclude Include="Source\Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
@@ -413,7 +416,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
-    <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\staticShader.shader" />
+    <None Include="Source\Resources\Shaders\staticShader.shader" />
     <None Include="Source\External\glm\detail\func_common.inl" />
     <None Include="Source\External\glm\detail\func_common_simd.inl" />
     <None Include="Source\External\glm\detail\func_exponential.inl" />
@@ -550,26 +553,29 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
-    <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\basicShader.shader" />
+    <None Include="Source\Resources\Shaders\basicShader.shader" />
     <None Include="Source\External\GLEW\bin\glew32.dll" />
     <None Include="Source\External\GLEW\lib\glew32.dll" />
-    <None Include="Source\Graphics\OpenGL\ShaderHandler\Source\textureShader.shader" />
-    <None Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\arial.fnt" />
-    <None Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\candara.fnt" />
-    <None Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_Normal.fnt" />
-    <None Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_SDF.fnt" />
+    <None Include="Source\Resources\Shaders\textureShader.shader" />
+    <None Include="Source\Resources\Fonts\arial.fnt" />
+    <None Include="Source\Resources\Fonts\candara.fnt" />
+    <None Include="Source\Resources\Fonts\Arial_Normal.fnt" />
+    <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Source\GUI\Images\component.png" />
-    <Image Include="Source\GUI\Images\Draw_Circuit_Buckets.png" />
-    <Image Include="Source\GUI\Images\Draw_MCC.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit1.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\elephant.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\arial.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit2.jpg" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Textures\circuit3.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\candara.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_Normal.png" />
-    <Image Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_SDF.png" />
+    <Image Include="Source\Resources\Icons\component.png" />
+    <Image Include="Source\Resources\Icons\Draw_Circuit_Buckets.png" />
+    <Image Include="Source\Resources\Icons\Draw_MCC.png" />
+    <Image Include="Source\Resources\Textures\circuit1.png" />
+    <Image Include="Source\Resources\Textures\elephant.png" />
+    <Image Include="Source\Resources\Fonts\arial.png" />
+    <Image Include="Source\Resources\Textures\circuit2.jpg" />
+    <Image Include="Source\Resources\Textures\circuit3.png" />
+    <Image Include="Source\Resources\Fonts\candara.png" />
+    <Image Include="Source\Resources\Fonts\Arial_Normal.png" />
+    <Image Include="Source\Resources\Fonts\Arial_SDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Source\Resources\resourceHandler.rc" />
   </ItemGroup>
 </Project>

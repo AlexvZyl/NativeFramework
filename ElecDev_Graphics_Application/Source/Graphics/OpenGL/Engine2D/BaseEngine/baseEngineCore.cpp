@@ -17,15 +17,15 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	//---------------------------------------------------------------------------------------
 	 
 	// Create basic shader.
-	std::string basicShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\basicShader.shader";
+	std::string basicShaderPath = "Source\\Resources\\Shaders\\basicShader.shader";
 	std::cout << "[OPENGL][SHADERS] Compiling Basic Shader...\n";
 	m_basicShader = new Shader(basicShaderPath);
 	// Create static shader.
-	std::string staticShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\staticShader.shader";
+	std::string staticShaderPath = "Source\\Resources\\Shaders\\staticShader.shader";
 	std::cout << "[OPENGL][SHADERS] Compiling Static Shader...\n";
 	m_staticShader = new Shader(staticShaderPath);
 	// Create texture shader.
-	std::string textureShaderPath = "Source\\Graphics\\OpenGL\\ShaderHandler\\Source\\textureShader.shader";
+	std::string textureShaderPath = "Source\\Resources\\Shaders\\textureShader.shader";
 	std::cout << "[OPENGL][SHADERS] Compiling Texture Shader...\n";
 	m_textureShader = new Shader(textureShaderPath);
 	// Done.
@@ -68,7 +68,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int totVertices = 1000*1000*10;
+	int totVertices = 1000*1000*25;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
 	// Triangles.
@@ -77,6 +77,8 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices, true);
 	// Background.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
+	// Frame buffer.
+	m_frameBuffer = new FrameBufferObject();
 
 	//---------------------------------------------------------------------------------------
 	// Background setup.
@@ -103,9 +105,9 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	m_textAtlas = loadTexture("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.png", true);
+	m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
 	// Load texture for testing.
-	m_texture = loadTexture("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Textures\\circuit1.png");
+	m_texture = loadTexture("Source\\Resources\\Textures\\circuit1.png");
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
@@ -115,7 +117,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
 
 	// Create texture renderer object.
-	m_textRenderer = new TextRenderer("Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.fnt");
+	m_textRenderer = new TextRenderer("Source\\Resources\\Fonts\\Arial_SDF.fnt");
 
 	//---------------------------------------------------------------------------------------
 };
@@ -137,6 +139,8 @@ BaseEngineGL::~BaseEngineGL()
 	delete m_textureTrianglesVAO;
 	// Delete text renderer.
 	delete m_textRenderer;
+	// FBO
+	delete m_frameBuffer;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
