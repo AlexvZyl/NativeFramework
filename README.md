@@ -94,7 +94,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ⬜ GUI interface controls OpenGL engines.
   * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
 * ⬜ Interface with Excel:
-  * ⬜ Requires exe file that has resource files included.
+  * ⬜ Requires exe file that has resource files included (Use .rc files).
   * ⬜ Write byte encoder/decoder.
   * ⬜ Write thread handler from python side for non-pause interface.
 * ⬜ MCC Drawings:
