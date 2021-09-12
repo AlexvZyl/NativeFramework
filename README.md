@@ -88,6 +88,7 @@ This is the graphics application that is to be used with the ElecDev software.  
     * ✅ Filled triangles.
     * ✅ Text.
   * ✅ Mouse event handler.
+  * ⬜ Implement frame buffers.
 * ✅ Implement State Machine that controls the application.
 * ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
   * ✅ Incorporate Base Engine.
