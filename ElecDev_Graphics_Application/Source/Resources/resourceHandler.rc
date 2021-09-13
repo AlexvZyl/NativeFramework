@@ -38,10 +38,6 @@ END
 
 3 TEXTINCLUDE 
 BEGIN
-    "$(SolutionDir)ElecDev_Graphics_Application\\Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.fnt\r\n"
-    "$(SolutionDir)ElecDev_Graphics_Application\\Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.png\r\n"
-    "$(SolutionDir)ElecDev_Graphics_Application\\Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Shaders\r\n"
-    "\r\n"
     "\0"
 END
 
@@ -72,18 +68,4 @@ IDI_ICON1               ICON                    "Icons\\mainIcon.ico"
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-#ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 3 resource.
-//
-$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_SDF.fnt
-$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_SDF.png
-$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Shaders
-
-
-/////////////////////////////////////////////////////////////////////////////
-#endif    // not APSTUDIO_INVOKED
 
