@@ -44,6 +44,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Buffer sizes are currently static, change to dynamic.
 * ⬜ Using index buffers might improve performance.
 * ⬜ Use SDF (Signed Distance Fields) when rendering text.
+* ⬜ Move shader resource loading into ShaderHandler.
 
 #### Raynhardt 
 *
