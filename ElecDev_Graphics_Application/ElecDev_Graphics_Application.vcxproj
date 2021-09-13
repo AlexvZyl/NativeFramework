@@ -184,6 +184,7 @@
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
+    <ClCompile Include="Source\Resources\resourceHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Resources\resource.h" />
@@ -711,27 +712,18 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
-    <None Include="Source\Resources\Fonts\arial.fnt" />
-    <None Include="Source\Resources\Fonts\Arial_Normal.fnt" />
-    <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
-    <None Include="Source\Resources\Fonts\candara.fnt" />
-    <None Include="Source\Resources\Shaders\basicShader.shader" />
-    <None Include="Source\Resources\Shaders\staticShader.shader" />
-    <None Include="Source\Resources\Shaders\textureShader.shader" />
+    <None Include="Source\Resources\Fonts\Arial_SDF.txt" />
+    <None Include="Source\Resources\Shaders\basicShader.txt" />
+    <None Include="Source\Resources\Shaders\staticShader.txt" />
+    <None Include="Source\Resources\Shaders\textureShader.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icons\component.png" />
     <Image Include="Icons\Draw_Circuit_Buckets.png" />
     <Image Include="Icons\Draw_MCC.png" />
-    <Image Include="Source\Resources\Fonts\arial.png" />
-    <Image Include="Source\Resources\Fonts\Arial_Normal.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.png" />
-    <Image Include="Source\Resources\Fonts\candara.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
-    <Image Include="Source\Resources\Textures\circuit1.png" />
-    <Image Include="Source\Resources\Textures\circuit2.jpg" />
-    <Image Include="Source\Resources\Textures\circuit3.png" />
-    <Image Include="Source\Resources\Textures\elephant.png" />
+    <Image Include="Source\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Resources\Icons\component.png" />
     <Image Include="Source\Resources\Icons\Draw_Circuit_Buckets.png" />
     <Image Include="Source\Resources\Icons\Draw_MCC.png" />

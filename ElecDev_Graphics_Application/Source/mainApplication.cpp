@@ -16,7 +16,6 @@
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
 
-
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
 
@@ -60,17 +59,19 @@ static void glfw_error_callback(int error, const char* description)
 /* Mouse events callbacks.                                                                                                               */
 /*=======================================================================================================================================*/
 
-// Handle mouse press events ftom GLFW.
+// Handle mouse press events from GLFW.
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
     graphicsHandler->mousePressEvent(window, button, action, mods);
 }
 
-// Handle mouse press events ftom GLFW.
+// Handle mouse press events from GLFW.
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
     graphicsHandler->mouseMoveEvent(window, xpos, ypos);
 }
+
+// Handle mouse press scroll. from GLFW.
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
     graphicsHandler->mouseScrollEvent(window, xoffset, yoffset);

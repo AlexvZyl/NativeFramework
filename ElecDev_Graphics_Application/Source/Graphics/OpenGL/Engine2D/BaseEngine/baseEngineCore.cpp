@@ -2,7 +2,10 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Class include.
 #include "baseEngineCore.h"
+// Needed to load resources.
+#include "../../Resources/resource.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
@@ -15,19 +18,48 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	//---------------------------------------------------------------------------------------
 	// Setup shaders.
 	//---------------------------------------------------------------------------------------
-	 
+	
+	//---------------------------
 	// Create basic shader.
-	std::string basicShaderPath = "Source\\Resources\\Shaders\\basicShader.shader";
+	//---------------------------
+
 	std::cout << "[OPENGL][SHADERS] Compiling Basic Shader...\n";
-	m_basicShader = new Shader(basicShaderPath);
+	// Load resource from executable.
+	HRSRC basicShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(BASIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL basicResourceData = LoadResource(getCurrentModule(), basicShaderResource);
+	DWORD basicResourceSize = SizeofResource(getCurrentModule(), basicShaderResource);
+	char* basicResourceFinal = (char*)LockResource(basicResourceData);
+	std::string basicShaderSource;
+	basicShaderSource.assign(basicResourceFinal, basicResourceSize);
+	m_basicShader = new Shader(basicShaderSource);
+
+	//---------------------------
 	// Create static shader.
-	std::string staticShaderPath = "Source\\Resources\\Shaders\\staticShader.shader";
+	//---------------------------
+
 	std::cout << "[OPENGL][SHADERS] Compiling Static Shader...\n";
-	m_staticShader = new Shader(staticShaderPath);
+	// Load resource from executable.
+	HRSRC staticShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(STATIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL staticResourceData = LoadResource(getCurrentModule(), staticShaderResource);
+	DWORD staticResourceSize = SizeofResource(getCurrentModule(), staticShaderResource);
+	char* staticResourceFinal = (char*)LockResource(staticResourceData);
+	std::string staticShaderSource;
+	staticShaderSource.assign(staticResourceFinal, staticResourceSize);
+	m_staticShader = new Shader(staticShaderSource);
+
+	//---------------------------
 	// Create texture shader.
-	std::string textureShaderPath = "Source\\Resources\\Shaders\\textureShader.shader";
+	//---------------------------
+
 	std::cout << "[OPENGL][SHADERS] Compiling Texture Shader...\n";
-	m_textureShader = new Shader(textureShaderPath);
+	// Load resource from executable.
+	HRSRC textureShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(TEXTURE_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL textureResourceData = LoadResource(getCurrentModule(), textureShaderResource);
+	DWORD textureResourceSize = SizeofResource(getCurrentModule(), textureShaderResource);
+	char* textureResourceFinal = (char*)LockResource(textureResourceData);
+	std::string textureShaderSource;
+	textureShaderSource.assign(textureResourceFinal, textureResourceSize);
+	m_textureShader = new Shader(textureShaderSource);
 	// Done.
 	std::cout << "[OPENGL][SHADERS] Done.\n\n";
 
@@ -68,7 +100,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int totVertices = 1000*1000*25;
+	unsigned int totVertices = 1000*1000*25;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
 	// Triangles.
