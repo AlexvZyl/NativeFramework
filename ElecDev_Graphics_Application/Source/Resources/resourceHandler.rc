@@ -69,18 +69,6 @@ IDB_PNG3                PNG                     "Icons\\Draw_MCC.png"
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "Icons\\mainIcon.ico"
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Shader
-//
-
-IDR_SHADER1             Shader                  "Shaders\\basicShader.shader"
-
-IDR_SHADER2             Shader                  "Shaders\\staticShader.shader"
-
-IDR_SHADER3             Shader                  "Shaders\\textureShader.shader"
-
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
