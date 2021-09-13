@@ -39,11 +39,47 @@ END
 3 TEXTINCLUDE 
 BEGIN
     "$(SolutionDir)ElecDev_Graphics_Application\\Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.fnt\r\n"
+    "$(SolutionDir)ElecDev_Graphics_Application\\Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Fonts\\Arial_SDF.png\r\n"
+    "$(SolutionDir)ElecDev_Graphics_Application\\Source\\Graphics\\OpenGL\\Engine2D\\BaseEngine\\Resources\\Shaders\r\n"
     "\r\n"
     "\0"
 END
 
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_PNG1                PNG                     "Icons\\component.png"
+
+IDB_PNG2                PNG                     "Icons\\Draw_Circuit_Buckets.png"
+
+IDB_PNG3                PNG                     "Icons\\Draw_MCC.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "Icons\\mainIcon.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Shader
+//
+
+IDR_SHADER1             Shader                  "Shaders\\basicShader.shader"
+
+IDR_SHADER2             Shader                  "Shaders\\staticShader.shader"
+
+IDR_SHADER3             Shader                  "Shaders\\textureShader.shader"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
@@ -56,6 +92,8 @@ END
 // Generated from the TEXTINCLUDE 3 resource.
 //
 $(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_SDF.fnt
+$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Fonts\Arial_SDF.png
+$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL\Engine2D\BaseEngine\Resources\Shaders
 
 
 /////////////////////////////////////////////////////////////////////////////
