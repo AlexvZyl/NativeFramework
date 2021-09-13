@@ -7,9 +7,6 @@
 #define IDB_PNG3                        103
 #define IDI_ICON1                       107
 #define IDR_ACCELERATOR1                108
-#define IDR_SHADER1                     110
-#define IDR_SHADER2                     111
-#define IDR_SHADER3                     112
 
 // Next default values for new objects
 // 
