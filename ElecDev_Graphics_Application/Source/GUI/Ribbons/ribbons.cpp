@@ -1,4 +1,6 @@
-
+/*=======================================================================================================================================*/
+/* Includes                                                                                                                              */
+/*=======================================================================================================================================*/
 
 #include "ribbons.h"
 #include <Core/imgui.h>
@@ -11,13 +13,10 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
-#include "../Helper/stateMachine.h"
-
 
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
-
 
 // Constructor.
 Ribbons::Ribbons(stateMachine states) {
@@ -62,19 +61,19 @@ Ribbons::Ribbons(stateMachine states) {
     this->image1_width = 0;
     this->image1_height = 0;
     this->image1_texture = 0;
-    this->ret1 = this->LoadTextureFromFile("Source\\GUI\\Images\\Draw_MCC.png", &this->image1_texture, &this->image1_width, &this->image1_height);
+    this->ret1 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_MCC.png", &this->image1_texture, &this->image1_width, &this->image1_height);
     //IM_ASSERT(ret1);
 
     this->image2_width = 0;
     this->image2_height = 0;
     this->image2_texture = 0;
-    this->ret2 = this->LoadTextureFromFile("Source\\GUI\\Images\\component.png", &this->image2_texture, &this->image2_width, &this->image2_height);
+    this->ret2 = this->LoadTextureFromFile("Source\\Resources\\Icons\\component.png", &this->image2_texture, &this->image2_width, &this->image2_height);
     //IM_ASSERT(ret2);
 
     this->image3_width = 0;
     this->image3_height = 0;
     this->image3_texture = 0;
-    this->ret3 = this->LoadTextureFromFile("Source\\GUI\\Images\\Draw_Circuit_buckets.png", &this->image3_texture, &this->image3_width, &this->image3_height);
+    this->ret3 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_Circuit_buckets.png", &this->image3_texture, &this->image3_width, &this->image3_height);
     //IM_ASSERT(ret3);
 
     this->sideBarFlag = "";
@@ -340,6 +339,6 @@ bool Ribbons::LoadTextureFromFile(const char* filename, GLuint* out_texture, int
     return true;
 }
 
-
-
-
+/*=======================================================================================================================================*/
+/* EOF.                                                                                                                                  */
+/*=======================================================================================================================================*/

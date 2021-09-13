@@ -12,19 +12,18 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "Core/imgui.h"
 
 // Design engine.
-#include "OpenGL/Engine2D/DesignEngine/designEngine.h"
+#include "OpenGL/Engine2D/DesignEngine/designEngineCore.h"
 // Drawing engine.
-#include "OpenGL/Engine2D/BaseEngine/core.h"
+#include "OpenGL/Engine2D/BaseEngine/baseEngineCore.h"
 
 //  General.
 #include <string>
 
 // OpenGL
-#include <GLEW/Includes/GL/glew.h>
-//#include <glad/glad.h>
+#include <glad/glad.h>
 #include <ErrorHandler/errorHandler.h>
 #include "ShaderHandler/shaderHandler.h"
-#include "../Helper/stateMachine.h"
+#include "../stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Data structures

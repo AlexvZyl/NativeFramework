@@ -24,40 +24,56 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 	// Test code.
 	//---------------------------------------------------------------------------------------
 
-	for (int i = 0; i <= 1; i++) 
+	for (int i = 0; i <= 0; i++) 
 	{
-		// Draw clear triangle example.
-		float ctPos1[2] = { 1.0f+i, -1.0f+i };
-		float ctPos2[2] = { 1.5f+i, -1.0f+i };
-		float ctPos3[2] = { 1.5f+i, -0.5f+i };
-		float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-		m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
+		for (int k = 0; k <= 0; k++) 
+		{
+			// Draw filled triangle example.
+			float ftPos1[2] = { -1.0f + i, -1.0f + k };
+			float ftPos2[2] = { -1.0f + i, -0.5 + k };
+			float ftPos3[2] = { -1.5f + i, -1.0f + k };
+			float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
+			m_drawingEngine->drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
 
-		// Draw filled triangle example.
-		float ftPos1[2] = { -1.0f+i, -1.0f+i };
-		float ftPos2[2] = { -1.0f+i, -0.5+i };
-		float ftPos3[2] = { -1.5f+i, -1.0f+i };
-		float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
-		m_drawingEngine->drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
+			// Draw clear quad.
+			float cqCoords[2] = { 0.0f + i, 0.0f + k };
+			float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+			m_drawingEngine->drawQuadClear(cqCoords, 2, 2, cqColor);
 
-		// Draw clear quad.
-		float cqCoords[2] = { 0.0f+i, 0.0f+i };
-		float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-		m_drawingEngine->drawQuadClear(cqCoords, 2, 2, cqColor);
+			// Draw filled quad.
+			float fqCoords[2] = { -0.5f + i, 0.5f + k };
+			float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+			m_drawingEngine->drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
 
-		// Draw filled quad.
-		float fqCoords[2] = { -1.0f+i, 1.0f+i };
-		float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-		m_drawingEngine->drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
+			// Draw filed ciricle.
+			float coords1[2] = { 0.0f + i, 0.0f + k };
+			float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
+			m_drawingEngine->drawCircleFilled(coords1, 0.2, color);
+			// Draw clear ciricle.
+			float coords2[2] = { i, -0.75f + k };
+			m_drawingEngine->drawCircleClear(coords2, 0.2, color);
 
-		// Draw filed ciricle.
-		float coords1[2] = { 0.0f+i, 0.0f+i };
-		float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
-		m_drawingEngine->drawCircleFilled(coords1, 0.2, color);
-		// Draw clear ciricle.
-		float coords2[2] = { i, -0.75f+i };
-		m_drawingEngine->drawCircleClear(coords2, 0.2, color);
+			// Draw clear triangle example.
+			float ctPos1[2] = { 1.0f + i, -1.0f + k };
+			float ctPos2[2] = { 1.5f + i, -1.0f + k };
+			float ctPos3[2] = { 1.0f + i, -0.5f + k };
+			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+			m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
+			// Test textures.
+			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
+			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
+			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
+			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
+			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
+			m_drawingEngine->m_textureTrianglesVAO->writeData(verticesTex);
+
+			// Test the text rendering.
+			float pos[2] = { 0.5f+i, 0.5f+k };
+			std::string text = "Testing-Font and Different_characters! ";
+			float colorText[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			m_drawingEngine->drawText(text, pos, colorText, 1);
+		}
 	}
 
 	//---------------------------------------------------------------------------------------
