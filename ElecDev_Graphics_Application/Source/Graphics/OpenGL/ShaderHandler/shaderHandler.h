@@ -36,7 +36,7 @@ private:
     // Renderer ID.
     
     // Shader location.
-    std::string m_filePath;
+    std::string m_shaderSource;
     // Caching uniform variables.
     std::unordered_map<std::string, int> m_uniformLocationCache;
 
@@ -45,7 +45,7 @@ public:
     unsigned int m_rendererID;
 
     // Constructor that generates shaders.
-    Shader(std::string& filePath);
+    Shader(std::string& shaderSource);
     // Destructor.
     ~Shader();
 
