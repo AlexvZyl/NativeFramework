@@ -99,7 +99,7 @@ public:
 	//  Window events.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	void resizeEvent(GLFWwindow* window, int width, int height);
+	void resizeEvent(int width, int height);
 
 };
 

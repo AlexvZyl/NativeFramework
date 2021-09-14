@@ -99,6 +99,11 @@ GraphicsHandler::~GraphicsHandler()
 // [LOOP FUNCTION] Function that handles which engine should be active and is placed into the OpenGL loop.
 void GraphicsHandler::renderGraphics()
 {
+	// Check for resize event.
+	if (m_states->renderResizeEvent)
+	{
+		resizeEvent(m_states->);
+	}
 
 	//  Run engine that has been set as active.
 	if (m_activeEngine == Engines::BASE_ENGINE)
@@ -253,7 +258,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 //  Window event handler.
 //----------------------------------------------------------------------------------------------------------------------
 
-void GraphicsHandler::resizeEvent(GLFWwindow* window, int width, int height)
+void GraphicsHandler::resizeEvent(int width, int height)
 {
 	// Call resize on active engine.
 	if (m_activeEngine == Engines::BASE_ENGINE)

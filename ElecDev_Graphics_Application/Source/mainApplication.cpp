@@ -78,17 +78,6 @@ void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 }
 
 /*=======================================================================================================================================*/
-/* GLFW window events callbacks.                                                                                                         */
-/*=======================================================================================================================================*/
-
-// The GLFW window resize callback.
-void glfwResizeEvent(GLFWwindow* window, int width, int height)
-{
-    graphicsHandler->resizeEvent(window, width, height);
-
-}
-
-/*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
 /*=======================================================================================================================================*/
 
@@ -257,6 +246,9 @@ int main(int, char**)
         glClearColor(backGroundColor[0], backGroundColor[1], backGroundColor[2], 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Handle graphics (OpenGL engines: Drawing and Designing).
+        graphicsHandler->renderGraphics();
+
         // Feed inputs to ImGUI, start new frame.
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -265,9 +257,6 @@ int main(int, char**)
         //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, 0.0f);
         //ImGui::DockSpace(ImGui::GetMainViewport);
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode| ImGuiDockNodeFlags_PassthruCentralNode);
-
-        // Handle graphics (OpenGL engines: Drawing and Designing).
-        graphicsHandler->renderGraphics();
 
         //Render ImGUI components.
         guiHandler.renderGraphics();
