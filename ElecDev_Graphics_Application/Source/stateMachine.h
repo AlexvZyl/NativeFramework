@@ -8,5 +8,6 @@ struct stateMachine
 	bool renderWindowHovered;
 	bool renderResizeEvent;
 	ImVec2 renderWindowMouseCoordinate;
+	ImVec2 renderWindowSize;
 
 };
