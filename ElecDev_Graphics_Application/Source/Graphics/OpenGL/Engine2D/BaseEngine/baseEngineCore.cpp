@@ -137,19 +137,20 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
+	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
+	m_textAtlas = loadBMPtoGL(LoadBitmap(getCurrentModule(), MAKEINTRESOURCE(ARIAL_SDF_BMP)));
 	// Load texture for testing.
-	m_texture = loadTexture("Source\\Resources\\Textures\\circuit1.png");
+	//m_texture = loadTexture("Source\\Resources\\Textures\\circuit1.png");
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
 	GLCall(glBindTextureUnit(1, m_textAtlas));	// Text Atlas.
-	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
+	//GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
 
 	// Create texture renderer object.
-	m_textRenderer = new TextRenderer("Source\\Resources\\Fonts\\Arial_SDF.fnt");
+	m_textRenderer = new TextRenderer();
 
 	//---------------------------------------------------------------------------------------
 };
@@ -181,6 +182,9 @@ BaseEngineGL::~BaseEngineGL()
 
 void BaseEngineGL::renderLoop()
 {
+	// Render to frame buffer.
+	m_frameBuffer->bind();
+
 	//---------------------------------------------------------------------------------------
 	// Matrix calculations.
 	//---------------------------------------------------------------------------------------
@@ -208,6 +212,15 @@ void BaseEngineGL::renderLoop()
 	m_textureTrianglesVAO->render();
 
 	//---------------------------------------------------------------------------------------
+
+	// Do not continue rendering to a frame buffer.
+	m_frameBuffer->unbind();
+}
+
+// Return the ID to the texture that is rendered via the FBO.
+unsigned int BaseEngineGL::getRenderedTexID() 
+{
+	return m_frameBuffer->getTexID();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

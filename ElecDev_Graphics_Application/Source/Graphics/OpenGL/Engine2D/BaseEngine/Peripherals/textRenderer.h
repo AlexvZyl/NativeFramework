@@ -56,7 +56,7 @@ private:
 public:
 
 	// Constructor.  Load the .fnt file and reads it.
-	TextRenderer(const char* filePath);
+	TextRenderer();
 	// Destructor.
 	~TextRenderer();
 

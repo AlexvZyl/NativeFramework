@@ -19,11 +19,18 @@ It is going to be used to render to an ImGUI widget.
 
 class FrameBufferObject 
 {
+	// Details regarding the FBO.
+	struct FrameBufferSpecification 
+	{
+		
+	};
 
 private:
 
 	// FBO id.
 	unsigned int m_rendererID;
+	// Texture ID.
+	unsigned int m_textureID;
 
 public:
 
@@ -34,6 +41,13 @@ public:
 	
 	// Bind the FBO.
 	void bind();
+	// Unbind the FBO.
+	void unbind();
+	// G>et the texture ID.
+	unsigned int getTexID();
+
+	// Resizing the texure when the window resizes.
+	void resize();
 
 };
 

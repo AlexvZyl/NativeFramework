@@ -1687,6 +1687,7 @@
     <Image Include="Source\Resources\Icons\mainIcon.ico">
       <Filter>Source</Filter>
     </Image>
+    <Image Include="Source\Resources\Fonts\Arial_SDF.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -18,7 +18,7 @@ TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.txt"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 COMPONENT_PNG					PNG							"Icons\\component.png"
-DRAW_CIRCUIT_BUCKETS PNG		PNG							"Icons\\Draw_Circuit_Buckets.png"
+DRAW_CIRCUIT_BUCKETS_PNG		PNG							"Icons\\Draw_Circuit_Buckets.png"
 DRAW_MCC_PNG					PNG							"Icons\\Draw_MCC.png"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Textures.
@@ -27,6 +27,7 @@ CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
 // OpenGL Fonts. 
 ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.txt"
 ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF.png"
+ARIAL_SDF_BMP					BMP							"Fonts\\Arial_SDF.bmp"
 //-------------------------------------------------------------------------------------------------
 
 /*=======================================================================================================================================*/
