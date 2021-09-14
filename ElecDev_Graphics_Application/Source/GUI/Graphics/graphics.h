@@ -20,7 +20,7 @@ public:
 
 	//Variables
 	stateMachine* states;
-	unsigned int textureID;
+	ImVec2 pos;
 	GraphicsHandler* graphicsHandler;
 
 	//Constructor

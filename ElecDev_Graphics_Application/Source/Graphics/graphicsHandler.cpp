@@ -174,11 +174,6 @@ void GraphicsHandler::closeActiveEngine()
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {	
-
-	if (this->m_states->renderWindowHovered) {
-		std::cout << this->m_states->renderWindowMouseCoordinate.x << " : " << this->m_states->renderWindowMouseCoordinate.y << std::endl;
-	}
-
 	// Check if not above ImGUI element.
 	if (!ImGui::GetIO().WantCaptureMouse)
 	{

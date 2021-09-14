@@ -20,6 +20,8 @@ Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler) {
 
 	this->states = states;
 	this->graphicsHandler = graphicsHandler;
+	this->pos.x = 0;
+	this->pos.y = 0;
 
 }
 
@@ -29,13 +31,22 @@ void Graphics::renderGraphics() {
 	ImGui::Begin("Render Window");
 	{
 		// Using a Child allow to fill all the space of the window.
-		// It also alows customization
+		// It also allows customization
 		ImGui::BeginChild("Render");
 		this->states->renderWindowHovered = ImGui::IsWindowHovered();
 		ImVec2 temp = ImGui::GetIO().MousePos;
 		temp.x -= ImGui::GetWindowPos().x;
 		temp.y -= ImGui::GetWindowPos().y;
 		this->states->renderWindowMouseCoordinate = temp;
+
+		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
+			std::cout << "Resized" << std::endl;
+			states->renderResizeEvent = true;
+		}
+		pos.x = ImGui::GetWindowSize().x;
+		pos.y = ImGui::GetWindowSize().y;
+
+
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		ImVec2 wsize = ImGui::GetWindowSize();
 		// Because I use the texture from OpenGL, I need to invert the V from the UV.
