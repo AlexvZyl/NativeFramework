@@ -263,8 +263,16 @@ int main(int, char**)
         ImGui::NewFrame();
         
         //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, 0.0f);
-        //ImGui::DockSpace(ImGui::GetMainViewport);
-        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode| ImGuiDockNodeFlags_PassthruCentralNode);
+
+        ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode;
+
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+        ImVec2 work_size = viewport->WorkSize;
+
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, work_size, dockspace_flags);
+        //ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode| ImGuiDockNodeFlags_PassthruCentralNode);
 
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();

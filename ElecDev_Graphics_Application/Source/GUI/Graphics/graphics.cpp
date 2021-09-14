@@ -42,8 +42,8 @@ void Graphics::renderGraphics() {
 		this->states->renderWindowMouseCoordinate = temp;
 
 		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
-			std::cout << "Resized" << std::endl;
 			states->renderResizeEvent = true;
+			states->renderWindowSize = ImGui::GetWindowSize();
 		}
 		pos.x = ImGui::GetWindowSize().x;
 		pos.y = ImGui::GetWindowSize().y;
