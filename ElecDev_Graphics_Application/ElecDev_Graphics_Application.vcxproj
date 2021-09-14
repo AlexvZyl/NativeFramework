@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\frameBufferObject.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Source\mainApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\GUI\Graphics\graphics.h" />
     <ClInclude Include="Source\Resources\resource.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />

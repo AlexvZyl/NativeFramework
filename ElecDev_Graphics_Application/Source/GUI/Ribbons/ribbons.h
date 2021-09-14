@@ -75,6 +75,8 @@ public:
 	std::string sideBarFlag;
 
 	stateMachine states;
+	ImVec2 MCCPos;
+
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.

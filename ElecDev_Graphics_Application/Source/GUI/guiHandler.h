@@ -12,6 +12,7 @@
 
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
+#include "Graphics/graphics.h"
 #include "../stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -30,10 +31,13 @@ public:
 
 	stateMachineGraphics statesG;
 
-	GraphicsHandler* graphics;
+	GraphicsHandler* graphicsHandle;
+
+	unsigned int textureID;
 
 	Toolbar toolbar = Toolbar(states);
 	Ribbons ribbons = Ribbons(states);
+	Graphics graphics = Graphics(states, textureID);
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.

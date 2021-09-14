@@ -91,13 +91,23 @@ void Ribbons::renderRibbons()
 bool Ribbons::topBar() {
 
     // Menu
-    ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
+    
     bool* p_open = NULL;
     ImGui::SetNextWindowBgAlpha(1);
-    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
     
-    ImGui::SetWindowSize(ImVec2(mainWindow.x+1,70));
-    ImGui::SetWindowPos(ImVec2(-1, 18));
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+    
+    
+    
+    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);
+    
+
+    ImGui::SetWindowSize(ImVec2(work_size.x,70));
+    ImGui::SetWindowPos(work_pos);
 
     //Create Image Buttons
     if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30))) {\
@@ -159,17 +169,18 @@ bool Ribbons::sideBar() {
 
 bool Ribbons::MCC() {
     bool close = true;
-    ImGui::Begin("Drawing MCC", &close, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
+
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+
+    ImGui::Begin("Drawing MCC", &close, ImGuiWindowFlags_NoResize);
     if (!close)
     {
         this->sideBarFlag = "None";
     }
-    if (this->states.toolsExpanded) {
-        ImGui::SetWindowPos(ImVec2(0, 90));
-    }
-    else {
-        ImGui::SetWindowPos(ImVec2(0, 40));
-    }
+
+    ImGui::SetWindowPos(ImVec2(work_pos.x, work_pos.y + 70), ImGuiCond_FirstUseEver);
 
     ImGui::Button("New MCC");
 

@@ -68,7 +68,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	int totVertices = 1000*1000*25;
+	unsigned int totVertices = 1000*1000*25;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
 	// Triangles.
