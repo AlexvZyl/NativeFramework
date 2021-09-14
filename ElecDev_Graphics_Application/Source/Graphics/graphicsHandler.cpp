@@ -22,15 +22,15 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachine* states)
 	//---------------------------------------------------------------------------------------
 
 	// Base engine.
-	m_drawingEngine = new BaseEngineGL(m_window);
+	m_drawingEngine = new BaseEngineGL(m_window, m_states);
 
 	//---------------------------------------------------------------------------------------
 	// Test code.
 	//---------------------------------------------------------------------------------------
 
-	for (int i = 0; i <= 0; i++) 
+	for (int i = 0; i <= 1*3; i+=3) 
 	{
-		for (int k = 0; k <= 0; k++) 
+		for (int k = 0; k <= 1*3; k+=3) 
 		{
 			// Draw filled triangle example.
 			float ftPos1[2] = { -1.0f + i, -1.0f + k };
@@ -103,10 +103,10 @@ GraphicsHandler::~GraphicsHandler()
 // [LOOP FUNCTION] Function that handles which engine should be active and is placed into the OpenGL loop.
 void GraphicsHandler::renderGraphics()
 {
-	// Check for resize event.
+	// Check for ImGUI viewport resize event.
 	if (m_states->renderResizeEvent)
 	{
-		resizeEvent(m_states->renderWindowSize.x, m_states->renderWindowSize.y);
+		resizeEventImGUI(m_states->renderWindowSize.x, m_states->renderWindowSize.y);
 	}
 
 	//  Run engine that has been set as active.
@@ -262,12 +262,13 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 //  Window event handler.
 //----------------------------------------------------------------------------------------------------------------------
 
-void GraphicsHandler::resizeEvent(int width, int height)
+// Resize event for the ImGui window.
+void GraphicsHandler::resizeEventImGUI(int width, int height)
 {
 	// Call resize on active engine.
 	if (m_activeEngine == Engines::BASE_ENGINE)
 	{
-		m_drawingEngine->resizeEvent(width, height);
+		m_drawingEngine->resizeEventImGUI(width, height);
 	}
 	else 
 	{

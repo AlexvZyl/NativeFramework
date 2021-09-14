@@ -26,7 +26,6 @@ CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
 ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.fnt"
-//ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF.png"
 ARIAL_SDF_BMP					RCDATA						"Fonts\\Arial_SDF.bmp"
 //-------------------------------------------------------------------------------------------------
 

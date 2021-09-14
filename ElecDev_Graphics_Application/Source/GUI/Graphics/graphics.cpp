@@ -39,8 +39,6 @@ void Graphics::renderGraphics() {
 		temp.y -= ImGui::GetWindowPos().y;
 		this->states->renderWindowMouseCoordinate = temp;
 
-		
-
 		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
 			states->renderResizeEvent = true;
 			states->renderWindowSize = ImGui::GetWindowSize();

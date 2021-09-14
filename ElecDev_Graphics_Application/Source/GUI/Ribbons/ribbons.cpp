@@ -57,23 +57,23 @@ Ribbons::Ribbons(stateMachine states) {
 
     this->drawToggle = false;
 
-    ////Load textures
-    //this->image1_width = 0;
-    //this->image1_height = 0;
-    //this->image1_texture = 0;
-    //this->ret1 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_MCC.png", &this->image1_texture, &this->image1_width, &this->image1_height);
-    ////IM_ASSERT(ret1);
+    //Load textures
+    this->image1_width = 0;
+    this->image1_height = 0;
+    this->image1_texture = 0;
+    this->ret1 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_MCC.png", &this->image1_texture, &this->image1_width, &this->image1_height);
+    //IM_ASSERT(ret1);
 
-    //this->image2_width = 0;
-    //this->image2_height = 0;
-    //this->image2_texture = 0;
-    //this->ret2 = this->LoadTextureFromFile("Source\\Resources\\Icons\\component.png", &this->image2_texture, &this->image2_width, &this->image2_height);
-    ////IM_ASSERT(ret2);
+    this->image2_width = 0;
+    this->image2_height = 0;
+    this->image2_texture = 0;
+    this->ret2 = this->LoadTextureFromFile("Source\\Resources\\Icons\\component.png", &this->image2_texture, &this->image2_width, &this->image2_height);
+    //IM_ASSERT(ret2);
 
-    //this->image3_width = 0;
-    //this->image3_height = 0;
-    //this->image3_texture = 0;
-    //this->ret3 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_Circuit_buckets.png", &this->image3_texture, &this->image3_width, &this->image3_height);
+    this->image3_width = 0;
+    this->image3_height = 0;
+    this->image3_texture = 0;
+    this->ret3 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_Circuit_buckets.png", &this->image3_texture, &this->image3_width, &this->image3_height);
     //IM_ASSERT(ret3);
 
     this->sideBarFlag = "";
@@ -184,15 +184,13 @@ bool Ribbons::MCC() {
 
     ImGui::Button("New MCC");
 
-    ImGui::Text("---------------------");
+    ImGui::Separator();
 
     ImGui::Button("Redraw MCC"); 
 
-    ImGui::Text("---------------------");
+    ImGui::Separator();
 
     ImGui::Button("Draw in AutoCAD"); 
-
-    ImGui::Text("---------------------");
 
     ImGui::End();
 
@@ -219,21 +217,21 @@ bool Ribbons::blockDiagram() {
     ImGui::Button("Recenter"); ImGui::SameLine();
     ImGui::Button("Generate Dataframe");
 
-    ImGui::Text("------------------------------------");
+    ImGui::Separator();
 
     ImGui::Text("Circuit:");
     ImGui::Button("Remove Component"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
     ImGui::Button("Remove All");
 
-    ImGui::Text("------------------------------------");
+    ImGui::Separator();
 
     ImGui::Text("Component Removal:");
     ImGui::Button("New Cable"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
     ImGui::Button("Undo");
 
-    ImGui::Text("------------------------------------");
+    ImGui::Separator();
 
     ImGui::Text("Component Generation:");
     ImGui::Text("Component Name:"); ImGui::SameLine();
@@ -259,8 +257,6 @@ bool Ribbons::blockDiagram() {
     ImGui::Button("New Cable"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
     ImGui::Button("Undo");
-
-    ImGui::Text("------------------------------------");
 
     ImGui::End();
 

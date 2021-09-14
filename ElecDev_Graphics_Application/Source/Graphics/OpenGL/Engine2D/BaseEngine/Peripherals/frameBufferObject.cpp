@@ -71,15 +71,18 @@ unsigned int FrameBufferObject::getTexID()
 // Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height) 
 {
+	bind();
+	// Delete texture.
+	GLCall(glDeleteTextures(1, &m_textureID));
 	// Generate a texture for the frame buffer.
 	GLCall(glGenTextures(1, &m_textureID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-
 	// Attach texture to the frame buffer.
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureID, 0));
+	unbind();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -12,8 +12,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // With GLFW window.
-BaseEngineGL::BaseEngineGL(GLFWwindow* window)
-	:m_window(window)
+BaseEngineGL::BaseEngineGL(GLFWwindow* window, stateMachine* states)
+	:m_window(window), m_states(states)
 {
 	//---------------------------------------------------------------------------------------
 	// Setup shaders.
@@ -64,22 +64,31 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	std::cout << "[OPENGL][SHADERS] Done.\n\n";
 
 	//---------------------------------------------------------------------------------------
+	// Windows setup.
+	//---------------------------------------------------------------------------------------
+
+	// GLFW viewport.
+	int viewportGLFW[2];
+	glfwGetWindowSize(m_window, &viewportGLFW[0], &viewportGLFW[1]);
+	m_glfwViewportDimensions[0] = viewportGLFW[0];
+	m_glfwViewportDimensions[1] = viewportGLFW[1];
+
+	// ImGUI viewport.
+	int viewportImGUI[2] = {500,500};
+	m_imGuiViewportDimensions[0] = viewportImGUI[0];
+	m_imGuiViewportDimensions[1] = viewportImGUI[1];
+
+	//---------------------------------------------------------------------------------------
 	// Matrices setup.
 	//---------------------------------------------------------------------------------------
 
-	// Find the viewpwort dimensions and store it.
-	int viewport[2];
-	glfwGetWindowSize(m_window, &viewport[0], &viewport[1]);
-	// Store the value to use when viewport changes.
-	m_viewportDimensions[0] = viewport[0];
-	m_viewportDimensions[1] = viewport[1];
-
 	// Find the minimum value of the viewport dimensions.
 	int minValue;
-	if (viewport[0] < viewport[1]) { minValue = viewport[0]; }
-	else { minValue = viewport[1]; }
-	// Scale the projection values according to the viewport aspect ratio.
-	float projValuesTemp[6] = { (float)-viewport[0] / minValue, (float)viewport[0] / minValue, (float)-viewport[1] / minValue, (float)viewport[1] / minValue,-1.0, 1.0 };
+	if (viewportGLFW[0] < viewportImGUI[1]) { minValue = viewportImGUI[0]; }
+	else { minValue = viewportImGUI[1]; }
+	// Scale the projection values according to the ImGUI viewport.
+	float projValuesTemp[6] = { (float)-viewportImGUI[0] / minValue, (float)viewportImGUI[0] / minValue, (float)-viewportImGUI[1] / minValue, (float)viewportImGUI[1] / minValue,-1.0, 1.0 };
+
 	// Save projection values to be used with resizing of the window.
 	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
 	// Create projection matrix.
@@ -100,7 +109,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	unsigned int totVertices = 1000;
+	unsigned int totVertices = 1000*1000;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
 	// Triangles.
@@ -110,7 +119,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Background.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
 	// Frame buffer.
-	m_frameBuffer = new FrameBufferObject(m_viewportDimensions[0], m_viewportDimensions[1]);
+	m_frameBuffer = new FrameBufferObject(m_imGuiViewportDimensions[0], m_imGuiViewportDimensions[1]);
 
 	//---------------------------------------------------------------------------------------
 	// Background setup.
@@ -137,10 +146,10 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	//m_textAtlas = loadBMPtoGL(ARIAL_SDF_BMP);
-
+	m_textAtlas = loadBMPtoGL(ARIAL_SDF_BMP);
+	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
+	
 	// Load texture for testing.
-	m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
 	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
 
 	// Setup shader with textures (including font atlas).
@@ -183,6 +192,9 @@ BaseEngineGL::~BaseEngineGL()
 
 void BaseEngineGL::renderLoop()
 {
+	// Set glViewport for the ImGUI context.
+	GLCall(glViewport(0, 0, m_imGuiViewportDimensions[0], m_imGuiViewportDimensions[1]));
+
 	// Render to frame buffer.
 	m_frameBuffer->bind();
 
@@ -216,6 +228,9 @@ void BaseEngineGL::renderLoop()
 
 	// Do not continue rendering to a frame buffer.
 	m_frameBuffer->unbind();
+
+	// Set glViewport for the GLFW. context.
+	GLCall(glViewport(0, 0, m_glfwViewportDimensions[0], m_glfwViewportDimensions[1]));
 }
 
 // Return the ID to the texture that is rendered via the FBO.
@@ -234,8 +249,7 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 	// The coordinates on the screen.
 	double screenCoords[2];  
 	// Find the viewpwort dimensions.
-	int viewport[2];
-	glfwGetWindowSize(m_window, &viewport[0], &viewport[1]);
+	int viewport[2] = {m_states->renderWindowSize.x, m_states->renderWindowSize.y};
 	// Account for pixel offset.
 	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
@@ -259,14 +273,13 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 //  Window functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Function that handles engine resizing.
-// Viewport changes are made in the main Applicatioon since it affects everything.
-void BaseEngineGL::resizeEvent(int width, int height)
+// Function that handles the resizing of the ImGUI docked window.
+void BaseEngineGL::resizeEventImGUI(int width, int height)
 {
 	// Calculate the value of the scaling.
-	double scalingFactor[2] = { (double)width / (double)m_viewportDimensions[0], (double)height / (double)m_viewportDimensions[1] };
-	m_viewportDimensions[0] = width;
-	m_viewportDimensions[1] = height;
+	double scalingFactor[2] = { (double)width / (double)m_imGuiViewportDimensions[0], (double)height / (double)m_imGuiViewportDimensions[1] };
+	m_imGuiViewportDimensions[0] = width;
+	m_imGuiViewportDimensions[1] = height;
 		
 	// Scale projection values.
 	m_projectionValues[0] *= scalingFactor[0];
@@ -286,7 +299,7 @@ void BaseEngineGL::resizeEvent(int width, int height)
 		// Create new projection matrix.
 		m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
 		// Scale the drawing so that it stays the same size relative to the viewport.
-		m_projectionMatrix = glm::scale(m_projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
+		//m_projectionMatrix = glm::scale(m_projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
 	}
 
 	// Apply changes to shaders.
@@ -295,8 +308,15 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	m_textureShader->bind();
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
 
-	// Resize the FBO.
-	//m_frameBuffer->resize(width, height);
+	// Resize FBO texture.
+	m_frameBuffer->resize(width, height);
+	// Reset bool.
+	m_states->renderResizeEvent = false;
+
+	// Change viewport dimmensions.
+	m_imGuiViewportDimensions[0] = width;
+	m_imGuiViewportDimensions[1] = height;
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
