@@ -17,7 +17,11 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachine* states)
 	: m_window(window), m_states(states)
 {
+	//---------------------------------------------------------------------------------------
 	// Create engines.
+	//---------------------------------------------------------------------------------------
+
+	// Base engine.
 	m_drawingEngine = new BaseEngineGL(m_window);
 
 	//---------------------------------------------------------------------------------------
@@ -102,7 +106,7 @@ void GraphicsHandler::renderGraphics()
 	// Check for resize event.
 	if (m_states->renderResizeEvent)
 	{
-		resizeEvent(m_states->);
+		resizeEvent(m_states->renderWindowSize.x, m_states->renderWindowSize.y);
 	}
 
 	//  Run engine that has been set as active.

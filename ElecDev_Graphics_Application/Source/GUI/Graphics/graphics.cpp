@@ -20,12 +20,9 @@
 Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
 	: states(states), graphicsHandler(graphicsHandler) 
 {
-
 	this->pos.x = 0;
 	this->pos.y = 0;
-
 }
-
 
 // Render the graphics scene.
 void Graphics::renderGraphics() {
@@ -47,7 +44,6 @@ void Graphics::renderGraphics() {
 		}
 		pos.x = ImGui::GetWindowSize().x;
 		pos.y = ImGui::GetWindowSize().y;
-
 
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		ImVec2 wsize = ImGui::GetWindowSize();

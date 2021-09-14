@@ -127,9 +127,6 @@ int main(int, char**)
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync.
 
-    // Set window resize callback function.
-    glfwSetWindowSizeCallback(window, glfwResizeEvent);
-
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Initialize OpenGL loader.
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -222,13 +219,6 @@ int main(int, char**)
     // Create GUI handler object.
     GUIHandler guiHandler(states, graphicsHandler);
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // Other setups.
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-    // Set background color.
-    float backGroundColor[] = { (float)0 / 255, (float)0 / 255, (float)0 / 255 };
-
     /*===================================================================================================================================*/
     /* Loop                                                                                                                              */
     /*===================================================================================================================================*/
@@ -243,7 +233,6 @@ int main(int, char**)
         //glfwWaitEvents();
         glfwPollEvents();
         // Init colors.
-        glClearColor(backGroundColor[0], backGroundColor[1], backGroundColor[2], 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Handle graphics (OpenGL engines: Drawing and Designing).
