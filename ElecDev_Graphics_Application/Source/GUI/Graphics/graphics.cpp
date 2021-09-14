@@ -29,6 +29,7 @@ void Graphics::renderGraphics() {
 
 	ImGui::Begin("Render Window");
 	{
+		ImGui::SetWindowSize(ImVec2(500, 500), ImGuiCond_Once);
 		// Using a Child allow to fill all the space of the window.
 		// It also allows customization
 		ImGui::BeginChild("Render");
@@ -37,6 +38,8 @@ void Graphics::renderGraphics() {
 		temp.x -= ImGui::GetWindowPos().x;
 		temp.y -= ImGui::GetWindowPos().y;
 		this->states->renderWindowMouseCoordinate = temp;
+
+		
 
 		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
 			states->renderResizeEvent = true;
