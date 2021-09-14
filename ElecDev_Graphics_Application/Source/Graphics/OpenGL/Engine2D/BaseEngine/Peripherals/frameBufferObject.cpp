@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor.
-FrameBufferObject::FrameBufferObject() 
+FrameBufferObject::FrameBufferObject(int width, int height) 
 {
 	// Generate the frame buffer.
 	GLCall(glGenFramebuffers(1, &m_rendererID));
@@ -19,7 +19,7 @@ FrameBufferObject::FrameBufferObject()
 	// Generate a texture for the frame buffer.
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -68,10 +68,18 @@ unsigned int FrameBufferObject::getTexID()
 	return m_textureID;
 }
 
-// Resizing for when the window changes size.
-void FrameBufferObject::resize() 
+// Resizing the texture for when the window changes size.
+void FrameBufferObject::resize(int width, int height) 
 {
+	// Generate a texture for the frame buffer.
+	glGenTextures(1, &m_textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	// Attach texture to the frame buffer.
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_textureID, 0);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

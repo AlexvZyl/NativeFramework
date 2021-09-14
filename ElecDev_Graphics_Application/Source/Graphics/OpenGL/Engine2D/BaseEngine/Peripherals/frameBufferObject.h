@@ -35,7 +35,7 @@ private:
 public:
 
 	// Constructor.
-	FrameBufferObject();
+	FrameBufferObject(int width, int height);
 	// Destructor.
 	~FrameBufferObject();
 	
@@ -47,7 +47,7 @@ public:
 	unsigned int getTexID();
 
 	// Resizing the texure when the window resizes.
-	void resize();
+	void resize(int width, int height);
 
 };
 

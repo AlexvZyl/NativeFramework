@@ -110,7 +110,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Background.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
 	// Frame buffer.
-	m_frameBuffer = new FrameBufferObject();
+	m_frameBuffer = new FrameBufferObject(m_viewportDimensions[0], m_viewportDimensions[1]);
 
 	//---------------------------------------------------------------------------------------
 	// Background setup.
@@ -293,6 +293,9 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
 	m_textureShader->bind();
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
+
+	// Resize the FBO.
+	m_frameBuffer->resize(width, height);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
