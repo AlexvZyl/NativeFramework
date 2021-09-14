@@ -41,7 +41,6 @@ GLuint BaseEngineGL::loadTexture(const std::string& path, bool alpha)
 	// Load texture with alpha channel.
 	else
 	{
-		int w, h;
 		auto* pixels = stbi_load(path.c_str(), &w, &h, &bits, STBI_rgb_alpha);
 		GLuint textureID;
 		GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
@@ -50,74 +49,54 @@ GLuint BaseEngineGL::loadTexture(const std::string& path, bool alpha)
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixels));
-		// Clear memory.
-		DeleteObject(pixels);
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
+		stbi_image_free(pixels);
 		return textureID;
 	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-GLuint BaseEngineGL::loadBMPtoGL(HBITMAP bitmap_handle)
+GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 {
-    const int BytesPerPixel = sizeof(DWORD);
-    HDC context = GetDC(NULL);
+	// Create windows bitmap.
+    HBITMAP hBmp = NULL;
+    hBmp = (HBITMAP) ::LoadImage(getCurrentModule(),
+        MAKEINTRESOURCE(ARIAL_SDF_BMP), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+    // Get info about the bitmap
+    BITMAP BM;
+    ::GetObject(hBmp, sizeof(BM), &BM);
 
-    SIZE bitmap_size;
-    if (!GetBitmapDimensionEx(bitmap_handle, &bitmap_size))
-        return 0;
-    size_t bitmap_buffer_size = bitmap_size.cx * bitmap_size.cy * BytesPerPixel;
-    void* bitmap_buffer;
-    bitmap_buffer = malloc(bitmap_buffer_size);
-    // Test if failed.
-    if (!bitmap_buffer)
-        return 0;
+	// Create texrure.
+	GLuint textureID;
+	GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
+	GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
 
-    BITMAPINFO bitmap_info;
-    memset(&bitmap_info, 0, sizeof(bitmap_info));
-    bitmap_info.bmiHeader.biSize = sizeof(bitmap_info.bmiHeader);
-    bitmap_info.bmiHeader.biWidth = bitmap_size.cx;
-    bitmap_info.bmiHeader.biHeight = bitmap_size.cy;
-    bitmap_info.bmiHeader.biPlanes = 1;
-    bitmap_info.bmiHeader.biBitCount = 8;
-    bitmap_info.bmiHeader.biCompression = BI_RGB;
+    // Tell OpenGL to ignore padding at ends of rows.
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	// Texture parameters.
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);   
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    // Check for failure.
-    if (!GetDIBits(context,
-                   bitmap_handle,
-                   0, bitmap_size.cy,
-                   bitmap_buffer,
-                   &bitmap_info,
-                   DIB_RGB_COLORS))
-    {
-        free(bitmap_buffer);
-        return 0;
-    }
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	//GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-    // Load into OpenGL.
-    GLuint texture_name;
-    glGenTextures(1, &texture_name);
-    glBindTexture(GL_TEXTURE_2D, texture_name);
-    glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-    glPixelStorei(GL_UNPACK_LSB_FIRST, GL_TRUE);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                 bitmap_size.cx, bitmap_size.cy, 0,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-                 bitmap_buffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-    // Clear memory.
-    free(bitmap_buffer);
-    // Return Texture ID.
-    return texture_name;
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BM.bmWidth, BM.bmHeight,
+        0, GL_RGB, GL_UNSIGNED_BYTE, BM.bmBits);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, BM.bmWidth, BM.bmHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, BM.bmBits);
+
+	// Clear memory.
+    DeleteObject((HGDIOBJ)hBmp);
+	// Return OpenGL texture ID.
+	return textureID;
 }
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

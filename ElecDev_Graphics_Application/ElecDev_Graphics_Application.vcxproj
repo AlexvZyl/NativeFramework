@@ -714,10 +714,10 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
-    <None Include="Source\Resources\Fonts\Arial_SDF.txt" />
-    <None Include="Source\Resources\Shaders\basicShader.txt" />
-    <None Include="Source\Resources\Shaders\staticShader.txt" />
-    <None Include="Source\Resources\Shaders\textureShader.txt" />
+    <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
+    <None Include="Source\Resources\Shaders\basicShader.shader" />
+    <None Include="Source\Resources\Shaders\staticShader.shader" />
+    <None Include="Source\Resources\Shaders\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icons\component.png" />

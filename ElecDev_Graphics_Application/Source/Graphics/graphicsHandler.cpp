@@ -61,17 +61,17 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachine* states)
 			m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
 			// Test textures.
-			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
+			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
+			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
+			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
 			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
 			m_drawingEngine->m_textureTrianglesVAO->writeData(verticesTex);
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f+i, 0.5f+k };
-			std::string text = "Testing-Font and Different_characters! ";
-			float colorText[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			std::string text = "Testing-Font and Different_characters. [!&>*?\\] ";
+			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 			m_drawingEngine->drawText(text, pos, colorText, 1);
 		}
 	}
@@ -174,18 +174,11 @@ void GraphicsHandler::closeActiveEngine()
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {	
-
-	if (this->m_states->renderWindowHovered) {
-		std::cout << this->m_states->renderWindowMouseCoordinate.x << " : " << this->m_states->renderWindowMouseCoordinate.y << std::endl;
-	}
-
 	// Check if not above ImGUI element.
-	if (!ImGui::GetIO().WantCaptureMouse)
+	if (m_states->renderWindowHovered)
 	{
 		// Find cursos position.
-		double mousePos[2];
-		glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
-
+		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
 		if (m_activeEngine == Engines::BASE_ENGINE)
 		{
 			// Check if left press.
@@ -213,10 +206,10 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
 	// Check if not above ImGUI element.
-	if (!ImGui::GetIO().WantCaptureMouse)
+	if (m_states->renderWindowHovered)
 	{
 		// Find cursos position.
-		double mousePos[2] = { xpos, ypos };
+		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
 		// Check button state.
 		int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 
@@ -238,11 +231,10 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset) 
 {	
 	// Check if not above ImGUI element.
-	if (!ImGui::GetIO().WantCaptureMouse) 
+	if (m_states->renderWindowHovered)
 	{
 		// Find cursos position.
-		double mousePos[2];
-		glfwGetCursorPos(window, &mousePos[0], &mousePos[1]);
+		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
 
 		// Call current active engine zoom function.
 		if (m_activeEngine == Engines::BASE_ENGINE) 

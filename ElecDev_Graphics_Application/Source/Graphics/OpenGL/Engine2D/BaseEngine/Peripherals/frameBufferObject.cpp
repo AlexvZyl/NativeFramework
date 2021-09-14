@@ -36,7 +36,8 @@ FrameBufferObject::FrameBufferObject(int width, int height)
 	// Check for failure.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "[OPEMGL][ERROR] Framebuffer is not complete!" << std::endl;
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 // Destructor.

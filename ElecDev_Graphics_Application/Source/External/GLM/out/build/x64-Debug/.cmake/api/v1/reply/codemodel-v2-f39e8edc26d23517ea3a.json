@@ -27,8 +27,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/User/Documents/Enerdyne/ElecDev_Graphics_Application/Source/External/GLM/out/build/x64-Debug",
-		"source" : "C:/Users/User/Documents/Enerdyne/ElecDev_Graphics_Application/Source/External/GLM"
+		"build" : "C:/Users/Alex/Desktop/Enerdyne/ElecDev_Graphics_Application/ElecDev_Graphics_Application/Source/External/GLM/out/build/x64-Debug",
+		"source" : "C:/Users/Alex/Desktop/Enerdyne/ElecDev_Graphics_Application/ElecDev_Graphics_Application/Source/External/GLM"
 	},
 	"version" : 
 	{

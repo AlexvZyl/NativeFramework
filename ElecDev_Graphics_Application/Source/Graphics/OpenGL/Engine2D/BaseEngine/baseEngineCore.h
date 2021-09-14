@@ -130,7 +130,7 @@ public:
 	TextRenderer* m_textRenderer;
 	// Functions.
 	GLuint loadTexture(const std::string& path, bool alpha=false);
-	GLuint loadBMPtoGL(HBITMAP bitmap_handle);
+	GLuint loadBMPtoGL(int bitmapID);
 	void renderLoop();
 	// Get the ID to the FBO rendered texture.
 	unsigned int getRenderedTexID();

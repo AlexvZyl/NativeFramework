@@ -12,9 +12,9 @@
 // Resource ID					Resource Type				Resource Path
 //-------------------------------------------------------------------------------------------------
 // Shaders.
-BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.txt"
-STATIC_SHADER					TEXTFILE					"Shaders\\staticShader.txt"
-TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.txt"
+BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
+STATIC_SHADER					TEXTFILE					"Shaders\\staticShader.shader"
+TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.shader"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 COMPONENT_PNG					PNG							"Icons\\component.png"
@@ -25,9 +25,9 @@ DRAW_MCC_PNG					PNG							"Icons\\Draw_MCC.png"
 CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
-ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.txt"
-ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF.png"
-ARIAL_SDF_BMP					BMP							"Fonts\\Arial_SDF.bmp"
+ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.fnt"
+//ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF.png"
+ARIAL_SDF_BMP					RCDATA						"Fonts\\Arial_SDF.bmp"
 //-------------------------------------------------------------------------------------------------
 
 /*=======================================================================================================================================*/

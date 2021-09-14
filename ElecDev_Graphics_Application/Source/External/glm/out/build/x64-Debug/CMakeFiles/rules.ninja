@@ -12,12 +12,6 @@
 # =============================================================================
 
 #############################################
-# localized /showIncludes string
-
-msvc_deps_prefix = Note: including file: 
-
-
-#############################################
 # Rule for running custom commands.
 
 rule CUSTOM_COMMAND
@@ -29,7 +23,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\User\Documents\Enerdyne\ElecDev_Graphics_Application\Source\External\GLM -BC:\Users\User\Documents\Enerdyne\ElecDev_Graphics_Application\Source\External\GLM\out\build\x64-Debug
+  command = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\External\GLM -BC:\Users\Alex\Desktop\Enerdyne\ElecDev_Graphics_Application\ElecDev_Graphics_Application\Source\External\GLM\out\build\x64-Debug
   description = Re-running CMake...
   generator = 1
 

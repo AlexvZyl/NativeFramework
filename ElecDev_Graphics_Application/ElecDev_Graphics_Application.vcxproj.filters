@@ -1231,13 +1231,13 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Resources\Fonts\Arial_SDF.txt">
+    <None Include="Source\Resources\Fonts\Arial_SDF.fnt">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\associated_min_max.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\basicShader.txt">
+    <None Include="Source\Resources\Shaders\basicShader.shader">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\bit.inl">
@@ -1546,7 +1546,7 @@
     <None Include="Source\External\glm\gtx\spline.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\staticShader.txt">
+    <None Include="Source\Resources\Shaders\staticShader.shader">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\std_based_type.inl">
@@ -1558,7 +1558,7 @@
     <None Include="Source\External\glm\gtx\texture.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\textureShader.txt">
+    <None Include="Source\Resources\Shaders\textureShader.shader">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\transform.inl">

@@ -16,14 +16,11 @@
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
 
-Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler) {
+// Constructor.
+Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
+	: states(states), graphicsHandler(graphicsHandler) {}
 
-	this->states = states;
-	this->graphicsHandler = graphicsHandler;
-
-}
-
-
+// Render the graphics scene.
 void Graphics::renderGraphics() {
 
 	ImGui::Begin("Render Window");
@@ -45,3 +42,7 @@ void Graphics::renderGraphics() {
 	ImGui::End();
 
 }
+
+/*=======================================================================================================================================*/
+/* EOF                                                                                                                                   */
+/*=======================================================================================================================================*/

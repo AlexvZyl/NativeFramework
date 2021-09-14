@@ -100,7 +100,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	unsigned int totVertices = 1000*1000*25;
+	unsigned int totVertices = 1000;
 	// Lines.
 	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
 	// Triangles.
@@ -137,17 +137,18 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
-	m_textAtlas = loadBMPtoGL(LoadBitmap(getCurrentModule(), MAKEINTRESOURCE(ARIAL_SDF_BMP)));
+	//m_textAtlas = loadBMPtoGL(ARIAL_SDF_BMP);
+
 	// Load texture for testing.
-	//m_texture = loadTexture("Source\\Resources\\Textures\\circuit1.png");
+	m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
+	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
 	GLCall(glBindTextureUnit(1, m_textAtlas));	// Text Atlas.
-	//GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
+	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
 
 	// Create texture renderer object.
 	m_textRenderer = new TextRenderer();
@@ -295,7 +296,7 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
 
 	// Resize the FBO.
-	m_frameBuffer->resize(width, height);
+	//m_frameBuffer->resize(width, height);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
