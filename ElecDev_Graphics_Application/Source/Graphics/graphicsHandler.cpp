@@ -14,7 +14,7 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //----------------------------------------------------------------------------------------------------------------------
 
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states)
+GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachine* states)
 	: m_window(window), m_states(states)
 {
 	// Create engines.

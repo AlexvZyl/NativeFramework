@@ -29,8 +29,6 @@ public:
 
 	stateMachine states;
 
-	stateMachineGraphics statesG;
-
 	GraphicsHandler* graphicsHandler;
 
 	unsigned int textureID;
@@ -44,7 +42,7 @@ public:
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHandler);
+	GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler);
 
 	// Function that handles which engine should be active.
 	void renderGraphics();

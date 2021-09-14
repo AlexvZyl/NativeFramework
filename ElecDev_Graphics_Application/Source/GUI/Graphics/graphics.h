@@ -19,12 +19,12 @@ class Graphics
 public:
 
 	//Variables
-	stateMachineGraphics* states;
+	stateMachine* states;
 	unsigned int textureID;
 	GraphicsHandler* graphicsHandler;
 
 	//Constructor
-	Graphics(stateMachineGraphics* states, GraphicsHandler* graphicsHandler);
+	Graphics(stateMachine* states, GraphicsHandler* graphicsHandler);
 
 	//Renderer
 	void renderGraphics();

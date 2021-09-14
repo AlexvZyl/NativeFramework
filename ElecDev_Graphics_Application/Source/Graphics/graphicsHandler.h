@@ -48,7 +48,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// State machine variable.
-	stateMachineGraphics* m_states;
+	stateMachine* m_states;
 
 	// Variable that holds the active engine.
 	Engines m_activeEngine;
@@ -65,7 +65,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Constructor with GLFW window.
-	GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states);
+	GraphicsHandler(GLFWwindow* window, stateMachine* states);
 	// Destructor.
 	~GraphicsHandler();
 

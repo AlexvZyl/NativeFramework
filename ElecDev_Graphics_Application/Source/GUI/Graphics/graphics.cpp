@@ -16,7 +16,7 @@
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
 
-Graphics::Graphics(stateMachineGraphics* states, GraphicsHandler* graphicsHandler) {
+Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler) {
 
 	this->states = states;
 	this->graphicsHandler = graphicsHandler;

@@ -9,20 +9,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor.
-GUIHandler::GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHandler)
+GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 {
     // Set the custom theme.
     setTheme();
  
-	this->statesG = *states;
+	this->states = *states;
 	this->states.toolsExpanded = false;
 	this->states.toolsMode = 0;
 	this->textureID = 0;
 
 	this->graphicsHandler = graphicsHandler;
-
-	this->states.toolsMode = 0;
-	this->states.toolsExpanded = 0;
 
 	this->toolbar = new Toolbar(this->states);
 	this->ribbons = new Ribbons(this->states);

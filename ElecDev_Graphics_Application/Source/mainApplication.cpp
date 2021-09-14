@@ -231,17 +231,17 @@ int main(int, char**)
     glEnable(GL_MULTISAMPLE);
 
     // Create the state machine variables.
-    stateMachineGraphics states;
-    states.gui = false;
-    states.mode = 0;
+    stateMachine* states = new stateMachine();
+    states->toolsExpanded = false;
+    states->toolsMode = 0;
 
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = new GraphicsHandler(window, &states);
+    graphicsHandler = new GraphicsHandler(window, states);
 
     // Create GUI handler object.
-    GUIHandler guiHandler(&states, graphicsHandler);
+    GUIHandler guiHandler(states, graphicsHandler);
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Other setups.
