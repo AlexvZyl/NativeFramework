@@ -47,7 +47,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Create a resource loader function.
 
 #### Raynhardt 
-*
+* ⬜ Multi View port
+* ⬜ Multi vieport docking
 
 ---
 
