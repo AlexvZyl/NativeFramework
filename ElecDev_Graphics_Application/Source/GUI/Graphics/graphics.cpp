@@ -31,6 +31,11 @@ void Graphics::renderGraphics() {
 		// Using a Child allow to fill all the space of the window.
 		// It also alows customization
 		ImGui::BeginChild("Render");
+		this->states->renderWindowHovered = ImGui::IsWindowHovered();
+		ImVec2 temp = ImGui::GetIO().MousePos;
+		temp.x -= ImGui::GetWindowPos().x;
+		temp.y -= ImGui::GetWindowPos().y;
+		this->states->renderWindowMouseCoordinate = temp;
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		ImVec2 wsize = ImGui::GetWindowSize();
 		// Because I use the texture from OpenGL, I need to invert the V from the UV.
