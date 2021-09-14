@@ -2,7 +2,10 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Class include.
 #include "baseEngineCore.h"
+// Needed to load resources.
+#include "../../Resources/resource.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
@@ -15,19 +18,48 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	//---------------------------------------------------------------------------------------
 	// Setup shaders.
 	//---------------------------------------------------------------------------------------
-	 
+	
+	//---------------------------
 	// Create basic shader.
-	std::string basicShaderPath = "Source\\Resources\\Shaders\\basicShader.shader";
+	//---------------------------
+
 	std::cout << "[OPENGL][SHADERS] Compiling Basic Shader...\n";
-	m_basicShader = new Shader(basicShaderPath);
+	// Load resource from executable.
+	HRSRC basicShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(BASIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL basicResourceData = LoadResource(getCurrentModule(), basicShaderResource);
+	DWORD basicResourceSize = SizeofResource(getCurrentModule(), basicShaderResource);
+	char* basicResourceFinal = (char*)LockResource(basicResourceData);
+	std::string basicShaderSource;
+	basicShaderSource.assign(basicResourceFinal, basicResourceSize);
+	m_basicShader = new Shader(basicShaderSource);
+
+	//---------------------------
 	// Create static shader.
-	std::string staticShaderPath = "Source\\Resources\\Shaders\\staticShader.shader";
+	//---------------------------
+
 	std::cout << "[OPENGL][SHADERS] Compiling Static Shader...\n";
-	m_staticShader = new Shader(staticShaderPath);
+	// Load resource from executable.
+	HRSRC staticShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(STATIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL staticResourceData = LoadResource(getCurrentModule(), staticShaderResource);
+	DWORD staticResourceSize = SizeofResource(getCurrentModule(), staticShaderResource);
+	char* staticResourceFinal = (char*)LockResource(staticResourceData);
+	std::string staticShaderSource;
+	staticShaderSource.assign(staticResourceFinal, staticResourceSize);
+	m_staticShader = new Shader(staticShaderSource);
+
+	//---------------------------
 	// Create texture shader.
-	std::string textureShaderPath = "Source\\Resources\\Shaders\\textureShader.shader";
+	//---------------------------
+
 	std::cout << "[OPENGL][SHADERS] Compiling Texture Shader...\n";
-	m_textureShader = new Shader(textureShaderPath);
+	// Load resource from executable.
+	HRSRC textureShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(TEXTURE_SHADER), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL textureResourceData = LoadResource(getCurrentModule(), textureShaderResource);
+	DWORD textureResourceSize = SizeofResource(getCurrentModule(), textureShaderResource);
+	char* textureResourceFinal = (char*)LockResource(textureResourceData);
+	std::string textureShaderSource;
+	textureShaderSource.assign(textureResourceFinal, textureResourceSize);
+	m_textureShader = new Shader(textureShaderSource);
 	// Done.
 	std::cout << "[OPENGL][SHADERS] Done.\n\n";
 
@@ -78,7 +110,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 	// Background.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
 	// Frame buffer.
-	m_frameBuffer = new FrameBufferObject();
+	m_frameBuffer = new FrameBufferObject(m_viewportDimensions[0], m_viewportDimensions[1]);
 
 	//---------------------------------------------------------------------------------------
 	// Background setup.
@@ -105,19 +137,20 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
+	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
+	m_textAtlas = loadBMPtoGL(LoadBitmap(getCurrentModule(), MAKEINTRESOURCE(ARIAL_SDF_BMP)));
 	// Load texture for testing.
-	m_texture = loadTexture("Source\\Resources\\Textures\\circuit1.png");
+	//m_texture = loadTexture("Source\\Resources\\Textures\\circuit1.png");
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
 	GLCall(glBindTextureUnit(1, m_textAtlas));	// Text Atlas.
-	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
+	//GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
 
 	// Create texture renderer object.
-	m_textRenderer = new TextRenderer("Source\\Resources\\Fonts\\Arial_SDF.fnt");
+	m_textRenderer = new TextRenderer();
 
 	//---------------------------------------------------------------------------------------
 };
@@ -149,6 +182,9 @@ BaseEngineGL::~BaseEngineGL()
 
 void BaseEngineGL::renderLoop()
 {
+	// Render to frame buffer.
+	m_frameBuffer->bind();
+
 	//---------------------------------------------------------------------------------------
 	// Matrix calculations.
 	//---------------------------------------------------------------------------------------
@@ -176,6 +212,15 @@ void BaseEngineGL::renderLoop()
 	m_textureTrianglesVAO->render();
 
 	//---------------------------------------------------------------------------------------
+
+	// Do not continue rendering to a frame buffer.
+	m_frameBuffer->unbind();
+}
+
+// Return the ID to the texture that is rendered via the FBO.
+unsigned int BaseEngineGL::getRenderedTexID() 
+{
+	return m_frameBuffer->getTexID();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -248,6 +293,9 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
 	m_textureShader->bind();
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
+
+	// Resize the FBO.
+	m_frameBuffer->resize(width, height);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -77,6 +77,7 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
+    <ClCompile Include="Source\Resources\resourceHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1230,28 +1231,19 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Resources\Fonts\arial.fnt">
-      <Filter>Source</Filter>
-    </None>
-    <None Include="Source\Resources\Fonts\Arial_Normal.fnt">
-      <Filter>Source</Filter>
-    </None>
-    <None Include="Source\Resources\Fonts\Arial_SDF.fnt">
+    <None Include="Source\Resources\Fonts\Arial_SDF.txt">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\associated_min_max.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\basicShader.shader">
+    <None Include="Source\Resources\Shaders\basicShader.txt">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\bit.inl">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtc\bitfield.inl">
-      <Filter>Source</Filter>
-    </None>
-    <None Include="Source\Resources\Fonts\candara.fnt">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\closest_point.inl">
@@ -1554,7 +1546,7 @@
     <None Include="Source\External\glm\gtx\spline.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\staticShader.shader">
+    <None Include="Source\Resources\Shaders\staticShader.txt">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\std_based_type.inl">
@@ -1566,7 +1558,7 @@
     <None Include="Source\External\glm\gtx\texture.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\textureShader.shader">
+    <None Include="Source\Resources\Shaders\textureShader.txt">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\transform.inl">
@@ -1670,25 +1662,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Source\Resources\Fonts\arial.png">
-      <Filter>Source</Filter>
-    </Image>
-    <Image Include="Source\Resources\Fonts\Arial_Normal.png">
-      <Filter>Source</Filter>
-    </Image>
     <Image Include="Source\Resources\Fonts\Arial_SDF.png">
       <Filter>Source</Filter>
     </Image>
-    <Image Include="Source\Resources\Fonts\candara.png">
-      <Filter>Source</Filter>
-    </Image>
-    <Image Include="Source\Resources\Textures\circuit1.png">
-      <Filter>Source</Filter>
-    </Image>
-    <Image Include="Source\Resources\Textures\circuit2.jpg">
-      <Filter>Source</Filter>
-    </Image>
-    <Image Include="Source\Resources\Textures\circuit3.png">
+    <Image Include="Source\Resources\Textures\circuitTree.png">
       <Filter>Source</Filter>
     </Image>
     <Image Include="Source\Resources\Icons\component.png">
@@ -1709,12 +1686,10 @@
     <Image Include="Source\Resources\Icons\Draw_MCC.png">
       <Filter>Source</Filter>
     </Image>
-    <Image Include="Source\Resources\Textures\elephant.png">
-      <Filter>Source</Filter>
-    </Image>
     <Image Include="Source\Resources\Icons\mainIcon.ico">
       <Filter>Source</Filter>
     </Image>
+    <Image Include="Source\Resources\Fonts\Arial_SDF.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

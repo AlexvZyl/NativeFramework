@@ -1,71 +1,35 @@
-// Microsoft Visual C++ generated resource script.
-//
+/*=======================================================================================================================================*/
+/* Includes.                                                                                                                             */
+/*=======================================================================================================================================*/
+
 #include "resource.h"
 
-#define APSTUDIO_READONLY_SYMBOLS
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 2 resource.
-//
-#include "winres.h"
+/*=======================================================================================================================================*/
+/* Resources.                                                                                                                            */
+/*=======================================================================================================================================*/
 
-/////////////////////////////////////////////////////////////////////////////
-#undef APSTUDIO_READONLY_SYMBOLS
+//-------------------------------------------------------------------------------------------------
+// Resource ID					Resource Type				Resource Path
+//-------------------------------------------------------------------------------------------------
+// Shaders.
+BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.txt"
+STATIC_SHADER					TEXTFILE					"Shaders\\staticShader.txt"
+TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.txt"
+//-------------------------------------------------------------------------------------------------
+// ImGui images.
+COMPONENT_PNG					PNG							"Icons\\component.png"
+DRAW_CIRCUIT_BUCKETS_PNG		PNG							"Icons\\Draw_Circuit_Buckets.png"
+DRAW_MCC_PNG					PNG							"Icons\\Draw_MCC.png"
+//-------------------------------------------------------------------------------------------------
+// OpenGL Textures.
+CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
+//-------------------------------------------------------------------------------------------------
+// OpenGL Fonts. 
+ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.txt"
+ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF.png"
+ARIAL_SDF_BMP					BMP							"Fonts\\Arial_SDF.bmp"
+//-------------------------------------------------------------------------------------------------
 
-/////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
-#pragma code_page(1252)
-
-#ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
-
-1 TEXTINCLUDE 
-BEGIN
-    "resource.h\0"
-END
-
-2 TEXTINCLUDE 
-BEGIN
-    "#include ""winres.h""\r\n"
-    "\0"
-END
-
-3 TEXTINCLUDE 
-BEGIN
-    "\0"
-END
-
-#endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// PNG
-//
-
-IDB_PNG1                PNG                     "Icons\\component.png"
-
-IDB_PNG2                PNG                     "Icons\\Draw_Circuit_Buckets.png"
-
-IDB_PNG3                PNG                     "Icons\\Draw_MCC.png"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_ICON1               ICON                    "Icons\\mainIcon.ico"
-
-#endif    // English (United States) resources
-/////////////////////////////////////////////////////////////////////////////
-
-
+/*=======================================================================================================================================*/
+/* EOF.                                                                                                                                  */
+/*=======================================================================================================================================*/

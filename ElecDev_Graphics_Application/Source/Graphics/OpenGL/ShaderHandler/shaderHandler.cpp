@@ -13,8 +13,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor generates the shaders.
-Shader::Shader(std::string& filePath)
-    : m_filePath(filePath), m_rendererID(0)
+Shader::Shader(std::string& shaderSourceIn)
+    : m_shaderSource(shaderSourceIn), m_rendererID(0)
 {
 
     // Shader mode handler. Used as an index for the shaderSource.
@@ -27,14 +27,13 @@ Shader::Shader(std::string& filePath)
     // Parse the shader.
     //----------------------------------------------------------------------------
 
-    // Read shader from file.
-    std::ifstream fileStream(m_filePath);
     // Stream that contains the shader.
     std::stringstream shaderSource[2];
+    std::istringstream source(m_shaderSource);
 
     // Run through all of the lines.
     std::string line;
-    while (std::getline(fileStream, line))
+    while (std::getline(source, line))
     {
         // Find shader keyword and set shader type.
         if (line.find("#shader") != std::string::npos)
@@ -64,14 +63,12 @@ Shader::Shader(std::string& filePath)
 
     // Compile the shader program.
     compileShader(vShaderCode, fShaderCode); 
-
 }
 
 // Destructor
 Shader::~Shader()
 {
-    std::cout << "[OPENGL][SHADER] Destructor called.\n\n";
-    //GLCall(glDeleteProgram(m_rendererID));
+    GLCall(glDeleteProgram(m_rendererID));
 }
 
 // Compiles the shader program.

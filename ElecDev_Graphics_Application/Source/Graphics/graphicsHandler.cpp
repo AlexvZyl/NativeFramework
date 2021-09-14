@@ -61,10 +61,10 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachineGraphics* state
 			m_drawingEngine->drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
 			// Test textures.
-			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
-			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
-			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
-			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
+			TexturedVertexData v1(1.25f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+			TexturedVertexData v2(1.25f+i, 0.75f+k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+			TexturedVertexData v3(0.75f+i, 0.75f+k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+			TexturedVertexData v4(0.75f+i, 1.25f+k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
 			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
 			m_drawingEngine->m_textureTrianglesVAO->writeData(verticesTex);
 

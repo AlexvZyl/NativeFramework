@@ -29,6 +29,9 @@ The interactive engine (the one where elements can be drawn is handled in Design
 // Text rendering.
 #include "Peripherals/textRenderer.h"
 
+// Resource loading.
+#include <Windows.h>
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Globals.
 //----------------------------------------------------------------------------------------------------------------------
@@ -127,7 +130,10 @@ public:
 	TextRenderer* m_textRenderer;
 	// Functions.
 	GLuint loadTexture(const std::string& path, bool alpha=false);
+	GLuint loadBMPtoGL(HBITMAP bitmap_handle);
 	void renderLoop();
+	// Get the ID to the FBO rendered texture.
+	unsigned int getRenderedTexID();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
