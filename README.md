@@ -49,6 +49,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 #### Raynhardt 
 * ⬜ Multi View port
 * ⬜ Multi vieport docking
+* ⬜ Resize event need working on
 
 ---
 
