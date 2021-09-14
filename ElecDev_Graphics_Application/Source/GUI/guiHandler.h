@@ -31,13 +31,13 @@ public:
 
 	stateMachineGraphics statesG;
 
-	GraphicsHandler* graphicsHandle;
+	GraphicsHandler* graphicsHandler;
 
 	unsigned int textureID;
 
-	Toolbar toolbar = Toolbar(states);
-	Ribbons ribbons = Ribbons(states);
-	Graphics graphics = Graphics(states, textureID);
+	Toolbar* toolbar;
+	Ribbons* ribbons;
+	Graphics* graphics;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.

@@ -19,18 +19,22 @@ GUIHandler::GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHa
 	this->states.toolsMode = 0;
 	this->textureID = 0;
 
-	this->graphicsHandle = graphicsHandler;
+	this->graphicsHandler = graphicsHandler;
 
 	this->states.toolsMode = 0;
 	this->states.toolsExpanded = 0;
+
+	this->toolbar = new Toolbar(this->states);
+	this->ribbons = new Ribbons(this->states);
+	this->graphics = new Graphics(states, this->graphicsHandler);
 	
 };
 
 void GUIHandler::renderGraphics()
 {
-	this->toolbar.renderToolbar();
-	this->ribbons.renderRibbons();
-	//this->graphics.renderGraphics();
+	this->toolbar->renderToolbar();
+	this->ribbons->renderRibbons();
+	this->graphics->renderGraphics();
 	ImGui::Begin("FPS");
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
 	ImGui::SetWindowPos(ImVec2(ImGui::GetMainViewport()->WorkSize.x -160, 0));

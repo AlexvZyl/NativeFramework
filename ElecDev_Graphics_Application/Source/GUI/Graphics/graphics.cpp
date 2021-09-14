@@ -16,10 +16,10 @@
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
 
-Graphics::Graphics(stateMachine states, unsigned int textureID) {
+Graphics::Graphics(stateMachineGraphics* states, GraphicsHandler* graphicsHandler) {
 
 	this->states = states;
-	this->textureID = textureID;
+	this->graphicsHandler = graphicsHandler;
 
 }
 
@@ -34,7 +34,7 @@ void Graphics::renderGraphics() {
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		ImVec2 wsize = ImGui::GetWindowSize();
 		// Because I use the texture from OpenGL, I need to invert the V from the UV.
-		ImGui::Image((ImTextureID)this->textureID, wsize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)this->graphicsHandler->m_drawingEngine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::EndChild();
 	}
 	ImGui::End();

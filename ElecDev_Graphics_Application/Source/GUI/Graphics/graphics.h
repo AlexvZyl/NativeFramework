@@ -4,10 +4,11 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-#include <GLFW/glfw3.h>
 #include <Core/imgui.h>
 #include <string>
 #include "../stateMachine.h"
+#include <../Graphics/graphicsHandler.h>
+#include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */
@@ -18,11 +19,12 @@ class Graphics
 public:
 
 	//Variables
-	stateMachine states;
+	stateMachineGraphics* states;
 	unsigned int textureID;
+	GraphicsHandler* graphicsHandler;
 
 	//Constructor
-	Graphics(stateMachine states, unsigned int textureID);
+	Graphics(stateMachineGraphics* states, GraphicsHandler* graphicsHandler);
 
 	//Renderer
 	void renderGraphics();
