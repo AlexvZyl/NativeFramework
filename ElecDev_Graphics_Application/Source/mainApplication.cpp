@@ -272,7 +272,8 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
-        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoResize);
+        //ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, 0.0f);
+        ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode);
 
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();

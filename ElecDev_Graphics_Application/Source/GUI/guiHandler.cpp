@@ -32,10 +32,14 @@ void GUIHandler::renderGraphics()
 	this->toolbar->renderToolbar();
 	this->ribbons->renderRibbons();
 	this->graphics->renderGraphics();
+	const ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+	ImVec2 work_size = viewport->WorkSize;
+
 	ImGui::Begin("FPS");
+	ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
 	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
-	ImGui::SetWindowPos(ImVec2(ImGui::GetMainViewport()->WorkSize.x -160, 0));
-	ImGui::SetNextWindowSize(ImVec2(30, 10));
+	
 	ImGui::End();	
 };
 
