@@ -22,11 +22,12 @@ public:
 	stateMachine* states;
 	ImVec2 pos;
 	GraphicsHandler* graphicsHandler;
+	ImGuiID dock;
 
 	//Constructor
 	Graphics(stateMachine* states, GraphicsHandler* graphicsHandler);
 
 	//Renderer
-	void renderGraphics();
+	void renderGraphics(ImGuiID dock);
 };
 
