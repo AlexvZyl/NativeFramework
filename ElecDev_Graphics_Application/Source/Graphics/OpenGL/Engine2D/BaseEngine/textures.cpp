@@ -62,7 +62,7 @@ GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 	// Create windows bitmap.
     HBITMAP hBmp = NULL;
     hBmp = (HBITMAP) ::LoadImage(getCurrentModule(),
-        MAKEINTRESOURCE(ARIAL_SDF_BMP), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+        MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
     // Get info about the bitmap
     BITMAP BM;
     GetObject(hBmp, sizeof(BM), &BM);
