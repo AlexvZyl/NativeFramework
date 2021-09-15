@@ -545,7 +545,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\frameBufferObject.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\stb_image.h" />
+    <ClInclude Include="Source\External\Misc\stb_image.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.h" />
     <ClInclude Include="Source\GUI\guiHandler.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
@@ -727,7 +727,8 @@
     <Image Include="Icons\Draw_MCC.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.png" />
-    <Image Include="Source\Resources\Icons\circuitIcon.ico" />
+    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
+    <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Resources\Icons\component.png" />

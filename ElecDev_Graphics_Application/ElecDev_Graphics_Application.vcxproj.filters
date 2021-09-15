@@ -872,7 +872,7 @@
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\stb_image.h">
+    <ClInclude Include="Source\External\Misc\stb_image.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\std_based_type.hpp">
@@ -1691,7 +1691,8 @@
     </Image>
     <Image Include="Source\Resources\Fonts\Arial_SDF.bmp" />
     <Image Include="Icons\circuitIcon.ico" />
-    <Image Include="Source\Resources\Icons\circuitIcon.ico" />
+    <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
+    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

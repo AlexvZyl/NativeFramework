@@ -25,6 +25,9 @@
 // Graphics handler include.
 #include <../Graphics/graphicsHandler.h>
 
+// Resources.
+#include <Misc/stb_image.h>
+
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
 /*=======================================================================================================================================*/
@@ -121,11 +124,16 @@ int main(int, char**)
     // Enable 16x MSAA.
     glfwWindowHint(GLFW_SAMPLES, 16);
     // Create GLFW window.
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev Graphics", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync.
+
+    // Set window icon.
+    GLFWimage icon;
+    icon.pixels = stbi_load("Source\\Resources\\Icons\\circuitIcon.bmp", &icon.width, &icon.height, NULL, STBI_rgb_alpha);
+    glfwSetWindowIcon(window, 1, &icon);
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Initialize OpenGL loader.

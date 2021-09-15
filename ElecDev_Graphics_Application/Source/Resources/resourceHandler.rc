@@ -52,7 +52,7 @@ END
 // Resource ID					Resource Type				Resource Path
 //-------------------------------------------------------------------------------------------------
 // Application icon.
-IDI_ICON1						ICON		                 "Icons\\circuitIcon.ico"
+IDI_ICON1						ICON		                 "Icons\\circuitIcon128.ico"
 //-------------------------------------------------------------------------------------------------
 // Shaders.
 BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
@@ -70,6 +70,7 @@ CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
 // OpenGL Fonts. 
 ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.fnt"
 ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF.png"
+ARIAL_SDF_BMP					BMP							"Fonts\\Arial_SDF.bmp"
 //-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources
