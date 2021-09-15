@@ -62,10 +62,10 @@ GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 	// Create windows bitmap.
     HBITMAP hBmp = NULL;
     hBmp = (HBITMAP) ::LoadImage(getCurrentModule(),
-        MAKEINTRESOURCE(ARIAL_SDF_BMP), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+        MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
     // Get info about the bitmap
     BITMAP BM;
-    ::GetObject(hBmp, sizeof(BM), &BM);
+    GetObject(hBmp, sizeof(BM), &BM);
 
 	// Create texrure.
 	GLuint textureID;
@@ -73,7 +73,7 @@ GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 	GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
 
     // Tell OpenGL to ignore padding at ends of rows.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	// Texture parameters.
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);   
@@ -87,8 +87,7 @@ GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BM.bmWidth, BM.bmHeight,
-        0, GL_RGB, GL_UNSIGNED_BYTE, BM.bmBits);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BM.bmWidth, BM.bmHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, BM.bmBits);
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, BM.bmWidth, BM.bmHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, BM.bmBits);
 
 	// Clear memory.
@@ -96,7 +95,6 @@ GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 	// Return OpenGL texture ID.
 	return textureID;
 }
-
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

@@ -24,6 +24,7 @@
     <ProjectGuid>{26e8aca6-08dd-4daa-b218-0dda29b22b32}</ProjectGuid>
     <RootNamespace>ElecDevGraphicsApplication</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ElecDev</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -720,11 +721,13 @@
     <None Include="Source\Resources\Shaders\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Icons\circuitIcon.ico" />
     <Image Include="Icons\component.png" />
     <Image Include="Icons\Draw_Circuit_Buckets.png" />
     <Image Include="Icons\Draw_MCC.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.png" />
+    <Image Include="Source\Resources\Icons\circuitIcon.ico" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Resources\Icons\component.png" />

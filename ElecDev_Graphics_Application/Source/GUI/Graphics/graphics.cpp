@@ -20,18 +20,23 @@
 Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
 	: states(states), graphicsHandler(graphicsHandler) 
 {
-
 	this->pos.x = 0;
 	this->pos.y = 0;
-
 }
 
-
 // Render the graphics scene.
-void Graphics::renderGraphics() {
+void Graphics::renderGraphics(ImGuiID dock) {
+	bool open = true;
 
+	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
+
+	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
+	ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 	ImGui::Begin("Render Window");
 	{
+		
+		//ImGui::GetCurrentWindow()->DockNode = ImGui::DockBuilderGetCentralNode(dock);
+
 		ImGui::SetWindowSize(ImVec2(500, 500), ImGuiCond_Once);
 		// Using a Child allow to fill all the space of the window.
 		// It also allows customization
@@ -42,8 +47,7 @@ void Graphics::renderGraphics() {
 		temp.y -= ImGui::GetWindowPos().y;
 		this->states->renderWindowMouseCoordinate = temp;
 
-		ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
-
+		//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
 
 		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
 			states->renderResizeEvent = true;
@@ -52,14 +56,13 @@ void Graphics::renderGraphics() {
 		pos.x = ImGui::GetWindowSize().x;
 		pos.y = ImGui::GetWindowSize().y;
 
-
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		ImVec2 wsize = ImGui::GetWindowSize();
 		// Because I use the texture from OpenGL, I need to invert the V from the UV.
 		ImGui::Image((ImTextureID)this->graphicsHandler->m_drawingEngine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::EndChild();
 	}
-	ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
+	
 	ImGui::End();
 
 }
