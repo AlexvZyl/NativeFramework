@@ -39,6 +39,9 @@ void Graphics::renderGraphics() {
 		temp.y -= ImGui::GetWindowPos().y;
 		this->states->renderWindowMouseCoordinate = temp;
 
+		ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
+
+
 		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
 			states->renderResizeEvent = true;
 			states->renderWindowSize = ImGui::GetWindowSize();
@@ -52,6 +55,7 @@ void Graphics::renderGraphics() {
 		ImGui::Image((ImTextureID)this->graphicsHandler->m_drawingEngine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::EndChild();
 	}
+	ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	ImGui::End();
 
 }
