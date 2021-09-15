@@ -47,29 +47,9 @@ void GUIHandler::renderGraphics()
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 	ImGui::PopStyleVar(2);
 	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
-
-
-	
-	ImGui::DockBuilderAddNode(dockspaceID, ImGuiDockNodeFlags_None);
-
-	ImGuiID dock_main_id = dockspaceID;
-	ImGuiID dock_up_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Up, 0.05f, nullptr, &dock_main_id);
-	ImGuiID dock_right_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
-	ImGuiID dock_left_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.2f, nullptr, &dock_main_id);
-	ImGuiID dock_down_id = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.2f, nullptr, &dock_main_id);
-	ImGuiID dock_down_right_id = ImGui::DockBuilderSplitNode(dock_down_id, ImGuiDir_Right, 0.6f, nullptr, &dock_down_id);
-
-	ImGui::DockBuilderDockWindow("Actions", dock_up_id);
-	ImGui::DockBuilderDockWindow("Hierarchy", dock_right_id);
-	ImGui::DockBuilderDockWindow("Inspector", dock_left_id);
-	ImGui::DockBuilderDockWindow("Console", dock_down_id);
-	ImGui::DockBuilderDockWindow("Project", dock_down_right_id);
-	ImGui::DockBuilderDockWindow("Scene", dock_main_id);
-
-	ImGui::DockBuilderFinish(dock_main_id);
 	
 
-	ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+	ImGuiID dock = ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
 	this->toolbar->renderToolbar();
 
@@ -77,7 +57,7 @@ void GUIHandler::renderGraphics()
 
 	this->ribbons->renderRibbons();
 
-	this->graphics->renderGraphics();
+	this->graphics->renderGraphics(dock);
 
 	ImGui::Begin("FPS");
 	ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
