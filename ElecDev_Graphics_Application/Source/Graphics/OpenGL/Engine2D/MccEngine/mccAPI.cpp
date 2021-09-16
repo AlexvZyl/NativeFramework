@@ -12,6 +12,25 @@ Engine API.
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Add MCC to the dictS.
+void MccEngineGL::addMcc(std::string mccName)
+{
+	// Add to dictionary.
+	m_mccDictionary.insert({ mccName, new MccStruct(m_states) });
+	// Set MCC name.
+	m_activeMCC = mccName;
+}
+
+// Remove an MCC from the dict.
+void MccEngineGL::removeMCC(std::string mccName)
+{
+	delete m_mccDictionary[mccName];
+	// Remove by key.
+	m_mccDictionary.erase(mccName);
+	// Set new active MCC.
+	m_activeMCC = m_mccDictionary.begin()->first;
+}
+
 // Draws a line.
 void MccEngineGL::drawLine(std::string mccName, float position1[2], float position2[2], float color[4])
 {

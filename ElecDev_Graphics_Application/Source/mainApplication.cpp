@@ -317,7 +317,7 @@ int main(int, char**)
     int display_w, display_h;   // Viewport for ImGUI.
 
     // Thread.
-    std::thread t1(readingIn, states, graphicsHandler, &guiHandler);
+    std::thread t1(readingIn, states, graphicsHandler, &guiHandler);  
 
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
@@ -337,13 +337,12 @@ int main(int, char**)
         glViewport(0, 0, display_w, display_h);
 
         // Render ImGUI to screen.
-        /*if (states->startMainGraphics)
-        { guiHandler.renderGui(io); }*/
         guiHandler.renderGui(io);
         
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
-        
+
+        glFinish();
     }
 
     /*===================================================================================================================================*/

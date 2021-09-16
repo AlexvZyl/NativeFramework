@@ -19,7 +19,7 @@ MccEngineGL::~MccEngineGL()
 	// Delete engines to prevent memory leaks.
 	for (auto engine : m_mccDictionary)
 	{
-		delete engine.second;
+		delete engine.second->engine;
 	}
 }
 
@@ -29,32 +29,12 @@ void MccEngineGL::renderActiveEngine()
 	// Check if the dict is not empty.
 	if (m_mccDictionary.size() != 0)
 	{
-		// Render active engine.
-		/*m_mccDictionary[m_activeMCC]->renderLoop();*/
-
 		// For now render everytihng.
 		for (auto engine : m_mccDictionary)
 		{
 			engine.second->engine->renderLoop();
 		}
 	}
-}
-
-// Add MCC to the dictS.
-void MccEngineGL::addMcc(std::string mccName) 
-{
-	// Add to dictionary.
-	m_mccDictionary.insert({ mccName, new MccStruct(m_states) });
-	// Set MCC name.
-	m_activeMCC = mccName;
-}
-
-// Remove an MCC from the dict.
-void MccEngineGL::removeMCC(std::string mccName) 
-{
-	delete m_mccDictionary[mccName];
-	// Remove by key.
-	m_mccDictionary.erase(mccName);
 }
 
 //---------------------------------------------------------------------------------------
