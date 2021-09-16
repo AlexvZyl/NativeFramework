@@ -12,6 +12,29 @@
 #include "../stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
+//  MCC Engine Struct.
+//----------------------------------------------------------------------------------------------------------------------
+
+struct MccStruct {
+
+	ImVec2 vieportDimentions = {500, 500};
+	bool isHovered = false;
+	BaseEngineGL* engine;
+
+	// Constructor.
+	MccStruct(stateMachine* states) 
+	{
+		engine = new BaseEngineGL(states);
+	}
+
+	// Destructor.
+	~MccStruct() 
+	{
+		delete engine;
+	}
+};
+
+//----------------------------------------------------------------------------------------------------------------------
 //  Class.
 //----------------------------------------------------------------------------------------------------------------------
  
@@ -25,7 +48,7 @@ public:
 	//---------------------------------------------------------------------------------------
 
 	// Dictionary containg all of the MCC drawing instances.
-	std::map<std::string, mccStruct*> m_mccDictionary;
+	std::map<std::string, MccStruct*> m_mccDictionary;
 	// States.
 	stateMachine* m_states;
 	// Keep track of the active MCC.

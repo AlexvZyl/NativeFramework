@@ -34,7 +34,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Struct that contains the different OpenGL engines that can be used.
 enum class Engines
 {
-	ANIMATION, BASE_ENGINE, DESIGN_ENGINE
+	ANIMATION, BASE_ENGINE, DESIGN_ENGINE, MCC_ENGINE
 };
 
 //----------------------------------------------------------------------------------------------------------------------
