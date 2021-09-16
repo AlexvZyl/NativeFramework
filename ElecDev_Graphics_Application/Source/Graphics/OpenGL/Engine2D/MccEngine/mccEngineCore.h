@@ -16,7 +16,7 @@
 //----------------------------------------------------------------------------------------------------------------------
  
 // MCC Drawing engine that inherets from the base engine.
-class MccEngineGL : public BaseEngineGL {
+class MccEngineGL {
 
 public:
 
@@ -25,9 +25,11 @@ public:
 	//---------------------------------------------------------------------------------------
 
 	// Dictionary containg all of the MCC drawing instances.
-	std::map<std::string, BaseEngineGL> m_mccDictionary;
+	std::map<std::string, BaseEngineGL*> m_mccDictionary;
 	// States.
 	stateMachine* m_states;
+	// Keep track of the active MCC.
+	std::string m_activeMCC;
 
 	//---------------------------------------------------------------------------------------
 	// Contructor.
@@ -46,6 +48,15 @@ public:
 	void addMcc(std::string mccName);
 	// Removes an MCC from the dict.
 	void removeMCC(std::string mccName);
+	// Render loop.
+	void renderActiveEngine();
+
+	//---------------------------------------------------------------------------------------
+	// Events.
+	//---------------------------------------------------------------------------------------
+
+	// Resize event for the engine.
+	void resizeEvent(int width, int height);
 
 	//---------------------------------------------------------------------------------------
 	// API.
