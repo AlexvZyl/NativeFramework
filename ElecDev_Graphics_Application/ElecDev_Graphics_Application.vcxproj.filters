@@ -81,6 +81,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\API.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
+    <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1223,6 +1224,7 @@
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
+    <ClInclude Include="Source\GUI\MCC\mcc.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

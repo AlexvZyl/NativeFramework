@@ -49,8 +49,6 @@ void Graphics::deQueueInput() {
 
 		inputQueue temp = states->inputQueue.front();
 
-		temp.command.c_str();
-
 		switch (hash(temp.command.c_str())) {
 
 			case hash("drawLine"):

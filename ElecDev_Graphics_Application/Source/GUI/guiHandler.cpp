@@ -24,6 +24,12 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->toolbar = new Toolbar(this->states);
 	this->ribbons = new Ribbons(this->states);
 	this->graphics = new Graphics(states, this->graphicsHandler);
+
+	//MCCDict.
+
+	this->mcc = new MCC(states,graphicsHandler);
+	//MCCDict->insert("test", new BaseEngineGL(m_window, states));
+
 	
 };
 
@@ -68,6 +74,7 @@ void GUIHandler::renderGui(ImGuiIO& io)
 
 	if (states->showGraphicsWindow) {
 		this->graphics->renderGraphics(dock);
+		this->mcc->renderGraphics(dock);
 	}
 
 	ImGui::Begin("FPS");

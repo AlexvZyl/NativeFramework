@@ -9,10 +9,12 @@
 //  General.
 #include <string>
 #include <iostream>
+#include <map>
 
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
 #include "Graphics/graphics.h"
+#include "MCC/mcc.h"
 #include "../stateMachine.h"
 
 // ImGUI (GUI software). 
@@ -44,6 +46,7 @@ public:
 	Toolbar* toolbar;
 	Ribbons* ribbons;
 	Graphics* graphics;
+	MCC* mcc;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.

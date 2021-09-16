@@ -186,6 +186,7 @@
     <ClCompile Include="Source\Graphics\graphicsHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.cpp" />
+    <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
+    <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\Resources\resource.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
