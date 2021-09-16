@@ -64,7 +64,8 @@ void MccEngineGL::removeMCC(std::string mccName)
 // Resize event for the engine.
 void MccEngineGL::resizeEvent(int width, int height) 
 {
-	// Check if the dict is not empty.	
+	// Check if the dict is not empty.
+	
 	if (m_mccDictionary.size() != 0)
 	{
 		// Run resize event for each engine.

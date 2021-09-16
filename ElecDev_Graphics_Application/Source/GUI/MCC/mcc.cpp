@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cfenv>
 #include "stateMachine.h"
+#include <string>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
@@ -55,7 +56,11 @@ void MCC::deQueueInput() {
 
 		case hash("drawLine"):
 
+			std::string mccName;
 			float par[8];
+
+			mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+			temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
 
 			for (size_t i = 0; i < 8; i++)
 			{
@@ -63,7 +68,7 @@ void MCC::deQueueInput() {
 				temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
 			}
 
-			//graphicsHandler->m_drawingEngine->drawLine(new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
+			graphicsHandler->m_mccEngine->drawLine(mccName,new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
 
 			break;
 		}
@@ -100,10 +105,16 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// It also allows customization
 				ImGui::BeginChild("Render");
 				this->states->renderWindowHovered = ImGui::IsWindowHovered();
+				struc.second->isHovered = ImGui::IsWindowHovered();
 				ImVec2 temp = ImGui::GetIO().MousePos;
 				temp.x -= ImGui::GetWindowPos().x;
 				temp.y -= ImGui::GetWindowPos().y;
-				this->states->renderWindowMouseCoordinate = temp;
+				struc.second->mouseCoords = temp;
+
+				if (ImGui::GetWindowSize().x != struc.second->viewportDimentions.x || ImGui::GetWindowSize().y != struc.second->viewportDimentions.y) {
+					struc.second->resizeEvent = true;
+					struc.second->viewportDimentions = ImGui::GetWindowSize();
+				}
 
 				// Set the active engine.
 				if (struc.second->isHovered)
@@ -130,17 +141,10 @@ void MCC::renderGraphics(ImGuiID dock) {
 				ImVec2 wsize = ImGui::GetWindowSize();
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
 				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
-				struc.second->isHovered = ImGui::IsWindowHovered();
-
-				ImVec2 temp1 = ImGui::GetIO().MousePos;
-				temp1.x -= ImGui::GetWindowPos().x;
-				temp1.y -= ImGui::GetWindowPos().y;
-				struc.second->mouseCoords = temp1;
+				
 
 				ImGui::EndChild();
 			}
-
-			struc.second->viewportDimentions = ImGui::GetWindowSize();
 
 			ImGui::End();
 

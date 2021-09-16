@@ -29,7 +29,9 @@ struct stateMachine
 
 	bool globalQuit = false;
 
+	std::queue<inputQueue> inputQueueMCC;
 	std::queue<inputQueue> inputQueue;
+	
 
 };
 

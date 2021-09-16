@@ -21,6 +21,7 @@ struct MccStruct {
 	bool isHovered = false;
 	BaseEngineGL* engine;
 	ImVec2 mouseCoords;
+	bool resizeEvent;
 
 	// Constructor.
 	MccStruct(stateMachine* states) 
