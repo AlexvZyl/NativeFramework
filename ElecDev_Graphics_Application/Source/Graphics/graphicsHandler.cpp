@@ -128,7 +128,7 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered && m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
-		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
+		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 
 		if (m_activeEngine == Engines::MCC_ENGINE)
 		{
@@ -160,7 +160,7 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered && m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
-		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
+		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 		// Check button state.
 		int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 
@@ -185,7 +185,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered&& m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
-		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
+		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 
 		// Call current active engine zoom function.
 		if (m_activeEngine == Engines::MCC_ENGINE)
