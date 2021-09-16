@@ -103,12 +103,12 @@ void MCC::renderGraphics(ImGuiID dock) {
 				this->states->renderWindowMouseCoordinate = temp;
 
 				// Set the active engine.
-				if (ImGui::IsWindowFocused()) 
+				if (struc.second->isHovered)
 				{
 					graphicsHandler->m_mccEngine->m_activeMCC = struc.first;
 				}
 				// Reset mouse coordinates.
-				else 
+				else
 				{
 					struc.second->engine->m_prevMouseEventWorldCoords[0] = NULL;
 					struc.second->engine->m_prevMouseEventWorldCoords[1] = NULL;
@@ -129,10 +129,10 @@ void MCC::renderGraphics(ImGuiID dock) {
 				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				struc.second->isHovered = ImGui::IsWindowHovered();
 
-				ImVec2 temp = ImGui::GetIO().MousePos;
-				temp.x -= ImGui::GetWindowPos().x;
-				temp.y -= ImGui::GetWindowPos().y;
-				struc.second->mouseCoords = temp;
+				ImVec2 temp1 = ImGui::GetIO().MousePos;
+				temp1.x -= ImGui::GetWindowPos().x;
+				temp1.y -= ImGui::GetWindowPos().y;
+				struc.second->mouseCoords = temp1;
 
 				ImGui::EndChild();
 			}
