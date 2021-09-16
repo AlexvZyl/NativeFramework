@@ -65,7 +65,7 @@ void Toolbar::renderToolbar()
         {
             if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { exit(1); }
+            if (ImGui::MenuItem("Close", "Ctrl+W")) { states->globalQuit = true; }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
