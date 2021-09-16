@@ -23,7 +23,6 @@ GraphicsHandler::GraphicsHandler(GLFWwindow* window, stateMachine* states)
 
 	// Base engine.
 	m_mccEngine = new MccEngineGL(m_states);
-	m_baseEngine = new BaseEngineGL(m_states);
 
 	//---------------------------------------------------------------------------------------
 
@@ -54,7 +53,7 @@ void GraphicsHandler::renderGraphics()
 	//  Run engine that has been set as active.
 	if (m_activeEngine == Engines::BASE_ENGINE)
 	{
-		m_mccEngine->renderLoop();
+		m_mccEngine->renderActiveEngine();
 	}
 	else if (m_activeEngine == Engines::DESIGN_ENGINE)
 	{
@@ -136,14 +135,14 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 			if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 			{
 				// Call active engine.
-				m_mccEngine->mousePressLeft(mousePos);
+				m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mousePressLeft(mousePos);
 			}
 
 			// Check if left press.
 			if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
 				// Call active engine.
-				m_mccEngine->mousePressRight(mousePos);
+				m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mousePressRight(mousePos);
 			}
 		}
 		else 
@@ -167,7 +166,7 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 		// Call active engine.
 		if (m_activeEngine == Engines::BASE_ENGINE) 
 		{ 
-			m_mccEngine->mouseMoveEvent(mousePos, buttonState);
+			m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseMoveEvent(mousePos, buttonState);
 		}
 		// Output error if active engine is not found.
 		else 
@@ -190,7 +189,7 @@ void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, doubl
 		// Call current active engine zoom function.
 		if (m_activeEngine == Engines::BASE_ENGINE) 
 		{
-			m_mccEngine->mouseScrollEvent(mousePos, yoffset);
+			m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseScrollEvent(mousePos, yoffset);
 		}
 		else 
 		{
@@ -210,7 +209,7 @@ void GraphicsHandler::resizeEventImGUI(int width, int height)
 	// Call resize on active engine.
 	if (m_activeEngine == Engines::BASE_ENGINE)
 	{
-		m_mccEngine->resizeEventImGUI(width, height);
+		m_mccEngine->resizeEvent(width, height);
 	}
 	else 
 	{

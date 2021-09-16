@@ -57,8 +57,6 @@ public:
 
 	// Different drawing engines.
 	MccEngineGL* m_mccEngine;
-	DesignEngineGL* m_designEngine;
-	BaseEngineGL* m_baseEngine;
 
 	// The GLFW window from the main application.
 	GLFWwindow* m_window;
