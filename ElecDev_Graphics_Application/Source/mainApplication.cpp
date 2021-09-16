@@ -75,8 +75,6 @@ void procesInput(std::string inString, stateMachine* states, GraphicsHandler* gr
     }
 
     std::cout << functionCall << std::endl;
-
-
 }
 
 void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
@@ -92,9 +90,7 @@ void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandle
         temp = "";
 
     }
-
 }
-
 
 /*=======================================================================================================================================*/
 /* Mouse events callbacks.                                                                                                               */
@@ -245,11 +241,11 @@ int main(int, char**)
     int display_w, display_h;
 
     // Setup mouse callbacks.
-    glfwSetMouseButtonCallback(window, mousePressEvent);// Mouse press event.
-    glfwSetCursorPosCallback(window, mouseMoveEvent);   //  Mouse move event.
-    glfwSetScrollCallback(window, mouseScrollEvent);    // Mouse scroll event.
+    glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
+    glfwSetCursorPosCallback(window, mouseMoveEvent);       // Mouse move event.
+    glfwSetScrollCallback(window, mouseScrollEvent);        // Mouse scroll event.
 
-    // Enable MSAA.
+    // Enable MSAA in OpenGL.
     glEnable(GL_MULTISAMPLE);
 
     // Create the state machine variables.
@@ -270,10 +266,13 @@ int main(int, char**)
     /*===================================================================================================================================*/
 
     // Loop variables.
-    bool wait = false;
-    std::thread t1(readingIn,states,graphicsHandler,&guiHandler);
+    bool wait = false;      // Can be used to tell the app to wait for events and not run
+                            // continuously in the background.
+                            
+    // Create thread that handles the Python/C++ interface.
+    std::thread interfaceThread(readingIn,states,graphicsHandler,&guiHandler);
 
-    // Graphics Pipeline
+    // Graphics pipeline that draws OpenGL and ImGUI.
     while (!glfwWindowShouldClose(window))
     {
         // Event checking.
@@ -286,23 +285,22 @@ int main(int, char**)
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();
 
-        //Render ImGUI to screen.
-        //Render ImGUI components.
-        if (states->startMainGraphics)
-        { guiHandler.renderGui(io); }
+        // Render ImGUI to screen.
+        /*if (states->startMainGraphics)
+        { guiHandler.renderGui(io); }*/
+        guiHandler.renderGui(io);
         
-        // Assign values to viewport.  This can be moved to a GLFW callback for optimization.
+        // Assign values to viewport (This can be moved to a GLFW callback for optimization).
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
     }
 
-    t1.join();
-
     /*===================================================================================================================================*/
 
     // Cleanup.
+    interfaceThread.join();         // Join thread with main.
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

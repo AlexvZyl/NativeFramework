@@ -7,6 +7,9 @@
 // Needed to load resources.
 #include "../../Resources/resource.h"
 
+#include "Misc/stb_image.h"
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
 //----------------------------------------------------------------------------------------------------------------------
@@ -146,9 +149,8 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window, stateMachine* states)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	m_textAtlas = loadBMPtoGL(ARIAL_SDF_BMP);
-	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
-	
+	m_textAtlas = loadBMPtoGL(ICON_BMP);
+	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF_BMP.bmp", true);
 	// Load texture for testing.
 	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
 
