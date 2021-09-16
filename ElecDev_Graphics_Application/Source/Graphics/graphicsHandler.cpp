@@ -125,7 +125,7 @@ void GraphicsHandler::closeActiveEngine()
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {	
 	// Check if not above ImGUI element.
-	if (m_states->renderWindowHovered && m_mccEngine->m_mccDictionary.size() != 0)
+	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered && m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
 		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
@@ -157,7 +157,7 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
 	// Check if not above ImGUI element.
-	if (m_states->renderWindowHovered && m_mccEngine->m_mccDictionary.size() != 0)
+	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered && m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
 		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
@@ -182,7 +182,7 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset) 
 {	
 	// Check if not above ImGUI element.
-	if (m_states->renderWindowHovered && m_mccEngine->m_mccDictionary.size() != 0)
+	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered&& m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
 		double mousePos[2] = { m_states->renderWindowMouseCoordinate.x , m_states->renderWindowMouseCoordinate.y };
