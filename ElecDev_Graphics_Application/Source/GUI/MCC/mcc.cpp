@@ -38,6 +38,7 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->dock = 0;
 
 	graphicsHandler->m_mccEngine->addMcc("Test");
+	graphicsHandler->m_mccEngine->addMcc("Test2");
 }
 
 void MCC::deQueueInput() {
@@ -113,7 +114,7 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Get the size of the child (i.e. the whole draw size of the windows).
 				ImVec2 wsize = ImGui::GetWindowSize();
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
-				ImGui::Image((ImTextureID)engine.second.getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((ImTextureID)engine.second->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::EndChild();
 			}
 
