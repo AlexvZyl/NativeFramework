@@ -25,7 +25,7 @@ public:
 	//---------------------------------------------------------------------------------------
 
 	// Dictionary containg all of the MCC drawing instances.
-	std::map<std::string, BaseEngineGL*> m_mccDictionary;
+	std::map<std::string, mccStruct*> m_mccDictionary;
 	// States.
 	stateMachine* m_states;
 	// Keep track of the active MCC.
