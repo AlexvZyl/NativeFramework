@@ -77,11 +77,17 @@ Ribbons::Ribbons(stateMachine states) {
     //IM_ASSERT(ret3);
 
     this->sideBarFlag = "";
+    first[0] = true;
+    first[1] = true;
+    first[2] = true;
+
 }
 
 
-void Ribbons::renderRibbons()
+void Ribbons::renderRibbons(ImGuiID* dock)
 {
+
+    this->dock = dock;
     
     topBar();
     sideBar();
@@ -152,6 +158,12 @@ bool Ribbons::topBar() {
 
 bool Ribbons::sideBar() {
 
+    if (first[0]) {
+        ImGui::DockBuilderSplitNode(*this->dock, ImGuiDir_Left, 0.1f, &this->left, this->dock);
+        first[0] = false;
+    }
+
+
     if (this->sideBarFlag == "Block Diagram")
     {
         blockDiagram();
@@ -173,14 +185,17 @@ bool Ribbons::MCC() {
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
     ImVec2 work_size = viewport->WorkSize;
+    if (first[1])
+    { 
+        ImGui::SetNextWindowDockID(this->left, ImGuiCond_Once);
+        first[1] = false;
+    }
 
     ImGui::Begin("Drawing MCC", &close, ImGuiWindowFlags_NoResize);
     if (!close)
     {
         this->sideBarFlag = "None";
     }
-
-    ImGui::SetWindowPos(ImVec2(work_pos.x, work_pos.y + 70), ImGuiCond_FirstUseEver);
 
     ImGui::Button("New MCC");
 
@@ -200,16 +215,20 @@ bool Ribbons::MCC() {
 bool Ribbons::blockDiagram() {
 
     bool close = true;
+
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+    if (first[2])
+    {
+        ImGui::SetNextWindowDockID(this->left, ImGuiCond_Once);
+        first[2] = false;
+    }
+
     ImGui::Begin("Drawing GUI", &close);
     if (!close)
     {
         this->sideBarFlag = "None";
-    }
-    if (this->states.toolsExpanded) {
-        ImGui::SetWindowPos(ImVec2(0, 90));
-    }
-    else {
-        ImGui::SetWindowPos(ImVec2(0, 40));
     }
     
 

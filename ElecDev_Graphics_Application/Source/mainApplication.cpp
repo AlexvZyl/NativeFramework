@@ -7,11 +7,13 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <thread>
 
 // ImGUI (GUI software). 
 #include "Core/imgui.h"
 #include "Implementations/imgui_impl_glfw.h"
 #include "Implementations/imgui_impl_opengl3.h"
+#include "stateMachine.h"
 
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
@@ -57,6 +59,42 @@ static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
 }
+
+// First part untill ";" is the function name
+void procesInput(std::string inString, stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
+
+    std::string functionCall = inString.substr(inString.find("(:"), inString.length());
+
+    functionCall = inString.substr(2, functionCall.find(":)")-2);
+
+    if (functionCall == "StartMain") {
+        states->startMainGraphics = true;
+    }
+    if (functionCall == "EndMain") {
+        states->startMainGraphics = false;
+    }
+
+    std::cout << functionCall << std::endl;
+
+
+}
+
+void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
+
+    std::string temp;
+
+    while (true) {
+
+        std::cin >> temp;
+        if (temp != "") {
+            procesInput(temp, states, graphicsHandler, guiHandler);
+        }
+        temp = "";
+
+    }
+
+}
+
 
 /*=======================================================================================================================================*/
 /* Mouse events callbacks.                                                                                                               */
@@ -233,6 +271,7 @@ int main(int, char**)
 
     // Loop variables.
     bool wait = false;
+    std::thread t1(readingIn,states,graphicsHandler,&guiHandler);
 
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
@@ -248,14 +287,18 @@ int main(int, char**)
         graphicsHandler->renderGraphics();
 
         //Render ImGUI to screen.
-        guiHandler.renderGui(io);
-
+        //Render ImGUI components.
+        if (states->startMainGraphics)
+        { guiHandler.renderGui(io); }
+        
         // Assign values to viewport.  This can be moved to a GLFW callback for optimization.
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
     }
+
+    t1.join();
 
     /*===================================================================================================================================*/
 

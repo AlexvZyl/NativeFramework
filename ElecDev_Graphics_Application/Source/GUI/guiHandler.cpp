@@ -35,6 +35,8 @@ void GUIHandler::renderGui(ImGuiIO& io)
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	//Begion Docking Space
+
 	ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -56,11 +58,11 @@ void GUIHandler::renderGui(ImGuiIO& io)
 
 	ImGuiID dock = ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
+	// End Docking space
+
 	this->toolbar->renderToolbar();
 
-	//ImGui::SetNextWindowDockID(0, ImGuiCond_Once);
-
-	this->ribbons->renderRibbons();
+	this->ribbons->renderRibbons(&dock);
 
 	this->graphics->renderGraphics(dock);
 
