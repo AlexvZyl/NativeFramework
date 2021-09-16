@@ -35,7 +35,7 @@ public:
 	//  Variables.
 	//--------------------------------------------------------------------------------------------------------------
 
-	stateMachine states;
+	stateMachine* states;
 
 	GraphicsHandler* graphicsHandler;
 

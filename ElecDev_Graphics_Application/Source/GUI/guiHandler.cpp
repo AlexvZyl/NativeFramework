@@ -14,9 +14,9 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
     // Set the custom theme.
     setTheme();
  
-	this->states = *states;
-	this->states.toolsExpanded = false;
-	this->states.toolsMode = 0;
+	this->states = states;
+	this->states->toolsExpanded = false;
+	this->states->toolsMode = 0;
 	this->textureID = 0;
 
 	this->graphicsHandler = graphicsHandler;
@@ -26,6 +26,8 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->graphics = new Graphics(states, this->graphicsHandler);
 	
 };
+
+
 
 // [MAIN LOOP] Render the GUI to the screen.
 void GUIHandler::renderGui(ImGuiIO& io)
@@ -64,7 +66,9 @@ void GUIHandler::renderGui(ImGuiIO& io)
 
 	this->ribbons->renderRibbons(&dock);
 
-	this->graphics->renderGraphics(dock);
+	if (states->showGraphicsWindow) {
+		this->graphics->renderGraphics(dock);
+	}
 
 	ImGui::Begin("FPS");
 	ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));

@@ -1,5 +1,16 @@
 #pragma once
 #include <Core/imgui.h>
+#include <queue>
+#include <string>
+
+struct inputQueue {
+
+	//Constructor
+	inputQueue(std::string command, std::string parameters) : command(command), parameters(parameters)
+	{}
+	std::string command;
+	std::string parameters;
+};
 
 struct stateMachine
 {
@@ -10,7 +21,15 @@ struct stateMachine
 	ImVec2 renderWindowMouseCoordinate;
 	ImVec2 renderWindowSize;
 
-	bool startMainGraphics = false;
+	bool startMainGraphics = true;
 
+	bool startDemoWindow = false;
+
+	bool showGraphicsWindow = true;
+
+	bool globalQuit = false;
+
+	std::queue<inputQueue> inputQueue;
 
 };
+

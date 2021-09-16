@@ -51,30 +51,70 @@
 GraphicsHandler* graphicsHandler;
 
 /*=======================================================================================================================================*/
+/* Additive functions                                                                                                                        */
+/*=======================================================================================================================================*/
+
+constexpr size_t hash(const char* str) {
+    const long long p = 131;
+    const long long m = 4294967291; // 2^32 - 5, largest 32 bit prime
+    long long total = 0;
+    long long current_multiplier = 1;
+    for (int i = 0; str[i] != '\0'; ++i) {
+        total = (total + current_multiplier * str[i]) % m;
+        current_multiplier = (current_multiplier * p) % m;
+    }
+    return total;
+}
+
+/*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */
 /*=======================================================================================================================================*/
 
-// GLFW error handler.
-static void glfw_error_callback(int error, const char* description)
-{
-    fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
-}
-
-// First part untill ";" is the function name
 void procesInput(std::string inString, stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
 
-    std::string functionCall = inString.substr(inString.find("(:"), inString.length());
+    int startFunc;
+    int endFunc;
 
-    functionCall = inString.substr(2, functionCall.find(":)")-2);
+    int startPar;
+    int endPar;
 
-    if (functionCall == "StartMain") {
-        states->startMainGraphics = true;
+    // Functions is shown between (: and :)
+    startFunc = inString.find("(:") + 2;
+    endFunc = inString.find(":)",startFunc) - 2;
+
+    // Parameters is shown (: and :)
+
+
+    std::string command = inString.substr(startFunc, endFunc);
+    inString = inString.substr(endFunc + 4);
+
+    switch (hash(command.c_str())) {
+
+        case hash("Quit"):
+            states->globalQuit = true;
+            break;
+
+        case hash("Command"):
+            
+            std::string function = inString.substr(2, inString.find(":)")-2);
+            inString = inString.substr(inString.find(":)") + 2);
+            std::string params = inString.substr(2, inString.find(":)")-2);
+
+            states->inputQueue.push(*(new inputQueue(function, params)));
+
+            break;
+
     }
-    if (functionCall == "EndMain") {
-        states->startMainGraphics = false;
-    }
 
-    std::cout << functionCall << std::endl;
+    std::cout << command << std::endl;
+
+    
+
+
+
+    
+
+
 }
 
 void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
@@ -83,7 +123,7 @@ void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandle
 
     while (true) {
 
-        std::cin >> temp;
+        std::getline(std::cin, temp);
         if (temp != "") {
             procesInput(temp, states, graphicsHandler, guiHandler);
         }
@@ -91,6 +131,15 @@ void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandle
 
     }
 }
+
+// GLFW error handler.
+static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
+}
+
+
+
 
 /*=======================================================================================================================================*/
 /* Mouse events callbacks.                                                                                                               */
@@ -266,14 +315,12 @@ int main(int, char**)
     /*===================================================================================================================================*/
 
     // Loop variables.
-    bool wait = false;      // Can be used to tell the app to wait for events and not run
-                            // continuously in the background.
-                            
-    // Create thread that handles the Python/C++ interface.
-    std::thread interfaceThread(readingIn,states,graphicsHandler,&guiHandler);
+    bool wait = false;
 
-    // Graphics pipeline that draws OpenGL and ImGUI.
-    while (!glfwWindowShouldClose(window))
+    std::thread t1(readingIn, states, graphicsHandler, &guiHandler);
+
+    // Graphics Pipeline
+    while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
@@ -295,12 +342,15 @@ int main(int, char**)
         glViewport(0, 0, display_w, display_h);
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
+        
     }
+
+   
 
     /*===================================================================================================================================*/
 
     // Cleanup.
-    interfaceThread.join();         // Join thread with main.
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -308,6 +358,7 @@ int main(int, char**)
     // Close application.
     glfwDestroyWindow(window);
     glfwTerminate();
+    exit(0);
     return 0;
 }
 

@@ -29,5 +29,6 @@ public:
 
 	//Renderer
 	void renderGraphics(ImGuiID dock);
+	void deQueueInput();
 };
 
