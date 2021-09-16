@@ -65,8 +65,6 @@ void MccEngineGL::removeMCC(std::string mccName)
 void MccEngineGL::resizeEvent(int width, int height) 
 {
 	// Check if the dict is not empty.
-
-	std::cout << m_mccDictionary.size() << std::endl;
 	
 	if (m_mccDictionary.size() != 0)
 	{

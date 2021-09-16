@@ -100,7 +100,7 @@ void procesInput(std::string inString, stateMachine* states, GraphicsHandler* gr
             inString = inString.substr(inString.find(":)") + 2);
             std::string params = inString.substr(2, inString.find(":)")-2);
 
-            states->inputQueue.push(*(new inputQueue(function, params)));
+            states->inputQueueMCC.push(*(new inputQueue(function, params)));
 
             break;
 
