@@ -105,13 +105,13 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Set the active engine.
 				if (ImGui::IsWindowFocused()) 
 				{
-					graphicsHandler->m_mccEngine->m_activeMCC = engine.first; 
+					graphicsHandler->m_mccEngine->m_activeMCC = struc.first;
 				}
 				// Reset mouse coordinates.
 				else 
 				{
-					engine.second->m_prevMouseEventWorldCoords[0] = NULL;
-					engine.second->m_prevMouseEventWorldCoords[1] = NULL;
+					struc.second->engine->m_prevMouseEventWorldCoords[0] = NULL;
+					struc.second->engine->m_prevMouseEventWorldCoords[1] = NULL;
 				}
 
 				//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
@@ -131,7 +131,7 @@ void MCC::renderGraphics(ImGuiID dock) {
 			}
 
 			struc.second->isHovered = ImGui::IsWindowHovered();
-			struc.second->vieportDimentions = &ImGui::GetWindowSize();
+			struc.second->vieportDimentions = ImGui::GetWindowSize();
 
 			ImGui::End();
 
