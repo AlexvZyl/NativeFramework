@@ -77,7 +77,7 @@ public:
 
 	std::string sideBarFlag;
 
-	stateMachine states;
+	stateMachine* states;
 	ImVec2 MCCPos;
 
 	ImGuiID* dock;
@@ -91,7 +91,7 @@ public:
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	Ribbons(stateMachine states);
+	Ribbons(stateMachine* states);
 
 	// Function that handles which engine should be active.
 	void renderRibbons(ImGuiID* dock);

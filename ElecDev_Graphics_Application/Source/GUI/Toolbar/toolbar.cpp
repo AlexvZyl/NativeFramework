@@ -14,7 +14,7 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(stateMachine states)
+Toolbar::Toolbar(stateMachine* states)
 {
     this->states = states;
     this->my_tool_active = true;

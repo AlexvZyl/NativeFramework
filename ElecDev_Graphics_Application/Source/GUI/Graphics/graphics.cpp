@@ -8,9 +8,26 @@
 #include <iostream>
 #include <cmath>
 #include <cfenv>
+#include "stateMachine.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
+
+/*=======================================================================================================================================*/
+/* Additive functions                                                                                                                        */
+/*=======================================================================================================================================*/
+
+constexpr size_t hash(const char* str) {
+	const long long p = 131;
+	const long long m = 4294967291; // 2^32 - 5, largest 32 bit prime
+	long long total = 0;
+	long long current_multiplier = 1;
+	for (int i = 0; str[i] != '\0'; ++i) {
+		total = (total + current_multiplier * str[i]) % m;
+		current_multiplier = (current_multiplier * p) % m;
+	}
+	return total;
+}
 
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
@@ -25,8 +42,42 @@ Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->dock = 0;
 }
 
+void Graphics::deQueueInput() {
+	
+
+	while (states->inputQueue.size() > 0){
+
+		inputQueue temp = states->inputQueue.front();
+
+		temp.command.c_str();
+
+		switch (hash(temp.command.c_str())) {
+
+			case hash("drawLine"):
+
+				float par[8];
+
+				for (size_t i = 0; i < 8; i++)
+				{
+					par[i] = std::stof(temp.parameters.substr(0, temp.parameters.find(";")));
+					temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+				}
+
+				graphicsHandler->m_drawingEngine->drawLine(new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
+
+				break;
+		}
+
+		states->inputQueue.pop();
+
+	}
+
+}
+
 // Render the graphics scene.
 void Graphics::renderGraphics(ImGuiID dock) {
+
+	deQueueInput();
 	bool open = true;
 
 	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
