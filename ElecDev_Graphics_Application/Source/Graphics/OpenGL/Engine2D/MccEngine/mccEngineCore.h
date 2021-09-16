@@ -20,6 +20,7 @@ struct MccStruct {
 	ImVec2 viewportDimentions;
 	bool isHovered = false;
 	BaseEngineGL* engine;
+	ImVec2 mouseCoords;
 
 	// Constructor.
 	MccStruct(stateMachine* states) 

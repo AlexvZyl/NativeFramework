@@ -129,6 +129,11 @@ void MCC::renderGraphics(ImGuiID dock) {
 				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				struc.second->isHovered = ImGui::IsWindowHovered();
 
+				ImVec2 temp = ImGui::GetIO().MousePos;
+				temp.x -= ImGui::GetWindowPos().x;
+				temp.y -= ImGui::GetWindowPos().y;
+				struc.second->mouseCoords = temp;
+
 				ImGui::EndChild();
 			}
 
