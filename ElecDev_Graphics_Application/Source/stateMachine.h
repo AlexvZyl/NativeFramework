@@ -33,12 +33,3 @@ struct stateMachine
 
 };
 
-struct mccStruct {
-
-	ImVec2* vieportDimentions;
-	bool* isHovered;
-	BaseEngineGL* engine;
-
-
-};
-

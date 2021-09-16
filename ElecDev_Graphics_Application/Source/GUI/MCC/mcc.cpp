@@ -83,11 +83,11 @@ void MCC::renderGraphics(ImGuiID dock) {
 	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	
 	if (graphicsHandler->m_mccEngine->m_mccDictionary.size() != 0) {
-		for (auto engine : graphicsHandler->m_mccEngine->m_mccDictionary)
+		for (auto struc : graphicsHandler->m_mccEngine->m_mccDictionary)
 		{
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
-			ImGui::Begin(engine.first.c_str());
+			ImGui::Begin(struc.first.c_str());
 			{
 
 				//ImGui::GetCurrentWindow()->DockNode = ImGui::DockBuilderGetCentralNode(dock);
@@ -114,9 +114,12 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Get the size of the child (i.e. the whole draw size of the windows).
 				ImVec2 wsize = ImGui::GetWindowSize();
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
-				ImGui::Image((ImTextureID)engine.second->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::EndChild();
 			}
+
+			struc.second->isHovered = ImGui::IsWindowHovered();
+			struc.second->vieportDimentions = &ImGui::GetWindowSize();
 
 			ImGui::End();
 
