@@ -14,17 +14,7 @@
 /* Additive functions                                                                                                                        */
 /*=======================================================================================================================================*/
 
-constexpr size_t hash(const char* str) {
-	const long long p = 131;
-	const long long m = 4294967291; // 2^32 - 5, largest 32 bit prime
-	long long total = 0;
-	long long current_multiplier = 1;
-	for (int i = 0; str[i] != '\0'; ++i) {
-		total = (total + current_multiplier * str[i]) % m;
-		current_multiplier = (current_multiplier * p) % m;
-	}
-	return total;
-}
+
 
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
@@ -41,58 +31,9 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 	graphicsHandler->m_mccEngine->addMcc("Test");
 }
 
-void MCC::deQueueInput() {
-
-
-	while (states->inputQueueMCC.size() > 0) {
-
-		inputQueue temp = states->inputQueueMCC.front();
-		std::string mccName;
-
-		switch (hash(temp.command.c_str())) {
-
-		case hash("drawLine"):
-
-			
-			float par[8];
-
-			mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-			temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-			std::cout << mccName << std::endl;
-
-			for (size_t i = 0; i < 8; i++)
-			{
-				par[i] = std::stof(temp.parameters.substr(0, temp.parameters.find(";")));
-				temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-				std::cout << par[i] << std::endl;
-			}
-
-			graphicsHandler->m_mccEngine->drawLine(mccName,new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
-
-			break;
-
-		case hash("addMCC"):
-			std::string mccName;
-			mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-			temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-
-			graphicsHandler->m_mccEngine->addMcc(mccName);
-
-
-			break;
-		}
-
-
-		states->inputQueueMCC.pop();
-
-	}
-
-}
 
 // Render the graphics scene.
 void MCC::renderGraphics(ImGuiID dock) {
-
-	deQueueInput();
 	bool open = true;
 
 	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
@@ -114,7 +55,8 @@ void MCC::renderGraphics(ImGuiID dock) {
 				//ImGui::SetWindowSize(ImVec2(500, 500), ImGuiCond_Once);
 				// Using a Child allow to fill all the space of the window.
 				// It also allows customization
-				ImGui::BeginChild("Render");
+				std::string childName = struc.first + "Render";
+				ImGui::BeginChild(childName.c_str());
 				this->states->renderWindowHovered = ImGui::IsWindowHovered();
 				struc.second->isHovered = ImGui::IsWindowHovered();
 				ImVec2 temp = ImGui::GetIO().MousePos;
@@ -150,9 +92,6 @@ void MCC::renderGraphics(ImGuiID dock) {
 
 				// Get the size of the child (i.e. the whole draw size of the windows).
 				ImVec2 wsize = ImGui::GetWindowSize();
-				if (graphicsHandler->m_mccEngine->m_mccDictionary.size() == 2) {
-					int hi = -5;
-				}
 
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
 				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));

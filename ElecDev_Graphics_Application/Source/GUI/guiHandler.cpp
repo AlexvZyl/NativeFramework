@@ -8,6 +8,7 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
+
 // Constructor.
 GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 {
@@ -33,11 +34,10 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 	
 };
 
-
-
 // [MAIN LOOP] Render the GUI to the screen.
 void GUIHandler::renderGui(ImGuiIO& io)
 {
+
 	// Feed inputs to ImGUI, start new frame.
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();

@@ -54,6 +54,7 @@ public:
 
 	// Constructor.
 	GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler);
+	void deQueueInput();
 
 	// Function that handles which engine should be active.
 	void renderGui(ImGuiIO& io);

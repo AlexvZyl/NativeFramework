@@ -70,7 +70,7 @@ constexpr size_t hash(const char* str) {
 /* Functions.                                                                                                                            */
 /*=======================================================================================================================================*/
 
-void procesInput(std::string inString, stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
+void procesInput(std::string inString, stateMachine* states) {
 
     int startFunc;
     int endFunc;
@@ -108,16 +108,9 @@ void procesInput(std::string inString, stateMachine* states, GraphicsHandler* gr
 
     std::cout << command << std::endl;
 
-    
-
-
-
-    
-
-
 }
 
-void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) {
+void readingIn(stateMachine* states) {
 
     std::string temp;
 
@@ -125,7 +118,7 @@ void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandle
 
         std::getline(std::cin, temp);
         if (temp != "") {
-            procesInput(temp, states, graphicsHandler, guiHandler);
+            procesInput(temp, states);
         }
         temp = "";
 
@@ -166,6 +159,54 @@ void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
 /*=======================================================================================================================================*/
+
+void deQueueInput(stateMachine* states) {
+
+
+    while (states->inputQueueMCC.size() > 0) {
+
+        inputQueue temp = states->inputQueueMCC.front();
+        std::string mccName;
+
+        switch (hash(temp.command.c_str())) {
+
+        case hash("drawLine"):
+
+
+            float par[8];
+
+            mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+            temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+            std::cout << mccName << std::endl;
+
+            for (size_t i = 0; i < 8; i++)
+            {
+                par[i] = std::stof(temp.parameters.substr(0, temp.parameters.find(";")));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                std::cout << par[i] << std::endl;
+            }
+
+            graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
+
+            break;
+
+        case hash("addMCC"):
+            std::string mccName;
+            mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+            temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+
+            graphicsHandler->m_mccEngine->addMcc(mccName);
+
+
+            break;
+        }
+
+
+        states->inputQueueMCC.pop();
+
+    }
+
+}
 
 int main(int, char**)
 {
@@ -317,11 +358,13 @@ int main(int, char**)
     // Loop variables.
     bool wait = false;
 
-    std::thread t1(readingIn, states, graphicsHandler, &guiHandler);
+    std::thread t1(readingIn, states);
 
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
+        deQueueInput(states);
+
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
         else { glfwPollEvents(); }        // App runs continuously.
@@ -343,6 +386,8 @@ int main(int, char**)
         
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
+
+        
         
     }
 

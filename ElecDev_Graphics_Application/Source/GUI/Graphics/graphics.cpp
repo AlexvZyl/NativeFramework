@@ -40,6 +40,7 @@ Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;
+
 }
 
 void Graphics::deQueueInput() {
