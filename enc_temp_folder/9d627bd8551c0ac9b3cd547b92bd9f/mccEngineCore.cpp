@@ -68,6 +68,7 @@ void MccEngineGL::resizeEvent(int width, int height)
 	
 	if (m_mccDictionary.size() != 0)
 	{
+		std::cout << m_mccDictionary.begin()->first << "\n";
 		// Run resize event for each engine.
 		for (auto engine : m_mccDictionary)
 		{
