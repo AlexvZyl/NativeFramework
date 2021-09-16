@@ -13,6 +13,8 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 
 // Design engine.
 #include "OpenGL/Engine2D/DesignEngine/designEngineCore.h"
+// MCC Engine.
+#include "Engine2D/MccEngine/mccEngineCore.h"
 // Drawing engine.
 #include "OpenGL/Engine2D/BaseEngine/baseEngineCore.h"
 
@@ -54,8 +56,9 @@ public:
 	Engines m_activeEngine;
 
 	// Different drawing engines.
-	BaseEngineGL* m_drawingEngine;
+	MccEngineGL* m_mccEngine;
 	DesignEngineGL* m_designEngine;
+	BaseEngineGL* m_baseEngine;
 
 	// The GLFW window from the main application.
 	GLFWwindow* m_window;

@@ -63,7 +63,7 @@ void Graphics::deQueueInput() {
 					temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
 				}
 
-				graphicsHandler->m_drawingEngine->drawLine(new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
+				//graphicsHandler->m_baseEngine->drawLine(new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
 
 				break;
 		}
@@ -112,7 +112,7 @@ void Graphics::renderGraphics(ImGuiID dock) {
 		// Get the size of the child (i.e. the whole draw size of the windows).
 		ImVec2 wsize = ImGui::GetWindowSize();
 		// Because I use the texture from OpenGL, I need to invert the V from the UV.
-		ImGui::Image((ImTextureID)this->graphicsHandler->m_drawingEngine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)this->graphicsHandler->m_baseEngine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::EndChild();
 	}
 	

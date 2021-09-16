@@ -107,7 +107,6 @@ public:
 	//  Misc variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	GLFWwindow* m_window;
 	float m_imGuiViewportDimensions[2];
 	float m_projectionValues[6];
 	float m_glfwViewportDimensions[2];
@@ -118,7 +117,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// With GLFW window.
-	BaseEngineGL(GLFWwindow* window, stateMachine* states);
+	BaseEngineGL(stateMachine* states);
 	// Destructor
 	~BaseEngineGL();
 

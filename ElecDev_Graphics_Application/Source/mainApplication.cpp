@@ -332,20 +332,19 @@ int main(int, char**)
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();
 
+        // Assign values to viewport for ImGUI.
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+
         // Render ImGUI to screen.
         /*if (states->startMainGraphics)
         { guiHandler.renderGui(io); }*/
         guiHandler.renderGui(io);
         
-        // Assign values to viewport (This can be moved to a GLFW callback for optimization).
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
         
     }
-
-   
 
     /*===================================================================================================================================*/
 
