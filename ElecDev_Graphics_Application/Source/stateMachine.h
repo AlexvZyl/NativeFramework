@@ -10,4 +10,7 @@ struct stateMachine
 	ImVec2 renderWindowMouseCoordinate;
 	ImVec2 renderWindowSize;
 
+	bool startMainGraphics = false;
+
+
 };

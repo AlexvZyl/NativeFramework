@@ -22,6 +22,7 @@ Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
 {
 	this->pos.x = 0;
 	this->pos.y = 0;
+	this->dock = 0;
 }
 
 // Render the graphics scene.
@@ -32,12 +33,13 @@ void Graphics::renderGraphics(ImGuiID dock) {
 
 	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
+
 	ImGui::Begin("Render Window");
 	{
 		
 		//ImGui::GetCurrentWindow()->DockNode = ImGui::DockBuilderGetCentralNode(dock);
 
-		ImGui::SetWindowSize(ImVec2(500, 500), ImGuiCond_Once);
+		//ImGui::SetWindowSize(ImVec2(500, 500), ImGuiCond_Once);
 		// Using a Child allow to fill all the space of the window.
 		// It also allows customization
 		ImGui::BeginChild("Render");

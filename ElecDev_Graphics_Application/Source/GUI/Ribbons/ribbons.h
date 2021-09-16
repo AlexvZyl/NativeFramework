@@ -80,6 +80,11 @@ public:
 	stateMachine states;
 	ImVec2 MCCPos;
 
+	ImGuiID* dock;
+	ImGuiID left;
+
+	bool first[3];
+
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
@@ -89,7 +94,7 @@ public:
 	Ribbons(stateMachine states);
 
 	// Function that handles which engine should be active.
-	void renderRibbons();
+	void renderRibbons(ImGuiID* dock);
 	bool topBar();
 	bool sideBar();
 	bool MCC();
