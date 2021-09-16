@@ -110,8 +110,8 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Reset mouse coordinates.
 				else 
 				{
-					engine.second->m_prevMouseEventWorldCoords[0] = NULL;
-					engine.second->m_prevMouseEventWorldCoords[1] = NULL;
+					engine.second->engine->m_prevMouseEventWorldCoords[0] = NULL;
+					engine.second->engine->m_prevMouseEventWorldCoords[1] = NULL;
 				}
 
 				//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
@@ -126,7 +126,7 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Get the size of the child (i.e. the whole draw size of the windows).
 				ImVec2 wsize = ImGui::GetWindowSize();
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
-				ImGui::Image((ImTextureID)engine.second->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((ImTextureID)engine.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::EndChild();
 			}
 

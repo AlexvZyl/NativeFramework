@@ -73,7 +73,7 @@ void MccEngineGL::resizeEvent(int width, int height)
 		// Run resize event for each engine.
 		for (auto engine : m_mccDictionary)
 		{
-			engine.second->engine->resizeEventImGUI(width, height);
+			engine.second->engine->resizeEventImGUI(engine.second->viewportDimentions.x, engine.second->viewportDimentions.y);
 		}
 	}
 

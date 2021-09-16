@@ -17,7 +17,7 @@
 
 struct MccStruct {
 
-	ImVec2 vieportDimentions = {500, 500};
+	ImVec2 viewportDimentions;
 	bool isHovered = false;
 	BaseEngineGL* engine;
 
@@ -25,6 +25,8 @@ struct MccStruct {
 	MccStruct(stateMachine* states) 
 	{
 		engine = new BaseEngineGL(states);
+		viewportDimentions[0] = engine->m_imGuiViewportDimensions[0];
+		viewportDimentions[1] = engine->m_imGuiViewportDimensions[1];
 	}
 
 	// Destructor.
