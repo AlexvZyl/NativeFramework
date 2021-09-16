@@ -109,7 +109,6 @@ public:
 
 	float m_imGuiViewportDimensions[2];
 	float m_projectionValues[6];
-	float m_glfwViewportDimensions[2];
 	stateMachine* m_states;
 
 	//---------------------------------------------------------------------------------------------------------------------

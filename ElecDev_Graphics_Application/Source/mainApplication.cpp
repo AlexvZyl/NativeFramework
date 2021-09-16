@@ -171,8 +171,6 @@ void deQueueInput(stateMachine* states) {
         switch (hash(temp.command.c_str())) {
 
         case hash("drawLine"):
-
-
             float par[8];
 
             mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -185,27 +183,24 @@ void deQueueInput(stateMachine* states) {
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 std::cout << par[i] << std::endl;
             }
-
             graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
-
             break;
 
         case hash("addMCC"):
-            std::string mccName;
             mccName = temp.parameters.substr(0, temp.parameters.find(";"));
             temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-
             graphicsHandler->m_mccEngine->addMcc(mccName);
+            break;
 
-
+        case hash("removeMCC"):
+            mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+            temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+            graphicsHandler->m_mccEngine->removeMCC(mccName);
             break;
         }
 
-
         states->inputQueueMCC.pop();
-
     }
-
 }
 
 int main(int, char**)
@@ -359,9 +354,11 @@ int main(int, char**)
 
     std::thread t1(readingIn, states);
 
+    bool add = true;
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
+        // Poll commands from python interface.
         deQueueInput(states);
 
         // Event checking.
@@ -370,7 +367,7 @@ int main(int, char**)
     
         // Init colors for OpenGL.
         glClear(GL_COLOR_BUFFER_BIT);
-
+     
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();
 
@@ -380,10 +377,13 @@ int main(int, char**)
 
         // Render ImGUI to screen.
         guiHandler.renderGui(io);
-        
+
+        // Destroy ImGUI to allow drawing in other
+        // contexts.
+        ImGui_ImplOpenGL3_DestroyDeviceObjects();
+
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
-      
     }
 
     /*===================================================================================================================================*/

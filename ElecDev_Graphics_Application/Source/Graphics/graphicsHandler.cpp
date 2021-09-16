@@ -124,8 +124,8 @@ void GraphicsHandler::closeActiveEngine()
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {	
-	// Check if not above ImGUI element.
-	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered && m_mccEngine->m_mccDictionary.size() != 0)
+	// Check if dict is not empty.
+	if (m_mccEngine->m_mccDictionary.size() != 0) 
 	{
 		// Find cursos position.
 		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
@@ -146,7 +146,7 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 				m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->engine->mousePressRight(mousePos);
 			}
 		}
-		else 
+		else
 		{
 			std::cout << "[OPENGL][ERROR][ENGINES] Active engine not found during mouse press event.\n";
 		}
@@ -156,8 +156,8 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 // Handle mouse move events.
 void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-	// Check if not above ImGUI element.
-	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered && m_mccEngine->m_mccDictionary.size() != 0)
+	// Check if MCC dict is empty.
+	if (m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
 		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
@@ -166,23 +166,22 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 
 		// Call active engine.
 		if (m_activeEngine == Engines::MCC_ENGINE)
-		{ 
+		{
 			m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->engine->mouseMoveEvent(mousePos, buttonState);
 		}
 		// Output error if active engine is not found.
-		else 
-		{ 
-			std::cout << "[OPENGL][ERROR][ENGINES] Active engine not found during mouse move event.\n"; 
+		else
+		{
+			std::cout << "[OPENGL][ERROR][ENGINES] Active engine not found during mouse move event.\n";
 		}
-		
 	}
 }
 
 // Handle mouse scroll events.
 void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset) 
 {	
-	// Check if not above ImGUI element.
-	if (m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->isHovered&& m_mccEngine->m_mccDictionary.size() != 0)
+	// Check if dict is not empty.
+	if (m_mccEngine->m_mccDictionary.size() != 0)
 	{
 		// Find cursos position.
 		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };

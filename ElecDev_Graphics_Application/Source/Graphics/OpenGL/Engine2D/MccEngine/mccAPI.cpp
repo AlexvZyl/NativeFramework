@@ -28,7 +28,10 @@ void MccEngineGL::removeMCC(std::string mccName)
 	// Remove by key.
 	m_mccDictionary.erase(mccName);
 	// Set new active MCC.
-	m_activeMCC = m_mccDictionary.begin()->first;
+	if (m_mccDictionary.size() != 0)
+	{
+		m_activeMCC = m_mccDictionary.begin()->first;
+	}
 }
 
 // Draws a line.
