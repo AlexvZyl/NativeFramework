@@ -64,10 +64,7 @@ void MccEngineGL::removeMCC(std::string mccName)
 // Resize event for the engine.
 void MccEngineGL::resizeEvent(int width, int height) 
 {
-	// Check if the dict is not empty.
-
-	std::cout << m_mccDictionary.size() << std::endl;
-	
+	// Check if the dict is not empty.	
 	if (m_mccDictionary.size() != 0)
 	{
 		// Run resize event for each engine.
@@ -76,10 +73,6 @@ void MccEngineGL::resizeEvent(int width, int height)
 			engine.second->engine->resizeEventImGUI(engine.second->viewportDimentions.x, engine.second->viewportDimentions.y);
 		}
 	}
-
-	// Reset bool.
-	m_states->renderResizeEvent = false;
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------

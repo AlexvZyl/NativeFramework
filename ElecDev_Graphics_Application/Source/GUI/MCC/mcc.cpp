@@ -39,6 +39,9 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 
 	graphicsHandler->m_mccEngine->addMcc("Test");
 	graphicsHandler->m_mccEngine->addMcc("Test2");
+	graphicsHandler->m_mccEngine->addMcc("Test3");
+	graphicsHandler->m_mccEngine->addMcc("Test4");
+	graphicsHandler->m_mccEngine->addMcc("Test5");
 }
 
 void MCC::deQueueInput() {
