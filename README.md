@@ -50,6 +50,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Multi View port
 * ⬜ Multi vieport docking
 * ⬜ Resize event need working on
+* ⬜ Implement Input catching
 
 ---
 
