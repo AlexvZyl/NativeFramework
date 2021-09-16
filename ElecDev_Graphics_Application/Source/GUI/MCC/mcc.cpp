@@ -37,8 +37,8 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->pos.y = 0;
 	this->dock = 0;
 
-	/*graphicsHandler->m_mccEngine->addMcc("Test");
-	graphicsHandler->m_mccEngine->addMcc("Test2");*/
+	graphicsHandler->m_mccEngine->addMcc("Test");
+	graphicsHandler->m_mccEngine->addMcc("Test2");
 }
 
 void MCC::deQueueInput() {
@@ -101,6 +101,18 @@ void MCC::renderGraphics(ImGuiID dock) {
 				temp.x -= ImGui::GetWindowPos().x;
 				temp.y -= ImGui::GetWindowPos().y;
 				this->states->renderWindowMouseCoordinate = temp;
+
+				// Set the active engine.
+				if (ImGui::IsWindowFocused()) 
+				{
+					graphicsHandler->m_mccEngine->m_activeMCC = engine.first; 
+				}
+				// Reset mouse coordinates.
+				else 
+				{
+					engine.second->m_prevMouseEventWorldCoords[0] = NULL;
+					engine.second->m_prevMouseEventWorldCoords[1] = NULL;
+				}
 
 				//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
 

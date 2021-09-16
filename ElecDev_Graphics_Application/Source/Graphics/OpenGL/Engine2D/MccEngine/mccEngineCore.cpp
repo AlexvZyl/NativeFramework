@@ -74,6 +74,10 @@ void MccEngineGL::resizeEvent(int width, int height)
 			engine.second->resizeEventImGUI(width, height);
 		}
 	}
+
+	// Reset bool.
+	m_states->renderResizeEvent = false;
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
