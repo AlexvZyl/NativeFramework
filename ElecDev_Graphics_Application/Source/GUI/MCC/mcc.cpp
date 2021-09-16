@@ -44,32 +44,46 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 void MCC::deQueueInput() {
 
 
-	while (states->inputQueue.size() > 0) {
+	while (states->inputQueueMCC.size() > 0) {
 
-		inputQueue temp = states->inputQueue.front();
+		inputQueue temp = states->inputQueueMCC.front();
+		std::string mccName;
 
 		switch (hash(temp.command.c_str())) {
 
 		case hash("drawLine"):
 
-			std::string mccName;
+			
 			float par[8];
 
 			mccName = temp.parameters.substr(0, temp.parameters.find(";"));
 			temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+			std::cout << mccName << std::endl;
 
 			for (size_t i = 0; i < 8; i++)
 			{
 				par[i] = std::stof(temp.parameters.substr(0, temp.parameters.find(";")));
 				temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+				std::cout << par[i] << std::endl;
 			}
 
 			graphicsHandler->m_mccEngine->drawLine(mccName,new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
 
 			break;
+
+		case hash("addMCC"):
+			std::string mccName;
+			mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+			temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+
+			graphicsHandler->m_mccEngine->addMcc(mccName);
+
+
+			break;
 		}
 
-		states->inputQueue.pop();
+
+		states->inputQueueMCC.pop();
 
 	}
 
@@ -78,7 +92,7 @@ void MCC::deQueueInput() {
 // Render the graphics scene.
 void MCC::renderGraphics(ImGuiID dock) {
 
-	//deQueueInput();
+	deQueueInput();
 	bool open = true;
 
 	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
@@ -89,6 +103,7 @@ void MCC::renderGraphics(ImGuiID dock) {
 	if (graphicsHandler->m_mccEngine->m_mccDictionary.size() != 0) {
 		for (auto struc : graphicsHandler->m_mccEngine->m_mccDictionary)
 		{
+			
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
 			ImGui::Begin(struc.first.c_str());
@@ -135,6 +150,10 @@ void MCC::renderGraphics(ImGuiID dock) {
 
 				// Get the size of the child (i.e. the whole draw size of the windows).
 				ImVec2 wsize = ImGui::GetWindowSize();
+				if (graphicsHandler->m_mccEngine->m_mccDictionary.size() == 2) {
+					int hi = -5;
+				}
+
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
 				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				
