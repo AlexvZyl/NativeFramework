@@ -37,7 +37,6 @@ void MccEngineGL::renderActiveEngine()
 		{
 			engine.second->renderLoop();
 		}
-
 	}
 }
 
@@ -53,6 +52,7 @@ void MccEngineGL::addMcc(std::string mccName)
 // Remove an MCC from the dict.
 void MccEngineGL::removeMCC(std::string mccName) 
 {
+	delete m_mccDictionary[mccName];
 	// Remove by key.
 	m_mccDictionary.erase(mccName);
 }
