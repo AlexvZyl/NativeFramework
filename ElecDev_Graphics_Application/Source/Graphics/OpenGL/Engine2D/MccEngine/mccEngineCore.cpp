@@ -35,7 +35,7 @@ void MccEngineGL::renderActiveEngine()
 		// For now render everytihng.
 		for (auto engine : m_mccDictionary)
 		{
-			engine.second->renderLoop();
+			engine.second->engine->renderLoop();
 		}
 	}
 }
@@ -44,7 +44,7 @@ void MccEngineGL::renderActiveEngine()
 void MccEngineGL::addMcc(std::string mccName) 
 {
 	// Add to dictionary.
-	m_mccDictionary.insert({mccName, new BaseEngineGL(m_states)});
+	m_mccDictionary.insert({ mccName, new MccStruct(m_states) });
 	// Set MCC name.
 	m_activeMCC = mccName;
 }
@@ -73,7 +73,7 @@ void MccEngineGL::resizeEvent(int width, int height)
 		// Run resize event for each engine.
 		for (auto engine : m_mccDictionary)
 		{
-			engine.second->resizeEventImGUI(width, height);
+			engine.second->engine->resizeEventImGUI(width, height);
 		}
 	}
 
