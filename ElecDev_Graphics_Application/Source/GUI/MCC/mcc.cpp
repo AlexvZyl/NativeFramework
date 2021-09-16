@@ -30,12 +30,14 @@ constexpr size_t hash(const char* str) {
 /*=======================================================================================================================================*/
 
 // Constructor.
-MCC::MCC(stateMachine* states, std::map<std::string, BaseEngineGL> *MCCDict)
-	: states(states), MCCDict(MCCDict)
+MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
+	: states(states), graphicsHandler(graphicsHandler)
 {
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;
+
+	graphicsHandler->m_mccEngine->addMcc("Test");
 }
 
 void MCC::deQueueInput() {
@@ -78,13 +80,13 @@ void MCC::renderGraphics(ImGuiID dock) {
 
 
 	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
-	if (MCCDict->size() != 0) {
-		auto iter = MCCDict->begin();
-		while (iter != MCCDict->end())
+	
+	if (graphicsHandler->m_mccEngine->m_mccDictionary.size() != 0) {
+		for (auto engine : graphicsHandler->m_mccEngine->m_mccDictionary)
 		{
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
-			ImGui::Begin("Render Window");
+			ImGui::Begin(engine.first.c_str());
 			{
 
 				//ImGui::GetCurrentWindow()->DockNode = ImGui::DockBuilderGetCentralNode(dock);
@@ -111,13 +113,12 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Get the size of the child (i.e. the whole draw size of the windows).
 				ImVec2 wsize = ImGui::GetWindowSize();
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
-				ImGui::Image((ImTextureID)iter->second.getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image((ImTextureID)engine.second.getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				ImGui::EndChild();
 			}
 
 			ImGui::End();
 
-			++iter;
 
 		}
 	}

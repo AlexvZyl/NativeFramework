@@ -27,7 +27,7 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 
 	//MCCDict.
 
-	this->mcc = new MCC(states, MCCDict);
+	this->mcc = new MCC(states,graphicsHandler);
 	//MCCDict->insert("test", new BaseEngineGL(m_window, states));
 
 	

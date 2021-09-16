@@ -20,12 +20,12 @@ public:
 
 	//Variables
 	stateMachine* states;
+	GraphicsHandler* graphicsHandler;
 	ImVec2 pos;
-	std::map<std::string, BaseEngineGL> *MCCDict;
 	ImGuiID dock;
 
 	//Constructor
-	MCC(stateMachine* states, std::map<std::string, BaseEngineGL> *MCCDict);
+	MCC(stateMachine* states, GraphicsHandler* graphicsHandler);
 
 	//Renderer
 	void renderGraphics(ImGuiID dock);
