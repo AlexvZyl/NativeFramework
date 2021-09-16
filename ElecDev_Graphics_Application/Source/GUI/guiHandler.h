@@ -15,6 +15,11 @@
 #include "Graphics/graphics.h"
 #include "../stateMachine.h"
 
+// ImGUI (GUI software). 
+#include "Core/imgui.h"
+#include "Implementations/imgui_impl_glfw.h"
+#include "Implementations/imgui_impl_opengl3.h"
+
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
 
@@ -48,7 +53,7 @@ public:
 	GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler);
 
 	// Function that handles which engine should be active.
-	void renderGraphics();
+	void renderGui(ImGuiIO& io);
 
 	// Set custom theme.
 	void setTheme();

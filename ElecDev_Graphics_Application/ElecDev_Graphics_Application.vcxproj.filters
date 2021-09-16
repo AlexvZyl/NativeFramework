@@ -1693,6 +1693,7 @@
     <Image Include="Icons\circuitIcon.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
+    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -727,8 +727,8 @@
     <Image Include="Icons\Draw_MCC.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF.png" />
-    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
+    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Resources\Icons\component.png" />

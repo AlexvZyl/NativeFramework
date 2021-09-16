@@ -179,7 +179,7 @@ int main(int, char**)
     // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -231,58 +231,30 @@ int main(int, char**)
     /* Loop                                                                                                                              */
     /*===================================================================================================================================*/
 
-    // [MISSING COMMENT]
-    std::string interfacePython = "";
+    // Loop variables.
+    bool wait = false;
 
     // Graphics Pipeline
     while (!glfwWindowShouldClose(window))
     {
-        // Check for events.
-        //glfwWaitEvents();
-        glfwPollEvents();
-        // Init colors.
+        // Event checking.
+        if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
+        else { glfwPollEvents(); }        // App runs continuously.
+    
+        // Init colors for OpenGL.
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();
 
-        // Feed inputs to ImGUI, start new frame.
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        //Render ImGUI to screen.
+        guiHandler.renderGui(io);
 
-        //Render ImGUI components.
-        guiHandler.renderGraphics();
-
-        /*std::cin >> interfacePython;
-        ImGui::Begin("Interface Window Example");
-        ImGui::Text("(%s)", interfacePython);
-        ImGui::SetWindowPos(ImVec2(ImGui::GetMainViewport()->WorkSize.x - 160, 0));
-        ImGui::SetNextWindowSize(ImVec2(30, 10));
-        ImGui::End();*/
-
-        //Render ImGUI into screen.
-        ImGui::Render();
-        // Assign values to viewport.
+        // Assign values to viewport.  This can be moved to a GLFW callback for optimization.
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        // Update and Render additional Platform Windows
-        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            GLFWwindow* backup_current_context = glfwGetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            glfwMakeContextCurrent(backup_current_context);
-        }
-
-        
+        // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
-        //glFinish();
-
     }
 
     /*===================================================================================================================================*/
@@ -295,9 +267,7 @@ int main(int, char**)
     // Close application.
     glfwDestroyWindow(window);
     glfwTerminate();
-
     return 0;
-
 }
 
 /*=======================================================================================================================================*/
