@@ -30,7 +30,14 @@ void MccEngineGL::renderActiveEngine()
 	if (m_mccDictionary.size() != 0)
 	{
 		// Render active engine.
-		m_mccDictionary[m_activeMCC]->renderLoop();
+		/*m_mccDictionary[m_activeMCC]->renderLoop();*/
+
+		// For now render everytihng.
+		for (auto engine : m_mccDictionary)
+		{
+			engine.second->renderLoop();
+		}
+
 	}
 }
 
