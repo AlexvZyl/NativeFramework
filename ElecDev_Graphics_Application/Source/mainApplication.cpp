@@ -130,7 +130,6 @@ void readingIn(stateMachine* states, GraphicsHandler* graphicsHandler, GUIHandle
         temp = "";
 
     }
-
 }
 
 // GLFW error handler.
@@ -291,11 +290,11 @@ int main(int, char**)
     int display_w, display_h;
 
     // Setup mouse callbacks.
-    glfwSetMouseButtonCallback(window, mousePressEvent);// Mouse press event.
-    glfwSetCursorPosCallback(window, mouseMoveEvent);   //  Mouse move event.
-    glfwSetScrollCallback(window, mouseScrollEvent);    // Mouse scroll event.
+    glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
+    glfwSetCursorPosCallback(window, mouseMoveEvent);       // Mouse move event.
+    glfwSetScrollCallback(window, mouseScrollEvent);        // Mouse scroll event.
 
-    // Enable MSAA.
+    // Enable MSAA in OpenGL.
     glEnable(GL_MULTISAMPLE);
 
     // Create the state machine variables.
@@ -333,20 +332,19 @@ int main(int, char**)
         // Handle graphics (OpenGL engines: Drawing and Designing).
         graphicsHandler->renderGraphics();
 
-        //Render ImGUI to screen.
-        //Render ImGUI components.
-        if (states->startMainGraphics)
-        { guiHandler.renderGui(io); }
-        
-        // Assign values to viewport.  This can be moved to a GLFW callback for optimization.
+        // Assign values to viewport for ImGUI.
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
+
+        // Render ImGUI to screen.
+        /*if (states->startMainGraphics)
+        { guiHandler.renderGui(io); }*/
+        guiHandler.renderGui(io);
+        
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
         
     }
-
-   
 
     /*===================================================================================================================================*/
 

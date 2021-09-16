@@ -7,13 +7,16 @@
 // Needed to load resources.
 #include "../../Resources/resource.h"
 
+#include "Misc/stb_image.h"
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
 //----------------------------------------------------------------------------------------------------------------------
 
 // With GLFW window.
-BaseEngineGL::BaseEngineGL(GLFWwindow* window, stateMachine* states)
-	:m_window(window), m_states(states)
+BaseEngineGL::BaseEngineGL(stateMachine* states)
+	:m_states(states)
 {
 	//---------------------------------------------------------------------------------------
 	// Setup shaders.
@@ -67,12 +70,6 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window, stateMachine* states)
 	// Windows setup.
 	//---------------------------------------------------------------------------------------
 
-	// GLFW viewport.
-	int viewportGLFW[2];
-	glfwGetWindowSize(m_window, &viewportGLFW[0], &viewportGLFW[1]);
-	m_glfwViewportDimensions[0] = viewportGLFW[0];
-	m_glfwViewportDimensions[1] = viewportGLFW[1];
-
 	// ImGUI viewport.
 	int viewportImGUI[2] = {500,500};
 	m_imGuiViewportDimensions[0] = viewportImGUI[0];
@@ -84,7 +81,7 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window, stateMachine* states)
 
 	// Find the minimum value of the viewport dimensions.
 	int minValue;
-	if (viewportGLFW[0] < viewportImGUI[1]) { minValue = viewportImGUI[0]; }
+	if (viewportImGUI[0] < viewportImGUI[1]) { minValue = viewportImGUI[0]; }
 	else { minValue = viewportImGUI[1]; }
 	// Scale the projection values according to the ImGUI viewport.
 	float projValuesTemp[6] = { (float)-viewportImGUI[0] / minValue, (float)viewportImGUI[0] / minValue, (float)-viewportImGUI[1] / minValue, (float)viewportImGUI[1] / minValue,-1.0, 1.0 };
@@ -146,9 +143,8 @@ BaseEngineGL::BaseEngineGL(GLFWwindow* window, stateMachine* states)
 
 	m_textureShader->bind();
 	// Load font atlas as texture.
-	m_textAtlas = loadBMPtoGL(ARIAL_SDF_BMP);
-	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF.png", true);
-	
+	m_textAtlas = loadBMPtoGL(ICON_BMP);
+	//m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF_BMP.bmp", true);
 	// Load texture for testing.
 	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
 
@@ -228,9 +224,6 @@ void BaseEngineGL::renderLoop()
 
 	// Do not continue rendering to a frame buffer.
 	m_frameBuffer->unbind();
-
-	// Set glViewport for the GLFW. context.
-	GLCall(glViewport(0, 0, m_glfwViewportDimensions[0], m_glfwViewportDimensions[1]));
 }
 
 // Return the ID to the texture that is rendered via the FBO.
