@@ -286,8 +286,6 @@ int main(int, char**)
     int screen_width, screen_height;
     glfwGetFramebufferSize(window, &screen_width, &screen_height);
     glViewport(0, 0, screen_width, screen_height);
-    // Variables used in loop.
-    int display_w, display_h;
 
     // Setup mouse callbacks.
     glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
@@ -315,8 +313,10 @@ int main(int, char**)
     /*===================================================================================================================================*/
 
     // Loop variables.
-    bool wait = false;
+    bool wait = false;          // Wait for events.
+    int display_w, display_h;   // Viewport for ImGUI.
 
+    // Thread.
     std::thread t1(readingIn, states, graphicsHandler, &guiHandler);
 
     // Graphics Pipeline
