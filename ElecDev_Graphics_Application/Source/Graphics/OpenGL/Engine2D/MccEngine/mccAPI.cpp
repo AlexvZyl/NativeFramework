@@ -98,7 +98,7 @@ void MccEngineGL::drawQuadFilled(std::string mccName, float position[2], float w
 // Draws a clear circle.
 void MccEngineGL::drawCircleClear(std::string mccName, float coords[2], float radius, float color[4])
 {
-	for (int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
+	for (unsigned int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
 	{
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
@@ -114,7 +114,7 @@ void MccEngineGL::drawCircleClear(std::string mccName, float coords[2], float ra
 // Draws a filled circle.
 void MccEngineGL::drawCircleFilled(std::string mccName, float coords[2], float radius, float color[4])
 {
-	for (int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
+	for (unsigned int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
 	{
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);

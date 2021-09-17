@@ -15,12 +15,6 @@
 #include "Implementations/imgui_impl_opengl3.h"
 #include "stateMachine.h"
 
-// GLAD (OpenGL loader).
-#include <glad/glad.h>
-
-// Include GLFW (window) after OpenGL definition.
-#include <GLFW/glfw3.h>
-
 // GUI includes.
 #include "GUI/guiHandler.h"
 
@@ -29,6 +23,12 @@
 
 // Resources.
 #include <Misc/stb_image.h>
+
+// Include GLFW (window) after OpenGL definition.
+#include <GLFW/glfw3.h>
+
+// GLAD (OpenGL loader).
+#include <glad/glad.h>
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
@@ -74,32 +74,41 @@ void procesInput(std::string inString, stateMachine* states) {
     // Variables.
     int startFunc;
     int endFunc;
-    int startPar;
-    int endPar;
 
     // Functions is shown between (: and :)
-    startFunc = inString.find("(:") + 2;
-    endFunc = inString.find(":)",startFunc) - 2;
+    startFunc = (int)inString.find("(:") + 2;
+    endFunc = (int)inString.find(":)",startFunc) - 2;
 
     // Parameters is shown between (: and :).
     std::string command = inString.substr(startFunc, endFunc);
     inString = inString.substr(endFunc + 4);
 
     // Parse into types.
-    switch (hash(command.c_str())) {
+    switch (hash(command.c_str()))
+    {
 
         // Quit the thread.
         case hash("Quit"):
+        {
             states->globalQuit = true;
             break;
+        }
          
         // Command to be processed by the app.
         case hash("Command"):
-            std::string function = inString.substr(2, inString.find(":)")-2);
+        {
+            std::string function = inString.substr(2, inString.find(":)") - 2);
             inString = inString.substr(inString.find(":)") + 2);
-            std::string params = inString.substr(2, inString.find(":)")-2);
+            std::string params = inString.substr(2, inString.find(":)") - 2);
             states->inputQueueMCC.push(*(new inputQueue(function, params)));
             break;
+        }
+
+        default:
+        {
+            std::cout << "[INTERFACE][ERROR] '" << command << "' type invalid. \n\n";
+            break;
+        }
     }
 }
 
@@ -251,6 +260,10 @@ void deQueueInput(stateMachine* states) {
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->m_mccEngine->removeMCC(mccName);
                 break;
+
+            default:
+                std::cout << "[INTERFACE][ERROR] '" << temp.command.c_str() << "' function invalid. \n\n";
+                break;
             }
 
         // Remove command from queue.
@@ -281,13 +294,13 @@ void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 // Handle mouse press events from GLFW.
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-    graphicsHandler->mouseMoveEvent(window, xpos, ypos);
+    graphicsHandler->mouseMoveEvent(window, (float)xpos, (float)ypos);
 }
 
 // Handle mouse press scroll. from GLFW.
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
-    graphicsHandler->mouseScrollEvent(window, xoffset, yoffset);
+    graphicsHandler->mouseScrollEvent(window, (float)xoffset, (float)yoffset);
 }
 
 /*=======================================================================================================================================*/

@@ -91,10 +91,10 @@ public:
 	void mousePressEvent(GLFWwindow* window, int button, int action, int mods);
 
 	// Handle mouse move events.
-	void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos);
+	void mouseMoveEvent(GLFWwindow* window, float xpos, float ypos);
 
 	// Handle mouse move events.
-	void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset);
+	void mouseScrollEvent(GLFWwindow* window, float xoffset, float yoffset);
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Window events.

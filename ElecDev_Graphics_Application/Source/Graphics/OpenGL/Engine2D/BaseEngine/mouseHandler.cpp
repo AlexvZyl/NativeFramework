@@ -13,7 +13,7 @@ This is where the drawing enigine mouse events are handled.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Event handler for a mouse left click.
-void BaseEngineGL::mousePressLeft(double pixelCoords[2])
+void BaseEngineGL::mousePressLeft(float pixelCoords[2])
 {
 	// Find current click in world coords.
 	glm::vec4 currmousePosVec = pixelCoordsToWorldCoords(pixelCoords);
@@ -23,7 +23,7 @@ void BaseEngineGL::mousePressLeft(double pixelCoords[2])
 }
 
 // Event handler for a mouse right click.
-void BaseEngineGL::mousePressRight(double pixelCoords[2])
+void BaseEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Reset the view values.
 	m_scalingMatrix = glm::mat4(1.0f);
@@ -36,7 +36,7 @@ void BaseEngineGL::mousePressRight(double pixelCoords[2])
 //----------------------------------------------------------------------------------------------------------------------
 
 // Event handler for a mouse move event.
-void BaseEngineGL::mouseMoveEvent(double pixelCoords[2], int buttonState)
+void BaseEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
 {
 	// Check if left mouse is pressed.
 	if (buttonState == GLFW_PRESS)
@@ -58,24 +58,24 @@ void BaseEngineGL::mouseMoveEvent(double pixelCoords[2], int buttonState)
 //  Mouse Scroll event.
 //----------------------------------------------------------------------------------------------------------------------
 
-void BaseEngineGL::mouseScrollEvent(double pixelCoords[2], int yOffset) 
+void BaseEngineGL::mouseScrollEvent(float pixelCoords[2], int yOffset) 
 {	
 	
 	// Calculate zoom value based on mouse wheel scroll.
 	//----------------------------------------------------------
 	
 	// Define the scaling value.
-	double zoomScaleValue;
+	float zoomScaleValue;
 	 
 	// Determine if it should be a zoom in or out.
 	if (yOffset > 0) // Zoom in.
 	{	
 		// Zoom scale value.
-		zoomScaleValue = 1 + (double)m_scaleRate;
+		zoomScaleValue = 1 + (float)m_scaleRate;
 	}
 	else // Zoom out.
 	{
-		zoomScaleValue = 1 / (1 + (double)m_scaleRate);
+		zoomScaleValue = 1 / (1 + (float)m_scaleRate);
 	}
 
 	//  Apply scale and translate to keep zoom around mouse.
@@ -89,7 +89,7 @@ void BaseEngineGL::mouseScrollEvent(double pixelCoords[2], int yOffset)
 	// Calculate mouse world coordinates after scaling.
 	glm::vec4 mouseWorldCoordsPost = pixelCoordsToWorldCoords(pixelCoords);
 	// Translate the world so that the zoom happens on the mouse position. 
-	glm::vec3 translateVector = glm::vec3((double)mouseWorldCoordsPost[0] - (double)mouseWorldCoordsPre[0], (double)mouseWorldCoordsPost[1] - (double)mouseWorldCoordsPre[1], 0);
+	glm::vec3 translateVector = glm::vec3((float)mouseWorldCoordsPost[0] - (float)mouseWorldCoordsPre[0], (float)mouseWorldCoordsPost[1] - (float)mouseWorldCoordsPre[1], 0);
 	//  Apply translation vector.
 	m_translationMatrix = glm::translate(m_translationMatrix, translateVector);
 

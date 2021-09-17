@@ -2,6 +2,9 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Resource loading.
+#include "../Resources/resource.h"
+
 // Class include.
 #include "textRenderer.h"
 
@@ -10,9 +13,6 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
-
-// Resource loading.
-#include "../Resources/resource.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  TextRenderer Methods.
@@ -56,7 +56,7 @@ TextRenderer::TextRenderer()
 				id.push_back(line[cursor]);
 				cursor++;
 			}
-			c.id = ::atof(id.c_str());
+			c.id = (float)::atof(id.c_str());
 
 			//-------------------------------------
 			// Read the character x.
@@ -68,7 +68,7 @@ TextRenderer::TextRenderer()
 				x.push_back(line[cursor]);
 				cursor++;
 			}
-			c.x = (::atof(x.c_str()) ) / textureDimensions[0];
+			c.x = (float)(::atof(x.c_str()) ) / textureDimensions[0];
 			
 			//-------------------------------------
 			// Read the character y.
@@ -80,7 +80,7 @@ TextRenderer::TextRenderer()
 				y.push_back(line[cursor]);
 				cursor++;
 			}			
-			c.y = (::atof(y.c_str())) / textureDimensions[1];
+			c.y = (float)(::atof(y.c_str())) / textureDimensions[1];
 
 			//-------------------------------------
 			// Read the character width.
@@ -92,7 +92,7 @@ TextRenderer::TextRenderer()
 				width.push_back(line[cursor]);
 				cursor++;
 			}
-			c.width = (::atof(width.c_str())) / textureDimensions[0];
+			c.width = (float)(::atof(width.c_str())) / textureDimensions[0];
 
 			//-------------------------------------
 			// Read the character height.
@@ -104,7 +104,7 @@ TextRenderer::TextRenderer()
 				height.push_back(line[cursor]);
 				cursor++;
 			}
-			c.height = (::atof(height.c_str())) / textureDimensions[1];
+			c.height = (float)(::atof(height.c_str())) / textureDimensions[1];
 
 			//-------------------------------------
 			// Read the character x offset.
@@ -116,7 +116,7 @@ TextRenderer::TextRenderer()
 				xOffset.push_back(line[cursor]);
 				cursor++;
 			}
-			c.xOffset = ::atof(xOffset.c_str()) / textureDimensions[0];
+			c.xOffset = (float)::atof(xOffset.c_str()) / textureDimensions[0];
 
 			//-------------------------------------
 			// Read the character y offset.
@@ -128,7 +128,7 @@ TextRenderer::TextRenderer()
 				yOffset.push_back(line[cursor]);
 				cursor++;
 			}
-			c.yOffset = ::atof(yOffset.c_str()) / textureDimensions[1];
+			c.yOffset = (float)::atof(yOffset.c_str()) / textureDimensions[1];
 
 			//-------------------------------------
 			// Read the character x advance.
@@ -140,7 +140,7 @@ TextRenderer::TextRenderer()
 				xAdvance.push_back(line[cursor]);
 				cursor++;
 			}
-			c.xAdvance = ::atof(xAdvance.c_str()) / textureDimensions[0];
+			c.xAdvance = (float)::atof(xAdvance.c_str()) / textureDimensions[0];
 
 			// Add cahracter data to dictionary.
 			m_characterDictionary.insert({c.id, c});
@@ -168,11 +168,11 @@ void TextRenderer::writeText(std::string text, float coords[2], VertexArrayObjec
 	// This has to be compensated for in the funciton.
 
 	// Iterate through characters.
-	int textLength = text.length();
+	int textLength = (int)text.length();
 	float advance = 0;
 	for (int i = 0; i < textLength; i++)
 	{
-		Character c = m_characterDictionary[(int)text[i]];
+		Character c = m_characterDictionary[text[i]];
 		// Write character data to the VAO.
 		TexturedVertexData v1(										// Top left.
 			coords[0] + (advance + c.xOffset) * scale,				// x

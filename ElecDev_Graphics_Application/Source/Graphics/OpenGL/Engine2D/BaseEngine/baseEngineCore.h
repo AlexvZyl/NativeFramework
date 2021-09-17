@@ -9,9 +9,12 @@ The interactive engine (the one where elements can be drawn is handled in Design
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+
+// Resource loading.
+#include <Windows.h>
+
 // OpenGL.
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <ShaderHandler/shaderHandler.h>
 #include <glm.hpp>
 
@@ -29,14 +32,14 @@ The interactive engine (the one where elements can be drawn is handled in Design
 // Text rendering.
 #include "Peripherals/textRenderer.h"
 
-// Resource loading.
-#include <Windows.h>
+// Window.
+#include <GLFW/glfw3.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Globals.
 //----------------------------------------------------------------------------------------------------------------------
 
-const float PI = 3.14159265358979323;
+const float PI = 3.14159265358979323f;
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The drawingEngine class.
@@ -71,7 +74,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Saves the previous mouse event coordinates (in world coordinates).
-	double m_prevMouseEventWorldCoords[2] = {NULL, NULL};
+	float m_prevMouseEventWorldCoords[2] = {NULL, NULL};
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Shaders.
@@ -99,7 +102,7 @@ public:
 	//  Settings.
 	//---------------------------------------------------------------------------------------------------------------------
 	
-	float m_scaleRate = 0.3;				// Determines how much is zoomed with each mouse wheel scroll.
+	float m_scaleRate = 0.3f;				// Determines how much is zoomed with each mouse wheel scroll.
 	unsigned int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
 											// demanding at high values.
 
@@ -157,17 +160,17 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Handling mouse events.
-	void mousePressLeft(double pixelCoords[2]);
-	void mousePressRight(double pixelCoords[2]);
-	void mouseMoveEvent(double pixelCoords[2], int buttonState);
-	void mouseScrollEvent(double pixelCoords[2], int yOffset);
+	void mousePressLeft(float pixelCoords[2]);
+	void mousePressRight(float pixelCoords[2]);
+	void mouseMoveEvent(float pixelCoords[2], int buttonState);
+	void mouseScrollEvent(float pixelCoords[2], int yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Convert pixel coordinates to world coordinates.
-	glm::vec4 pixelCoordsToWorldCoords(double pixelCoords[2]);
+	glm::vec4 pixelCoordsToWorldCoords(float pixelCoords[2]);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Window functions.

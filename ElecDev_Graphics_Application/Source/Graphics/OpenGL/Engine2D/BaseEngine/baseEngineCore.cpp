@@ -71,7 +71,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	//---------------------------------------------------------------------------------------
 
 	// ImGUI viewport.
-	int viewportImGUI[2] = {500,500};
+	float viewportImGUI[2] = {500,500};
 	m_imGuiViewportDimensions[0] = viewportImGUI[0];
 	m_imGuiViewportDimensions[1] = viewportImGUI[1];
 
@@ -80,7 +80,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	//---------------------------------------------------------------------------------------
 
 	// Find the minimum value of the viewport dimensions.
-	int minValue;
+	float minValue;
 	if (viewportImGUI[0] < viewportImGUI[1]) { minValue = viewportImGUI[0]; }
 	else { minValue = viewportImGUI[1]; }
 	// Scale the projection values according to the ImGUI viewport.
@@ -116,7 +116,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Background.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
 	// Frame buffer.
-	m_frameBuffer = new FrameBufferObject(m_imGuiViewportDimensions[0], m_imGuiViewportDimensions[1]);
+	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1]);
 
 	//---------------------------------------------------------------------------------------
 	// Background setup.
@@ -201,10 +201,10 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	//		drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
 	//		// Test textures.
-	//		TexturedVertexData v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	//		TexturedVertexData v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-	//		TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-	//		TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+	//		TexturedVertexData v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
+	//		TexturedVertexData v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
+	//		TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
+	//		TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
 	//		std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
 	//		m_textureTrianglesVAO->writeData(verticesTex);
 
@@ -245,7 +245,7 @@ BaseEngineGL::~BaseEngineGL()
 void BaseEngineGL::renderLoop()
 {
 	// Set glViewport for the ImGUI context.
-	GLCall(glViewport(0, 0, m_imGuiViewportDimensions[0], m_imGuiViewportDimensions[1]));
+	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0], (GLsizei)m_imGuiViewportDimensions[1]));
 
 	// Render to frame buffer.
 	m_frameBuffer->bind();
@@ -293,16 +293,16 @@ unsigned int BaseEngineGL::getRenderedTexID()
 //----------------------------------------------------------------------------------------------------------------------
 
 // Function that takes pixel coordinates as input and return the coordinates in the world.
-glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
+glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 {
 	// The coordinates on the screen.
-	double screenCoords[2];  
+	float screenCoords[2];  
 	// Find the viewpwort dimensions.
-	int viewport[2] = {m_states->renderWindowSize.x, m_states->renderWindowSize.y};
+	float viewport[2] = {m_states->renderWindowSize.x, m_states->renderWindowSize.y};
 	// Account for pixel offset.
 	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
-	double pixelCoordsTemp[2] = { pixelCoords[0] , (double)viewport[1] - pixelCoords[1] };
+	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
 	
 	// Apply the viewport transform the the pixels.
 	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
@@ -326,9 +326,9 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(double pixelCoords[2])
 void BaseEngineGL::resizeEventImGUI(int width, int height)
 {
 	// Calculate the value of the scaling.
-	double scalingFactor[2] = { (double)width / (double)m_imGuiViewportDimensions[0], (double)height / (double)m_imGuiViewportDimensions[1] };
-	m_imGuiViewportDimensions[0] = width;
-	m_imGuiViewportDimensions[1] = height;
+	float scalingFactor[2] = { (float)width / (float)m_imGuiViewportDimensions[0], (float)height / (float)m_imGuiViewportDimensions[1] };
+	m_imGuiViewportDimensions[0] = (float)width;
+	m_imGuiViewportDimensions[1] = (float)height;
 		
 	// Scale projection values.
 	m_projectionValues[0] *= scalingFactor[0];
@@ -361,8 +361,8 @@ void BaseEngineGL::resizeEventImGUI(int width, int height)
 	m_frameBuffer->resize(width, height);
 
 	// Change viewport dimmensions.
-	m_imGuiViewportDimensions[0] = width;
-	m_imGuiViewportDimensions[1] = height;
+	m_imGuiViewportDimensions[0] = (float)width;
+	m_imGuiViewportDimensions[1] = (float)height;
 
 }
 

@@ -6,12 +6,12 @@ Texture handling for the Base Engine.
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "baseEngineCore.h"
-#include "Resources/resource.h"
-
 // Loading from executable.
 #include <Windows.h>
 #include "Misc/stb_image.h"
+
+#include "baseEngineCore.h"
+#include "Resources/resource.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Texture loading..
@@ -60,7 +60,7 @@ GLuint BaseEngineGL::loadTexture(const std::string& path, bool alpha)
 GLuint BaseEngineGL::loadBMPtoGL(int bitmapID)
 {
 	// Load BMP from file.
-	int width, height, bits;
+	//int width, height, bits;
 	//stbi_set_flip_vertically_on_load(1);
 	//auto* pixels = stbi_load("Source\\Resources\\Fonts\\Arial_SDF_BMP32.bmp", &width, &height, &bits, STBI_rgb_alpha);
 

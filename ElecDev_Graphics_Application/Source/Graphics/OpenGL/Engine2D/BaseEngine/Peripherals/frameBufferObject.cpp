@@ -16,7 +16,7 @@ FrameBufferObject::FrameBufferObject(int width, int height)
 	GLCall(glGenFramebuffers(1, &m_rendererID));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_rendererID));
 	// Check for error.
-	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE) 
+	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER)) 
 	{
 		std::cout << "[OPENGL][ERROR] FBO could not be generated. \n\n";
 	}
