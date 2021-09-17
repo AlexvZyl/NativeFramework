@@ -11,7 +11,7 @@
 #include <Core/imgui_internal.h>
 
 /*=======================================================================================================================================*/
-/* Additive functions                                                                                                                        */
+/* Additive functions                                                                                                                    */
 /*=======================================================================================================================================*/
 
 
@@ -29,16 +29,14 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->dock = 0;
 
 	//graphicsHandler->m_mccEngine->addMcc("Test");
-
 }
 
-
 // Render the graphics scene.
-void MCC::renderGraphics(ImGuiID dock) {
+void MCC::renderGraphics(ImGuiID dock) 
+{
 	bool open = true;
 
 	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
-
 
 	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	
@@ -97,17 +95,11 @@ void MCC::renderGraphics(ImGuiID dock) {
 				// Because I use the texture from OpenGL, I need to invert the V from the UV.
 				ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 				
-
 				ImGui::EndChild();
 			}
-
 			ImGui::End();
-
-
 		}
 	}
-	
-
 }
 
 /*=======================================================================================================================================*/

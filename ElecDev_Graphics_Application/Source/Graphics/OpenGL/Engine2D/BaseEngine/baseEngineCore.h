@@ -103,7 +103,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	float m_scaleRate = 0.3f;				// Determines how much is zoomed with each mouse wheel scroll.
-	unsigned int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
+	int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
 											// demanding at high values.
 
 	//---------------------------------------------------------------------------------------------------------------------

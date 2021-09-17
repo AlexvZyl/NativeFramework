@@ -76,7 +76,7 @@ void BaseEngineGL::drawQuadFilled(float position[2], float width, float height, 
 // Draws a clear circle.
 void BaseEngineGL::drawCircleClear(float coords[2], float radius, float color[4])
 {
-	for (unsigned int i = 0; i <= m_circleResolution; i++)
+	for (int i = 0; i <= m_circleResolution; i++)
 	{
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_circleResolution);
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);
@@ -92,7 +92,7 @@ void BaseEngineGL::drawCircleClear(float coords[2], float radius, float color[4]
 // Draws a filled circle.
 void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4])
 {
-	for (unsigned int i = 0; i <= m_circleResolution; i++)
+	for (int i = 0; i <= m_circleResolution; i++)
 	{
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_circleResolution);
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);

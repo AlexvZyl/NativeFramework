@@ -76,12 +76,12 @@ void procesInput(std::string inString, stateMachine* states) {
     int endFunc;
 
     // Functions is shown between (: and :)
-    startFunc = (int)inString.find("(:") + 2;
-    endFunc = (int)inString.find(":)",startFunc) - 2;
+    startFunc = (int)inString.find("[") + 1;
+    endFunc = (int)inString.find("]", startFunc) - 1;
 
     // Parameters is shown between (: and :).
     std::string command = inString.substr(startFunc, endFunc);
-    inString = inString.substr(endFunc + 4);
+    inString = inString.substr(endFunc + 2);
 
     // Parse into types.
     switch (hash(command.c_str()))
@@ -97,9 +97,9 @@ void procesInput(std::string inString, stateMachine* states) {
         // Command to be processed by the app.
         case hash("Command"):
         {
-            std::string function = inString.substr(2, inString.find(":)") - 2);
-            inString = inString.substr(inString.find(":)") + 2);
-            std::string params = inString.substr(2, inString.find(":)") - 2);
+            std::string function = inString.substr(1, inString.find("]") - 1);
+            inString = inString.substr(inString.find("]") + 1);
+            std::string params = inString.substr(1, inString.find("]") - 1);
             states->inputQueueMCC.push(*(new inputQueue(function, params)));
             break;
         }
@@ -143,122 +143,182 @@ void deQueueInput(stateMachine* states) {
 
             // Draw line.
             case hash("drawLine"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
-                break;
-
-            // Draw clear triangle.
-            case hash("drawTriangleClear"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 10; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{params[4], params[5]}, new float[4]{ params[6],params[7],params[8],params[9] });
-                break;
-
-            // Draw filled triangle. 
-            case hash("drawTriangleFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 10; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-                break;
-
-            // Draw clear quad.
-            case hash("drawQuadClear"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-                break;
-
-            // Draw filled quad.
-            case hash("drawQuadFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-                break;
-
-            // Draw clear circle.
-            case hash("drawCircleClear"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 7; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-                break;
-
-            // Draw a filled circle.
-            case hash("drawCircleFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 7; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->m_mccEngine->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-                break;
-
-            // Draw text.
-            case hash("drawText"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    // Read text.
-                    if (i == 0)
-                    {
-                        text = temp.parameters.substr(0, temp.parameters.find(";"));
-                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                    }
-                    // Read parameters,
-                    else
+                    for (size_t i = 0; i < 8; i++)
                     {
                         params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
+                    graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
                 }
-                graphicsHandler->m_mccEngine->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw clear triangle.
+            case hash("drawTriangleClear"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 10; i++)
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    graphicsHandler->m_mccEngine->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw filled triangle. 
+            case hash("drawTriangleFilled"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 10; i++)
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    graphicsHandler->m_mccEngine->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw clear quad.
+            case hash("drawQuadClear"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 8; i++)
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    graphicsHandler->m_mccEngine->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw filled quad.
+            case hash("drawQuadFilled"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 8; i++)
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    graphicsHandler->m_mccEngine->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw clear circle.
+            case hash("drawCircleClear"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 7; i++)
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    graphicsHandler->m_mccEngine->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw a filled circle.
+            case hash("drawCircleFilled"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 7; i++)
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    graphicsHandler->m_mccEngine->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
+                break;
+
+            // Draw text.
+            case hash("drawText"):
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    for (size_t i = 0; i < 8; i++)
+                    {
+                        // Read text.
+                        if (i == 0)
+                        {
+                            text = temp.parameters.substr(0, temp.parameters.find(";"));
+                            temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                        }
+                        // Read parameters,
+                        else
+                        {
+                            params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                            temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                        }
+                    }
+                    graphicsHandler->m_mccEngine->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
                 break;
 
             // Add MCC window to draw.
             case hash("addMCC"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->addMcc(mccName);
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    graphicsHandler->m_mccEngine->addMcc(mccName);
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" <<  e.what() << "'.\n\n";
+                }
                 break;
 
             // Remove MCC window.
             case hash("removeMCC"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->removeMCC(mccName);
+                try {
+                    mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    graphicsHandler->m_mccEngine->removeMCC(mccName);
+                }
+                catch (const std::exception& e)
+                {
+                    std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                }
                 break;
 
             default:
