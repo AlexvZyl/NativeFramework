@@ -43,8 +43,10 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Type casts throwing warning.  Fix.
 * ⬜ Buffer sizes are currently static, change to dynamic.
 * ⬜ Using index buffers might improve performance.
-* ⬜ Use SDF (Signed Distance Fields) when rendering text.
+* ✅ Use SDF (Signed Distance Fields) when rendering text.
 * ⬜ Create a resource loader function.
+* ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
+* ⬜ Fix abstractions.  Code got messy when we started rushing.
 
 #### Raynhardt 
 * ⬜ Multi View port
@@ -69,7 +71,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ✅ OpenGL.
   * ✅ GLM.
   * ✅ ImGUI Docking Branch.
-* ⬜ Base Engine:
+* ✅ Base Engine:
   * ✅ Implement matrix mathematics.
     * ✅ Translation, rotation & scaling.
     * ✅ Viewport, Model, View and Porjection matrices.
@@ -92,7 +94,7 @@ This is the graphics application that is to be used with the ElecDev software.  
     * ✅ Filled triangles.
     * ✅ Text.
   * ✅ Mouse event handler.
-  * ⬜ Implement frame buffers.
+  * ✅ Implement frame buffers.
 * ✅ Implement State Machine that controls the application.
 * ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
   * ✅ Incorporate Base Engine.
@@ -100,8 +102,9 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
 * ⬜ Interface with Excel:
   * ⬜ Requires exe file that has resource files included (Use .rc files).
-  * ⬜ Write byte encoder/decoder.
-  * ⬜ Write thread handler from python side for non-pause interface.
+  * ✅ Write byte encoder/decoder.
+  * ✅ Write thread handler from python side for non-pause interface.
+  * ✅ Input handler for threads and linked to state machine.
 * ⬜ MCC Drawings:
   * ⬜ Read available drawings from excel file.
   * ⬜ Draw and redraw MCC's.
