@@ -13,6 +13,8 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 
 // Design engine.
 #include "OpenGL/Engine2D/DesignEngine/designEngineCore.h"
+// MCC Engine.
+#include "Engine2D/MccEngine/mccEngineCore.h"
 // Drawing engine.
 #include "OpenGL/Engine2D/BaseEngine/baseEngineCore.h"
 
@@ -32,7 +34,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Struct that contains the different OpenGL engines that can be used.
 enum class Engines
 {
-	ANIMATION, BASE_ENGINE, DESIGN_ENGINE
+	ANIMATION, BASE_ENGINE, DESIGN_ENGINE, MCC_ENGINE
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -48,14 +50,13 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// State machine variable.
-	stateMachineGraphics* m_states;
+	stateMachine* m_states;
 
 	// Variable that holds the active engine.
 	Engines m_activeEngine;
 
 	// Different drawing engines.
-	BaseEngineGL* m_drawingEngine;
-	DesignEngineGL* m_designEngine;
+	MccEngineGL* m_mccEngine;
 
 	// The GLFW window from the main application.
 	GLFWwindow* m_window;
@@ -65,7 +66,7 @@ public:
 	//-----------------------------------------------------------------------------------------------------------------
 
 	// Constructor with GLFW window.
-	GraphicsHandler(GLFWwindow* window, stateMachineGraphics* states);
+	GraphicsHandler(GLFWwindow* window, stateMachine* states);
 	// Destructor.
 	~GraphicsHandler();
 
@@ -99,8 +100,7 @@ public:
 	//  Window events.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	void resizeEvent(GLFWwindow* window, int width, int height);
-
+	void resizeEvent(int width, int height);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

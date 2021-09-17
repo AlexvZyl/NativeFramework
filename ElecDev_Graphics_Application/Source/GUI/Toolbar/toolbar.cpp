@@ -14,7 +14,7 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(stateMachine states)
+Toolbar::Toolbar(stateMachine* states)
 {
     this->states = states;
     this->my_tool_active = true;
@@ -58,31 +58,28 @@ Toolbar::Toolbar(stateMachine states)
 
 void Toolbar::renderToolbar()
 {
-    ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
-    Toolbar:
-    ImGui::Begin("Toolbar", &this->my_tool_active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoBringToFrontOnFocus  | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-    ImGui::SetWindowSize(ImVec2(mainWindow.x+1, 30));
-    ImGui::SetWindowPos(ImVec2(-1, 0));
-    
-    if (ImGui::BeginMenuBar())
-    {
 
+    if (ImGui::BeginMainMenuBar())
+    {
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { exit(1); }
+            if (ImGui::MenuItem("Close", "Ctrl+W")) { states->globalQuit = true; }
             ImGui::EndMenu();
         }
-
-        if (ImGui::BeginMenu("View"))
+        if (ImGui::BeginMenu("Edit"))
         {
-            if (ImGui::MenuItem("Test 1")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
             ImGui::EndMenu();
         }
-        ImGui::EndMenuBar();
+        ImGui::EndMainMenuBar();
     }
-    ImGui::End();
 
 };
 

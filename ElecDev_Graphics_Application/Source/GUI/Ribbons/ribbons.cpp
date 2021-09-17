@@ -19,7 +19,7 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Ribbons::Ribbons(stateMachine states) {
+Ribbons::Ribbons(stateMachine* states) {
 
     this->states = states;
 
@@ -77,11 +77,17 @@ Ribbons::Ribbons(stateMachine states) {
     //IM_ASSERT(ret3);
 
     this->sideBarFlag = "";
+    first[0] = true;
+    first[1] = true;
+    first[2] = true;
+
 }
 
 
-void Ribbons::renderRibbons()
+void Ribbons::renderRibbons(ImGuiID* dock)
 {
+
+    this->dock = dock;
     
     topBar();
     sideBar();
@@ -91,13 +97,23 @@ void Ribbons::renderRibbons()
 bool Ribbons::topBar() {
 
     // Menu
-    ImVec2 mainWindow = ImGui::GetMainViewport()->WorkSize;
+    
     bool* p_open = NULL;
     ImGui::SetNextWindowBgAlpha(1);
-    this->states.toolsExpanded = ImGui::Begin("Tools", p_open, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse);
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse;
     
-    ImGui::SetWindowSize(ImVec2(mainWindow.x+1,70));
-    ImGui::SetWindowPos(ImVec2(-1, 18));
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+    
+    this->states->toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);
+
+    //ImGui::BeginDocked(ImGui::GetCurrentWindow(), p_open);
+    
+
+    ImGui::SetWindowSize(ImVec2(work_size.x,70));
+    ImGui::SetWindowPos(work_pos);
 
     //Create Image Buttons
     if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30))) {\
@@ -142,6 +158,12 @@ bool Ribbons::topBar() {
 
 bool Ribbons::sideBar() {
 
+    if (first[0]) {
+        ImGui::DockBuilderSplitNode(*this->dock, ImGuiDir_Left, 0.1f, &this->left, this->dock);
+        first[0] = false;
+    }
+
+
     if (this->sideBarFlag == "Block Diagram")
     {
         blockDiagram();
@@ -159,29 +181,31 @@ bool Ribbons::sideBar() {
 
 bool Ribbons::MCC() {
     bool close = true;
-    ImGui::Begin("Drawing MCC", &close, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_AlwaysAutoResize);
+
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+    if (first[1])
+    { 
+        ImGui::SetNextWindowDockID(this->left, ImGuiCond_Once);
+        first[1] = false;
+    }
+
+    ImGui::Begin("Drawing MCC", &close, ImGuiWindowFlags_NoResize);
     if (!close)
     {
         this->sideBarFlag = "None";
     }
-    if (this->states.toolsExpanded) {
-        ImGui::SetWindowPos(ImVec2(0, 90));
-    }
-    else {
-        ImGui::SetWindowPos(ImVec2(0, 40));
-    }
 
     ImGui::Button("New MCC");
 
-    ImGui::Text("---------------------");
+    ImGui::Separator();
 
     ImGui::Button("Redraw MCC"); 
 
-    ImGui::Text("---------------------");
+    ImGui::Separator();
 
     ImGui::Button("Draw in AutoCAD"); 
-
-    ImGui::Text("---------------------");
 
     ImGui::End();
 
@@ -191,16 +215,20 @@ bool Ribbons::MCC() {
 bool Ribbons::blockDiagram() {
 
     bool close = true;
+
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
+    ImVec2 work_size = viewport->WorkSize;
+    if (first[2])
+    {
+        ImGui::SetNextWindowDockID(this->left, ImGuiCond_Once);
+        first[2] = false;
+    }
+
     ImGui::Begin("Drawing GUI", &close);
     if (!close)
     {
         this->sideBarFlag = "None";
-    }
-    if (this->states.toolsExpanded) {
-        ImGui::SetWindowPos(ImVec2(0, 90));
-    }
-    else {
-        ImGui::SetWindowPos(ImVec2(0, 40));
     }
     
 
@@ -208,21 +236,21 @@ bool Ribbons::blockDiagram() {
     ImGui::Button("Recenter"); ImGui::SameLine();
     ImGui::Button("Generate Dataframe");
 
-    ImGui::Text("------------------------------------");
+    ImGui::Separator();
 
     ImGui::Text("Circuit:");
     ImGui::Button("Remove Component"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
     ImGui::Button("Remove All");
 
-    ImGui::Text("------------------------------------");
+    ImGui::Separator();
 
     ImGui::Text("Component Removal:");
     ImGui::Button("New Cable"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
     ImGui::Button("Undo");
 
-    ImGui::Text("------------------------------------");
+    ImGui::Separator();
 
     ImGui::Text("Component Generation:");
     ImGui::Text("Component Name:"); ImGui::SameLine();
@@ -248,8 +276,6 @@ bool Ribbons::blockDiagram() {
     ImGui::Button("New Cable"); ImGui::SameLine();
     ImGui::Button("Done"); ImGui::SameLine();
     ImGui::Button("Undo");
-
-    ImGui::Text("------------------------------------");
 
     ImGui::End();
 

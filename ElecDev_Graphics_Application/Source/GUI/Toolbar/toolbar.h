@@ -50,9 +50,9 @@ public:
     bool unsaved_document;
     bool my_tool_active;
 
-    stateMachine states;
+    stateMachine* states;
 
-    Toolbar(stateMachine states);
+    Toolbar(stateMachine* states);
 
 	// Function that handles which engine should be active.
 	void renderToolbar();

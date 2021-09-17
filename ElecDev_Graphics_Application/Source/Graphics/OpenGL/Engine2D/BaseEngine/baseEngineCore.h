@@ -29,6 +29,9 @@ The interactive engine (the one where elements can be drawn is handled in Design
 // Text rendering.
 #include "Peripherals/textRenderer.h"
 
+// Resource loading.
+#include <Windows.h>
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Globals.
 //----------------------------------------------------------------------------------------------------------------------
@@ -41,6 +44,7 @@ const float PI = 3.14159265358979323;
 
 class BaseEngineGL
 {
+
 public:
 
 	//---------------------------------------------------------------------------------------------------------------------
@@ -103,18 +107,19 @@ public:
 	//  Misc variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	GLFWwindow* m_window;
-	float m_viewportDimensions[2];
+	float m_imGuiViewportDimensions[2];
 	float m_projectionValues[6];
+	stateMachine* m_states;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructor & Destructor.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// With GLFW window.
-	BaseEngineGL(GLFWwindow* window);
+	BaseEngineGL(stateMachine* states);
+	// Destructor
 	~BaseEngineGL();
-		
+
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Rendering.
 	//---------------------------------------------------------------------------------------------------------------------
@@ -127,7 +132,10 @@ public:
 	TextRenderer* m_textRenderer;
 	// Functions.
 	GLuint loadTexture(const std::string& path, bool alpha=false);
+	GLuint loadBMPtoGL(int bitmapID);
 	void renderLoop();
+	// Get the ID to the FBO rendered texture.
+	unsigned int getRenderedTexID();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
@@ -166,8 +174,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Callback that handles the resizing event.
-	void resizeEvent(int width, int height);
-
+	void resizeEventImGUI(int width, int height);
 };
 
 //-------------------------------------------------------------------------------------------------------------------------

@@ -13,14 +13,14 @@ VertexArrayObject::VertexArrayObject(GLenum type, unsigned int maxVertices, bool
 	: m_bufferType(type), m_maxVertices(maxVertices)
 {
 	// Generate the VAO.
-	GLCall(glCreateVertexArrays(1, &m_vAID));
+	GLCall(glGenVertexArrays(1, &m_vAID));
 	GLCall(glBindVertexArray(m_vAID));
 
 	// Create untextured array.
 	if (!textured) 
 	{
 		// Generate and bind a VBO for the VAO.
-		GLCall(glCreateBuffers(1, &m_vBID));
+		GLCall(glGenBuffers(1, &m_vBID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 		GLCall(glBufferData(GL_ARRAY_BUFFER, m_maxVertices * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
 
@@ -35,7 +35,7 @@ VertexArrayObject::VertexArrayObject(GLenum type, unsigned int maxVertices, bool
 	else 
 	{
 		// Generate and bind a VBO for the VAO.
-		GLCall(glCreateBuffers(1, &m_vBID));
+		GLCall(glGenBuffers(1, &m_vBID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 		GLCall(glBufferData(GL_ARRAY_BUFFER, m_maxVertices * sizeof(TexturedVertexData), NULL, GL_DYNAMIC_DRAW));
 

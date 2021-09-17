@@ -9,10 +9,21 @@
 //  General.
 #include <string>
 #include <iostream>
+#include <map>
 
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
+#include "Graphics/graphics.h"
+#include "MCC/mcc.h"
 #include "../stateMachine.h"
+
+// ImGUI (GUI software). 
+#include "Core/imgui.h"
+#include "Implementations/imgui_impl_glfw.h"
+#include "Implementations/imgui_impl_opengl3.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include <Core/imgui_internal.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  GUI Handler Class.
@@ -26,24 +37,27 @@ public:
 	//  Variables.
 	//--------------------------------------------------------------------------------------------------------------
 
-	stateMachine states;
+	stateMachine* states;
 
-	stateMachineGraphics statesG;
+	GraphicsHandler* graphicsHandler;
 
-	GraphicsHandler* graphics;
+	unsigned int textureID;
 
-	Toolbar toolbar = Toolbar(states);
-	Ribbons ribbons = Ribbons(states);
+	Toolbar* toolbar;
+	Ribbons* ribbons;
+	Graphics* graphics;
+	MCC* mcc;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	GUIHandler(stateMachineGraphics* states, GraphicsHandler* graphicsHandler);
+	GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler);
+	void deQueueInput();
 
 	// Function that handles which engine should be active.
-	void renderGraphics();
+	void renderGui(ImGuiIO& io);
 
 	// Set custom theme.
 	void setTheme();

@@ -11,30 +11,34 @@
 #include <string>
 #include <sstream>
 
+// Resource loading.
+#include "../Resources/resource.h"
+
 //----------------------------------------------------------------------------------------------------------------------
 //  TextRenderer Methods.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor.
 // Parses the .fnt file so that the .png can be used to render text,
-TextRenderer::TextRenderer(const char* filePath)
+TextRenderer::TextRenderer()
 {
+	// Font information.
 	float textureDimensions[2] = { 512, 512 };	// Dimensions of the .png file.
 	float padding = 3;							// Amount of padding around each character.
-	// Create file object and open font file from path.
-	std::ifstream file;
-	file.open(filePath);
 
-	// Test if file opened.
-	if (!file.is_open()) 
-	{
-		std::cout << "[OPENGL][BASE ENGINE] Font file from '" << filePath << "' could not be opened.\n\n";
-		exit(EXIT_FAILURE);
-	}
+	// Load font text file from executable.
+	HRSRC resource = FindResource(getCurrentModule(), MAKEINTRESOURCE(ARIAL_SDF_FNT), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL data = LoadResource(getCurrentModule(), resource);
+	DWORD size = SizeofResource(getCurrentModule(), resource);
+	char* finalData = (char*)LockResource(data);
+	std::string fontData;
+	fontData.assign(finalData, size);
+	// Convert to stream.
+	std::istringstream source(fontData);
 
 	// Read the lines.
 	int lineCount=0;
-	for (std::string line; getline(file, line); )
+	for (std::string line; getline(source, line); )
 	{
 		// Read the character data.
 		if (lineCount >= 4 && lineCount <= 97-1+4) 
