@@ -29,11 +29,8 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 
 	this->mcc = new MCC(states,graphicsHandler);
 	//MCCDict->insert("test", new BaseEngineGL(m_window, states));
-
 	
 };
-
-
 
 // [MAIN LOOP] Render the GUI to the screen.
 void GUIHandler::renderGui(ImGuiIO& io)
@@ -62,7 +59,6 @@ void GUIHandler::renderGui(ImGuiIO& io)
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 	ImGui::PopStyleVar(2);
 	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
-	
 
 	ImGuiID dock = ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
@@ -109,6 +105,9 @@ void GUIHandler::renderGui(ImGuiIO& io)
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
+
+	// Destroy ImGUI to allow drawing in other contexts.
+	ImGui_ImplOpenGL3_DestroyDeviceObjects();
 
 };
 

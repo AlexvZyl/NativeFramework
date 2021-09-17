@@ -124,10 +124,10 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	// Assign background data.
 	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
-	float bgColor2[4] = { (float)230 / 255, (float)240 / 255, (float)255 / 255, 1.0f };
+	float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
 	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	// Top right.
 	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Bottom left.
+	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
 	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
 	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	// Create background.
@@ -164,57 +164,57 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Test code.
 	//---------------------------------------------------------------------------------------
 
-	for (int i = 0; i <= 1 * 3; i += 3)
-	{
-		for (int k = 0; k <= 1 * 3; k += 3)
-		{
-			// Draw filled triangle example.
-			float ftPos1[2] = { -1.0f + i, -1.0f + k };
-			float ftPos2[2] = { -1.0f + i, -0.5 + k };
-			float ftPos3[2] = { -1.5f + i, -1.0f + k };
-			float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
-			drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
+	//for (int i = 0; i <= 1 * 3; i += 3)
+	//{
+	//	for (int k = 0; k <= 1 * 3; k += 3)
+	//	{
+	//		// Draw filled triangle example.
+	//		float ftPos1[2] = { -1.0f + i, -1.0f + k };
+	//		float ftPos2[2] = { -1.0f + i, -0.5 + k };
+	//		float ftPos3[2] = { -1.5f + i, -1.0f + k };
+	//		float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
+	//		drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
 
-			// Draw clear quad.
-			float cqCoords[2] = { 0.0f + i, 0.0f + k };
-			float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawQuadClear(cqCoords, 2, 2, cqColor);
+	//		// Draw clear quad.
+	//		float cqCoords[2] = { 0.0f + i, 0.0f + k };
+	//		float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	//		drawQuadClear(cqCoords, 2, 2, cqColor);
 
-			// Draw filled quad.
-			float fqCoords[2] = { -0.5f + i, 0.5f + k };
-			float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-			drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
+	//		// Draw filled quad.
+	//		float fqCoords[2] = { -0.5f + i, 0.5f + k };
+	//		float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+	//		drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
 
-			// Draw filed ciricle.
-			float coords1[2] = { 0.0f + i, 0.0f + k };
-			float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
-			drawCircleFilled(coords1, 0.2, color);
-			// Draw clear ciricle.
-			float coords2[2] = { i, -0.75f + k };
-			drawCircleClear(coords2, 0.2, color);
+	//		// Draw filed ciricle.
+	//		float coords1[2] = { 0.0f + i, 0.0f + k };
+	//		float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
+	//		drawCircleFilled(coords1, 0.2, color);
+	//		// Draw clear ciricle.
+	//		float coords2[2] = { i, -0.75f + k };
+	//		drawCircleClear(coords2, 0.2, color);
 
-			// Draw clear triangle example.
-			float ctPos1[2] = { 1.0f + i, -1.0f + k };
-			float ctPos2[2] = { 1.5f + i, -1.0f + k };
-			float ctPos3[2] = { 1.0f + i, -0.5f + k };
-			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-			drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
+	//		// Draw clear triangle example.
+	//		float ctPos1[2] = { 1.0f + i, -1.0f + k };
+	//		float ctPos2[2] = { 1.5f + i, -1.0f + k };
+	//		float ctPos3[2] = { 1.0f + i, -0.5f + k };
+	//		float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+	//		drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
-			// Test textures.
-			TexturedVertexData v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-			TexturedVertexData v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
-			TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-			TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
-			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-			m_textureTrianglesVAO->writeData(verticesTex);
+	//		// Test textures.
+	//		TexturedVertexData v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	//		TexturedVertexData v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f);
+	//		TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+	//		TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f);
+	//		std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
+	//		m_textureTrianglesVAO->writeData(verticesTex);
 
-			// Test the text rendering.
-			float pos[2] = { 0.5f + i, 0.5f + k };
-			std::string text = "Testing-Font and Different_characters. [!&>*?\\] ";
-			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawText(text, pos, colorText, 1);
-		}
-	}
+	//		// Test the text rendering.
+	//		float pos[2] = { 0.5f + i, 0.5f + k };
+	//		std::string text = "Testing-Font and Different_characters. [!&>*?\\] ";
+	//		float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	//		drawText(text, pos, colorText, 1);
+	//	}
+	//}
 };
 
 // Delete and free memory.
