@@ -124,21 +124,20 @@ void GraphicsHandler::closeActiveEngine()
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {	
-	// Check if dict is not empty.
-	if (m_mccEngine->m_mccDictionary.size() != 0) 
+	// Check if MCC's are being drawn.
+	if (m_activeEngine == Engines::MCC_ENGINE)
 	{
-		// Find cursos position.
-		double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
-
-		if (m_activeEngine == Engines::MCC_ENGINE)
+		// Check if dict is not empty.
+		if (m_mccEngine->m_mccDictionary.size() != 0)
 		{
+			// Find cursos position.
+			double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 			// Check if left press.
 			if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 			{
 				// Call active engine.
 				m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->engine->mousePressLeft(mousePos);
 			}
-
 			// Check if right press.
 			else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 			{
@@ -146,18 +145,17 @@ void GraphicsHandler::mousePressEvent(GLFWwindow* window, int button, int action
 				m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->engine->mousePressRight(mousePos);
 			}
 		}
-		else
-		{
-			std::cout << "[OPENGL][ERROR][ENGINES] Active engine not found during mouse press event.\n";
-		}
+	}
+	// Print error.
+	else
+	{
+		std::cout << "[OPENGL][ERROR][ENGINES] Active engine not found during mouse press event.\n";
 	}
 }
 
 // Handle mouse move events.
 void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-	// Find cursos position.
-	double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 	// Check button state.
 	int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 
@@ -167,6 +165,8 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 		// Check if MCC dict is empty.
 		if (m_mccEngine->m_mccDictionary.size() != 0)
 		{
+			// Find cursos position.
+			double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 			m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->engine->mouseMoveEvent(mousePos, buttonState);
 		}
 	}
@@ -180,18 +180,18 @@ void GraphicsHandler::mouseMoveEvent(GLFWwindow* window, double xpos, double ypo
 // Handle mouse scroll events.
 void GraphicsHandler::mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset) 
 {	
-	// Find cursos position.
-	double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
-
 	// Call current active engine zoom function.
 	if (m_activeEngine == Engines::MCC_ENGINE)
 	{
 		// Check if dict is not empty.
 		if (m_mccEngine->m_mccDictionary.size() != 0)
 		{
+			// Find cursos position.
+			double mousePos[2] = { m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.x , m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->mouseCoords.y };
 			m_mccEngine->m_mccDictionary[m_mccEngine->m_activeMCC]->engine->mouseScrollEvent(mousePos, yoffset);
 		}
 	}
+	// Print error.
 	else 
 	{
 		std::cout << "[OPENGL][ERROR][ENGINES] Active engine not found during mouse scroll event.\n";

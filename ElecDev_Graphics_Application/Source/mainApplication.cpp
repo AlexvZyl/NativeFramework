@@ -126,6 +126,7 @@ void deQueueInput(stateMachine* states) {
         // Processing variables.
         inputQueue temp = states->inputQueueMCC.front();
         std::string mccName;
+        std::string text;
         std::vector<float> params;
 
         // Switch between different commands.
@@ -135,7 +136,6 @@ void deQueueInput(stateMachine* states) {
             case hash("drawLine"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
                 for (size_t i = 0; i < 8; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -148,7 +148,6 @@ void deQueueInput(stateMachine* states) {
             case hash("drawTriangleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
                 for (size_t i = 0; i < 10; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -161,7 +160,6 @@ void deQueueInput(stateMachine* states) {
             case hash("drawTriangleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
                 for (size_t i = 0; i < 10; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -174,7 +172,6 @@ void deQueueInput(stateMachine* states) {
             case hash("drawQuadClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
                 for (size_t i = 0; i < 8; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -187,7 +184,6 @@ void deQueueInput(stateMachine* states) {
             case hash("drawQuadFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
                 for (size_t i = 0; i < 8; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -196,43 +192,50 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->m_mccEngine->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-            // Draw clear circle.  [x]
+            // Draw clear circle.
             case hash("drawCircleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
-                for (size_t i = 0; i < 8; i++)
+                for (size_t i = 0; i < 7; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
+                graphicsHandler->m_mccEngine->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
-            // Draw a filled circle.  [x]
+            // Draw a filled circle.
             case hash("drawCircleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
-                for (size_t i = 0; i < 8; i++)
+                for (size_t i = 0; i < 7; i++)
                 {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
+                graphicsHandler->m_mccEngine->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
-            // Draw text.  [x]
+            // Draw text.
             case hash("drawText"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::cout << mccName << std::endl;
                 for (size_t i = 0; i < 8; i++)
                 {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    // Read text.
+                    if (i == 0)
+                    {
+                        text = temp.parameters.substr(0, temp.parameters.find(";"));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    // Read parameters,
+                    else
+                    {
+                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
                 }
-                graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
+                graphicsHandler->m_mccEngine->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
                 break;
 
             // Add MCC window to draw.
