@@ -77,6 +77,8 @@ public:
 	void removeMCC(std::string mccName);
 	// Render loop.
 	void renderActiveEngine();
+	// Checks if the given name is in the list of MCC's.
+	bool isNameValid(std::string mccName);
 
 	//---------------------------------------------------------------------------------------
 	// Events.
