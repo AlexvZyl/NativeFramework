@@ -76,6 +76,13 @@ void MCC::renderGraphics(ImGuiID dock)
 				// Reset mouse coordinates.
 				else
 				{
+					// If the active engine is the current engine, disable.
+					if (struc.first == graphicsHandler->m_mccEngine->m_activeMCC) 
+					{
+						graphicsHandler->m_mccEngine->m_activeMCC = 'None';
+					}
+
+					// Reset mouse coordinates when it moves outside of the window.
 					struc.second->engine->m_prevMouseEventWorldCoords[0] = NULL;
 					struc.second->engine->m_prevMouseEventWorldCoords[1] = NULL;
 				}

@@ -300,7 +300,7 @@ void deQueueInput(stateMachine* states) {
                 try {
                     mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                    graphicsHandler->m_mccEngine->addMcc(mccName);
+                    graphicsHandler->m_mccEngine->addMCC(mccName);
                 }
                 catch (const std::exception& e)
                 {

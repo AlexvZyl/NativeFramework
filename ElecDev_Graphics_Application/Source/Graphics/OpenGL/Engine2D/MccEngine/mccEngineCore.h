@@ -70,11 +70,7 @@ public:
 	//---------------------------------------------------------------------------------------
 	// Methods.
 	//---------------------------------------------------------------------------------------
-
-	// Adds an MCC to the dict.
-	void addMcc(std::string mccName);
-	// Removes an MCC from the dict.
-	void removeMCC(std::string mccName);
+	// 
 	// Render loop.
 	void renderActiveEngine();
 	// Checks if the given name is in the list of MCC's.
@@ -100,6 +96,10 @@ public:
 	void drawCircleClear(std::string mccName, float position[2], float radius, float color[4]);
 	void drawCircleFilled(std::string mccName, float position[2], float radius, float color[4]);
 	void drawText(std::string mccName, std::string text, float coords[2], float color[4], float scale);
+	// Adds an MCC to the dict.
+	void addMCC(std::string mccName);
+	// Removes an MCC from the dict.
+	void removeMCC(std::string mccName);
 	void display();
 
 	//---------------------------------------------------------------------------------------

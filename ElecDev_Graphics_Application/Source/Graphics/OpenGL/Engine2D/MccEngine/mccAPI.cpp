@@ -8,13 +8,19 @@ Engine API.
 
 #include "mccEngineCore.h"
 
+// ImGUI (GUI software). 
+#include "Implementations/imgui_impl_opengl3.h"
+
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Add MCC to the dictS.
-void MccEngineGL::addMcc(std::string mccName)
+void MccEngineGL::addMCC(std::string mccName)
 {
+
+	// Destroy ImGUI to allow drawing in other contexts.
+	ImGui_ImplOpenGL3_DestroyDeviceObjects();
 	// Add to dictionary.
 	m_mccDictionary.insert({ mccName, new MccStruct(m_states) });
 	// Set MCC name.
