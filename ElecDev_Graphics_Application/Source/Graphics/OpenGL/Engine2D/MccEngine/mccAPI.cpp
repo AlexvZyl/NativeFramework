@@ -18,13 +18,20 @@ Engine API.
 // Add MCC to the dictS.
 void MccEngineGL::addMCC(std::string mccName)
 {
-
-	// Destroy ImGUI to allow drawing in other contexts.
-	ImGui_ImplOpenGL3_DestroyDeviceObjects();
-	// Add to dictionary.
-	m_mccDictionary.insert({ mccName, new MccStruct(m_states) });
-	// Set MCC name.
-	m_activeMCC = mccName;
+	// Prevent 'None' being used as a  name.
+	if (mccName != "None") 
+	{
+		// Destroy ImGUI to allow drawing in other contexts.
+		ImGui_ImplOpenGL3_DestroyDeviceObjects();
+		// Add to dictionary.
+		m_mccDictionary.insert({ mccName, new MccStruct(m_states) });
+		// Set MCC name.
+		m_activeMCC = mccName;
+	}
+	else 
+	{
+		std::cout << "[INTERFACE][ERROR] 'None' is not a valid name. It is reserved for the inactive state.\n\n";
+	}
 }
 
 // Remove an MCC from the dict.

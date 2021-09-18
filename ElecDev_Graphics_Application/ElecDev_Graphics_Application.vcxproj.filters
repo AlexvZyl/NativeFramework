@@ -52,7 +52,7 @@
     <ClCompile Include="Source\mainApplication.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\mouseHandler.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseMouseHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\mousePoint.cpp">
@@ -82,6 +82,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccAPI.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccMouseHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">

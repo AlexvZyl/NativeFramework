@@ -82,6 +82,9 @@ public:
 
 	// Resize event for the engine.
 	void resizeEvent(int width, int height);
+	void mouseMoveEvent(int buttonState);
+	void mousePressEvent(int button, int action);
+	void mouseScrollEvent(float yOffset);
 
 	//---------------------------------------------------------------------------------------
 	// API.
