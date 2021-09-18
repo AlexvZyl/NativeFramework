@@ -728,6 +728,7 @@
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
     <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
+    <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\Shaders\basicShader.shader" />
     <None Include="Source\Resources\Shaders\staticShader.shader" />
     <None Include="Source\Resources\Shaders\textureShader.shader" />
@@ -738,10 +739,12 @@
     <Image Include="Icons\Draw_Circuit_Buckets.png" />
     <Image Include="Icons\Draw_MCC.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
+    <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_PNG.png" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
+    <Image Include="Source\Resources\Icons\panda.bmp" />
     <Image Include="Source\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Resources\Icons\component.png" />
     <Image Include="Source\Resources\Icons\Draw_Circuit_Buckets.png" />

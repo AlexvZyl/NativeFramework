@@ -74,7 +74,7 @@ public:
 	// Render loop.
 	void renderActiveEngine();
 	// Checks if the given name is in the list of MCC's.
-	bool isNameValid(std::string mccName);
+	bool isNameInDictionary(std::string mccName);
 
 	//---------------------------------------------------------------------------------------
 	// Events.

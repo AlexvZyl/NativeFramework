@@ -54,6 +54,7 @@ END
 // Application icon.
 IDI_ICON1						ICON		                "Icons\\circuitIcon128.ico"
 ICON_BMP						BITMAP						"Icons\\circuitIcon.bmp"
+PANDA							BITMAP						"Icons\\panda.bmp"
 //-------------------------------------------------------------------------------------------------
 // Shaders.
 BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
@@ -72,6 +73,8 @@ CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
 ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.fnt"
 ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF_PNG.png"
 ARIAL_SDF_BMP					BITMAP				 		"Fonts\\Arial_SDF_BMP_32.bmp"
+ARIAL_SDF_MIN_FNT				TEXTFILE					"Fonts\\Arial_SDF_Min.fnt"
+ARIAL_SDF_MIN_PNG				PNG							"Fonts\\Arial_SDF_Min.png"
 //-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources

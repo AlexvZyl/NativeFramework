@@ -52,7 +52,7 @@ void MccEngineGL::resizeEvent(int width, int height)
 		{
 			if (engine.second->resizeEvent)
 			{
-				engine.second->engine->resizeEventImGUI((int)engine.second->viewportDimentions.x, (int)engine.second->viewportDimentions.y);
+				engine.second->engine->resizeEvent((int)engine.second->viewportDimentions.x, (int)engine.second->viewportDimentions.y);
 				engine.second->resizeEvent = false;
 			}
 		}
