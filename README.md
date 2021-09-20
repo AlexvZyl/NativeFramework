@@ -54,6 +54,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Resize event need working on
 * ⬜ Implement Input catching
 
+#### Bugs from Ulrich
+Exception thrown at 0x0000000000000000 in ElecDev_Graphics_Application.exe: 0xC0000005: Access violation executing location 0x0000000000000000.
 ---
 
 ## Roadmap
