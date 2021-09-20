@@ -56,6 +56,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 #### Bugs from Ulrich
 The MCC must open in the middle of the window 
+If a lot of drawings are drawn, the last drawing is not completely finished. I do not know the reason for this, but if I draw a new MCC the old one is drawn completely
+I cannot resize the windows of the drawings
+I want to be able to close a drawing window (per MCC)
 
 ---
 
