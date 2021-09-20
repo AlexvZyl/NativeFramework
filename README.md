@@ -55,6 +55,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Implement Input catching
 
 #### Bugs from Ulrich
+The MCC must open in the middle of the window 
 
 ---
 
