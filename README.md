@@ -53,6 +53,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Multi vieport docking
 * ⬜ Resize event need working on
 * ⬜ Implement Input catching
+* ⬜ Rebuild IO handling
 
 #### Bugs from Ulrich
 The MCC must open in the middle of the window 
