@@ -208,7 +208,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 //  Camera manipulation.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Automatically places the drawing in the center.
+// Automatically places the drawing in the center and scales it to fit into the window..
 void BaseEngineGL::autoCenter() 
 {	
 	// Store min and max values.  Assign first values as default.
@@ -241,15 +241,24 @@ void BaseEngineGL::autoCenter()
 	}
 
 	// Calculate the values to translate.
-	
-	// Now translate the camera accordingly.
-	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(max[0]/2, max[1]/2, 0.0f));
-}
+	float translate[2]{};
+	translate[0] = -(max[0] - min[0]) / 2;
+	translate[1] = -(max[1] - min[1]) / 2;
 
-// Automatically scales the drawing so that it fits into the screen.
-void BaseEngineGL::autoScale()
-{
-	
+	// Now translate the camera accordingly.
+	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(translate[0], translate[1], 0.0f));
+	// Scale the drawing according to the largest translation that took place (This gives us the new max value,
+	// centered around (0.0).
+	if (translate[0] > translate[1]) 
+	{
+		float scale = std::abs(translate[0] * (1.1f));
+		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
+	}
+	else 
+	{
+		float scale = std::abs(translate[1] * (1.1f));
+		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------

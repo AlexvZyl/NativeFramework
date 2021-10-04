@@ -580,6 +580,19 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
+        // Center the drawing around (0,0).
+        case hash("autoCenter"):
+            try {
+                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                graphicsHandler->m_mccEngine->autoCenter(mccName);
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+            }
+            break;
+
         default:
             std::cout << "[INTERFACE][ERROR] '" << temp.command.c_str() << "' function invalid. \n\n";
             break;

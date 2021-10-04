@@ -165,7 +165,6 @@ public:
 	void drawText(std::string text, float coords[2], float color[4], float scale);
 	void drawDemo(unsigned int loopCount);											// Draw a demo of the capabilities.
 	void autoCenter();
-	void autoScale();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse events.

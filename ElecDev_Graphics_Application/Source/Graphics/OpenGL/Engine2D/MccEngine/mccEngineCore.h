@@ -105,6 +105,7 @@ public:
 	void removeMCC(std::string mccName);
 	// Draws a demo.
 	void drawDemo(std::string mccName, unsigned int loopCount);
+	void autoCenter(std::string mccName);
 
 	//---------------------------------------------------------------------------------------
 

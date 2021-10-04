@@ -274,12 +274,6 @@ void MccEngineGL::drawText(std::string mccName, std::string text, float coords[2
 	}
 }
 
-// Checks if the given name exists in the MCC dictionary.
-bool MccEngineGL::isNameInDictionary(std::string mccName)
-{
-	return m_mccDictionary.find(mccName) != m_mccDictionary.end();
-}
-
 // Draws the demo to the selected mcc.
 void MccEngineGL::drawDemo(std::string mccName, unsigned int loopCount) 
 {
@@ -299,6 +293,33 @@ void MccEngineGL::drawDemo(std::string mccName, unsigned int loopCount)
 	{
 		std::cout << "[INTERFACE][ERROR] '" << mccName << "' is an invalid name.\n\n";
 	}
+}
+
+// Centers the Drawing around (0,0) and scales it to fit into the window.
+void MccEngineGL::autoCenter(std::string mccName)
+{
+	// Check if MCC exists.
+	if (isNameInDictionary(mccName))
+	{
+		try {
+			// Render the demo drawing.
+			m_mccDictionary[mccName]->engine->autoCenter();
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+		}
+	}
+	else
+	{
+		std::cout << "[INTERFACE][ERROR] '" << mccName << "' is an invalid name.\n\n";
+	}
+}
+
+// Checks if the given name exists in the MCC dictionary.
+bool MccEngineGL::isNameInDictionary(std::string mccName)
+{
+	return m_mccDictionary.find(mccName) != m_mccDictionary.end();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
