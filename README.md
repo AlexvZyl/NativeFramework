@@ -118,11 +118,13 @@ I want to be able to close a drawing window (per MCC)
 
 ⬜ *It is up and running!* 
 
-### Design Engine (Child of Base Engine)
-
 * ⬜ Add client side copy of the buffer data to be able to read and change the data.
 * ⬜ Add autoCenter and autoScale functions.
 * ⬜ Optimize base engine.
+* ⬜ Add a demo drawing and some form of benchmark.
+
+### Design Engine (Child of Base Engine)
+
 * ⬜ Mouse event handler.
 * ⬜ Component generation and buffer management.
 * ⬜ Cable generation.
@@ -135,7 +137,6 @@ I want to be able to close a drawing window (per MCC)
 * ⬜ Add symbol library.
 * ⬜ Add template circuits.
 * ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
-* ⬜ Add a demo drawing and some form of benchmark.
 
 ### Long Term Dreams
 
