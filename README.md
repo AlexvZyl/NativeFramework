@@ -47,6 +47,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Create a resource loader function.
 * ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
 * ⬜ Fix abstractions.  Code got messy when we started rushing.
+* ⬜ Autoresize and scaling does not take into account the length of the text string.
 
 #### Raynhardt 
 * ⬜ Multi View port
