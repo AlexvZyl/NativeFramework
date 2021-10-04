@@ -133,6 +133,7 @@ I want to be able to close a drawing window (per MCC)
 * ⬜ Add symbol library.
 * ⬜ Add template circuits.
 * ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
+* ⬜ Add a demo drawing and some form of benchmark.
 
 ### Long Term Dreams
 
