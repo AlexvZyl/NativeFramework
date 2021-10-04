@@ -103,7 +103,8 @@ public:
 	void addMCC(std::string mccName);
 	// Removes an MCC from the dict.
 	void removeMCC(std::string mccName);
-	void display();
+	// Draws a demo.
+	void drawDemo(std::string mccName, unsigned int loopCount);
 
 	//---------------------------------------------------------------------------------------
 

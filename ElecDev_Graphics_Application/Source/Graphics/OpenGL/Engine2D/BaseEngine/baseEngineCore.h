@@ -97,28 +97,38 @@ public:
 	VertexArrayObject* m_backgroundVAO;			// Background has a seperate VAO since it should not move.
 	// Frame Buffer rendering.
 	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.
+	// Local Data.								// It is not a good idea to read data from the OpenGL buffers and thus we
+												// need to store copies of the buffers on the CPU side.
+	std::vector<VertexData> m_verticesCPU;			// A single buffer containing all of the vertices used in the drawing.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	float m_scaleRate = 0.3f;				// Determines how much is zoomed with each mouse wheel scroll.
-	int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
+	int m_circleResolution = 25;			// Determines how perfect the circle is (total lines used to draw it).  Very 
 											// demanding at high values.
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  State machine.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	stateMachine* m_states;					// Contains the current state of the application as well as information
+											// that is required from the GUI side for the Graphics side.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Misc variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	float m_imGuiViewportDimensions[2];
-	float m_projectionValues[6];
-	stateMachine* m_states;
+	float m_imGuiViewportDimensions[2];			// Stores the dimensions of the viewport that the OpenGL context gets drawn
+												// to.  
+	float m_projectionValues[6];				// Stores the valaues that is used to calculate the projection matrix.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructor & Destructor.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// With GLFW window.
+	// Contructor.
 	BaseEngineGL(stateMachine* states);
 	// Destructor
 	~BaseEngineGL();
@@ -153,7 +163,9 @@ public:
 	void drawCircleClear(float position[2], float radius, float color[4]);
 	void drawCircleFilled(float position[2], float radius, float color[4]);
 	void drawText(std::string text, float coords[2], float color[4], float scale);
-	void display();
+	void drawDemo(unsigned int loopCount);											// Draw a demo of the capabilities.
+	void autoCenter();
+	void autoScale();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse events.
@@ -178,6 +190,12 @@ public:
 
 	// Callback that handles the resizing event.
 	void resizeEvent(int width, int height);
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Camera manipulation.
+	//---------------------------------------------------------------------------------------------------------------------
+
+
 };
 
 //-------------------------------------------------------------------------------------------------------------------------

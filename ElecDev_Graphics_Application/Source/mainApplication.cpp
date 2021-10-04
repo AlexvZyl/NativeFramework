@@ -123,8 +123,8 @@ int main(int, char**)
     #else
         // GL 3.0 + GLSL 130.
         const char* glsl_version = "#version 450";
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only.
     #endif
@@ -385,7 +385,7 @@ void deQueueInput(stateMachine* states) {
         // Switch between different commands.
         switch (hash(temp.command.c_str())) {
 
-            // Draw line.
+        // Draw line.
         case hash("drawLine"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -403,7 +403,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw clear triangle.
+        // Draw clear triangle.
         case hash("drawTriangleClear"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -421,7 +421,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw filled triangle. 
+        // Draw filled triangle. 
         case hash("drawTriangleFilled"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -439,7 +439,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw clear quad.
+        // Draw clear quad.
         case hash("drawQuadClear"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -457,7 +457,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw filled quad.
+        // Draw filled quad.
         case hash("drawQuadFilled"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -475,7 +475,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw clear circle.
+        // Draw clear circle.
         case hash("drawCircleClear"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -493,7 +493,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw a filled circle.
+        // Draw a filled circle.
         case hash("drawCircleFilled"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -511,7 +511,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Draw text.
+        // Draw text.
         case hash("drawText"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -539,7 +539,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Add MCC window to draw.
+        // Add MCC window to draw.
         case hash("addMCC"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -552,12 +552,27 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-            // Remove MCC window.
+        // Remove MCC window.
         case hash("removeMCC"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->m_mccEngine->removeMCC(mccName);
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+            }
+            break;
+
+        // Draw the demo.
+        case hash("drawDemo"):
+            try {
+                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                graphicsHandler->m_mccEngine->drawDemo(mccName, (unsigned int)params[0]);
             }
             catch (const std::exception& e)
             {

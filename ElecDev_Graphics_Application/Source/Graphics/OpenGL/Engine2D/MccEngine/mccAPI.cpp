@@ -280,11 +280,25 @@ bool MccEngineGL::isNameInDictionary(std::string mccName)
 	return m_mccDictionary.find(mccName) != m_mccDictionary.end();
 }
 
-// Displays the new drawing to the screen.
-// Required after each new element has been added.
-void MccEngineGL::display()
+// Draws the demo to the selected mcc.
+void MccEngineGL::drawDemo(std::string mccName, unsigned int loopCount) 
 {
-	
+	// Check if MCC exists.
+	if (isNameInDictionary(mccName))
+	{
+		try {
+			// Render the demo drawing.
+			m_mccDictionary[mccName]->engine->drawDemo(loopCount);
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+		}
+	}
+	else
+	{
+		std::cout << "[INTERFACE][ERROR] '" << mccName << "' is an invalid name.\n\n";
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------------
