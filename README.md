@@ -120,6 +120,8 @@ I want to be able to close a drawing window (per MCC)
 
 ### Design Engine (Child of Base Engine)
 
+* ⬜ Add client side copy of the buffer data to be able to read and change the data.
+* ⬜ Add autoCenter and autoScale functions.
 * ⬜ Optimize base engine.
 * ⬜ Mouse event handler.
 * ⬜ Component generation and buffer management.
