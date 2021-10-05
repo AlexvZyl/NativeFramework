@@ -79,7 +79,7 @@ void MCC::renderGraphics(ImGuiID dock)
 					// If the active engine is the current engine, disable.
 					if (struc.first == graphicsHandler->m_mccEngine->m_activeMCC) 
 					{
-						graphicsHandler->m_mccEngine->m_activeMCC = 'None';
+						graphicsHandler->m_mccEngine->m_activeMCC = 'NONE';
 					}
 
 					// Reset mouse coordinates when it moves outside of the window.

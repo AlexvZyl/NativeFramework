@@ -15,7 +15,7 @@ This is where the drawing enigine mouse events are handled.
 void MccEngineGL::mousePressEvent(int button, int action) 
 {
 	// Check if MCC dict is empty or inactive.
-	if ((m_mccDictionary.size() != 0) && (isNameValid(m_activeMCC)))
+	if ((m_mccDictionary.size() != 0) && (isNameInDictionary(m_activeMCC)))
 	{
 		// Find cursos position.
 		float mousePos[2] = { m_mccDictionary[m_activeMCC]->mouseCoords.x , m_mccDictionary[m_activeMCC]->mouseCoords.y };
@@ -41,7 +41,7 @@ void MccEngineGL::mousePressEvent(int button, int action)
 void MccEngineGL::mouseMoveEvent(int buttonState)
 {
 	// Check if MCC dict is empty or inactive.
-	if ((m_mccDictionary.size() != 0) && (isNameValid(m_activeMCC)))
+	if ((m_mccDictionary.size() != 0) && (isNameInDictionary(m_activeMCC)))
 	{
 		// Find cursos position.
 		float mousePos[2] = { m_mccDictionary[m_activeMCC]->mouseCoords.x , m_mccDictionary[m_activeMCC]->mouseCoords.y };
@@ -56,7 +56,7 @@ void MccEngineGL::mouseMoveEvent(int buttonState)
 void MccEngineGL::mouseScrollEvent(float yOffset)
 {
 	// Check if MCC dict is empty or inactive.
-	if ((m_mccDictionary.size() != 0) && (isNameValid(m_activeMCC)))
+	if ((m_mccDictionary.size() != 0) && (isNameInDictionary(m_activeMCC)))
 	{
 		// Find cursos position.
 		float mousePos[2] = { m_mccDictionary[m_activeMCC]->mouseCoords.x , m_mccDictionary[m_activeMCC]->mouseCoords.y };

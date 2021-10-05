@@ -14,20 +14,22 @@
 #include <string>
 #include <sstream>
 
+#include "Misc/stb_image.h"
+
 //----------------------------------------------------------------------------------------------------------------------
 //  TextRenderer Methods.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor.
 // Parses the .fnt file so that the .png can be used to render text,
-TextRenderer::TextRenderer()
+TextRenderer::TextRenderer(int fontID, int atlasID)
 {
 	// Font information.
 	float textureDimensions[2] = { 512, 512 };	// Dimensions of the .png file.
 	float padding = 3;							// Amount of padding around each character.
 
 	// Load font text file from executable.
-	HRSRC resource = FindResource(getCurrentModule(), MAKEINTRESOURCE(ARIAL_SDF_FNT), MAKEINTRESOURCE(TEXTFILE));
+	HRSRC resource = FindResource(getCurrentModule(), MAKEINTRESOURCE(fontID), MAKEINTRESOURCE(TEXTFILE));
 	HGLOBAL data = LoadResource(getCurrentModule(), resource);
 	DWORD size = SizeofResource(getCurrentModule(), resource);
 	char* finalData = (char*)LockResource(data);
@@ -152,7 +154,49 @@ TextRenderer::TextRenderer()
 		// Increment line counter.
 		lineCount++;
 	}
+
+	// Load font atlas as texture.
+	//m_textAtlas = loadBMPtoGL(ICON_BMP);
+	m_textureID = loadTexture("Source\\Resources\\Fonts\\Arial_SDF_BMP_32.bmp", true);
 }
+
+GLuint TextRenderer::loadTexture(const std::string& path, bool alpha)
+{
+	int w, h, bits;
+	stbi_set_flip_vertically_on_load(1);
+
+	// Load texture without alpha channel.
+	if (!alpha)
+	{
+		auto* pixels = stbi_load(path.c_str(), &w, &h, &bits, STBI_rgb);
+		GLuint textureID;
+		GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
+		GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels));
+		stbi_image_free(pixels);
+		return textureID;
+	}
+	// Load texture with alpha channel.
+	else
+	{
+		auto* pixels = stbi_load(path.c_str(), &w, &h, &bits, STBI_rgb_alpha);
+		GLuint textureID;
+		GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
+		GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
+		stbi_image_free(pixels);
+		return textureID;
+	}
+}
+
 
 // Destructor.
 TextRenderer::~TextRenderer() 

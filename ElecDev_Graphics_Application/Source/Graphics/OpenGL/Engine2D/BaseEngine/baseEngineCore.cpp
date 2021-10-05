@@ -26,7 +26,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Create basic shader.
 	//---------------------------
 
-	std::cout << "[OPENGL][SHADERS] Compiling Basic Shader...\n";
+	std::cout << "[OPENGL][BASE ENGINE] Compiling shaders...\n";
 	// Load resource from executable.
 	HRSRC basicShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(BASIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
 	HGLOBAL basicResourceData = LoadResource(getCurrentModule(), basicShaderResource);
@@ -40,7 +40,6 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Create static shader.
 	//---------------------------
 
-	std::cout << "[OPENGL][SHADERS] Compiling Static Shader...\n";
 	// Load resource from executable.
 	HRSRC staticShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(STATIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
 	HGLOBAL staticResourceData = LoadResource(getCurrentModule(), staticShaderResource);
@@ -54,7 +53,6 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Create texture shader.
 	//---------------------------
 
-	std::cout << "[OPENGL][SHADERS] Compiling Texture Shader...\n";
 	// Load resource from executable.
 	HRSRC textureShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(TEXTURE_SHADER), MAKEINTRESOURCE(TEXTFILE));
 	HGLOBAL textureResourceData = LoadResource(getCurrentModule(), textureShaderResource);
@@ -64,7 +62,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	textureShaderSource.assign(textureResourceFinal, textureResourceSize);
 	m_textureShader = new Shader(textureShaderSource);
 	// Done.
-	std::cout << "[OPENGL][SHADERS] Done.\n\n";
+	std::cout << "[OPENGL][BASE ENGINE] Shaders done.\n\n";
 
 	//---------------------------------------------------------------------------------------
 	// Windows setup.
@@ -125,7 +123,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Assign background data.
 	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
 	float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
-	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	// Top right.
+	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
 	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
 	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
 	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
@@ -142,79 +140,22 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	m_textureShader->bind();
-	// Load font atlas as texture.
-	//m_textAtlas = loadBMPtoGL(ICON_BMP);
-	m_textAtlas = loadTexture("Source\\Resources\\Fonts\\Arial_SDF_BMP_32.bmp", true);
 	// Load texture for testing.
 	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
+
+	// Create texture renderer object.
+	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_BMP);
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
-	GLCall(glBindTextureUnit(1, m_textAtlas));	// Text Atlas.
+	GLCall(glBindTextureUnit(1, m_textRenderer->m_textureID));	// Text Atlas.
 	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
 
-	// Create texture renderer object.
-	m_textRenderer = new TextRenderer();
-
 	//---------------------------------------------------------------------------------------
 
-	//---------------------------------------------------------------------------------------
-	// Test code.
-	//---------------------------------------------------------------------------------------
 
-	//for (int i = 0; i <= 1 * 3; i += 3)
-	//{
-	//	for (int k = 0; k <= 1 * 3; k += 3)
-	//	{
-	//		// Draw filled triangle example.
-	//		float ftPos1[2] = { -1.0f + i, -1.0f + k };
-	//		float ftPos2[2] = { -1.0f + i, -0.5 + k };
-	//		float ftPos3[2] = { -1.5f + i, -1.0f + k };
-	//		float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
-	//		drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
-
-	//		// Draw clear quad.
-	//		float cqCoords[2] = { 0.0f + i, 0.0f + k };
-	//		float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	//		drawQuadClear(cqCoords, 2, 2, cqColor);
-
-	//		// Draw filled quad.
-	//		float fqCoords[2] = { -0.5f + i, 0.5f + k };
-	//		float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-	//		drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
-
-	//		// Draw filed ciricle.
-	//		float coords1[2] = { 0.0f + i, 0.0f + k };
-	//		float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
-	//		drawCircleFilled(coords1, 0.2, color);
-	//		// Draw clear ciricle.
-	//		float coords2[2] = { i, -0.75f + k };
-	//		drawCircleClear(coords2, 0.2, color);
-
-	//		// Draw clear triangle example.
-	//		float ctPos1[2] = { 1.0f + i, -1.0f + k };
-	//		float ctPos2[2] = { 1.5f + i, -1.0f + k };
-	//		float ctPos3[2] = { 1.0f + i, -0.5f + k };
-	//		float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
-	//		drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
-
-	//		// Test textures.
-	//		TexturedVertexData v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
-	//		TexturedVertexData v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
-	//		TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
-	//		TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
-	//		std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-	//		m_textureTrianglesVAO->writeData(verticesTex);
-
-	//		// Test the text rendering.
-	//		float pos[2] = { 0.5f + i, 0.5f + k };
-	//		std::string text = "Testing-Font and Different_characters. [!&>*?\\] ";
-	//		float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-	//		drawText(text, pos, colorText, 1);
-	//	}
-	//}
 };
 
 // Delete and free memory.
@@ -323,7 +264,7 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 //----------------------------------------------------------------------------------------------------------------------
 
 // Function that handles the resizing of the ImGUI docked window.
-void BaseEngineGL::resizeEventImGUI(int width, int height)
+void BaseEngineGL::resizeEvent(int width, int height)
 {
 	// Calculate the value of the scaling.
 	float scalingFactor[2] = { (float)width / (float)m_imGuiViewportDimensions[0], (float)height / (float)m_imGuiViewportDimensions[1] };
@@ -336,20 +277,13 @@ void BaseEngineGL::resizeEventImGUI(int width, int height)
 	m_projectionValues[2] *= scalingFactor[1];
 	m_projectionValues[3] *= scalingFactor[1];
 
-	// Arrange order of sacling based on if it should be division or multiplication.
-	if (scalingFactor[1] < 1)  //  Minimizing.
-	{
-		// Create new projection matrix.
-		m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
-	
-	}
-	else  //  Maximizing.
-	{
-		// Create new projection matrix.
-		m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
-		// Scale the drawing so that it stays the same size relative to the viewport.
-		//m_projectionMatrix = glm::scale(m_projectionMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1));
-	}
+	// Scale with the y scaling.
+	m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
+	// Update base matrix.
+	m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
+
+	// Create new projection matrix.
+	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
 
 	// Apply changes to shaders.
 	m_basicShader->bind();
@@ -363,8 +297,13 @@ void BaseEngineGL::resizeEventImGUI(int width, int height)
 	// Change viewport dimmensions.
 	m_imGuiViewportDimensions[0] = (float)width;
 	m_imGuiViewportDimensions[1] = (float)height;
-
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Camera manipulation.
+//----------------------------------------------------------------------------------------------------------------------
+
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

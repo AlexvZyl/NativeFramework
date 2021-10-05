@@ -74,7 +74,7 @@ public:
 	// Render loop.
 	void renderActiveEngine();
 	// Checks if the given name is in the list of MCC's.
-	bool isNameValid(std::string mccName);
+	bool isNameInDictionary(std::string mccName);
 
 	//---------------------------------------------------------------------------------------
 	// Events.
@@ -103,7 +103,9 @@ public:
 	void addMCC(std::string mccName);
 	// Removes an MCC from the dict.
 	void removeMCC(std::string mccName);
-	void display();
+	// Draws a demo.
+	void drawDemo(std::string mccName, unsigned int loopCount);
+	void autoCenter(std::string mccName);
 
 	//---------------------------------------------------------------------------------------
 

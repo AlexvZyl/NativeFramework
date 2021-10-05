@@ -25,10 +25,10 @@ void BaseEngineGL::mousePressLeft(float pixelCoords[2])
 // Event handler for a mouse right click.
 void BaseEngineGL::mousePressRight(float pixelCoords[2])
 {
-	// Reset the view values.
-	m_scalingMatrix = glm::mat4(1.0f);
-	m_translationMatrix = glm::mat4(1.0f);
-	m_rotationMatrix = glm::mat4(1.0f);
+	// Reset the view values to the base matrices.
+	m_scalingMatrix = m_scalingMatrixBase;
+	m_translationMatrix = m_translationMatrixBase;
+	m_rotationMatrix = m_rotationMatrixBase;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

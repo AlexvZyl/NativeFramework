@@ -18,8 +18,17 @@ Engine API.
 // Add MCC to the dictS.
 void MccEngineGL::addMCC(std::string mccName)
 {
-	// Prevent 'None' being used as a  name.
-	if (mccName != "None") 
+	// Check if name already used.
+	if (isNameInDictionary(mccName)) 
+	{
+		std::cout << "[INTERFACE][ERROR] Name '" << mccName <<"' already used.\n\n";
+	}
+	// Prevent 'NONE' being used as a  name.
+	else if (mccName == "NULL") 
+	{
+		std::cout << "[INTERFACE][ERROR] 'NULL' is not a valid name. It is reserved for the inactive state.\n\n";
+	}
+	else 
 	{
 		// Destroy ImGUI to allow drawing in other contexts.
 		ImGui_ImplOpenGL3_DestroyDeviceObjects();
@@ -28,17 +37,13 @@ void MccEngineGL::addMCC(std::string mccName)
 		// Set MCC name.
 		m_activeMCC = mccName;
 	}
-	else 
-	{
-		std::cout << "[INTERFACE][ERROR] 'None' is not a valid name. It is reserved for the inactive state.\n\n";
-	}
 }
 
 // Remove an MCC from the dict.
 void MccEngineGL::removeMCC(std::string mccName)
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName)) 
+	if (isNameInDictionary(mccName)) 
 	{
 		delete m_mccDictionary[mccName];
 		// Remove by key.
@@ -46,7 +51,7 @@ void MccEngineGL::removeMCC(std::string mccName)
 		// Set new active MCC.
 		if (m_mccDictionary.size() != 0)
 		{
-			m_activeMCC = m_mccDictionary.begin()->first;
+			m_activeMCC = "NULL";
 		}
 	}
 	else
@@ -59,7 +64,7 @@ void MccEngineGL::removeMCC(std::string mccName)
 void MccEngineGL::drawLine(std::string mccName, float position1[2], float position2[2], float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			// Define position data.
@@ -84,7 +89,7 @@ void MccEngineGL::drawLine(std::string mccName, float position1[2], float positi
 void MccEngineGL::drawTriangleClear(std::string mccName, float position1[2], float position2[2], float position3[2], float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 
@@ -111,7 +116,7 @@ void MccEngineGL::drawTriangleClear(std::string mccName, float position1[2], flo
 void MccEngineGL::drawTriangleFilled(std::string mccName, float position1[2], float position2[2], float position3[2], float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			// Define position data.
@@ -137,7 +142,7 @@ void MccEngineGL::drawTriangleFilled(std::string mccName, float position1[2], fl
 void MccEngineGL::drawQuadClear(std::string mccName, float position[2], float width, float height, float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			width /= 2;
@@ -164,7 +169,7 @@ void MccEngineGL::drawQuadClear(std::string mccName, float position[2], float wi
 void MccEngineGL::drawQuadFilled(std::string mccName, float position[2], float width, float height, float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			width /= 2;
@@ -191,7 +196,7 @@ void MccEngineGL::drawQuadFilled(std::string mccName, float position[2], float w
 void MccEngineGL::drawCircleClear(std::string mccName, float coords[2], float radius, float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			for (int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
@@ -221,7 +226,7 @@ void MccEngineGL::drawCircleClear(std::string mccName, float coords[2], float ra
 void MccEngineGL::drawCircleFilled(std::string mccName, float coords[2], float radius, float color[4])
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			for (int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
@@ -252,7 +257,7 @@ void MccEngineGL::drawCircleFilled(std::string mccName, float coords[2], float r
 void MccEngineGL::drawText(std::string mccName, std::string text, float coords[2], float color[4], float scale)
 {
 	// Check if MCC exists.
-	if (isNameValid(mccName))
+	if (isNameInDictionary(mccName))
 	{
 		try {
 			// Render the text.
@@ -269,17 +274,52 @@ void MccEngineGL::drawText(std::string mccName, std::string text, float coords[2
 	}
 }
 
-// Checks if the given name exists in the MCC dictionary.
-bool MccEngineGL::isNameValid(std::string mccName)
+// Draws the demo to the selected mcc.
+void MccEngineGL::drawDemo(std::string mccName, unsigned int loopCount) 
 {
-	return m_mccDictionary.find(mccName) != m_mccDictionary.end();
+	// Check if MCC exists.
+	if (isNameInDictionary(mccName))
+	{
+		try {
+			// Render the demo drawing.
+			m_mccDictionary[mccName]->engine->drawDemo(loopCount);
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+		}
+	}
+	else
+	{
+		std::cout << "[INTERFACE][ERROR] '" << mccName << "' is an invalid name.\n\n";
+	}
 }
 
-// Displays the new drawing to the screen.
-// Required after each new element has been added.
-void MccEngineGL::display()
+// Centers the Drawing around (0,0) and scales it to fit into the window.
+void MccEngineGL::autoCenter(std::string mccName)
 {
-	
+	// Check if MCC exists.
+	if (isNameInDictionary(mccName))
+	{
+		try {
+			// Render the demo drawing.
+			m_mccDictionary[mccName]->engine->autoCenter();
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+		}
+	}
+	else
+	{
+		std::cout << "[INTERFACE][ERROR] '" << mccName << "' is an invalid name.\n\n";
+	}
+}
+
+// Checks if the given name exists in the MCC dictionary.
+bool MccEngineGL::isNameInDictionary(std::string mccName)
+{
+	return m_mccDictionary.find(mccName) != m_mccDictionary.end();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

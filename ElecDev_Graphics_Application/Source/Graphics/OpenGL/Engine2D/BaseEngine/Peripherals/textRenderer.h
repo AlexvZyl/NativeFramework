@@ -55,10 +55,16 @@ private:
 
 public:
 
+	// Texture ID for the font atlas.
+	GLuint m_textureID;
+
 	// Constructor.  Load the .fnt file and reads it.
-	TextRenderer();
+	TextRenderer(int fontID, int atlasID);
 	// Destructor.
 	~TextRenderer();
+
+	// Loads textures to OpenGL.
+	GLuint loadTexture(const std::string& path, bool alpha);
 
 	// Writes the text to the vao supplied.
 	void writeText(std::string text, float coords[2], VertexArrayObject* vao, float textureID, float color[4], float scale);

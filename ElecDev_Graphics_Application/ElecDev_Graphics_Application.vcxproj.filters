@@ -1668,6 +1668,7 @@
     <None Include="Source\External\glm\gtx\wrap.inl">
       <Filter>Source</Filter>
     </None>
+    <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">
@@ -1700,6 +1701,8 @@
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_PNG.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
+    <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
+    <Image Include="Source\Resources\Icons\panda.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
