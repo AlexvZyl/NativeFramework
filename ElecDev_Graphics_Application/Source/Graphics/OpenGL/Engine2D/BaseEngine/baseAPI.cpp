@@ -263,14 +263,14 @@ void BaseEngineGL::autoCenter()
 	// centered around (0.0).
 	if (translate[0] > translate[1]) 
 	{
-		float scale = std::abs(translate[0] * (1.05f));
+		float scale = std::abs(translate[0]);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 	else 
 	{
-		float scale = std::abs(translate[1] * (1.05f));
+		float scale = std::abs(translate[1]);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
