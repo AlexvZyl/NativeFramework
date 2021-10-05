@@ -2,10 +2,6 @@
 
 This is the graphics application that is to be used with the ElecDev software.  It is built to be a standalone executable that can interface with Excel.
 
-* ⬜ = Still needs to be done.
-* 🟨 = Not done but no longer needed.
-* ✅ = Completed.
-
 ### Software And Dependencies
 
 * Language: C++, [https://en.wikipedia.org/wiki/C%2B%2B].  
@@ -25,6 +21,14 @@ This is the graphics application that is to be used with the ElecDev software.  
 * OpenGL Docs: [http://docs.gl/]. Very handy to check functions, versions and deprecations.
 
 ***IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!*
+
+---
+
+## Legend:
+
+* ⬜ = Incomplete.
+* 🟨 = No longer required.
+* ✅ = Completed.
 
 ---
 
