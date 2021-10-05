@@ -2,6 +2,10 @@
 
 This is the graphics application that is to be used with the ElecDev software.  It is built to be a standalone executable that can interface with Excel.
 
+* ⬜ = Still needs to be done.
+* 🟨 = Not done but no longer needed.
+* ✅ = Completed.
+
 ### Software And Dependencies
 
 * Language: C++, [https://en.wikipedia.org/wiki/C%2B%2B].  
@@ -28,7 +32,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 #### Alex
 * ⬜ Mouse events are handled by making the GraphicsHandler object global.  Find another way.
-* ⬜ Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
+* 🟨 Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
 * ⬜ OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
 * ⬜ Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
 * ⬜ GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.  Might just be the use of predefined IBO's.
@@ -40,7 +44,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Implement "Improved Alpha-Tested Magnification for Vector Textures and Special Effects" from paper [https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf].
 * ⬜ Font rendering is done with .fnt & .png files.  This works, but using .ttf files is more modern.  The fist option is used since it is faster to work with a font atlas.
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
-* ⬜ Type casts throwing warning.  Fix.
+* ✅ Type casts throwing warning.  Fix.
 * ⬜ Buffer sizes are currently static, change to dynamic.
 * ⬜ Using index buffers might improve performance.
 * ✅ Use SDF (Signed Distance Fields) when rendering text.
