@@ -277,6 +277,11 @@ void BaseEngineGL::resizeEvent(int width, int height)
 	m_projectionValues[2] *= scalingFactor[1];
 	m_projectionValues[3] *= scalingFactor[1];
 
+	// Scale with the y scaling.
+	m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
+	// Update base matrix.
+	m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
+
 	// Create new projection matrix.
 	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
 

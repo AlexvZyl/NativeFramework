@@ -69,6 +69,12 @@ public:
 	glm::mat4 m_translationMatrix = glm::mat4(1.0f);// Handles camera translations.
 	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);	// Handles camera rotations.
 
+	// We need matrices to store the base view of the drawing.  This is to fall back to when right clicking, and this has to 
+	// be updated with resizing and when auto sizing and scaling funtions are called.
+	glm::mat4 m_scalingMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera scaling.
+	glm::mat4 m_translationMatrixBase = glm::mat4(1.0f);// Stores base matrix for camera translation.
+	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera rotation.
+
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse handler variables.
 	//---------------------------------------------------------------------------------------------------------------------

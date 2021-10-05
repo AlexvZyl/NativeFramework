@@ -211,6 +211,15 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 // Automatically places the drawing in the center and scales it to fit into the window..
 void BaseEngineGL::autoCenter() 
 {	
+	// First reset the matrices.
+	m_scalingMatrix = glm::mat4(1.0f);
+	m_translationMatrix = glm::mat4(1.0f);
+	m_rotationMatrix = glm::mat4(1.0f);
+	// And reset the base matrices.
+	m_scalingMatrixBase = glm::mat4(1.0f);
+	m_translationMatrixBase = glm::mat4(1.0f);
+	m_rotationMatrixBase = glm::mat4(1.0f);
+
 	// Store min and max values.  Assign first values as default.
 	float max[2] = { m_verticesCPU[0].position[0], m_verticesCPU[0].position[1] };
 	float min[2] = { m_verticesCPU[0].position[0], m_verticesCPU[0].position[1] };
@@ -247,17 +256,24 @@ void BaseEngineGL::autoCenter()
 
 	// Now translate the camera accordingly.
 	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(translate[0], translate[1], 0.0f));
+	// Add to base matrix.
+	m_translationMatrixBase = glm::translate(m_translationMatrixBase, glm::vec3(translate[0], translate[1], 0.0f));
+
 	// Scale the drawing according to the largest translation that took place (This gives us the new max value,
 	// centered around (0.0).
 	if (translate[0] > translate[1]) 
 	{
-		float scale = std::abs(translate[0] * (1.1f));
+		float scale = std::abs(translate[0] * (1.05f));
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
+		// Update base matrix.
+		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 	else 
 	{
-		float scale = std::abs(translate[1] * (1.1f));
+		float scale = std::abs(translate[1] * (1.05f));
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
+		// Update base matrix.
+		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 }
 
