@@ -105,7 +105,7 @@ public:
 	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.
 	// Local Data.								// It is not a good idea to read data from the OpenGL buffers and thus we
 												// need to store copies of the buffers on the CPU side.
-	std::vector<VertexData> m_verticesCPU;			// A single buffer containing all of the vertices used in the drawing.
+	std::vector<VertexData> m_verticesCPU;		// A single buffer containing all of the vertices used in the drawing.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.
