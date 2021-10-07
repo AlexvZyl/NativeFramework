@@ -185,7 +185,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f + i, 0.5f + k };
-			std::string text = "Testing-Font and Different_characters. [!&>*?\\] ";
+			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 			drawText(text, pos, colorText, 1);
 		}
