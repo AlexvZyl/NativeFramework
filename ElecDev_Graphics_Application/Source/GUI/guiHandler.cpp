@@ -24,6 +24,7 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->toolbar = new Toolbar(this->states);
 	this->ribbons = new Ribbons(this->states);
 	this->graphics = new Graphics(states, this->graphicsHandler);
+	this->userWindow = new userGUI(states, this->graphicsHandler);
 
 	//MCCDict.
 
@@ -58,8 +59,8 @@ void GUIHandler::renderGui(ImGuiIO& io)
 	bool p_open = true;
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 	ImGui::PopStyleVar(2);
-	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
 
+	ImGuiID dockspaceID = ImGui::GetID("MyDockSpace");
 	ImGuiID dock = ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
 
 	// End Docking space
@@ -67,6 +68,7 @@ void GUIHandler::renderGui(ImGuiIO& io)
 	this->toolbar->renderToolbar();
 
 	this->ribbons->renderRibbons(&dock);
+
 
 	if (states->showGraphicsWindow) {
 		//this->graphics->renderGraphics(dock);
@@ -81,11 +83,24 @@ void GUIHandler::renderGui(ImGuiIO& io)
 
 	ImGui::End();
 
+	this->userWindow->renderWindow(dock);
+
 	ImGui::PopStyleVar();
 
 	//Render ImGUI into screen.
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	// Update and Render additional Platform Windows
+	// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		GLFWwindow* backup_current_context = glfwGetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(backup_current_context);
+	}
 
 };
 

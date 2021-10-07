@@ -14,6 +14,7 @@
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
 #include "Graphics/graphics.h"
+#include "UserGUI/userGUI.h"
 #include "MCC/mcc.h"
 #include "../stateMachine.h"
 
@@ -46,6 +47,7 @@ public:
 	Toolbar* toolbar;
 	Ribbons* ribbons;
 	Graphics* graphics;
+	userGUI* userWindow;
 	MCC* mcc;
 
 	//--------------------------------------------------------------------------------------------------------------

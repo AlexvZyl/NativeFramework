@@ -43,13 +43,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -196,6 +196,7 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\mainApplication.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
+    <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.h" />
@@ -581,6 +582,7 @@
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h" />
     <ClInclude Include="Source\GUI\Toolbar\toolbar.h" />
     <ClInclude Include="Source\stateMachine.h" />
+    <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
