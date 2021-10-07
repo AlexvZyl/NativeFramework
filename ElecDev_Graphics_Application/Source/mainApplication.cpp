@@ -313,8 +313,8 @@ constexpr size_t hash(const char* str) {
 
 // Process the input from python.
 // Divided into different types and processed accordingly.
-void procesInput(std::string inString, stateMachine* states) {
-
+void procesInput(std::string inString, stateMachine* states) 
+{
     // Variables.
     int startFunc;
     int endFunc;
@@ -331,28 +331,28 @@ void procesInput(std::string inString, stateMachine* states) {
     switch (hash(command.c_str()))
     {
         // Quit the thread.
-    case hash("Quit"):
-    {
-        states->globalQuit = true;
-        break;
-    }
+        case hash("Quit"):
+        {
+            states->globalQuit = true;
+            break;
+        }
 
-    // Command to be processed by the app.
-    case hash("Command"):
-    {
-        std::string function = inString.substr(1, inString.find("]") - 1);
-        inString = inString.substr(inString.find("]") + 1);
-        std::string params = inString.substr(1, inString.find("]") - 1);
-        states->inputQueueMCC.push(*(new inputQueue(function, params)));
-        break;
-    }
+        // Command to be processed by the app.
+        case hash("Command"):
+        {
+            std::string function = inString.substr(1, inString.find("]") - 1);
+            inString = inString.substr(inString.find("]") + 1);
+            std::string params = inString.substr(1, inString.find("]") - 1);
+            states->inputQueueMCC.push(*(new inputQueue(function, params)));
+            break;
+        }
 
-    // Error output of the command is invalid.
-    default:
-    {
-        std::cout << "[INTERFACE][ERROR] '" << command << "' type invalid. \n\n";
-        break;
-    }
+        // Error output of the command is invalid.
+        default:
+        {
+            std::cout << "[INTERFACE][ERROR] '" << command << "' type invalid. \n\n";
+            break;
+        }
     }
 }
 
@@ -593,7 +593,7 @@ void deQueueInput(stateMachine* states) {
             }
             break;
 
-        // Load CPU buffers toe GPU.
+        // Load CPU buffers to GPU.
         case hash("updateBuffers"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
