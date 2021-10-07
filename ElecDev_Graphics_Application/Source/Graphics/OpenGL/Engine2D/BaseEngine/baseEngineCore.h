@@ -101,11 +101,16 @@ public:
 	VertexArrayObject* m_textureTrianglesVAO;	// Textured Triangles.
 	VertexArrayObject* m_textVAO;				// Handles text rendering.
 	VertexArrayObject* m_backgroundVAO;			// Background has a seperate VAO since it should not move.
+
 	// Frame Buffer rendering.
-	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.
+	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
+
 	// Local Data.								// It is not a good idea to read data from the OpenGL buffers and thus we
 												// need to store copies of the buffers on the CPU side.
-	std::vector<VertexData> m_verticesCPU;			// A single buffer containing all of the vertices used in the drawing.
+
+	std::vector<VertexData> m_linesCPU;						// These two buffers contain the vertex data and stores it CPU side.  This
+	std::vector<VertexData> m_trianglesCPU;					// is to allow the program to dynamically change the buffers, since this 
+	std::vector<TexturedVertexData> m_texturedTrianglesCPU;	// cannot be done if all of the data is stored on the GPU.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.
@@ -123,7 +128,7 @@ public:
 											// that is required from the GUI side for the Graphics side.
 
 	//---------------------------------------------------------------------------------------------------------------------
-	//  Misc variables.
+	//  Viewport variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	float m_imGuiViewportDimensions[2];			// Stores the dimensions of the viewport that the OpenGL context gets drawn
@@ -171,6 +176,7 @@ public:
 	void drawText(std::string text, float coords[2], float color[4], float scale);
 	void drawDemo(unsigned int loopCount);											// Draw a demo of the capabilities.
 	void autoCenter();
+	void updateBuffers();				
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse events.

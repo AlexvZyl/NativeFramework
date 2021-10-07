@@ -88,15 +88,14 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	unsigned int totVertices = 1000*100;
 	// Lines.
-	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
+	m_linesVAO = new VertexArrayObject(GL_LINES);
 	// Triangles.
-	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices);
+	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Textured Triangles.
-	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices, true);
+	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, true);
 	// Background.
-	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
+	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Frame buffer.
 	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1]);
 
@@ -139,12 +138,12 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	//---------------------------------------------------------------------------------------
 
-
 };
 
 // Delete and free memory.
 BaseEngineGL::~BaseEngineGL() 
 {
+	std::cout << "\n" << "Engine destructor called.\n";
 	// Delete shaders.
 	delete m_basicShader;
 	delete m_staticShader;
