@@ -56,6 +56,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
 * ⬜ Fix abstractions.  Code got messy when we started rushing.
 * ✅ Autoresize and scaling does not take into account the length of the text string.
+* ⬜ Looks like there is some kind of memory leak when resizing the window.
 
 #### Raynhardt 
 * ⬜ Multi View port
