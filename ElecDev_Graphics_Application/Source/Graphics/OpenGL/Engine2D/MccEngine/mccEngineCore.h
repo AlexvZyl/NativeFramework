@@ -106,6 +106,8 @@ public:
 	// Draws a demo.
 	void drawDemo(std::string mccName, unsigned int loopCount);
 	void autoCenter(std::string mccName);
+	// Loads the CPU data to the GPU.
+	void updateBuffers(std::string mccName)
 
 	//---------------------------------------------------------------------------------------
 
