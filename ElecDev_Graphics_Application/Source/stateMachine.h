@@ -31,6 +31,8 @@ struct stateMachine
 
 	std::queue<inputQueue> inputQueueMCC;
 	std::queue<inputQueue> inputQueue;
+
+	bool userWindowHovered;
 	
 
 };
