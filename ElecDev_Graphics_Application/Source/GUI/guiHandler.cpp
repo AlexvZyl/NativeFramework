@@ -75,11 +75,10 @@ void GUIHandler::renderGui(ImGuiIO& io)
 		this->mcc->renderGraphics(dock);
 	}
 
-	ImGui::Begin("FPS");
-	ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
-	ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
-	
-	ImGui::End();	
+	//ImGui::Begin("FPS");
+	//ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
+	//ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
+	//ImGui::End();	
 
 	ImGui::End();
 
@@ -101,7 +100,6 @@ void GUIHandler::renderGui(ImGuiIO& io)
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
-
 };
 
 void GUIHandler::setTheme() 

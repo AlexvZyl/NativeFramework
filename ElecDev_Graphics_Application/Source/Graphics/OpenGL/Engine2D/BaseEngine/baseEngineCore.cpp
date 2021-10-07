@@ -143,7 +143,6 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 // Delete and free memory.
 BaseEngineGL::~BaseEngineGL() 
 {
-	std::cout << "\n" << "Engine destructor called.\n";
 	// Delete shaders.
 	delete m_basicShader;
 	delete m_staticShader;
