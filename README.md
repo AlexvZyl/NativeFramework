@@ -49,7 +49,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Font rendering is done with .fnt & .png files.  This works, but using .ttf files is more modern.  The fist option is used since it is faster to work with a font atlas.
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
 * ✅ Type casts throwing warning.  Fix.
-* ⬜ Buffer sizes are currently static, change to dynamic.
+* ✅ Buffer sizes are currently static, change to dynamic.
 * ⬜ Using index buffers might improve performance.
 * ✅ Use SDF (Signed Distance Fields) when rendering text.
 * ⬜ Create a resource loader function.
