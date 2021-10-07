@@ -22,7 +22,7 @@ struct MccStruct {
 	BaseEngineGL* engine;
 	ImVec2 mouseCoords;
 	bool resizeEvent=false;
-	bool close;
+	bool close = true;
 
 	// Constructor.
 	MccStruct(stateMachine* states) 

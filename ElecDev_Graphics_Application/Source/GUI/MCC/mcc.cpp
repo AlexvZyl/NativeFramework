@@ -41,6 +41,7 @@ void MCC::renderGraphics(ImGuiID dock)
 	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	
 	if (graphicsHandler->m_mccEngine->m_mccDictionary.size() != 0) {
+		std::vector<std::string> toRemove;
 		for (auto struc : graphicsHandler->m_mccEngine->m_mccDictionary)
 		{
 			
@@ -107,6 +108,13 @@ void MCC::renderGraphics(ImGuiID dock)
 				}
 			ImGui::End();
 			}
+			else {
+				toRemove.push_back(struc.first.c_str());
+			}
+		}
+		for (auto remove : toRemove)
+		{
+			graphicsHandler->m_mccEngine->removeMCC(remove);
 		}
 	}
 }
