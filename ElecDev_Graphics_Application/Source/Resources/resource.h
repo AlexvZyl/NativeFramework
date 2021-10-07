@@ -54,6 +54,7 @@
 
 // Windows api for the exe.
 #include <Windows.h>
+#include <string>
 
 /*=======================================================================================================================================*/
 /* Data.																															     */
@@ -73,9 +74,13 @@ struct Bitmap {
 // Load the current module.
 HMODULE getCurrentModule();
 
+// Load shader from resource.
+std::string loadShaderFromResource(int shaderID);
+
 // Loading bitmaps.
 Bitmap loadBitmapFromResource(int bitmapID);
 unsigned int loadBitmapToGL(Bitmap bitmap);
+
 
 /*=======================================================================================================================================*/
 /* EOF.                                                                                                                                  */
