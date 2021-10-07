@@ -109,13 +109,11 @@ private:
 	
 public:
 
-	// Total vertices available.
-	unsigned int m_maxVertices;
 	// Pointer that shows where in the buffer data need to be written.
 	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
-	VertexArrayObject(GLenum type, unsigned int maxVertices, bool textured=false);
+	VertexArrayObject(GLenum type, bool textured=false);
 
 	// Destructor.
 	~VertexArrayObject();
@@ -125,7 +123,6 @@ public:
 	// For textured.
 	void writeData(std::vector<TexturedVertexData> vertices);
 
-
 	// Function that draws the data in the VAO based on the model type selected in the constructor.
 	void render();
 
@@ -133,7 +130,6 @@ public:
 	void bind() const;
 	// Unbinds the VAO.
 	void unbind() const;
-
 };
 
 //----------------------------------------------------------------------------------------------------------------------

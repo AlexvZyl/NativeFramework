@@ -67,12 +67,8 @@ void MccEngineGL::drawLine(std::string mccName, float position1[2], float positi
 	if (isNameInDictionary(mccName))
 	{
 		try {
-			// Define position data.
-			VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
-			std::vector<VertexData> vertices = { v1,v2 };
-			// Write to bbuffer.
-			m_mccDictionary[mccName]->engine->m_linesVAO->writeData(vertices);
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawLine(position1, position2, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -92,14 +88,8 @@ void MccEngineGL::drawTriangleClear(std::string mccName, float position1[2], flo
 	if (isNameInDictionary(mccName))
 	{
 		try {
-
-			// Define position data.
-			VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
-			std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v1 };
-			// Write to buffer.
-			m_mccDictionary[mccName]->engine->m_linesVAO->writeData(vertices);
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawTriangleClear(position1, position2, position3, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -119,13 +109,8 @@ void MccEngineGL::drawTriangleFilled(std::string mccName, float position1[2], fl
 	if (isNameInDictionary(mccName))
 	{
 		try {
-			// Define position data.
-			VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
-			std::vector<VertexData> vertices = { v1, v2, v3 };
-			// Write to buffer.
-			m_mccDictionary[mccName]->engine->m_trianglesVAO->writeData(vertices);
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawTriangleFilled(position1, position2, position3, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -145,14 +130,8 @@ void MccEngineGL::drawQuadClear(std::string mccName, float position[2], float wi
 	if (isNameInDictionary(mccName))
 	{
 		try {
-			width /= 2;
-			height /= 2;
-			VertexData v1(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v2(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
-			std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v4, v4, v1 };
-			m_mccDictionary[mccName]->engine->m_linesVAO->writeData(vertices);
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawQuadClear(position, width, height, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -172,14 +151,8 @@ void MccEngineGL::drawQuadFilled(std::string mccName, float position[2], float w
 	if (isNameInDictionary(mccName))
 	{
 		try {
-			width /= 2;
-			height /= 2;
-			VertexData v1(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v2(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
-			VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
-			std::vector<VertexData> vertices = { v1, v2, v3, v3, v4, v1 };
-			m_mccDictionary[mccName]->engine->m_trianglesVAO->writeData(vertices);
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawQuadFilled(position, width, height, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -199,17 +172,8 @@ void MccEngineGL::drawCircleClear(std::string mccName, float coords[2], float ra
 	if (isNameInDictionary(mccName))
 	{
 		try {
-			for (int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
-			{
-				float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				VertexData v1(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
-				VertexData v2(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
-				std::vector<VertexData> vertices = { v1, v2 };
-				m_mccDictionary[mccName]->engine->m_linesVAO->writeData(vertices);
-			}
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawCircleClear(coords, radius, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -229,18 +193,8 @@ void MccEngineGL::drawCircleFilled(std::string mccName, float coords[2], float r
 	if (isNameInDictionary(mccName))
 	{
 		try {
-			for (int i = 0; i <= m_mccDictionary[mccName]->engine->m_circleResolution; i++)
-			{
-				float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_mccDictionary[mccName]->engine->m_circleResolution);
-				VertexData v1(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3]);
-				VertexData v2(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
-				VertexData v3(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
-				std::vector<VertexData> vertices = { v1, v2, v3 };
-				m_mccDictionary[mccName]->engine->m_trianglesVAO->writeData(vertices);
-			}
+			// Call BaseEngine function.
+			m_mccDictionary[mccName]->engine->drawCircleFilled(coords, radius, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -261,7 +215,7 @@ void MccEngineGL::drawText(std::string mccName, std::string text, float coords[2
 	{
 		try {
 			// Render the text.
-			m_mccDictionary[mccName]->engine->m_textRenderer->writeText(text, coords, m_mccDictionary[mccName]->engine->m_textureTrianglesVAO, 1, color, scale);
+			m_mccDictionary[mccName]->engine->drawText(text, coords, color, scale);
 		}
 		catch (const std::exception& e)
 		{

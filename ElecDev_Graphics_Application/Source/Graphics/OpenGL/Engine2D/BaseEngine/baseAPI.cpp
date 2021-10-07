@@ -19,11 +19,9 @@ void BaseEngineGL::drawLine(float position1[2], float position2[2], float color[
 	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = {v1,v2};
-	// Write to OpenGL buffer.
-	m_linesVAO->writeData(vertices);
+
 	// Write to CPU side buffer.
-	m_verticesCPU.push_back(v1);
-	m_verticesCPU.push_back(v2);
+	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Draw clear triangle.
@@ -34,12 +32,9 @@ void BaseEngineGL::drawTriangleClear(float position1[2], float position2[2], flo
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v1 };
-	// Write to OpenGL buffer.
-	m_linesVAO->writeData(vertices);
+
 	// Write to CPU side buffer.
-	m_verticesCPU.push_back(v1);
-	m_verticesCPU.push_back(v2);
-	m_verticesCPU.push_back(v3);
+	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Draw filled triangle.
@@ -50,12 +45,9 @@ void BaseEngineGL::drawTriangleFilled(float position1[2], float position2[2], fl
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v3 };
-	// Write to OpenGL buffer.
-	m_trianglesVAO->writeData(vertices);
+
 	// Write to CPU side buffer.
-	m_verticesCPU.push_back(v1);
-	m_verticesCPU.push_back(v2);
-	m_verticesCPU.push_back(v3);
+	m_trianglesCPU.insert(m_trianglesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Draw a clear quad.
@@ -68,13 +60,9 @@ void BaseEngineGL::drawQuadClear(float position[2], float width, float height, f
 	VertexData v3(position[0]-width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v4(position[0]-width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v4, v4, v1 };
-	// Write to OpenGL buffer.
-	m_linesVAO->writeData(vertices);
+
 	// Write to CPU side buffer.
-	m_verticesCPU.push_back(v1);
-	m_verticesCPU.push_back(v2);
-	m_verticesCPU.push_back(v3);
-	m_verticesCPU.push_back(v4);
+	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Draw a filled quad.
@@ -87,38 +75,43 @@ void BaseEngineGL::drawQuadFilled(float position[2], float width, float height, 
 	VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v3, v3, v4, v1 };
-	// Write to OpenGL buffer.
-	m_trianglesVAO->writeData(vertices);
+
 	// Write to CPU side buffer.
-	m_verticesCPU.push_back(v1);
-	m_verticesCPU.push_back(v2);
-	m_verticesCPU.push_back(v3);
-	m_verticesCPU.push_back(v4);
+	m_trianglesCPU.insert(m_trianglesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Draws a clear circle.
 void BaseEngineGL::drawCircleClear(float coords[2], float radius, float color[4])
 {
+	// Lines used to draw the circle.
+	std::vector<VertexData> vertices;
+
+	// Create lines requried to draw a circle.
 	for (int i = 0; i <= m_circleResolution; i++)
 	{
+		// Create one of the lines that make up the circle.
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_circleResolution);
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);
 		float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_circleResolution);
 		float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_circleResolution);
 		VertexData v1(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
 		VertexData v2(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
-		std::vector<VertexData> vertices = { v1, v2 };
-		// Write to OpenGL buffer.
-		m_linesVAO->writeData(vertices);
-		// Write to CPU side buffer.
-		m_verticesCPU.push_back(v1);
-		m_verticesCPU.push_back(v2);
+		std::vector<VertexData> verticesTemp = { v1, v2 };
+		// Add line to total lines.
+		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 	}
+
+	// Write to CPU side buffer.
+	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Draws a filled circle.
 void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4])
 {
+	// Lines used to draw the circle.
+	std::vector<VertexData> vertices;
+
+	// Create triangles requried to draw a circle.
 	for (int i = 0; i <= m_circleResolution; i++)
 	{
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_circleResolution);
@@ -128,24 +121,19 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 		VertexData v1(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3]);
 		VertexData v2(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
 		VertexData v3(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
-		std::vector<VertexData> vertices = { v1, v2, v3 };
-		// Write to OpenGL buffer.
-		m_trianglesVAO->writeData(vertices);
-		// Write to CPU side buffer.
-		m_verticesCPU.push_back(v1);
-		m_verticesCPU.push_back(v2);
-		m_verticesCPU.push_back(v3);
+		std::vector<VertexData> verticesTemp = { v1, v2, v3 };
+		// Add triangle to total triangles.
+		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 	}
+	// Write to CPU side buffer.
+	m_trianglesCPU.insert(m_trianglesCPU.end(), vertices.begin(), vertices.end());
 }
 
 // Adds text to the VBO object.
 void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale)
 {
-	// Test the text rendering.
-	m_textRenderer->writeText(text, coords, m_textureTrianglesVAO, 1, color, scale);
-	// Write to CPU side buffer.
-	VertexData v1{coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3]};
-	m_verticesCPU.push_back(v1);
+	// Write text to CPU side buffer.
+	m_textRenderer->writeText(text, coords, &m_texturedTrianglesCPU, 1, color, scale);
 }
 
 // Draws the demo drawing.
@@ -193,7 +181,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
 			TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
 			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-			m_textureTrianglesVAO->writeData(verticesTex);
+			m_texturedTrianglesCPU.insert(m_texturedTrianglesCPU.end(), verticesTex.begin(), verticesTex.end());
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f + i, 0.5f + k };
@@ -202,6 +190,20 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			drawText(text, pos, colorText, 1);
 		}
 	}
+	// Load the CPU buffers into the GPU.
+	updateBuffers();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Buffers.
+//----------------------------------------------------------------------------------------------------------------------
+
+// Writes the CPU side buffers to the GPU.
+void BaseEngineGL::updateBuffers() 
+{
+	m_linesVAO->writeData(m_linesCPU);
+	m_trianglesVAO->writeData(m_trianglesCPU);
+	m_textureTrianglesVAO->writeData(m_texturedTrianglesCPU);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -220,39 +222,103 @@ void BaseEngineGL::autoCenter()
 	m_translationMatrixBase = glm::mat4(1.0f);
 	m_rotationMatrixBase = glm::mat4(1.0f);
 
-	// Store min and max values.  Assign first values as default.
-	float max[2] = { m_verticesCPU[0].position[0], m_verticesCPU[0].position[1] };
-	float min[2] = { m_verticesCPU[0].position[0], m_verticesCPU[0].position[1] };
+	// Init min/max values.
+	float max[2] = { m_linesCPU[0].position[0], m_linesCPU[0].position[1] };
+	float min[2] = { m_linesCPU[0].position[0], m_linesCPU[0].position[1] };
+
+	//----------------------------------------------------------------------
+	// Lines.
+	//----------------------------------------------------------------------
 
 	// Find the maximum and minimum values for x and y.
-	for (int i=1; i<m_verticesCPU.size(); i++) 
+	for (int i=1; i< m_linesCPU.size(); i++)
 	{	
 		// Check max for x.
-		if (m_verticesCPU[i].position[0] > max[0])
+		if (m_linesCPU[i].position[0] > max[0])
 		{
-			max[0] = m_verticesCPU[i].position[0]; 
+			max[0] = m_linesCPU[i].position[0];
 		}
 		// Check min for x.
-		else if (m_verticesCPU[i].position[0] < min[0])
+		else if (m_linesCPU[i].position[0] < min[0])
 		{
-			min[0] = m_verticesCPU[i].position[0];
+			min[0] = m_linesCPU[i].position[0];
 		}
 		// Check max for y.
-		if (m_verticesCPU[i].position[1] > max[1])
+		if (m_linesCPU[i].position[1] > max[1])
 		{
-			max[1] = m_verticesCPU[i].position[1];
+			max[1] = m_linesCPU[i].position[1];
 		}
 		// Check min for y.
-		else if (m_verticesCPU[i].position[1] < min[1])
+		else if (m_linesCPU[i].position[1] < min[1])
 		{
-			min[1] = m_verticesCPU[i].position[1];
+			min[1] = m_linesCPU[i].position[1];
 		}
 	}
 
+	//----------------------------------------------------------------------
+	// Triangles.
+	//----------------------------------------------------------------------
+
+	// Find the maximum and minimum values for x and y.
+	for (int i = 0; i < m_trianglesCPU.size(); i++)
+	{
+		// Check max for x.
+		if (m_trianglesCPU[i].position[0] > max[0])
+		{
+			max[0] = m_trianglesCPU[i].position[0];
+		}
+		// Check min for x.
+		else if (m_trianglesCPU[i].position[0] < min[0])
+		{
+			min[0] = m_trianglesCPU[i].position[0];
+		}
+		// Check max for y.
+		if (m_trianglesCPU[i].position[1] > max[1])
+		{
+			max[1] = m_trianglesCPU[i].position[1];
+		}
+		// Check min for y.
+		else if (m_trianglesCPU[i].position[1] < min[1])
+		{
+			min[1] = m_trianglesCPU[i].position[1];
+		}
+	}
+
+	//----------------------------------------------------------------------
+	// Textured triangles.
+	//----------------------------------------------------------------------
+
+	// Find the maximum and minimum values for x and y.
+	for (int i = 0; i < m_texturedTrianglesCPU.size(); i++)
+	{
+		// Check max for x.
+		if (m_texturedTrianglesCPU[i].position[0] > max[0])
+		{
+			max[0] = m_texturedTrianglesCPU[i].position[0];
+		}
+		// Check min for x.
+		else if (m_texturedTrianglesCPU[i].position[0] < min[0])
+		{
+			min[0] = m_texturedTrianglesCPU[i].position[0];
+		}
+		// Check max for y.
+		if (m_texturedTrianglesCPU[i].position[1] > max[1])
+		{
+			max[1] = m_texturedTrianglesCPU[i].position[1];
+		}
+		// Check min for y.
+		else if (m_texturedTrianglesCPU[i].position[1] < min[1])
+		{
+			min[1] = m_texturedTrianglesCPU[i].position[1];
+		}
+	}
+
+	//----------------------------------------------------------------------
+
 	// Calculate the values to translate.
 	float translate[2]{};
-	translate[0] = -(max[0] - min[0]) / 2;
-	translate[1] = -(max[1] - min[1]) / 2;
+	translate[0] = -(max[0] + min[0]) / 2;
+	translate[1] = -(max[1] + min[1]) / 2;
 
 	// Now translate the camera accordingly.
 	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(translate[0], translate[1], 0.0f));
@@ -263,14 +329,14 @@ void BaseEngineGL::autoCenter()
 	// centered around (0.0).
 	if (translate[0] > translate[1]) 
 	{
-		float scale = std::abs(translate[0]);
+		float scale = std::abs(translate[0] * 1.1f);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 	else 
 	{
-		float scale = std::abs(translate[1]);
+		float scale = std::abs(translate[1] * 1.1f);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));

@@ -22,45 +22,29 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Setup shaders.
 	//---------------------------------------------------------------------------------------
 	
+	std::cout << "[OPENGL][BASE ENGINE] Compiling shaders...\n";
+
 	//---------------------------
 	// Create basic shader.
 	//---------------------------
-
-	std::cout << "[OPENGL][BASE ENGINE] Compiling shaders...\n";
-	// Load resource from executable.
-	HRSRC basicShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(BASIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
-	HGLOBAL basicResourceData = LoadResource(getCurrentModule(), basicShaderResource);
-	DWORD basicResourceSize = SizeofResource(getCurrentModule(), basicShaderResource);
-	char* basicResourceFinal = (char*)LockResource(basicResourceData);
-	std::string basicShaderSource;
-	basicShaderSource.assign(basicResourceFinal, basicResourceSize);
+	// Load shader code from the executable.
+	std::string basicShaderSource = loadShaderFromResource(BASIC_SHADER);
 	m_basicShader = new Shader(basicShaderSource);
 
 	//---------------------------
 	// Create static shader.
 	//---------------------------
-
-	// Load resource from executable.
-	HRSRC staticShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(STATIC_SHADER), MAKEINTRESOURCE(TEXTFILE));
-	HGLOBAL staticResourceData = LoadResource(getCurrentModule(), staticShaderResource);
-	DWORD staticResourceSize = SizeofResource(getCurrentModule(), staticShaderResource);
-	char* staticResourceFinal = (char*)LockResource(staticResourceData);
-	std::string staticShaderSource;
-	staticShaderSource.assign(staticResourceFinal, staticResourceSize);
+	// Load shader code from the executable.
+	std::string staticShaderSource = loadShaderFromResource(STATIC_SHADER);
 	m_staticShader = new Shader(staticShaderSource);
 
 	//---------------------------
 	// Create texture shader.
 	//---------------------------
-
 	// Load resource from executable.
-	HRSRC textureShaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(TEXTURE_SHADER), MAKEINTRESOURCE(TEXTFILE));
-	HGLOBAL textureResourceData = LoadResource(getCurrentModule(), textureShaderResource);
-	DWORD textureResourceSize = SizeofResource(getCurrentModule(), textureShaderResource);
-	char* textureResourceFinal = (char*)LockResource(textureResourceData);
-	std::string textureShaderSource;
-	textureShaderSource.assign(textureResourceFinal, textureResourceSize);
+	std::string textureShaderSource = loadShaderFromResource(TEXTURE_SHADER);
 	m_textureShader = new Shader(textureShaderSource);
+
 	// Done.
 	std::cout << "[OPENGL][BASE ENGINE] Shaders done.\n\n";
 
@@ -104,15 +88,14 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Buffers setup.
 	//---------------------------------------------------------------------------------------
 
-	unsigned int totVertices = 1000*100;
 	// Lines.
-	m_linesVAO = new VertexArrayObject(GL_LINES, totVertices);
+	m_linesVAO = new VertexArrayObject(GL_LINES);
 	// Triangles.
-	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices);
+	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Textured Triangles.
-	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, totVertices, true);
+	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, true);
 	// Background.
-	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES, 6);
+	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Frame buffer.
 	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1]);
 
@@ -155,12 +138,12 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	//---------------------------------------------------------------------------------------
 
-
 };
 
 // Delete and free memory.
 BaseEngineGL::~BaseEngineGL() 
 {
+	std::cout << "\n" << "Engine destructor called.\n";
 	// Delete shaders.
 	delete m_basicShader;
 	delete m_staticShader;
