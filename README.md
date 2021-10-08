@@ -120,13 +120,14 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ✅ Write thread handler from python side for non-pause interface.
   * ✅ Input handler for threads and linked to state machine.
 * ✅ Create terminal API that controls the app.
+
 * ✅ It is up and running!* 
 
 * ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
   * ✅ Incorporate Base Engine.
   * ⬜ GUI interface controls OpenGL engines.
   * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
-* ⬜ Add client side copy of the buffer data to be able to read and change the data.
+* ✅ Add client side copy of the buffer data to be able to read and change the data.
 * ✅ Add autoCenter and autoScale functions.
 * ⬜ Optimize base engine.
 * ⬜ Add a demo drawing and some form of benchmark.
