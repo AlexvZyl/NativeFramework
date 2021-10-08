@@ -82,7 +82,6 @@ Ribbons::Ribbons(stateMachine* states) {
 
 }
 
-
 void Ribbons::renderRibbons(ImGuiID* dock)
 {
 
