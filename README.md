@@ -133,6 +133,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Add autoCenter and autoScale functions.
 * ⬜ Optimize base engine.
 * ⬜ Add a demo drawing and some form of benchmark.
+* ⬜ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
 
 ### Design Engine (Child of Base Engine)
 
