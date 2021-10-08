@@ -29,7 +29,7 @@
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 #define COMPONENT_PNG 250				
-#define DRAW_CIRCUIT_BUCKETS 249
+#define DRAW_CIRCUIT_BUCKETS_PNG 249
 #define DRAW_MCC_PNG 248				
 //-------------------------------------------------------------------------------------------------
 // OpenGL Textures.
@@ -38,14 +38,13 @@
 // OpenGL Fonts. 
 #define ARIAL_SDF_FNT 246		
 #define ARIAL_SDF_PNG 245		
-#define ARIAL_SDF_BMP 244
 #define ARIAL_SDF_MIN_FNT 243
 #define ARIAL_SDF_MIN_PNG 242	
 //-------------------------------------------------------------------------------------------------
 // Application icon.
-#define IDI_ICON1 116			// Exe icon.
-#define ICON_BMP 115			// GLFW icon.
-#define PANDA 114
+#define IDI_ICON1 241			// Exe icon.
+#define ICON_PNG 240			// GLFW icon.
+#define PANDA 239
 //-------------------------------------------------------------------------------------------------
 
 /*=======================================================================================================================================*/
@@ -57,17 +56,6 @@
 #include <string>
 
 /*=======================================================================================================================================*/
-/* Data.																															     */
-/*=======================================================================================================================================*/
-
-// Struct that stores the bitmap data.
-struct Bitmap {
-	void* pixelData;
-	int width = 0;
-	int height = 0;
-};
-
-/*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */
 /*=======================================================================================================================================*/
 
@@ -77,10 +65,9 @@ HMODULE getCurrentModule();
 // Load shader from resource.
 std::string loadShaderFromResource(int shaderID);
 
-// Loading bitmaps.
-Bitmap loadBitmapFromResource(int bitmapID);
-unsigned int loadBitmapToGL(Bitmap bitmap);
-
+// Loading images.
+BITMAP loadImageFromResource(int resourceID);
+unsigned int loadBitmapToGL(BITMAP bitmap);
 
 /*=======================================================================================================================================*/
 /* EOF.                                                                                                                                  */

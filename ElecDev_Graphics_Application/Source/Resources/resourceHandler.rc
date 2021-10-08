@@ -53,8 +53,7 @@ END
 //-------------------------------------------------------------------------------------------------
 // Application icon.
 IDI_ICON1						ICON		                "Icons\\circuitIcon128.ico"
-ICON_BMP						BITMAP						"Icons\\circuitIcon.bmp"
-PANDA							BITMAP						"Icons\\panda.bmp"
+ICON_PNG						RCDATA						"Icons\\circuitImage.png"
 //-------------------------------------------------------------------------------------------------
 // Shaders.
 BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
@@ -62,19 +61,18 @@ STATIC_SHADER					TEXTFILE					"Shaders\\staticShader.shader"
 TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.shader"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
-COMPONENT_PNG					PNG							"Icons\\component.png"
-DRAW_CIRCUIT_BUCKETS_PNG		PNG							"Icons\\Draw_Circuit_Buckets.png"
-DRAW_MCC_PNG					PNG							"Icons\\Draw_MCC.png"
+COMPONENT_PNG					RCDATA						"Icons\\component.png"
+DRAW_CIRCUIT_BUCKETS_PNG		RCDATA						"Icons\\Draw_Circuit_Buckets.png"
+DRAW_MCC_PNG					RCDATA						"Icons\\Draw_MCC.png"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Textures.
-CIRCUIT_TREE_PNG				PNG							"Textures\\circuitTree.png"
+CIRCUIT_TREE_PNG				RCDATA						"Textures\\circuitTree.png"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
 ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.fnt"
-ARIAL_SDF_PNG					PNG							"Fonts\\Arial_SDF_PNG.png"
-ARIAL_SDF_BMP					BITMAP				 		"Fonts\\Arial_SDF_BMP_32.bmp"
+ARIAL_SDF_PNG					RCDATA						"Fonts\\Arial_SDF_PNG.png"
 ARIAL_SDF_MIN_FNT				TEXTFILE					"Fonts\\Arial_SDF_Min.fnt"
-ARIAL_SDF_MIN_PNG				PNG							"Fonts\\Arial_SDF_Min.png"
+ARIAL_SDF_MIN_PNG				RCDATA						"Fonts\\Arial_SDF_Min.png"
 //-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources
@@ -90,8 +88,6 @@ ARIAL_SDF_MIN_PNG				PNG							"Fonts\\Arial_SDF_Min.png"
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-
-
 
 /*=======================================================================================================================================*/
 /* EOF.                                                                                                                                  */

@@ -156,8 +156,8 @@ TextRenderer::TextRenderer(int fontID, int atlasID)
 	}
 
 	// Load font atlas as texture.
-	//m_textAtlas = loadBMPtoGL(ICON_BMP);
-	m_textureID = loadTexture("Source\\Resources\\Fonts\\Arial_SDF_BMP_32.bmp", true);
+	BITMAP textAtlas = loadImageFromResource(ARIAL_SDF_PNG);
+	m_textureID = loadBitmapToGL(textAtlas);
 }
 
 GLuint TextRenderer::loadTexture(const std::string& path, bool alpha)

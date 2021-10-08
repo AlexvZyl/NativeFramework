@@ -57,24 +57,23 @@ Ribbons::Ribbons(stateMachine* states) {
 
     this->drawToggle = false;
 
-    //Load textures
-    this->image1_width = 0;
-    this->image1_height = 0;
-    this->image1_texture = 0;
-    this->ret1 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_MCC.png", &this->image1_texture, &this->image1_width, &this->image1_height);
-    //IM_ASSERT(ret1);
+    //Load texture 1 
+    BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
+    this->image1_width = texture1BM.bmWidth;
+    this->image1_height = texture1BM.bmHeight;
+    this->image1_texture = loadBitmapToGL(texture1BM);
 
-    this->image2_width = 0;
-    this->image2_height = 0;
-    this->image2_texture = 0;
-    this->ret2 = this->LoadTextureFromFile("Source\\Resources\\Icons\\component.png", &this->image2_texture, &this->image2_width, &this->image2_height);
-    //IM_ASSERT(ret2);
+    //Load texture 2
+    BITMAP texture2BM = loadImageFromResource(COMPONENT_PNG);
+    this->image2_width = texture2BM.bmWidth;
+    this->image2_height = texture2BM.bmHeight;
+    this->image2_texture = loadBitmapToGL(texture2BM);
 
-    this->image3_width = 0;
-    this->image3_height = 0;
-    this->image3_texture = 0;
-    this->ret3 = this->LoadTextureFromFile("Source\\Resources\\Icons\\Draw_Circuit_buckets.png", &this->image3_texture, &this->image3_width, &this->image3_height);
-    //IM_ASSERT(ret3);
+    //Load texture 3 
+    BITMAP texture3BM = loadImageFromResource(DRAW_CIRCUIT_BUCKETS_PNG);
+    this->image3_width = texture3BM.bmWidth;
+    this->image3_height = texture3BM.bmHeight;
+    this->image3_texture = loadBitmapToGL(texture3BM);
 
     this->sideBarFlag = "";
     first[0] = true;

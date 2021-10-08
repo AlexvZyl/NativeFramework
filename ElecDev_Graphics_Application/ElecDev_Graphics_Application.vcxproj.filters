@@ -1705,6 +1705,7 @@
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
     <Image Include="Source\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Resources\Icons\circuitImage.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

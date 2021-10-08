@@ -24,6 +24,7 @@
 // Resources.
 #include <Misc/stb_image.h>
 #include "Resources/resource.h"
+#include <Windows.h>
 
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
@@ -143,14 +144,15 @@ int main(int, char**)
     glfwSwapInterval(1); // Enable vsync.
 
     // Load GLFW icon.
-    Bitmap bitmap = loadBitmapFromResource(PANDA);
-    GLFWimage icon;
+    BITMAP bitmap = loadImageFromResource(ICON_PNG);
+    GLFWimage* icon = new GLFWimage;
     // Load bitmap data to GLFW icon.
-    icon.pixels = reinterpret_cast<unsigned char*>(bitmap.pixelData);
-    icon.height = bitmap.height;
-    icon.width = bitmap.width;
+    icon->pixels = (unsigned char*) bitmap.bmBits;
+    icon->height = bitmap.bmHeight;
+    icon->width = bitmap.bmWidth;
     // Set icon.
-    //glfwSetWindowIcon(window, 1, &icon);
+    glfwSetWindowIcon(window, 1, icon);
+    delete icon;
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Initialize OpenGL loader.
