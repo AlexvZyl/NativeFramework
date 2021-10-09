@@ -60,7 +60,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Use SDF (Signed Distance Fields) when rendering text.
 * ✅ Create a resource loader function.
 * ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
-* ⬜ Fix abstractions.  Code got messy when we started rushing.
+* ✅ Fix abstractions.  Code got messy when we started rushing.
 * ✅ Autoresize and scaling does not take into account the length of the text string.
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
 * ⬜ Add text kerning.
@@ -137,8 +137,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Add client side copy of the buffer data to be able to read and change the data.
 * ✅ Add autoCenter and autoScale functions.
 * ⬜ Optimize base engine.
-* ⬜ Add a demo drawing and some form of benchmark.
-* ⬜ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
+* ✅ Add a demo drawing and some form of benchmark.
+* ✅ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
 
 ### Design Engine (Child of Base Engine)
 
