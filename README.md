@@ -24,6 +24,12 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ---
 
+## Graphics API
+
+
+
+---
+
 ## Legend:
 
 * ⬜ = Incomplete.
@@ -52,12 +58,13 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Buffer sizes are currently static, change to dynamic.
 * ⬜ Using index buffers might improve performance.
 * ✅ Use SDF (Signed Distance Fields) when rendering text.
-* ⬜ Create a resource loader function.
+* ✅ Create a resource loader function.
 * ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
 * ⬜ Fix abstractions.  Code got messy when we started rushing.
 * ✅ Autoresize and scaling does not take into account the length of the text string.
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
 * ⬜ Add text kerning.
+* ⬜ Move over to smart pointers for better memory management.
 
 #### Raynhardt 
 * ⬜ Multi View port
@@ -114,22 +121,20 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ✅ Mouse event handler.
   * ✅ Implement frame buffers.
 * ✅ Implement State Machine that controls the application.
+* ✅ Interface with Excel:
+  * ✅ Requires exe file that has resource files included (Use .rc files).
+  * ✅ Write byte encoder/decoder.
+  * ✅ Write thread handler from python side for non-pause interface.
+  * ✅ Input handler for threads and linked to state machine.
+* ✅ Create terminal API that controls the app.
+
+* ✅ It is up and running!* 
+
 * ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
   * ✅ Incorporate Base Engine.
   * ⬜ GUI interface controls OpenGL engines.
   * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
-* ⬜ Interface with Excel:
-  * ⬜ Requires exe file that has resource files included (Use .rc files).
-  * ✅ Write byte encoder/decoder.
-  * ✅ Write thread handler from python side for non-pause interface.
-  * ✅ Input handler for threads and linked to state machine.
-* ⬜ MCC Drawings:
-  * ⬜ Read available drawings from excel file.
-  * ⬜ Draw and redraw MCC's.
-
-⬜ *It is up and running!* 
-
-* ⬜ Add client side copy of the buffer data to be able to read and change the data.
+* ✅ Add client side copy of the buffer data to be able to read and change the data.
 * ✅ Add autoCenter and autoScale functions.
 * ⬜ Optimize base engine.
 * ⬜ Add a demo drawing and some form of benchmark.

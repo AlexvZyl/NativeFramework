@@ -6,7 +6,13 @@
 #include "resource.h"
 #include <iostream>
 
-// OpenGL.
+// Loading from resource.
+#include <gdiplus.h>
+#include <Shlwapi.h>
+#pragma comment(lib,"gdiplus.lib")
+#pragma comment(lib, "Shlwapi.lib")
+
+// OpenGL error handler.
 #include <ErrorHandler/errorHandler.h>
 
 /*=======================================================================================================================================*/
@@ -45,45 +51,29 @@ std::string loadShaderFromResource(int shaderID)
 /* Images.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-// Loads a bitmap from the executable and saves a txture ID.
-Bitmap loadBitmapFromResource(int bitmapID)
+BITMAP loadImageFromResource(int resourceID)
 {
-	// Bitmap to return.
-	Bitmap bitmap;
-
-	// Load bitmap handle from exe.
-	HBITMAP winBitmapHandle = (HBITMAP)LoadImage(getCurrentModule(), MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION | LR_DEFAULTSIZE);
-	// Convert to bitmap data.
-	BITMAP winBitmap;
-	GetObject(winBitmapHandle, sizeof(winBitmap), &winBitmap);
-
-	// Store in local format and return.
-	bitmap.width = winBitmap.bmWidth;
-	bitmap.height = winBitmap.bmHeight;
-	bitmap.pixelData = winBitmap.bmBits;
+	HBITMAP hbitmap = NULL;
+	ULONG_PTR token;
+	Gdiplus::GdiplusStartupInput tmp;
+	Gdiplus::GdiplusStartup(&token, &tmp, NULL);
+	if (auto hres = FindResource(getCurrentModule(), MAKEINTRESOURCE(resourceID), RT_RCDATA))
+		if (auto size = SizeofResource(getCurrentModule(), hres))
+			if (auto data = LockResource(LoadResource(getCurrentModule(), hres)))
+				if (auto stream =  SHCreateMemStream((BYTE*)data, size))
+				{
+					Gdiplus::Bitmap bmp(stream);
+					stream->Release();
+					bmp.GetHBITMAP(Gdiplus::Color::Transparent, &hbitmap);
+				}
+	Gdiplus::GdiplusShutdown(token);
+	BITMAP bitmap;
+	GetObject(hbitmap, sizeof(BITMAP), &bitmap);
 	return bitmap;
-
-
-	//// Create windows bitmap.
-	//HBITMAP hBmp = (HBITMAP)LoadImage(getCurrentModule(), MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-	//std::cout << GetLastError() << "\n";
-	//// Get info about the bitmap
-	//
-
-	//HBITMAP bitmapHandle1 = reinterpret_cast<HBITMAP>(LoadImage(GetModuleHandle(nullptr), MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE));
-	//HBITMAP bitmapHandle2 = LoadBitmapA(getCurrentModule(), MAKEINTRESOURCEA(ARIAL_SDF_BMP));
-	//HBITMAP bitmapHandle3 = LoadBitmap((HINSTANCE)getCurrentModule(), MAKEINTRESOURCE(bitmapID));
-	//HBITMAP bitmapHandle4 = (HBITMAP)::LoadImage(getCurrentModule(), MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
-	//HBITMAP bitmapHandle5 = reinterpret_cast<HBITMAP>(LoadImage(getCurrentModule(), MAKEINTRESOURCE(bitmapID), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE));
-	//BITMAP bitmapData;
-	//int error = GetObject(bitmapHandle1, sizeof(BITMAP), &bitmapData);
-
-	// Return the bitmap data.
-
 }
 
 // Loads a bitmap into OpenGL and returns the texture ID.
-unsigned int loadBitmapToGL(Bitmap bitmap) 
+unsigned int loadBitmapToGL(BITMAP bitmap) 
 {
 	unsigned int textureID = 0;
 	GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
@@ -93,20 +83,7 @@ unsigned int loadBitmapToGL(Bitmap bitmap)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap.width, bitmap.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void*)bitmap.pixelData));
-
-	//GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmapData.bmWidth, bitmapData.bmHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapData.bmBits));
-	//stbi_image_free(pixels);
-	//DeleteObject((HGDIOBJ)bitmapHandle1);
-
-	// Tell OpenGL to ignore padding at ends of rows.
-	//GLCall(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
-
-	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void*)bits);
-
-	// Return OpenGL texture ID.
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap.bmWidth, bitmap.bmHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void*)bitmap.bmBits));
 	return textureID;
 }
 

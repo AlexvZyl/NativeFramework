@@ -123,10 +123,11 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	m_textureShader->bind();
 	// Load texture for testing.
-	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
+	BITMAP circuitTreeBM = loadImageFromResource(CIRCUIT_TREE_PNG);
+	m_texture = loadBitmapToGL(circuitTreeBM);
 
 	// Create texture renderer object.
-	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_BMP);
+	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));

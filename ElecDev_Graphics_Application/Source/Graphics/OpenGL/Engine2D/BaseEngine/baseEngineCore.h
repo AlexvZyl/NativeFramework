@@ -9,7 +9,6 @@ The interactive engine (the one where elements can be drawn is handled in Design
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-
 // Resource loading.
 #include <Windows.h>
 
