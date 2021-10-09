@@ -56,7 +56,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
 * ✅ Type casts throwing warning.  Fix.
 * ✅ Buffer sizes are currently static, change to dynamic.
-* ⬜ Using index buffers might improve performance.
 * ✅ Use SDF (Signed Distance Fields) when rendering text.
 * ✅ Create a resource loader function.
 * ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
@@ -136,9 +135,9 @@ This is the graphics application that is to be used with the ElecDev software.  
   * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
 * ✅ Add client side copy of the buffer data to be able to read and change the data.
 * ✅ Add autoCenter and autoScale functions.
-* ⬜ Optimize base engine.
 * ✅ Add a demo drawing and some form of benchmark.
 * ✅ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
+* ⬜ Implement Index Buffers.  Wil increase performance and reduce memory usage.
 
 ### Design Engine (Child of Base Engine)
 
