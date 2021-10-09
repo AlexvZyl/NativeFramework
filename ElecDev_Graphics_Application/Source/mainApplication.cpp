@@ -122,7 +122,7 @@ int main(int, char**)
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac.
     #else
         // GL 3.0 + GLSL 130.
-        const char* glsl_version = "#version 450";
+        const char* glsl_version = "#version 460";
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
@@ -237,7 +237,7 @@ int main(int, char**)
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = new GraphicsHandler(window, states);
+    graphicsHandler = new GraphicsHandler(states);
 
     // Create GUI handler object.
     GUIHandler guiHandler(states, graphicsHandler);
@@ -396,7 +396,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
+                graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
             }
             catch (const std::exception& e)
             {
@@ -414,7 +414,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
+                graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
             }
             catch (const std::exception& e)
             {
@@ -432,7 +432,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
+                graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
             }
             catch (const std::exception& e)
             {
@@ -450,7 +450,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
+                graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
             }
             catch (const std::exception& e)
             {
@@ -468,7 +468,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
+                graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
             }
             catch (const std::exception& e)
             {
@@ -486,7 +486,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
+                graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
             }
             catch (const std::exception& e)
             {
@@ -504,7 +504,7 @@ void deQueueInput(stateMachine* states) {
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                graphicsHandler->m_mccEngine->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
+                graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
             }
             catch (const std::exception& e)
             {
@@ -532,7 +532,7 @@ void deQueueInput(stateMachine* states) {
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
                 }
-                graphicsHandler->m_mccEngine->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
+                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
             }
             catch (const std::exception& e)
             {
@@ -541,11 +541,11 @@ void deQueueInput(stateMachine* states) {
             break;
 
         // Add MCC window to draw.
-        case hash("addMCC"):
+        case hash("addWindow"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->addMCC(mccName);
+                graphicsHandler->addWindow(mccName, EngineType::BaseEngineGL);
             }
             catch (const std::exception& e)
             {
@@ -554,11 +554,11 @@ void deQueueInput(stateMachine* states) {
             break;
 
         // Remove MCC window.
-        case hash("removeMCC"):
+        case hash("removeWindow"):
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->removeMCC(mccName);
+                graphicsHandler->removeWindow(mccName);
             }
             catch (const std::exception& e)
             {
@@ -573,7 +573,7 @@ void deQueueInput(stateMachine* states) {
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->drawDemo(mccName, (unsigned int)params[0]);
+                graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
             }
             catch (const std::exception& e)
             {
@@ -586,7 +586,7 @@ void deQueueInput(stateMachine* states) {
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->autoCenter(mccName);
+                graphicsHandler->autoCenter(mccName);
             }
             catch (const std::exception& e)
             {
@@ -599,7 +599,7 @@ void deQueueInput(stateMachine* states) {
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->m_mccEngine->updateBuffers(mccName);
+                graphicsHandler->updateBuffers(mccName);
             }
             catch (const std::exception& e)
             {

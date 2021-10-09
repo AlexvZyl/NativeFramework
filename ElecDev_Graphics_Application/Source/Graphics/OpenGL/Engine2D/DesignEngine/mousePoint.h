@@ -30,7 +30,7 @@ private:
 public:
 
 	//Constructor.
-	MousePoint(GLFWwindow* window, float color[4], float size);
+	MousePoint(float color[4], float size);
 	// Destructor.
 	~MousePoint();
 

@@ -183,10 +183,10 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Handling mouse events.
-	void mousePressLeft(float pixelCoords[2]);
-	void mousePressRight(float pixelCoords[2]);
-	void mouseMoveEvent(float pixelCoords[2], int buttonState);
-	void mouseScrollEvent(float pixelCoords[2], int yOffset);
+	virtual void mousePressLeft(float pixelCoords[2]);
+	virtual void mousePressRight(float pixelCoords[2]);
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
+	virtual void mouseScrollEvent(float pixelCoords[2], int yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.
