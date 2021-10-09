@@ -101,7 +101,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ✅ Shader handler.
   - ✅ Basic Shader.
   - ✅ Static Shader.
-  - ✅ TExture Shader.
+  - ✅ Texture Shader.
+  - ✅ Loading shaders from .shadere files.
+  - ✅ Compiling and using shader via a class.
 - ✅ Implement class that handles VAO's:
   - ✅ Lines.
   - ✅ Triangles.
