@@ -97,9 +97,11 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ✅ Implement matrix mathematics.
 - ✅ Translation, rotation & scaling.
 - ✅ Viewport, Model, View and Porjection matrices.
-- ✅ Basic shader.
 - ✅ Error handler.
 - ✅ Shader handler.
+  - ✅ Basic Shader.
+  - ✅ Static Shader.
+  - ✅ TExture Shader.
 - ✅ Implement class that handles VAO's:
   - ✅ Lines.
   - ✅ Triangles.
