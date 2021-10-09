@@ -548,7 +548,9 @@ void deQueueInput(stateMachine* states) {
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->addWindow(mccName, EngineType::BaseEngineGL);
+                text = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                graphicsHandler->addWindow(mccName, text);
             }
             catch (const std::exception& e)
             {

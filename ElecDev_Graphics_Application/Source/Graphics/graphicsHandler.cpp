@@ -116,7 +116,7 @@ void GraphicsHandler::mouseScrollEvent(float yOffset)
 void GraphicsHandler::resizeEvent(int width, int height)
 {
 	// Check if the dict is not empty.	
-	if (m_windowsDictionary.size() != 0)
+	if (m_windowsDictionary.size())
 	{
 		// Run resize event for each engine.
 		for (auto engine : m_windowsDictionary)

@@ -17,7 +17,7 @@ API for the graphics of the application.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Add a new window to the app.
-void GraphicsHandler::addWindow(std::string windowName, EngineType engineType)
+void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 {
 	// Check if name already used.
 	if (isWindowValid(windowName))
@@ -31,12 +31,32 @@ void GraphicsHandler::addWindow(std::string windowName, EngineType engineType)
 	}
 	else
 	{
-		// Destroy ImGUI to allow drawing in other contexts.
-		ImGui_ImplOpenGL3_DestroyDeviceObjects();
-		// Set window active.
-		m_activeWindow = windowName;
-		// Add to dictionary.
-		m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, engineType) }); 
+		// Check engine type.
+		if (engineType == "Base" || engineType == " Base" || engineType == "  Base")
+		{
+			// Destroy ImGUI to allow drawing in other contexts.
+			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
+			// Add window to dictionary.
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::BaseEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName + " [BaseEngineGL]";
+		}
+		else if (engineType == "Design" || engineType == " Design" || engineType == "  Design")
+		{
+			// Destroy ImGUI to allow drawing in other contexts.
+			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
+			// Add window to dictionary.
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::DesignEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName + " [DesignEngineGL]";
+		}
+		// Catch error.
+		else 
+		{
+			std::cout << "[INTERFACE][ERROR] '" << engineType << "' is not a valid engine type. Did you add too much spaces before the name?\n\n";
+		}
 	}
 }
 

@@ -48,6 +48,7 @@ struct RenderWindowGL
 	// Data from ImGUI.
 	ImVec2 viewportDimentions;
 	ImVec2 mouseCoords;
+	std::string windowName;
 
 	// State machine information.
 	bool isHovered = false;
@@ -63,7 +64,7 @@ struct RenderWindowGL
 		}
 		else if (engineType == EngineType::DesignEngineGL)
 		{
-			engineGL =  dynamic_cast<DesignEngineGL*>(new BaseEngineGL(states));
+			engineGL =  new DesignEngineGL(states);
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
 		viewportDimentions[1] = engineGL->m_imGuiViewportDimensions[1];
@@ -158,7 +159,7 @@ public:
 	// --------------------------------
 	
 	// Adds an MCC to the dict.
-	void addWindow(std::string windowName, EngineType engineType);
+	void addWindow(std::string windowName, std::string engineType);
 	// Removes an MCC from the dict.
 	void removeWindow(std::string windowName);
 

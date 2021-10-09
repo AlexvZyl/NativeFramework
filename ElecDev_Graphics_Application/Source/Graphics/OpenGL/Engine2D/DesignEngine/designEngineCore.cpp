@@ -10,6 +10,22 @@ The interactive engine (the one where elements can be drawn is handled in design
 // Class include.
 #include "designEngineCore.h"
 
+//----------------------------------------------------------------------------------------------------------------------
+//  Constructor & Destructor.
+//----------------------------------------------------------------------------------------------------------------------
+
+// Constructor.
+DesignEngineGL::DesignEngineGL(stateMachine* states) : BaseEngineGL(states)
+{
+
+}
+
+// Destructor.
+DesignEngineGL::~DesignEngineGL() 
+{
+	
+}
+
 //---------------------------------------------------------------------------------------------------------------------
 //  API
 //----------------------------------------------------------------------------------------------------------------------

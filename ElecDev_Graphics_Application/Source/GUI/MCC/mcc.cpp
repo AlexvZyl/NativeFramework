@@ -48,7 +48,7 @@ void MCC::renderGraphics(ImGuiID dock)
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
 			if (struc.second->close) {
-				if (ImGui::Begin(struc.first.c_str(), &struc.second->close))
+				if (ImGui::Begin(struc.second->windowName.c_str(), &struc.second->close))
 				{
 
 					//ImGui::GetCurrentWindow()->DockNode = ImGui::DockBuilderGetCentralNode(dock);
@@ -81,7 +81,7 @@ void MCC::renderGraphics(ImGuiID dock)
 						// If the active engineGL is the current engineGL, disable.
 						if (struc.first == graphicsHandler->m_activeWindow)
 						{
-							graphicsHandler->m_activeWindow = 'NONE';
+							graphicsHandler->m_activeWindow = 'NULL';
 						}
 
 						// Reset mouse coordinates when it moves outside of the window.
