@@ -51,7 +51,7 @@ struct RenderWindowGL
 
 	// State machine information.
 	bool isHovered = false;
-	bool resizeEvent = false;
+	bool resizeEvent = true;
 	bool close = true;
 
 	// Constructor.
@@ -120,9 +120,9 @@ public:
 	// Mouse events are automatically assigned to the active window.
 	// The active window is changed from the ImGUI side as the mouse moves.
 
-	void mousePressEvent(GLFWwindow* window, int button, int action, int mods);	// Handle mouse press events.
-	void mouseMoveEvent(GLFWwindow* window, float xpos, float ypos);			// Handle mouse move events.
-	void mouseScrollEvent(GLFWwindow* window, float xOffset, float yOffset);	// Handle mouse scroll events.
+	void mousePressEvent(int button, int action);		// Handle mouse press events.
+	void mouseMoveEvent(int buttonState);				// Handle mouse move events.
+	void mouseScrollEvent(float yOffset);				// Handle mouse scroll events.
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Window events.

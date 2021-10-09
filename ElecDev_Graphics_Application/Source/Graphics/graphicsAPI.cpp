@@ -33,10 +33,10 @@ void GraphicsHandler::addWindow(std::string windowName, EngineType engineType)
 	{
 		// Destroy ImGUI to allow drawing in other contexts.
 		ImGui_ImplOpenGL3_DestroyDeviceObjects();
-		// Add to dictionary.
-		m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, engineType) });
-		// Set window name.
+		// Set window active.
 		m_activeWindow = windowName;
+		// Add to dictionary.
+		m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, engineType) }); 
 	}
 }
 

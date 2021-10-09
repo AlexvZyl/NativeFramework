@@ -78,19 +78,21 @@ static void glfw_error_callback(int error, const char* description)
 // Handle mouse press events from GLFW.
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
-    graphicsHandler->mousePressEvent(window, button, action, mods);
+    graphicsHandler->mousePressEvent(button, action);
 }
 
 // Handle mouse press events from GLFW.
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
-{
-    graphicsHandler->mouseMoveEvent(window, (float)xpos, (float)ypos);
+{   
+    // Get button state.
+    int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    graphicsHandler->mouseMoveEvent(buttonState);
 }
 
 // Handle mouse press scroll. from GLFW.
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
-    graphicsHandler->mouseScrollEvent(window, (float)xoffset, (float)yoffset);
+    graphicsHandler->mouseScrollEvent((float)yoffset);
 }
 
 /*=======================================================================================================================================*/
@@ -145,14 +147,13 @@ int main(int, char**)
 
     // Load GLFW icon.
     BITMAP bitmap = loadImageFromResource(ICON_PNG);
-    GLFWimage* icon = new GLFWimage;
+    GLFWimage icon;
     // Load bitmap data to GLFW icon.
-    icon->pixels = (unsigned char*) bitmap.bmBits;
-    icon->height = bitmap.bmHeight;
-    icon->width = bitmap.bmWidth;
+    icon.pixels = (unsigned char*) bitmap.bmBits;
+    icon.height = bitmap.bmHeight;
+    icon.width = bitmap.bmWidth;
     // Set icon.
-    glfwSetWindowIcon(window, 1, icon);
-    delete icon;
+    glfwSetWindowIcon(window, 1, &icon);
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // Initialize OpenGL loader.
