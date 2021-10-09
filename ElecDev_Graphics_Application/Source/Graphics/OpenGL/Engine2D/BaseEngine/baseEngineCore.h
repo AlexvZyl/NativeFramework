@@ -88,7 +88,6 @@ public:
 	Shader* m_basicShader;		// Renders movable elements without textures.
 	Shader* m_staticShader;		// Renders static elements.
 	Shader* m_textureShader;	// Renders movable elements with textures.
-	Shader* m_textShader;		// Shader that renders text.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Buffers.
@@ -153,10 +152,8 @@ public:
 	GLuint m_textAtlas;
 	// Objects.
 	TextRenderer* m_textRenderer;
-	// Functions.
-	GLuint loadTexture(const std::string& path, bool alpha=false);
-	GLuint loadBMPtoGL(int bitmapID);
-	void renderLoop();
+	// Rendering loop.
+	virtual void renderLoop();
 	// Get the ID to the FBO rendered texture.
 	unsigned int getRenderedTexID();
 
@@ -183,7 +180,7 @@ public:
 
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
-	virtual void mousePressRight(float pixelCoords[2]);
+	virtual void mousePressRight();
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
 	virtual void mouseScrollEvent(float pixelCoords[2], int yOffset);
 
@@ -199,7 +196,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Callback that handles the resizing event.
-	void resizeEvent(int width, int height);
+	virtual void resizeEvent(int width, int height);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Camera manipulation.

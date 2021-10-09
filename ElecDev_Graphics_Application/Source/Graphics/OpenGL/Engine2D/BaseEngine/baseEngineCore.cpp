@@ -18,35 +18,15 @@
 BaseEngineGL::BaseEngineGL(stateMachine* states)
 	:m_states(states)
 {
+	std::cout << "[OPENGL][BASE ENGINE] Starting...\n";
+
 	//---------------------------------------------------------------------------------------
-	// Setup shaders.
+	// Compile shaders.
 	//---------------------------------------------------------------------------------------
-	
-	std::cout << "[OPENGL][BASE ENGINE] Compiling shaders...\n";
 
-	//---------------------------
-	// Create basic shader.
-	//---------------------------
-	// Load shader code from the executable.
-	std::string basicShaderSource = loadShaderFromResource(BASIC_SHADER);
-	m_basicShader = new Shader(basicShaderSource);
-
-	//---------------------------
-	// Create static shader.
-	//---------------------------
-	// Load shader code from the executable.
-	std::string staticShaderSource = loadShaderFromResource(STATIC_SHADER);
-	m_staticShader = new Shader(staticShaderSource);
-
-	//---------------------------
-	// Create texture shader.
-	//---------------------------
-	// Load resource from executable.
-	std::string textureShaderSource = loadShaderFromResource(TEXTURE_SHADER);
-	m_textureShader = new Shader(textureShaderSource);
-
-	// Done.
-	std::cout << "[OPENGL][BASE ENGINE] Shaders done.\n\n";
+	m_basicShader = new Shader(BASIC_SHADER);
+	m_staticShader = new Shader(STATIC_SHADER);
+	m_textureShader = new Shader(TEXTURE_SHADER);
 
 	//---------------------------------------------------------------------------------------
 	// Windows setup.
@@ -138,6 +118,9 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	//---------------------------------------------------------------------------------------
 
+	// Done.
+	std::cout << "[OPENGL][BASE ENGINE] Done.\n";
+
 };
 
 // Delete and free memory.
@@ -172,6 +155,7 @@ void BaseEngineGL::renderLoop()
 
 	// Render to frame buffer.
 	m_frameBuffer->bind();
+	m_frameBuffer->clear();
 
 	//---------------------------------------------------------------------------------------
 	// Matrix calculations.

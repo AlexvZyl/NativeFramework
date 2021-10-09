@@ -49,6 +49,9 @@ public:
 	// Resizing the texure when the window resizes.
 	void resize(int width, int height);
 
+	// Clears the FBO.
+	void clear();
+
 };
 
 //----------------------------------------------------------------------------------------------------------------------

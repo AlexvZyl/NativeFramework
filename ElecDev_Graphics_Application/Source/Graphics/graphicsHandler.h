@@ -44,6 +44,7 @@ struct RenderWindowGL
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
 	BaseEngineGL* engineGL;
+	EngineType engineType;
 
 	// Data from ImGUI.
 	ImVec2 viewportDimentions;
@@ -61,10 +62,12 @@ struct RenderWindowGL
 		if (engineType == EngineType::BaseEngineGL) 
 		{
 			engineGL = new BaseEngineGL(states);
+			engineType = EngineType::BaseEngineGL;
 		}
 		else if (engineType == EngineType::DesignEngineGL)
 		{
 			engineGL =  new DesignEngineGL(states);
+			engineType = EngineType::DesignEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
 		viewportDimentions[1] = engineGL->m_imGuiViewportDimensions[1];

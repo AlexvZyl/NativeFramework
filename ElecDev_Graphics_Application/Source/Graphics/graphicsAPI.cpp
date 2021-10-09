@@ -55,7 +55,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 		// Catch error.
 		else 
 		{
-			std::cout << "[INTERFACE][ERROR] '" << engineType << "' is not a valid engine type. Did you add too much spaces before the name?\n\n";
+			std::cout << "[INTERFACE][ERROR] '" << engineType << "' is not a valid engine type. Did you add more than 2 spaces before the name?\n\n";
 		}
 	}
 }

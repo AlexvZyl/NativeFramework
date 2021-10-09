@@ -51,9 +51,14 @@ FrameBufferObject::~FrameBufferObject()
 void FrameBufferObject::bind() 
 {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_rendererID));
+	GLCall(glEnable(GL_DEPTH_TEST));
+}
+
+// Clear the FBO.
+void FrameBufferObject::clear() 
+{
 	GLCall(glClearColor(0.1f, 0.1f, 0.1f, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	GLCall(glEnable(GL_DEPTH_TEST));
 }
 
 // Unbind the FBO.

@@ -7,16 +7,16 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "shaderHandler.h"
+#include "../Resources/resource.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor generates the shaders.
-Shader::Shader(std::string& shaderSourceIn)
-    : m_shaderSource(shaderSourceIn), m_rendererID(0)
+Shader::Shader(unsigned int shaderID)
+    : m_rendererID(0)
 {
-
     // Shader mode handler. Used as an index for the shaderSource.
     enum class ShaderType
     {
@@ -29,7 +29,7 @@ Shader::Shader(std::string& shaderSourceIn)
 
     // Stream that contains the shader.
     std::stringstream shaderSource[2];
-    std::istringstream source(m_shaderSource);
+    std::istringstream source(loadShaderFromResource(shaderID));
 
     // Run through all of the lines.
     std::string line;
