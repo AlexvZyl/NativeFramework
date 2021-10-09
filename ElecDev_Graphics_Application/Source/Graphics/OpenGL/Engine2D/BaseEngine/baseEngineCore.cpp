@@ -53,9 +53,8 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	//---------------------------------------------------------------------------------------
 
 	// ImGUI viewport.
-	float viewportImGUI[2] = {500,500};
-	m_imGuiViewportDimensions[0] = viewportImGUI[0];
-	m_imGuiViewportDimensions[1] = viewportImGUI[1];
+	m_imGuiViewportDimensions[0] = 500;
+	m_imGuiViewportDimensions[1] = 500;
 
 	//---------------------------------------------------------------------------------------
 	// Matrices setup.
@@ -63,10 +62,10 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	// Find the minimum value of the viewport dimensions.
 	float minValue;
-	if (viewportImGUI[0] < viewportImGUI[1]) { minValue = viewportImGUI[0]; }
-	else { minValue = viewportImGUI[1]; }
+	if (m_imGuiViewportDimensions[0] < m_imGuiViewportDimensions[1]) { minValue = m_imGuiViewportDimensions[0]; }
+	else { minValue = m_imGuiViewportDimensions[1]; }
 	// Scale the projection values according to the ImGUI viewport.
-	float projValuesTemp[6] = { (float)-viewportImGUI[0] / minValue, (float)viewportImGUI[0] / minValue, (float)-viewportImGUI[1] / minValue, (float)viewportImGUI[1] / minValue,-1.0, 1.0 };
+	float projValuesTemp[6] = { (float)-m_imGuiViewportDimensions[0] / minValue, (float)m_imGuiViewportDimensions[0] / minValue, (float)-m_imGuiViewportDimensions[1] / minValue, (float)m_imGuiViewportDimensions[1] / minValue,-1.0, 1.0 };
 
 	// Save projection values to be used with resizing of the window.
 	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
@@ -124,10 +123,11 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	m_textureShader->bind();
 	// Load texture for testing.
-	m_texture = loadTexture("Source\\Resources\\Textures\\circuitTree.png");
+	BITMAP circuitTreeBM = loadImageFromResource(CIRCUIT_TREE_PNG);
+	m_texture = loadBitmapToGL(circuitTreeBM);
 
 	// Create texture renderer object.
-	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_BMP);
+	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 
 	// Setup shader with textures (including font atlas).
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));

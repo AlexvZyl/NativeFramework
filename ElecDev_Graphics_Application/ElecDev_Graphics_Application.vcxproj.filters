@@ -78,12 +78,10 @@
     </ClCompile>
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccAPI.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccMouseHandler.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
+    <ClCompile Include="Source\Graphics\graphicsAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1224,7 +1222,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
@@ -1705,6 +1702,7 @@
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
     <Image Include="Source\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Resources\Icons\circuitImage.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -28,7 +28,7 @@ MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
 	this->pos.y = 0;
 	this->dock = 0;
 
-	//graphicsHandler->m_mccEngine->addMcc("Test");
+	//graphicsHandler->addMcc("Test");
 }
 
 // Render the graphics scene.
@@ -40,9 +40,9 @@ void MCC::renderGraphics(ImGuiID dock)
 
 	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	
-	if (graphicsHandler->m_mccEngine->m_mccDictionary.size() != 0) {
+	if (graphicsHandler->m_windowsDictionary.size() != 0) {
 		std::vector<std::string> toRemove;
-		for (auto struc : graphicsHandler->m_mccEngine->m_mccDictionary)
+		for (auto struc : graphicsHandler->m_windowsDictionary)
 		{
 			
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
@@ -70,23 +70,23 @@ void MCC::renderGraphics(ImGuiID dock)
 						struc.second->viewportDimentions = ImGui::GetWindowSize();
 					}
 
-					// Set the active engine.
+					// Set the active engineGL.
 					if (struc.second->isHovered)
 					{
-						graphicsHandler->m_mccEngine->m_activeMCC = struc.first;
+						graphicsHandler->m_activeWindow = struc.first;
 					}
 					// Reset mouse coordinates.
 					else
 					{
-						// If the active engine is the current engine, disable.
-						if (struc.first == graphicsHandler->m_mccEngine->m_activeMCC)
+						// If the active engineGL is the current engineGL, disable.
+						if (struc.first == graphicsHandler->m_activeWindow)
 						{
-							graphicsHandler->m_mccEngine->m_activeMCC = 'NONE';
+							graphicsHandler->m_activeWindow = 'NONE';
 						}
 
 						// Reset mouse coordinates when it moves outside of the window.
-						struc.second->engine->m_prevMouseEventWorldCoords[0] = NULL;
-						struc.second->engine->m_prevMouseEventWorldCoords[1] = NULL;
+						struc.second->engineGL->m_prevMouseEventWorldCoords[0] = NULL;
+						struc.second->engineGL->m_prevMouseEventWorldCoords[1] = NULL;
 					}
 
 					//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
@@ -102,7 +102,7 @@ void MCC::renderGraphics(ImGuiID dock)
 					ImVec2 wsize = ImGui::GetWindowSize();
 
 					// Because I use the texture from OpenGL, I need to invert the V from the UV.
-					ImGui::Image((ImTextureID)struc.second->engine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+					ImGui::Image((ImTextureID)struc.second->engineGL->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 
 					ImGui::EndChild();
 				}
@@ -114,7 +114,7 @@ void MCC::renderGraphics(ImGuiID dock)
 		}
 		for (auto remove : toRemove)
 		{
-			graphicsHandler->m_mccEngine->removeMCC(remove);
+			graphicsHandler->removeWindow(remove);
 		}
 	}
 }

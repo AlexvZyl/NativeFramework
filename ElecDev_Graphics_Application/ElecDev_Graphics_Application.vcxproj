@@ -135,6 +135,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,9 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccAPI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccMouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\graphicsAPI.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
@@ -199,7 +199,6 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\MccEngine\mccEngineCore.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
@@ -745,6 +744,7 @@
     <Image Include="Source\Resources\Fonts\Arial_SDF_PNG.png" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
+    <Image Include="Source\Resources\Icons\circuitImage.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Icons\panda.bmp" />
     <Image Include="Source\Resources\Textures\circuitTree.png" />
