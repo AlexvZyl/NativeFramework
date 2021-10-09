@@ -6,7 +6,7 @@ This is where the drawing enigine mouse events are handled.
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Engine2D/BaseEngine/baseEngineCore.h"
+#include "baseEngineCore.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Mouse Press event.
@@ -23,7 +23,7 @@ void BaseEngineGL::mousePressLeft(float pixelCoords[2])
 }
 
 // Event handler for a mouse right click.
-void BaseEngineGL::mousePressRight(float pixelCoords[2])
+void BaseEngineGL::mousePressRight()
 {
 	// Reset the view values to the base matrices.
 	m_scalingMatrix = m_scalingMatrixBase;

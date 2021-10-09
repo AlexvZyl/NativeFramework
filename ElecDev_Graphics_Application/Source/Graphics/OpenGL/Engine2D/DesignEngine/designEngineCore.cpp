@@ -17,45 +17,56 @@ The interactive engine (the one where elements can be drawn is handled in design
 // Constructor.
 DesignEngineGL::DesignEngineGL(stateMachine* states) : BaseEngineGL(states)
 {
+	std::cout << "[OPENGL][DESIGN ENGINE] Starting...\n";
 
+	float color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+	m_mousePoint = new MousePoint(color, 0.015, 20, &m_projectionMatrix, m_states);
+
+	std::cout << "[OPENGL][DESIGN ENGINE] Done.\n";
 }
 
 // Destructor.
 DesignEngineGL::~DesignEngineGL() 
 {
-	
+	delete m_mousePoint;
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//  Rendering.
+//----------------------------------------------------------------------------------------------------------------------
+
+void DesignEngineGL::renderLoop()
+{
+	// Call the base engine rendering loop.
+	BaseEngineGL::renderLoop();
+
+	// Now add the design engine loop on top.
+	m_frameBuffer->bind();
+
+	// Draw the mouse point.
+	m_mousePoint->render();
+
+	// Done.
+	m_frameBuffer->unbind();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//  Window events.
+//----------------------------------------------------------------------------------------------------------------------
+
+void DesignEngineGL::resizeEvent(int width, int height) 
+{
+	// Call base engine resize event.
+	BaseEngineGL::resizeEvent(width, height);
+
+	// Now call resizing required for design engine.
+	m_mousePoint->updateProjection();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 //  API
 //----------------------------------------------------------------------------------------------------------------------
 
-// Adds a line to the VBO object.
-void DesignEngineGL::drawLine()
-{
-	
-}
-
-// Adds a circle to the VBO object.
-void DesignEngineGL::drawCircle()
-{
-	
-}
-
-// Adds text to the VBO object.
-void DesignEngineGL::drawText()
-{
-	
-}
-
-// Displays the new drawing to the screen.
-// Required after each new element has been added.
-void DesignEngineGL::display()
-{
-
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -79,7 +79,7 @@ void GraphicsHandler::mousePressEvent(int button, int action)
 		else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight(mousePos);
+			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight();
 		}
 	}
 }
