@@ -366,6 +366,7 @@ void readingIn(stateMachine* states) {
         std::getline(std::cin, temp);
         if (temp != "") {
             procesInput(temp, states);
+            std::cout << "Received" << std::endl;
         }
         temp = "";
     }
