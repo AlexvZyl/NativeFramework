@@ -83,81 +83,79 @@ This is the graphics application that is to be used with the ElecDev software.  
 ## Roadmap
 
 ### Base Engine
+- ✅ Structure code and setup handlers:
+    - ✅ Main app.
+    - ✅ GUI Handler.
+    - ✅ Graphics Handler (Backend Engines).
+- ✅ Setup project with dependancies:
+    - ✅ ImGUI.
+    - ✅ GLAD.
+    - ✅ GLFW.
+    - ✅ OpenGL.
+    - ✅ GLM.
+    - ✅ ImGUI Docking Branch.
+- ✅ Implement matrix mathematics.
+- ✅ Translation, rotation & scaling.
+- ✅ Viewport, Model, View and Porjection matrices.
+- ✅ Basic shader.
+- ✅ Error handler.
+- ✅ Shader handler.
+- ✅ Implement class that handles VAO's:
+  - ✅ Lines.
+  - ✅ Triangles.
+  - ✅ Textured triangles (Includes text).
+- ✅ Implement batch rendering.
+- ✅ Draw textured elements.
+- ✅ Drawing API:
+  - ✅ Lines.
+  - ✅ Clear circles.
+  - ✅ Filled circles.
+  - ✅ Clear quads.
+  - ✅ Filled quads.
+  - ✅ Clear triangles.
+  - ✅ Filled triangles.
+  - ✅ Text.
+- ✅ Mouse event handler.
+- ✅ Implement frame buffers.
+- ✅ Implement State Machine that controls the application.
+- ✅ Interface with Excel:
+  - ✅ Requires exe file that has resource files included (Use .rc files).
+  - ✅ Write byte encoder/decoder.
+  - ✅ Write thread handler from python side for non-pause interface.
+  - ✅ Input handler for threads and linked to state machine.
+- ✅ Create terminal API that controls the app.
 
-* ✅ Structure code and setup handlers:
-  * ✅ Main app.
-  * ✅ GUI Handler.
-  * ✅ Graphics Handler (Backend Engines).
-* ✅ Setup project with dependancies:
-  * ✅ ImGUI.
-  * ✅ GLAD.
-  * ✅ GLFW.
-  * ✅ OpenGL.
-  * ✅ GLM.
-  * ✅ ImGUI Docking Branch.
-* ✅ Base Engine:
-  * ✅ Implement matrix mathematics.
-    * ✅ Translation, rotation & scaling.
-    * ✅ Viewport, Model, View and Porjection matrices.
-  * ✅ Basic shader.
-  * ✅ Error handler.
-  * ✅ Shader handler.
-  * ✅ Implement class that handles VAO's:
-    * ✅ Lines.
-    * ✅ Triangles.
-    * ✅ Textured triangles (Includes text).
-  * ✅ Implement batch rendering.
-  * ✅ Draw textured elements.
-  * ✅ Drawing API:
-    * ✅ Lines.
-    * ✅ Clear circles.
-    * ✅ Filled circles.
-    * ✅ Clear quads.
-    * ✅ Filled quads.
-    * ✅ Clear triangles.
-    * ✅ Filled triangles.
-    * ✅ Text.
-  * ✅ Mouse event handler.
-  * ✅ Implement frame buffers.
-* ✅ Implement State Machine that controls the application.
-* ✅ Interface with Excel:
-  * ✅ Requires exe file that has resource files included (Use .rc files).
-  * ✅ Write byte encoder/decoder.
-  * ✅ Write thread handler from python side for non-pause interface.
-  * ✅ Input handler for threads and linked to state machine.
-* ✅ Create terminal API that controls the app.
-
-* ✅ It is up and running!* 
-
-* ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
-  * ✅ Incorporate Base Engine.
-  * ⬜ GUI interface controls OpenGL engines.
-  * ⬜ Bind all user inputs to OpenGL actions and state machine updates.
-* ✅ Add client side copy of the buffer data to be able to read and change the data.
-* ✅ Add autoCenter and autoScale functions.
-* ✅ Add a demo drawing and some form of benchmark.
-* ✅ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
-* ⬜ Implement Index Buffers.  Wil increase performance and reduce memory usage.
+- ✅ *It is up and running!*
+ 
+- ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
+  - ✅ Incorporate Base Engine.
+  - ⬜ GUI interface controls OpenGL engines.
+  - ⬜ Bind all user inputs to OpenGL actions and state machine updates.
+- ✅ Add client side copy of the buffer data to be able to read and change the data.
+- ✅ Add autoCenter and autoScale functions.
+- ✅ Add a demo drawing and some form of benchmark.
+- ✅ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
+- ⬜ Implement Index Buffers.  Wil increase performance and reduce memory usage.
 
 ### Design Engine (Child of Base Engine)
 
-* ⬜ Mouse event handler.
-* ⬜ Component generation and buffer management.
-* ⬜ Cable generation.
-* ⬜ Add virtual mouse point that snaps to parts of the drawings to make editing easier.
-* ⬜ Port software from the PyQt interface:
-  * ⬜ Create a state machine for type of user interface.
-* ⬜ Improve engine with a better UI:
-  * ⬜ Auto alignment.
-  * ⬜ Move components.
-* ⬜ Add symbol library.
-* ⬜ Add template circuits.
-* ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
+- ⬜ Mouse event handler.
+- ⬜ Component generation and buffer management.
+- ⬜ Cable generation.
+- ⬜ Add virtual mouse point that snaps to parts of the drawings to make editing easier.
+- ⬜ Port software from the PyQt interface:
+  - ⬜ Create a state machine for type of user interface.
+- ⬜ Improve engine with a better UI:
+  - ⬜ Auto alignment.
+  - ⬜ Move components.
+- ⬜ Add symbol library.
+- ⬜ Add template circuits.
+- ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
 
 ### Long Term Dreams
 
-* ⬜ 3D Drawings.
-* ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].
+- ⬜ 3D Drawings.
+- ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].
 
 ---
 
