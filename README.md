@@ -58,6 +58,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Autoresize and scaling does not take into account the length of the text string.
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
 * ⬜ Add text kerning.
+* ⬜ Move over to smart pointers for better memory management.
 
 #### Raynhardt 
 * ⬜ Multi View port
