@@ -81,7 +81,7 @@ void MCC::renderGraphics(ImGuiID dock)
 						// If the active engineGL is the current engineGL, disable.
 						if (struc.first == graphicsHandler->m_activeWindow)
 						{
-							graphicsHandler->m_activeWindow = 'NULL';
+							graphicsHandler->m_activeWindow = "NULL";
 						}
 
 						// Reset mouse coordinates when it moves outside of the window.

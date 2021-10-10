@@ -58,7 +58,7 @@ void BaseEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
 //  Mouse Scroll event.
 //----------------------------------------------------------------------------------------------------------------------
 
-void BaseEngineGL::mouseScrollEvent(float pixelCoords[2], int yOffset) 
+void BaseEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset) 
 {	
 	
 	// Calculate zoom value based on mouse wheel scroll.

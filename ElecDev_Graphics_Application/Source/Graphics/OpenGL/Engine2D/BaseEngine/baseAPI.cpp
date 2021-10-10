@@ -132,7 +132,7 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 // Adds text to the VBO object.
 void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, char align)
 {
-	// Calculate the length of the string.
+	// Calculate the length & height of the string.
 	float length = 0;
 	float height = m_textRenderer->m_characterDictionary[text[0]].height;
 	for (char c : text) 
@@ -178,13 +178,13 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 // Draws the demo drawing.
 void BaseEngineGL::drawDemo(unsigned int loopCount)
 {
-	for (int i = 0; i <= loopCount * 3; i += 3)
+	for (unsigned int i = 0; i <= loopCount * 3; i += 3)
 	{
-		for (int k = 0; k <= loopCount * 3; k += 3)
+		for (unsigned int k = 0; k <= loopCount * 3; k += 3)
 		{
 			// Draw filled triangle example.
 			float ftPos1[2] = { -1.0f + i, -1.0f + k };
-			float ftPos2[2] = { -1.0f + i, -0.5 + k };
+			float ftPos2[2] = { -1.0f + i, -0.5f + k };
 			float ftPos3[2] = { -1.5f + i, -1.0f + k };
 			float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
 			drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
@@ -192,20 +192,20 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			// Draw clear quad.
 			float cqCoords[2] = { 0.0f + i, 0.0f + k };
 			float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawQuadClear(cqCoords, 2, 2, cqColor);
+			drawQuadClear(cqCoords, 2.0f, 2.0f, cqColor);
 
 			// Draw filled quad.
 			float fqCoords[2] = { -0.5f + i, 0.5f + k };
 			float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-			drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
+			drawQuadFilled(fqCoords, 0.25f, 0.3f, fqColor);
 
 			// Draw filed ciricle.
 			float coords1[2] = { 0.0f + i, 0.0f + k };
 			float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
-			drawCircleFilled(coords1, 0.2, color);
+			drawCircleFilled(coords1, 0.2f, color);
 			// Draw clear ciricle.
-			float coords2[2] = { i, -0.75f + k };
-			drawCircleClear(coords2, 0.2, color);
+			float coords2[2] = { (float)i, -0.75f + k };
+			drawCircleClear(coords2, 0.2f, color);
 
 			// Draw clear triangle example.
 			float ctPos1[2] = { 1.0f + i, -1.0f + k };
@@ -226,7 +226,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawCircleFilled(pos, 0.01, color);
+			drawCircleFilled(pos, 0.01f, color);
 			drawText(text, pos, colorText, 1.0f, 'C');
 		}
 	}

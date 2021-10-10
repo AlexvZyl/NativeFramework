@@ -146,9 +146,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Testing texture.
-	GLuint m_texture;
-	// Texture that contains all of the font information.
-	GLuint m_textAtlas;
+	GLuint m_texture=0;
 	// Objects.
 	TextRenderer* m_textRenderer;
 	// Rendering loop.
@@ -181,7 +179,7 @@ public:
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight();
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
-	virtual void mouseScrollEvent(float pixelCoords[2], int yOffset);
+	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.
