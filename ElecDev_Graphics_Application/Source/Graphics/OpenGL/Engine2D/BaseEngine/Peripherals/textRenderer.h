@@ -63,11 +63,8 @@ public:
 	// Destructor.
 	~TextRenderer();
 
-	// Loads textures to OpenGL.
-	GLuint loadTexture(const std::string& path, bool alpha);
-
 	// Writes the text to the CPU side buffer supplied.
-	void writeText(std::string text, float coords[2], std::vector<TexturedVertexData>* bufferCPU, float textureID, float color[4], float scale);
+	void writeText(std::vector<TexturedVertexData>* bufferCPU, std::string text, float coords[2], float color[4], float scale);
 
 };
 

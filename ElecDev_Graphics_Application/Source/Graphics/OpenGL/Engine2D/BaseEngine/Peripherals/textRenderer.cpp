@@ -28,15 +28,8 @@ TextRenderer::TextRenderer(int fontID, int atlasID)
 	float textureDimensions[2] = { 512, 512 };	// Dimensions of the .png file.
 	float padding = 3;							// Amount of padding around each character.
 
-	// Load font text file from executable.
-	HRSRC resource = FindResource(getCurrentModule(), MAKEINTRESOURCE(fontID), MAKEINTRESOURCE(TEXTFILE));
-	HGLOBAL data = LoadResource(getCurrentModule(), resource);
-	DWORD size = SizeofResource(getCurrentModule(), resource);
-	char* finalData = (char*)LockResource(data);
-	std::string fontData;
-	fontData.assign(finalData, size);
-	// Convert to stream.
-	std::istringstream source(fontData);
+	// Load font text file from executable and convert to stream.
+	std::istringstream source(loadTextFromResource(fontID));
 
 	// Read the lines.
 	int lineCount=0;
@@ -156,47 +149,8 @@ TextRenderer::TextRenderer(int fontID, int atlasID)
 	}
 
 	// Load font atlas as texture.
-	BITMAP textAtlas = loadImageFromResource(ARIAL_SDF_PNG);
-	m_textureID = loadBitmapToGL(textAtlas);
+	m_textureID = loadBitmapToGL(loadImageFromResource(ARIAL_SDF_PNG));
 }
-
-GLuint TextRenderer::loadTexture(const std::string& path, bool alpha)
-{
-	int w, h, bits;
-	stbi_set_flip_vertically_on_load(1);
-
-	// Load texture without alpha channel.
-	if (!alpha)
-	{
-		auto* pixels = stbi_load(path.c_str(), &w, &h, &bits, STBI_rgb);
-		GLuint textureID;
-		GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
-		GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels));
-		stbi_image_free(pixels);
-		return textureID;
-	}
-	// Load texture with alpha channel.
-	else
-	{
-		auto* pixels = stbi_load(path.c_str(), &w, &h, &bits, STBI_rgb_alpha);
-		GLuint textureID;
-		GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
-		GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
-		stbi_image_free(pixels);
-		return textureID;
-	}
-}
-
 
 // Destructor.
 TextRenderer::~TextRenderer() 
@@ -205,19 +159,18 @@ TextRenderer::~TextRenderer()
 }
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-void TextRenderer::writeText(std::string text, float coords[2], std::vector<TexturedVertexData>* bufferCPU, float textureID, float color[4], float scale)
+void TextRenderer::writeText(std::vector<TexturedVertexData>* bufferCPU, std::string text, float coords[2], float color[4], float scale)
 {	
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
-	// (standard for OpenGL).  However, BaseEngineGL is currently written where the (0,0) point is in the bottom left.
+	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
 	// This has to be compensated for in the funciton.
 
 	// Buffer that contains total information.
 	std::vector<TexturedVertexData> vertices;
 
 	// Iterate through characters.
-	int textLength = (int)text.length();
 	float advance = 0;
-	for (int i = 0; i < textLength; i++)
+	for (int i = 0; i < (int)text.length(); i++)
 	{
 		Character c = m_characterDictionary[text[i]];
 		// Write character data to the VAO.
@@ -227,7 +180,7 @@ void TextRenderer::writeText(std::string text, float coords[2], std::vector<Text
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x, 1.0f-c.y,											// Texture coordinates.
-			textureID												// Which texture to draw.
+			1														// Slot 1 is reserved for the text font atlas.
 		);
 		TexturedVertexData v2(										// Top right.
 			coords[0] + (advance + c.xOffset + c.width) * scale,	// x
@@ -235,7 +188,7 @@ void TextRenderer::writeText(std::string text, float coords[2], std::vector<Text
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x+c.width, 1.0f-c.y,									// Texture coordinates.
-			textureID												// Which texture to draw.
+			1														// Slot 1 is reserved for the text font atlas.
 		);
 		TexturedVertexData v3(										// Bottom right.
 			coords[0] + (advance + c.xOffset + c.width) * scale,	// x
@@ -243,7 +196,7 @@ void TextRenderer::writeText(std::string text, float coords[2], std::vector<Text
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x+c.width, 1.0f-c.y - c.height,						// Texture coordinates.
-			textureID												// Which texture to draw.
+			1														// Slot 1 is reserved for the text font atlas.
 		);
 		TexturedVertexData v4(										// Bottom left.
 			coords[0] + (advance + c.xOffset) * scale,				// x
@@ -251,7 +204,7 @@ void TextRenderer::writeText(std::string text, float coords[2], std::vector<Text
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x, 1.0f - c.y - c.height,								// Texture coordinates.
-			textureID												// Which texture to draw.
+			1														// Slot 1 is reserved for the text font atlas.
 		);
 
 		// Create temp buffer.

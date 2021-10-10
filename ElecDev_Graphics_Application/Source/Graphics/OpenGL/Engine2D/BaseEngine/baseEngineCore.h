@@ -97,7 +97,6 @@ public:
 	VertexArrayObject* m_linesVAO;				// Lines.
 	VertexArrayObject* m_trianglesVAO;			// Triangles.
 	VertexArrayObject* m_textureTrianglesVAO;	// Textured Triangles.
-	VertexArrayObject* m_textVAO;				// Handles text rendering.
 	VertexArrayObject* m_backgroundVAO;			// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer rendering.
@@ -146,7 +145,7 @@ public:
 	//  Rendering.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	// Variables.
+	// Testing texture.
 	GLuint m_texture;
 	// Texture that contains all of the font information.
 	GLuint m_textAtlas;
@@ -169,7 +168,7 @@ public:
 	void drawQuadFilled(float position[2], float width, float height, float color[4]);
 	void drawCircleClear(float position[2], float radius, float color[4]);
 	void drawCircleFilled(float position[2], float radius, float color[4]);
-	void drawText(std::string text, float coords[2], float color[4], float scale);
+	void drawText(std::string text, float coords[2], float color[4], float scale, char align);
 	void drawDemo(unsigned int loopCount);											// Draw a demo of the capabilities.
 	void autoCenter();
 	void updateBuffers();				
@@ -197,11 +196,6 @@ public:
 
 	// Callback that handles the resizing event.
 	virtual void resizeEvent(int width, int height);
-
-	//---------------------------------------------------------------------------------------------------------------------
-	//  Camera manipulation.
-	//---------------------------------------------------------------------------------------------------------------------
-
 
 };
 

@@ -29,7 +29,7 @@ Shader::Shader(unsigned int shaderID)
 
     // Stream that contains the shader.
     std::stringstream shaderSource[2];
-    std::istringstream source(loadShaderFromResource(shaderID));
+    std::istringstream source(loadTextFromResource(shaderID));
 
     // Run through all of the lines.
     std::string line;

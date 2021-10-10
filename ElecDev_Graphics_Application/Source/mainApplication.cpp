@@ -143,7 +143,7 @@ int main(int, char**)
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync.
+    glfwSwapInterval(1); // VSync buffer size.
 
     // Load GLFW icon.
     BITMAP bitmap = loadImageFromResource(ICON_PNG);
@@ -520,7 +520,7 @@ void deQueueInput(stateMachine* states) {
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
+                for (size_t i = 0; i < 9; i++)
                 {
                     // Read text.
                     if (i == 0)
@@ -535,7 +535,7 @@ void deQueueInput(stateMachine* states) {
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
                 }
-                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
+                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], params[7]);
             }
             catch (const std::exception& e)
             {

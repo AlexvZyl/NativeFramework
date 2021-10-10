@@ -152,7 +152,7 @@ public:
 	void drawQuadFilled(std::string windowName, float position[2], float width, float height, float color[4]);
 	void drawCircleClear(std::string windowName, float position[2], float radius, float color[4]);
 	void drawCircleFilled(std::string windowName, float position[2], float radius, float color[4]);
-	void drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale);
+	void drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, char align);
 	// Scales and centers the drawing in the window.
 	void autoCenter(std::string windowName);
 	// Loads the CPU data to the GPU.

@@ -35,10 +35,10 @@ HMODULE getCurrentModule()
 /*=======================================================================================================================================*/
 
 // Loads the shader text file from the executable and returns it as a string.
-std::string loadShaderFromResource(int shaderID) 
+std::string loadTextFromResource(int textID) 
 {
 	// Load resource from executable.
-	HRSRC shaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(shaderID), MAKEINTRESOURCE(TEXTFILE));
+	HRSRC shaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(textID), MAKEINTRESOURCE(TEXTFILE));
 	HGLOBAL resourceData = LoadResource(getCurrentModule(), shaderResource);
 	DWORD resourceSize = SizeofResource(getCurrentModule(), shaderResource);
 	char* resourceFinal = (char*)LockResource(resourceData);

@@ -63,7 +63,7 @@
 HMODULE getCurrentModule();
 
 // Load shader from resource.
-std::string loadShaderFromResource(int shaderID);
+std::string loadTextFromResource(int textID);
 
 // Loading images.
 BITMAP loadImageFromResource(int resourceID);

@@ -130,10 +130,33 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 }
 
 // Adds text to the VBO object.
-void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale)
+void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, char align)
 {
-	// Write text to CPU side buffer.
-	m_textRenderer->writeText(text, coords, &m_texturedTrianglesCPU, 1, color, scale);
+
+
+	// Center the text.
+	if (align == 'C' || align == 'c')
+	{
+		// Write text to CPU side buffer.
+		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
+	}
+	// Right allign the text.
+	else if (align == 'R' || align == 'r') 
+	{
+		// Write text to CPU side buffer.
+		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
+	}
+	// Left allign the text.
+	else if (align == 'L' || align == 'l') 
+	{
+		// Write text to CPU side buffer.
+		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
+	}
+	// Display error.
+	else 
+	{
+		std::cout << "[INTERFACE][ERROR] '" << align << "' is not a valid alignment.\n\n";
+	}	
 }
 
 // Draws the demo drawing.
@@ -187,7 +210,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawText(text, pos, colorText, 1);
+			drawText(text, pos, colorText, 1.0f, 'C');
 		}
 	}
 	// Load the CPU buffers into the GPU.

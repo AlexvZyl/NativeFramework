@@ -31,8 +31,19 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	}
 	else
 	{
+		// Remove leading white spaces.
+		while (engineType[0] == ' ')
+		{
+			engineType.erase(engineType.begin());
+		}
+		// Remove white spaces at end.
+		while (engineType[engineType.length()-1] == ' ')
+		{
+			engineType.pop_back();
+		}
+
 		// Check engine type.
-		if (engineType == "Base" || engineType == " Base" || engineType == "  Base")
+		if (engineType == "Base" || engineType == "base")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
@@ -40,9 +51,9 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			m_activeWindow = windowName;
 			// Add window to dictionary.
 			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::BaseEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [BaseEngineGL]";
+			m_windowsDictionary[windowName]->windowName = windowName + " [Base]";
 		}
-		else if (engineType == "Design" || engineType == " Design" || engineType == "  Design")
+		else if (engineType == "Design" || engineType == "design")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
@@ -50,12 +61,12 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			m_activeWindow = windowName;
 			// Add window to dictionary.
 			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::DesignEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [DesignEngineGL]";
+			m_windowsDictionary[windowName]->windowName = windowName + " [Design]";
 		}
 		// Catch error.
 		else 
 		{
-			std::cout << "[INTERFACE][ERROR] '" << engineType << "' is not a valid engine type. Did you add more than 2 spaces before the name?\n\n";
+			std::cout << "[INTERFACE][ERROR] '" << engineType << "' is not a valid engine type.\n\n";
 		}
 	}
 }
@@ -229,14 +240,14 @@ void GraphicsHandler::drawCircleFilled(std::string windowName, float coords[2], 
 }
 
 // Adds text to the VBO object.
-void GraphicsHandler::drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale)
+void GraphicsHandler::drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, char align)
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))
 	{
 		try {
 			// Render the text.
-			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale);
+			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale, align);
 		}
 		catch (const std::exception& e)
 		{

@@ -18,7 +18,7 @@ FrameBufferObject::FrameBufferObject(int width, int height)
 	// Check for error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER)) 
 	{
-		std::cout << "[OPENGL][ERROR] FBO could not be generated. \n\n";
+		std::cout << "[BASE_ENGINE][ERROR] FBO could not be generated.\n\n";
 	}
 
 	// Generate a texture for the frame buffer.
@@ -35,7 +35,7 @@ FrameBufferObject::FrameBufferObject(int width, int height)
 
 	// Check for failure.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		std::cout << "[OPEMGL][ERROR] Framebuffer is not complete!" << std::endl;
+		std::cout << "[BASE_ENGINE][ERROR] FBO is not complete!\n\n" << std::endl;
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }

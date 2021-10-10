@@ -103,8 +103,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	m_textureShader->bind();
 	// Load texture for testing.
-	BITMAP circuitTreeBM = loadImageFromResource(CIRCUIT_TREE_PNG);
-	m_texture = loadBitmapToGL(circuitTreeBM);
+	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
 
 	// Create texture renderer object.
 	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
@@ -131,11 +130,8 @@ BaseEngineGL::~BaseEngineGL()
 	delete m_staticShader;
 	delete m_textureShader;
 	// Delete VAO's.
-	// Lines.
 	delete m_linesVAO;
-	// Background.
 	delete m_backgroundVAO;
-	// Triangles.
 	delete m_trianglesVAO;
 	delete m_textureTrianglesVAO;
 	// Delete text renderer.
