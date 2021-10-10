@@ -51,7 +51,7 @@ TextRenderer::TextRenderer(int fontID, int atlasID)
 				id.push_back(line[cursor]);
 				cursor++;
 			}
-			c.id = (float)::atof(id.c_str());
+			c.id = (unsigned int)::atof(id.c_str());
 
 			//-------------------------------------
 			// Read the character x.

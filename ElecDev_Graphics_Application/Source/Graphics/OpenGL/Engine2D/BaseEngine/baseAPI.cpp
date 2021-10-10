@@ -132,23 +132,39 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 // Adds text to the VBO object.
 void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, char align)
 {
-
+	// Calculate the length of the string.
+	float length = 0;
+	float height = m_textRenderer->m_characterDictionary[text[0]].height;
+	for (char c : text) 
+	{
+		length += m_textRenderer->m_characterDictionary[c].xAdvance;
+	}
 
 	// Center the text.
 	if (align == 'C' || align == 'c')
 	{
+		// Place the coords in the center of the text.
+		coords[0] = coords[0] - (length * scale) / 2;
+		// Place on top of coordinate.
+		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
 		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
 	}
 	// Right allign the text.
 	else if (align == 'R' || align == 'r') 
 	{
+		// Align text to right.
+		coords[0] = coords[0] - length * scale;
+		// Place on top of coordinate.
+		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
 		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
 	}
 	// Left allign the text.
 	else if (align == 'L' || align == 'l') 
 	{
+		// Place on top of the coordinate.
+		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
 		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
 	}
@@ -210,6 +226,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+			drawCircleFilled(pos, 0.01, color);
 			drawText(text, pos, colorText, 1.0f, 'C');
 		}
 	}

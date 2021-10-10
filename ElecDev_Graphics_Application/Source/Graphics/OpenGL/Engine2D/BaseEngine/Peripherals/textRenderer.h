@@ -40,7 +40,7 @@ private:
 	// Stores the information regarding the characters.
 	struct Character
 	{
-		float id=0;				// Character code in ascii.
+		unsigned int id=0;		// Character code in ascii.
 		float x=0;				// Top left coordinate of character.
 		float y=0;				// Top left coordinate of character
 		float width=0;			// Width of character in pixels.
@@ -50,10 +50,10 @@ private:
 		float xAdvance=0;		// Amount that the cursor should move to draw a new character.
 	};
 
-	// Character dictionary that contains the info on each character.
-	std::map<float, Character> m_characterDictionary;
-
 public:
+
+	// Character dictionary that contains the info on each character.
+	std::map<unsigned int, Character> m_characterDictionary;
 
 	// Texture ID for the font atlas.
 	GLuint m_textureID;
