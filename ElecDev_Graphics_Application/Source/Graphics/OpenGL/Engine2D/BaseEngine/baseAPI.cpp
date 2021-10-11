@@ -389,9 +389,11 @@ void BaseEngineGL::autoCenter()
 	//----------------------------------------------------------------------
 
 	// Calculate the values to translate.
-	float translate[2]{};
-	translate[0] = -(max[0] + min[0]) / 2;
-	translate[1] = -(max[1] + min[1]) / 2;
+	float translate[2];
+	float size[2] = { max[0] - min[0], max[1] - min[1] };
+
+	translate[0] = -min[0] - (size[0] / 2);
+	translate[1] = -min[1] - (size[1] / 2);
 
 	// Now translate the camera accordingly.
 	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(translate[0], translate[1], 0.0f));
@@ -400,16 +402,16 @@ void BaseEngineGL::autoCenter()
 
 	// Scale the drawing according to the largest translation that took place (This gives us the new max value,
 	// centered around (0.0).
-	if (translate[0] > translate[1]) 
+	if (size[0] > size[1]) 
 	{
-		float scale = std::abs(translate[0] * 1.1f);
+		float scale = std::abs(size[0]/2);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 	else 
 	{
-		float scale = std::abs(translate[1] * 1.1f);
+		float scale = std::abs(size[1]/2);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
