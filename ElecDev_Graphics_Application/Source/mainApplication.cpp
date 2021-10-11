@@ -368,8 +368,19 @@ void readingIn(stateMachine* states) {
 
         std::getline(std::cin, temp);
         if (temp != "") {
-            procesInput(temp, states);
             std::cout << "Received" << std::endl;
+            std::string subCommand = "";
+            while (true) {
+                int nextStart = temp.find("::");
+                if (nextStart == -1) {
+                    break;
+                }
+                subCommand = temp.substr(0, nextStart);
+                procesInput(subCommand, states);
+                temp = temp.substr(nextStart + 2, temp.size());
+                
+            }
+            
         }
         temp = "";
     }
