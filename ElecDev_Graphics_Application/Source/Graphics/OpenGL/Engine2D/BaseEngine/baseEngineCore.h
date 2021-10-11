@@ -146,9 +146,7 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Testing texture.
-	GLuint m_texture;
-	// Texture that contains all of the font information.
-	GLuint m_textAtlas;
+	GLuint m_texture=0;
 	// Objects.
 	TextRenderer* m_textRenderer;
 	// Rendering loop.
@@ -168,7 +166,7 @@ public:
 	void drawQuadFilled(float position[2], float width, float height, float color[4]);
 	void drawCircleClear(float position[2], float radius, float color[4]);
 	void drawCircleFilled(float position[2], float radius, float color[4]);
-	void drawText(std::string text, float coords[2], float color[4], float scale, char align);
+	void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
 	void drawDemo(unsigned int loopCount);											// Draw a demo of the capabilities.
 	void autoCenter();
 	void updateBuffers();				
@@ -181,7 +179,7 @@ public:
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight();
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
-	virtual void mouseScrollEvent(float pixelCoords[2], int yOffset);
+	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.

@@ -130,18 +130,18 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 }
 
 // Adds text to the VBO object.
-void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, char align)
+void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, std::string align)
 {
-	// Calculate the length of the string.
+	// Calculate the length & height of the string.
 	float length = 0;
 	float height = m_textRenderer->m_characterDictionary[text[0]].height;
-	for (char c : text) 
+	for (char c : text)
 	{
 		length += m_textRenderer->m_characterDictionary[c].xAdvance;
 	}
 
 	// Center the text.
-	if (align == 'C' || align == 'c')
+	if (align == "C" || align == "c")
 	{
 		// Place the coords in the center of the text.
 		coords[0] = coords[0] - (length * scale) / 2;
@@ -151,7 +151,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
 	}
 	// Right allign the text.
-	else if (align == 'R' || align == 'r') 
+	else if (align == "R" || align == "r") 
 	{
 		// Align text to right.
 		coords[0] = coords[0] - length * scale;
@@ -161,7 +161,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
 	}
 	// Left allign the text.
-	else if (align == 'L' || align == 'l') 
+	else if (align == "L" || align == "l") 
 	{
 		// Place on top of the coordinate.
 		coords[1] = coords[1] + height * scale;
@@ -178,13 +178,13 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 // Draws the demo drawing.
 void BaseEngineGL::drawDemo(unsigned int loopCount)
 {
-	for (int i = 0; i <= loopCount * 3; i += 3)
+	for (unsigned int i = 0; i <= loopCount * 3; i += 3)
 	{
-		for (int k = 0; k <= loopCount * 3; k += 3)
+		for (unsigned int k = 0; k <= loopCount * 3; k += 3)
 		{
 			// Draw filled triangle example.
 			float ftPos1[2] = { -1.0f + i, -1.0f + k };
-			float ftPos2[2] = { -1.0f + i, -0.5 + k };
+			float ftPos2[2] = { -1.0f + i, -0.5f + k };
 			float ftPos3[2] = { -1.5f + i, -1.0f + k };
 			float ftColor[4] = { 0.0f, 1.0f, 1.0f, 1.0f };
 			drawTriangleFilled(ftPos1, ftPos2, ftPos3, ftColor);
@@ -192,20 +192,20 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			// Draw clear quad.
 			float cqCoords[2] = { 0.0f + i, 0.0f + k };
 			float cqColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawQuadClear(cqCoords, 2, 2, cqColor);
+			drawQuadClear(cqCoords, 2.0f, 2.0f, cqColor);
 
 			// Draw filled quad.
 			float fqCoords[2] = { -0.5f + i, 0.5f + k };
 			float fqColor[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
-			drawQuadFilled(fqCoords, 0.25, 0.3, fqColor);
+			drawQuadFilled(fqCoords, 0.25f, 0.3f, fqColor);
 
 			// Draw filed ciricle.
 			float coords1[2] = { 0.0f + i, 0.0f + k };
 			float color[4] = { 1.0f, 0.6f, 0.0f, 1.0f };
-			drawCircleFilled(coords1, 0.2, color);
+			drawCircleFilled(coords1, 0.2f, color);
 			// Draw clear ciricle.
-			float coords2[2] = { i, -0.75f + k };
-			drawCircleClear(coords2, 0.2, color);
+			float coords2[2] = { (float)i, -0.75f + k };
+			drawCircleClear(coords2, 0.2f, color);
 
 			// Draw clear triangle example.
 			float ctPos1[2] = { 1.0f + i, -1.0f + k };
@@ -226,8 +226,8 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
-			drawCircleFilled(pos, 0.01, color);
-			drawText(text, pos, colorText, 1.0f, 'C');
+			drawCircleFilled(pos, 0.01f, color);
+			drawText(text, pos, colorText, 1.0f, "C");
 		}
 	}
 	// Load the CPU buffers into the GPU.
@@ -262,65 +262,95 @@ void BaseEngineGL::autoCenter()
 	m_translationMatrixBase = glm::mat4(1.0f);
 	m_rotationMatrixBase = glm::mat4(1.0f);
 
-	// Init min/max values.
-	float max[2] = { m_linesCPU[0].position[0], m_linesCPU[0].position[1] };
-	float min[2] = { m_linesCPU[0].position[0], m_linesCPU[0].position[1] };
+	float max[2] = { 0, 0 };
+	float min[2] = { 0, 0 };
 
 	//----------------------------------------------------------------------
 	// Lines.
 	//----------------------------------------------------------------------
 
-	// Find the maximum and minimum values for x and y.
-	for (int i=1; i< m_linesCPU.size(); i++)
-	{	
-		// Check max for x.
-		if (m_linesCPU[i].position[0] > max[0])
+	// If lines is not empty.
+	if (m_linesCPU.size())
+	{
+		// Init min/max values.
+		max[0] = m_linesCPU[0].position[0];
+		max[1] = m_linesCPU[0].position[1];
+		min[0] = m_linesCPU[0].position[0];
+		max[1] = m_linesCPU[0].position[1];
+
+		// Find the maximum and minimum values for x and y.
+		for (int i = 1; i < m_linesCPU.size(); i++)
 		{
-			max[0] = m_linesCPU[i].position[0];
+			// Check max for x.
+			if (m_linesCPU[i].position[0] > max[0])
+			{
+				max[0] = m_linesCPU[i].position[0];
+			}
+			// Check min for x.
+			else if (m_linesCPU[i].position[0] < min[0])
+			{
+				min[0] = m_linesCPU[i].position[0];
+			}
+			// Check max for y.
+			if (m_linesCPU[i].position[1] > max[1])
+			{
+				max[1] = m_linesCPU[i].position[1];
+			}
+			// Check min for y.
+			else if (m_linesCPU[i].position[1] < min[1])
+			{
+				min[1] = m_linesCPU[i].position[1];
+			}
 		}
-		// Check min for x.
-		else if (m_linesCPU[i].position[0] < min[0])
-		{
-			min[0] = m_linesCPU[i].position[0];
-		}
-		// Check max for y.
-		if (m_linesCPU[i].position[1] > max[1])
-		{
-			max[1] = m_linesCPU[i].position[1];
-		}
-		// Check min for y.
-		else if (m_linesCPU[i].position[1] < min[1])
-		{
-			min[1] = m_linesCPU[i].position[1];
-		}
+	}
+	// If lines is empty init with triangles.
+	else if (m_trianglesCPU.size())
+	{
+		// Init min/max values.
+		max[0] = m_trianglesCPU[0].position[0];
+		max[1] = m_trianglesCPU[0].position[1];
+		min[0] = m_trianglesCPU[0].position[0];
+		max[1] = m_trianglesCPU[0].position[1];
+	}
+	// If triangels is empty init with textured triangles.
+	else if (m_texturedTrianglesCPU.size()) 
+	{
+		// Init min/max values.
+		max[0] = m_texturedTrianglesCPU[0].position[0];
+		max[1] = m_texturedTrianglesCPU[0].position[1];
+		min[0] = m_texturedTrianglesCPU[0].position[0];
+		max[1] = m_texturedTrianglesCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
 	// Triangles.
 	//----------------------------------------------------------------------
 
-	// Find the maximum and minimum values for x and y.
-	for (int i = 0; i < m_trianglesCPU.size(); i++)
+	if (m_trianglesCPU.size())
 	{
-		// Check max for x.
-		if (m_trianglesCPU[i].position[0] > max[0])
+		// Find the maximum and minimum values for x and y.
+		for (int i = 0; i < m_trianglesCPU.size(); i++)
 		{
-			max[0] = m_trianglesCPU[i].position[0];
-		}
-		// Check min for x.
-		else if (m_trianglesCPU[i].position[0] < min[0])
-		{
-			min[0] = m_trianglesCPU[i].position[0];
-		}
-		// Check max for y.
-		if (m_trianglesCPU[i].position[1] > max[1])
-		{
-			max[1] = m_trianglesCPU[i].position[1];
-		}
-		// Check min for y.
-		else if (m_trianglesCPU[i].position[1] < min[1])
-		{
-			min[1] = m_trianglesCPU[i].position[1];
+			// Check max for x.
+			if (m_trianglesCPU[i].position[0] > max[0])
+			{
+				max[0] = m_trianglesCPU[i].position[0];
+			}
+			// Check min for x.
+			else if (m_trianglesCPU[i].position[0] < min[0])
+			{
+				min[0] = m_trianglesCPU[i].position[0];
+			}
+			// Check max for y.
+			if (m_trianglesCPU[i].position[1] > max[1])
+			{
+				max[1] = m_trianglesCPU[i].position[1];
+			}
+			// Check min for y.
+			else if (m_trianglesCPU[i].position[1] < min[1])
+			{
+				min[1] = m_trianglesCPU[i].position[1];
+			}
 		}
 	}
 
@@ -328,28 +358,31 @@ void BaseEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	// Find the maximum and minimum values for x and y.
-	for (int i = 0; i < m_texturedTrianglesCPU.size(); i++)
+	if (m_texturedTrianglesCPU.size())
 	{
-		// Check max for x.
-		if (m_texturedTrianglesCPU[i].position[0] > max[0])
+		// Find the maximum and minimum values for x and y.
+		for (int i = 0; i < m_texturedTrianglesCPU.size(); i++)
 		{
-			max[0] = m_texturedTrianglesCPU[i].position[0];
-		}
-		// Check min for x.
-		else if (m_texturedTrianglesCPU[i].position[0] < min[0])
-		{
-			min[0] = m_texturedTrianglesCPU[i].position[0];
-		}
-		// Check max for y.
-		if (m_texturedTrianglesCPU[i].position[1] > max[1])
-		{
-			max[1] = m_texturedTrianglesCPU[i].position[1];
-		}
-		// Check min for y.
-		else if (m_texturedTrianglesCPU[i].position[1] < min[1])
-		{
-			min[1] = m_texturedTrianglesCPU[i].position[1];
+			// Check max for x.
+			if (m_texturedTrianglesCPU[i].position[0] > max[0])
+			{
+				max[0] = m_texturedTrianglesCPU[i].position[0];
+			}
+			// Check min for x.
+			else if (m_texturedTrianglesCPU[i].position[0] < min[0])
+			{
+				min[0] = m_texturedTrianglesCPU[i].position[0];
+			}
+			// Check max for y.
+			if (m_texturedTrianglesCPU[i].position[1] > max[1])
+			{
+				max[1] = m_texturedTrianglesCPU[i].position[1];
+			}
+			// Check min for y.
+			else if (m_texturedTrianglesCPU[i].position[1] < min[1])
+			{
+				min[1] = m_texturedTrianglesCPU[i].position[1];
+			}
 		}
 	}
 

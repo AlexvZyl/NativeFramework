@@ -44,7 +44,7 @@ void DesignEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
 //  Mouse Scroll event.
 //----------------------------------------------------------------------------------------------------------------------
 
-void DesignEngineGL::mouseScrollEvent(float pixelCoords[2], int yOffset)
+void DesignEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 {
 	// Call the base engine event.
 	BaseEngineGL::mouseScrollEvent(pixelCoords, yOffset);

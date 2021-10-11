@@ -20,7 +20,7 @@ DesignEngineGL::DesignEngineGL(stateMachine* states) : BaseEngineGL(states)
 	std::cout << "[OPENGL][DESIGN ENGINE] Starting...\n";
 
 	float color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
-	m_mousePoint = new MousePoint(color, 0.015, 20, &m_projectionMatrix, m_states);
+	m_mousePoint = new MousePoint(color, 0.015f, 20, &m_projectionMatrix, m_states);
 
 	std::cout << "[OPENGL][DESIGN ENGINE] Done.\n";
 }

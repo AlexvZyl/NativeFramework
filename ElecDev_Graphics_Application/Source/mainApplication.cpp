@@ -520,7 +520,8 @@ void deQueueInput(stateMachine* states) {
             try {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 9; i++)
+                std::string align;
+                for (size_t i = 0; i < 8; i++)
                 {
                     // Read text.
                     if (i == 0)
@@ -528,14 +529,20 @@ void deQueueInput(stateMachine* states) {
                         text = temp.parameters.substr(0, temp.parameters.find(";"));
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
-                    // Read parameters,
+                    // Read tex alignment.
+                    if (i == 7) 
+                    {
+                        align = temp.parameters.substr(0, temp.parameters.find(";"));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    // Read parameters.
                     else
                     {
                         params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
                 }
-                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], params[7]);
+                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
             }
             catch (const std::exception& e)
             {

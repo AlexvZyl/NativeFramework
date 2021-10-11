@@ -6,8 +6,8 @@ This code contains the class that handles the mouse point that snaps to componen
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "mousePoint.h"
 #include "../../Resources/resource.h"
+#include "mousePoint.h"
 
 const float PI = 3.14159265358979323f;
 
@@ -38,7 +38,7 @@ MousePoint::MousePoint(float color[4], float radius, unsigned int resolution, gl
 	float coords[2] = { 0,0 };
 
 	// Create triangles requried to draw a circle.
-	for (int i = 0; i <= resolution; i++)
+	for (unsigned int i = 0; i <= resolution; i++)
 	{
 		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / resolution);
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / resolution);

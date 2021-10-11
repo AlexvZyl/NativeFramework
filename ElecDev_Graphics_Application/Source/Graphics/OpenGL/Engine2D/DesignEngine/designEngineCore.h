@@ -57,7 +57,7 @@ public:
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight();
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
-	virtual void mouseScrollEvent(float pixelCoords[2], int yOffset);
+	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 
 	//--------------------------------------------------------------------------------------------------------------------
 

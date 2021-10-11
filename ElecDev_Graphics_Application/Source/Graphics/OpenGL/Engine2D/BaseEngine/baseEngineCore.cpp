@@ -2,13 +2,10 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Class include.
-#include "baseEngineCore.h"
 // Needed to load resources.
 #include "../../Resources/resource.h"
-
-#include "Misc/stb_image.h"
-
+// Class include.
+#include "baseEngineCore.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
