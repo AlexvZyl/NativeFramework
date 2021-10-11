@@ -262,8 +262,6 @@ void BaseEngineGL::autoCenter()
 	m_translationMatrixBase = glm::mat4(1.0f);
 	m_rotationMatrixBase = glm::mat4(1.0f);
 
-	// Dimensions of the drawing.
-	// These values are calculated in the following loops.
 	float max[2] = { 0, 0 };
 	float min[2] = { 0, 0 };
 
@@ -391,8 +389,9 @@ void BaseEngineGL::autoCenter()
 	//----------------------------------------------------------------------
 
 	// Calculate the values to translate.
-	float size[2] = { std::abs(max[0] - min[0]), std::abs(max[1] - min[1]) };
 	float translate[2];
+	float size[2] = { std::abs(max[0] - min[0]), std::abs(max[1] - min[1]) };
+	
 	translate[0] = -min[0] - (size[0] / 2);
 	translate[1] = -min[1] - (size[1] / 2);
 
@@ -405,14 +404,14 @@ void BaseEngineGL::autoCenter()
 	// centered around (0.0).
 	if (size[0] > size[1]) 
 	{
-		float scale = size[0]/2;
+		float scale = std::abs(size[0]/2);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 	else 
 	{
-		float scale = size[1]/2;
+		float scale = std::abs(size[1]/2);
 		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
 		// Update base matrix.
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
