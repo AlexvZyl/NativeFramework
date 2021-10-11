@@ -166,7 +166,7 @@ public:
 	void drawQuadFilled(float position[2], float width, float height, float color[4]);
 	void drawCircleClear(float position[2], float radius, float color[4]);
 	void drawCircleFilled(float position[2], float radius, float color[4]);
-	void drawText(std::string text, float coords[2], float color[4], float scale, char align);
+	void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
 	void drawDemo(unsigned int loopCount);											// Draw a demo of the capabilities.
 	void autoCenter();
 	void updateBuffers();				

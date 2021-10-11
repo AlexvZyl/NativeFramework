@@ -240,12 +240,35 @@ void GraphicsHandler::drawCircleFilled(std::string windowName, float coords[2], 
 }
 
 // Adds text to the VBO object.
-void GraphicsHandler::drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, char align)
+void GraphicsHandler::drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, std::string align)
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))
 	{
 		try {
+
+			// Remove leading white spaces.
+			while (align[0] == ' ')
+			{
+				align.erase(align.begin());
+			}
+			// Remove white spaces at end.
+			while (align[align.length() - 1] == ' ')
+			{
+				align.pop_back();
+			}
+
+			// Remove leading white spaces.
+			while (text[0] == ' ')
+			{
+				text.erase(text.begin());
+			}
+			// Remove white spaces at end.
+			while (text[text.length() - 1] == ' ')
+			{
+				text.pop_back();
+			}
+
 			// Render the text.
 			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale, align);
 		}
