@@ -169,6 +169,9 @@
     <ClCompile Include="Source\Graphics\graphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designMouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DMouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DEngine.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
@@ -200,6 +203,8 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engines3D\base3DEngine.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
