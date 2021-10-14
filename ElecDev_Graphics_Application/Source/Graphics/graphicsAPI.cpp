@@ -22,13 +22,13 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	// Check if name already used.
 	if (isWindowValid(windowName))
 	{
-		std::cout << red << "\n[INTERFACE] [ERROR]" << white << " Name '" << windowName << "' already used.\n";
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " Name '" << windowName << "' already used.\n";
 		std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 	}
 	// Prevent 'NULL' being used as a  name.
 	else if (windowName == "NULL")
 	{
-		std::cout << red << "\n[INTERFACE] [ERROR]" << white << " 'NULL' is not a valid name. It is reserved for the inactive state.\n";
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " 'NULL' is not a valid name. It is reserved for the inactive state.\n";
 		std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 	}
 	else
@@ -78,7 +78,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 		// Catch error.
 		else 
 		{
-			std::cout << red << "\n[INTERFACE] [ERROR]" << white << " '" << engineType << "' is not a valid engine type.\n";
+			std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << engineType << "' is not a valid engine type.\n";
 			std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 		}
 	}
