@@ -64,7 +64,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
 * ⬜ Add text kerning.
 * ⬜ Move over to smart pointers for better memory management.
-* ⬜ Fix cursor position calculation with text.
+* ⬜ Fix cursor position calculation with text in the text renderer.
+* ⬜ Fix naming convention.
 
 #### Raynhardt 
 * ⬜ Multi View port
