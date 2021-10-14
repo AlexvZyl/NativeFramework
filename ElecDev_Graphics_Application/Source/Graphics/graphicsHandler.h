@@ -15,6 +15,8 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Engine2D/BaseEngine/baseEngineCore.h"
 // Design engine.
 #include "OpenGL/Engine2D/DesignEngine/designEngineCore.h"
+// 3D Engine.
+#include "OpenGL/Engines3D/base3DEngine.h"
 
 //  General.
 #include <string>
@@ -33,7 +35,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Type that holds the different engines available.
 enum class EngineType
 {
-	BaseEngineGL = 0, DesignEngineGL = 1
+	BaseEngineGL = 0, DesignEngineGL = 1, Base3DEngineGL = 2
 };
 
 // Data type that holds the window that is to be drawn, as well as information regarding the window.
@@ -57,7 +59,7 @@ struct RenderWindowGL
 	bool close = true;
 
 	// Constructor.
-	RenderWindowGL(stateMachine* states, EngineType engineType)
+	RenderWindowGL(stateMachine* states, EngineType engineType) 
 	{
 		if (engineType == EngineType::BaseEngineGL) 
 		{
@@ -68,6 +70,11 @@ struct RenderWindowGL
 		{
 			engineGL =  new DesignEngineGL(states);
 			engineType = EngineType::DesignEngineGL;
+		}
+		else if (engineType == EngineType::Base3DEngineGL)
+		{
+			engineGL = new Base3DEngineGL(states);
+			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
 		viewportDimentions[1] = engineGL->m_imGuiViewportDimensions[1];
@@ -165,6 +172,8 @@ public:
 	void addWindow(std::string windowName, std::string engineType);
 	// Removes an MCC from the dict.
 	void removeWindow(std::string windowName);
+	void windowError(std::string windowName);
+	void parametersError(const std::exception &e);
 
 	// Testing.
 	// --------------------------------

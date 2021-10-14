@@ -15,7 +15,7 @@
 BaseEngineGL::BaseEngineGL(stateMachine* states)
 	:m_states(states)
 {
-	std::cout << "[OPENGL][BASE ENGINE] Starting...\n";
+	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
 	//---------------------------------------------------------------------------------------
 	// Compile shaders.
@@ -47,7 +47,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Save projection values to be used with resizing of the window.
 	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
 	// Create projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], -1.0f, 1.0f);
+	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], 0.1f, 1.0f);
 
 	// Assign matrices to basic shader.
 	m_basicShader->bind();
@@ -115,7 +115,8 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	//---------------------------------------------------------------------------------------
 
 	// Done.
-	std::cout << "[OPENGL][BASE ENGINE] Done.\n";
+	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 2D engine done.";
+	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 
 };
 

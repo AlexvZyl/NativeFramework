@@ -26,6 +26,9 @@
 #include "Resources/resource.h"
 #include <Windows.h>
 
+// Console coloring.
+#include "External/Misc/ConsoleColor.h"
+
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
 
@@ -51,6 +54,7 @@ void deQueueInput(stateMachine* states);
 void readingIn(stateMachine* states);
 constexpr size_t hash(const char* str);
 void procesInput(std::string inString, stateMachine* states);
+void exceptionLog(const std::exception& e);
 
 /*=======================================================================================================================================*/
 /* Variables/Globals/Defines.                                                                                                            */
@@ -68,7 +72,7 @@ GraphicsHandler* graphicsHandler;
 // GLFW error handler.
 static void glfw_error_callback(int error, const char* description)
 {
-    fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
+    fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white,  "%d: %s\n", error, description);
 }
 
 /*=======================================================================================================================================*/
@@ -180,12 +184,12 @@ int main(int, char**)
     // OpenGL loader error handler.
     if (err)
     {
-        fprintf(stderr, "[OPENGL][ERROR] Failed to initialize OpenGL loader!\n");
+        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white,   " Failed to initialize OpenGL loader!\n");
         return 1;
     }
 
     // Print OpenGL version.
-    std::cout << "[OPENGL][INFO] Loaded OpenGL version: " << glGetString(GL_VERSION) << ".\n\n";
+    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version : " << glGetString(GL_VERSION) << ".";
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI & OpenGL setup. 
@@ -222,15 +226,17 @@ int main(int, char**)
     // Viewport.
     int screen_width, screen_height;
     glfwGetFramebufferSize(window, &screen_width, &screen_height);
-    glViewport(0, 0, screen_width, screen_height);
+    GLCall(glViewport(0, 0, screen_width, screen_height));
 
     // Setup mouse callbacks.
     glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
     glfwSetCursorPosCallback(window, mouseMoveEvent);       // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);        // Mouse scroll event.
 
-    // Enable MSAA in OpenGL.
-    glEnable(GL_MULTISAMPLE);
+    // OpenGL inits.
+    GLCall(glEnable(GL_MULTISAMPLE));       // MSAA.
+    GLCall(glEnable(GL_DEPTH_TEST));        // Depth testing (the z buffer).
+    GLCall(glEnable(GL_DEPTH_BUFFER_BIT));  // 
 
     // Create the state machine variables.
     stateMachine* states = new stateMachine();
@@ -256,6 +262,9 @@ int main(int, char**)
     // Thread reading inputs from pipeline.
     std::thread t1(readingIn, states);
 
+    // Start input.
+    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
+
     // [MAIN LOOP] Graphics Pipeline
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
@@ -267,14 +276,14 @@ int main(int, char**)
         else { glfwPollEvents(); }        // App runs continuously.
     
         // Init colors for OpenGL.
-        glClear(GL_COLOR_BUFFER_BIT);
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
      
         // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
         graphicsHandler->renderGraphics();
 
         // Assign values to viewport for ImGUI.
         glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
+        GLCall(glViewport(0, 0, display_w, display_h));
 
         // Render ImGUI to screen.
         guiHandler.renderGui(io);
@@ -290,6 +299,9 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    // Log exiting.
+    std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
 
     // Close application.
     glfwDestroyWindow(window);
@@ -354,7 +366,8 @@ void procesInput(std::string inString, stateMachine* states)
         // Error output of the command is invalid.
         default:
         {
-            std::cout << "[INTERFACE][ERROR] '" << command << "' type invalid. \n\n";
+            std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << command << "' type invalid.\n";
+            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
             break;
         }
     }
@@ -415,7 +428,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -433,7 +446,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -451,7 +464,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -469,7 +482,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -487,7 +500,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -505,7 +518,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -523,7 +536,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -558,7 +571,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -573,7 +586,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -586,7 +599,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -601,7 +614,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -614,7 +627,7 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
@@ -627,18 +640,26 @@ void deQueueInput(stateMachine* states) {
             }
             catch (const std::exception& e)
             {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+                exceptionLog(e);
             }
             break;
 
         default:
-            std::cout << "[INTERFACE][ERROR] '" << temp.command.c_str() << "' function invalid. \n\n";
+            std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
+            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
             break;
         }
 
         // Remove command from queue.
         states->inputQueueMCC.pop();
     }
+}
+
+// Print the exception message to the terminal.
+void exceptionLog(const std::exception& e) 
+{
+    std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
+    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 
 /*=======================================================================================================================================*/

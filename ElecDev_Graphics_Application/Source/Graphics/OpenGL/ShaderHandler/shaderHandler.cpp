@@ -141,7 +141,7 @@ int Shader::getUniformLocation(const std::string& name)
     
     // Find uniform.
     GLCall(int location = glGetUniformLocation(m_rendererID, name.c_str()));
-    if (location == -1) { std::cout << "[SHADER ERROR] Uniform '" << name << "' does not exist.\n"; }
+    if (location == -1) { std::cout << red << "\n[OPENGL] [ERROR] : " << white << "Shader error : Uniform '" << name << "' does not exist.\n"; }
     // Add the uniform to the cache.
     m_uniformLocationCache[name] = location;
 
@@ -160,7 +160,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             GLCall( glGetShaderInfoLog(shader, 1024, NULL, infoLog) );
-            std::cout << "[OPENGL][ERROR][SHADER COMPILATION] Type: " << type << "\n" << infoLog << "\n";
+            std::cout << red << "\n[OPENGL] [ERROR] : " << white << "Shader compilation type : " << type << "\n" << infoLog << "\n";
         }
     }
     else
@@ -169,12 +169,12 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             GLCall( glGetProgramInfoLog(shader, 1024, NULL, infoLog) );
-            std::cout << "[OPENGL][ERROR][SHADER LINKING] Type: " << type << "\n" << infoLog << "\n";
+            std::cout << red << "\n[OPENGL] [ERROR] : " << white << "Shader compilation type : " << type << "\n" << infoLog << "\n";
         }
         else
         {
             // Print success message.
-            std::cout << "[OPENGL][SHADERS] " << type << " linked succesfully.\n";
+            std::cout << blue << "\n[OPENGL] [INFO] : " << white << type << " shader linked succesfully.";
         }
     }
 }

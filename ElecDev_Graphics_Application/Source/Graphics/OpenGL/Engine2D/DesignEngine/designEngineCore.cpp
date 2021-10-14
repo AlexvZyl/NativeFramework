@@ -17,12 +17,13 @@ The interactive engine (the one where elements can be drawn is handled in design
 // Constructor.
 DesignEngineGL::DesignEngineGL(stateMachine* states) : BaseEngineGL(states)
 {
-	std::cout << "[OPENGL][DESIGN ENGINE] Starting...\n";
+	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
 	float color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 	m_mousePoint = new MousePoint(color, 0.015f, 20, &m_projectionMatrix, m_states);
 
-	std::cout << "[OPENGL][DESIGN ENGINE] Done.\n";
+	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
+	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 
 // Destructor.

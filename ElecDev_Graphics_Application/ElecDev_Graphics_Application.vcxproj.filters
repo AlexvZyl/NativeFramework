@@ -81,6 +81,9 @@
     <ClCompile Include="Source\Graphics\graphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designMouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DEngine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DMouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1224,6 +1227,8 @@
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engines3D\base3DEngine.h" />
+    <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
