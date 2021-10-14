@@ -83,6 +83,10 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Roadmap
 
+### ElecDev App General
+
+- ⬜ Implement logging system with spdlog.
+
 ### Base Engine
 - ✅ Structure code and setup handlers:
     - ✅ Main app.
