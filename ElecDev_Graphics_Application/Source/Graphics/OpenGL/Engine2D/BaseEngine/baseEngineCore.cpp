@@ -116,7 +116,6 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 2D engine done.";
-	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 
 };
 

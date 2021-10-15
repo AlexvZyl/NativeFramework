@@ -16,17 +16,13 @@ Base3DEngineGL::Base3DEngineGL(stateMachine* states) : BaseEngineGL(states)
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
 
 	// The background will not be needed.
-	//delete m_backgroundVAO;
-
-	// Enable depth buffer.
-	GLCall(glEnable(GL_DEPTH_BUFFER_BIT));
+	//delete m_backgroundVAO; 
 
 	// The projection matrix has to be recalculated for a 3D projection, using a perspective projection.
 	m_projectionMatrix = glm::perspective(glm::radians(90.0f), m_imGuiViewportDimensions[0]/m_imGuiViewportDimensions[1], 0.1f, 100.0f);
 
 	// Done log.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 3D engine done.";
-	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 
 // Destructor.

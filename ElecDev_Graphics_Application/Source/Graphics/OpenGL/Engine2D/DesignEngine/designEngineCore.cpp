@@ -23,7 +23,6 @@ DesignEngineGL::DesignEngineGL(stateMachine* states) : BaseEngineGL(states)
 	m_mousePoint = new MousePoint(color, 0.015f, 20, &m_projectionMatrix, m_states);
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
-	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 
 // Destructor.

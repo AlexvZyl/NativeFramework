@@ -236,7 +236,6 @@ int main(int, char**)
     // OpenGL inits.
     GLCall(glEnable(GL_MULTISAMPLE));       // MSAA.
     GLCall(glEnable(GL_DEPTH_TEST));        // Depth testing (the z buffer).
-    GLCall(glEnable(GL_DEPTH_BUFFER_BIT));  // 
 
     // Create the state machine variables.
     stateMachine* states = new stateMachine();
@@ -275,7 +274,7 @@ int main(int, char**)
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
         else { glfwPollEvents(); }        // App runs continuously.
     
-        // Init colors for OpenGL.
+        // Clear colors for OpenGL.
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
      
         // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
@@ -397,14 +396,17 @@ void deQueueInput(stateMachine* states) {
         inputQueue temp = states->inputQueueMCC.front();
         std::string mccName;
         std::string text;
+        std::string align;
         std::vector<float> params;
 
-        // Switch between different commands.
-        switch (hash(temp.command.c_str())) {
+        // Try the command and catch exceptions.
+        try {
 
-        // Draw line.
-        case hash("drawLine"):
-            try {
+            // Switch between different commands.
+            switch (hash(temp.command.c_str()))
+            {
+                // Draw line.
+            case hash("drawLine"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -413,16 +415,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw clear triangle.
-        case hash("drawTriangleClear"):
-            try {
+                // Draw clear triangle.
+            case hash("drawTriangleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -431,16 +427,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw filled triangle. 
-        case hash("drawTriangleFilled"):
-            try {
+                // Draw filled triangle. 
+            case hash("drawTriangleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -449,16 +439,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw clear quad.
-        case hash("drawQuadClear"):
-            try {
+                // Draw clear quad.
+            case hash("drawQuadClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -467,16 +451,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw filled quad.
-        case hash("drawQuadFilled"):
-            try {
+                // Draw filled quad.
+            case hash("drawQuadFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -485,16 +463,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw clear circle.
-        case hash("drawCircleClear"):
-            try {
+                // Draw clear circle.
+            case hash("drawCircleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -503,16 +475,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw a filled circle.
-        case hash("drawCircleFilled"):
-            try {
+                // Draw a filled circle.
+            case hash("drawCircleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -521,19 +487,12 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw text.
-        case hash("drawText"):
-            try {
+                // Draw text.
+            case hash("drawText"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::string align;
                 for (size_t i = 0; i < 8; i++)
                 {
                     // Read text.
@@ -543,7 +502,7 @@ void deQueueInput(stateMachine* states) {
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
                     // Read tex alignment.
-                    if (i == 7) 
+                    if (i == 7)
                     {
                         align = temp.parameters.substr(0, temp.parameters.find(";"));
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -556,90 +515,62 @@ void deQueueInput(stateMachine* states) {
                     }
                 }
                 graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Add MCC window to draw.
-        case hash("addWindow"):
-            try {
+                // Add MCC window to draw.
+            case hash("addWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 text = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->addWindow(mccName, text);
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Remove MCC window.
-        case hash("removeWindow"):
-            try {
+                // Remove MCC window.
+            case hash("removeWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->removeWindow(mccName);
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Draw the demo.
-        case hash("drawDemo"):
-            try {
+                // Draw the demo.
+            case hash("drawDemo"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Center the drawing around (0,0).
-        case hash("autoCenter"):
-            try {
+                // Center the drawing around (0,0).
+            case hash("autoCenter"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->autoCenter(mccName);
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        // Load CPU buffers to GPU.
-        case hash("updateBuffers"):
-            try {
+                // Load CPU buffers to GPU.
+            case hash("updateBuffers"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->updateBuffers(mccName);
-            }
-            catch (const std::exception& e)
-            {
-                exceptionLog(e);
-            }
-            break;
+                break;
 
-        default:
-            std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
+            default:
+                std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
+                break;
+            }
+            
             std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
-            break;
-        }
 
-        // Remove command from queue.
-        states->inputQueueMCC.pop();
+            // Remove command from queue.
+            states->inputQueueMCC.pop();
+        }
+        // Catch error and print log.              
+        catch (const std::exception& e)
+        {
+            exceptionLog(e);
+        }
     }
 }
 

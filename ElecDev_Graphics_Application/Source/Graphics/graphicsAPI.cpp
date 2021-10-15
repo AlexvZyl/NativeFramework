@@ -79,7 +79,6 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 		else 
 		{
 			std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << engineType << "' is not a valid engine type.\n";
-			std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 		}
 	}
 }
