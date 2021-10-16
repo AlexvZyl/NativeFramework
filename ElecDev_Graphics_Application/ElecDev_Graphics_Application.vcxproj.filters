@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseAPI.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_API.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseEngineCore.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_Engine.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngineCore.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_Engine.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\ErrorHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\frameBufferObject.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\FrameBufferObject.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\External\GLAD\src\glad.c">
@@ -22,7 +22,7 @@
     <ClCompile Include="Source\External\glm\detail\glm.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\graphicsHandler.cpp">
+    <ClCompile Include="Source\Graphics\GraphicsHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\guiHandler.cpp">
@@ -49,41 +49,42 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\mainApplication.cpp">
+    <ClCompile Include="Source\MainApplication.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseMouseHandler.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_MouseHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\Peripherals\mousePoint.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Peripherals\MousePoint.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\ShaderHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\TextRenderer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\VertexArrayObject.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
-    <ClCompile Include="Source\Resources\resourceHandler.cpp" />
+    <ClCompile Include="Source\Resources\ResourceHandler.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
-    <ClCompile Include="Source\Graphics\graphicsAPI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designAPI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designMouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DEngine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DMouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines3D\base3DAPI.cpp" />
+    <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_API.cpp" />
+    <ClCompile Include="Source\Logging\logHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -116,7 +117,7 @@
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\autohint.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\baseEngineCore.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_Engine.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp">
@@ -191,7 +192,7 @@
     <ClInclude Include="Source\External\glm\gtc\constants.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\designEngineCore.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_Engine.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\freetype\Includes\dlg\dlg.h">
@@ -209,7 +210,7 @@
     <ClInclude Include="Source\External\glm\gtc\epsilon.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\errorHandler.h">
+    <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\ErrorHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\euler_angles.hpp">
@@ -242,7 +243,7 @@
     <ClInclude Include="Source\External\glm\gtx\fast_trigonometry.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\frameBufferObject.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\FrameBufferObject.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftcalc.h">
@@ -317,7 +318,7 @@
     <ClInclude Include="Source\External\glm\gtx\gradient_paint.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\graphicsHandler.h">
+    <ClInclude Include="Source\Graphics\GraphicsHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI\guiHandler.h">
@@ -695,7 +696,7 @@
     <ClInclude Include="Source\External\glm\gtx\mixed_product.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\DesignEngine\Peripherals\mousePoint.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Peripherals\MousePoint.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\simd\neon.h">
@@ -719,7 +720,7 @@
     <ClInclude Include="Source\External\glm\gtx\number_precision.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\ShaderHandler\shaderHandler.h">
+    <ClInclude Include="Source\Graphics\OpenGL\ShaderHandler\ShaderHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\optimum_pow.hpp">
@@ -815,7 +816,7 @@
     <ClInclude Include="Source\External\glm\gtc\reciprocal.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Resources\resource.h">
+    <ClInclude Include="Source\Resources\ResourceHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Boost\Includes\bind\detail\result_traits.hpp">
@@ -872,7 +873,7 @@
     <ClInclude Include="Source\External\glm\gtx\spline.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\stateMachine.h">
+    <ClInclude Include="Source\StateMachine.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h">
@@ -956,7 +957,7 @@
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\t1types.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\textRenderer.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\TextRenderer.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\texture.hpp">
@@ -1211,7 +1212,7 @@
     <ClInclude Include="Source\External\glm\ext\vector_ulp.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engine2D\BaseEngine\Peripherals\vertexArrayObject.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\VertexArrayObject.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\GLEW\include\GL\wglew.h">
@@ -1227,8 +1228,104 @@
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines3D\base3DEngine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
+    <ClInclude Include="Source\External\SPDLog\cfg\argv.h" />
+    <ClInclude Include="Source\External\SPDLog\cfg\env.h" />
+    <ClInclude Include="Source\External\SPDLog\cfg\helpers.h" />
+    <ClInclude Include="Source\External\SPDLog\cfg\helpers-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\backtracer.h" />
+    <ClInclude Include="Source\External\SPDLog\details\backtracer-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\circular_q.h" />
+    <ClInclude Include="Source\External\SPDLog\details\console_globals.h" />
+    <ClInclude Include="Source\External\SPDLog\details\file_helper.h" />
+    <ClInclude Include="Source\External\SPDLog\details\file_helper-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\fmt_helper.h" />
+    <ClInclude Include="Source\External\SPDLog\details\log_msg.h" />
+    <ClInclude Include="Source\External\SPDLog\details\log_msg_buffer.h" />
+    <ClInclude Include="Source\External\SPDLog\details\log_msg_buffer-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\log_msg-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\mpmc_blocking_q.h" />
+    <ClInclude Include="Source\External\SPDLog\details\null_mutex.h" />
+    <ClInclude Include="Source\External\SPDLog\details\os.h" />
+    <ClInclude Include="Source\External\SPDLog\details\os-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\periodic_worker.h" />
+    <ClInclude Include="Source\External\SPDLog\details\periodic_worker-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\registry.h" />
+    <ClInclude Include="Source\External\SPDLog\details\registry-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\synchronous_factory.h" />
+    <ClInclude Include="Source\External\SPDLog\details\tcp_client.h" />
+    <ClInclude Include="Source\External\SPDLog\details\tcp_client-windows.h" />
+    <ClInclude Include="Source\External\SPDLog\details\thread_pool.h" />
+    <ClInclude Include="Source\External\SPDLog\details\thread_pool-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\details\windows_include.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\args.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\chrono.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\color.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\compile.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\core.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\format.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\format-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\locale.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\os.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\ostream.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\printf.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\ranges.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bundled\xchar.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\bin_to_hex.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\chrono.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\compile.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\fmt.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\ostr.h" />
+    <ClInclude Include="Source\External\SPDLog\fmt\xchar.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\android_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\ansicolor_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\ansicolor_sink-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\base_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\base_sink-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\basic_file_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\basic_file_sink-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\daily_file_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\dist_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\dup_filter_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\hourly_file_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\mongo_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\msvc_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\null_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\ostream_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\qt_sinks.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\ringbuffer_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\rotating_file_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\rotating_file_sink-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\sink-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\stdout_color_sinks.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\stdout_color_sinks-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\stdout_sinks.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\stdout_sinks-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\syslog_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\systemd_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\tcp_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\win_eventlog_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\wincolor_sink.h" />
+    <ClInclude Include="Source\External\SPDLog\sinks\wincolor_sink-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\async.h" />
+    <ClInclude Include="Source\External\SPDLog\async_logger.h" />
+    <ClInclude Include="Source\External\SPDLog\async_logger-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\common.h" />
+    <ClInclude Include="Source\External\SPDLog\common-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\formatter.h" />
+    <ClInclude Include="Source\External\SPDLog\fwd.h" />
+    <ClInclude Include="Source\External\SPDLog\logger.h" />
+    <ClInclude Include="Source\External\SPDLog\logger-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\pattern_formatter.h" />
+    <ClInclude Include="Source\External\SPDLog\pattern_formatter-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\spdlog.h" />
+    <ClInclude Include="Source\External\SPDLog\spdlog-inl.h" />
+    <ClInclude Include="Source\External\SPDLog\stopwatch.h" />
+    <ClInclude Include="Source\External\SPDLog\tweakme.h" />
+    <ClInclude Include="Source\External\SPDLog\version.h" />
+    <ClInclude Include="Source\Logging\logHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1714,7 +1811,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Source\Resources\resourceHandler.rc">
+    <ResourceCompile Include="Source\Resources\resource.rc">
       <Filter>Source</Filter>
     </ResourceCompile>
   </ItemGroup>

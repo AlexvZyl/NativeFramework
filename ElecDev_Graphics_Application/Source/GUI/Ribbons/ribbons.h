@@ -13,7 +13,7 @@
 #include "../stateMachine.h"
 
 // Resource loading.
-#include "../Resources/resource.h"
+#include "../Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */

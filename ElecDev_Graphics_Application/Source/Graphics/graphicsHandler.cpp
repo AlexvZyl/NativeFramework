@@ -7,7 +7,7 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //  Class include.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "graphicsHandler.h"
+#include "GraphicsHandler.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors & setup.

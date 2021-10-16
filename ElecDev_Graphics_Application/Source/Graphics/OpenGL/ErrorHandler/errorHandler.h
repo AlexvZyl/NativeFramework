@@ -9,14 +9,14 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Console coloring.
+#include <External/Misc/ConsoleColor.h>
+
 // General.
 #include <iostream>
 
 // OpenGL.
 #include <glad/glad.h>
-
-// Console coloring.
-#include <External/Misc/ConsoleColor.h>
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Compiler settings.
