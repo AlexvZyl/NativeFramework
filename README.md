@@ -171,6 +171,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ✅ Add Base3D engine that can have a window instance.
 - ✅ Implement perspective projection matrix.
 - ✅ Create a demo drawing.
+- ⬜ Add a depth buffer to the FBO.
 - ⬜ Implement 3D mouse handling:
     - ⬜ Scrolling.
     - ⬜ Moving.
