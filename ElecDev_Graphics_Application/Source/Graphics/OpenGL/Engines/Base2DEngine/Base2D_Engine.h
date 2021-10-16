@@ -14,22 +14,22 @@ The interactive engine (the one where elements can be drawn is handled in Design
 
 // OpenGL.
 #include <glad/glad.h>
-#include <ShaderHandler/shaderHandler.h>
+#include <ShaderHandler/ShaderHandler.h>
 #include <glm.hpp>
 
 // General.
 #include <iostream>
 
 // Error handling.
-#include <ErrorHandler/errorHandler.h>
+#include <ErrorHandler/ErrorHandler.h>
 #include "../stateMachine.h"
 
 // Buffers.
-#include "Peripherals/vertexArrayObject.h"
-#include "Peripherals/frameBufferObject.h"
+#include "Peripherals/VertexArrayObject.h"
+#include "Peripherals/FrameBufferObject.h"
 
 // Text rendering.
-#include "Peripherals/textRenderer.h"
+#include "Peripherals/TextRenderer.h"
 
 // Window.
 #include <GLFW/glfw3.h>

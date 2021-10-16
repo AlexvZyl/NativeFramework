@@ -9,16 +9,16 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include <ErrorHandler/errorHandler.h>
-#include "ShaderHandler/shaderHandler.h"
+#include <ErrorHandler/ErrorHandler.h>
+#include "ShaderHandler/ShaderHandler.h"
 #include "../stateMachine.h"
 
 // Drawing engine.
-#include "OpenGL/Engines/Base2DEngine/baseEngineCore.h"
+#include "OpenGL/Engines/Base2DEngine/Base2D_Engine.h"
 // Design engine.
-#include "OpenGL/Engines/Design2DEngine/designEngineCore.h"
+#include "OpenGL/Engines/Design2DEngine/Design2D_Engine.h"
 // 3D Engine.
-#include "OpenGL/Engines/Base3DEngine/base3DEngine.h"
+#include "OpenGL/Engines/Base3DEngine/Base3D_Engine.h"
 
 //  General.
 #include <string>
@@ -37,7 +37,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 // Type that holds the different engines available.
 enum class EngineType
 {
-	BaseEngineGL = 0, DesignEngineGL = 1, Base3DEngineGL = 2
+	None = -1, BaseEngineGL = 0, DesignEngineGL = 1, Base3DEngineGL = 2
 };
 
 // Data type that holds the window that is to be drawn, as well as information regarding the window.
@@ -48,7 +48,7 @@ struct RenderWindowGL
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
 	BaseEngineGL* engineGL;
-	EngineType engineType;
+	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
 	ImVec2 viewportDimentions;

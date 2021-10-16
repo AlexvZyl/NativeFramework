@@ -8,7 +8,7 @@ The interactive engine (the one where elements can be drawn is handled in design
 //----------------------------------------------------------------------------------------------------------------------
 
 // Class include.
-#include "designEngineCore.h"
+#include "Design2D_Engine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.

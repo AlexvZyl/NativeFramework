@@ -3,10 +3,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Resource loading.
-#include "../Resources/resource.h"
+#include "../Resources/ResourceHandler.h"
 
 // Class include.
-#include "textRenderer.h"
+#include "TextRenderer.h"
 
 // File reading.
 #include <fstream>

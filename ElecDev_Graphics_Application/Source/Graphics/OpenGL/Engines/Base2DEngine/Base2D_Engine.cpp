@@ -3,9 +3,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // Needed to load resources.
-#include "../../Resources/resource.h"
+#include "../../Resources/ResourceHandler.h"
 // Class include.
-#include "baseEngineCore.h"
+#include "Base2D_Engine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructor & Destructor.
@@ -29,7 +29,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Windows setup.
 	//---------------------------------------------------------------------------------------
 
-	// ImGUI viewport.
+	// ImGUI viewport init.
 	m_imGuiViewportDimensions[0] = 500;
 	m_imGuiViewportDimensions[1] = 500;
 
@@ -166,8 +166,8 @@ void BaseEngineGL::renderLoop()
 	//---------------------------------------------------------------------------------------
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
-	m_linesVAO->render();
 	m_trianglesVAO->render();
+	m_linesVAO->render();
 
 	//---------------------------------------------------------------------------------------
 	// Draw textured entities.
@@ -178,7 +178,7 @@ void BaseEngineGL::renderLoop()
 
 	//---------------------------------------------------------------------------------------
 
-	// Do not continue rendering to a frame buffer.
+	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
 }
 
@@ -206,8 +206,8 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 	// The nomalized mouse coordinates on the users screen.
 	float normalizedScreenCoords[2];
 	// Apply the viewport transform the the pixels.
-	normalizedScreenCoords[0] = (normalizedScreenCoords[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
-	normalizedScreenCoords[1] = (normalizedScreenCoords[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
+	normalizedScreenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
+	normalizedScreenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
 	// Convert to screen vector.
 	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], 0, 1 };
 

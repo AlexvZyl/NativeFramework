@@ -17,7 +17,7 @@
 
 // Resources.
 #include <Misc/stb_image.h>
-#include "Resources/resource.h"
+#include "Resources/ResourceHandler.h"
 
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
@@ -26,7 +26,7 @@
 #include "GUI/guiHandler.h"
 
 // Graphics handler include.
-#include <../Graphics/graphicsHandler.h>
+#include <../Graphics/GraphicsHandler.h>
 
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>

@@ -3,7 +3,7 @@
 //=============================================================================================================================================//
 
 // The base 2D engine.
-#include "base3DEngine.h"
+#include "Base3D_Engine.h"
 
 //=============================================================================================================================================//
 //  Constructor and Destructor.																												   //
@@ -14,9 +14,10 @@ Base3DEngineGL::Base3DEngineGL(stateMachine* states) : BaseEngineGL(states)
 {
 	// Starting log.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
-
+	
 	// The background will not be needed.
 	//delete m_backgroundVAO; 
+	GLCall(glEnable(GL_DEPTH_TEST));
 
 	// The projection matrix has to be recalculated for a 3D projection, using a perspective projection.
 	m_projectionMatrix = glm::perspective(glm::radians(90.0f), m_imGuiViewportDimensions[0]/m_imGuiViewportDimensions[1], 0.1f, 100.0f);
@@ -39,8 +40,10 @@ Base3DEngineGL::~Base3DEngineGL()
 // Rendering loop.
 void Base3DEngineGL::renderLoop() 
 {	
+
 	// Clear the depth buffer.  (The color buffer is already cleared by the main app)
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+
 
 	// Call parent render loop.
 	BaseEngineGL::renderLoop();

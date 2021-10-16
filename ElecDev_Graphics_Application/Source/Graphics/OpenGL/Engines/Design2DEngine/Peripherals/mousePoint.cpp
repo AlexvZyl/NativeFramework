@@ -6,7 +6,7 @@ This code contains the class that handles the mouse point that snaps to componen
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "../../Resources/resource.h"
+#include "../../Resources/ResourceHandler.h"
 #include "mousePoint.h"
 
 const float PI = 3.14159265358979323f;

@@ -7,7 +7,7 @@ API for the graphics of the application.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Class include.
-#include "graphicsHandler.h"
+#include "GraphicsHandler.h"
 
 // ImGUI (GUI software). 
 #include "Implementations/imgui_impl_opengl3.h"

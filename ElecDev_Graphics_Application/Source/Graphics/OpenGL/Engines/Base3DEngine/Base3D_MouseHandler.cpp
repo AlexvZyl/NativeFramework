@@ -2,7 +2,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "base3DEngine.h"
+#include "Base3D_Engine.h"
 
 //=============================================================================================================================================//
 //  Functions.																																   //
@@ -20,6 +20,8 @@ void Base3DEngineGL::mousePressRight()
 
 void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState) 
 {	
+	BaseEngineGL::mouseMoveEvent(pixelCoords, buttonState);
+
 	// Implement rotation.
 	if (buttonState == GLFW_PRESS) 
 	{

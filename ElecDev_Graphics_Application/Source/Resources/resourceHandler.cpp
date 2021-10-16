@@ -3,7 +3,7 @@
 /*=======================================================================================================================================*/
 
 // General.
-#include "resource.h"
+#include "ResourceHandler.h"
 #include <iostream>
 
 // Loading from resource.
@@ -13,7 +13,7 @@
 #pragma comment(lib, "Shlwapi.lib")
 
 // OpenGL error handler.
-#include <ErrorHandler/errorHandler.h>
+#include <ErrorHandler/ErrorHandler.h>
 
 /*=======================================================================================================================================*/
 /* Module.	                                                                                                                             */
