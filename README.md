@@ -20,6 +20,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * Udemy course: [https://www.udemy.com/course/graphics-with-modern-opengl/].  Only buy the courses when they are on discount!
 * OpenGL Docs: [http://docs.gl/]. Very handy to check functions, versions and deprecations.
 * Also has an OpenGL course: [https://www.youtube.com/channel/UCUkRj4qoT1bsWpE_C8lZYoQ].
+* Also good: [https://www.youtube.com/c/OGLDEV/featured].
 
 ***IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!*
 
