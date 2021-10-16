@@ -47,7 +47,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * 🟨 Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
 * ⬜ OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
 * ⬜ Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
-* ⬜ GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.  Might just be the use of predefined IBO's.
+* 🟨 GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.  Might just be the use of predefined IBO's.
 * ✅ Use the docking branch from ImGUI.
 * ✅ Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex.
 * ⬜ Combine basic, textured and text rendering (VAO's and shaders) to reduce draw calls and shader switching.
@@ -168,7 +168,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ### 3D Base Engine
 
-- ⬜ Implement perspective projection matrix.
+- ✅ Add Base3D engine that can have a window instance.
+- ✅ Implement perspective projection matrix.
+- ✅ Create a demo drawing.
 - ⬜ Implement 3D mouse handling:
     - ⬜ Scrolling.
     - ⬜ Moving.
