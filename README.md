@@ -105,8 +105,8 @@ This is the graphics application that is to be used with the ElecDev software.  
     - ✅ GLM.
     - ✅ ImGUI Docking Branch.
 - ✅ Implement matrix mathematics.
-- ✅ Translation, rotation & scaling.
-- ✅ Viewport, Model, View and Porjection matrices.
+    - ✅ Translation, rotation & scaling.
+    - ✅ Viewport, Model, View and Porjection matrices.
 - ✅ Error handler.
 - ✅ Shader handler.
   - ✅ Basic Shader.
@@ -138,9 +138,7 @@ This is the graphics application that is to be used with the ElecDev software.  
   - ✅ Write thread handler from python side for non-pause interface.
   - ✅ Input handler for threads and linked to state machine.
 - ✅ Create terminal API that controls the app.
-
 - ✅ *It is up and running!*
- 
 - ⬜ Create first basic app with simple GUI interface and simple OpenGL drawing:
   - ✅ Incorporate Base Engine.
   - ⬜ GUI interface controls OpenGL engines.
