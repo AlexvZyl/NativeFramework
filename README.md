@@ -68,6 +68,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Move over to smart pointers for better memory management.
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ Fix naming convention.
+* ⬜ Enable MSAA for the FBO.
 
 #### Raynhardt 
 * ⬜ Multi View port
@@ -149,6 +150,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ✅ Add a demo drawing and some form of benchmark.
 - ✅ Redo the window management.  Make window generic so that it can draw any kind of OpenGL engine.
 - ⬜ Implement Index Buffers.  Wil increase performance and reduce memory usage.
+- ⬜ Implement culling.
+- ⬜ Implement stencil buffers.
 
 ### Design Engine (Child of Base Engine)
 
