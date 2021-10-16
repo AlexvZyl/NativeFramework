@@ -15,19 +15,18 @@
 #include "Implementations/imgui_impl_opengl3.h"
 #include "stateMachine.h"
 
+// Resources.
+#include <Misc/stb_image.h>
+#include "Resources/resource.h"
+
+// Console coloring.
+#include "External/Misc/ConsoleColor.h"
+
 // GUI includes.
 #include "GUI/guiHandler.h"
 
 // Graphics handler include.
 #include <../Graphics/graphicsHandler.h>
-
-// Resources.
-#include <Misc/stb_image.h>
-#include "Resources/resource.h"
-#include <Windows.h>
-
-// Console coloring.
-#include "External/Misc/ConsoleColor.h"
 
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>

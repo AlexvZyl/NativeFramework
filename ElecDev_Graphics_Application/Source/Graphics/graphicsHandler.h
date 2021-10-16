@@ -9,24 +9,26 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Core/imgui.h"
+#include <ErrorHandler/errorHandler.h>
+#include "ShaderHandler/shaderHandler.h"
+#include "../stateMachine.h"
 
 // Drawing engine.
-#include "OpenGL/Engine2D/BaseEngine/baseEngineCore.h"
+#include "OpenGL/Engines/Base2DEngine/baseEngineCore.h"
 // Design engine.
-#include "OpenGL/Engine2D/DesignEngine/designEngineCore.h"
+#include "OpenGL/Engines/Design2DEngine/designEngineCore.h"
 // 3D Engine.
-#include "OpenGL/Engines3D/base3DEngine.h"
+#include "OpenGL/Engines/Base3DEngine/base3DEngine.h"
 
 //  General.
 #include <string>
 #include <variant>
 
+// GUI.
+#include "Core/imgui.h"
+
 // OpenGL
 #include <glad/glad.h>
-#include <ErrorHandler/errorHandler.h>
-#include "ShaderHandler/shaderHandler.h"
-#include "../stateMachine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Data

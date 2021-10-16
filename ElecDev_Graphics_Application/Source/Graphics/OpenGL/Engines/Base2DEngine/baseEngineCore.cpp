@@ -95,8 +95,8 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	//---------------------------------------------------------------------------------------
 
 	// Enable blending for alpha channels.
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GLCall(glEnable(GL_BLEND));
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 	m_textureShader->bind();
 	// Load texture for testing.
@@ -110,7 +110,7 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
 	GLCall(glBindTextureUnit(1, m_textRenderer->m_textureID));	// Text Atlas.
-	GLCall(glBindTextureUnit(2, m_texture));	// Testing texture.
+	GLCall(glBindTextureUnit(2, m_texture));					// Testing texture.
 
 	//---------------------------------------------------------------------------------------
 
@@ -195,8 +195,7 @@ unsigned int BaseEngineGL::getRenderedTexID()
 // Function that takes pixel coordinates as input and return the coordinates in the world.
 glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 {
-	// The coordinates on the screen.
-	float screenCoords[2];  
+	
 	// Find the viewpwort dimensions.
 	float viewport[2] = {m_states->renderWindowSize.x, m_states->renderWindowSize.y};
 	// Account for pixel offset.
@@ -204,11 +203,13 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
 	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
 	
+	// The nomalized mouse coordinates on the users screen.
+	float normalizedScreenCoords[2];
 	// Apply the viewport transform the the pixels.
-	screenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
-	screenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
+	normalizedScreenCoords[0] = (normalizedScreenCoords[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
+	normalizedScreenCoords[1] = (normalizedScreenCoords[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
 	// Convert to screen vector.
-	glm::vec4 screenVec = { screenCoords[0], screenCoords[1], 0, 1 };
+	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], 0, 1 };
 
 	// Apply MVP matrices.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;

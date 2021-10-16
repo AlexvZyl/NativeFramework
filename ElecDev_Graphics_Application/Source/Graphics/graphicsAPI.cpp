@@ -23,13 +23,11 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	if (isWindowValid(windowName))
 	{
 		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " Name '" << windowName << "' already used.\n";
-		std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 	}
 	// Prevent 'NULL' being used as a  name.
 	else if (windowName == "NULL")
 	{
 		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " 'NULL' is not a valid name. It is reserved for the inactive state.\n";
-		std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 	}
 	else
 	{
@@ -45,7 +43,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 		}
 
 		// Check engine type.
-		if (engineType == "Base" || engineType == "base")
+		if (engineType == "Base2D" || engineType == "base2D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
@@ -53,9 +51,9 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			m_activeWindow = windowName;
 			// Add window to dictionary.
 			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::BaseEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [Base]";
+			m_windowsDictionary[windowName]->windowName = windowName + " [Base2D]";
 		}
-		else if (engineType == "Design" || engineType == "design")
+		else if (engineType == "Design2D" || engineType == "design2D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
@@ -63,7 +61,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			m_activeWindow = windowName;
 			// Add window to dictionary.
 			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::DesignEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [Design]";
+			m_windowsDictionary[windowName]->windowName = windowName + " [Design2D]";
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
 		{
@@ -362,12 +360,10 @@ void GraphicsHandler::updateBuffers(std::string windowName)
 void GraphicsHandler::windowError(std::string windowName) 
 {
 	std::cout << red << "\n[INTERFACE] [ERROR]" << white << " '" << windowName << "' is an invalid name.\n";
-	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 void GraphicsHandler::parametersError(const std::exception& e) 
 {
 	std::cout << red <<"\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
-	std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

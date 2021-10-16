@@ -57,7 +57,7 @@ void Base3DEngineGL::resizeEvent(int width, int height)
 	m_imGuiViewportDimensions[1] = (float)height;
 
 	// Now recalculate the projection matrix.
-	m_projectionMatrix = glm::perspective(glm::radians(45.0f), m_imGuiViewportDimensions[0] / m_imGuiViewportDimensions[1], -1.0f, 1.0f);
+	m_projectionMatrix = glm::perspective(glm::radians(45.0f), m_imGuiViewportDimensions[0] / m_imGuiViewportDimensions[1], 0.1f, 100.0f);
 
 	// Apply changes to shaders.
 	m_basicShader->bind();
@@ -67,7 +67,6 @@ void Base3DEngineGL::resizeEvent(int width, int height)
 	
 	// Resize the frame buffer.
 	m_frameBuffer->resize(width, height);
-
 }
 
 //=============================================================================================================================================//
