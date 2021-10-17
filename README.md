@@ -60,7 +60,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Buffer sizes are currently static, change to dynamic.
 * ✅ Use SDF (Signed Distance Fields) when rendering text.
 * ✅ Create a resource loader function.
-* ⬜ Mouse events are combined between ImGUI and GLFW.  This might be bad coding.
 * ✅ Fix abstractions.  Code got messy when we started rushing.
 * ✅ Autoresize and scaling does not take into account the length of the text string.
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
@@ -90,6 +89,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 ### ElecDev App General
 
 - ⬜ Implement logging system with spdlog.
+- ⬜ Overhaul event system and mouse handling. (Mouse events are combined between ImGUI and GLFW.  This might be bad coding)
 
 ### Base Engine
 
