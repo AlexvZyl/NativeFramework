@@ -590,34 +590,33 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->updateBuffers(mccName);
                 break;
 
-            default:
-                std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
-                break;
-            }
-            
-            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
-
-        case hash("addGUI"):
-            try {
+            case hash("addGUI"):
                 std::cout << "GUI" << std::endl;
                 std::string guiName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 std::string guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
                 std::string parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 guiHandler->createGUI(guiName, guiPos, parameters);
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        default:
-            std::cout << "[INTERFACE][ERROR] '" << temp.command.c_str() << "' function invalid. \n\n";
-            break;
+            default:
+                std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
+                break;
+            }
+
+            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
+
+            // Remove command from queue.
+            states->inputQueueMCC.pop();
+        }
+        // Catch error and print log.              
+        catch (const std::exception& e)
+        {
+            exceptionLog(e);
         }
     }
 }
+
 
 // Print the exception message to the terminal.
 void exceptionLog(const std::exception& e) 
