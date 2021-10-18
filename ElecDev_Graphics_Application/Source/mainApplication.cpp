@@ -433,6 +433,11 @@ void deQueueInput(stateMachine* states) {
         std::string align;
         std::vector<float> params;
 
+        std::string guiName;
+        std::string guiPos;
+        std::string parameters;
+
+
         // Try the command and catch exceptions.
         try {
 
@@ -592,10 +597,10 @@ void deQueueInput(stateMachine* states) {
 
             case hash("addGUI"):
                 std::cout << "GUI" << std::endl;
-                std::string guiName = temp.parameters.substr(0, temp.parameters.find(";"));
+                guiName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                std::string guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
-                std::string parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
+                parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 guiHandler->createGUI(guiName, guiPos, parameters);
                 break;
 
