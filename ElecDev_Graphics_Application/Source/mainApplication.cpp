@@ -49,6 +49,8 @@
 
 void deQueueInput(stateMachine* states);
 void readingIn(stateMachine* states);
+void deQueueOutput(stateMachine* states);
+void readingOut(stateMachine* states);
 constexpr size_t hash(const char* str);
 void procesInput(std::string inString, stateMachine* states);
 
@@ -60,6 +62,7 @@ void procesInput(std::string inString, stateMachine* states);
 // Used as a global variable so that the mouse event callbacks from GLFW can have
 // access to it.
 GraphicsHandler* graphicsHandler;
+GUIHandler* guiHandler;
 
 /*=======================================================================================================================================*/
 /* GLFW callbacks.                                                                                                                       */
@@ -243,7 +246,7 @@ int main(int, char**)
     graphicsHandler = new GraphicsHandler(states);
 
     // Create GUI handler object.
-    GUIHandler guiHandler(states, graphicsHandler);
+    guiHandler = new GUIHandler(states, graphicsHandler);
 
     /*===================================================================================================================================*/
     /* Loop                                                                                                                              */
@@ -255,6 +258,9 @@ int main(int, char**)
 
     // Thread reading inputs from pipeline.
     std::thread t1(readingIn, states);
+
+    //Thread writing to the pipeline
+    std::thread t2(readingOut, states);
 
     // [MAIN LOOP] Graphics Pipeline
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
@@ -277,7 +283,7 @@ int main(int, char**)
         glViewport(0, 0, display_w, display_h);
 
         // Render ImGUI to screen.
-        guiHandler.renderGui(io);
+        guiHandler->renderGui(io);
 
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
@@ -384,6 +390,26 @@ void readingIn(stateMachine* states) {
         }
         temp = "";
     }
+}
+
+void readingOut(stateMachine* states) {
+
+    while (true) {
+        deQueueOutput(states);
+    }
+}
+
+void deQueueOutput(stateMachine* states) {
+
+    while (states->outputQ.size() > 0) {
+        outputQueue temp = states->outputQ.front();
+
+        std::cout << temp.command << temp.parameters << std::endl;
+
+        states->outputQ.pop();
+
+    }
+
 }
 
 // Process the funcions laoded by the python thread.
@@ -615,6 +641,21 @@ void deQueueInput(stateMachine* states) {
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->updateBuffers(mccName);
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+            }
+            break;
+
+        case hash("addGUI"):
+            try {
+                std::cout << "GUI" << std::endl;
+                std::string guiName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                std::string guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
+                std::string parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                guiHandler->createGUI(guiName, guiPos, parameters);
             }
             catch (const std::exception& e)
             {

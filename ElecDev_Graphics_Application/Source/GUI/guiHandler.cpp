@@ -8,6 +8,19 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Hash the input text to be checked against list of commands.
+constexpr size_t hash(const char* str) {
+	const long long p = 131;
+	const long long m = 4294967291; // 2^32 - 5, largest 32 bit prime
+	long long total = 0;
+	long long current_multiplier = 1;
+	for (int i = 0; str[i] != '\0'; ++i) {
+		total = (total + current_multiplier * str[i]) % m;
+		current_multiplier = (current_multiplier * p) % m;
+	}
+	return total;
+}
+
 // Constructor.
 GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 {
@@ -75,6 +88,8 @@ void GUIHandler::renderGui(ImGuiIO& io)
 		this->mcc->renderGraphics(dock);
 	}
 
+	this->renderUI();
+
 	//ImGui::Begin("FPS");
 	//ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
 	//ImGui::Text("(%.1f FPS)", ImGui::GetIO().Framerate);
@@ -109,6 +124,169 @@ void GUIHandler::setTheme()
     ImGui::GetStyle().GrabRounding = 4.0f;
 	ImGui::GetStyle().ChildRounding = 4.0f;
 }
+
+void GUIHandler::createGUI(std::string guiName, std::string guiPos, std::string parameters) {
+
+	size_t pos = 0;
+	size_t pos_2 = 0;
+	std::string delimiter = ";";
+	std::list<element> elements;
+	std::string s = parameters;
+
+	std::string token;
+	// Add element loop
+	while ((pos = s.find(delimiter)) != std::string::npos) {
+
+		std::string elementTemp = s.substr(0, pos);
+		int pos1 = elementTemp.find("<");
+
+		std::string elementType = elementTemp.substr(0, pos1);
+
+		elementTemp.erase(0, pos1 + 1);
+
+		int pos2 = elementTemp.find(">");
+
+		std::string elementName = elementTemp.substr(0, pos2);
+
+		elementTemp.erase(0, pos2 + 2);
+
+		std::list<std::string> extra;
+
+		while ((pos_2 = elementTemp.find(">")) != std::string::npos) {
+			extra.push_back(elementTemp.substr(0, pos_2));
+			elementTemp.erase(0, pos_2 + delimiter.length());
+		}
+		elementTemp = elementTemp.erase(0, pos_2);
+
+		s.erase(0, pos + delimiter.length());
+		element tempElement(elementType, elementName, extra);
+		elements.push_back(tempElement);
+	}
+
+	ImVec2 winPos;
+
+	winPos.x = std::stof(guiPos.substr(0,guiPos.find(",")));
+	winPos.y = std::stof(guiPos.substr(guiPos.find(",") + 1, guiPos.size() - guiPos.find(",") - 1));
+
+	guiHolder temp(guiName, winPos, elements);
+	guis.push_back(temp);
+}
+
+void GUIHandler::pushData(std::list<guiHolder>::iterator uiWindow) {
+
+	std::cout << "Pushing data" << std::endl;
+	std::list<element>::iterator elements = uiWindow->elements.begin();
+	std::string output;
+	output.append("[");
+	output.append(uiWindow->windowName);
+	output.append("][");
+	while (elements != uiWindow->elements.end())
+	{
+		output.append("<");
+		output.append(elements->type.c_str());
+		output.append(";");
+		output.append(elements->name.c_str());
+		output.append(";");
+		output.append(elements->data.c_str());
+		output.append(";");
+		output.append(">");
+		++elements;
+		
+	}
+	output.append("]");
+
+	outputQueue tempQueue("ReturnUI", output);
+	states->outputQ.push(tempQueue);
+
+}
+
+void GUIHandler::renderUI(){
+
+	std::list<guiHolder>::iterator it = guis.begin();
+	while (it != guis.end())
+	{
+
+		if (it->submit)
+		{
+			pushData(it);
+		}
+		
+		if (it->close)
+		{
+			if (ImGui::Begin(it->windowName.c_str(), &it->close)) {
+				ImGui::SetWindowSize(ImVec2(0, 0));
+				ImGui::SetWindowPos(it->windowPos, ImGuiCond_Once);
+
+				std::list<element>::iterator it2;
+				for (it2 = it->elements.begin(); it2 != it->elements.end(); ++it2)
+				{
+					switch (hash(it2->type.c_str()))
+					{
+
+					case hash("Button"):
+					{
+						if (ImGui::Button(it2->name.c_str())) {
+							
+							it2->data.clear();
+							it2->data.append("PRESSED");
+							
+						}
+						break;
+					}
+
+					case hash("SButton"):
+					{
+						if (ImGui::Button(it2->name.c_str())) {
+							it2->data.clear();
+							it2->data.append("PRESSED");
+							it->submit = true;
+							it->close = false;
+
+						}
+						break;
+					}
+
+					case hash("Text"):
+					{
+						ImGui::Text(it2->name.c_str());
+						break;
+					}
+
+					case hash("InputText"):
+					{
+						static char str0[128] = "";
+						ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
+						std::string out = str0;
+						it2->data.clear();
+						it2->data.append(out);
+						break;
+					}
+					case hash("SameLine"):
+					{
+						ImGui::SameLine();
+					}
+
+					default:
+					{
+						break;
+					}
+					}
+
+				}
+				ImGui::End();
+
+			}
+			++it;
+		}
+		else {
+			guis.erase(it++);
+		}
+		
+	}
+
+}
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.
 //----------------------------------------------------------------------------------------------------------------------

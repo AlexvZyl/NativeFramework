@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <list>
 
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
@@ -30,6 +31,35 @@
 //  GUI Handler Class.
 //----------------------------------------------------------------------------------------------------------------------
 
+struct element {
+	std::string name;
+	std::list<std::string> extraParams;
+	std::string type;
+	std::string data = "";
+
+	element(std::string typeIn, std::string nameIn, std::list<std::string> extra) {
+		name = nameIn;
+		extraParams = extra;
+		type = typeIn;
+	}
+
+};
+
+struct guiHolder {
+	std::string windowName;
+	ImVec2 windowPos;
+	std::list<element> elements;
+	bool close = true;
+	bool submit = false;
+
+	guiHolder(std::string window, ImVec2 windowPosIn, std::list<element> inElements) {
+		windowName = window;
+		elements = inElements;
+		windowPos = windowPosIn;
+	}
+};
+
+
 class GUIHandler
 {
 public:
@@ -49,6 +79,7 @@ public:
 	Graphics* graphics;
 	userGUI* userWindow;
 	MCC* mcc;
+	std::list<guiHolder> guis;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
@@ -64,8 +95,16 @@ public:
 	// Set custom theme.
 	void setTheme();
 
+	void createGUI(std::string guiName, std::string guiPos, std::string parameters);
+
+	void renderUI();
+
+	void pushData(std::list<guiHolder>::iterator uiWindow);
+
 };
+
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.
 //----------------------------------------------------------------------------------------------------------------------
+
