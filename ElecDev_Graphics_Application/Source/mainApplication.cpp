@@ -51,6 +51,8 @@
 
 void deQueueInput(stateMachine* states);
 void readingIn(stateMachine* states);
+void deQueueOutput(stateMachine* states);
+void readingOut(stateMachine* states);
 constexpr size_t hash(const char* str);
 void procesInput(std::string inString, stateMachine* states);
 void exceptionLog(const std::exception& e);
@@ -63,6 +65,7 @@ void exceptionLog(const std::exception& e);
 // Used as a global variable so that the mouse event callbacks from GLFW can have
 // access to it.
 GraphicsHandler* graphicsHandler;
+GUIHandler* guiHandler;
 
 /*=======================================================================================================================================*/
 /* GLFW callbacks.                                                                                                                       */
@@ -247,7 +250,7 @@ int main(int, char**)
     graphicsHandler = new GraphicsHandler(states);
 
     // Create GUI handler object.
-    GUIHandler guiHandler(states, graphicsHandler);
+    guiHandler = new GUIHandler(states, graphicsHandler);
 
     /*===================================================================================================================================*/
     /* Loop                                                                                                                              */
@@ -260,8 +263,8 @@ int main(int, char**)
     // Thread reading inputs from pipeline.
     std::thread t1(readingIn, states);
 
-    // Start input.
-    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
+    //Thread writing to the pipeline
+    std::thread t2(readingOut, states);
 
     // [MAIN LOOP] Graphics Pipeline
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
@@ -284,7 +287,7 @@ int main(int, char**)
         GLCall(glViewport(0, 0, display_w, display_h));
 
         // Render ImGUI to screen.
-        guiHandler.renderGui(io);
+        guiHandler->renderGui(io);
 
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
@@ -397,6 +400,26 @@ void readingIn(stateMachine* states) {
     }
 }
 
+void readingOut(stateMachine* states) {
+
+    while (true) {
+        deQueueOutput(states);
+    }
+}
+
+void deQueueOutput(stateMachine* states) {
+
+    while (states->outputQ.size() > 0) {
+        outputQueue temp = states->outputQ.front();
+
+        std::cout << temp.command << temp.parameters << std::endl;
+
+        states->outputQ.pop();
+
+    }
+
+}
+
 // Process the funcions laoded by the python thread.
 void deQueueInput(stateMachine* states) {
 
@@ -409,6 +432,11 @@ void deQueueInput(stateMachine* states) {
         std::string text;
         std::string align;
         std::vector<float> params;
+
+        std::string guiName;
+        std::string guiPos;
+        std::string parameters;
+
 
         // Try the command and catch exceptions.
         try {
@@ -567,11 +595,20 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->updateBuffers(mccName);
                 break;
 
+            case hash("addGUI"):
+                std::cout << "GUI" << std::endl;
+                guiName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
+                parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                guiHandler->createGUI(guiName, guiPos, parameters);
+                break;
+
             default:
                 std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
                 break;
             }
-            
+
             std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 
             // Remove command from queue.
@@ -584,6 +621,7 @@ void deQueueInput(stateMachine* states) {
         }
     }
 }
+
 
 // Print the exception message to the terminal.
 void exceptionLog(const std::exception& e) 

@@ -12,6 +12,15 @@ struct inputQueue {
 	std::string parameters;
 };
 
+struct outputQueue {
+
+	//Constructor
+	outputQueue(std::string command, std::string parameters) : command(command), parameters(parameters)
+	{}
+	std::string command;
+	std::string parameters;
+};
+
 struct stateMachine
 {
 	bool toolsExpanded;
@@ -31,6 +40,8 @@ struct stateMachine
 
 	std::queue<inputQueue> inputQueueMCC;
 	std::queue<inputQueue> inputQueue;
+
+	std::queue<outputQueue> outputQ;
 
 	bool userWindowHovered;
 	
