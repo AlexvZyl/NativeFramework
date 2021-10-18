@@ -71,11 +71,11 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Move CPU data handling over to VAO class.
 
 #### Raynhardt 
-* ⬜ Multi View port
-* ⬜ Multi vieport docking
+* ✅ Multi View port
+* ✅ Multi vieport docking
 * ⬜ Resize event need working on
-* ⬜ Implement Input catching
-* ⬜ Rebuild IO handling
+* ✅ Implement Input catching
+* ✅ Rebuild IO handling
 
 #### Bugs from Ulrich
 * ✅ The MCC must open in the middle of the window.
