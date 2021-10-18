@@ -145,6 +145,8 @@ void GUIHandler::createGUI(std::string guiName, std::string guiPos, std::string 
 
 	std::string token;
 	// Add element loop
+
+
 	while ((pos = s.find(delimiter)) != std::string::npos) {
 
 		std::string elementTemp = s.substr(0, pos);
@@ -170,6 +172,8 @@ void GUIHandler::createGUI(std::string guiName, std::string guiPos, std::string 
 
 		s.erase(0, pos + delimiter.length());
 		element tempElement(elementType, elementName, extra);
+		std::cout << elementType << std::endl;
+		std::cout << elementName << std::endl;
 		elements.push_back(tempElement);
 	}
 
@@ -230,6 +234,7 @@ void GUIHandler::renderUI(){
 				std::list<element>::iterator it2;
 				for (it2 = it->elements.begin(); it2 != it->elements.end(); ++it2)
 				{
+					static char str0[128] = "";
 					switch (hash(it2->type.c_str()))
 					{
 
@@ -263,9 +268,9 @@ void GUIHandler::renderUI(){
 					}
 
 					case hash("InputText"):
-					{
-						static char str0[128] = "";
-						ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
+					{	
+						strcpy_s(str0, it2->data.c_str());
+						ImGui::InputText(it2->name.c_str(), str0, IM_ARRAYSIZE(str0));
 						std::string out = str0;
 						it2->data.clear();
 						it2->data.append(out);
@@ -274,6 +279,10 @@ void GUIHandler::renderUI(){
 					case hash("SameLine"):
 					{
 						ImGui::SameLine();
+					}
+					case hash("SliderAngle"): {
+						static float angle = 0.0f;
+						ImGui::SliderAngle("slider angle", &angle);
 					}
 
 					default:
