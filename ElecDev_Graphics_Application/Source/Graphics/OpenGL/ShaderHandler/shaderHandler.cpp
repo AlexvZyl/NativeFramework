@@ -6,17 +6,17 @@
 //  Class include.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "shaderHandler.h"
+#include "../Resources/ResourceHandler.h"
+#include "ShaderHandler.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Constructor generates the shaders.
-Shader::Shader(std::string& shaderSourceIn)
-    : m_shaderSource(shaderSourceIn), m_rendererID(0)
+Shader::Shader(unsigned int shaderID)
+    : m_rendererID(0)
 {
-
     // Shader mode handler. Used as an index for the shaderSource.
     enum class ShaderType
     {
@@ -29,7 +29,7 @@ Shader::Shader(std::string& shaderSourceIn)
 
     // Stream that contains the shader.
     std::stringstream shaderSource[2];
-    std::istringstream source(m_shaderSource);
+    std::istringstream source(loadTextFromResource(shaderID));
 
     // Run through all of the lines.
     std::string line;
@@ -141,7 +141,7 @@ int Shader::getUniformLocation(const std::string& name)
     
     // Find uniform.
     GLCall(int location = glGetUniformLocation(m_rendererID, name.c_str()));
-    if (location == -1) { std::cout << "[SHADER ERROR] Uniform '" << name << "' does not exist.\n"; }
+    if (location == -1) { std::cout << red << "\n[OPENGL] [ERROR] : " << white << "Shader error : Uniform '" << name << "' does not exist.\n"; }
     // Add the uniform to the cache.
     m_uniformLocationCache[name] = location;
 
@@ -160,7 +160,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             GLCall( glGetShaderInfoLog(shader, 1024, NULL, infoLog) );
-            std::cout << "[OPENGL][ERROR][SHADER COMPILATION] Type: " << type << "\n" << infoLog << "\n";
+            std::cout << red << "\n[OPENGL] [ERROR] : " << white << "Shader compilation type : " << type << "\n" << infoLog << "\n";
         }
     }
     else
@@ -169,12 +169,12 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         if (!success)
         {
             GLCall( glGetProgramInfoLog(shader, 1024, NULL, infoLog) );
-            std::cout << "[OPENGL][ERROR][SHADER LINKING] Type: " << type << "\n" << infoLog << "\n";
+            std::cout << red << "\n[OPENGL] [ERROR] : " << white << "Shader compilation type : " << type << "\n" << infoLog << "\n";
         }
         else
         {
             // Print success message.
-            std::cout << "[OPENGL][SHADERS] " << type << " linked succesfully.\n";
+            std::cout << blue << "\n[OPENGL] [INFO] : " << white << type << " shader linked succesfully.";
         }
     }
 }

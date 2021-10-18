@@ -7,7 +7,7 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //  Class include.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "graphicsHandler.h"
+#include "GraphicsHandler.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors & setup.
@@ -79,7 +79,7 @@ void GraphicsHandler::mousePressEvent(int button, int action)
 		else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight(mousePos);
+			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight();
 		}
 	}
 }
@@ -116,7 +116,7 @@ void GraphicsHandler::mouseScrollEvent(float yOffset)
 void GraphicsHandler::resizeEvent(int width, int height)
 {
 	// Check if the dict is not empty.	
-	if (m_windowsDictionary.size() != 0)
+	if (m_windowsDictionary.size())
 	{
 		// Run resize event for each engine.
 		for (auto engine : m_windowsDictionary)

@@ -46,6 +46,16 @@ GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
 	
 };
 
+// Destructor.
+GUIHandler::~GUIHandler() 
+{
+	delete toolbar;
+	delete ribbons;
+	delete graphics;
+	delete userWindow;
+	delete mcc;
+}
+
 // [MAIN LOOP] Render the GUI to the screen.
 void GUIHandler::renderGui(ImGuiIO& io)
 {

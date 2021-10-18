@@ -87,6 +87,8 @@ public:
 
 	// Constructor.
 	GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler);
+	// Destructor.
+	~GUIHandler();
 	void deQueueInput();
 
 	// Function that handles which engine should be active.

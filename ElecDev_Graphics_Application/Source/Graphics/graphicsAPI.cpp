@@ -7,7 +7,7 @@ API for the graphics of the application.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Class include.
-#include "graphicsHandler.h"
+#include "GraphicsHandler.h"
 
 // ImGUI (GUI software). 
 #include "Implementations/imgui_impl_opengl3.h"
@@ -17,26 +17,67 @@ API for the graphics of the application.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Add a new window to the app.
-void GraphicsHandler::addWindow(std::string windowName, EngineType engineType)
+void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 {
 	// Check if name already used.
 	if (isWindowValid(windowName))
 	{
-		std::cout << "[INTERFACE][ERROR] Name '" << windowName << "' already used.\n\n";
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " Name '" << windowName << "' already used.\n";
 	}
 	// Prevent 'NULL' being used as a  name.
 	else if (windowName == "NULL")
 	{
-		std::cout << "[INTERFACE][ERROR] 'NULL' is not a valid name. It is reserved for the inactive state.\n\n";
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " 'NULL' is not a valid name. It is reserved for the inactive state.\n";
 	}
 	else
 	{
-		// Destroy ImGUI to allow drawing in other contexts.
-		ImGui_ImplOpenGL3_DestroyDeviceObjects();
-		// Set window active.
-		m_activeWindow = windowName;
-		// Add to dictionary.
-		m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, engineType) }); 
+		// Remove leading white spaces.
+		while (engineType[0] == ' ')
+		{
+			engineType.erase(engineType.begin());
+		}
+		// Remove white spaces at end.
+		while (engineType[engineType.length()-1] == ' ')
+		{
+			engineType.pop_back();
+		}
+
+		// Check engine type.
+		if (engineType == "Base2D" || engineType == "base2D")
+		{
+			// Destroy ImGUI to allow drawing in other contexts.
+			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
+			// Add window to dictionary.
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::BaseEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName + " [Base2D]";
+		}
+		else if (engineType == "Design2D" || engineType == "design2D")
+		{
+			// Destroy ImGUI to allow drawing in other contexts.
+			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
+			// Add window to dictionary.
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::DesignEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName + " [Design2D]";
+		}
+		else if (engineType == "Base3D" || engineType == "base3D")
+		{
+			// Destroy ImGUI to allow drawing in other contexts.
+			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
+			// Add window to dictionary.
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Base3DEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName + " [Base3D]";
+		}
+		// Catch error.
+		else 
+		{
+			std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << engineType << "' is not a valid engine type.\n";
+		}
 	}
 }
 
@@ -57,7 +98,7 @@ void GraphicsHandler::removeWindow(std::string windowName)
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -73,12 +114,12 @@ void GraphicsHandler::drawLine(std::string windowName, float position1[2], float
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -94,12 +135,12 @@ void GraphicsHandler::drawTriangleClear(std::string windowName, float position1[
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -115,12 +156,12 @@ void GraphicsHandler::drawTriangleFilled(std::string windowName, float position1
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -136,12 +177,12 @@ void GraphicsHandler::drawQuadClear(std::string windowName, float position[2], f
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -157,12 +198,12 @@ void GraphicsHandler::drawQuadFilled(std::string windowName, float position[2], 
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -178,12 +219,12 @@ void GraphicsHandler::drawCircleClear(std::string windowName, float coords[2], f
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -199,33 +240,56 @@ void GraphicsHandler::drawCircleFilled(std::string windowName, float coords[2], 
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
 // Adds text to the VBO object.
-void GraphicsHandler::drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale)
+void GraphicsHandler::drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, std::string align)
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))
 	{
 		try {
+
+			// Remove leading white spaces.
+			while (align[0] == ' ')
+			{
+				align.erase(align.begin());
+			}
+			// Remove white spaces at end.
+			while (align[align.length() - 1] == ' ')
+			{
+				align.pop_back();
+			}
+
+			// Remove leading white spaces.
+			while (text[0] == ' ')
+			{
+				text.erase(text.begin());
+			}
+			// Remove white spaces at end.
+			while (text[text.length() - 1] == ' ')
+			{
+				text.pop_back();
+			}
+
 			// Render the text.
-			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale);
+			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale, align);
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -241,12 +305,12 @@ void GraphicsHandler::drawDemo(std::string windowName, unsigned int loopCount)
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -262,12 +326,12 @@ void GraphicsHandler::autoCenter(std::string windowName)
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
 }
 
@@ -283,13 +347,23 @@ void GraphicsHandler::updateBuffers(std::string windowName)
 		}
 		catch (const std::exception& e)
 		{
-			std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
+			parametersError(e);
 		}
 	}
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << windowName << "' is an invalid name.\n\n";
+		windowError(windowName);
 	}
+}
+
+// Print error messages.
+void GraphicsHandler::windowError(std::string windowName) 
+{
+	std::cout << red << "\n[INTERFACE] [ERROR]" << white << " '" << windowName << "' is an invalid name.\n";
+}
+void GraphicsHandler::parametersError(const std::exception& e) 
+{
+	std::cout << red <<"\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
 }
 
 //----------------------------------------------------------------------------------------------------------------------

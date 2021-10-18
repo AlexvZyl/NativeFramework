@@ -9,6 +9,9 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Console coloring.
+#include <External/Misc/ConsoleColor.h>
+
 // General.
 #include <iostream>
 

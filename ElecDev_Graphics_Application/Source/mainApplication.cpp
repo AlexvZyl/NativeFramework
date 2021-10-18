@@ -15,16 +15,18 @@
 #include "Implementations/imgui_impl_opengl3.h"
 #include "stateMachine.h"
 
+// Resources.
+#include <Misc/stb_image.h>
+#include "Resources/ResourceHandler.h"
+
+// Console coloring.
+#include "External/Misc/ConsoleColor.h"
+
 // GUI includes.
 #include "GUI/guiHandler.h"
 
 // Graphics handler include.
-#include <../Graphics/graphicsHandler.h>
-
-// Resources.
-#include <Misc/stb_image.h>
-#include "Resources/resource.h"
-#include <Windows.h>
+#include <../Graphics/GraphicsHandler.h>
 
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
@@ -53,6 +55,7 @@ void deQueueOutput(stateMachine* states);
 void readingOut(stateMachine* states);
 constexpr size_t hash(const char* str);
 void procesInput(std::string inString, stateMachine* states);
+void exceptionLog(const std::exception& e);
 
 /*=======================================================================================================================================*/
 /* Variables/Globals/Defines.                                                                                                            */
@@ -71,7 +74,7 @@ GUIHandler* guiHandler;
 // GLFW error handler.
 static void glfw_error_callback(int error, const char* description)
 {
-    fprintf(stderr, "[GLFW ERROR] %d: %s\n", error, description);
+    fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white,  "%d: %s\n", error, description);
 }
 
 /*=======================================================================================================================================*/
@@ -146,7 +149,7 @@ int main(int, char**)
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync.
+    glfwSwapInterval(1); // VSync buffer size.
 
     // Load GLFW icon.
     BITMAP bitmap = loadImageFromResource(ICON_PNG);
@@ -183,12 +186,12 @@ int main(int, char**)
     // OpenGL loader error handler.
     if (err)
     {
-        fprintf(stderr, "[OPENGL][ERROR] Failed to initialize OpenGL loader!\n");
+        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white,   " Failed to initialize OpenGL loader!\n");
         return 1;
     }
 
     // Print OpenGL version.
-    std::cout << "[OPENGL][INFO] Loaded OpenGL version: " << glGetString(GL_VERSION) << ".\n\n";
+    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version : " << glGetString(GL_VERSION) << ".";
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI & OpenGL setup. 
@@ -225,15 +228,16 @@ int main(int, char**)
     // Viewport.
     int screen_width, screen_height;
     glfwGetFramebufferSize(window, &screen_width, &screen_height);
-    glViewport(0, 0, screen_width, screen_height);
+    GLCall(glViewport(0, 0, screen_width, screen_height));
 
     // Setup mouse callbacks.
     glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
     glfwSetCursorPosCallback(window, mouseMoveEvent);       // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);        // Mouse scroll event.
 
-    // Enable MSAA in OpenGL.
-    glEnable(GL_MULTISAMPLE);
+    // OpenGL inits.
+    GLCall(glEnable(GL_MULTISAMPLE));       // MSAA.
+    GLCall(glEnable(GL_DEPTH_TEST));        // Depth testing (the z buffer).
 
     // Create the state machine variables.
     stateMachine* states = new stateMachine();
@@ -272,15 +276,15 @@ int main(int, char**)
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
         else { glfwPollEvents(); }        // App runs continuously.
     
-        // Init colors for OpenGL.
-        glClear(GL_COLOR_BUFFER_BIT);
+        // Clear colors for OpenGL.
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
      
         // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
         graphicsHandler->renderGraphics();
 
         // Assign values to viewport for ImGUI.
         glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
+        GLCall(glViewport(0, 0, display_w, display_h));
 
         // Render ImGUI to screen.
         guiHandler->renderGui(io);
@@ -296,6 +300,9 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    // Log exiting.
+    std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
 
     // Close application.
     glfwDestroyWindow(window);
@@ -360,7 +367,8 @@ void procesInput(std::string inString, stateMachine* states)
         // Error output of the command is invalid.
         default:
         {
-            std::cout << "[INTERFACE][ERROR] '" << command << "' type invalid. \n\n";
+            std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << command << "' type invalid.\n";
+            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
             break;
         }
     }
@@ -422,14 +430,17 @@ void deQueueInput(stateMachine* states) {
         inputQueue temp = states->inputQueueMCC.front();
         std::string mccName;
         std::string text;
+        std::string align;
         std::vector<float> params;
 
-        // Switch between different commands.
-        switch (hash(temp.command.c_str())) {
+        // Try the command and catch exceptions.
+        try {
 
-        // Draw line.
-        case hash("drawLine"):
-            try {
+            // Switch between different commands.
+            switch (hash(temp.command.c_str()))
+            {
+                // Draw line.
+            case hash("drawLine"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -438,16 +449,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw clear triangle.
-        case hash("drawTriangleClear"):
-            try {
+                // Draw clear triangle.
+            case hash("drawTriangleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -456,16 +461,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw filled triangle. 
-        case hash("drawTriangleFilled"):
-            try {
+                // Draw filled triangle. 
+            case hash("drawTriangleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -474,16 +473,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw clear quad.
-        case hash("drawQuadClear"):
-            try {
+                // Draw clear quad.
+            case hash("drawQuadClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -492,16 +485,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw filled quad.
-        case hash("drawQuadFilled"):
-            try {
+                // Draw filled quad.
+            case hash("drawQuadFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -510,16 +497,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw clear circle.
-        case hash("drawCircleClear"):
-            try {
+                // Draw clear circle.
+            case hash("drawCircleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -528,16 +509,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw a filled circle.
-        case hash("drawCircleFilled"):
-            try {
+                // Draw a filled circle.
+            case hash("drawCircleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -546,16 +521,10 @@ void deQueueInput(stateMachine* states) {
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
                 graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw text.
-        case hash("drawText"):
-            try {
+                // Draw text.
+            case hash("drawText"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -566,87 +535,67 @@ void deQueueInput(stateMachine* states) {
                         text = temp.parameters.substr(0, temp.parameters.find(";"));
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
-                    // Read parameters,
+                    // Read tex alignment.
+                    if (i == 7)
+                    {
+                        align = temp.parameters.substr(0, temp.parameters.find(";"));
+                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                    }
+                    // Read parameters.
                     else
                     {
                         params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
                 }
-                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6]);
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
+                break;
 
-        // Add MCC window to draw.
-        case hash("addWindow"):
-            try {
+                // Add MCC window to draw.
+            case hash("addWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->addWindow(mccName, EngineType::BaseEngineGL);
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                text = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                graphicsHandler->addWindow(mccName, text);
+                break;
 
-        // Remove MCC window.
-        case hash("removeWindow"):
-            try {
+                // Remove MCC window.
+            case hash("removeWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->removeWindow(mccName);
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Draw the demo.
-        case hash("drawDemo"):
-            try {
+                // Draw the demo.
+            case hash("drawDemo"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Center the drawing around (0,0).
-        case hash("autoCenter"):
-            try {
+                // Center the drawing around (0,0).
+            case hash("autoCenter"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->autoCenter(mccName);
-            }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+                break;
 
-        // Load CPU buffers to GPU.
-        case hash("updateBuffers"):
-            try {
+                // Load CPU buffers to GPU.
+            case hash("updateBuffers"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->updateBuffers(mccName);
+                break;
+
+            default:
+                std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
+                break;
             }
-            catch (const std::exception& e)
-            {
-                std::cout << "[INTERFACE][ERROR] Invalid parameters caused exception: '" << e.what() << "'.\n\n";
-            }
-            break;
+            
+            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 
         case hash("addGUI"):
             try {
@@ -667,10 +616,14 @@ void deQueueInput(stateMachine* states) {
             std::cout << "[INTERFACE][ERROR] '" << temp.command.c_str() << "' function invalid. \n\n";
             break;
         }
-
-        // Remove command from queue.
-        states->inputQueueMCC.pop();
     }
+}
+
+// Print the exception message to the terminal.
+void exceptionLog(const std::exception& e) 
+{
+    std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
+    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 
 /*=======================================================================================================================================*/

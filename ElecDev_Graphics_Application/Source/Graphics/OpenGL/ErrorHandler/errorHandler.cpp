@@ -26,10 +26,11 @@ bool  glCheckError(const char* function, const char* file, int line)
 	while (GLenum error = glGetError())
 	{
 		// Print the error.
-		std::cout << "[OPENGL][ERROR(HEX)] : " << std::hex << error << std::dec << "\n" <<
-					 "[FILE]		     : " << file << "\n" <<
-					 "[LINE]		     : " << line << "\n" <<
-					 "[FUNCTION]	     : " << function << "\n\n";
+		std::cout	<< red << "\n\n[OPENGL] [ERROR] \n"
+					<<		    "[HEX CODE]       : "	<< white << std::hex << error << std::dec << "\n"
+					<< red <<   "[FILE]		 : "		<< white << file << "\n"
+					<< red <<   "[LINE]		 : "		<< white << line << "\n"
+					<< red <<   "[FUNCTION]	 : "		<< white << function << "\n";
 	}
 	return true;
 }

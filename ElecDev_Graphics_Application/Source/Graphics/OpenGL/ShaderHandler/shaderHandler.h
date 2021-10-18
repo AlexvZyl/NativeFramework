@@ -33,19 +33,16 @@ class Shader
 {
 private:
 
-    // Renderer ID.
-    
-    // Shader location.
-    std::string m_shaderSource;
     // Caching uniform variables.
     std::unordered_map<std::string, int> m_uniformLocationCache;
 
 public:
 
+    // Shader renderer ID.
     unsigned int m_rendererID;
 
     // Constructor that generates shaders.
-    Shader(std::string& shaderSource);
+    Shader(unsigned int shaderID);
     // Destructor.
     ~Shader();
 
