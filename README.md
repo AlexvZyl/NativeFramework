@@ -151,6 +151,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ⬜ Implement Index Buffers.  Wil increase performance and reduce memory usage.
 - ⬜ Implement culling.
 - ⬜ Implement stencil buffers.
+- ⬜ Expand teture rendering capabilities.
 
 ### Design Engine (Child of Base Engine)
 
