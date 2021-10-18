@@ -68,7 +68,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ Fix naming convention.
 * ⬜ Enable MSAA for the FBO.
-* ⬜ Move CPU data handling over to VAO class.
+* ✅ Move CPU data handling over to VAO class.
 
 #### Raynhardt 
 * ✅ Multi View port
