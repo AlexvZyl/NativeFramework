@@ -52,11 +52,13 @@ struct guiHolder {
 	bool close = true;
 	bool submit = false;
 	bool docked = false;
+	std::string docking;
 
-	guiHolder(std::string window, ImVec2 windowPosIn, std::list<element> inElements) {
+	guiHolder(std::string window, ImVec2 windowPosIn, std::string dockingIn, std::list<element> inElements) {
 		windowName = window;
 		elements = inElements;
 		windowPos = windowPosIn;
+		docking = dockingIn;
 	}
 };
 
@@ -98,9 +100,9 @@ public:
 	// Set custom theme.
 	void setTheme();
 
-	void createGUI(std::string guiName, std::string guiPos, std::string parameters);
+	void createGUI(std::string guiName, std::string guiPos, std::string docking, std::string parameters);
 
-	void renderUI(ImGuiID dock);
+	void renderUI(ImGuiID* dock);
 
 	void pushData(std::list<guiHolder>::iterator uiWindow);
 

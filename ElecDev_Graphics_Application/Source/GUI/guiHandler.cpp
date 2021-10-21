@@ -98,7 +98,7 @@ void GUIHandler::renderGui(ImGuiIO& io)
 		this->mcc->renderGraphics(dock);
 	}
 
-	this->renderUI(dock);
+	this->renderUI(&dock);
 
 	//ImGui::Begin("FPS");
 	//ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
@@ -135,7 +135,7 @@ void GUIHandler::setTheme()
 	ImGui::GetStyle().ChildRounding = 4.0f;
 }
 
-void GUIHandler::createGUI(std::string guiName, std::string guiPos, std::string parameters) {
+void GUIHandler::createGUI(std::string guiName, std::string guiPos, std::string docking, std::string parameters) {
 
 	size_t pos = 0;
 	size_t pos_2 = 0;
@@ -180,7 +180,10 @@ void GUIHandler::createGUI(std::string guiName, std::string guiPos, std::string 
 	winPos.x = std::stof(guiPos.substr(0,guiPos.find(",")));
 	winPos.y = std::stof(guiPos.substr(guiPos.find(",") + 1, guiPos.size() - guiPos.find(",") - 1));
 
-	guiHolder temp(guiName, winPos, elements);
+	guiHolder temp(guiName, winPos,docking, elements);
+	if (docking != "None") {
+		temp.docked = true;
+	}
 	guis.push_back(temp);
 }
 
@@ -212,7 +215,7 @@ void GUIHandler::pushData(std::list<guiHolder>::iterator uiWindow) {
 
 }
 
-void GUIHandler::renderUI(ImGuiID dock){
+void GUIHandler::renderUI(ImGuiID* dock){
 
 	std::list<guiHolder>::iterator it = guis.begin();
 	while (it != guis.end())
@@ -226,12 +229,51 @@ void GUIHandler::renderUI(ImGuiID dock){
 		if (it->close)
 		{
 			if (it->docked) {
-				ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
+				ImGuiID newPos;
+				ImGuiID useless;
+				switch (hash(it->docking.c_str()))
+				{
+					case hash("Left"):
+					{
+						std::cout << "Left Side" << std::endl;
+						//ImGui::DockBuilderSplitNode(*dock, ImGuiDir_Left, 0.1f, &newPos, dock);
+						std::cout << "Created" << std::endl;
+						ImGui::SetNextWindowDockID(*dock, ImGuiCond_Once);
+						break;
+					}
+
+					case hash("Top"):
+					{
+						ImGui::SetNextWindowDockID(*dock, ImGuiCond_Once);
+						break;
+					}
+
+					case hash("Right"):
+					{
+						ImGui::SetNextWindowDockID(*dock, ImGuiCond_Once);
+						break;
+					}
+
+					case hash("Bottom"):
+					{
+						ImGui::SetNextWindowDockID(*dock, ImGuiCond_Once);
+						break;
+					}
+
+					default:
+					{
+						break;
+					}
+
+
+				}
+			}
+			else {
+				ImGui::SetNextWindowPos(it->windowPos, ImGuiCond_Once);
 			}
 
 			if (ImGui::Begin(it->windowName.c_str(), &it->close)) {
 				ImGui::SetWindowSize(ImVec2(0, 0));
-				ImGui::SetWindowPos(it->windowPos, ImGuiCond_Once);
 
 				std::list<element>::iterator it2;
 				for (it2 = it->elements.begin(); it2 != it->elements.end(); ++it2)
@@ -300,7 +342,6 @@ void GUIHandler::renderUI(ImGuiID dock){
 						int count = 0;
 						for (std::list<std::string>::iterator it3 = it2->extraParams.begin(); it3 != it2->extraParams.end(); ++it3)
 						{
-							std::cout << it3->c_str() << std::endl;
 							range[count] = std::stof(it3->c_str());
 							count++;
 						}

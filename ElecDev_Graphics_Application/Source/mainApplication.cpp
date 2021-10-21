@@ -435,6 +435,7 @@ void deQueueInput(stateMachine* states) {
 
         std::string guiName;
         std::string guiPos;
+        std::string docking;
         std::string parameters;
 
 
@@ -600,8 +601,10 @@ void deQueueInput(stateMachine* states) {
                 guiName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                docking = temp.parameters.substr(0, temp.parameters.find(";"));
                 parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                guiHandler->createGUI(guiName, guiPos, parameters);
+                guiHandler->createGUI(guiName, guiPos, docking, parameters);
                 break;
 
             default:
