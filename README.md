@@ -183,6 +183,7 @@ This is the graphics application that is to be used with the ElecDev software.  
     - ⬜ Clicks.
 - ⬜ Add a camera class that is used in the 3D engine and replaces the 2D engine view controls.
 - ⬜ Implement a better event handler, incuding mouse handling.
+- ⬜ Add skybox.
 
 ### Long Term Dreams
 
