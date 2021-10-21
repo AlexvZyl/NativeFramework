@@ -68,8 +68,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Move over to smart pointers for better memory management.
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ Fix naming convention.
-* ⬜ Enable MSAA for the FBO.
+* ✅ Enable MSAA for the FBO.
 * ✅ Move CPU data handling over to VAO class.
+* ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
 
 #### Raynhardt 
 * ✅ Multi View port
