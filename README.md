@@ -180,7 +180,8 @@ This is the graphics application that is to be used with the ElecDev software.  
     - ⬜ Scrolling.
     - ⬜ Moving.
     - ⬜ Clicks.
-- ⬜ Add a camera class that is  ussed in the 3D engine and replaces the 2D engine view controls.
+- ⬜ Add a camera class that is used in the 3D engine and replaces the 2D engine view controls.
+- ⬜ Implement a better event handler, incuding mouse handling.
 
 ### Long Term Dreams
 
