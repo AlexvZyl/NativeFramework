@@ -85,6 +85,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_MouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_API.cpp" />
     <ClCompile Include="Source\Logging\logHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1326,6 +1327,7 @@
     <ClInclude Include="Source\External\SPDLog\tweakme.h" />
     <ClInclude Include="Source\External\SPDLog\version.h" />
     <ClInclude Include="Source\Logging\logHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

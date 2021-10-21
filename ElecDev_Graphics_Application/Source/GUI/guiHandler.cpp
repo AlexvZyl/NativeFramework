@@ -44,8 +44,13 @@ GUIHandler::~GUIHandler()
 }
 
 // [MAIN LOOP] Render the GUI to the screen.
-void GUIHandler::renderGui(ImGuiIO& io)
+void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 {
+	// Assign values to viewport for ImGUI.
+	int display_w, display_h;
+	glfwGetFramebufferSize(window, &display_w, &display_h);
+	GLCall(glViewport(0, 0, display_w, display_h));
+
 	// Feed inputs to ImGUI, start new frame.
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -112,11 +117,11 @@ void GUIHandler::renderGui(ImGuiIO& io)
 	}
 };
 
-void GUIHandler::setTheme() 
+void GUIHandler::setTheme()
 {
-    //imGuiIO.Fonts->AddFontFromFileTTF("../data/Fonts/Ruda-Bold.ttf", 15.0f, &config);
-    ImGui::GetStyle().FrameRounding = 4.0f;
-    ImGui::GetStyle().GrabRounding = 4.0f;
+	//imGuiIO.Fonts->AddFontFromFileTTF("../data/Fonts/Ruda-Bold.ttf", 15.0f, &config);
+	ImGui::GetStyle().FrameRounding = 4.0f;
+	ImGui::GetStyle().GrabRounding = 4.0f;
 	ImGui::GetStyle().ChildRounding = 4.0f;
 }
 //----------------------------------------------------------------------------------------------------------------------

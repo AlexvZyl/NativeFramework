@@ -36,7 +36,7 @@ void DesignEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
 	// Call base engine event.
 	BaseEngineGL::mouseMoveEvent(pixelCoords, buttonState);
 
-	// Update the mouse point.
+	// Update the mouse point position.
 	m_mousePoint->updatePosition(pixelCoords);
 }
 

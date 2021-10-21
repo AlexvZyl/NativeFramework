@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_MouseHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_API.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="Source\External\SPDLog\stopwatch.h" />
     <ClInclude Include="Source\External\SPDLog\tweakme.h" />
     <ClInclude Include="Source\External\SPDLog\version.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />

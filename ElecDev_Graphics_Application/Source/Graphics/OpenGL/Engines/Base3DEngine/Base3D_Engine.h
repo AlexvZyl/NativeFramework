@@ -11,6 +11,7 @@ Some modifications will have to be applied to the matrices and the mouse handlin
 
 // The base 2D engine.
 #include "../Base2DEngine/Base2D_Engine.h"
+#include "Peripherals/Camera.h"
 
 //=============================================================================================================================================//
 //  Base 3D Engine Class.																													   //
@@ -24,6 +25,9 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------
 	//  Variables.
 	//----------------------------------------------------------------------------------------------------------------------
+	
+	// 3D scene camera.
+	Camera* m_camera;
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//  Constructor and Destructor.
@@ -40,6 +44,10 @@ public:
 
 	// Rendering loop.
 	virtual void renderLoop();
+	// Background creation.
+	virtual void createBackground();
+	// Update the MVP matrices.
+	virtual void updateMatrices();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API

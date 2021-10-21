@@ -188,7 +188,7 @@ int main(int, char**)
     }
 
     // Print OpenGL version.
-    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version : " << glGetString(GL_VERSION) << ".";
+    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI & OpenGL setup. 
@@ -228,13 +228,15 @@ int main(int, char**)
     GLCall(glViewport(0, 0, screen_width, screen_height));
 
     // Setup mouse callbacks.
-    glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
-    glfwSetCursorPosCallback(window, mouseMoveEvent);       // Mouse move event.
-    glfwSetScrollCallback(window, mouseScrollEvent);        // Mouse scroll event.
+    glfwSetMouseButtonCallback(window, mousePressEvent);        // Mouse press event.
+    glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
+    glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
 
-    // OpenGL inits.
-    GLCall(glEnable(GL_MULTISAMPLE));       // MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));        // Depth testing (the z buffer).
+    // OpenGL settings.
+    GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
+    GLCall(glDisable(GL_DEPTH_TEST));                           // Disable the depth testing since it will be enabled only when rendring 3D scenes.
+    GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
 
     // Create the state machine variables.
     stateMachine* states = new stateMachine();
@@ -255,7 +257,6 @@ int main(int, char**)
 
     // Loop variables.
     bool wait = false;          // Wait for events.
-    int display_w, display_h;   // Viewport for ImGUI.
 
     // Thread reading inputs from pipeline.
     std::thread t1(readingIn, states);
@@ -263,32 +264,27 @@ int main(int, char**)
     // Start input.
     std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 
-    // [MAIN LOOP] Graphics Pipeline
+    // [MAIN LOOP] Graphics Pipeline.
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
+        // Clear buffers for OpenGL.
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
         // Poll commands from python interface.
         deQueueInput(states);
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
         else { glfwPollEvents(); }        // App runs continuously.
-    
-        // Clear colors for OpenGL.
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
      
         // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
         graphicsHandler->renderGraphics();
 
-        // Assign values to viewport for ImGUI.
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        GLCall(glViewport(0, 0, display_w, display_h));
-
         // Render ImGUI to screen.
-        guiHandler.renderGui(io);
+        guiHandler.renderGui(io, window);
 
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
-
     }
 
     /*===================================================================================================================================*/
@@ -297,6 +293,8 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    delete graphicsHandler;
+    delete states;
 
     // Log exiting.
     std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;

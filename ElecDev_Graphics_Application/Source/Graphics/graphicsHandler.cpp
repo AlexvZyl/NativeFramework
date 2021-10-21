@@ -17,13 +17,11 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 GraphicsHandler::GraphicsHandler(stateMachine* states)
 	: m_states(states)
 {
-
 };
 
 // Destructor.
 GraphicsHandler::~GraphicsHandler() 
 {
-
 };
 
 //----------------------------------------------------------------------------------------------------------------------

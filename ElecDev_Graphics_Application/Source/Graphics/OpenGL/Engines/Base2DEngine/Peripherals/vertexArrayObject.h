@@ -109,19 +109,25 @@ private:
 	
 public:
 
+	// Data stored CPU side.  This allows the buffers to be resized dynamically as more or less memory is required.
+	// Data should not be stored and read from OpenGL (GPU side).
+	std::vector<VertexData> m_vertexDataCPU;
+	std::vector<TexturedVertexData> m_texturedVertexDataCPU;
+
 	// Pointer that shows where in the buffer data need to be written.
 	GLsizei m_bufferPtr = 0;
 	
 	// Constructor.
 	VertexArrayObject(GLenum type, bool textured=false);
-
 	// Destructor.
 	~VertexArrayObject();
 
-	// Function that can dynamically write to the vertex buffer binded to this VAO.
+	// Store the data on the CPU side memory.
 	void writeData(std::vector<VertexData> vertices);
 	// For textured.
 	void writeData(std::vector<TexturedVertexData> vertices);
+	// Send the data to the GPU.
+	void updateGPU();
 
 	// Function that draws the data in the VAO based on the model type selected in the constructor.
 	void render();

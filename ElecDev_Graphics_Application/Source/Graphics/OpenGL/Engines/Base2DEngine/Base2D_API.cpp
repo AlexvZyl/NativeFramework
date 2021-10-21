@@ -21,7 +21,7 @@ void BaseEngineGL::drawLine(float position1[2], float position2[2], float color[
 	std::vector<VertexData> vertices = {v1,v2};
 
 	// Write to CPU side buffer.
-	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
+	m_linesVAO->writeData(vertices);
 }
 
 // Draw clear triangle.
@@ -34,7 +34,7 @@ void BaseEngineGL::drawTriangleClear(float position1[2], float position2[2], flo
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v1 };
 
 	// Write to CPU side buffer.
-	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
+	m_linesVAO->writeData(vertices);
 }
 
 // Draw filled triangle.
@@ -47,7 +47,7 @@ void BaseEngineGL::drawTriangleFilled(float position1[2], float position2[2], fl
 	std::vector<VertexData> vertices = { v1, v2, v3 };
 
 	// Write to CPU side buffer.
-	m_trianglesCPU.insert(m_trianglesCPU.end(), vertices.begin(), vertices.end());
+	m_trianglesVAO->writeData(vertices);
 }
 
 // Draw a clear quad.
@@ -62,7 +62,7 @@ void BaseEngineGL::drawQuadClear(float position[2], float width, float height, f
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v4, v4, v1 };
 
 	// Write to CPU side buffer.
-	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
+	m_linesVAO->writeData(vertices);
 }
 
 // Draw a filled quad.
@@ -77,7 +77,7 @@ void BaseEngineGL::drawQuadFilled(float position[2], float width, float height, 
 	std::vector<VertexData> vertices = { v1, v2, v3, v3, v4, v1 };
 
 	// Write to CPU side buffer.
-	m_trianglesCPU.insert(m_trianglesCPU.end(), vertices.begin(), vertices.end());
+	m_trianglesVAO->writeData(vertices);
 }
 
 // Draws a clear circle.
@@ -102,7 +102,7 @@ void BaseEngineGL::drawCircleClear(float coords[2], float radius, float color[4]
 	}
 
 	// Write to CPU side buffer.
-	m_linesCPU.insert(m_linesCPU.end(), vertices.begin(), vertices.end());
+	m_linesVAO->writeData(vertices);
 }
 
 // Draws a filled circle.
@@ -126,7 +126,7 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 	}
 	// Write to CPU side buffer.
-	m_trianglesCPU.insert(m_trianglesCPU.end(), vertices.begin(), vertices.end());
+	m_trianglesVAO->writeData(vertices);
 }
 
 // Adds text to the VBO object.
@@ -148,7 +148,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_textureTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
 	}
 	// Right allign the text.
 	else if (align == "R" || align == "r") 
@@ -158,7 +158,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_textureTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
 	}
 	// Left allign the text.
 	else if (align == "L" || align == "l") 
@@ -166,7 +166,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		// Place on top of the coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_textureTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
 	}
 	// Display error.
 	else 
@@ -178,6 +178,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 // Draws the demo drawing.
 void BaseEngineGL::drawDemo(unsigned int loopCount)
 {
+	loopCount -= 1;
 	for (unsigned int i = 0; i <= loopCount * 3; i += 3)
 	{
 		for (unsigned int k = 0; k <= loopCount * 3; k += 3)
@@ -220,7 +221,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
 			TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
 			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-			m_texturedTrianglesCPU.insert(m_texturedTrianglesCPU.end(), verticesTex.begin(), verticesTex.end());
+			m_textureTrianglesVAO->writeData(verticesTex);
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f + i, 0.5f + k };
@@ -241,9 +242,9 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 // Writes the CPU side buffers to the GPU.
 void BaseEngineGL::updateBuffers() 
 {
-	m_linesVAO->writeData(m_linesCPU);
-	m_trianglesVAO->writeData(m_trianglesCPU);
-	m_textureTrianglesVAO->writeData(m_texturedTrianglesCPU);
+	m_linesVAO->updateGPU();
+	m_trianglesVAO->updateGPU();
+	m_textureTrianglesVAO->updateGPU();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -272,86 +273,86 @@ void BaseEngineGL::autoCenter()
 	//----------------------------------------------------------------------
 
 	// If lines is not empty.
-	if (m_linesCPU.size())
+	if (m_linesVAO->m_vertexDataCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_linesCPU[0].position[0];
-		max[1] = m_linesCPU[0].position[1];
-		min[0] = m_linesCPU[0].position[0];
-		min[1] = m_linesCPU[0].position[1];
+		max[0] = m_linesVAO->m_vertexDataCPU[0].position[0];
+		max[1] = m_linesVAO->m_vertexDataCPU[0].position[1];
+		min[0] = m_linesVAO->m_vertexDataCPU[0].position[0];
+		min[1] = m_linesVAO->m_vertexDataCPU[0].position[1];
 
 		// Find the maximum and minimum values for x and y.
-		for (int i = 1; i < m_linesCPU.size(); i++)
+		for (int i = 1; i < m_linesVAO->m_vertexDataCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_linesCPU[i].position[0] > max[0])
+			if (m_linesVAO->m_vertexDataCPU[i].position[0] > max[0])
 			{
-				max[0] = m_linesCPU[i].position[0];
+				max[0] = m_linesVAO->m_vertexDataCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_linesCPU[i].position[0] < min[0])
+			else if (m_linesVAO->m_vertexDataCPU[i].position[0] < min[0])
 			{
-				min[0] = m_linesCPU[i].position[0];
+				min[0] = m_linesVAO->m_vertexDataCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_linesCPU[i].position[1] > max[1])
+			if (m_linesVAO->m_vertexDataCPU[i].position[1] > max[1])
 			{
-				max[1] = m_linesCPU[i].position[1];
+				max[1] = m_linesVAO->m_vertexDataCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_linesCPU[i].position[1] < min[1])
+			else if (m_linesVAO->m_vertexDataCPU[i].position[1] < min[1])
 			{
-				min[1] = m_linesCPU[i].position[1];
+				min[1] = m_linesVAO->m_vertexDataCPU[i].position[1];
 			}
 		}
 	}
 	// If lines is empty init with triangles.
-	else if (m_trianglesCPU.size())
+	else if (m_trianglesVAO->m_vertexDataCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_trianglesCPU[0].position[0];
-		max[1] = m_trianglesCPU[0].position[1];
-		min[0] = m_trianglesCPU[0].position[0];
-		min[1] = m_trianglesCPU[0].position[1];
+		max[0] = m_trianglesVAO->m_vertexDataCPU[0].position[0];
+		max[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
+		min[0] = m_trianglesVAO->m_vertexDataCPU[0].position[0];
+		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
 	}
 	// If triangels is empty init with textured triangles.
-	else if (m_texturedTrianglesCPU.size()) 
+	else if (m_textureTrianglesVAO->m_texturedVertexDataCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_texturedTrianglesCPU[0].position[0];
-		max[1] = m_texturedTrianglesCPU[0].position[1];
-		min[0] = m_texturedTrianglesCPU[0].position[0];
-		min[1] = m_texturedTrianglesCPU[0].position[1];
+		max[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
+		max[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+		min[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
+		min[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
 	// Triangles.
 	//----------------------------------------------------------------------
 
-	if (m_trianglesCPU.size())
+	if (m_trianglesVAO->m_vertexDataCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_trianglesCPU.size(); i++)
+		for (int i = 0; i < m_trianglesVAO->m_vertexDataCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_trianglesCPU[i].position[0] > max[0])
+			if (m_trianglesVAO->m_vertexDataCPU[i].position[0] > max[0])
 			{
-				max[0] = m_trianglesCPU[i].position[0];
+				max[0] = m_trianglesVAO->m_vertexDataCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_trianglesCPU[i].position[0] < min[0])
+			else if (m_trianglesVAO->m_vertexDataCPU[i].position[0] < min[0])
 			{
-				min[0] = m_trianglesCPU[i].position[0];
+				min[0] = m_trianglesVAO->m_vertexDataCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_trianglesCPU[i].position[1] > max[1])
+			if (m_trianglesVAO->m_vertexDataCPU[i].position[1] > max[1])
 			{
-				max[1] = m_trianglesCPU[i].position[1];
+				max[1] = m_trianglesVAO->m_vertexDataCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_trianglesCPU[i].position[1] < min[1])
+			else if (m_trianglesVAO->m_vertexDataCPU[i].position[1] < min[1])
 			{
-				min[1] = m_trianglesCPU[i].position[1];
+				min[1] = m_trianglesVAO->m_vertexDataCPU[i].position[1];
 			}
 		}
 	}
@@ -360,30 +361,30 @@ void BaseEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	if (m_texturedTrianglesCPU.size())
+	if (m_textureTrianglesVAO->m_texturedVertexDataCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_texturedTrianglesCPU.size(); i++)
+		for (int i = 0; i < m_textureTrianglesVAO->m_texturedVertexDataCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_texturedTrianglesCPU[i].position[0] > max[0])
+			if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0] > max[0])
 			{
-				max[0] = m_texturedTrianglesCPU[i].position[0];
+				max[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_texturedTrianglesCPU[i].position[0] < min[0])
+			else if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0] < min[0])
 			{
-				min[0] = m_texturedTrianglesCPU[i].position[0];
+				min[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_texturedTrianglesCPU[i].position[1] > max[1])
+			if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1] > max[1])
 			{
-				max[1] = m_texturedTrianglesCPU[i].position[1];
+				max[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_texturedTrianglesCPU[i].position[1] < min[1])
+			else if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1] < min[1])
 			{
-				min[1] = m_texturedTrianglesCPU[i].position[1];
+				min[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
 			}
 		}
 	}

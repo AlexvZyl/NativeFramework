@@ -32,7 +32,7 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
 
 void Base3DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset) 
 {
-	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(0.0f, 0.0f, yOffset*0.5f));
+	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(0.0f, 0.0f, yOffset*0.05f));
 }
 
 //=============================================================================================================================================//

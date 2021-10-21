@@ -22,7 +22,7 @@ MousePoint::MousePoint(float color[4], float radius, unsigned int resolution, gl
 	// Create VAO that draws the point.
 	m_VAO = new VertexArrayObject(GL_TRIANGLES);
 
-	// Create shader to render the point.
+	// Create shader to render the point in a different space.
 	m_shader = new Shader(BASIC_SHADER);
 
 	// Assign matrices to shader.

@@ -61,7 +61,7 @@ public:
 	void deQueueInput();
 
 	// Function that handles which engine should be active.
-	void renderGui(ImGuiIO& io);
+	void renderGui(ImGuiIO& io, GLFWwindow* window);
 
 	// Set custom theme.
 	void setTheme();
