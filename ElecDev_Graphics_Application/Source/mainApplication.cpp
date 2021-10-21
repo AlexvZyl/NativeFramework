@@ -88,8 +88,9 @@ void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {   
     // Get button state.
-    int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    graphicsHandler->mouseMoveEvent(buttonState);
+    int buttonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    int buttonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight);
 }
 
 // Handle mouse press scroll. from GLFW.
@@ -403,7 +404,7 @@ void deQueueInput(stateMachine* states) {
             switch (hash(temp.command.c_str()))
             {
                 // Draw line.
-            case hash("drawLine"):
+            case hash("DrawLine"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -415,7 +416,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw clear triangle.
-            case hash("drawTriangleClear"):
+            case hash("DrawTriangleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -427,7 +428,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw filled triangle. 
-            case hash("drawTriangleFilled"):
+            case hash("DrawTriangleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -439,7 +440,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw clear quad.
-            case hash("drawQuadClear"):
+            case hash("DrawQuadClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -451,7 +452,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw filled quad.
-            case hash("drawQuadFilled"):
+            case hash("DrawQuadFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -463,7 +464,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw clear circle.
-            case hash("drawCircleClear"):
+            case hash("DrawCircleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -475,7 +476,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw a filled circle.
-            case hash("drawCircleFilled"):
+            case hash("DrawCircleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -487,7 +488,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Draw text.
-            case hash("drawText"):
+            case hash("DrawText"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -515,7 +516,7 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Add MCC window to draw.
-            case hash("addWindow"):
+            case hash("AddWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 text = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -524,14 +525,14 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Remove MCC window.
-            case hash("removeWindow"):
+            case hash("RemoveWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->removeWindow(mccName);
                 break;
 
                 // Draw the demo.
-            case hash("drawDemo"):
+            case hash("DrawDemo"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -540,14 +541,14 @@ void deQueueInput(stateMachine* states) {
                 break;
 
                 // Center the drawing around (0,0).
-            case hash("autoCenter"):
+            case hash("AutoCenter"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->autoCenter(mccName);
                 break;
 
                 // Load CPU buffers to GPU.
-            case hash("updateBuffers"):
+            case hash("UpdateBuffers"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->updateBuffers(mccName);

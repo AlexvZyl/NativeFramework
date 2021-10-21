@@ -77,20 +77,20 @@ void GraphicsHandler::mousePressEvent(int button, int action)
 		else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		{
 			// Call active engine.
-			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight();
+			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight(mousePos);
 		}
 	}
 }
 
 // Handle mouse move events.
-void GraphicsHandler::mouseMoveEvent(int buttonState)
+void GraphicsHandler::mouseMoveEvent(int buttonStateLeft, int buttonStateRight)
 {
 	// Check if window dict is empty or inactive.
 	if (m_windowsDictionary.size() && isWindowValid(m_activeWindow))
 	{
 		// Find cursos position.
 		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords.x , m_windowsDictionary[m_activeWindow]->mouseCoords.y };
-		m_windowsDictionary[m_activeWindow]->engineGL->mouseMoveEvent(mousePos, buttonState);
+		m_windowsDictionary[m_activeWindow]->engineGL->mouseMoveEvent(mousePos, buttonStateLeft, buttonStateRight);
 	}
 }
 

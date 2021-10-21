@@ -16,9 +16,11 @@ Base3DEngineGL::Base3DEngineGL(stateMachine* states) : BaseEngineGL(states)
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
 
 	// Create the camera.
-	float position[3] = {0.0f, 0.0f, 1.0f};
+	float position[3] = {0.0f, 4.0f, 6.0f};
 	float target[3] = { 0.0f, 0.0f, 0.0f };
-	m_camera = new Camera(position, target, &m_rotationMatrix, &m_translationMatrix);
+	m_camera = new Camera(position, target, &m_viewMatrix);
+	// Init the view matrix according to the camera setup.
+	m_camera->updateView();
 
 	// Create the background (or skybox) for the 3D scene.
 	createBackground();
@@ -47,25 +49,54 @@ Base3DEngineGL::~Base3DEngineGL()
 // [MAIN LOOP] Rendering loop.
 void Base3DEngineGL::renderLoop() 
 {
+	// ------------------------------------------------------------	//
+	//  Setup.														//
+	// ------------------------------------------------------------	//
+
 	// Enable depth test for the 3D rendering.
 	GLCall(glEnable(GL_DEPTH_TEST));
 
-	// Call parent render loop.
-	BaseEngineGL::renderLoop();
+	// Set glViewport for the ImGUI context.
+	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0],
+							(GLsizei)m_imGuiViewportDimensions[1]));
+
+	// Calculate and update the engine matrices.
+	m_camera->updateView();
+
+	// Render to frame buffer.
+	m_frameBuffer->bind();
+	m_frameBuffer->clear();
+
+	// ------------------------------------------------------------	//
+	//  Rendering.													//
+	// ------------------------------------------------------------	//
+
+	// Draw static entities.
+	m_staticShader->bind();
+	m_backgroundVAO->render();
+
+	// Draw basic entities.
+	m_basicShader->bind();
+	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
+	m_trianglesVAO->render();
+	m_linesVAO->render();
+
+	// Draw textured entities.
+	m_textureShader->bind();
+	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
+	m_textureTrianglesVAO->render();
+
+	// ------------------------------------------------------------	//
+	//  Cleanup.													//
+	// ------------------------------------------------------------	//
+
+	// Stop rendering to the current FBO.
+	m_frameBuffer->unbind();
 
 	// Disable depth test since its not needed for the 2D engines.
 	GLCall(glDisable(GL_DEPTH_TEST));
-}
 
-// Applies the render loop matrix calculations.
-// This function is called in 'BaseEngineGL::renderLoop()'.
-void Base3DEngineGL::updateMatrices()
-{
-	// Update the rotation matrix from the quaternion.
-	m_camera->updateMatrices();
-
-	// Call base function.
-	BaseEngineGL::updateMartrices();
+	// ------------------------------------------------------------	//
 }
 
 // Creates the background for the scene.
@@ -73,7 +104,6 @@ void Base3DEngineGL::createBackground()
 {
 	// Delete the Base2D background.
 	delete m_backgroundVAO;
-
 	// Now create the background for the 3D scene.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Assign background data.

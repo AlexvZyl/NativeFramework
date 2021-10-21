@@ -133,9 +133,9 @@ public:
 	// Mouse events are automatically assigned to the active window.
 	// The active window is changed from the ImGUI side as the mouse moves.
 
-	void mousePressEvent(int button, int action);		// Handle mouse press events.
-	void mouseMoveEvent(int buttonState);				// Handle mouse move events.
-	void mouseScrollEvent(float yOffset);				// Handle mouse scroll events.
+	void mousePressEvent(int button, int action);					// Handle mouse press events.
+	void mouseMoveEvent(int buttonStateLeft, int buttonStateRight);	// Handle mouse move events.
+	void mouseScrollEvent(float yOffset);							// Handle mouse scroll events.
 
 	//-----------------------------------------------------------------------------------------------------------------
 	//  Window events.

@@ -108,31 +108,32 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 					i - size, j + size, k + size,
 					1.0f, 0.0f, 0.0f, 1.0f,
 					0.0f, 1.0f,
-					2.0f
+					0.0f
 				);
 				TexturedVertexData tv2(			// Top right.
 					i + size, j + size, k + size,
 					0.0f, 1.0f, 0.0f, 1.0f,
 					1.0f, 1.0f,
-					2.0f
+					0.0f
 				);
 				TexturedVertexData tv3(			// Bottom right.
 					i + size, j - size, k + size,
 					0.0f, 0.0f, 1.0f, 1.0f,
 					1.0f, 0.0f,
-					2.0f
+					0.0f
 				);
 				TexturedVertexData tv4(			// Bottom left.
 					i - size, j - size, k + size,
-					1.0f, 1.0f, 0.0f, 1.0f,
+					1.0f, 0.0f, 1.0f, 1.0f,
 					0.0f, 0.0f,
-					2.0f
+					0.0f
 				);	
 				std::vector<TexturedVertexData> tVertices = {tv1, tv2, tv3, tv3, tv4, tv1};
 				m_textureTrianglesVAO->writeData(tVertices);
 			}
 		}
 	}
+
 	updateBuffers();
 }
  

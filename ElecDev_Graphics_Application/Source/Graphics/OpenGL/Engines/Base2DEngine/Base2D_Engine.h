@@ -85,8 +85,8 @@ public:
 	//  Shaders.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	Shader* m_staticShader;		// Renders static elements.
 	Shader* m_basicShader;		// Renders movable elements without textures.
+	Shader* m_staticShader;		// Renders static elements.
 	Shader* m_textureShader;	// Renders movable elements with textures.
 
 	//---------------------------------------------------------------------------------------------------------------------
@@ -148,9 +148,6 @@ public:
 	unsigned int getRenderTexture();
 	// Create a background.
 	virtual void createBackground();
-	// Function that does the matrix mathematics for the world movement.
-	// Created seperately so that different engines can do different calculations.
-	virtual void updateMartrices();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
@@ -175,8 +172,8 @@ public:
 
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
-	virtual void mousePressRight();
-	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
+	virtual void mousePressRight(float pixelCoords[2]);
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------

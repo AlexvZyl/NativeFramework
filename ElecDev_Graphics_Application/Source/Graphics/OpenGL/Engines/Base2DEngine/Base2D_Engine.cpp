@@ -118,8 +118,8 @@ void BaseEngineGL::renderLoop()
 							(GLsizei)m_imGuiViewportDimensions[1]));
 
 	// Calculate and update the engine matrices.
-	updateMartrices();
-
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
+	
 	// Render to frame buffer.
 	m_frameBuffer->bind();
 	m_frameBuffer->clear();
@@ -151,12 +151,6 @@ void BaseEngineGL::renderLoop()
 	m_frameBuffer->unbind();
 
 	// ------------------------------------------------------------	//
-}
-
-// Applies the render loop matrix calculations.
-void BaseEngineGL::updateMartrices() 
-{
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
 }
 
 // Return the ID to the texture that is rendered via the FBO.
