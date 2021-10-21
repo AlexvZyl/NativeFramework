@@ -98,7 +98,7 @@ void GUIHandler::renderGui(ImGuiIO& io)
 		this->mcc->renderGraphics(dock);
 	}
 
-	this->renderUI();
+	this->renderUI(dock);
 
 	//ImGui::Begin("FPS");
 	//ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
@@ -212,7 +212,7 @@ void GUIHandler::pushData(std::list<guiHolder>::iterator uiWindow) {
 
 }
 
-void GUIHandler::renderUI(){
+void GUIHandler::renderUI(ImGuiID dock){
 
 	std::list<guiHolder>::iterator it = guis.begin();
 	while (it != guis.end())
@@ -225,6 +225,10 @@ void GUIHandler::renderUI(){
 		
 		if (it->close)
 		{
+			if (it->docked) {
+				ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
+			}
+
 			if (ImGui::Begin(it->windowName.c_str(), &it->close)) {
 				ImGui::SetWindowSize(ImVec2(0, 0));
 				ImGui::SetWindowPos(it->windowPos, ImGuiCond_Once);
@@ -233,6 +237,7 @@ void GUIHandler::renderUI(){
 				for (it2 = it->elements.begin(); it2 != it->elements.end(); ++it2)
 				{
 					static char str0[128] = "";
+					static int sliderVal = 0;
 					switch (hash(it2->type.c_str()))
 					{
 
@@ -289,9 +294,19 @@ void GUIHandler::renderUI(){
 					}
 					case hash("SliderAngle"):
 					{
-						static float angle = 0.0f;
-						ImGui::SliderAngle("slider angle", &angle);
-						it2->data = angle;
+						
+
+						int range[2];
+						int count = 0;
+						for (std::list<std::string>::iterator it3 = it2->extraParams.begin(); it3 != it2->extraParams.end(); ++it3)
+						{
+							std::cout << it3->c_str() << std::endl;
+							range[count] = std::stof(it3->c_str());
+							count++;
+						}
+
+						ImGui::SliderInt(it2->name.c_str(), &sliderVal, range[0], range[1]);
+						it2->data = std::to_string(sliderVal);
 						break;
 					}
 					case hash("ComboBox"): 

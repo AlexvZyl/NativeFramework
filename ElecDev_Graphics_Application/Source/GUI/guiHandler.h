@@ -51,6 +51,7 @@ struct guiHolder {
 	std::list<element> elements;
 	bool close = true;
 	bool submit = false;
+	bool docked = false;
 
 	guiHolder(std::string window, ImVec2 windowPosIn, std::list<element> inElements) {
 		windowName = window;
@@ -99,7 +100,7 @@ public:
 
 	void createGUI(std::string guiName, std::string guiPos, std::string parameters);
 
-	void renderUI();
+	void renderUI(ImGuiID dock);
 
 	void pushData(std::list<guiHolder>::iterator uiWindow);
 
