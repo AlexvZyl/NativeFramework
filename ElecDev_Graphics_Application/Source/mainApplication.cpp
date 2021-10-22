@@ -622,6 +622,23 @@ void deQueueInput(stateMachine* states) {
                                                            new float[4]{params[12],params[13],params[14],params[15]});
                 break;
 
+            // Draw filled quad.
+            case hash("DrawCuboidFilled"):
+                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                for (size_t i = 0; i < 17; i++)
+                {
+                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                }
+                graphicsHandler->drawCuboidFilled(mccName, new float[3]{ params[0], params[1], params[2] },
+                    new float[3]{ params[3], params[4], params[5] },
+                    new float[3]{ params[6], params[7], params[8] },
+                    new float[3]{ params[9], params[10], params[11] },
+                    params[12],
+                    new float[4]{ params[13],params[14],params[15],params[16] });
+                break;
+
             default:
                 std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
                 break;

@@ -381,6 +381,27 @@ void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3],
 	}
 }
 
+// Draws a 3D cuboid.
+void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4])
+{
+	// Check if window exists.
+	if (isWindowValid(windowName))
+	{
+		try {
+			// Call BaseEngine function.
+			m_windowsDictionary[windowName]->engineGL->drawCuboidFilled(vertex1, vertex2, vertex3, vertex4, depth, color);
+		}
+		catch (const std::exception& e)
+		{
+			parametersError(e);
+		}
+	}
+	else
+	{
+		windowError(windowName);
+	}
+}
+
 // ===================================================================================================================== //
 // Error handling.																										 //
 // ===================================================================================================================== //

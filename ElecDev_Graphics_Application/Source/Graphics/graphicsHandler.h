@@ -171,6 +171,7 @@ public:
 	// --------------------------------
 
 	void drawQuadFilled3D(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]);
+	void drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]);
 
 	// Window management.
 	// --------------------------------
