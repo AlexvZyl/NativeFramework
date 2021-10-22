@@ -1,0 +1,86 @@
+#pragma once
+
+/*
+Child of EngineCoreGL.  Uses the base OpenGL functionality and implements 2D controls and API.
+*/
+
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
+
+// Core OpenGL functionality.
+#include "../Core/CoreGL.h"
+
+//=============================================================================================================================================//
+//  Base 2D Engine Class.																													   //
+//=============================================================================================================================================//
+
+class Base2DEngineGL : EngineCoreGL
+{
+
+public:
+
+	//=========================================================================================================================================//
+	//  Engine settings.																													   //
+	//=========================================================================================================================================//
+
+	float m_scaleRate = 0.3f;		// Determines how much is zoomed with each mouse wheel scroll.
+	float m_projectionValues[6];	// Stores the valaues that is used to calculate the projection matrix.
+
+	//=========================================================================================================================================//
+	//  Constructor and destructor.																											   //
+	//=========================================================================================================================================//
+
+	// Contructor.
+	Base2DEngineGL(stateMachine* states);
+	// Destructor
+	~Base2DEngineGL();
+
+	//=========================================================================================================================================//
+	//  Rendering.																															   //
+	//=========================================================================================================================================//
+
+	// Testing texture.
+	GLuint m_texture=0;
+	// Rendering loop.
+	virtual void renderLoop();
+	// Get the ID to the FBO rendered texture.
+	unsigned int getRenderTexture();
+	// Create a background.
+	virtual void createBackground();
+
+	//=========================================================================================================================================//
+	//  API.																																   //
+	//=========================================================================================================================================//
+
+	// Functions supported by the base engine.
+	virtual void drawLine(float position1[2], float position2[2], float color[4]);
+	virtual void drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]);
+	virtual void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]);
+	virtual void drawQuadClear(float position[2], float width, float height, float color[4]);
+	virtual void drawQuadFilled(float position[2], float width, float height, float color[4]);
+	virtual void drawCircleClear(float position[2], float radius, float color[4]);
+	virtual void drawCircleFilled(float position[2], float radius, float color[4]);
+	virtual void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
+	virtual void drawDemo(unsigned int loopCount);								
+	virtual void autoCenter();
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Coordinate systems.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	// Convert pixel coordinates to world coordinates.
+	glm::vec4 pixelCoordsToWorldCoords(float pixelCoords[2]);
+
+	//---------------------------------------------------------------------------------------------------------------------
+	//  Window functions.
+	//---------------------------------------------------------------------------------------------------------------------
+
+	// Callback that handles the resizing event.
+	virtual void resizeEvent(int width, int height);
+
+};
+
+//-------------------------------------------------------------------------------------------------------------------------
+//  EOF.
+//-------------------------------------------------------------------------------------------------------------------------

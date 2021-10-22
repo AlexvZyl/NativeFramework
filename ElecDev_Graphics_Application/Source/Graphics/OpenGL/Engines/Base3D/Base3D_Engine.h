@@ -31,8 +31,7 @@ public:
 	
 	// 3D scene camera.
 	Camera* m_camera;
-	// Stores the previous event coords in pixels.  This is required for the camera rotation.
-	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };
+	
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//  Constructor and Destructor.
