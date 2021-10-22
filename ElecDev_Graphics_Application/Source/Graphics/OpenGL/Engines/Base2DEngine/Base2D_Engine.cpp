@@ -26,14 +26,6 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	m_textureShader = new Shader(TEXTURE_SHADER);
 
 	//---------------------------------------------------------------------------------------
-	// Windows setup.
-	//---------------------------------------------------------------------------------------
-
-	// ImGUI viewport init.
-	m_imGuiViewportDimensions[0] = 500;
-	m_imGuiViewportDimensions[1] = 500;
-
-	//---------------------------------------------------------------------------------------
 	// Matrices setup.
 	//---------------------------------------------------------------------------------------
 
@@ -61,51 +53,24 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
 
 	//---------------------------------------------------------------------------------------
+	// Rendering setup.
+	//---------------------------------------------------------------------------------------
+
+	// Create the background for the scene.
+	createBackground();
+
 	// Buffers setup.
-	//---------------------------------------------------------------------------------------
-
-	// Lines.
-	m_linesVAO = new VertexArrayObject(GL_LINES);
-	// Triangles.
+	m_linesVAO = new VertexArrayObject(GL_LINES);					
 	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES);
-	// Textured Triangles.
 	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, true);
-	// Background.
-	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
-	// Frame buffer.
-	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1]);
+	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 
-	//---------------------------------------------------------------------------------------
-	// Background setup.
-	//---------------------------------------------------------------------------------------
-
-	// Assign background data.
-	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
-	float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
-	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
-	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
-	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
-	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
-	// Create background.
-	m_backgroundVAO->writeData(vertices);
-
-	//---------------------------------------------------------------------------------------
-	// Textures & Text setup.
-	//---------------------------------------------------------------------------------------
-
-	// Enable blending for alpha channels.
-	GLCall(glEnable(GL_BLEND));
-	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-	m_textureShader->bind();
-	// Load texture for testing.
-	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
-
-	// Create texture renderer object.
-	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
+	// Textures.
+	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));	// Testing texture.
+	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);		// Text renderer.
 
 	// Setup shader with textures (including font atlas).
+	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
@@ -141,51 +106,77 @@ BaseEngineGL::~BaseEngineGL()
 //  Rendering.
 //----------------------------------------------------------------------------------------------------------------------
 
+// [MAIN LOOP] The rendering pipeline.
 void BaseEngineGL::renderLoop()
 {
-	// Set glViewport for the ImGUI context.
-	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0], (GLsizei)m_imGuiViewportDimensions[1]));
+	// ------------------------------------------------------------	//
+	//  Setup.														//
+	// ------------------------------------------------------------	//
 
+	// Set glViewport for the ImGUI context.
+	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0], 
+							(GLsizei)m_imGuiViewportDimensions[1]));
+
+	// Calculate and update the engine matrices.
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
+	
 	// Render to frame buffer.
 	m_frameBuffer->bind();
 	m_frameBuffer->clear();
-
-	//---------------------------------------------------------------------------------------
-	// Matrix calculations.
-	//---------------------------------------------------------------------------------------
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
 	
-	//---------------------------------------------------------------------------------------
+	// ------------------------------------------------------------	//
+	//  Rendering.													//
+	// ------------------------------------------------------------	//
+		
 	// Draw static entities.
-	//---------------------------------------------------------------------------------------
 	m_staticShader->bind();
 	m_backgroundVAO->render();
 
-	//---------------------------------------------------------------------------------------
 	// Draw basic entities.
-	//---------------------------------------------------------------------------------------
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
 	m_trianglesVAO->render();
 	m_linesVAO->render();
 
-	//---------------------------------------------------------------------------------------
 	// Draw textured entities.
-	//---------------------------------------------------------------------------------------
 	m_textureShader->bind();
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
 	m_textureTrianglesVAO->render();
 
-	//---------------------------------------------------------------------------------------
+	// ------------------------------------------------------------	//
+	//  Cleanup.													//
+	// ------------------------------------------------------------	//
 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
+
+	// ------------------------------------------------------------	//
 }
 
 // Return the ID to the texture that is rendered via the FBO.
-unsigned int BaseEngineGL::getRenderedTexID() 
+unsigned int BaseEngineGL::getRenderTexture()
 {
-	return m_frameBuffer->getTexID();
+	return m_frameBuffer->getRenderTexture();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+// Used to create a background.
+// Is a virtual function so that child engines have the option to change the background.
+void BaseEngineGL::createBackground() 
+{
+	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
+	// Assign background data.
+	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
+	float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
+	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
+	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
+	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
+	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
+	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
+	// Create background.
+	m_backgroundVAO->writeData(vertices);
+	m_backgroundVAO->updateGPU();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

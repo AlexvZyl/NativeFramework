@@ -54,25 +54,25 @@ public:
 	//---------------------------------------------------------------------------------------------------------------------
 	
 	// MVP Matrices.
-	glm::mat4 m_modelMatrix = glm::mat4(1.0f);		// The model matrix that places the object in the world.  Is going to be 
-													// kept an identity matrix for now.
-	glm::mat4 m_viewMatrix = glm::mat4(1.0f);		// The matrix that handles the camera movement.
-													// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);	// The matrix that handles the clipping plane (which part of the world is
-													// going to be visible to the screen?
-	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);	// The matrix that handles the viewport transform.  Converts screen pixel
-													// coordinates to the OpenGL uniform coordinate system.
+	glm::mat4 m_modelMatrix = glm::mat4(1.0f);			// The model matrix that places the object in the world.  Is going to be 
+														// kept an identity matrix for now.
+	glm::mat4 m_viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
+														// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
+	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);		// The matrix that handles the clipping plane (which part of the world is
+														// going to be visible to the screen?
+	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
+														// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.
-	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);	// Handles camera scaling.
-	glm::mat4 m_translationMatrix = glm::mat4(1.0f);// Handles camera translations.
-	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);	// Handles camera rotations.
+	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
+	glm::mat4 m_translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
+	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
 
 	// We need matrices to store the base view of the drawing.  This is to fall back to when right clicking, and this has to 
 	// be updated with resizing and when auto sizing and scaling funtions are called.
-	glm::mat4 m_scalingMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera scaling.
-	glm::mat4 m_translationMatrixBase = glm::mat4(1.0f);// Stores base matrix for camera translation.
-	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera rotation.
+	glm::mat4 m_scalingMatrixBase = glm::mat4(1.0f);		// Stores base matrix for camera scaling.
+	glm::mat4 m_translationMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera translation.
+	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);		// Stores base matrix for camera rotation.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse handler variables.
@@ -102,13 +102,6 @@ public:
 	// Frame Buffer rendering.
 	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
 
-	// Local Data.								// It is not a good idea to read data from the OpenGL buffers and thus we
-												// need to store copies of the buffers on the CPU side.
-
-	std::vector<VertexData> m_linesCPU;						// These two buffers contain the vertex data and stores it CPU side.  This
-	std::vector<VertexData> m_trianglesCPU;					// is to allow the program to dynamically change the buffers, since this 
-	std::vector<TexturedVertexData> m_texturedTrianglesCPU;	// cannot be done if all of the data is stored on the GPU.
-
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Settings.
 	//---------------------------------------------------------------------------------------------------------------------
@@ -128,9 +121,9 @@ public:
 	//  Viewport variables.
 	//---------------------------------------------------------------------------------------------------------------------
 
-	float m_imGuiViewportDimensions[2];			// Stores the dimensions of the viewport that the OpenGL context gets drawn
-												// to.  
-	float m_projectionValues[6];				// Stores the valaues that is used to calculate the projection matrix.
+	float m_imGuiViewportDimensions[2] = {500, 500};	// Stores the dimensions of the viewport that the OpenGL context gets drawn
+														// to.  
+	float m_projectionValues[6];						// Stores the valaues that is used to calculate the projection matrix.
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructor & Destructor.
@@ -152,24 +145,28 @@ public:
 	// Rendering loop.
 	virtual void renderLoop();
 	// Get the ID to the FBO rendered texture.
-	unsigned int getRenderedTexID();
+	unsigned int getRenderTexture();
+	// Create a background.
+	virtual void createBackground();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Functions supported by the base engine.
-	void drawLine(float position1[2], float position2[2], float color[4]);
-	void drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]);
-	void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]);
-	void drawQuadClear(float position[2], float width, float height, float color[4]);
-	void drawQuadFilled(float position[2], float width, float height, float color[4]);
-	void drawCircleClear(float position[2], float radius, float color[4]);
-	void drawCircleFilled(float position[2], float radius, float color[4]);
-	void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
-	virtual void drawDemo(unsigned int loopCount);								// Draw a demo of the capabilities.
+	virtual void drawLine(float position1[2], float position2[2], float color[4]);
+	virtual void drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]);
+	virtual void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]);
+	virtual void drawQuadClear(float position[2], float width, float height, float color[4]);
+	virtual void drawQuadFilled(float position[2], float width, float height, float color[4]);
+	virtual void drawCircleClear(float position[2], float radius, float color[4]);
+	virtual void drawCircleFilled(float position[2], float radius, float color[4]);
+	virtual void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
+	virtual void drawDemo(unsigned int loopCount);								
 	virtual void autoCenter();
 	void updateBuffers();				
+
+	virtual void drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Mouse events.
@@ -177,8 +174,8 @@ public:
 
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
-	virtual void mousePressRight();
-	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
+	virtual void mousePressRight(float pixelCoords[2]);
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 
 	//---------------------------------------------------------------------------------------------------------------------

@@ -19,23 +19,27 @@ It is going to be used to render to an ImGUI widget.
 
 class FrameBufferObject 
 {
-	// Details regarding the FBO.
-	struct FrameBufferSpecification 
-	{
-		
-	};
 
 private:
 
-	// FBO id.
-	unsigned int m_rendererID;
-	// Texture ID.
-	unsigned int m_textureID;
+	// FBO that will be rendered.
+	unsigned int m_renderFrameBufferID;			// FBO ID.
+	unsigned int m_renderColorTextureID;		// Texture ID.	
+
+	// MSAA FBO.
+	unsigned int m_msaaFrameBufferID;			// FBO ID.
+	unsigned int m_msaaColorTextureID;			// Texture ID.	
+	unsigned int m_msaaDepthStencilBufferID;	// Depth/Stencil buffer.
+
+	// Saves the FBO size.
+	int m_viewport[2] = { 500, 500 };
+
+	int m_MSAA = 1;
 
 public:
 
 	// Constructor.
-	FrameBufferObject(int width, int height);
+	FrameBufferObject(int width, int height, int MSAA);
 	// Destructor.
 	~FrameBufferObject();
 	
@@ -43,8 +47,10 @@ public:
 	void bind();
 	// Unbind the FBO.
 	void unbind();
-	// G>et the texture ID.
-	unsigned int getTexID();
+	// Create the color, depth and stencil attachments.
+	void createAttachments(int width, int height);
+	// Get the texture ID.
+	unsigned int getRenderTexture();
 
 	// Resizing the texure when the window resizes.
 	void resize(int width, int height);

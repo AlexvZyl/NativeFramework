@@ -91,8 +91,9 @@ void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {   
     // Get button state.
-    int buttonState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    graphicsHandler->mouseMoveEvent(buttonState);
+    int buttonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    int buttonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight);
 }
 
 // Handle mouse press scroll. from GLFW.
@@ -191,7 +192,7 @@ int main(int, char**)
     }
 
     // Print OpenGL version.
-    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version : " << glGetString(GL_VERSION) << ".";
+    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
 
     /*-----------------------------------------------------------------------------------------------------------------------------------*/
     // ImGUI & OpenGL setup. 
@@ -231,13 +232,15 @@ int main(int, char**)
     GLCall(glViewport(0, 0, screen_width, screen_height));
 
     // Setup mouse callbacks.
-    glfwSetMouseButtonCallback(window, mousePressEvent);    // Mouse press event.
-    glfwSetCursorPosCallback(window, mouseMoveEvent);       // Mouse move event.
-    glfwSetScrollCallback(window, mouseScrollEvent);        // Mouse scroll event.
+    glfwSetMouseButtonCallback(window, mousePressEvent);        // Mouse press event.
+    glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
+    glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
 
-    // OpenGL inits.
-    GLCall(glEnable(GL_MULTISAMPLE));       // MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));        // Depth testing (the z buffer).
+    // OpenGL settings.
+    GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
+    GLCall(glDisable(GL_DEPTH_TEST));                           // Disable the depth testing since it will be enabled only when rendring 3D scenes.
+    GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
 
     // Create the state machine variables.
     stateMachine* states = new stateMachine();
@@ -258,7 +261,6 @@ int main(int, char**)
 
     // Loop variables.
     bool wait = false;          // Wait for events.
-    int display_w, display_h;   // Viewport for ImGUI.
 
     // Thread reading inputs from pipeline.
     std::thread t1(readingIn, states);
@@ -266,32 +268,27 @@ int main(int, char**)
     //Thread writing to the pipeline
     std::thread t2(readingOut, states);
 
-    // [MAIN LOOP] Graphics Pipeline
+    // [MAIN LOOP] Graphics Pipeline.
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
+        // Clear buffers for OpenGL.
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
         // Poll commands from python interface.
         deQueueInput(states);
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
         else { glfwPollEvents(); }        // App runs continuously.
-    
-        // Clear colors for OpenGL.
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
      
         // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
         graphicsHandler->renderGraphics();
 
-        // Assign values to viewport for ImGUI.
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        GLCall(glViewport(0, 0, display_w, display_h));
-
         // Render ImGUI to screen.
-        guiHandler->renderGui(io);
+        guiHandler->renderGui(io, window);
 
         // Swap the OpenGL buffers.
         glfwSwapBuffers(window);
-
     }
 
     /*===================================================================================================================================*/
@@ -300,6 +297,8 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    delete graphicsHandler;
+    delete states;
 
     // Log exiting.
     std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
@@ -444,8 +443,8 @@ void deQueueInput(stateMachine* states) {
             // Switch between different commands.
             switch (hash(temp.command.c_str()))
             {
-                // Draw line.
-            case hash("drawLine"):
+            // Draw line.
+            case hash("DrawLine"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -456,8 +455,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-                // Draw clear triangle.
-            case hash("drawTriangleClear"):
+            // Draw clear triangle.
+            case hash("DrawTriangleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -468,8 +467,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
                 break;
 
-                // Draw filled triangle. 
-            case hash("drawTriangleFilled"):
+            // Draw filled triangle. 
+            case hash("DrawTriangleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 10; i++)
@@ -480,8 +479,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
                 break;
 
-                // Draw clear quad.
-            case hash("drawQuadClear"):
+            // Draw clear quad.
+            case hash("DrawQuadClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -492,8 +491,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-                // Draw filled quad.
-            case hash("drawQuadFilled"):
+            // Draw filled quad.
+            case hash("DrawQuadFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -504,8 +503,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-                // Draw clear circle.
-            case hash("drawCircleClear"):
+            // Draw clear circle.
+            case hash("DrawCircleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -516,8 +515,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
-                // Draw a filled circle.
-            case hash("drawCircleFilled"):
+            // Draw a filled circle.
+            case hash("DrawCircleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 7; i++)
@@ -528,8 +527,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
-                // Draw text.
-            case hash("drawText"):
+            // Draw text.
+            case hash("DrawText"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 for (size_t i = 0; i < 8; i++)
@@ -556,8 +555,8 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
                 break;
 
-                // Add MCC window to draw.
-            case hash("addWindow"):
+            // Add MCC window to draw.
+            case hash("AddWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 text = temp.parameters.substr(0, temp.parameters.find(";"));
@@ -565,15 +564,15 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->addWindow(mccName, text);
                 break;
 
-                // Remove MCC window.
-            case hash("removeWindow"):
+            // Remove MCC window.
+            case hash("RemoveWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->removeWindow(mccName);
                 break;
 
-                // Draw the demo.
-            case hash("drawDemo"):
+            // Draw the demo.
+            case hash("DrawDemo"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
@@ -581,15 +580,15 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
                 break;
 
-                // Center the drawing around (0,0).
-            case hash("autoCenter"):
+            // Center the drawing around (0,0).
+            case hash("AutoCenter"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->autoCenter(mccName);
                 break;
 
-                // Load CPU buffers to GPU.
-            case hash("updateBuffers"):
+            // Load CPU buffers to GPU.
+            case hash("UpdateDrawing"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->updateBuffers(mccName);
@@ -602,6 +601,25 @@ void deQueueInput(stateMachine* states) {
                 guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
                 parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 guiHandler->createGUI(guiName, guiPos, parameters);
+                
+            /*===================================================================================================================================*/
+            /* 3D API.                                                                                                                           */
+            /*===================================================================================================================================*/
+
+            // Draw filled quad.
+            case hash("DrawQuadFilled3D"):
+                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                for (size_t i = 0; i < 16; i++)
+                {
+                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                }
+                graphicsHandler->drawQuadFilled3D(mccName, new float[3]{ params[0], params[1], params[2] },
+                                                           new float[3]{ params[3], params[4], params[5] },
+                                                           new float[3]{ params[6], params[7], params[8] },
+                                                           new float[3]{ params[9], params[10], params[11] },
+                                                           new float[4]{params[12],params[13],params[14],params[15]});
                 break;
 
             default:

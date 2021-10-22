@@ -11,6 +11,10 @@ Some modifications will have to be applied to the matrices and the mouse handlin
 
 // The base 2D engine.
 #include "../Base2DEngine/Base2D_Engine.h"
+#include "Peripherals/Camera.h"
+
+// GLM QUaternion.
+#include "glm.hpp"
 
 //=============================================================================================================================================//
 //  Base 3D Engine Class.																													   //
@@ -24,6 +28,11 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------
 	//  Variables.
 	//----------------------------------------------------------------------------------------------------------------------
+	
+	// 3D scene camera.
+	Camera* m_camera;
+	// Stores the previous event coords in pixels.  This is required for the camera rotation.
+	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//  Constructor and Destructor.
@@ -40,12 +49,15 @@ public:
 
 	// Rendering loop.
 	virtual void renderLoop();
+	// Background creation.
+	virtual void createBackground();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  API
 	//---------------------------------------------------------------------------------------------------------------------
 
-	virtual void drawDemo(unsigned int loopCount);		// Draw a demo of the engine capabilities.
+	virtual void drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]);
+	virtual void drawDemo(unsigned int loopCount);
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Window events.
@@ -59,8 +71,8 @@ public:
 
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
-	virtual void mousePressRight();
-	virtual void mouseMoveEvent(float pixelCoords[2], int buttonState);
+	virtual void mousePressRight(float pixelCoords[2]);
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 
 	//--------------------------------------------------------------------------------------------------------------------

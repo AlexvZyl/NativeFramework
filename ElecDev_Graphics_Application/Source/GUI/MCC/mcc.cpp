@@ -102,7 +102,7 @@ void MCC::renderGraphics(ImGuiID dock)
 					ImVec2 wsize = ImGui::GetWindowSize();
 
 					// Because I use the texture from OpenGL, I need to invert the V from the UV.
-					ImGui::Image((ImTextureID)struc.second->engineGL->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
+					ImGui::Image((ImTextureID)struc.second->engineGL->getRenderTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 
 					ImGui::EndChild();
 				}

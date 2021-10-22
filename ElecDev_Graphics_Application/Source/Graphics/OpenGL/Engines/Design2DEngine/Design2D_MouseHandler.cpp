@@ -20,10 +20,10 @@ void DesignEngineGL::mousePressLeft(float pixelCoords[2])
 }
 
 // Event handler for a mouse right click.
-void DesignEngineGL::mousePressRight()
+void DesignEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Call base engine event.
-	BaseEngineGL::mousePressRight();
+	BaseEngineGL::mousePressRight(pixelCoords);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,12 +31,12 @@ void DesignEngineGL::mousePressRight()
 //----------------------------------------------------------------------------------------------------------------------
 
 // Event handler for a mouse move event.
-void DesignEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
+void DesignEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
 	// Call base engine event.
-	BaseEngineGL::mouseMoveEvent(pixelCoords, buttonState);
+	BaseEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight);
 
-	// Update the mouse point.
+	// Update the mouse point position.
 	m_mousePoint->updatePosition(pixelCoords);
 }
 

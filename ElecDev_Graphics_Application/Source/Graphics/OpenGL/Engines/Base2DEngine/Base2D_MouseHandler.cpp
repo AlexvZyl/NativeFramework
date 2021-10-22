@@ -23,7 +23,7 @@ void BaseEngineGL::mousePressLeft(float pixelCoords[2])
 }
 
 // Event handler for a mouse right click.
-void BaseEngineGL::mousePressRight()
+void BaseEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Reset the view values to the base matrices.
 	m_scalingMatrix = m_scalingMatrixBase;
@@ -36,10 +36,10 @@ void BaseEngineGL::mousePressRight()
 //----------------------------------------------------------------------------------------------------------------------
 
 // Event handler for a mouse move event.
-void BaseEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonState)
+void BaseEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
 	// Check if left mouse is pressed.
-	if (buttonState == GLFW_PRESS)
+	if (buttonStateLeft == GLFW_PRESS)
 	{
 		// Find current mouse position in the world.
 		glm::vec4 currMousePosVec = pixelCoordsToWorldCoords(pixelCoords);
