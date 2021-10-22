@@ -6,7 +6,7 @@
 
 
 //=============================================================================================================================================//
-//  Basic primitives.																																   //
+//  Basic primitives.																														   //
 //=============================================================================================================================================//
 
 void Base3DEngineGL::drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]) 
@@ -101,6 +101,178 @@ void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], fl
 	m_trianglesVAO->writeData(vertices);
 }
 
+//=============================================================================================================================================//
+//  Camera manipulation.																													   //
+//=============================================================================================================================================//
+
+// Automatically places the drawing in the center and scales it to fit into the window..
+void Base3DEngineGL::autoCenter()
+{
+	// First reset the matrices.
+	m_scalingMatrix = glm::mat4(1.0f);
+	m_translationMatrix = glm::mat4(1.0f);
+	m_rotationMatrix = glm::mat4(1.0f);
+	// And reset the base matrices.
+	m_scalingMatrixBase = glm::mat4(1.0f);
+	m_translationMatrixBase = glm::mat4(1.0f);
+	m_rotationMatrixBase = glm::mat4(1.0f);
+
+	// Dimensions of the drawing.
+	// These values are calculated in the following loops.
+	float max[2] = { 0, 0 };
+	float min[2] = { 0, 0 };
+
+	//----------------------------------------------------------------------
+	// Lines.
+	//----------------------------------------------------------------------
+
+	// If lines is not empty.
+	if (m_linesVAO->m_vertexDataCPU.size())
+	{
+		// Init min/max values.
+		max[0] = m_linesVAO->m_vertexDataCPU[0].position[0];
+		max[1] = m_linesVAO->m_vertexDataCPU[0].position[1];
+		min[0] = m_linesVAO->m_vertexDataCPU[0].position[0];
+		min[1] = m_linesVAO->m_vertexDataCPU[0].position[1];
+
+		// Find the maximum and minimum values for x and y.
+		for (int i = 1; i < m_linesVAO->m_vertexDataCPU.size(); i++)
+		{
+			// Check max for x.
+			if (m_linesVAO->m_vertexDataCPU[i].position[0] > max[0])
+			{
+				max[0] = m_linesVAO->m_vertexDataCPU[i].position[0];
+			}
+			// Check min for x.
+			else if (m_linesVAO->m_vertexDataCPU[i].position[0] < min[0])
+			{
+				min[0] = m_linesVAO->m_vertexDataCPU[i].position[0];
+			}
+			// Check max for y.
+			if (m_linesVAO->m_vertexDataCPU[i].position[1] > max[1])
+			{
+				max[1] = m_linesVAO->m_vertexDataCPU[i].position[1];
+			}
+			// Check min for y.
+			else if (m_linesVAO->m_vertexDataCPU[i].position[1] < min[1])
+			{
+				min[1] = m_linesVAO->m_vertexDataCPU[i].position[1];
+			}
+		}
+	}
+	// If lines is empty init with triangles.
+	else if (m_trianglesVAO->m_vertexDataCPU.size())
+	{
+		// Init min/max values.
+		max[0] = m_trianglesVAO->m_vertexDataCPU[0].position[0];
+		max[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
+		min[0] = m_trianglesVAO->m_vertexDataCPU[0].position[0];
+		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
+	}
+	// If triangels is empty init with textured triangles.
+	else if (m_textureTrianglesVAO->m_texturedVertexDataCPU.size())
+	{
+		// Init min/max values.
+		max[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
+		max[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+		min[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
+		min[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+	}
+
+	//----------------------------------------------------------------------
+	// Triangles.
+	//----------------------------------------------------------------------
+
+	if (m_trianglesVAO->m_vertexDataCPU.size())
+	{
+		// Find the maximum and minimum values for x and y.
+		for (int i = 0; i < m_trianglesVAO->m_vertexDataCPU.size(); i++)
+		{
+			// Check max for x.
+			if (m_trianglesVAO->m_vertexDataCPU[i].position[0] > max[0])
+			{
+				max[0] = m_trianglesVAO->m_vertexDataCPU[i].position[0];
+			}
+			// Check min for x.
+			else if (m_trianglesVAO->m_vertexDataCPU[i].position[0] < min[0])
+			{
+				min[0] = m_trianglesVAO->m_vertexDataCPU[i].position[0];
+			}
+			// Check max for y.
+			if (m_trianglesVAO->m_vertexDataCPU[i].position[1] > max[1])
+			{
+				max[1] = m_trianglesVAO->m_vertexDataCPU[i].position[1];
+			}
+			// Check min for y.
+			else if (m_trianglesVAO->m_vertexDataCPU[i].position[1] < min[1])
+			{
+				min[1] = m_trianglesVAO->m_vertexDataCPU[i].position[1];
+			}
+		}
+	}
+
+	//----------------------------------------------------------------------
+	// Textured triangles.
+	//----------------------------------------------------------------------
+
+	if (m_textureTrianglesVAO->m_texturedVertexDataCPU.size())
+	{
+		// Find the maximum and minimum values for x and y.
+		for (int i = 0; i < m_textureTrianglesVAO->m_texturedVertexDataCPU.size(); i++)
+		{
+			// Check max for x.
+			if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0] > max[0])
+			{
+				max[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+			}
+			// Check min for x.
+			else if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0] < min[0])
+			{
+				min[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+			}
+			// Check max for y.
+			if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1] > max[1])
+			{
+				max[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+			}
+			// Check min for y.
+			else if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1] < min[1])
+			{
+				min[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+			}
+		}
+	}
+
+	//----------------------------------------------------------------------
+
+	// Calculate the values to translate.
+	float size[2] = { std::abs(max[0] - min[0]), std::abs(max[1] - min[1]) };
+	float translate[2];
+	translate[0] = -min[0] - (size[0] / 2);
+	translate[1] = -min[1] - (size[1] / 2);
+
+	// Now translate the camera accordingly.
+	m_translationMatrix = glm::translate(m_translationMatrix, glm::vec3(translate[0], translate[1], 0.0f));
+	// Add to base matrix.
+	m_translationMatrixBase = glm::translate(m_translationMatrixBase, glm::vec3(translate[0], translate[1], 0.0f));
+
+	// Scale the drawing according to the largest translation that took place (This gives us the new max value,
+	// centered around (0.0).
+	if (size[0] > size[1])
+	{
+		float scale = size[0] / 2;
+		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
+		// Update base matrix.
+		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
+	}
+	else
+	{
+		float scale = size[1] / 2;
+		m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(1 / scale, 1 / scale, 1.0f));
+		// Update base matrix.
+		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
+	}
+}
 
 //=============================================================================================================================================//
 //  Testing.																																   //

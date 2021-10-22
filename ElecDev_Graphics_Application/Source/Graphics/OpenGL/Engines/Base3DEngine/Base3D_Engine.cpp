@@ -73,7 +73,9 @@ void Base3DEngineGL::renderLoop()
 
 	// Draw static entities.
 	m_staticShader->bind();
+    GLCall(glDepthFunc(GL_EQUAL));
 	m_backgroundVAO->render();
+	GLCall(glDepthFunc(GL_LESS));
 
 	// Draw basic entities.
 	m_basicShader->bind();
@@ -109,10 +111,10 @@ void Base3DEngineGL::createBackground()
 	// Assign background data.
 	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
 	float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
-	VertexData v5(1.0f, 1.0f, 0.99f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
-	VertexData v6(-1.0f, 1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
-	VertexData v8(1.0f, -1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
+	VertexData v5(1.0f, 1.0f, 1.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
+	VertexData v6(-1.0f, 1.0f, 1.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
+	VertexData v7(-1.0f, -1.0f, 1.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
+	VertexData v8(1.0f, -1.0f, 1.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
 	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	// Create background.
 	m_backgroundVAO->writeData(vertices);

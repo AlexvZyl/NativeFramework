@@ -58,6 +58,7 @@ public:
 
 	virtual void drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]);
 	virtual void drawCuboidFilled(float position1[3], float position2[3], float position3[3], float position4[3], float depth, float color[4]);
+	virtual void autoCenter();
 	virtual void drawDemo(unsigned int loopCount);
 
 	//---------------------------------------------------------------------------------------------------------------------
