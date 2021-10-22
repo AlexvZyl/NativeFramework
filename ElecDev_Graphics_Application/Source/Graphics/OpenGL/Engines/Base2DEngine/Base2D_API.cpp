@@ -420,6 +420,14 @@ void BaseEngineGL::autoCenter()
 	}
 }
 
+
+void BaseEngineGL::drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]) 
+{
+	// This is not an 3D engine.
+}
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.
 //----------------------------------------------------------------------------------------------------------------------

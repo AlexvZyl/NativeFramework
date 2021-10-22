@@ -44,17 +44,24 @@ void Camera::translateTowardsTarget(float translation)
 		// Create the camera position based on the new orientation vector.
 		m_position = m_target + m_orientation;
 	}
+	//else 
+	//{
+	//	// Add the translation to the orientation vector.
+	//	m_position -= translationVec;
+	//	m_target -= translationVec;
+	//	m_orientation = m_position - m_target;		
+	//}
 }
 
 // Rotates the camera around the target.
-void Camera::rotateAroundTarget(float rotation[2])
+void Camera::rotateAroundTarget(float deltaPixels[2])
 {
 	// Calculate the axis' of rotation.
 	glm::vec3 xRotate = glm::cross(m_orientation, m_upVector - m_orientation);
 	glm::vec3 yRotate = glm::cross(m_orientation, m_rightVector - m_orientation);
 	// Rotate the orientation vector.
-	m_orientation = glm::rotate(m_orientation, rotation[1] * m_rotationSpeed, xRotate);
-	m_orientation = glm::rotate(m_orientation, -1*rotation[0] * m_rotationSpeed, yRotate);
+	m_orientation = glm::rotate(m_orientation, deltaPixels[1] * m_rotationSpeed, xRotate);
+	m_orientation = glm::rotate(m_orientation, -1* deltaPixels[0] * m_rotationSpeed, yRotate);
 	// Check the the camera is not looking straight down or up.
 	if ( (glm::normalize(m_orientation)[1] <= 0.99f) && (glm::normalize(m_orientation)[1] >= -0.99f) )
 	{
@@ -66,8 +73,8 @@ void Camera::rotateAroundTarget(float rotation[2])
 	}
 	else
 	{
-		m_orientation = glm::rotate(m_orientation, rotation[0] * m_rotationSpeed, yRotate);
-		m_orientation = glm::rotate(m_orientation, rotation[1] * m_rotationSpeed, xRotate);
+		m_orientation = glm::rotate(m_orientation, deltaPixels[0] * m_rotationSpeed, yRotate);
+		m_orientation = glm::rotate(m_orientation, deltaPixels[1] * m_rotationSpeed, xRotate);
 	}
 }
 

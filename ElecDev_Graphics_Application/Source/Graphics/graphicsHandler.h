@@ -150,7 +150,7 @@ public:
 	// API.
 	//---------------------------------------------------------------------------------------
 
-	// Basic Rendering
+	// 2D Rendering
 	// --------------------------------
 	
 	// Functions supported by the base engine.  Added functionality to choose MCC.
@@ -166,6 +166,11 @@ public:
 	void autoCenter(std::string windowName);
 	// Loads the CPU data to the GPU.
 	void updateBuffers(std::string windowName);
+
+	// 3D Rendering
+	// --------------------------------
+
+	void drawQuadFilled3D(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]);
 
 	// Window management.
 	// --------------------------------

@@ -403,7 +403,7 @@ void deQueueInput(stateMachine* states) {
             // Switch between different commands.
             switch (hash(temp.command.c_str()))
             {
-                // Draw line.
+            // Draw line.
             case hash("DrawLine"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -415,7 +415,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-                // Draw clear triangle.
+            // Draw clear triangle.
             case hash("DrawTriangleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -427,7 +427,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
                 break;
 
-                // Draw filled triangle. 
+            // Draw filled triangle. 
             case hash("DrawTriangleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -439,7 +439,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
                 break;
 
-                // Draw clear quad.
+            // Draw clear quad.
             case hash("DrawQuadClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -451,7 +451,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-                // Draw filled quad.
+            // Draw filled quad.
             case hash("DrawQuadFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -463,7 +463,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
-                // Draw clear circle.
+            // Draw clear circle.
             case hash("DrawCircleClear"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -475,7 +475,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
-                // Draw a filled circle.
+            // Draw a filled circle.
             case hash("DrawCircleFilled"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -487,7 +487,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
-                // Draw text.
+            // Draw text.
             case hash("DrawText"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -515,7 +515,7 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
                 break;
 
-                // Add MCC window to draw.
+            // Add MCC window to draw.
             case hash("AddWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -524,14 +524,14 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->addWindow(mccName, text);
                 break;
 
-                // Remove MCC window.
+            // Remove MCC window.
             case hash("RemoveWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->removeWindow(mccName);
                 break;
 
-                // Draw the demo.
+            // Draw the demo.
             case hash("DrawDemo"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
@@ -540,18 +540,38 @@ void deQueueInput(stateMachine* states) {
                 graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
                 break;
 
-                // Center the drawing around (0,0).
+            // Center the drawing around (0,0).
             case hash("AutoCenter"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->autoCenter(mccName);
                 break;
 
-                // Load CPU buffers to GPU.
-            case hash("UpdateBuffers"):
+            // Load CPU buffers to GPU.
+            case hash("UpdateDrawing"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 graphicsHandler->updateBuffers(mccName);
+                break;
+
+            /*===================================================================================================================================*/
+            /* 3D API.                                                                                                                           */
+            /*===================================================================================================================================*/
+
+            // Draw filled quad.
+            case hash("DrawQuadFilled3D"):
+                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
+                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                for (size_t i = 0; i < 16; i++)
+                {
+                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
+                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
+                }
+                graphicsHandler->drawQuadFilled3D(mccName, new float[3]{ params[0], params[1], params[2] },
+                                                           new float[3]{ params[3], params[4], params[5] },
+                                                           new float[3]{ params[6], params[7], params[8] },
+                                                           new float[3]{ params[9], params[10], params[11] },
+                                                           new float[4]{params[12],params[13],params[14],params[15]});
                 break;
 
             default:

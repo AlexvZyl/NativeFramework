@@ -5,7 +5,37 @@
 #include "Base3D_Engine.h"
 
 //=============================================================================================================================================//
-//  Functions.																																   //
+//  Basic primitives.																																   //
+//=============================================================================================================================================//
+
+void Base3DEngineGL::drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]) 
+{
+	// Create the vertices.
+	VertexData v1(
+		position1[0], position1[1], position1[2],
+		color[0], color[1], color[2], color[3]
+	);
+	// Create the vertices.
+	VertexData v2(
+		position2[0], position2[1], position2[2],
+		color[0], color[1], color[2], color[3]
+	);
+	// Create the vertices.
+	VertexData v3(
+		position3[0], position3[1], position3[2],
+		color[0], color[1], color[2], color[3]
+	);
+	// Create the vertices.
+	VertexData v4(
+		position4[0], position4[1], position4[2],
+		color[0], color[1], color[2], color[3]
+	);
+	std::vector<VertexData> vertices = { v1,v2,v3,v3,v4,v1 };
+	m_trianglesVAO->writeData(vertices);
+}
+
+//=============================================================================================================================================//
+//  Testing.																																   //
 //=============================================================================================================================================//
 
 void Base3DEngineGL::drawDemo(unsigned int loopCount) 
