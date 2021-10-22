@@ -82,13 +82,12 @@ void Camera::rotateAroundTarget(float deltaPixels[2])
 void Camera::translateCamera(float deltaPixels[2]) 
 {
 	// Calculate the tranlation vectors.
-	glm::vec xTranslate = glm::normalize(m_rightVector) * deltaPixels[0] * m_panSpeed;
-	glm::vec yTranslate = glm::normalize(m_upVector) * deltaPixels[1] * m_panSpeed;
+	glm::vec3 xTranslate = glm::normalize(m_rightVector) * deltaPixels[0] * m_panSpeed;
+	glm::vec3 yTranslate = glm::normalize(m_upVector) * deltaPixels[1] * m_panSpeed;
 	// Apply the translation vectors.
 	m_target -= xTranslate - yTranslate;
 	m_position -= xTranslate - yTranslate;
 }
-
 
 // Update the view matrix based on the camera variables.
 void Camera::updateView()

@@ -268,6 +268,9 @@ int main(int, char**)
     //Thread writing to the pipeline
     std::thread t2(readingOut, states);
 
+    // Input message.
+    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
+
     // [MAIN LOOP] Graphics Pipeline.
     while (!glfwWindowShouldClose(window) && !states->globalQuit)
     {
