@@ -238,10 +238,8 @@ int main(int, char**)
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
-    GLCall(glDisable(GL_CULL_FACE));
     GLCall(glDisable(GL_DEPTH_TEST));                           // Disable the depth testing since it will be enabled only when rendring 3D scenes.
-    //GLCall(glDepthFunc(GL_EQUAL))                              // Set the function used with depth testing.
-    GLCall(glDepthFunc(GL_LESS));
+    GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
     GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
 

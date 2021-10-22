@@ -73,6 +73,7 @@ void Base3DEngineGL::renderLoop()
 
 	// Draw static entities.
 	m_staticShader->bind();
+	// Stop the background from clipping the scene.
     GLCall(glDepthFunc(GL_EQUAL));
 	m_backgroundVAO->render();
 	GLCall(glDepthFunc(GL_LESS));
