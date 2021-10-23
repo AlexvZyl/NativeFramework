@@ -371,7 +371,6 @@ void GraphicsHandler::drawDemo(std::string windowName, unsigned int loopCount)
 // 3D Rendering.																										 //
 // ===================================================================================================================== //
 
-// Draws a filled 2D quad in the 3D world.
 void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]) 
 {
 	// Check if window exists.
@@ -393,27 +392,6 @@ void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3],
 }
 
 void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]) 
-{
-	// Check if window exists.
-	if (isWindowValid(windowName))
-	{
-		try {
-			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawCuboidFilled(vertex1, vertex2, vertex3, vertex4, depth, color);
-		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
-	}
-	else
-	{
-		windowError(windowName);
-	}
-}
-
-// Draws a 3D cuboid.
-void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4])
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))

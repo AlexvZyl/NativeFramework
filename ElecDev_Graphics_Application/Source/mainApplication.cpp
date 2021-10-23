@@ -385,7 +385,7 @@ void readingIn(stateMachine* states) {
 
         std::getline(std::cin, temp);
         if (temp != "") {
-            std::cout << "Received" << std::endl;
+            std::cout << blue << "[INTERFACE] [INFO] : " << white << "Command received." << std::endl;
             std::string subCommand = "";
             while (true) {
                 int nextStart = temp.find("::");
