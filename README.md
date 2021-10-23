@@ -72,6 +72,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ✅ Move CPU data handling over to VAO class.
 * ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
 * ⬜ Make the circle resolution dynamic, a function of the radius.
+* ⬜ Fix shader uniform caching.
 
 #### Raynhardt 
 * ✅ Multi View port
