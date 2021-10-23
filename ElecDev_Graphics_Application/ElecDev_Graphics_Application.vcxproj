@@ -167,24 +167,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_MouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_MouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\CameraGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\MousePointGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_MouseHandler.cpp" />
     <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\FrameBufferObject.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\TextRenderer.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Peripherals\MousePoint.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\VertexArrayObject.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_MouseHandler.cpp" />
     <ClCompile Include="Source\GUI\guiHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp" />
@@ -192,10 +196,7 @@
     <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\ErrorHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\ShaderHandler.cpp" />
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
@@ -301,8 +302,16 @@
     <ClInclude Include="Source\External\SPDLog\stopwatch.h" />
     <ClInclude Include="Source\External\SPDLog\tweakme.h" />
     <ClInclude Include="Source\External\SPDLog\version.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\MousePointGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
@@ -659,11 +668,7 @@
     <ClInclude Include="Source\External\glm\vec3.hpp" />
     <ClInclude Include="Source\External\glm\vec4.hpp" />
     <ClInclude Include="Source\External\glm\vector_relational.hpp" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\FrameBufferObject.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\TextRenderer.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Peripherals\MousePoint.h" />
     <ClInclude Include="Source\External\Misc\stb_image.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\VertexArrayObject.h" />
     <ClInclude Include="Source\GUI\guiHandler.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3native.h" />
@@ -676,10 +681,7 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
     <ClInclude Include="Source\Graphics\GraphicsHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\ErrorHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\ShaderHandler\ShaderHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
     <ClInclude Include="Source\GUI\notify.h" />
     <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
@@ -836,7 +838,7 @@
     <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\Shaders\basicShader.shader" />
-    <None Include="Source\Resources\Shaders\staticShader.shader" />
+    <None Include="Source\Resources\Shaders\backgroundShader.shader" />
     <None Include="Source\Resources\Shaders\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>

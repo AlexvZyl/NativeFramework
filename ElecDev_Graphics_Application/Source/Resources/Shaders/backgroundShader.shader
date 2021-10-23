@@ -9,7 +9,7 @@ out vec4 colorFragment;
 void main()
 {
 	colorFragment = colorData;
-	gl_Position = vec4(position.x, position.y, position.w, position.w);;
+	gl_Position = vec4(position.x, position.y, position.w, position.w);
 };
 
 #shader fragment

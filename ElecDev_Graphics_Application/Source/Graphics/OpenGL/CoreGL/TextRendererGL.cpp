@@ -6,7 +6,7 @@
 #include "../Resources/ResourceHandler.h"
 
 // Class include.
-#include "TextRenderer.h"
+#include "TextRendererGL.h"
 
 // File reading.
 #include <fstream>

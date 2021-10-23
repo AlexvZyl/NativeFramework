@@ -1,19 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_API.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_Engine.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_Engine.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\ErrorHandler\ErrorHandler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\FrameBufferObject.cpp">
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\External\GLAD\src\glad.c">
@@ -52,25 +40,10 @@
     <ClCompile Include="Source\MainApplication.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_MouseHandler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Peripherals\MousePoint.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\ShaderHandler\ShaderHandler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\TextRenderer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\VertexArrayObject.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
@@ -79,13 +52,23 @@
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_MouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_MouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_MouseHandler.cpp" />
     <ClCompile Include="Source\Logging\logHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\CameraGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\MousePointGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -116,9 +99,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\autohint.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Base2D_Engine.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp">
@@ -193,7 +173,7 @@
     <ClInclude Include="Source\External\glm\gtc\constants.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Design2D_Engine.h">
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\freetype\Includes\dlg\dlg.h">
@@ -209,9 +189,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtc\epsilon.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\ErrorHandler\ErrorHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\euler_angles.hpp">
@@ -242,9 +219,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\fast_trigonometry.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\FrameBufferObject.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\ftcalc.h">
@@ -697,9 +671,6 @@
     <ClInclude Include="Source\External\glm\gtx\mixed_product.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Design2DEngine\Peripherals\MousePoint.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\External\glm\simd\neon.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -719,9 +690,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\number_precision.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\ShaderHandler\ShaderHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\optimum_pow.hpp">
@@ -956,9 +924,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\freetype\Includes\freetype\internal\t1types.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\TextRenderer.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\texture.hpp">
@@ -1213,9 +1178,6 @@
     <ClInclude Include="Source\External\glm\ext\vector_ulp.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base2DEngine\Peripherals\VertexArrayObject.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\External\GLEW\include\GL\wglew.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -1229,7 +1191,6 @@
     <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Base3D_Engine.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\SPDLog\cfg\argv.h" />
     <ClInclude Include="Source\External\SPDLog\cfg\env.h" />
@@ -1327,7 +1288,16 @@
     <ClInclude Include="Source\External\SPDLog\tweakme.h" />
     <ClInclude Include="Source\External\SPDLog\version.h" />
     <ClInclude Include="Source\Logging\logHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Engines\Base3DEngine\Peripherals\Camera.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\MousePointGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1656,7 +1626,7 @@
     <None Include="Source\External\glm\gtx\spline.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\staticShader.shader">
+    <None Include="Source\Resources\Shaders\backgroundShader.shader">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\std_based_type.inl">

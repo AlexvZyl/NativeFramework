@@ -2,7 +2,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Camera.h"
+#include "CameraGL.h"
 #include "GLFW/glfw3.h"
 #include "GLM/gtx/rotate_vector.hpp"
 

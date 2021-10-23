@@ -4,15 +4,14 @@
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "./Engines/Base2DEngine/Base2D_Engine.h"
-#include <StateMachine.h>
-#include "Peripherals/MousePoint.h"
+#include "../Base2DEngineGL/Base2D_Engine.h"
+#include "../CoreGL/MousePointGL.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The Design Engine class.
 //----------------------------------------------------------------------------------------------------------------------
 
-class DesignEngineGL : public BaseEngineGL
+class Design2DEngineGL : public Base2DEngineGL
 {
 public:
 
@@ -28,9 +27,9 @@ public:
 	//----------------------------------------------------------------------------------------------------------------------
 
 	// Constructor
-	DesignEngineGL(stateMachine* states);
+	Design2DEngineGL(stateMachine* states);
 	// Destructor.
-	~DesignEngineGL();
+	~Design2DEngineGL();
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Rendering.

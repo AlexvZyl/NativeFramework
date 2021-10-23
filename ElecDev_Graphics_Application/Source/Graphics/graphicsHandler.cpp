@@ -8,6 +8,7 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "GraphicsHandler.h"
+#include "GLFW/glfw3.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Constructors & setup.
@@ -79,6 +80,12 @@ void GraphicsHandler::mousePressEvent(int button, int action)
 			// Call active engine.
 			m_windowsDictionary[m_activeWindow]->engineGL->mousePressRight(mousePos);
 		}
+		// Check if middle press.
+		else if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
+		{
+			// Call active engine.
+			m_windowsDictionary[m_activeWindow]->engineGL->mousePressMiddle(mousePos);
+		}
 	}
 }
 
@@ -121,7 +128,7 @@ void GraphicsHandler::resizeEvent(int width, int height)
 		{
 			if (engine.second->resizeEvent)
 			{
-				engine.second->engineGL->resizeEvent((int)engine.second->viewportDimentions.x, (int)engine.second->viewportDimentions.y);
+				engine.second->engineGL->resizeEvent(engine.second->viewportDimentions.x, engine.second->viewportDimentions.y);
 				engine.second->resizeEvent = false;
 			}
 		}

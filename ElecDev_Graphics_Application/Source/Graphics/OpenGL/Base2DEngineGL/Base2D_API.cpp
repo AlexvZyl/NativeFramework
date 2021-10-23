@@ -6,14 +6,14 @@ Engine API.
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "Engines/Base2DEngine/Base2D_Engine.h"
+#include "Base2D_Engine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Rendering.
 //----------------------------------------------------------------------------------------------------------------------
 
 // Draws a line.
-void BaseEngineGL::drawLine(float position1[2], float position2[2], float color[4])
+void Base2DEngineGL::drawLine(float position1[2], float position2[2], float color[4])
 {
 	// Define position data.
 	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
@@ -25,7 +25,7 @@ void BaseEngineGL::drawLine(float position1[2], float position2[2], float color[
 }
 
 // Draw clear triangle.
-void BaseEngineGL::drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4])
+void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4])
 {
 	// Define position data.
 	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
@@ -38,7 +38,7 @@ void BaseEngineGL::drawTriangleClear(float position1[2], float position2[2], flo
 }
 
 // Draw filled triangle.
-void BaseEngineGL::drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]) 
+void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]) 
 {
 	// Define position data.
 	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
@@ -51,7 +51,7 @@ void BaseEngineGL::drawTriangleFilled(float position1[2], float position2[2], fl
 }
 
 // Draw a clear quad.
-void BaseEngineGL::drawQuadClear(float position[2], float width, float height, float color[4]) 
+void Base2DEngineGL::drawQuadClear(float position[2], float width, float height, float color[4]) 
 {
 	width /= 2;
 	height /= 2;
@@ -66,7 +66,7 @@ void BaseEngineGL::drawQuadClear(float position[2], float width, float height, f
 }
 
 // Draw a filled quad.
-void BaseEngineGL::drawQuadFilled(float position[2], float width, float height, float color[4]) 
+void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height, float color[4]) 
 {
 	width /= 2;
 	height /= 2;
@@ -81,7 +81,7 @@ void BaseEngineGL::drawQuadFilled(float position[2], float width, float height, 
 }
 
 // Draws a clear circle.
-void BaseEngineGL::drawCircleClear(float coords[2], float radius, float color[4])
+void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[4])
 {
 	// Lines used to draw the circle.
 	std::vector<VertexData> vertices;
@@ -106,7 +106,7 @@ void BaseEngineGL::drawCircleClear(float coords[2], float radius, float color[4]
 }
 
 // Draws a filled circle.
-void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4])
+void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color[4])
 {
 	// Lines used to draw the circle.
 	std::vector<VertexData> vertices;
@@ -130,7 +130,7 @@ void BaseEngineGL::drawCircleFilled(float coords[2], float radius, float color[4
 }
 
 // Adds text to the VBO object.
-void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, std::string align)
+void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, std::string align)
 {
 	// Calculate the length & height of the string.
 	float length = 0;
@@ -148,7 +148,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_textureTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
 	}
 	// Right allign the text.
 	else if (align == "R" || align == "r") 
@@ -158,7 +158,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_textureTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
 	}
 	// Left allign the text.
 	else if (align == "L" || align == "l") 
@@ -166,7 +166,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 		// Place on top of the coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_textureTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
 	}
 	// Display error.
 	else 
@@ -176,7 +176,7 @@ void BaseEngineGL::drawText(std::string text, float coords[2], float color[4], f
 }
 
 // Draws the demo drawing.
-void BaseEngineGL::drawDemo(unsigned int loopCount)
+void Base2DEngineGL::drawDemo(unsigned int loopCount)
 {
 	loopCount -= 1;
 	for (unsigned int i = 0; i <= loopCount * 3; i += 3)
@@ -221,7 +221,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 			TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
 			TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
 			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
-			m_textureTrianglesVAO->writeData(verticesTex);
+			m_texturedTrianglesVAO->writeData(verticesTex);
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f + i, 0.5f + k };
@@ -232,7 +232,7 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 		}
 	}
 	// Load the CPU buffers into the GPU.
-	updateBuffers();
+	updateGPU();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -240,11 +240,11 @@ void BaseEngineGL::drawDemo(unsigned int loopCount)
 //----------------------------------------------------------------------------------------------------------------------
 
 // Writes the CPU side buffers to the GPU.
-void BaseEngineGL::updateBuffers() 
+void Base2DEngineGL::updateGPU()
 {
 	m_linesVAO->updateGPU();
 	m_trianglesVAO->updateGPU();
-	m_textureTrianglesVAO->updateGPU();
+	m_texturedTrianglesVAO->updateGPU();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ void BaseEngineGL::updateBuffers()
 //----------------------------------------------------------------------------------------------------------------------
 
 // Automatically places the drawing in the center and scales it to fit into the window..
-void BaseEngineGL::autoCenter() 
+void Base2DEngineGL::autoCenter() 
 {	
 	// First reset the matrices.
 	m_scalingMatrix = glm::mat4(1.0f);
@@ -316,13 +316,13 @@ void BaseEngineGL::autoCenter()
 		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
 	}
 	// If triangels is empty init with textured triangles.
-	else if (m_textureTrianglesVAO->m_texturedVertexDataCPU.size())
+	else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
-		max[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
-		min[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
-		min[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+		max[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
+		max[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+		min[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
+		min[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
@@ -361,30 +361,30 @@ void BaseEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	if (m_textureTrianglesVAO->m_texturedVertexDataCPU.size())
+	if (m_texturedTrianglesVAO->m_texturedVertexDataCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_textureTrianglesVAO->m_texturedVertexDataCPU.size(); i++)
+		for (int i = 0; i < m_texturedTrianglesVAO->m_texturedVertexDataCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0] > max[0])
+			if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0] > max[0])
 			{
-				max[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+				max[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0] < min[0])
+			else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0] < min[0])
 			{
-				min[0] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+				min[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1] > max[1])
+			if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1] > max[1])
 			{
-				max[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+				max[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1] < min[1])
+			else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1] < min[1])
 			{
-				min[1] = m_textureTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+				min[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
 			}
 		}
 	}
@@ -419,20 +419,6 @@ void BaseEngineGL::autoCenter()
 		m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(1 / scale, 1 / scale, 1.0f));
 	}
 }
-
-
-void BaseEngineGL::drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]) 
-{
-	// This is not an 3D engine.
-}
-
-void BaseEngineGL::drawCuboidFilled(float position1[3], float position2[3], float position3[3], float position4[3], float depth, float color[4]) 
-{
-	// This is not an 3D engine.
-}
-
-
-
 
 //----------------------------------------------------------------------------------------------------------------------
 //  EOF.

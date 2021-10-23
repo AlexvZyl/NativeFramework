@@ -17,7 +17,7 @@
 #include <sstream>
 
 // OpenGL.
-#include <ErrorHandler/errorHandler.h>
+#include "ErrorHandlerGL.h"
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

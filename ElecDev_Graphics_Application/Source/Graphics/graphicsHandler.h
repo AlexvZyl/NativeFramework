@@ -1,43 +1,34 @@
 #pragma once
 
 /*
-This file will control all of the graphics engines and all of the API's, as well as the unitialization.
+This class will control all of the graphics engines and all of the API's, as well as the unitialization.
 This is so that the main loop that will containt both ImGUI calls and pure OpenGL calls can remain clean.
 */
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Includes.
-//----------------------------------------------------------------------------------------------------------------------
-
-#include <ErrorHandler/ErrorHandler.h>
-#include "ShaderHandler/ShaderHandler.h"
-#include "../stateMachine.h"
-
-// Drawing engine.
-#include "OpenGL/Engines/Base2DEngine/Base2D_Engine.h"
-// Design engine.
-#include "OpenGL/Engines/Design2DEngine/Design2D_Engine.h"
-// 3D Engine.
-#include "OpenGL/Engines/Base3DEngine/Base3D_Engine.h"
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
 
 //  General.
 #include <string>
 #include <variant>
-
+// OpenGL engines.
+#include "OpenGL/CoreGL/EngineCoreGL.h"
+#include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
+#include "OpenGL/Base3DEngineGL/Base3D_Engine.h"
+#include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
 // GUI.
 #include "Core/imgui.h"
+#include "../stateMachine.h"
 
-// OpenGL
-#include <glad/glad.h>
-
-//----------------------------------------------------------------------------------------------------------------------
-//  Data
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Data.																																	   //
+//=============================================================================================================================================//
 
 // Type that holds the different engines available.
 enum class EngineType
 {
-	None = -1, BaseEngineGL = 0, DesignEngineGL = 1, Base3DEngineGL = 2
+	None = -1, Base2DEngineGL = 0, Design2DEngineGL = 1, Base3DEngineGL = 2
 };
 
 // Data type that holds the window that is to be drawn, as well as information regarding the window.
@@ -47,7 +38,7 @@ struct RenderWindowGL
 	// The rendering engine.
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
-	BaseEngineGL* engineGL;
+	EngineCoreGL* engineGL;
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
@@ -63,15 +54,15 @@ struct RenderWindowGL
 	// Constructor.
 	RenderWindowGL(stateMachine* states, EngineType engineType) 
 	{
-		if (engineType == EngineType::BaseEngineGL) 
+		if (engineType == EngineType::Base2DEngineGL) 
 		{
-			engineGL = new BaseEngineGL(states);
-			engineType = EngineType::BaseEngineGL;
+			engineGL = new Base2DEngineGL(states);
+			engineType = EngineType::Base2DEngineGL;
 		}
-		else if (engineType == EngineType::DesignEngineGL)
+		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL =  new DesignEngineGL(states);
-			engineType = EngineType::DesignEngineGL;
+			engineGL =  new Design2DEngineGL(states);
+			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
@@ -89,9 +80,9 @@ struct RenderWindowGL
 	}
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Graphics Handler Class.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Graphis Handler.																														   //
+//=============================================================================================================================================//
 
 class GraphicsHandler
 {
@@ -190,6 +181,6 @@ public:
 	void drawDemo(std::string windowName, unsigned int loopCount);
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-//  EOF.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  EOF.																																	   //
+//=============================================================================================================================================//

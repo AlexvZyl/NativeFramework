@@ -2,19 +2,21 @@
 API for the graphics of the application.
 */
 
-// ===================================================================================================================== //
-//  Includes.																											 //
-// ===================================================================================================================== //
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
 
 // Class include.
 #include "GraphicsHandler.h"
-
-// ImGUI (GUI software). 
+// ImGUI. 
 #include "Implementations/imgui_impl_opengl3.h"
+// General
+#include <stdio.h>
+#include <External/Misc/ConsoleColor.h>
 
-// ===================================================================================================================== //
-//  Functions.																											 //
-// ===================================================================================================================== //
+//=============================================================================================================================================//
+//  Window Handling.																														   //
+//=============================================================================================================================================//
 
 // Add a new window to the app.
 void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
@@ -22,12 +24,12 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	// Check if name already used.
 	if (isWindowValid(windowName))
 	{
-		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " Name '" << windowName << "' already used.\n";
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Name '" << windowName << "' already used.\n";
 	}
 	// Prevent 'NULL' being used as a  name.
 	else if (windowName == "NULL")
 	{
-		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " 'NULL' is not a valid name. It is reserved for the inactive state.\n";
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'NULL' is not a valid name. It is reserved for the inactive state.\n";
 	}
 	else
 	{
@@ -50,8 +52,8 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Set window active.
 			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::BaseEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [Base2D]";
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Base2DEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName;
 		}
 		else if (engineType == "Design2D" || engineType == "design2D")
 		{
@@ -60,8 +62,8 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Set window active.
 			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::DesignEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [Design2D]";
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Design2DEngineGL) });
+			m_windowsDictionary[windowName]->windowName = windowName;
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
 		{
@@ -71,7 +73,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			m_activeWindow = windowName;
 			// Add window to dictionary.
 			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Base3DEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName + " [Base3D]";
+			m_windowsDictionary[windowName]->windowName = windowName;
 		}
 		// Catch error.
 		else 
@@ -101,6 +103,57 @@ void GraphicsHandler::removeWindow(std::string windowName)
 		windowError(windowName);
 	}
 }
+
+//=============================================================================================================================================//
+//  General rendering functions.																											   //
+//=============================================================================================================================================//
+
+// Centers the Drawing around (0,0) and scales it to fit into the window.
+void GraphicsHandler::autoCenter(std::string windowName)
+{
+	// Check if window exists.
+	if (isWindowValid(windowName))
+	{
+		try {
+			// Render the demo drawing.
+			m_windowsDictionary[windowName]->engineGL->autoCenter();
+		}
+		catch (const std::exception& e)
+		{
+			parametersError(e);
+		}
+	}
+	else
+	{
+		windowError(windowName);
+	}
+}
+
+// Centers the Drawing around (0,0) and scales it to fit into the window.
+void GraphicsHandler::updateBuffers(std::string windowName)
+{
+	// Check if window exists.
+	if (isWindowValid(windowName))
+	{
+		try {
+			// Render the demo drawing.
+			m_windowsDictionary[windowName]->engineGL->updateGPU();
+		}
+		catch (const std::exception& e)
+		{
+			parametersError(e);
+		}
+	}
+	else
+	{
+		windowError(windowName);
+	}
+}
+
+//=============================================================================================================================================//
+// 2D Rendering.																															   //
+//=============================================================================================================================================//
+
 
 // Draws a line.
 void GraphicsHandler::drawLine(std::string windowName, float position1[2], float position2[2], float color[4])
@@ -314,50 +367,8 @@ void GraphicsHandler::drawDemo(std::string windowName, unsigned int loopCount)
 	}
 }
 
-// Centers the Drawing around (0,0) and scales it to fit into the window.
-void GraphicsHandler::autoCenter(std::string windowName)
-{
-	// Check if window exists.
-	if (isWindowValid(windowName))
-	{
-		try {
-			// Render the demo drawing.
-			m_windowsDictionary[windowName]->engineGL->autoCenter();
-		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
-	}
-	else
-	{
-		windowError(windowName);
-	}
-}
-
-// Centers the Drawing around (0,0) and scales it to fit into the window.
-void GraphicsHandler::updateBuffers(std::string windowName)
-{
-	// Check if window exists.
-	if (isWindowValid(windowName))
-	{
-		try {
-			// Render the demo drawing.
-			m_windowsDictionary[windowName]->engineGL->updateBuffers();
-		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
-	}
-	else
-	{
-		windowError(windowName);
-	}
-}
-
 // ===================================================================================================================== //
-// 3D API.																												 //
+// 3D Rendering.																										 //
 // ===================================================================================================================== //
 
 // Draws a filled 2D quad in the 3D world.
@@ -369,6 +380,26 @@ void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3],
 		try {
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawQuadFilled3D(vertex1, vertex2, vertex3, vertex4, color);
+		}
+		catch (const std::exception& e)
+		{
+			parametersError(e);
+		}
+	}
+	else
+	{
+		windowError(windowName);
+	}
+}
+
+void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]) 
+{
+	// Check if window exists.
+	if (isWindowValid(windowName))
+	{
+		try {
+			// Call BaseEngine function.
+			m_windowsDictionary[windowName]->engineGL->drawCuboidFilled(vertex1, vertex2, vertex3, vertex4, depth, color);
 		}
 		catch (const std::exception& e)
 		{
@@ -409,7 +440,7 @@ void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3],
 // Print error messages.
 void GraphicsHandler::windowError(std::string windowName) 
 {
-	std::cout << red << "\n[INTERFACE] [ERROR]" << white << " '" << windowName << "' is an invalid name.\n";
+	std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << windowName << "' is an invalid name.\n";
 }
 void GraphicsHandler::parametersError(const std::exception& e) 
 {

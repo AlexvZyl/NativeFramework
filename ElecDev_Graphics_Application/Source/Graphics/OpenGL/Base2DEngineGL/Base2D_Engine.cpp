@@ -12,21 +12,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 // With GLFW window.
-BaseEngineGL::BaseEngineGL(stateMachine* states)
-	:m_states(states)
+Base2DEngineGL::Base2DEngineGL(stateMachine* states) : EngineCoreGL(states)
 {
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
 	//---------------------------------------------------------------------------------------
-	// Compile shaders.
-	//---------------------------------------------------------------------------------------
-
-	m_basicShader = new Shader(BASIC_SHADER);
-	m_staticShader = new Shader(STATIC_SHADER);
-	m_textureShader = new Shader(TEXTURE_SHADER);
-
-	//---------------------------------------------------------------------------------------
-	// Matrices setup.
+	// Projection setup.
 	//---------------------------------------------------------------------------------------
 
 	// Find the minimum value of the viewport dimensions.
@@ -41,41 +32,23 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 	// Create projection matrix.
 	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], 0.1f, 1.0f);
 
-	// Assign matrices to basic shader.
+	// Assign projection matrices to shader.
 	m_basicShader->bind();
-	m_basicShader->setMat4("worldMatrix", m_modelMatrix);
 	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
-	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
-	// Assign matrices to texture shader.
 	m_textureShader->bind();
-	m_textureShader->setMat4("worldMatrix", m_modelMatrix);
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
-	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
 
 	//---------------------------------------------------------------------------------------
 	// Rendering setup.
 	//---------------------------------------------------------------------------------------
 
-	// Create the background for the scene.
-	createBackground();
-
-	// Buffers setup.
-	m_linesVAO = new VertexArrayObject(GL_LINES);					
-	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES);
-	m_textureTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, true);
-	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
-
-	// Textures.
-	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));	// Testing texture.
-	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);		// Text renderer.
-
-	// Setup shader with textures (including font atlas).
+	// Add a texture to the texture shader.
+	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };
 	GLCall(glUniform1iv(loc, 3, samplers));
-	GLCall(glBindTextureUnit(1, m_textRenderer->m_textureID));	// Text Atlas.
-	GLCall(glBindTextureUnit(2, m_texture));					// Testing texture.
+	GLCall(glBindTextureUnit(2, m_texture));
 
 	//---------------------------------------------------------------------------------------
 
@@ -85,21 +58,8 @@ BaseEngineGL::BaseEngineGL(stateMachine* states)
 };
 
 // Delete and free memory.
-BaseEngineGL::~BaseEngineGL() 
+Base2DEngineGL::~Base2DEngineGL() 
 {
-	// Delete shaders.
-	delete m_basicShader;
-	delete m_staticShader;
-	delete m_textureShader;
-	// Delete VAO's.
-	delete m_linesVAO;
-	delete m_backgroundVAO;
-	delete m_trianglesVAO;
-	delete m_textureTrianglesVAO;
-	// Delete text renderer.
-	delete m_textRenderer;
-	// FBO
-	delete m_frameBuffer;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -107,7 +67,7 @@ BaseEngineGL::~BaseEngineGL()
 //----------------------------------------------------------------------------------------------------------------------
 
 // [MAIN LOOP] The rendering pipeline.
-void BaseEngineGL::renderLoop()
+void Base2DEngineGL::renderLoop()
 {
 	// ------------------------------------------------------------	//
 	//  Setup.														//
@@ -128,8 +88,8 @@ void BaseEngineGL::renderLoop()
 	//  Rendering.													//
 	// ------------------------------------------------------------	//
 		
-	// Draw static entities.
-	m_staticShader->bind();
+	// Draw background.
+	m_backgroundShader->bind();
 	m_backgroundVAO->render();
 
 	// Draw basic entities.
@@ -141,7 +101,7 @@ void BaseEngineGL::renderLoop()
 	// Draw textured entities.
 	m_textureShader->bind();
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
-	m_textureTrianglesVAO->render();
+	m_texturedTrianglesVAO->render();
 
 	// ------------------------------------------------------------	//
 	//  Cleanup.													//
@@ -154,29 +114,9 @@ void BaseEngineGL::renderLoop()
 }
 
 // Return the ID to the texture that is rendered via the FBO.
-unsigned int BaseEngineGL::getRenderTexture()
+unsigned int Base2DEngineGL::getRenderTexture()
 {
 	return m_frameBuffer->getRenderTexture();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-
-// Used to create a background.
-// Is a virtual function so that child engines have the option to change the background.
-void BaseEngineGL::createBackground() 
-{
-	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
-	// Assign background data.
-	float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
-	float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
-	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
-	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
-	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
-	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
-	// Create background.
-	m_backgroundVAO->writeData(vertices);
-	m_backgroundVAO->updateGPU();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -184,7 +124,7 @@ void BaseEngineGL::createBackground()
 //----------------------------------------------------------------------------------------------------------------------
 
 // Function that takes pixel coordinates as input and return the coordinates in the world.
-glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
+glm::vec4 Base2DEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 {
 	
 	// Find the viewpwort dimensions.
@@ -215,10 +155,10 @@ glm::vec4 BaseEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 //----------------------------------------------------------------------------------------------------------------------
 
 // Function that handles the resizing of the ImGUI docked window.
-void BaseEngineGL::resizeEvent(int width, int height)
+void Base2DEngineGL::resizeEvent(float width, float height)
 {
 	// Calculate the value of the scaling.
-	float scalingFactor[2] = { (float)width / (float)m_imGuiViewportDimensions[0], (float)height / (float)m_imGuiViewportDimensions[1] };
+	float scalingFactor[2] = { width / (float)m_imGuiViewportDimensions[0], height / (float)m_imGuiViewportDimensions[1] };
 	m_imGuiViewportDimensions[0] = (float)width;
 	m_imGuiViewportDimensions[1] = (float)height;
 		
