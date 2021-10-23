@@ -2,18 +2,18 @@
 This is where the drawing enigine mouse events are handled.
 */
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Includes.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
 
 #include "Base2D_Engine.h"
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse Press event.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Mouse Presses.																															   //
+//=============================================================================================================================================//
 
 // Event handler for a mouse left click.
-void BaseEngineGL::mousePressLeft(float pixelCoords[2])
+void Base2DEngineGL::mousePressLeft(float pixelCoords[2])
 {
 	// Find current click in world coords.
 	glm::vec4 currmousePosVec = pixelCoordsToWorldCoords(pixelCoords);
@@ -23,7 +23,7 @@ void BaseEngineGL::mousePressLeft(float pixelCoords[2])
 }
 
 // Event handler for a mouse right click.
-void BaseEngineGL::mousePressRight(float pixelCoords[2])
+void Base2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Reset the view values to the base matrices.
 	m_scalingMatrix = m_scalingMatrixBase;
@@ -31,12 +31,17 @@ void BaseEngineGL::mousePressRight(float pixelCoords[2])
 	m_rotationMatrix = m_rotationMatrixBase;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse Move event.
-//----------------------------------------------------------------------------------------------------------------------
+void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
+{
+		
+}
+
+//=============================================================================================================================================//
+//  Mouse Move.																																   //
+//=============================================================================================================================================//
 
 // Event handler for a mouse move event.
-void BaseEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
+void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
 	// Check if left mouse is pressed.
 	if (buttonStateLeft == GLFW_PRESS)
@@ -54,11 +59,11 @@ void BaseEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int
 	}
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse Scroll event.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Mouse Scroll.																															   //
+//=============================================================================================================================================//
 
-void BaseEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset) 
+void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset) 
 {	
 	
 	// Calculate zoom value based on mouse wheel scroll.
@@ -98,6 +103,6 @@ void BaseEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	m_prevMouseEventWorldCoords[1] = mouseWorldCoordsPost[1];
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  EOF.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  EOF.																																	   //
+//=============================================================================================================================================//

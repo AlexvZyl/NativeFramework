@@ -18,7 +18,7 @@ render all of the text.
 #include <map>
 
 // OpenGL Engines incude.
-#include "VertexArrayObject.h"
+#include "VertexArrayObjectGL.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Class.

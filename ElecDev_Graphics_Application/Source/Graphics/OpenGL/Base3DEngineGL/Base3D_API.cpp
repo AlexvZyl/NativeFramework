@@ -159,12 +159,12 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 					0.0f
 				);	
 				std::vector<TexturedVertexData> tVertices = {tv1, tv2, tv3, tv3, tv4, tv1};
-				m_textureTrianglesVAO->writeData(tVertices);
+				m_texturedTrianglesVAO->writeData(tVertices);
 			}
 		}
 	}
 
-	updateBuffers();
+	updateGPU();
 }
  
 //=============================================================================================================================================//

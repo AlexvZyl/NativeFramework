@@ -9,13 +9,13 @@ Child of EngineCoreGL.  Uses the base OpenGL functionality and implements 2D con
 //=============================================================================================================================================//
 
 // Core OpenGL functionality.
-#include "../Core/CoreGL.h"
+#include "../CoreGL/EngineCoreGL.h"
 
 //=============================================================================================================================================//
 //  Base 2D Engine Class.																													   //
 //=============================================================================================================================================//
 
-class Base2DEngineGL : EngineCoreGL
+class Base2DEngineGL : public EngineCoreGL
 {
 
 public:
@@ -45,9 +45,10 @@ public:
 	// Rendering loop.
 	virtual void renderLoop();
 	// Get the ID to the FBO rendered texture.
-	unsigned int getRenderTexture();
-	// Create a background.
-	virtual void createBackground();
+	virtual unsigned int getRenderTexture();
+	virtual void updateGPU();
+	// Callback that handles the resizing event.
+	virtual void resizeEvent(float width, float height);
 
 	//=========================================================================================================================================//
 	//  API.																																   //
@@ -65,20 +66,23 @@ public:
 	virtual void drawDemo(unsigned int loopCount);								
 	virtual void autoCenter();
 
+	//=========================================================================================================================================//
+	//  Mouse Events.																														   //
+	//=========================================================================================================================================//
+
+	// Handling mouse events.
+	virtual void mousePressLeft(float pixelCoords[2]);
+	virtual void mousePressRight(float pixelCoords[2]);
+	virtual void mousePressMiddle(float pixelCoords[2]);
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight);
+	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
+
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Coordinate systems.
 	//---------------------------------------------------------------------------------------------------------------------
 
 	// Convert pixel coordinates to world coordinates.
 	glm::vec4 pixelCoordsToWorldCoords(float pixelCoords[2]);
-
-	//---------------------------------------------------------------------------------------------------------------------
-	//  Window functions.
-	//---------------------------------------------------------------------------------------------------------------------
-
-	// Callback that handles the resizing event.
-	virtual void resizeEvent(int width, int height);
-
 };
 
 //-------------------------------------------------------------------------------------------------------------------------

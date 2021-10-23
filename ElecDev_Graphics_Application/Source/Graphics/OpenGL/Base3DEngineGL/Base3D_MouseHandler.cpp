@@ -5,10 +5,9 @@
 #include "Base3D_Engine.h"
 
 //=============================================================================================================================================//
-//  Functions.																																   //
+//  Mouse presses.																															   //
 //=============================================================================================================================================//
 
-// Handles the mouse left press.
 void Base3DEngineGL::mousePressLeft(float pixelCoords[2]) 
 {
 	// Store the new mouse pixel coordinates.
@@ -23,7 +22,14 @@ void Base3DEngineGL::mousePressRight(float pixelCoords[2])
 	m_prevMouseEventPixelCoords[1] = pixelCoords[1];
 }
 
-// Handles the mouse movement.
+void Base3DEngineGL::mousePressMiddle(float pixelCoords[2])
+{
+}
+
+//=============================================================================================================================================//
+//  Mouse movement.																															   //
+//=============================================================================================================================================//
+
 void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight) 
 {	
 	// Implement rotation.
@@ -48,7 +54,10 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 	}
 }
 
-// The mouse scroll callback.
+//=============================================================================================================================================//
+//  Mouse scrolling.																														   //
+//=============================================================================================================================================//
+
 void Base3DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 {
 	// Move in the direction of the target on a mouse scroll.

@@ -10,7 +10,7 @@ It is going to be used to render to an ImGUI widget.
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include <ErrorHandler/ErrorHandler.h>
+#include "ErrorHandlerGL.h"
 #include <glad/glad.h>
 
 //----------------------------------------------------------------------------------------------------------------------

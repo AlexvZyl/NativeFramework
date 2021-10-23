@@ -1,66 +1,53 @@
 /*
-This is where the drawing enigine is handled.  This is only used to draw elements to the screen.
-The interactive engine (the one where elements can be drawn is handled in designEngine).
+This is where the drawing enigine mouse events are handled.
 */
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Includes.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Class include.
 #include "Design2D_Engine.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Constructor & Destructor.
+//  Mouse Press event.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Constructor.
-DesignEngineGL::DesignEngineGL(stateMachine* states) : BaseEngineGL(states)
+// Event handler for a mouse left click.
+void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 {
-	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
-
-	float color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
-	m_mousePoint = new MousePoint(color, 0.015f, 20, &m_projectionMatrix, m_states);
-
-	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
+	// Call base engine event.
+	Base2DEngineGL::mousePressLeft(pixelCoords);
 }
 
-// Destructor.
-DesignEngineGL::~DesignEngineGL() 
+// Event handler for a mouse right click.
+void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 {
-	delete m_mousePoint;
+	// Call base engine event.
+	Base2DEngineGL::mousePressRight(pixelCoords);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Rendering.
+//  Mouse Move event.
 //----------------------------------------------------------------------------------------------------------------------
 
-void DesignEngineGL::renderLoop()
+// Event handler for a mouse move event.
+void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
-	// Call the base engine rendering loop.
-	BaseEngineGL::renderLoop();
+	// Call base engine event.
+	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight);
 
-	// Now add the design engine loop on top.
-	m_frameBuffer->bind();
-
-	// Draw the mouse point.
-	m_mousePoint->render();
-
-	// Done.
-	m_frameBuffer->unbind();
+	// Update the mouse point position.
+	m_mousePoint->updatePosition(pixelCoords);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-//  Window events.
+//  Mouse Scroll event.
 //----------------------------------------------------------------------------------------------------------------------
 
-void DesignEngineGL::resizeEvent(int width, int height) 
+void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 {
-	// Call base engine resize event.
-	BaseEngineGL::resizeEvent(width, height);
-
-	// Now call resizing required for design engine.
-	m_mousePoint->updateProjection();
+	// Call the base engine event.
+	Base2DEngineGL::mouseScrollEvent(pixelCoords, yOffset);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
