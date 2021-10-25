@@ -1741,6 +1741,7 @@
       <Filter>Source</Filter>
     </None>
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
+    <None Include="Source\Scripts\PythonTest.py" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">
