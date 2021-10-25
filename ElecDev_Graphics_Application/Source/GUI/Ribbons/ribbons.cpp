@@ -156,12 +156,6 @@ bool Ribbons::topBar() {
 
 bool Ribbons::sideBar() {
 
-    if (first[0]) {
-        ImGui::DockBuilderSplitNode(*this->dock, ImGuiDir_Left, 0.1f, &this->left, this->dock);
-        first[0] = false;
-    }
-
-
     if (this->sideBarFlag == "Block Diagram")
     {
         blockDiagram();
