@@ -31,37 +31,6 @@
 //  GUI Handler Class.
 //----------------------------------------------------------------------------------------------------------------------
 
-struct element {
-	std::string name;
-	std::list<std::string> extraParams;
-	std::string type;
-	std::string data = "";
-
-	element(std::string typeIn, std::string nameIn, std::list<std::string> extra) {
-		name = nameIn;
-		extraParams = extra;
-		type = typeIn;
-	}
-
-};
-
-struct guiHolder {
-	std::string windowName;
-	ImVec2 windowPos;
-	std::list<element> elements;
-	bool close = true;
-	bool submit = false;
-	bool docked = false;
-	std::string docking;
-
-	guiHolder(std::string window, ImVec2 windowPosIn, std::string dockingIn, std::list<element> inElements) {
-		windowName = window;
-		elements = inElements;
-		windowPos = windowPosIn;
-		docking = dockingIn;
-	}
-};
-
 
 class GUIHandler
 {
@@ -80,9 +49,18 @@ public:
 	Toolbar* toolbar;
 	Ribbons* ribbons;
 	Graphics* graphics;
-	userGUI* userWindow;
+	userGUI* userGUIP;
 	MCC* mcc;
-	std::list<guiHolder> guis;
+	ImGuiID dock;
+	ImGuiID dockSpaceID;
+
+	boolean dockCreated = false;
+
+	ImGuiID dock_up_id;
+	ImGuiID dock_right_id;
+	ImGuiID dock_left_id;
+	ImGuiID dock_down_id;
+	ImGuiID dock_none_id;
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
@@ -100,11 +78,9 @@ public:
 	// Set custom theme.
 	void setTheme();
 
-	void createGUI(std::string guiName, std::string guiPos, std::string docking, std::string parameters);
+	void createDock(ImVec2 work_size);
 
-	void renderUI(ImGuiID* dock);
 
-	void pushData(std::list<guiHolder>::iterator uiWindow);
 
 };
 

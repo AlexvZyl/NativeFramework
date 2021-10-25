@@ -604,7 +604,7 @@ void deQueueInput(stateMachine* states) {
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 docking = temp.parameters.substr(0, temp.parameters.find(";"));
                 parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                guiHandler->createGUI(guiName, guiPos, docking, parameters);
+                guiHandler->userGUIP->createGUI(guiName, guiPos, docking, parameters);
                 break;
 
             default:
