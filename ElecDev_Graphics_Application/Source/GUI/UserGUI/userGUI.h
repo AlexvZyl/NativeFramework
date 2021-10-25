@@ -27,6 +27,7 @@ struct guiHolder {
 	bool close = true;
 	bool submit = false;
 	bool docked = false;
+	bool addDock = false;
 	std::string docking;
 	ImGuiID dockPos;
 
@@ -56,6 +57,7 @@ public:
 	char steadyVoltDrop[128] = "Hello, world!";
 
 	std::list<guiHolder> guis;
+	bool resetDock = false;
 
 	//Constructor
 	userGUI(stateMachine* states, GraphicsHandler* graphicsHandler);

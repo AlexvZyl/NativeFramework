@@ -140,13 +140,57 @@ void GUIHandler::setTheme()
 void GUIHandler::createDock(ImVec2 work_size) {
 
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+	//ImGui::DockBuilderRemoveNode(dockspace_id);
+
+	if (this->userGUIP->resetDock || this->ribbons->first[0])
+	{
+		resetDock(dockspace_id);
+		this->ribbons->first[0] = false;
+	}
+	else {
+		ImGuiID dock = ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+		this->dock = dock;
+		this->dockSpaceID = dockspace_id;
+	}
+
+}
+
+void GUIHandler::resetDock(ImGuiID dockspace_id) {
+
 	ImGui::DockBuilderRemoveNode(dockspace_id);
 	ImGuiID dock = ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 
+	ImGui::DockBuilderSplitNode(dock, ImGuiDir_Left, 0.1f, &this->ribbons->left, &dock);
+
+	std::list<guiHolder>::iterator it = this->userGUIP->guis.begin();
+	while (it != this->userGUIP->guis.end())
+	{
+
+		switch (hash(it->docking.c_str()))
+		{
+		case (hash("LEFT")):	
+			ImGui::DockBuilderSplitNode(dock, ImGuiDir_Left, 0.2f, &it->dockPos, &dock);
+			break;
+		case (hash("RIGHT")):
+			ImGui::DockBuilderSplitNode(dock, ImGuiDir_Right, 0.2f, &it->dockPos, &dock);
+			break;
+		case (hash("TOP")):
+			ImGui::DockBuilderSplitNode(dock, ImGuiDir_Up, 0.2f, &it->dockPos, &dock);
+			break;
+		case (hash("BOTTOM")):
+			ImGui::DockBuilderSplitNode(dock, ImGuiDir_Down, 0.2f, &it->dockPos, &dock);
+			break;
+
+		default:
+			break;
+		}
+		it->docked = true;
+		++it;
+		
+	}
 	this->dock = dock;
 	this->dockSpaceID = dockspace_id;
-
-
+	this->userGUIP->resetDock = false;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

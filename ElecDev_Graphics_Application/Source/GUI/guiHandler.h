@@ -79,6 +79,7 @@ public:
 	void setTheme();
 
 	void createDock(ImVec2 work_size);
+	void resetDock(ImGuiID dockspace_id);
 
 
 

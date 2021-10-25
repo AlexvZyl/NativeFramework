@@ -96,6 +96,10 @@ void userGUI::createGUI(std::string guiName, std::string guiPos, std::string doc
 
 		s.erase(0, pos + delimiter.length());
 		element tempElement(elementType, elementName, extra);
+		if (elementType == "InputText") {
+			tempElement.data = extra.front().c_str();
+		}
+		
 		elements.push_back(tempElement);
 	}
 
@@ -105,10 +109,10 @@ void userGUI::createGUI(std::string guiName, std::string guiPos, std::string doc
 	winPos.y = std::stof(guiPos.substr(guiPos.find(",") + 1, guiPos.size() - guiPos.find(",") - 1));
 
 	guiHolder temp(guiName, winPos, docking, elements);
-	temp.docked = true;
 	temp.docking = docking;
-	ImGui::DockBuilderSplitNode(this->dock, ImGuiDir_Right, 0.2f, &temp.dockPos, &this->dock);
+	temp.addDock = true;
 	guis.push_back(temp);
+	resetDock = true;
 }
 
 void userGUI::renderUI(ImGuiID* dock) {

@@ -597,7 +597,6 @@ void deQueueInput(stateMachine* states) {
                 break;
 
             case hash("addGUI"):
-                std::cout << "GUI" << std::endl;
                 guiName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
