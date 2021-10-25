@@ -245,6 +245,7 @@ int main(int, char**)
     GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
     GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
+    GLCall(glClearColor(0.17f, 0.17f, 0.17f, 1.0f));            // Set the color to which OpenGL clears.
 
     // Create the state machine variables.
     stateMachine* states = new stateMachine();
