@@ -34,6 +34,9 @@
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
 
+// Python stuff.
+#include <Python.h>
+
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
 /*=======================================================================================================================================*/
@@ -260,14 +263,20 @@ int main(int, char**)
     /* Loop                                                                                                                              */
     /*===================================================================================================================================*/
 
-    // Loop variables.
-    bool wait = false;          // Wait for events.
-
+    // Set waiting for events.
+    bool wait = false;
     // Thread reading inputs from pipeline.
     std::thread t1(readingIn, states);
-
     //Thread writing to the pipeline
     std::thread t2(readingOut, states);
+
+    // Test Python script.
+    //Py_SetProgramName(argv[0]);  /* optional but recommended */
+    Py_Initialize();
+    PyObject* obj = Py_BuildValue("s", "C:\\Enerdyne\\GitHub Repos\\ElecDev_Graphics_Application\\ElecDev_Graphics_Application\\Source\\Scripts\\PythonTest.py");
+    FILE* file = _Py_fopen_obj(obj, "r+");
+    PyRun_SimpleFile(file, "PythonTest.py");
+    Py_Finalize();
 
     // Input message.
     std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
@@ -378,49 +387,48 @@ void procesInput(std::string inString, stateMachine* states)
 }
 
 // Threaded function that reads the messages from python.
-void readingIn(stateMachine* states) {
-
+void readingIn(stateMachine* states) 
+{
     std::string temp;
-    while (true) {
-
+    while (true) 
+    {
         std::getline(std::cin, temp);
-        if (temp != "") {
+        if (temp != "") 
+        {
             std::cout << blue << "[INTERFACE] [INFO] : " << white << "Command received." << std::endl;
             std::string subCommand = "";
-            while (true) {
+            while (true) 
+            {
                 int nextStart = temp.find("::");
-                if (nextStart == -1) {
+                if (nextStart == -1) 
+                {
                     break;
                 }
                 subCommand = temp.substr(0, nextStart);
                 procesInput(subCommand, states);
-                temp = temp.substr(nextStart + 2, temp.size());
-                
+                temp = temp.substr(nextStart + 2, temp.size());   
             }
-            
         }
         temp = "";
     }
 }
 
-void readingOut(stateMachine* states) {
-
-    while (true) {
+void readingOut(stateMachine* states) 
+{
+    while (true) 
+    {
         deQueueOutput(states);
     }
 }
 
-void deQueueOutput(stateMachine* states) {
-
-    while (states->outputQ.size() > 0) {
+void deQueueOutput(stateMachine* states) 
+{
+    while (states->outputQ.size() > 0) 
+    {
         outputQueue temp = states->outputQ.front();
-
         std::cout << temp.command << temp.parameters << std::endl;
-
         states->outputQ.pop();
-
     }
-
 }
 
 // Process the funcions laoded by the python thread.
@@ -435,12 +443,10 @@ void deQueueInput(stateMachine* states) {
         std::string text;
         std::string align;
         std::vector<float> params;
-
         std::string guiName;
         std::string guiPos;
         std::string docking;
         std::string parameters;
-
 
         // Try the command and catch exceptions.
         try {
