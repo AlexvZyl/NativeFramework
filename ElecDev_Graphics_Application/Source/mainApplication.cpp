@@ -605,6 +605,7 @@ void deQueueInput(stateMachine* states) {
                 guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
                 parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 guiHandler->createGUI(guiName, guiPos, parameters);
+                break;
                 
             /*===================================================================================================================================*/
             /* 3D API.                                                                                                                           */
