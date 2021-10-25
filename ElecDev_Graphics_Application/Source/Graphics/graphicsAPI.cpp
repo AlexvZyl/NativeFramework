@@ -98,10 +98,7 @@ void GraphicsHandler::removeWindow(std::string windowName)
 			m_activeWindow = "NULL";
 		}
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 //=============================================================================================================================================//
@@ -118,15 +115,9 @@ void GraphicsHandler::autoCenter(std::string windowName)
 			// Render the demo drawing.
 			m_windowsDictionary[windowName]->engineGL->autoCenter();
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Centers the Drawing around (0,0) and scales it to fit into the window.
@@ -139,15 +130,9 @@ void GraphicsHandler::updateBuffers(std::string windowName)
 			// Render the demo drawing.
 			m_windowsDictionary[windowName]->engineGL->updateGPU();
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 //=============================================================================================================================================//
@@ -165,15 +150,9 @@ void GraphicsHandler::drawLine(std::string windowName, float position1[2], float
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawLine(position1, position2, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draw clear triangle.
@@ -186,15 +165,9 @@ void GraphicsHandler::drawTriangleClear(std::string windowName, float position1[
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawTriangleClear(position1, position2, position3, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draw filled triangle.
@@ -207,15 +180,9 @@ void GraphicsHandler::drawTriangleFilled(std::string windowName, float position1
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawTriangleFilled(position1, position2, position3, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draw a clear quad.
@@ -228,15 +195,9 @@ void GraphicsHandler::drawQuadClear(std::string windowName, float position[2], f
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawQuadClear(position, width, height, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draw a filled quad.
@@ -249,15 +210,9 @@ void GraphicsHandler::drawQuadFilled(std::string windowName, float position[2], 
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawQuadFilled(position, width, height, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draws a clear circle.
@@ -270,15 +225,9 @@ void GraphicsHandler::drawCircleClear(std::string windowName, float coords[2], f
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawCircleClear(coords, radius, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draws a filled circle.
@@ -291,15 +240,9 @@ void GraphicsHandler::drawCircleFilled(std::string windowName, float coords[2], 
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawCircleFilled(coords, radius, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Adds text to the VBO object.
@@ -335,15 +278,9 @@ void GraphicsHandler::drawText(std::string windowName, std::string text, float c
 			// Render the text.
 			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale, align);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // Draws the demo to the selected window.
@@ -356,15 +293,9 @@ void GraphicsHandler::drawDemo(std::string windowName, unsigned int loopCount)
 			// Render the demo drawing.
 			m_windowsDictionary[windowName]->engineGL->drawDemo(loopCount);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // ===================================================================================================================== //
@@ -380,15 +311,9 @@ void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3],
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawQuadFilled3D(vertex1, vertex2, vertex3, vertex4, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]) 
@@ -400,15 +325,9 @@ void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3],
 			// Call BaseEngine function.
 			m_windowsDictionary[windowName]->engineGL->drawCuboidFilled(vertex1, vertex2, vertex3, vertex4, depth, color);
 		}
-		catch (const std::exception& e)
-		{
-			parametersError(e);
-		}
+		catch (const std::exception& e) { parametersError(e); }
 	}
-	else
-	{
-		windowError(windowName);
-	}
+	else { windowError(windowName); }
 }
 
 // ===================================================================================================================== //

@@ -1,24 +1,24 @@
-//----------------------------------------------------------------------------------------------------------------------
-//  Includes.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
 
 // Needed to load resources.
 #include "../../Resources/ResourceHandler.h"
 // Class include.
 #include "Base2D_Engine.h"
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Constructor & Destructor.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Costructor & Destructor.																												   //
+//=============================================================================================================================================//
 
 // With GLFW window.
 Base2DEngineGL::Base2DEngineGL(stateMachine* states) : EngineCoreGL(states)
 {
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
-	//---------------------------------------------------------------------------------------
-	// Projection setup.
-	//---------------------------------------------------------------------------------------
+	// --------------------------------- //
+	//  P R O J E C T I O N   S E T U P  //
+	// --------------------------------- //
 
 	// Find the minimum value of the viewport dimensions.
 	float minValue;
@@ -38,9 +38,9 @@ Base2DEngineGL::Base2DEngineGL(stateMachine* states) : EngineCoreGL(states)
 	m_textureShader->bind();
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
 
-	//---------------------------------------------------------------------------------------
-	// Rendering setup.
-	//---------------------------------------------------------------------------------------
+	// ------------------------------- //
+	//  R E n D E R I N G   S E T U P  //
+	// ------------------------------- //
 
 	// Add a texture to the texture shader.
 	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
@@ -62,16 +62,16 @@ Base2DEngineGL::~Base2DEngineGL()
 {
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Rendering.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Rendering.																																   //
+//=============================================================================================================================================//
 
 // [MAIN LOOP] The rendering pipeline.
 void Base2DEngineGL::renderLoop()
 {
-	// ------------------------------------------------------------	//
-	//  Setup.														//
-	// ------------------------------------------------------------	//
+	// ----------- //
+	//  S E T U P  //
+	// ----------- //
 
 	// Set glViewport for the ImGUI context.
 	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0], 
@@ -84,9 +84,9 @@ void Base2DEngineGL::renderLoop()
 	m_frameBuffer->bind();
 	m_frameBuffer->clear();
 	
-	// ------------------------------------------------------------	//
-	//  Rendering.													//
-	// ------------------------------------------------------------	//
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 		
 	// Draw background.
 	m_backgroundShader->bind();
@@ -103,14 +103,12 @@ void Base2DEngineGL::renderLoop()
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
 	m_texturedTrianglesVAO->render();
 
-	// ------------------------------------------------------------	//
-	//  Cleanup.													//
-	// ------------------------------------------------------------	//
+	// --------------- //
+	//  C L E A N U P  //
+	// --------------- //
 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
-
-	// ------------------------------------------------------------	//
 }
 
 // Return the ID to the texture that is rendered via the FBO.
@@ -119,21 +117,19 @@ unsigned int Base2DEngineGL::getRenderTexture()
 	return m_frameBuffer->getRenderTexture();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
 //  Coordinate systems.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
 
 // Function that takes pixel coordinates as input and return the coordinates in the world.
 glm::vec4 Base2DEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
-{
-	
+{	
 	// Find the viewpwort dimensions.
 	float viewport[2] = {m_states->renderWindowSize.x, m_states->renderWindowSize.y};
 	// Account for pixel offset.
 	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
 	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
-	
 	// The nomalized mouse coordinates on the users screen.
 	float normalizedScreenCoords[2];
 	// Apply the viewport transform the the pixels.
@@ -141,24 +137,22 @@ glm::vec4 Base2DEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 	normalizedScreenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
 	// Convert to screen vector.
 	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], 0, 1 };
-
 	// Apply MVP matrices.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
 	glm::mat4 MVPinverse = glm::inverse(m_modelMatrix * m_viewMatrix * m_projectionMatrix);
 	glm::vec4 worldVec = screenVec * MVPinverse ;
-
 	return worldVec;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Window functions.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Window Functions.																														   //
+//=============================================================================================================================================//
 
 // Function that handles the resizing of the ImGUI docked window.
 void Base2DEngineGL::resizeEvent(float width, float height)
 {
 	// Calculate the value of the scaling.
-	float scalingFactor[2] = { width / (float)m_imGuiViewportDimensions[0], height / (float)m_imGuiViewportDimensions[1] };
+	float scalingFactor[2] = { (float)width / (float)m_imGuiViewportDimensions[0], (float)height / (float)m_imGuiViewportDimensions[1] };
 	m_imGuiViewportDimensions[0] = (float)width;
 	m_imGuiViewportDimensions[1] = (float)height;
 		
@@ -190,6 +184,6 @@ void Base2DEngineGL::resizeEvent(float width, float height)
 	m_imGuiViewportDimensions[1] = (float)height;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  EOF.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+// EOF.																																		   //
+//=============================================================================================================================================//

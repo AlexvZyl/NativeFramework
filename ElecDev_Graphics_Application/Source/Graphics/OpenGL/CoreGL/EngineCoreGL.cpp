@@ -17,20 +17,24 @@ and notify the user via the terminal interface.
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
+// Constructor.
 EngineCoreGL::EngineCoreGL(stateMachine* states)
 	:m_states(states)
 {
+	// Print start message.
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Engine core starting...";
 
-	//---------------------------------------------------------------------------------------
-	// Compile basic shaders.
-	//---------------------------------------------------------------------------------------
+	// ----------------------------------------- //
+	//  C R E A T E   B A S I C   S H A D E R S  //
+	// ----------------------------------------- //
 
+	// Compile the shaders, using the resources embedded in the exe.
 	m_basicShader = new Shader(BASIC_SHADER);
 	m_backgroundShader = new Shader(BACKGROUND_SHADER);
 	m_textureShader = new Shader(TEXTURE_SHADER);
 
-	// Set default values for the shaders.
+	// Set default values for the shaders.  The background shader does not require
+	// this setup, since it does not work with the MVP matrices.
 	glm::mat4 identity = glm::mat4(1.0f);
 	m_basicShader->bind();
 	m_basicShader->setMat4("worldMatrix", identity);
@@ -41,37 +45,32 @@ EngineCoreGL::EngineCoreGL(stateMachine* states)
 	m_textureShader->setMat4("projectionMatrix", identity);
 	m_textureShader->setMat4("viewMatrix", identity);
 
-	//---------------------------------------------------------------------------------------
-	// Create basic VAO's.
-	//---------------------------------------------------------------------------------------
+	// ------------------------------------- //
+	//  C R E A T E   B A S I C   V A O ' S  //
+	// ------------------------------------- //
 
-	// Buffers setup.
 	m_linesVAO = new VertexArrayObject(GL_LINES);
 	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES);
 	m_texturedTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, true);
 	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
-	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
+	createDefaultBackground();
 
-	//---------------------------------------------------------------------------------------
-	// Create default text renderer.
-	//---------------------------------------------------------------------------------------
+	// ----------------------------------------- //
+	//  C R E A T E   T E X T   R E N D E R E R  //
+	// ----------------------------------------- //
 
 	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
-	// Setup shader with textures for text renderer.
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1 };
 	GLCall(glUniform1iv(loc, 2, samplers));
 	GLCall(glBindTextureUnit(1, m_textRenderer->m_textureID));	// Text Atlas.
 
-	//---------------------------------------------------------------------------------------
-
-	createDefaultBackground();
-
-	// Done.
+	// Print done message.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core done.\n";
 }
 
+// Destructor.
 EngineCoreGL::~EngineCoreGL()
 {
 	// Shaders.
@@ -103,16 +102,15 @@ void EngineCoreGL::functionNotImplementedError(std::string functionName)
 //=============================================================================================================================================//
 
 void EngineCoreGL::renderLoop() { functionNotImplementedError(__FUNCTION__); }
+void EngineCoreGL::autoCenter() { functionNotImplementedError(__FUNCTION__); }
+void EngineCoreGL::drawDemo(unsigned int loopCount) { functionNotImplementedError(__FUNCTION__); }
 
 void EngineCoreGL::updateGPU() 
 {
 	m_linesVAO->updateGPU();
 	m_trianglesVAO->updateGPU();
 	m_texturedTrianglesVAO->updateGPU();
-}
-												
- void EngineCoreGL::autoCenter() { functionNotImplementedError(__FUNCTION__); }
- void EngineCoreGL::drawDemo(unsigned int loopCount) { functionNotImplementedError(__FUNCTION__); }
+}												
 												
  unsigned int EngineCoreGL::getRenderTexture() 
  {
@@ -121,6 +119,8 @@ void EngineCoreGL::updateGPU()
 
  void EngineCoreGL::createDefaultBackground() 
  {
+	 // Create the VAO.
+	 m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
 	 // Assign background data.
 	 float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
 	 float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
@@ -132,6 +132,14 @@ void EngineCoreGL::updateGPU()
 	 // Create background.
 	 m_backgroundVAO->writeData(vertices);
 	 m_backgroundVAO->updateGPU();
+ }
+
+ float EngineCoreGL::deltaTime()
+ {
+	 float currentFrame = glfwGetTime();
+	 m_deltaTime = currentFrame - m_lastFrame;
+	 m_lastFrame = currentFrame;
+	 return m_deltaTime;
  }
 
  //=============================================================================================================================================//

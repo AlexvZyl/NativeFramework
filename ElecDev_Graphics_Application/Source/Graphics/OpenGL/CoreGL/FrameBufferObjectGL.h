@@ -34,6 +34,7 @@ private:
 	// Saves the FBO size.
 	int m_viewport[2] = { 500, 500 };
 
+	// The multisampling level (how many samples per pixel?).
 	int m_MSAA = 1;
 
 public:

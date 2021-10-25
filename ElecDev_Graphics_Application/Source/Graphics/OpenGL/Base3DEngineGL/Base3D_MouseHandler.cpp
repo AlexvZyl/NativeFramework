@@ -47,7 +47,7 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 	{	
 		// Calculate the change in mouse movement.
 		float mouseMovementPixels[2] = { pixelCoords[0] - m_prevMouseEventPixelCoords[0], pixelCoords[1] - m_prevMouseEventPixelCoords[1] };
-		m_camera->translateCamera(mouseMovementPixels);
+		m_camera->panCameraPixels(mouseMovementPixels);
 		// Store the new mouse pixel coordinates.
 		m_prevMouseEventPixelCoords[0] = pixelCoords[0];
 		m_prevMouseEventPixelCoords[1] = pixelCoords[1];

@@ -89,8 +89,8 @@ void FrameBufferObject::createAttachments(int width, int height)
 // Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height)
 {
+	// Recreate the attachments with the new size.
 	createAttachments(width, height);
-
 	// Save the dimenions.
 	m_viewport[0] = width;
 	m_viewport[1] = height;
