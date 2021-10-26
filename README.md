@@ -98,7 +98,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ⬜ Overhaul event system and mouse handling. (Mouse events are combined between ImGUI and GLFW.  This might be bad coding)
 - ✅ Implement MSAA with the FBO's.
 
-### Base Engine
+### Base 2D Engine
 
 - ✅ Structure code and setup handlers:
     - ✅ Main app.
@@ -159,7 +159,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ⬜ Implement stencil buffers.
 - ⬜ Expand texture rendering capabilities.
 
-### Design Engine (Child of Base Engine)
+### Design 2D Engine (Child of Base 2D Engine)
 
 - ⬜ Mouse event handler.
 - ⬜ Component generation and buffer management.
@@ -175,7 +175,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
 - ⬜ Add helper class the draws lines and highlites components that are selected.
 
-### 3D Base Engine
+### Base 3D Engine
 
 - ✅ Add Base3D engine that can have a window instance.
 - ✅ Implement perspective projection matrix.
