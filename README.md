@@ -186,8 +186,13 @@ This is the graphics application that is to be used with the ElecDev software.  
     - ✅ Moving.
     - ✅ Clicks.
 - ✅ Add a camera class that is used in the 3D engine.
-- ⬜ Implement a better event handler, incuding mouse handling.
 - ⬜ Add skybox.
+- ⬜ Implement API.
+    - ⬜ Text.
+    - ✅ Cuboids.
+    - ⬜ Quads.
+    - ⬜ Triangles.
+    - ⬜ Circles.
 
 ### Long Term Dreams
 
