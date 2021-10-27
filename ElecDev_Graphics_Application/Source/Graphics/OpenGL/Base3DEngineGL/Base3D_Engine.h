@@ -11,7 +11,7 @@ Some modifications will have to be applied to the matrices and the mouse handlin
 
 // The base 2D engine.
 #include "../CoreGL/EngineCoreGL.h"
-#include "../CoreGL/CameraGL.h"
+#include "Peripherals/CameraGL.h"
 
 //=============================================================================================================================================//
 //  Base 3D Engine Class.																													   //

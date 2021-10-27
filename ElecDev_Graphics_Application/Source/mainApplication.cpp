@@ -273,11 +273,11 @@ int main(int, char**)
 
     // Test Python script.
     //Py_SetProgramName(argv[0]);  /* optional but recommended */
-    Py_Initialize();
+    /*Py_Initialize();
     PyObject* obj = Py_BuildValue("s", "C:\\Enerdyne\\GitHub Repos\\ElecDev_Graphics_Application\\ElecDev_Graphics_Application\\Source\\Scripts\\PythonTest.py");
     FILE* file = _Py_fopen_obj(obj, "r+");
     PyRun_SimpleFile(file, "PythonTest.py");
-    Py_Finalize();
+    Py_Finalize();*/
 
     // Input message.
     std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
