@@ -10,18 +10,15 @@
 
 // General.
 #include <iostream>
-
 // File streaming.
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
 // OpenGL.
 #include "ErrorHandlerGL.h"
 #include <glad/glad.h>
 #include <glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 // Chaching include.
 #include <unordered_map>
 

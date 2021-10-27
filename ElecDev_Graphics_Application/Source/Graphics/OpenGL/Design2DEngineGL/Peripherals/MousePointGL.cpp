@@ -24,7 +24,6 @@ MousePoint::MousePoint(float color[4], float radius, unsigned int resolution, gl
 
 	// Create shader to render the point in a different space.
 	m_shader = new Shader(BASIC_SHADER);
-
 	// Assign matrices to shader.
 	m_shader->bind();
 	m_shader->setMat4("worldMatrix", m_modelMatrix);
@@ -33,10 +32,8 @@ MousePoint::MousePoint(float color[4], float radius, unsigned int resolution, gl
 
 	// Lines used to draw the circle.
 	std::vector<VertexData> vertices;
-
 	// Calculate coordinates to draw to.
 	float coords[2] = { 0,0 };
-
 	// Create triangles requried to draw a circle.
 	for (unsigned int i = 0; i <= resolution; i++)
 	{
@@ -53,6 +50,7 @@ MousePoint::MousePoint(float color[4], float radius, unsigned int resolution, gl
 	}
 	// Write the data to the buffer.
 	m_VAO->writeData(vertices);
+	m_VAO->updateGPU();
 }
 
 // Destructor.
@@ -85,7 +83,6 @@ void MousePoint::updatePosition(float pixelCoords[2])
 	glm::vec4 newWorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	float translate[2] = { m_worldCoordsPrev[0] - newWorldCoords[0], m_worldCoordsPrev[1] - newWorldCoords[1] };
 	m_translationMatrix =  glm::translate(m_translationMatrix, glm::vec3(-translate[0], -translate[1], 0.0f));
-
 	// Assign current position to prev coords.
 	m_worldCoordsPrev[0] = newWorldCoords[0];
 	m_worldCoordsPrev[1] = newWorldCoords[1];

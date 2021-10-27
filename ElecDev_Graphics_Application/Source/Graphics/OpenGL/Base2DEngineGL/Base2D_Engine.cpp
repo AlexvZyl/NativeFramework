@@ -39,7 +39,7 @@ Base2DEngineGL::Base2DEngineGL(stateMachine* states) : EngineCoreGL(states)
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
 
 	// ------------------------------- //
-	//  R E n D E R I N G   S E T U P  //
+	//  R E N D E R I N G   S E T U P  //
 	// ------------------------------- //
 
 	// Add a texture to the texture shader.
@@ -60,6 +60,7 @@ Base2DEngineGL::Base2DEngineGL(stateMachine* states) : EngineCoreGL(states)
 // Delete and free memory.
 Base2DEngineGL::~Base2DEngineGL() 
 {
+	EngineCoreGL::~EngineCoreGL();
 }
 
 //=============================================================================================================================================//
@@ -176,7 +177,7 @@ void Base2DEngineGL::resizeEvent(float width, float height)
 	m_textureShader->bind();
 	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
 
-	// Resize FBO texture.
+	// Resize FBO attachments.
 	m_frameBuffer->resize(width, height);
 
 	// Change viewport dimmensions.

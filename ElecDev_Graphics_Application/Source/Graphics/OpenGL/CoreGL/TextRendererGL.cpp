@@ -4,16 +4,13 @@
 
 // Resource loading.
 #include "../Resources/ResourceHandler.h"
-
 // Class include.
 #include "TextRendererGL.h"
-
 // File reading.
 #include <fstream>
 #include <cstdlib>
 #include <string>
 #include <sstream>
-
 #include "Misc/stb_image.h"
 
 //----------------------------------------------------------------------------------------------------------------------

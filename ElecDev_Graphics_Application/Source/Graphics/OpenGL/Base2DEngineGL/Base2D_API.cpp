@@ -19,7 +19,6 @@ void Base2DEngineGL::drawLine(float position1[2], float position2[2], float colo
 	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = {v1,v2};
-
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
 }
@@ -32,7 +31,6 @@ void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], f
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v1 };
-
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
 }
@@ -45,7 +43,6 @@ void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], 
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v3 };
-
 	// Write to CPU side buffer.
 	m_trianglesVAO->writeData(vertices);
 }
@@ -60,7 +57,6 @@ void Base2DEngineGL::drawQuadClear(float position[2], float width, float height,
 	VertexData v3(position[0]-width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v4(position[0]-width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v4, v4, v1 };
-
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
 }
@@ -75,7 +71,6 @@ void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height
 	VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
 	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
 	std::vector<VertexData> vertices = { v1, v2, v3, v3, v4, v1 };
-
 	// Write to CPU side buffer.
 	m_trianglesVAO->writeData(vertices);
 }
@@ -85,7 +80,6 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 {
 	// Lines used to draw the circle.
 	std::vector<VertexData> vertices;
-
 	// Create lines requried to draw a circle.
 	for (int i = 0; i <= m_circleResolution; i++)
 	{
@@ -100,7 +94,6 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 		// Add line to total lines.
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 	}
-
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
 }
@@ -110,7 +103,6 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 {
 	// Lines used to draw the circle.
 	std::vector<VertexData> vertices;
-
 	// Create triangles requried to draw a circle.
 	for (int i = 0; i <= m_circleResolution; i++)
 	{
@@ -139,7 +131,6 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 	{
 		length += m_textRenderer->m_characterDictionary[c].xAdvance;
 	}
-
 	// Center the text.
 	if (align == "C" || align == "c")
 	{

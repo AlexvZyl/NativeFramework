@@ -13,10 +13,8 @@ render all of the text.
 
 // General.
 #include <iostream>
-
 // Used for dictionary.
 #include <map>
-
 // OpenGL Engines incude.
 #include "VertexArrayObjectGL.h"
 

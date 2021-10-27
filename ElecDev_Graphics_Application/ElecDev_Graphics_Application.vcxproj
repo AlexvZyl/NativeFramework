@@ -173,11 +173,11 @@
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_MouseHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\CameraGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\MousePointGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\MousePointGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
@@ -304,11 +304,11 @@
     <ClInclude Include="Source\External\SPDLog\version.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\MousePointGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\MousePointGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
@@ -835,7 +835,7 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
-    <None Include="Source\Scripts\PythonTest.py" />
+    <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\Shaders\basicShader.shader" />
