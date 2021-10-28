@@ -1,5 +1,5 @@
 /*
-This is where the interactive design 2D design engine is implemented.
+This is where the interactive 2D design engine is implemented.
 */
 
 //=============================================================================================================================================//
