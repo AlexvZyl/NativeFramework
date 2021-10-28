@@ -29,8 +29,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ## Graphics API
 
-
-
 ---
 
 ## Legend:
