@@ -47,14 +47,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Combine basic, textured and text rendering (VAO's and shaders) to reduce draw calls and shader switching.
 * ⬜ Currently using an older version of the ImGUI docking banch, because they implemented an OpenGL loader that conflicts with GLAD.  Find out why this is a problem and fix.
 * ⬜ Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
-* ⬜ Move over to smart pointers for better memory management.
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
 * ⬜ Make function calling in the GraphicsAPI generic (use function pointers?).
-
-#### Bugs from Ulrich
-* ⬜ If a lot of drawings are drawn, the last drawing is not completely finished. I do not know the reason for this, but if I draw a new MCC the old one is drawn completely.
-* ⬜ I cannot resize the windows of the drawings.
 
 ---
 
