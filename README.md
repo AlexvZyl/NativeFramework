@@ -43,48 +43,30 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 #### Alex
 * ⬜ Mouse events are handled by making the GraphicsHandler object global.  Find another way.
-* 🟨 Seperate OpenGL drawing and window events on different threads (Resizing not working properly).
 * ⬜ OpenGL has a offset that cannot be removed (can be seen in AutoCAD).  Find a way to fix this.
 * ⬜ Unbinding is not necessary and costs performance, but helpful for debugging.  Write code so that it unbinds in debug mode but does not do it in release mode.
-* 🟨 GL_LINES & GL_TRIANGLES are being used instead of GL_LINE_LOOP & GL_TRIANGLE_FAN.  Unsure if this will have an impact on performance.  Might just be the use of predefined IBO's.
-* ✅ Use the docking branch from ImGUI.
-* ✅ Use less draw calls by using less buffers.  Only draw lines and triangles.  Will make buffer management more complex.
 * ⬜ Combine basic, textured and text rendering (VAO's and shaders) to reduce draw calls and shader switching.
 * ⬜ Currently using an older version of the ImGUI docking banch, because they implemented an OpenGL loader that conflicts with GLAD.  Find out why this is a problem and fix.
 * ⬜ Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
-* ✅ Implement "Improved Alpha-Tested Magnification for Vector Textures and Special Effects" from paper [https://steamcdn-a.akamaihd.net/apps/valve/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf].
 * ⬜ Font rendering is done with .fnt & .png files.  This works, but using .ttf files is more modern.  The fist option is used since it is faster to work with a font atlas.
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
-* ✅ Type casts throwing warning.  Fix.
-* ✅ Buffer sizes are currently static, change to dynamic.
-* ✅ Use SDF (Signed Distance Fields) when rendering text.
-* ✅ Create a resource loader function.
-* ✅ Fix abstractions.  Code got messy when we started rushing.
-* ✅ Autoresize and scaling does not take into account the length of the text string.
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
 * ⬜ Add text kerning.
 * ⬜ Move over to smart pointers for better memory management.
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ Fix naming convention.
-* ✅ Enable MSAA for the FBO.
-* ✅ Move CPU data handling over to VAO class.
 * ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
 * ⬜ Make the circle resolution dynamic, a function of the radius.
 * ⬜ Fix shader uniform caching.
 * ⬜ Make function calling in the GraphicsAPI generic (use function pointers?).
 
 #### Raynhardt 
-* ✅ Multi View port
-* ✅ Multi vieport docking
+
 * ⬜ Resize event need working on
-* ✅ Implement Input catching
-* ✅ Rebuild IO handling
 
 #### Bugs from Ulrich
-* ✅ The MCC must open in the middle of the window.
 * ⬜ If a lot of drawings are drawn, the last drawing is not completely finished. I do not know the reason for this, but if I draw a new MCC the old one is drawn completely.
 * ⬜ I cannot resize the windows of the drawings.
-* ✅ I want to be able to close a drawing window (per MCC).
 
 ---
 
