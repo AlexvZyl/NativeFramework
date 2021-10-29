@@ -51,7 +51,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ Font rendering is done with .fnt & .png files.  This works, but using .ttf files is more modern.  The fist option is used since it is faster to work with a font atlas.
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
 * ⬜ Looks like there is some kind of memory leak when resizing the window.
-* ⬜ Add text kerning.
 * ⬜ Move over to smart pointers for better memory management.
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ Fix naming convention.
