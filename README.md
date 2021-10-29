@@ -51,9 +51,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * ⬜ TextRenderer file parsing is hard coded for one specific file.  This has to be fixed.
 * ⬜ Move over to smart pointers for better memory management.
 * ⬜ Fix cursor position calculation with text in the text renderer.
-* ⬜ Fix naming convention.
 * ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
-* ⬜ Fix shader uniform caching.
 * ⬜ Make function calling in the GraphicsAPI generic (use function pointers?).
 
 #### Raynhardt 
