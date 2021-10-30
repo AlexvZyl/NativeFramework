@@ -44,7 +44,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 #### Alex
 * ⬜ Mouse events are handled by making the GraphicsHandler object global.  Find another way.
 * ⬜ Combine basic, textured and text rendering (VAO's and shaders) to reduce draw calls and shader switching.
-* ⬜ Error handler uses deprecated OpenGL functions that causes problems on GPU's that does not have good compatibility.  Replace with another handler (glDebugMessageCallback?).
 * ⬜ Fix cursor position calculation with text in the text renderer.
 * ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
 * ⬜ Make function calling in the GraphicsAPI generic (use function pointers?).
