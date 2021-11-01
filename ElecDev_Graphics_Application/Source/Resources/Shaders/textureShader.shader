@@ -5,6 +5,7 @@ layout(location = 0) in vec3 pos;
 layout(location = 1) in vec4 v_color;
 layout(location = 2) in vec2 v_texCoord;
 layout(location = 3) in float v_texID;
+layout(location = 4) in uint v_entityID;
 
 uniform mat4 worldMatrix;
 uniform mat4 projectionMatrix;
@@ -13,23 +14,27 @@ uniform mat4 viewMatrix;
 out vec4 f_color;
 out vec2 f_texCoord;
 out float f_texID;
+flat out uint f_entityID;
 
 void main()
 {
-	f_color = v_color;
+	f_color =v_color;
 	f_texCoord = v_texCoord;
 	f_texID = v_texID;
 	gl_Position = projectionMatrix * viewMatrix * worldMatrix * vec4(pos, 1.0);
+	f_entityID = v_entityID;
 }
 
 #shader fragment
 #version 450 core
 
 layout(location = 0) out vec4 o_color;
+layout(location = 1) out uint o_entityID;
 
 in vec4 f_color;
 in vec2 f_texCoord;
 in float f_texID;
+flat in uint f_entityID;
 
 const float width = 0.4;
 const float edge = 0.2;
@@ -53,4 +58,5 @@ void main()
 	{
 		o_color = texture(f_textures[index], f_texCoord);
 	}
+	o_entityID = f_entityID;
 }

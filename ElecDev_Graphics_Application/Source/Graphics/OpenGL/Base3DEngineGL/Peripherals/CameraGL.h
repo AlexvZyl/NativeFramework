@@ -43,11 +43,8 @@ public:
 	// Camera controls.
 	void translateTowardsTarget(float translation);
 	void rotateAroundTarget(float deltaPixels[2]);
-	void panCameraPixels(float deltaPixels[2]);				// Pans the camera based on the distance the mouse moved on the screen.
-	void panCameraCoords(float worldCoords[3]);				// Pans the camera according to the world coords supplied.
-															// The coords given is not the destination, but the total pan.
-	void translateCameraPixels(float deltaPixels[2]);
-	void translateCameraCoords(float worldCoords[3]);
+	void panCamera(float panVector[2]);
+	void translateWorldCoords(float translateVector[3]);
 	void rotateAroundPosition(float rotation[3]);
 	void scaleScene(float scale);
 

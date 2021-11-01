@@ -41,9 +41,9 @@ MousePoint::MousePoint(float color[4], float radius, unsigned int resolution, gl
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / resolution);
 		float x2 = coords[0] + radius * std::cos(i * PI * 2 / resolution);
 		float y2 = coords[1] + radius * std::sin(i * PI * 2 / resolution);
-		VertexData v1(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3]);
-		VertexData v2(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
-		VertexData v3(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
+		VertexData v1(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+		VertexData v2(x1, y1, 0.0f, color[0], color[1], color[2], color[3], 0);
+		VertexData v3(x2, y2, 0.0f, color[0], color[1], color[2], color[3], 0);
 		std::vector<VertexData> verticesTemp = { v1, v2, v3 };
 		// Add triangle to total triangles.
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());

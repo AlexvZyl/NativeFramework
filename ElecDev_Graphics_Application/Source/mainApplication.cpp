@@ -8,32 +8,24 @@
 #include <iostream>
 #include <string>
 #include <thread>
-
 // ImGUI (GUI software). 
 #include "Core/imgui.h"
 #include "Implementations/imgui_impl_glfw.h"
 #include "Implementations/imgui_impl_opengl3.h"
 #include "stateMachine.h"
-
 // Resources.
 #include <Misc/stb_image.h>
 #include "Resources/ResourceHandler.h"
-
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
-
 // GUI includes.
 #include "GUI/guiHandler.h"
-
 // Graphics handler include.
 #include <../Graphics/GraphicsHandler.h>
-
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
-
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
-
 // Python stuff.
 #include <Python.h>
 

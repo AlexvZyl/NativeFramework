@@ -53,6 +53,20 @@ void Camera::translateTowardsTarget(float translation)
 	//}
 }
 
+// Moves the camera based on the world's coordinate system, not the camera.
+void Camera::translateWorldCoords(float translateVector[3]) 
+{
+	float scale = 1000000;
+	// Move camera position.
+	m_position[0] += translateVector[0] * scale;
+	m_position[1] += translateVector[1] * scale;
+	m_position[2] += translateVector[2] * scale;
+	// Update camera target.
+	m_target[0] += translateVector[0] * scale;
+	m_target[1] += translateVector[1] * scale;
+	m_target[2] += translateVector[2] * scale;
+}
+
 // Rotates the camera around the target.
 void Camera::rotateAroundTarget(float deltaPixels[2])
 {
@@ -79,25 +93,14 @@ void Camera::rotateAroundTarget(float deltaPixels[2])
 }
 
 // Translates the camera based on mouse movement.
-void Camera::panCameraPixels(float deltaPixels[2]) 
+void Camera::panCamera(float panVector[2]) 
 {
 	// Calculate the tranlation vectors.
-	glm::vec3 xTranslate = glm::normalize(m_rightVector) * deltaPixels[0] * m_panSpeed;
-	glm::vec3 yTranslate = glm::normalize(m_upVector) * deltaPixels[1] * m_panSpeed;
+	glm::vec3 xTranslate = glm::normalize(m_rightVector) * panVector[0] * m_panSpeed;
+	glm::vec3 yTranslate = glm::normalize(m_upVector) * panVector[1] * m_panSpeed;
 	// Apply the translation vectors.
 	m_target -= xTranslate - yTranslate;
 	m_position -= xTranslate - yTranslate;
-}
-
-void Camera::panCameraCoords(float worldCoords[3]) 
-{
-	// Calculate the tranlation vectors.
-	glm::vec3 xTranslate = glm::normalize(m_rightVector) * worldCoords[0];
-	glm::vec3 yTranslate = glm::normalize(m_upVector) * worldCoords[1];
-	glm::vec3 zTranslate = glm::normalize(m_orientation) * worldCoords[2];
-	// Apply the translation vectors.
-	m_target -= xTranslate - yTranslate + zTranslate;
-	m_position -= xTranslate - yTranslate + zTranslate;
 }
 
 // Update the view matrix based on the camera variables.

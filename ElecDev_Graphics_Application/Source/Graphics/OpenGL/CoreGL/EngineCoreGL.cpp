@@ -73,19 +73,15 @@ EngineCoreGL::EngineCoreGL(stateMachine* states)
 // Destructor.
 EngineCoreGL::~EngineCoreGL()
 {
-	// Shaders.
-	delete m_basicShader;
-	delete m_backgroundShader;
-	delete m_textureShader;
-	// VAO's.
-	delete m_linesVAO;
-	delete m_backgroundVAO;
-	delete m_trianglesVAO;
-	delete m_texturedTrianglesVAO;
-	// Text renderer.
-	delete m_textRenderer;
-	// FBO.
-	delete m_frameBuffer;
+	delete m_basicShader;			// Shader. 
+	delete m_backgroundShader;		// "
+	delete m_textureShader;			// "
+	delete m_linesVAO;				// VAO.
+	delete m_backgroundVAO;			// "
+	delete m_trianglesVAO;			// "
+	delete m_texturedTrianglesVAO;	// "
+	delete m_textRenderer;			// Text renderer.
+	delete m_frameBuffer;			// FBO.
 }
 
 //=============================================================================================================================================//
@@ -104,18 +100,21 @@ void EngineCoreGL::functionNotImplementedError(std::string functionName)
 void EngineCoreGL::renderLoop() { functionNotImplementedError(__FUNCTION__); }
 void EngineCoreGL::autoCenter() { functionNotImplementedError(__FUNCTION__); }
 void EngineCoreGL::drawDemo(unsigned int loopCount) { functionNotImplementedError(__FUNCTION__); }
+unsigned int EngineCoreGL::getRenderTexture() { return m_frameBuffer->getRenderTexture(); }
+
+unsigned int EngineCoreGL::getEntityID(float pixelCoords[2]) 
+{ 
+	// Adjust the pixel coords.
+	float pixelCoordsTemp[2] = { pixelCoords[0], m_imGuiViewportDimensions[1] - pixelCoords[1] };
+	return m_frameBuffer->getEntityID(pixelCoordsTemp);
+}
 
 void EngineCoreGL::updateGPU() 
 {
 	m_linesVAO->updateGPU();
 	m_trianglesVAO->updateGPU();
 	m_texturedTrianglesVAO->updateGPU();
-}												
-												
- unsigned int EngineCoreGL::getRenderTexture() 
- {
-	 return m_frameBuffer->getRenderTexture();
- }
+}																								
 
  void EngineCoreGL::createDefaultBackground() 
  {
@@ -124,10 +123,10 @@ void EngineCoreGL::updateGPU()
 	 // Assign background data.
 	 float bgColor1[4] = { (float)162 / 255, (float)184 / 255, (float)242 / 255, 1.0f };
 	 float bgColor2[4] = { (float)210 / 255, (float)242 / 255, (float)255 / 255, 1.0f };
-	 VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3]);	//  Top right.
-	 VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Top left.
-	 VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom left.
-	 VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3]);	//  Bottom right.
+	 VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3], 0);	//  Top right.
+	 VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Top left.
+	 VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom left.
+	 VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
 	 std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	 // Create background.
 	 m_backgroundVAO->writeData(vertices);

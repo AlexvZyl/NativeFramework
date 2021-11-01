@@ -16,8 +16,8 @@ Engine API.
 void Base2DEngineGL::drawLine(float position1[2], float position2[2], float color[4])
 {
 	// Define position data.
-	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
+	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = {v1,v2};
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
@@ -27,9 +27,9 @@ void Base2DEngineGL::drawLine(float position1[2], float position2[2], float colo
 void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4])
 {
 	// Define position data.
-	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
+	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v1 };
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
@@ -39,9 +39,9 @@ void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], f
 void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]) 
 {
 	// Define position data.
-	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3]);
+	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v3 };
 	// Write to CPU side buffer.
 	m_trianglesVAO->writeData(vertices);
@@ -52,10 +52,10 @@ void Base2DEngineGL::drawQuadClear(float position[2], float width, float height,
 {
 	width /= 2;
 	height /= 2;
-	VertexData v1(position[0]+width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v2(position[0]+width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v3(position[0]-width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v4(position[0]-width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3]);
+	VertexData v1(position[0]+width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v2(position[0]+width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v3(position[0]-width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v4(position[0]-width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v4, v4, v1 };
 	// Write to CPU side buffer.
 	m_linesVAO->writeData(vertices);
@@ -66,10 +66,10 @@ void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height
 {
 	width /= 2;
 	height /= 2;
-	VertexData v1(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v2(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3]);
-	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3]);
+	VertexData v1(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v2(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0);
+	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v3, v3, v4, v1 };
 	// Write to CPU side buffer.
 	m_trianglesVAO->writeData(vertices);
@@ -88,8 +88,8 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);
 		float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_circleResolution);
 		float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_circleResolution);
-		VertexData v1(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
-		VertexData v2(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
+		VertexData v1(x1, y1, 0.0f, color[0], color[1], color[2], color[3], 0);
+		VertexData v2(x2, y2, 0.0f, color[0], color[1], color[2], color[3], 0);
 		std::vector<VertexData> verticesTemp = { v1, v2 };
 		// Add line to total lines.
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
@@ -110,9 +110,9 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);
 		float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_circleResolution);
 		float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_circleResolution);
-		VertexData v1(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3]);
-		VertexData v2(x1, y1, 0.0f, color[0], color[1], color[2], color[3]);
-		VertexData v3(x2, y2, 0.0f, color[0], color[1], color[2], color[3]);
+		VertexData v1(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3], 0);
+		VertexData v2(x1, y1, 0.0f, color[0], color[1], color[2], color[3], 0);
+		VertexData v3(x2, y2, 0.0f, color[0], color[1], color[2], color[3], 0);
 		std::vector<VertexData> verticesTemp = { v1, v2, v3 };
 		// Add triangle to total triangles.
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
@@ -139,7 +139,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_VertexDataTexturedCPU, text, coords, color, scale);
 	}
 	// Right allign the text.
 	else if (align == "R" || align == "r") 
@@ -149,7 +149,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_VertexDataTexturedCPU, text, coords, color, scale);
 	}
 	// Left allign the text.
 	else if (align == "L" || align == "l") 
@@ -157,7 +157,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of the coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_texturedVertexDataCPU, text, coords, color, scale);
+		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_VertexDataTexturedCPU, text, coords, color, scale);
 	}
 	// Display error.
 	else 
@@ -207,11 +207,11 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 			drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
 			// Test textures.
-			TexturedVertexData v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f);
-			TexturedVertexData v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f);
-			TexturedVertexData v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f);
-			TexturedVertexData v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f);
-			std::vector<TexturedVertexData> verticesTex = { v1, v2, v3, v3, v4, v1 };
+			VertexDataTextured v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f, 0);
+			VertexDataTextured v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f, 0);
+			VertexDataTextured v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0);
+			VertexDataTextured v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0);
+			std::vector<VertexDataTextured> verticesTex = { v1, v2, v3, v3, v4, v1 };
 			m_texturedTrianglesVAO->writeData(verticesTex);
 
 			// Test the text rendering.
@@ -307,13 +307,13 @@ void Base2DEngineGL::autoCenter()
 		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
 	}
 	// If triangels is empty init with textured triangles.
-	else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU.size())
+	else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
-		max[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
-		min[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
-		min[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+		max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
+		max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
+		min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
+		min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
@@ -352,30 +352,30 @@ void Base2DEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	if (m_texturedTrianglesVAO->m_texturedVertexDataCPU.size())
+	if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_texturedTrianglesVAO->m_texturedVertexDataCPU.size(); i++)
+		for (int i = 0; i < m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0] > max[0])
+			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] > max[0])
 			{
-				max[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+				max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0] < min[0])
+			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] < min[0])
 			{
-				min[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+				min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1] > max[1])
+			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] > max[1])
 			{
-				max[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+				max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1] < min[1])
+			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] < min[1])
 			{
-				min[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+				min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
 			}
 		}
 	}

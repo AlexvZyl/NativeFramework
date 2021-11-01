@@ -99,6 +99,28 @@ void Base3DEngineGL::renderLoop()
 	// ------------------------------------------------------------	//
 }
 
+glm::vec4 Base3DEngineGL::pixelCoordsToWorldVector(float pixelCoords[2]) 
+{
+	// Find the viewpwort dimensions.
+	float viewport[2] = { m_states->renderWindowSize.x, m_states->renderWindowSize.y };
+	// Account for pixel offset.
+	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
+	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
+	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
+	// The nomalized mouse coordinates on the users screen.
+	float normalizedScreenCoords[2];
+	// Apply the viewport transform the the pixels.
+	normalizedScreenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
+	normalizedScreenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
+	// Convert to screen vector.
+	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], -1.0f, 1.0f };
+	// Apply MVP matrices.
+	//m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
+	glm::mat4 MVPinverse = glm::inverse(m_modelMatrix * m_viewMatrix * m_projectionMatrix);
+	glm::vec4 worldVec = screenVec * MVPinverse;
+	return worldVec;
+}
+
 //=============================================================================================================================================//
 //  Window events.																															   //
 //=============================================================================================================================================//

@@ -83,10 +83,12 @@ void MCC::renderGraphics(ImGuiID dock)
 						{
 							graphicsHandler->m_activeWindow = "NULL";
 						}
-
 						// Reset mouse coordinates when it moves outside of the window.
-						struc.second->engineGL->m_prevMouseEventWorldCoords[0] = NULL;
-						struc.second->engineGL->m_prevMouseEventWorldCoords[1] = NULL;
+						struc.second->engineGL->m_prevMouseEventWorldVec[0] = NULL;
+						struc.second->engineGL->m_prevMouseEventWorldVec[1] = NULL;
+						struc.second->engineGL->m_prevMouseEventWorldVec[2] = NULL;
+						struc.second->engineGL->m_prevMouseEventPixelCoords[0] = NULL;
+						struc.second->engineGL->m_prevMouseEventPixelCoords[1] = NULL;
 					}
 
 					//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);

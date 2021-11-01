@@ -1,26 +1,29 @@
 #pragma once
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Includes.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
 
 #include <vector>
 #include "ErrorHandlerGL.h"
 #include <glad/glad.h>
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Data Structures.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Data structures.																														   //
+//=============================================================================================================================================//
 
-// Structr that contains the untextured vertex data.
+// Structure that contains the untextured vertex data.
 struct VertexData
 {
 	float position[3] = { 0,0,0 };
 	float color[4] = { 0,0,0,0 };
 	float raw[7] = { 0,0,0,0,0,0,0 };
+	unsigned int entityID[1] = { 0 };
 	
-	// Vertex data without texture.
-	VertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3)
+	// Constructor.
+	VertexData(float pos0, float pos1, float pos2, 
+			   float col0, float col1, float col2, float col3, 
+			   unsigned int eID)
 	{
 		// Assign position.
 		position[0] = pos0;
@@ -31,9 +34,11 @@ struct VertexData
 		color[1] = col1;
 		color[2] = col2;
 		color[3] = col3;
+		// Assign ID.
+		entityID[0] = eID;
 	}
 
-	// Convert the data so that OpenGL can store it in the VBO.
+	// Return a pointer to the raw data so that OpenGL can write it to the GPU.
 	const void* rawData()
 	{
 		raw[0] = position[0];
@@ -48,16 +53,20 @@ struct VertexData
 };
 
 // Struct that contains the textured vertex data.
-struct TexturedVertexData
+struct VertexDataTextured
 {
 	float position[3] = { 0,0,0 };
 	float color[4] = { 0,0,0,0 };
 	float texturePosition[2] = { 0,0 };
 	float textureID = 0.0f;
 	float raw[10] = { 0,0,0,0,0,0,0,0,0,0 };
+	unsigned int entityID[1] = { 0 };
 
-	// Vertex data without texture.
-	TexturedVertexData(float pos0, float pos1, float pos2, float col0, float col1, float col2, float col3, float texPos0, float texPos1, float texID)
+	// Constructor.
+	VertexDataTextured(float pos0, float pos1, float pos2,
+					   float col0, float col1, float col2, float col3, 
+					   float texPos0, float texPos1, float texID, 
+					   unsigned int eID)
 	{
 		// Assign position.
 		position[0] = pos0;
@@ -68,14 +77,16 @@ struct TexturedVertexData
 		color[1] = col1;
 		color[2] = col2;
 		color[3] = col3;
+		// Assign entity ID.
+		entityID[0] = eID;
 		// Assign texture ID position.
 		texturePosition[0] = texPos0;
 		texturePosition[1] = texPos1;
 		// Assigne texture ID.
-		textureID = texID;
+		textureID = (unsigned int)texID;
 	}
 
-	// Convert the data so that OpenGL can store it in the VBO.
+	// Return a pointer to the raw data so that OpenGL can write it to the GPU.
 	const void* rawData()
 	{
 		raw[0] = position[0];
@@ -92,52 +103,58 @@ struct TexturedVertexData
 	}
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Vertex Array Class.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Class.																																	   //
+//=============================================================================================================================================//
 
 class VertexArrayObject
 {
 private:
 	
-	// VAO ID.
-	unsigned int m_vAID;
-	// VBO ID.
-	unsigned int m_vBID;
-	// Data type used in this VAO.
-	GLenum m_bufferType;
+	unsigned int m_vAID;	// VAO ID.
+	unsigned int m_vBID;	// VBO ID.
+	GLenum m_bufferType;	// Data type used in this VAO.		
 	
 public:
+
+	// --------- //
+	//  D A T A  //
+	// --------- //
 
 	// Data stored CPU side.  This allows the buffers to be resized dynamically as more or less memory is required.
 	// Data should not be stored and read from OpenGL (GPU side).
 	std::vector<VertexData> m_vertexDataCPU;
-	std::vector<TexturedVertexData> m_texturedVertexDataCPU;
-
+	std::vector<VertexDataTextured> m_VertexDataTexturedCPU;
 	// Pointer that shows where in the buffer data need to be written.
 	GLsizei m_bufferPtr = 0;
 	
+	// ------------------------------------------------- //
+	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
+	// ------------------------------------------------- //
+
 	// Constructor.
-	VertexArrayObject(GLenum type, bool textured=false);
+	VertexArrayObject(GLenum type, bool textured=false);		
 	// Destructor.
-	~VertexArrayObject();
+	~VertexArrayObject();										
 
-	// Store the data on the CPU side memory.
-	void writeData(std::vector<VertexData> vertices);
-	// For textured.
-	void writeData(std::vector<TexturedVertexData> vertices);
-	// Send the data to the GPU.
-	void updateGPU();
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 
-	// Function that draws the data in the VAO based on the model type selected in the constructor.
-	void render();
-
+	// Store the data on the CPU side memory for untextured vertices.
+	void writeData(std::vector<VertexData> vertices);			
+	// Store the data on the CPU side memory for textured vertices.
+	void writeData(std::vector<VertexDataTextured> vertices);   
+	// Sends the data to the GPU.
+	void updateGPU();											
+	// Draws the data in the VAO.
+	void render();												
 	// Binds the VAO.
-	void bind() const;
+	void bind() const;											
 	// Unbinds the VAO.
-	void unbind() const;
+	void unbind() const;										
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-//  EOF.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  EOF.																																	   //
+//=============================================================================================================================================//
