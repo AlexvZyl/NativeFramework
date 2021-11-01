@@ -15,12 +15,17 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 {
 	// Generate MSAA FBO.
 	GLCall(glGenFramebuffers(1, &m_msaaFrameBufferID));
+	GLCall(glGenTextures(1, &m_msaaColorTextureID));
+	GLCall(glGenTextures(1, &m_msaaEntityIDBufferID));
+	GLCall(glGenRenderbuffers(1, &m_msaaDepthStencilBufferID));
 	// Check for generation error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
 	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " MSAA FBO could not be generated.\n"; }
 
 	// Generate render FBO.
 	GLCall(glGenFramebuffers(1, &m_renderFrameBufferID));
+	GLCall(glGenTextures(1, &m_renderColorTextureID));
+	GLCall(glGenTextures(1, &m_renderEntityIDBufferID));
 	// Check for generation error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
 	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO could not be generated.\n"; }
@@ -43,12 +48,10 @@ void FrameBufferObject::createAttachments(int width, int height)
 	// Bind MSA FBO.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
 	// Generate and attach MSAA color texture.
-	GLCall(glGenTextures(1, &m_msaaColorTextureID));
 	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));
 	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_RGBA, width, height, GL_TRUE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID, 0));
 	// Generate and attach MSAA entityID buffer.
-	GLCall(glGenTextures(1, &m_msaaEntityIDBufferID));
 	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDBufferID));
 	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_R32UI, width, height, GL_TRUE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDBufferID, 0));
@@ -56,7 +59,6 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLenum drawBuffers[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
 	GLCall(glDrawBuffers(2, drawBuffers));
 	// Create depth/stencil MSAA buffer texture.
-	GLCall(glGenRenderbuffers(1, &m_msaaDepthStencilBufferID));
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_msaaDepthStencilBufferID));
 	GLCall(glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_MSAA, GL_DEPTH24_STENCIL8, width, height));
 	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_msaaDepthStencilBufferID));	
@@ -71,7 +73,6 @@ void FrameBufferObject::createAttachments(int width, int height)
 	// Bind render FBO.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
 	// Generate and attach color texture.
-	GLCall(glGenTextures(1, &m_renderColorTextureID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderColorTextureID));
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
@@ -81,7 +82,6 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_renderColorTextureID, 0));
 	// Generate Entity ID texture.
-	GLCall(glGenTextures(1, &m_renderEntityIDBufferID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderEntityIDBufferID));
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
