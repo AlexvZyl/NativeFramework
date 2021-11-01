@@ -1,25 +1,27 @@
 #shader vertex
 #version 450 core
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 colorData;
+layout(location = 0) in vec4 v_position;
+layout(location = 1) in vec4 v_colorData;
 
-out vec4 colorFragment;
+out vec4 f_color;
 
 void main()
 {
-	colorFragment = colorData;
-	gl_Position = vec4(position.x, position.y, position.w, position.w);
+	f_color = v_colorData;
+	gl_Position = vec4(v_position.x, v_position.y, v_position.w, v_position.w);
 };
 
 #shader fragment
 #version 450 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 o_color;
+layout(location = 1) out uint o_entityID;
 
-in vec4 colorFragment;
+in vec4 f_color;
 
 void main()
 {
-	color = colorFragment;
+	o_color = f_color;
+	o_entityID = -1;
 };

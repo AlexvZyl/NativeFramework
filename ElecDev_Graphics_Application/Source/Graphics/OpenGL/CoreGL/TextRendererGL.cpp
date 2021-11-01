@@ -152,18 +152,17 @@ TextRenderer::TextRenderer(int fontID, int atlasID)
 // Destructor.
 TextRenderer::~TextRenderer() 
 {
-
 }
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-void TextRenderer::writeText(std::vector<TexturedVertexData>* bufferCPU, std::string text, float coords[2], float color[4], float scale)
+void TextRenderer::writeText(std::vector<VertexDataTextured>* bufferCPU, std::string text, float coords[2], float color[4], float scale)
 {	
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
 	// This has to be compensated for in the funciton.
 
 	// Buffer that contains total information.
-	std::vector<TexturedVertexData> vertices;
+	std::vector<VertexDataTextured> vertices;
 
 	// Iterate through characters.
 	float advance = 0;
@@ -171,41 +170,45 @@ void TextRenderer::writeText(std::vector<TexturedVertexData>* bufferCPU, std::st
 	{
 		Character c = m_characterDictionary[text[i]];
 		// Write character data to the VAO.
-		TexturedVertexData v1(										// Top left.
+		VertexDataTextured v1(										// Top left.
 			coords[0] + (advance + c.xOffset) * scale,				// x
 			coords[1] - (c.yOffset) * scale,						// y
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x, 1.0f-c.y,											// Texture coordinates.
-			1														// Slot 1 is reserved for the text font atlas.
+			1,														// Slot 1 is reserved for the text font atlas.
+			0														// The entity ID.  Fow now empty.
 		);
-		TexturedVertexData v2(										// Top right.
+		VertexDataTextured v2(										// Top right.
 			coords[0] + (advance + c.xOffset + c.width) * scale,	// x
 			coords[1] - (c.yOffset) * scale,						// y
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x+c.width, 1.0f-c.y,									// Texture coordinates.
-			1														// Slot 1 is reserved for the text font atlas.
+			1,														// Slot 1 is reserved for the text font atlas.
+			0														// The entity ID.  Fow now empty.
 		);
-		TexturedVertexData v3(										// Bottom right.
+		VertexDataTextured v3(										// Bottom right.
 			coords[0] + (advance + c.xOffset + c.width) * scale,	// x
 			coords[1] + (-1*c.yOffset - c.height) * scale,			// y	
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x+c.width, 1.0f-c.y - c.height,						// Texture coordinates.
-			1														// Slot 1 is reserved for the text font atlas.
+			1,														// Slot 1 is reserved for the text font atlas.
+			0														// The entity ID.  Fow now empty.
 		);
-		TexturedVertexData v4(										// Bottom left.
+		VertexDataTextured v4(										// Bottom left.
 			coords[0] + (advance + c.xOffset) * scale,				// x
 			coords[1] + (-1*c.yOffset - c.height) * scale,			// y
 			0.0f,													// z
 			color[0], color[1], color[2], color[3],					// Color.
 			c.x, 1.0f - c.y - c.height,								// Texture coordinates.
-			1														// Slot 1 is reserved for the text font atlas.
+			1,														// Slot 1 is reserved for the text font atlas.
+			0														// The entity ID.  Fow now empty.
 		);
 
 		// Create temp buffer.
-		std::vector<TexturedVertexData> verticesTemp = { v1,v2,v3,v3,v4,v1 };
+		std::vector<VertexDataTextured> verticesTemp = { v1,v2,v3,v3,v4,v1 };
 		// Add to total vertices.
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 		// Move the cursor right so that it can draw the next character.

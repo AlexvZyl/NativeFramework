@@ -14,22 +14,26 @@ void Base3DEngineGL::drawQuadFilled3D(float position1[3], float position2[3], fl
 	// Create the vertices.
 	VertexData v1(
 		position1[0], position1[1], position1[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v2(
 		position2[0], position2[1], position2[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v3(
 		position3[0], position3[1], position3[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v4(
 		position4[0], position4[1], position4[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	std::vector<VertexData> vertices = { v1,v2,v3,v3,v4,v1 };
 	m_trianglesVAO->writeData(vertices);
@@ -40,22 +44,26 @@ void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], fl
 	// Create the vertices.
 	VertexData v1(
 		position1[0], position1[1], position1[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v2(
 		position2[0], position2[1], position2[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v3(
 		position3[0], position3[1], position3[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v4(
 		position4[0], position4[1], position4[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 
 	// Calculate the depth vector.
@@ -72,22 +80,26 @@ void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], fl
 	// Create depth vertices.
 	VertexData v5(
 		position1[0] + depthVector[0], position1[1] + depthVector[1], position1[2] + depthVector[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v6(
 		position2[0] + depthVector[0], position2[1] + depthVector[1], position2[2] + depthVector[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v7(
 		position3[0] + depthVector[0], position3[1] + depthVector[1], position3[2] + depthVector[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 	// Create the vertices.
 	VertexData v8(
 		position4[0] + depthVector[0], position4[1] + depthVector[1], position4[2] + depthVector[2],
-		color[0], color[1], color[2], color[3]
+		color[0], color[1], color[2], color[3],
+		0
 	);
 
 	std::vector<VertexData> vertices = {
@@ -170,13 +182,13 @@ void Base3DEngineGL::autoCenter()
 		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
 	}
 	// If triangels is empty init with textured triangles.
-	else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU.size())
+	else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
-		max[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
-		min[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[0];
-		min[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[0].position[1];
+		max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
+		max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
+		min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
+		min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
@@ -215,30 +227,30 @@ void Base3DEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	if (m_texturedTrianglesVAO->m_texturedVertexDataCPU.size())
+	if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_texturedTrianglesVAO->m_texturedVertexDataCPU.size(); i++)
+		for (int i = 0; i < m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0] > max[0])
+			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] > max[0])
 			{
-				max[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+				max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0] < min[0])
+			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] < min[0])
 			{
-				min[0] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[0];
+				min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1] > max[1])
+			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] > max[1])
 			{
-				max[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+				max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1] < min[1])
+			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] < min[1])
 			{
-				min[1] = m_texturedTrianglesVAO->m_texturedVertexDataCPU[i].position[1];
+				min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
 			}
 		}
 	}
@@ -275,36 +287,44 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 				// 3D Cube bottom vertices.
 				VertexData vb1(			// Top left.
 					i - size, j + size, k - size,
-					1.0f, 0.0f, 0.0f, 1.0f
+					1.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vb2(			// Top right.
 					i + size, j + size, k - size,
-					0.0f, 1.0f, 0.0f, 1.0f
+					0.0f, 1.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vb3(			// Bottom right.
 					i + size, j - size, k - size,
-					0.0f, 0.0f, 1.0f, 1.0f
+					0.0f, 0.0f, 1.0f, 1.0f,
+					0
 				);
 				VertexData vb4(			// Bottom left.
 					i - size, j - size, k - size,
-					1.0f, 1.0f, 0.0f, 1.0f
+					1.0f, 1.0f, 0.0f, 1.0f,
+					0
 				);
 				// 3D Cube top vertices.
 				VertexData vt1(			// Top left.
 					i - size, j + size, k + size,
-					1.0f, 0.0f, 1.0f, 1.0f
+					1.0f, 0.0f, 1.0f, 1.0f,
+					0
 				);
 				VertexData vt2(			// Top right.
 					i + size, j + size, k + size,
-					0.0f, 1.0f, 1.0f, 1.0f
+					0.0f, 1.0f, 1.0f, 1.0f,
+					0
 				);
 				VertexData vt3(			// Bottom right.
 					i + size, j - size, k + size,
-					1.0f, 0.0f, 0.0f, 1.0f
+					1.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vt4(			// Bottom left.
 					i - size, j - size, k + size,
-					0.0f, 1.0f, 0.0f, 1.0f
+					0.0f, 1.0f, 0.0f, 1.0f,
+					0
 				);
 				// Write the data.
 				std::vector<VertexData> vertices = { vb1, vb2, vb3, vb3, vb4, vb1,
@@ -317,36 +337,44 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 				// 3D Cube bottom vertices.
 				VertexData vb1_l(			// Top left.
 					i - size, j + size, k - size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vb2_l(			// Top right.
 					i + size, j + size, k - size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vb3_l(			// Bottom right.
 					i + size, j - size, k - size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vb4_l(			// Bottom left.
 					i - size, j - size, k - size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				// 3D Cube top vertices.
 				VertexData vt1_l(			// Top left.
 					i - size, j + size, k + size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vt2_l(			// Top right.
 					i + size, j + size, k + size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vt3_l(			// Bottom right.
 					i + size, j - size, k + size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				VertexData vt4_l(			// Bottom left.
 					i - size, j - size, k + size,
-					0.0f, 0.0f, 0.0f, 1.0f
+					0.0f, 0.0f, 0.0f, 1.0f,
+					0
 				);
 				// Write the data.
 				std::vector<VertexData> vertices_l = { vb1_l, vb2_l, vb2_l, vb3_l, vb3_l, vb4_l, vb4_l, vb1_l, vb1_l, vb3_l,
@@ -357,31 +385,35 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 
 				// Render a texture to the cubes.
 				// 3D Cube bottom vertices.
-				TexturedVertexData tv1(			// Top left.
+				VertexDataTextured tv1(			// Top left.
 					i - size, j + size, k + size,
 					1.0f, 0.0f, 0.0f, 1.0f,
 					0.0f, 1.0f,
-					0.0f
+					0.0f,
+					0
 				);
-				TexturedVertexData tv2(			// Top right.
+				VertexDataTextured tv2(			// Top right.
 					i + size, j + size, k + size,
 					0.0f, 1.0f, 0.0f, 1.0f,
 					1.0f, 1.0f,
-					0.0f
+					0.0f,
+					0
 				);
-				TexturedVertexData tv3(			// Bottom right.
+				VertexDataTextured tv3(			// Bottom right.
 					i + size, j - size, k + size,
 					0.0f, 0.0f, 1.0f, 1.0f,
 					1.0f, 0.0f,
-					0.0f
+					0.0f,
+					0
 				);
-				TexturedVertexData tv4(			// Bottom left.
+				VertexDataTextured tv4(			// Bottom left.
 					i - size, j - size, k + size,
 					1.0f, 0.0f, 1.0f, 1.0f,
 					0.0f, 0.0f,
-					0.0f
+					0.0f,
+					0
 				);	
-				std::vector<TexturedVertexData> tVertices = {tv1, tv2, tv3, tv3, tv4, tv1};
+				std::vector<VertexDataTextured> tVertices = {tv1, tv2, tv3, tv3, tv4, tv1};
 				m_texturedTrianglesVAO->writeData(tVertices);
 			}
 		}

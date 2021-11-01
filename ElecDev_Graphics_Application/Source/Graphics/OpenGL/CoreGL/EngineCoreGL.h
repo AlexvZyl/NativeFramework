@@ -102,9 +102,10 @@ public:
 	//  V I E W P O R T  //
 	// ----------------- //
 
-	float m_imGuiViewportDimensions[2] = { 500, 500 };		// Stores the dimensions of the viewport that the OpenGL context gets drawn
-															// to.  
-	virtual void resizeEvent(float width, float height);	// Resizes the viewport, projection matrix and FBO.
+	float m_imGuiViewportDimensions[2] = { 500, 500 };		// Stores the dimensions of the viewport that the OpenGL context gets drawn to.  
+															
+	// Resizes the viewport, projection matrix and FBO.
+	virtual void resizeEvent(float width, float height);	
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -116,29 +117,37 @@ public:
 	// --------------------------------------- //
 	//  R E N D E R I N G   F U N C T I O N S  //
 	// --------------------------------------- //
-
-	virtual void renderLoop();						// Main loop where the rendering happens.
-	virtual void updateGPU();						// Updates the buffers on the GPU with the data stored CPU side.  Required to call to
-													// update the elements that are displayed to the screen.
-	virtual void autoCenter();						// Autocenters the current scene.
-	virtual void drawDemo(unsigned int loopCount);	// Draws elements to the screen.  Used for debugging and benchmarking.
-													// Should also be implemented to showcase the capabilities of the engine.
-	virtual unsigned int getRenderTexture();		// Returns the FBO texture ID that can be rendered.
-	void createDefaultBackground();					// Creates the default background for the engines.
-	float deltaTime();								// Calculates the delta time and returns it.	
-	float m_deltaTime = 0.0f;						// The difference between the last 2 rendred frame.
-													// This is used to ensure constant movement and sensitivity
-													// regardless of the framerate.
-	float m_lastFrame = 0.0f;						// The time of the previous frame.
 	
+	// Main loop where the rendering happens.
+	virtual void renderLoop();								
+	// Updates the buffers on the GPU with the data stored CPU side.  Required 
+	// to call to update the elements that are displayed to the screen.
+	virtual void updateGPU();								
+	// Autocenters the current scene.
+	virtual void autoCenter();								
+	// Draws elements to the screen.  Used for debugging and benchmarking.
+	// Should also be implemented to showcase the capabilities of the engine.
+	virtual void drawDemo(unsigned int loopCount);			
+	// Returns the FBO texture ID that can be rendered.
+	virtual unsigned int getRenderTexture();			
+	// Creates the default background for the engines.
+	void createDefaultBackground();							
+	// Calculates the delta time and returns it.	
+	// This is used to ensure constant movement and sensitivity
+	// regardless of the framerate.
+	float deltaTime();										
+	// Returns the ID of the entity in the pixel coords.
+	unsigned int getEntityID(float pixelCoords[2]);			
+
+	float m_deltaTime = 0.0f;	// The difference between the last 2 rendred frame.
+	float m_lastFrame = 0.0f;	// The time of the previous frame.
+
 	// ------------------------------ //
 	//  M O U S E   H A N D L I N G   //
 	// ------------------------------ //
 	
-	// Stores the previous mouse event information.
-	float m_prevMouseEventWorldCoords[2] = { NULL, NULL };	// Stores the position in world coordinates.
-	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };	// Stores the position in screen pixel coordinates.
-	// Handling mouse events.
+	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };		// Stores the previous mouse event information.
+	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	// Stores the vector that goes into the world.
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight(float pixelCoords[2]);
 	virtual void mousePressMiddle(float pixelCoords[2]);

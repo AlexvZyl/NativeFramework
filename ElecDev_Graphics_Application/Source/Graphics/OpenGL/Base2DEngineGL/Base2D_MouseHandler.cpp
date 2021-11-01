@@ -18,8 +18,8 @@ void Base2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Find current click in world coords.
 	glm::vec4 currmousePosVec = pixelCoordsToWorldCoords(pixelCoords);
 	// Save current mouse pos click.
-	m_prevMouseEventWorldCoords[0] = currmousePosVec[0];
-	m_prevMouseEventWorldCoords[1] = currmousePosVec[1];
+	m_prevMouseEventWorldVec[0] = currmousePosVec[0];
+	m_prevMouseEventWorldVec[1] = currmousePosVec[1];
 }
 
 // Event handler for a mouse right click.
@@ -43,19 +43,20 @@ void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
 // Event handler for a mouse move event.
 void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
+	std::cout << "\n Entity ID: " << getEntityID(pixelCoords);
+
 	// Check if left mouse is pressed.
 	if (buttonStateLeft == GLFW_PRESS)
 	{
 		// Find current mouse position in the world.
 		glm::vec4 currMousePosVec = pixelCoordsToWorldCoords(pixelCoords);
 		// Calculate distance to translate.
-		glm::vec3 translateVec({ (currMousePosVec[0] - m_prevMouseEventWorldCoords[0]),(currMousePosVec[1] - m_prevMouseEventWorldCoords[1]),0 });
+		glm::vec3 translateVec({ (currMousePosVec[0] - m_prevMouseEventWorldVec[0]),(currMousePosVec[1] - m_prevMouseEventWorldVec[1]),0 });
 		// Translate to the view matrix.
 		m_translationMatrix = glm::translate(m_translationMatrix, translateVec);
-
 		// Save mouse click position.
-		m_prevMouseEventWorldCoords[0] = currMousePosVec[0];
-		m_prevMouseEventWorldCoords[1] = currMousePosVec[1];
+		m_prevMouseEventWorldVec[0] = currMousePosVec[0];
+		m_prevMouseEventWorldVec[1] = currMousePosVec[1];
 	}
 }
 
@@ -68,24 +69,15 @@ void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	
 	// Calculate zoom value based on mouse wheel scroll.
 	//----------------------------------------------------------
-	
 	// Define the scaling value.
 	float zoomScaleValue;
-	 
-	// Determine if it should be a zoom in or out.
-	if (yOffset > 0) // Zoom in.
-	{	
-		// Zoom scale value.
-		zoomScaleValue = 1 + (float)m_scaleRate;
-	}
-	else // Zoom out.
-	{
-		zoomScaleValue = 1 / (1 + (float)m_scaleRate);
-	}
+	// Zoom in.
+	if (yOffset > 0) { zoomScaleValue = 1 + (float)m_scaleRate; }
+	// Zoom out.
+	else { zoomScaleValue = 1 / (1 + (float)m_scaleRate); }
 
 	//  Apply scale and translate to keep zoom around mouse.
 	//----------------------------------------------------------
-	
 	// Calculate mouse world coords before scaling.
 	glm::vec4 mouseWorldCoordsPre = pixelCoordsToWorldCoords(pixelCoords);
 	// Apply scaling.
@@ -99,8 +91,8 @@ void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	m_translationMatrix = glm::translate(m_translationMatrix, translateVector);
 
 	// Update mouse coordinates.
-	m_prevMouseEventWorldCoords[0] = mouseWorldCoordsPost[0];
-	m_prevMouseEventWorldCoords[1] = mouseWorldCoordsPost[1];
+	m_prevMouseEventWorldVec[0] = mouseWorldCoordsPost[0];
+	m_prevMouseEventWorldVec[1] = mouseWorldCoordsPost[1];
 }
 
 //=============================================================================================================================================//
