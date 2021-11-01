@@ -50,8 +50,6 @@ void Base3DEngineGL::mousePressMiddle(float pixelCoords[2])
 
 void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight) 
 {	
-	std::cout << "\n Entity ID: " << getEntityID(pixelCoords);
-
 	// Implement rotation.
 	if (buttonStateLeft == GLFW_PRESS) 
 	{
