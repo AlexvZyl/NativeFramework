@@ -25,7 +25,7 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	// Generate render FBO.
 	GLCall(glGenFramebuffers(1, &m_renderFrameBufferID));
 	GLCall(glGenTextures(1, &m_renderColorTextureID));
-	GLCall(glGenTextures(1, &m_renderEntityIDBufferID));
+	GLCall(glGenTextures(1, &m_renderEntityIDTextureID));
 	// Check for generation error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
 	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO could not be generated.\n"; }
