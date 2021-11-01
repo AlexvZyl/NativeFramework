@@ -42,8 +42,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 ## Fixing & Improving
 
 #### Alex
-* ⬜ Mouse events are handled by making the GraphicsHandler object global.  Find another way.
-* ⬜ What happens when deltaTime() gets called twice in the same frame in the camera handler?
 * ⬜ Make function calling in the GraphicsAPI generic (use function pointers?).
 
 ---
