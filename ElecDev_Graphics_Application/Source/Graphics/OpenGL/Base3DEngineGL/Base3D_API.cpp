@@ -288,43 +288,43 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 				VertexData vb1(			// Top left.
 					i - size, j + size, k - size,
 					1.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i+j+k
 				);
 				VertexData vb2(			// Top right.
 					i + size, j + size, k - size,
 					0.0f, 1.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vb3(			// Bottom right.
 					i + size, j - size, k - size,
 					0.0f, 0.0f, 1.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vb4(			// Bottom left.
 					i - size, j - size, k - size,
 					1.0f, 1.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				// 3D Cube top vertices.
 				VertexData vt1(			// Top left.
 					i - size, j + size, k + size,
 					1.0f, 0.0f, 1.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vt2(			// Top right.
 					i + size, j + size, k + size,
 					0.0f, 1.0f, 1.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vt3(			// Bottom right.
 					i + size, j - size, k + size,
 					1.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vt4(			// Bottom left.
 					i - size, j - size, k + size,
 					0.0f, 1.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				// Write the data.
 				std::vector<VertexData> vertices = { vb1, vb2, vb3, vb3, vb4, vb1,
@@ -338,43 +338,43 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 				VertexData vb1_l(			// Top left.
 					i - size, j + size, k - size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vb2_l(			// Top right.
 					i + size, j + size, k - size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vb3_l(			// Bottom right.
 					i + size, j - size, k - size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vb4_l(			// Bottom left.
 					i - size, j - size, k - size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				// 3D Cube top vertices.
 				VertexData vt1_l(			// Top left.
 					i - size, j + size, k + size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vt2_l(			// Top right.
 					i + size, j + size, k + size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vt3_l(			// Bottom right.
 					i + size, j - size, k + size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				VertexData vt4_l(			// Bottom left.
 					i - size, j - size, k + size,
 					0.0f, 0.0f, 0.0f, 1.0f,
-					0
+					i + j + k
 				);
 				// Write the data.
 				std::vector<VertexData> vertices_l = { vb1_l, vb2_l, vb2_l, vb3_l, vb3_l, vb4_l, vb4_l, vb1_l, vb1_l, vb3_l,
@@ -390,28 +390,28 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 					1.0f, 0.0f, 0.0f, 1.0f,
 					0.0f, 1.0f,
 					0.0f,
-					0
+					i + j + k
 				);
 				VertexDataTextured tv2(			// Top right.
 					i + size, j + size, k + size,
 					0.0f, 1.0f, 0.0f, 1.0f,
 					1.0f, 1.0f,
 					0.0f,
-					0
+					i + j + k
 				);
 				VertexDataTextured tv3(			// Bottom right.
 					i + size, j - size, k + size,
 					0.0f, 0.0f, 1.0f, 1.0f,
 					1.0f, 0.0f,
 					0.0f,
-					0
+					i + j + k
 				);
 				VertexDataTextured tv4(			// Bottom left.
 					i - size, j - size, k + size,
 					1.0f, 0.0f, 1.0f, 1.0f,
 					0.0f, 0.0f,
 					0.0f,
-					0
+					i + j + k
 				);	
 				std::vector<VertexDataTextured> tVertices = {tv1, tv2, tv3, tv3, tv4, tv1};
 				m_texturedTrianglesVAO->writeData(tVertices);
