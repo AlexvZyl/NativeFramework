@@ -16,7 +16,7 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	// Generate MSAA FBO.
 	GLCall(glGenFramebuffers(1, &m_msaaFrameBufferID));
 	GLCall(glGenTextures(1, &m_msaaColorTextureID));
-	GLCall(glGenTextures(1, &m_msaaEntityIDBufferID));
+	GLCall(glGenTextures(1, &m_msaaEntityIDTextureID));
 	GLCall(glGenRenderbuffers(1, &m_msaaDepthStencilBufferID));
 	// Check for generation error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
@@ -52,9 +52,9 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_RGBA, width, height, GL_TRUE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID, 0));
 	// Generate and attach MSAA entityID buffer.
-	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDBufferID));
+	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDTextureID));
 	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_R32UI, width, height, GL_TRUE));
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDBufferID, 0));
+	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDTextureID, 0));
 	// Enable draw buffers.
 	GLenum drawBuffers[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
 	GLCall(glDrawBuffers(2, drawBuffers));
@@ -82,14 +82,14 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_renderColorTextureID, 0));
 	// Generate Entity ID texture.
-	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderEntityIDBufferID));
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderEntityIDTextureID));
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_renderEntityIDBufferID, 0));
+	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_renderEntityIDTextureID, 0));
 	// Check for completion errror.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO is not complete.\n" << std::endl;
@@ -107,10 +107,10 @@ FrameBufferObject::~FrameBufferObject()
 {
 	// Delete the textures.
 	GLCall(glDeleteTextures(1, &m_msaaColorTextureID));
-	GLCall(glDeleteTextures(1, &m_msaaDepthStencilBufferID));
-	GLCall(glDeleteTextures(1, &m_msaaEntityIDBufferID));
+	GLCall(glDeleteRenderbuffers(1, &m_msaaDepthStencilBufferID));
+	GLCall(glDeleteTextures(1, &m_msaaEntityIDTextureID));
 	GLCall(glDeleteTextures(1, &m_renderColorTextureID));
-	GLCall(glDeleteTextures(1, &m_renderEntityIDBufferID));
+	GLCall(glDeleteTextures(1, &m_renderEntityIDTextureID));
 	// Delete the buffers.
 	GLCall(glDeleteFramebuffers(1, &m_msaaFrameBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_renderFrameBufferID));

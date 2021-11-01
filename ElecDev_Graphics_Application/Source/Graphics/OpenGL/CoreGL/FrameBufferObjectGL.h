@@ -24,13 +24,13 @@ private:
 	// FBO that will be rendered.
 	unsigned int m_renderFrameBufferID;			// FBO ID.
 	unsigned int m_renderColorTextureID;		// Texture ID.	
-	unsigned int m_renderEntityIDBufferID;		// Buffer containing the entities.
+	unsigned int m_msaaEntityIDTextureID;		// Texture containing the entity ID's.
 
 	// MSAA FBO.
 	unsigned int m_msaaFrameBufferID;			// FBO ID.
 	unsigned int m_msaaColorTextureID;			// Texture ID.	
 	unsigned int m_msaaDepthStencilBufferID;	// Depth/Stencil buffer.
-	unsigned int m_msaaEntityIDBufferID;		// Buffer containing the entities.
+	unsigned int m_renderEntityIDTextureID;		// Texture containing the entity ID's.
 
 	// Saves the FBO size.
 	int m_viewport[2] = { 500, 500 };
