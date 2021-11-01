@@ -31,21 +31,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ---
 
-## Legend:
-
-* ⬜ = Incomplete.
-* 🟨 = No longer required.
-* ✅ = Completed.
-
----
-
-## Fixing & Improving
-
-#### Alex
-* ⬜ Make function calling in the GraphicsAPI generic (use function pointers?).
-
----
-
 ## Roadmap
 
 ### ElecDev App General
