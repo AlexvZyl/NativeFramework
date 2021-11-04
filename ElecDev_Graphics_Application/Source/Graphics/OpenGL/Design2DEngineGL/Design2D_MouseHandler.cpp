@@ -34,6 +34,17 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
 	// Call base engine event.
+
+	//std::cout<<getEntityID(pixelCoords)<<std::endl;
+	glm::vec4 WorldCoords = Base2DEngineGL::pixelCoordsToWorldCoords(pixelCoords);
+	float raw_screenCoords[2];
+	Base2DEngineGL::pixelCoordsToScreenCoords(pixelCoords, raw_screenCoords);
+	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+	std::cout << "Screen = " << raw_screenCoords[0] << ',' << raw_screenCoords[1] << std::endl;
+	std::cout << "World = " << screenCoords[0] << ',' << screenCoords[1] << std::endl;
+
+	component->move(screenCoords);
+	component->draw();
 	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight);
 
 	// Update the mouse point position.

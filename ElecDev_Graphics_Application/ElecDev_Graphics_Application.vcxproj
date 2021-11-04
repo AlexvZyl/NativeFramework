@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\SPDLog\async.h" />
     <ClInclude Include="Source\External\SPDLog\async_logger-inl.h" />

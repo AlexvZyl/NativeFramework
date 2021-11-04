@@ -27,7 +27,7 @@
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
 // Python stuff.
-#include <Python.h>
+//#include <Python.h>
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
