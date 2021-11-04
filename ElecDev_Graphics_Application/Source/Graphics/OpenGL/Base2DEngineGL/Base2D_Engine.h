@@ -49,10 +49,6 @@ public:
 	virtual void updateGPU();
 	// Callback that handles the resizing event.
 	virtual void resizeEvent(float width, float height);
-	// Calculate the world coordinates from the pixel coordinates.
-	virtual glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
-	// Calculate the camera coordinates from the pixel coordinates.
-	virtual glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 
 	// ------------ //
 	//  2D   A P I  //

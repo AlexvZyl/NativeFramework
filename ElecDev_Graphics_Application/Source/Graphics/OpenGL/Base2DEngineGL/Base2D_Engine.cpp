@@ -118,37 +118,6 @@ unsigned int Base2DEngineGL::getRenderTexture()
 	return m_frameBuffer->getRenderTexture();
 }
 
-glm::vec3 Base2DEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
-{
-	glm::vec4 viewPort = {0.0f, 0.0f, m_imGuiViewportDimensions[0], m_imGuiViewportDimensions[1]};
-	glm::vec3 pixelCoords3 = {pixelCoords[0], viewPort[3]-pixelCoords[1], 0.0f};
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	glm::vec3 worldVec = glm::unProject(pixelCoords3, m_viewMatrix, m_projectionMatrix, viewPort);
-	return worldVec;
-}
-
-glm::vec3 Base2DEngineGL::pixelCoordsToCameraCoords(float pixelCoords[2]) 
-{
-	// Find the viewpwort dimensions.
-	float viewport[2] = { m_states->renderWindowSize.x, m_states->renderWindowSize.y };
-	// Account for pixel offset.
-	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
-	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
-	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
-	// The nomalized mouse coordinates on the users screen.
-	float normalizedScreenCoords[2];
-	// Apply the viewport transform the the pixels.
-	normalizedScreenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
-	normalizedScreenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
-	// Convert to screen vector.
-	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], 0.0f, 1.0f };
-	// Apply MVP matrices.
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	glm::mat4 MVPinverse = glm::inverse(m_modelMatrix * m_viewMatrix * m_projectionMatrix);
-	glm::vec4 worldVec = screenVec * MVPinverse;
-	return worldVec;
-}
-
 //=============================================================================================================================================//
 //  Window Functions.																														   //
 //=============================================================================================================================================//
