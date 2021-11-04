@@ -134,15 +134,15 @@ glm::vec4 Base2DEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 	// Convert to screen vector.
 	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], 1.0f, 1.0f };
 	// Apply MVP matrices.
-	m_viewMatrix = m_rotationMatrix * m_translationMatrix * m_scalingMatrix;
+	m_viewMatrix = m_scalingMatrix * m_translationMatrix;
 	glm::mat4 MVPinverse = glm::inverse(m_viewMatrix * m_projectionMatrix);//glm::inverse(m_viewMatrix) * glm::inverse(m_projectionMatrix);
-	glm::vec4 worldVec = screenVec * MVPinverse;
+	glm::vec4 worldVec = MVPinverse * screenVec;
 	//worldVec.w = 1 / worldVec.w;
 	//worldVec.x *= worldVec.w;
-	std::cout << "rotation mat: " << m_rotationMatrix[0][0] << ',' << m_rotationMatrix[1][0] << ',' << m_rotationMatrix[2][0] << ',' << m_rotationMatrix[3][0] << std::endl;
-	std::cout << m_rotationMatrix[0][1] << ',' << m_rotationMatrix[1][1] << ',' << m_rotationMatrix[2][1] << ',' << m_rotationMatrix[3][1] << std::endl;
-	std::cout << m_rotationMatrix[0][2] << ',' << m_rotationMatrix[1][2] << ',' << m_rotationMatrix[2][2] << ',' << m_rotationMatrix[3][2] << std::endl;
-	std::cout << m_rotationMatrix[0][3] << ',' << m_rotationMatrix[1][3] << ',' << m_rotationMatrix[2][3] << ',' << m_rotationMatrix[3][3] << std::endl;
+	std::cout << "view mat: " << m_viewMatrix[0][0] << ',' << m_viewMatrix[1][0] << ',' << m_viewMatrix[2][0] << ',' << m_viewMatrix[3][0] << std::endl;
+	std::cout << m_viewMatrix[0][1] << ',' << m_viewMatrix[1][1] << ',' << m_viewMatrix[2][1] << ',' << m_viewMatrix[3][1] << std::endl;
+	std::cout << m_viewMatrix[0][2] << ',' << m_viewMatrix[1][2] << ',' << m_viewMatrix[2][2] << ',' << m_viewMatrix[3][2] << std::endl;
+	std::cout << m_viewMatrix[0][3] << ',' << m_viewMatrix[1][3] << ',' << m_viewMatrix[2][3] << ',' << m_viewMatrix[3][3] << std::endl;
 
 
 	return worldVec;
