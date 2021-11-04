@@ -138,6 +138,10 @@ public:
 	float deltaTime();										
 	// Returns the ID of the entity in the pixel coords.
 	unsigned int getEntityID(float pixelCoords[2]);			
+	// Calculate the world coordinates from the pixel coordinates.
+	virtual glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
+	// Calculate the camera coordinates from the pixel coordinates.
+	virtual glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 
 	float m_deltaTime = 0.0f;	// The difference between the last 2 rendred frame.
 	float m_lastFrame = 0.0f;	// The time of the previous frame.

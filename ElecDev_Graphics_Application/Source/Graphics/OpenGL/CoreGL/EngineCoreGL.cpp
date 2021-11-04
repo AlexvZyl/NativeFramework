@@ -100,6 +100,8 @@ void EngineCoreGL::functionNotImplementedError(std::string functionName)
 void EngineCoreGL::renderLoop() { functionNotImplementedError(__FUNCTION__); }
 void EngineCoreGL::autoCenter() { functionNotImplementedError(__FUNCTION__); }
 void EngineCoreGL::drawDemo(unsigned int loopCount) { functionNotImplementedError(__FUNCTION__); }
+glm::vec3 EngineCoreGL::pixelCoordsToWorldCoords(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); return glm::vec3(0.0f, 0.0f, 0.0f); }
+glm::vec3 EngineCoreGL::pixelCoordsToCameraCoords(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); return glm::vec3(0.0f, 0.0f, 0.0f); }
 unsigned int EngineCoreGL::getRenderTexture() { return m_frameBuffer->getRenderTexture(); }
 
 unsigned int EngineCoreGL::getEntityID(float pixelCoords[2]) 
