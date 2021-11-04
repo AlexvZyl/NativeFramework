@@ -6,6 +6,7 @@
 
 #include "../Base2DEngineGL/Base2D_Engine.h"
 #include "Peripherals/MousePointGL.h"
+#include "Peripherals/Component2D.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  The Design Engine class.
@@ -21,6 +22,8 @@ public:
 
 	// A virtual mouse point that is used to edit the circuit.
 	MousePoint* m_mousePoint;
+	VertexArrayObject* vao;//testing
+	Component2D* component;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructor and Destructor.

@@ -44,7 +44,6 @@ public:
 
 	// Rendering loop.
 	virtual void renderLoop();
-	glm::vec4 pixelCoordsToWorldVector(float pixelCoords[2]);	// Converts the screen coords to a ray that goes into the world.
 
 	// ------- //
 	//  A P I  //
