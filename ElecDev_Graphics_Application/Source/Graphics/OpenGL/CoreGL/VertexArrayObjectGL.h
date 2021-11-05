@@ -83,7 +83,6 @@ struct Colour
 		this->b = b;
 		this->a = a;
 	}
-	
 	//Could add another constructors that sets a specified colour defined in a string
 	//i.e. Colour(char* colour , float a)
 };
@@ -99,7 +98,6 @@ struct VertexData
 	float color[4] = { 0,0,0,0 };
 	float raw[7] = { 0,0,0,0,0,0,0 };
 	unsigned int entityID[1] = { 0 };
-	
 	// Constructors.
 
 	//create an unititialised VertexData structure
@@ -165,9 +163,9 @@ struct VertexDataTextured
 
 	// Constructor.
 	VertexDataTextured(float pos0, float pos1, float pos2,
-					   float col0, float col1, float col2, float col3, 
-					   float texPos0, float texPos1, float texID, 
-					   unsigned int eID)
+		float col0, float col1, float col2, float col3,
+		float texPos0, float texPos1, float texID,
+		unsigned int eID)
 	{
 		// Assign position.
 		position[0] = pos0;
@@ -211,11 +209,11 @@ struct VertexDataTextured
 class VertexArrayObject
 {
 private:
-	
+
 	unsigned int m_vAID;	// VAO ID.
 	unsigned int m_vBID;	// VBO ID.
 	GLenum m_bufferType;	// Data type used in this VAO.		
-	
+
 public:
 
 	// --------- //
@@ -228,15 +226,15 @@ public:
 	std::vector<VertexDataTextured> m_VertexDataTexturedCPU;
 	// Pointer that shows where in the buffer data need to be written.
 	GLsizei m_bufferPtr = 0;
-	
+
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
 	// Constructor.
-	VertexArrayObject(GLenum type, bool textured=false);		
+	VertexArrayObject(GLenum type, bool textured = false);
 	// Destructor.
-	~VertexArrayObject();										
+	~VertexArrayObject();
 
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -251,13 +249,13 @@ public:
 	// Assign data to the CPU side memory for untextured vertices.
 	void assignData(std::vector<VertexDataTextured> vertices);
 	// Sends the data to the GPU.
-	void updateGPU();											
+	void updateGPU();
 	// Draws the data in the VAO.
-	void render();												
+	void render();
 	// Binds the VAO.
-	void bind() const;											
+	void bind() const;
 	// Unbinds the VAO.
-	void unbind() const;										
+	void unbind() const;
 };
 
 //=============================================================================================================================================//
