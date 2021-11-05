@@ -24,6 +24,12 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Call base engine event.
 	Base2DEngineGL::mousePressRight(pixelCoords);
+
+	// Move the component.
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+	component->moveTo(screenCoords);
+	component->draw();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -33,22 +39,14 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 // Event handler for a mouse move event.
 void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
 {
-	// Call base engine event.
-
-	//std::cout<<getEntityID(pixelCoords)<<std::endl;
-	glm::vec4 WorldCoords = Base2DEngineGL::pixelCoordsToWorldCoords(pixelCoords);
-	float raw_screenCoords[2];
-	Base2DEngineGL::pixelCoordsToScreenCoords(pixelCoords, raw_screenCoords);
+	// Move the component.
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
-	std::cout << "Screen = " << raw_screenCoords[0] << ',' << raw_screenCoords[1] << std::endl;
-	std::cout << "World = " << screenCoords[0] << ',' << screenCoords[1] << std::endl;
-
-	component->move(screenCoords);
+	component->moveTo(screenCoords);
 	component->draw();
-	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight);
 
-	// Update the mouse point position.
-	m_mousePoint->updatePosition(pixelCoords);
+	// Call parent event.
+	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -59,6 +57,13 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 {
 	// Call the base engine event.
 	Base2DEngineGL::mouseScrollEvent(pixelCoords, yOffset);
+
+	// Move the component.
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+	component->moveTo(screenCoords);
+	component->draw();
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
