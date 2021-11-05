@@ -8,7 +8,8 @@
 #include <iostream>
 #include <cmath>
 #include <cfenv>
-#include "stateMachine.h"
+#include "GUIState.h"
+#include "PythonInterface.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
@@ -34,43 +35,31 @@ constexpr size_t hash(const char* str) {
 /*=======================================================================================================================================*/
 
 // Constructor.
-Graphics::Graphics(stateMachine* states, GraphicsHandler* graphicsHandler)
-	: states(states), graphicsHandler(graphicsHandler) 
+Graphics::Graphics(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
+	: m_guiState(guiState), graphicsHandler(graphicsHandler), m_pyInterface(pyInterface)
 {
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;
-
 }
 
-void Graphics::deQueueInput() {
-	
-
-	while (states->inputQueue.size() > 0){
-
-		inputQueue temp = states->inputQueue.front();
-
+void Graphics::deQueueInput() 
+{
+	while (m_pyInterface->inputQueue.size() > 0)
+	{
+		InputQueue temp = m_pyInterface->inputQueue.front();
 		switch (hash(temp.command.c_str())) {
-
 			case hash("drawLine"):
-
 				float par[8];
-
 				for (size_t i = 0; i < 8; i++)
 				{
 					par[i] = std::stof(temp.parameters.substr(0, temp.parameters.find(";")));
 					temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
 				}
-
-				//graphicsHandler->m_baseEngine->drawLine(new float[2]{ par[0],par[1] }, new float[2]{ par[2],par[3] }, new float[4]{ par[4],par[5],par[6],par[7] });
-
 				break;
 		}
-
-		states->inputQueue.pop();
-
+		m_pyInterface->inputQueue.pop();
 	}
-
 }
 
 // Render the graphics scene.
@@ -78,10 +67,6 @@ void Graphics::renderGraphics(ImGuiID dock) {
 
 	deQueueInput();
 	bool open = true;
-
-	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
-
-	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
 	ImGui::Begin("Render Window");
@@ -93,17 +78,20 @@ void Graphics::renderGraphics(ImGuiID dock) {
 		// Using a Child allow to fill all the space of the window.
 		// It also allows customization
 		ImGui::BeginChild("Render");
-		this->states->renderWindowHovered = ImGui::IsWindowHovered();
+		this->m_guiState->renderWindowHovered = ImGui::IsWindowHovered();
 		ImVec2 temp = ImGui::GetIO().MousePos;
 		temp.x -= ImGui::GetWindowPos().x;
 		temp.y -= ImGui::GetWindowPos().y;
-		this->states->renderWindowMouseCoordinate = temp;
+		m_guiState->renderWindowMouseCoordinate[0] = temp.x;
+		m_guiState->renderWindowMouseCoordinate[1] = temp.x;
 
 		//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
 
 		if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
-			states->renderResizeEvent = true;
-			states->renderWindowSize = ImGui::GetWindowSize();
+			m_guiState->renderResizeEvent = true;
+			ImVec2 temp = ImGui::GetWindowSize();
+			m_guiState->renderWindowSize[0] = temp.x;
+			m_guiState->renderWindowSize[0] = temp.y;
 		}
 		pos.x = ImGui::GetWindowSize().x;
 		pos.y = ImGui::GetWindowSize().y;
@@ -114,9 +102,7 @@ void Graphics::renderGraphics(ImGuiID dock) {
 		//ImGui::Image((ImTextureID)this->graphicsHandler->m_baseEngine->getRenderedTexID(), wsize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::EndChild();
 	}
-	
 	ImGui::End();
-
 }
 
 /*=======================================================================================================================================*/

@@ -1,12 +1,24 @@
-//----------------------------------------------------------------------------------------------------------------------
-//  Includes.
-//----------------------------------------------------------------------------------------------------------------------
+/*=======================================================================================================================================*/
+/* Includes.																															 */
+/*=======================================================================================================================================*/
 
-#include "guiHandler.h"
+// ImGUI (GUI software). 
+#include "Core/imgui.h"
+#include "Implementations/imgui_impl_glfw.h"
+#include "Implementations/imgui_impl_opengl3.h"
+// GUI Components.
+#include "Ribbons/ribbons.h"
+#include "Toolbar/toolbar.h"
+#include "Graphics/graphics.h"
+#include "MCC/mcc.h"
+#include "../GUIState.h"
+#include "UserGUI/userGUI.h"
+#include "GuiHandler.h"
+#include "Graphics/OpenGL/CoreGL/ErrorHandlerGL.h"
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Functions.
-//----------------------------------------------------------------------------------------------------------------------
+/*=======================================================================================================================================*/
+/* Functions.																															 */
+/*=======================================================================================================================================*/
 
 // Hash the input text to be checked against list of commands.
 constexpr size_t hash(const char* str) {
@@ -22,28 +34,24 @@ constexpr size_t hash(const char* str) {
 }
 
 // Constructor.
-GUIHandler::GUIHandler(stateMachine* states, GraphicsHandler* graphicsHandler)
+GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
+	:m_guiState(guiState), m_pyInterface(pyInterface)
 {
     // Set the custom theme.
     setTheme();
  
-	this->states = states;
-	this->states->toolsExpanded = false;
-	this->states->toolsMode = 0;
+	m_guiState->toolsExpanded = false;
+	m_guiState->toolsMode = 0;
 	this->textureID = 0;
 
 	this->graphicsHandler = graphicsHandler;
 
-	this->toolbar = new Toolbar(this->states);
-	this->ribbons = new Ribbons(this->states);
-	this->graphics = new Graphics(states, this->graphicsHandler);
-	this->userGUIP = new userGUI(states, this->graphicsHandler);
+	this->toolbar = new Toolbar(m_guiState);
+	this->ribbons = new Ribbons(m_guiState);
+	this->graphics = new Graphics(m_guiState, this->graphicsHandler, m_pyInterface);
+	this->userGUIP = new userGUI(m_guiState, this->graphicsHandler, m_pyInterface);
 
-	//MCCDict.
-
-	this->mcc = new MCC(states,graphicsHandler);
-	//MCCDict->insert("test", new BaseEngineGL(m_window, states));
-	
+	this->mcc = new MCC(m_guiState, graphicsHandler);	
 };
 
 // Destructor.
@@ -100,12 +108,10 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 
 	this->userGUIP->renderUI(&this->dock);
 
-	if (states->showGraphicsWindow) {
+	if (m_guiState->showGraphicsWindow) {
 		//this->graphics->renderGraphics(dock);
 		this->mcc->renderGraphics(this->dock);
 	}
-
-
 
 	//ImGui::Begin("FPS");
 	//ImGui::SetWindowPos(ImVec2(work_pos.x + work_size.x - 100, work_pos.y));
@@ -133,14 +139,6 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 		glfwMakeContextCurrent(backup_current_context);
 	}
 };
-
-void GUIHandler::setTheme()
-{
-	//imGuiIO.Fonts->AddFontFromFileTTF("../data/Fonts/Ruda-Bold.ttf", 15.0f, &config);
-	ImGui::GetStyle().FrameRounding = 4.0f;
-	ImGui::GetStyle().GrabRounding = 4.0f;
-	ImGui::GetStyle().ChildRounding = 4.0f;
-}
 
 void GUIHandler::createDock(ImVec2 work_size) {
 
@@ -198,6 +196,64 @@ void GUIHandler::resetDock(ImGuiID dockspace_id) {
 	this->userGUIP->resetDock = false;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  EOF.
-//----------------------------------------------------------------------------------------------------------------------
+void GUIHandler::setTheme()
+{
+	//imGuiIO.Fonts->AddFontFromFileTTF("../data/Fonts/Ruda-Bold.ttf", 15.0f, &config);
+	ImGui::GetStyle().FrameRounding = 4.0f;
+	ImGui::GetStyle().GrabRounding = 4.0f;
+	ImGui::GetStyle().ChildRounding = 4.0f;
+
+	// ----------------------------- //
+	//  I M G U I   H A Z E L N U T  //
+	// ----------------------------- //
+	
+	//auto& colors = ImGui::GetStyle().Colors;
+	//colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
+	//// Headers
+	//colors[ImGuiCol_Header] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+	//colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+	//colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//// Buttons
+	//colors[ImGuiCol_Button] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+	//colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+	//colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//// Frame BG
+	//colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+	//colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
+	//colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//// Tabs
+	//colors[ImGuiCol_Tab] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//colors[ImGuiCol_TabHovered] = ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f };
+	//colors[ImGuiCol_TabActive] = ImVec4{ 0.28f, 0.2805f, 0.281f, 1.0f };
+	//colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+	//// Title
+	//colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	//colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+
+	// ------------------------- //
+	//  F O N T   E X A M P L E  //
+	// ------------------------- //
+
+	// Implement the font.
+	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	// Load Fonts
+	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+	// - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+	// - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+	// - Read 'docs/FONTS.md' for more instructions and details.
+	// - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+	//io.Fonts->AddFontDefault();
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+	//io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
+	//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+	//IM_ASSERT(font != NULL);
+}
+
+/*=======================================================================================================================================*/
+/* EOF.																																	 */
+/*=======================================================================================================================================*/

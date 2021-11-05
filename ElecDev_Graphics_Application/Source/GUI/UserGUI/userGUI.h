@@ -1,12 +1,27 @@
 #pragma once
+
+/*=======================================================================================================================================*/
+/* Includes.																															 */
+/*=======================================================================================================================================*/
+
 #include <Core/imgui.h>
 #include <string>
-#include "../stateMachine.h"
-#include <../Graphics/graphicsHandler.h>
-#include <GLFW/glfw3.h>
+#include <list>
+#include <GUIState.h>
 
+/*=======================================================================================================================================*/
+/* Includes.																															 */
+/*=======================================================================================================================================*/
 
-struct element {
+class PyInterface;
+class GraphicsHandler;
+
+/*=======================================================================================================================================*/
+/* Strutures. 																															 */
+/*=======================================================================================================================================*/
+
+struct element 
+{
 	std::string name;
 	std::list<std::string> extraParams;
 	std::string type;
@@ -17,10 +32,10 @@ struct element {
 		extraParams = extra;
 		type = typeIn;
 	}
-
 };
 
-struct guiHolder {
+struct guiHolder 
+{
 	std::string windowName;
 	ImVec2 windowPos;
 	std::list<element> elements;
@@ -33,7 +48,8 @@ struct guiHolder {
 
 	bool first = true;
 
-	guiHolder(std::string window, ImVec2 windowPosIn, std::string dockingIn, std::list<element> inElements) {
+	guiHolder(std::string window, ImVec2 windowPosIn, std::string dockingIn, std::list<element> inElements) 
+	{
 		windowName = window;
 		elements = inElements;
 		windowPos = windowPosIn;
@@ -41,12 +57,18 @@ struct guiHolder {
 	}
 };
 
+/*=======================================================================================================================================*/
+/* Class.																																 */
+/*=======================================================================================================================================*/
+
 class userGUI
 {
+
 public:
 
 	//Variables
-	stateMachine* states;
+	GUIState* m_guiState;
+	PyInterface* m_pyInterface;
 	ImVec2 pos;
 	GraphicsHandler* graphicsHandler;
 	ImGuiID dock;
@@ -55,16 +77,18 @@ public:
 	const char* voltageLevel = "460";
 	const char* efficiencyRating = "IEC";
 	char steadyVoltDrop[128] = "Hello, world!";
-
 	std::list<guiHolder> guis;
 	bool resetDock = false;
 
 	//Constructor
-	userGUI(stateMachine* states, GraphicsHandler* graphicsHandler);
-
+	userGUI(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface);
 
 	//Renderer
 	void pushData(std::list<guiHolder>::iterator uiWindow);
 	void createGUI(std::string guiName, std::string guiPos, std::string docking, std::string parameters);
 	void renderUI(ImGuiID* dock);
 };
+
+/*=======================================================================================================================================*/
+/* EOF.	     																															 */
+/*=======================================================================================================================================*/

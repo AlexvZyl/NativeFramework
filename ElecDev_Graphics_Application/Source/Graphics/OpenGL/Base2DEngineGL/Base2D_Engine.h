@@ -24,15 +24,15 @@ public:
 	//  E N G I N E   V A R I A B L E S  //
 	// --------------------------------- //
 
-	float m_scaleRate = 0.3f;								// Determines how much is zoomed with each mouse wheel scroll.
-	float m_projectionValues[6];							// Stores the valaues that is used to calculate the projection matrix.
+	float m_scaleRate = 0.3f;		// Determines how much is zoomed with each mouse wheel scroll.
+	float m_projectionValues[6];	// Stores the valaues that is used to calculate the projection matrix.
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
 	// Contructor.
-	Base2DEngineGL(stateMachine* states);
+	Base2DEngineGL(GUIState* guiState);
 	// Destructor
 	~Base2DEngineGL();
 

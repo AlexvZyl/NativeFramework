@@ -74,6 +74,9 @@ ARIAL_SDF_PNG					RCDATA						"Fonts\\Arial_SDF_PNG.png"
 ARIAL_SDF_MIN_FNT				TEXTFILE					"Fonts\\Arial_SDF_Min.fnt"
 ARIAL_SDF_MIN_PNG				RCDATA						"Fonts\\Arial_SDF_Min.png"
 //-------------------------------------------------------------------------------------------------
+// ImGui Fonts.
+RUDA_BOLD_TTF					TEXFILE						"Fonts\\Ruda\\Ruda-bold.ttf"
+//-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources
 

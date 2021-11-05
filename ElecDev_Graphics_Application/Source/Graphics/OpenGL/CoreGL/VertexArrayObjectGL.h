@@ -24,7 +24,11 @@ struct float2
 	// Constructors.
 
 	//creates ininitialised float2
-	float2() {}
+	float2() 
+	{
+		x = 0;
+		y = 0;
+	}
 
 	float2(float x, float y)
 	{
@@ -43,7 +47,12 @@ struct float3
 	// Constructors.
 
 	//creates ininitialised float3
-	float3() {	}
+	float3() 
+	{
+		x = 0;
+		y = 0;
+		z = 0;
+	}
 
 	//Creates a float3 with the specified values.
 	float3(float x, float y, float z)
@@ -60,7 +69,6 @@ struct float3
 		this->y = val.y;
 		this->z = z;
 	}
-
 };
 
 struct Colour

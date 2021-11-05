@@ -5,7 +5,7 @@
 /*=======================================================================================================================================*/
 
 // State control.
-#include "../stateMachine.h"
+#include "../GUIState.h"
 
 /*=======================================================================================================================================*/
 /* Class.                                                                                                                                */
@@ -50,9 +50,9 @@ public:
     bool unsaved_document;
     bool my_tool_active;
 
-    stateMachine* states;
+    GUIState* m_guiState;
 
-    Toolbar(stateMachine* states);
+    Toolbar(GUIState* states);
 
 	// Function that handles which engine should be active.
 	void renderToolbar();

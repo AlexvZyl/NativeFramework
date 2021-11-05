@@ -14,9 +14,9 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(stateMachine* states)
+Toolbar::Toolbar(GUIState* guiState)
+    : m_guiState(guiState)
 {
-    this->states = states;
     this->my_tool_active = true;
     this->show_app_main_menu_bar = false;
     this->show_app_documents = false;
@@ -49,7 +49,6 @@ Toolbar::Toolbar(stateMachine* states)
     this->no_bring_to_front = false;
     this->unsaved_document = false;
     this->my_tool_active = true;
-
 };
 
 /*=======================================================================================================================================*/
@@ -65,7 +64,7 @@ void Toolbar::renderToolbar()
         {
             if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
             if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { states->globalQuit = true; }
+            if (ImGui::MenuItem("Close", "Ctrl+W")) { m_guiState->globalQuit = true; }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
