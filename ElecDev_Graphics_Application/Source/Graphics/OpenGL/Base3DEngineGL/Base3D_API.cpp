@@ -182,13 +182,13 @@ void Base3DEngineGL::autoCenter()
 		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
 	}
 	// If triangels is empty init with textured triangles.
-	else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
+	else if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
-		max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
-		min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
-		min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
+		max[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[0];
+		max[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[1];
+		min[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[0];
+		min[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
@@ -227,30 +227,30 @@ void Base3DEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
+	if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size(); i++)
+		for (int i = 0; i < m_texturedTrianglesVAO->m_vertexDataTexturedCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] > max[0])
+			if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0] > max[0])
 			{
-				max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
+				max[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] < min[0])
+			else if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0] < min[0])
 			{
-				min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
+				min[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] > max[1])
+			if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1] > max[1])
 			{
-				max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
+				max[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] < min[1])
+			else if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1] < min[1])
 			{
-				min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
+				min[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1];
 			}
 		}
 	}

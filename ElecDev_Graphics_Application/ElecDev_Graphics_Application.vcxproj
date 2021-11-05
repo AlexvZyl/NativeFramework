@@ -227,6 +227,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsHandler.cpp" />
+    <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
