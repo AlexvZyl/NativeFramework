@@ -8,7 +8,6 @@ class Component2D
 {
 	//Private Members
 private:
-	
 	//shape and edge data
 	VertexArrayObject* shape;
 	VertexArrayObject* edges;
@@ -53,6 +52,5 @@ public:
 	void render();
 
 	//Move the component to a new positioned centred at the given coordinates
-	void move(float pointerPos[2]);
+	void moveTo(float pointerPos[2]);
 };
-

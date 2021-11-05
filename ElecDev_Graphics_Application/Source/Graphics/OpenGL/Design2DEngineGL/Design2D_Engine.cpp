@@ -18,7 +18,7 @@ Design2DEngineGL::Design2DEngineGL(stateMachine* states) : Base2DEngineGL(states
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
-	float color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+	float color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 	m_mousePoint = new MousePoint(color, 0.015f, 20, &m_projectionMatrix, m_states);
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
@@ -40,13 +40,10 @@ Design2DEngineGL::Design2DEngineGL(stateMachine* states) : Base2DEngineGL(states
 	vao->updateGPU();
 
 	component = new Component2D();
-	
-
-
 }
 
 // Destructor.
-Design2DEngineGL::~Design2DEngineGL() 
+Design2DEngineGL::~Design2DEngineGL()
 {
 	// Call base destructor.
 	Base2DEngineGL::~Base2DEngineGL();
@@ -70,7 +67,7 @@ void Design2DEngineGL::renderLoop()
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
-	
+
 	// Render to the FBO.
 	m_frameBuffer->bind();
 
@@ -96,7 +93,7 @@ void Design2DEngineGL::renderLoop()
 //  Events.																																	   //
 //=============================================================================================================================================//
 
-void Design2DEngineGL::resizeEvent(int width, int height) 
+void Design2DEngineGL::resizeEvent(int width, int height)
 {
 	// Call base engine resize event.
 	Base2DEngineGL::resizeEvent(width, height);
