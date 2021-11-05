@@ -135,15 +135,6 @@ void VertexArrayObject::assignData(std::vector<VertexDataTextured> vertices)
 	m_VertexDataTexturedCPU.assign(vertices.begin(), vertices.end());
 }
 
-void VertexArrayObject::assignData(std::vector<VertexData> vertices)
-{
-	m_vertexDataCPU.assign(vertices.begin(), vertices.end());
-}
-
-void VertexArrayObject::assignData(std::vector<VertexDataTextured> vertices)
-{
-	m_VertexDataTexturedCPU.assign(vertices.begin(), vertices.end());
-}
 
 void VertexArrayObject::writeData(std::vector<VertexDataTextured> vertices)
 {

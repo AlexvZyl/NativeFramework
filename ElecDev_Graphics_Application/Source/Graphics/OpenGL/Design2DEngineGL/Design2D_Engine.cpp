@@ -22,24 +22,9 @@ Design2DEngineGL::Design2DEngineGL(stateMachine* states) : Base2DEngineGL(states
 	m_mousePoint = new MousePoint(color, 0.015f, 20, &m_projectionMatrix, m_states);
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
-
-	vao = new VertexArrayObject(GL_LINES);
-	VertexData v1(
-		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f, 1.0f,
-		1
-	);
-	VertexData v2(
-		1.0f, 1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f, 1.0f,
-		1
-	);
-	std::vector < VertexData > vec1 = { v1, v2 };
-	vao->writeData(vec1);
-	//autoCenter();
-	vao->updateGPU();
-
-	component = new Component2D();
+	
+	m_components.insert(m_components.begin(), new Component2D());
+	m_activeComponent = m_components[0];
 }
 
 // Destructor.
@@ -51,8 +36,10 @@ Design2DEngineGL::~Design2DEngineGL()
 	// Delete helpers.
 	delete m_mousePoint;
 
-	delete vao;
-	delete component;
+	for (int i = 0; i < m_components.size(); i++) {
+		delete m_components[i];
+	}
+	m_components.empty();
 }
 
 //=============================================================================================================================================//
@@ -77,8 +64,7 @@ void Design2DEngineGL::renderLoop()
 
 	// Helpers.
 	m_basicShader->bind();
-	vao->render();
-	component->render();
+	m_activeComponent->render();
 	m_mousePoint->render();
 
 	// --------------- //
