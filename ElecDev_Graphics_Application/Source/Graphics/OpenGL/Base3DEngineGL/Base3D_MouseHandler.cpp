@@ -14,7 +14,7 @@ void Base3DEngineGL::mousePressLeft(float pixelCoords[2])
 	m_prevMouseEventPixelCoords[0] = pixelCoords[0];
 	m_prevMouseEventPixelCoords[1] = pixelCoords[1];
 	// Store previous mouse event world vector.
-	glm::vec3 mouseWorldCoords = pixelCoordsToCameraCoords(pixelCoords);
+	glm::vec4 mouseWorldCoords = pixelCoordsToWorldVector(pixelCoords);
 	m_prevMouseEventWorldVec[0] = mouseWorldCoords[0];
 	m_prevMouseEventWorldVec[1] = mouseWorldCoords[1];
 	m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
@@ -26,7 +26,7 @@ void Base3DEngineGL::mousePressRight(float pixelCoords[2])
 	m_prevMouseEventPixelCoords[0] = pixelCoords[0];
 	m_prevMouseEventPixelCoords[1] = pixelCoords[1];
 	// Store previous mouse event world vector.
-	glm::vec3 mouseWorldCoords = pixelCoordsToCameraCoords(pixelCoords);
+	glm::vec4 mouseWorldCoords = pixelCoordsToWorldVector(pixelCoords);
 	m_prevMouseEventWorldVec[0] = mouseWorldCoords[0];
 	m_prevMouseEventWorldVec[1] = mouseWorldCoords[1];
 	m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
@@ -38,7 +38,7 @@ void Base3DEngineGL::mousePressMiddle(float pixelCoords[2])
 	m_prevMouseEventPixelCoords[0] = pixelCoords[0];
 	m_prevMouseEventPixelCoords[1] = pixelCoords[1];
 	// Store previous mouse event world vector.
-	glm::vec3 mouseWorldCoords = pixelCoordsToCameraCoords(pixelCoords);
+	glm::vec4 mouseWorldCoords = pixelCoordsToWorldVector(pixelCoords);
 	m_prevMouseEventWorldVec[0] = mouseWorldCoords[0];
 	m_prevMouseEventWorldVec[1] = mouseWorldCoords[1];
 	m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
@@ -60,7 +60,7 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 		m_prevMouseEventPixelCoords[0] = pixelCoords[0];
 		m_prevMouseEventPixelCoords[1] = pixelCoords[1];
 		// Store previous mouse event world vector.
-		glm::vec3 mouseWorldCoords = pixelCoordsToCameraCoords(pixelCoords);
+		glm::vec4 mouseWorldCoords = pixelCoordsToWorldVector(pixelCoords);
 		m_prevMouseEventWorldVec[0] = mouseWorldCoords[0];
 		m_prevMouseEventWorldVec[1] = mouseWorldCoords[1];
 		m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
@@ -75,7 +75,7 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 		m_prevMouseEventPixelCoords[0] = pixelCoords[0];
 		m_prevMouseEventPixelCoords[1] = pixelCoords[1];
 		// Store previous mouse event world vector.
-		glm::vec3 mouseWorldCoords = pixelCoordsToCameraCoords(pixelCoords);
+		glm::vec4 mouseWorldCoords = pixelCoordsToWorldVector(pixelCoords);
 		m_prevMouseEventWorldVec[0] = mouseWorldCoords[0];
 		m_prevMouseEventWorldVec[1] = mouseWorldCoords[1];
 		m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
@@ -88,15 +88,15 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 
 void Base3DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 {
-	// Calculate mouse world coordinates before moving forward..
-	glm::vec3 mouseWorldCoordsPre = pixelCoordsToCameraCoords(pixelCoords);
-	// Move in the direction of the target on a mouse scroll and update the view matrix.
-	m_camera->translateTowardsTarget(yOffset);
-	m_camera->updateView();
-	// Calculate mouse world coordinates after moving forward.
-	glm::vec3 mouseWorldCoordsPost = pixelCoordsToCameraCoords(pixelCoords);
-	// Translate the world so that the zoom happens on the mouse position. 
-	float translateVector[3] = { (float)mouseWorldCoordsPost[0] - (float)mouseWorldCoordsPre[0], (float)mouseWorldCoordsPost[1] - (float)mouseWorldCoordsPre[1], 0.0f };
+	//// Calculate mouse world coordinates before moving forward..
+	//glm::vec4 mouseWorldCoordsPre = pixelCoordsToWorldVector(pixelCoords);
+	//// Move in the direction of the target on a mouse scroll and update the view matrix.
+	//m_camera->translateTowardsTarget(yOffset);
+	//m_camera->updateView();
+	//// Calculate mouse world coordinates after moving forward.
+	//glm::vec4 mouseWorldCoordsPost = pixelCoordsToWorldVector(pixelCoords);
+	//// Translate the world so that the zoom happens on the mouse position. 
+	//float translateVector[3] = { (float)mouseWorldCoordsPost[0] - (float)mouseWorldCoordsPre[0], (float)mouseWorldCoordsPost[1] - (float)mouseWorldCoordsPre[1], 0.0f };
 	//  Apply translation vector.
 	m_camera->translateTowardsTarget(yOffset * 0.5f);
 	m_prevMouseEventPixelCoords[0] = pixelCoords[0];

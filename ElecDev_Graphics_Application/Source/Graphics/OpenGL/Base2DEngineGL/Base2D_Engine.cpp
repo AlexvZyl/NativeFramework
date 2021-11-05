@@ -118,6 +118,50 @@ unsigned int Base2DEngineGL::getRenderTexture()
 	return m_frameBuffer->getRenderTexture();
 }
 
+glm::vec4 Base2DEngineGL::pixelCoordsToWorldCoords(float pixelCoords[2])
+{
+	// Find the viewpwort dimensions.
+	float viewport[2] = { m_imGuiViewportDimensions[0], m_imGuiViewportDimensions[1] };
+	// Account for pixel offset.
+	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
+	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
+	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
+	// The nomalized mouse coordinates on the users screen.
+	float normalizedScreenCoords[2];
+	// Apply the viewport transform the the pixels.
+	normalizedScreenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
+	normalizedScreenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
+	// Convert to screen vector.
+	glm::vec4 screenVec = { normalizedScreenCoords[0], normalizedScreenCoords[1], 1.0f, 1.0f };
+	// Apply MVP matrices.
+	m_viewMatrix = m_scalingMatrix * m_translationMatrix;
+	glm::mat4 MVPinverse = glm::inverse(m_viewMatrix * m_projectionMatrix);//glm::inverse(m_viewMatrix) * glm::inverse(m_projectionMatrix);
+	glm::vec4 worldVec = MVPinverse * screenVec;
+	//worldVec.w = 1 / worldVec.w;
+	//worldVec.x *= worldVec.w;
+	std::cout << "view mat: " << m_viewMatrix[0][0] << ',' << m_viewMatrix[1][0] << ',' << m_viewMatrix[2][0] << ',' << m_viewMatrix[3][0] << std::endl;
+	std::cout << m_viewMatrix[0][1] << ',' << m_viewMatrix[1][1] << ',' << m_viewMatrix[2][1] << ',' << m_viewMatrix[3][1] << std::endl;
+	std::cout << m_viewMatrix[0][2] << ',' << m_viewMatrix[1][2] << ',' << m_viewMatrix[2][2] << ',' << m_viewMatrix[3][2] << std::endl;
+	std::cout << m_viewMatrix[0][3] << ',' << m_viewMatrix[1][3] << ',' << m_viewMatrix[2][3] << ',' << m_viewMatrix[3][3] << std::endl;
+
+
+	return worldVec;
+}
+
+void Base2DEngineGL::pixelCoordsToScreenCoords(float pixelCoords[2], float normalizedScreenCoords[2])
+{
+	// Find the viewpwort dimensions.
+	float viewport[2] = { m_states->renderWindowSize.x, m_states->renderWindowSize.y };
+	// Account for pixel offset.
+	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
+	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.
+	float pixelCoordsTemp[2] = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
+	
+	// Apply the viewport transform the the pixels.
+	normalizedScreenCoords[0] = (pixelCoordsTemp[0] - viewportOffset[0] / 2) / (viewportOffset[0] / 2);
+	normalizedScreenCoords[1] = (pixelCoordsTemp[1] - viewportOffset[1] / 2) / (viewportOffset[1] / 2);
+}
+
 //=============================================================================================================================================//
 //  Window Functions.																														   //
 //=============================================================================================================================================//

@@ -19,7 +19,7 @@ Component2D::Component2D()
 Component2D::Component2D(float centreCoords[2])
 {
 	Component2D();
-	centre = float2(centreCoords[0], centreCoords[1]);
+	centre = float2(centreCoords[0], centreCoords[1]);	
 }
 
 Component2D::~Component2D() {
@@ -41,7 +41,7 @@ void Component2D::draw()
 		edgeVertices[i] = VertexData(vertices[i], shapeColour, edgeID++);
 	}
 	std::vector<VertexData> shapeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[0] };
-	std::vector<VertexData> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0] };
+	std::vector<VertexData> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0]};
 	// Write to CPU side buffer.
 	shape->assignData(shapeVerticesVec);
 	shape->updateGPU();
@@ -49,7 +49,7 @@ void Component2D::draw()
 	edges->updateGPU();
 }
 
-void Component2D::moveTo(float pointerPos[2])
+void Component2D::move(float pointerPos[2])
 {
 	//std::cout << pointerPos[0] << ',' << pointerPos[1] << std::endl;
 	centre = float2(pointerPos[0], pointerPos[1]);
@@ -58,6 +58,7 @@ void Component2D::moveTo(float pointerPos[2])
 	vertices[2] = float3(centre.x + width, centre.y + height, 0.0f);
 	vertices[3] = float3(centre.x - width, centre.y + height, 0.0f);
 	draw();
+
 }
 
 void Component2D::render()

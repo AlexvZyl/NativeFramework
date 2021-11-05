@@ -49,6 +49,9 @@ public:
 	virtual void updateGPU();
 	// Callback that handles the resizing event.
 	virtual void resizeEvent(float width, float height);
+	glm::vec4 pixelCoordsToWorldCoords(float pixelCoords[2]);
+	void pixelCoordsToScreenCoords(float pixelCoords[2], float normalizedScreenCoords[2]);
+
 
 	// ------------ //
 	//  2D   A P I  //
