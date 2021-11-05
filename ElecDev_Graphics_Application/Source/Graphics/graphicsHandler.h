@@ -17,9 +17,6 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
 #include "OpenGL/Base3DEngineGL/Base3D_Engine.h"
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
-// GUI.
-#include "Core/imgui.h"
-#include "../stateMachine.h"
 
 //=============================================================================================================================================//
 //  Data.																																	   //
@@ -42,8 +39,8 @@ struct RenderWindowGL
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
-	ImVec2 viewportDimentions;
-	ImVec2 mouseCoords;
+	float viewportDimentions[2];
+	float mouseCoords[2];
 	std::string windowName;
 
 	// State machine information.
@@ -52,21 +49,21 @@ struct RenderWindowGL
 	bool close = true;
 
 	// Constructor.
-	RenderWindowGL(stateMachine* states, EngineType engineType) 
+	RenderWindowGL(GUIState* guiState, EngineType engineType) 
 	{
 		if (engineType == EngineType::Base2DEngineGL) 
 		{
-			engineGL = new Base2DEngineGL(states);
+			engineGL = new Base2DEngineGL(guiState);
 			engineType = EngineType::Base2DEngineGL;
 		}
 		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL =  new Design2DEngineGL(states);
+			engineGL =  new Design2DEngineGL(guiState);
 			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
-			engineGL = new Base3DEngineGL(states);
+			engineGL = new Base3DEngineGL(guiState);
 			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
@@ -88,9 +85,9 @@ class GraphicsHandler
 {
 public:
 
-	//-----------------------------------------------------------------------------------------------------------------
-	//  Variables.
-	//-----------------------------------------------------------------------------------------------------------------
+	// ------------------- //
+	//  V A R I A B L E S  //
+	// ------------------- //
 
 	// Map that holds the windows and their names.
 	std::map<std::string, RenderWindowGL*> m_windowsDictionary;
@@ -99,50 +96,47 @@ public:
 	std::string m_activeWindow;
 
 	// State machine variable.
-	stateMachine* m_states;
+	GUIState* m_guiState;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	//  Constructors and setup.
-	//-----------------------------------------------------------------------------------------------------------------
+	// ------------------------------------------------- //
+	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
+	// ------------------------------------------------- //
 
 	// Constructor with GLFW window.
-	GraphicsHandler(stateMachine* states);
+	GraphicsHandler(GUIState* guiState);
 	// Destructor.
 	~GraphicsHandler();
 
-	//-----------------------------------------------------------------------------------------------------------------
-	//  Functions.
-	//-----------------------------------------------------------------------------------------------------------------
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 
 	// Renders the graphics of all of the engines.
 	// Can be improved by only rendering the engines that are viewable.  Does ImGUI do this automatically?
 	void renderGraphics();
 
-	//-----------------------------------------------------------------------------------------------------------------
-	//  Mouse events.
-	//-----------------------------------------------------------------------------------------------------------------
+	// ------------------------- //
+	//  M O U S E   E V E N T S  //
+	// ------------------------- //
+	
 	// Mouse events are automatically assigned to the active window.
 	// The active window is changed from the ImGUI side as the mouse moves.
-
 	void mousePressEvent(int button, int action);					// Handle mouse press events.
 	void mouseMoveEvent(int buttonStateLeft, int buttonStateRight);	// Handle mouse move events.
 	void mouseScrollEvent(float yOffset);							// Handle mouse scroll events.
 
-	//-----------------------------------------------------------------------------------------------------------------
-	//  Window events.
-	//-----------------------------------------------------------------------------------------------------------------
+	// -------------------------- //
+	//  W I N D O W   E V E N T S //
+	// -------------------------- //
 
 	// Resizes the engines.
 	void resizeEvent(int width, int height);
 	// Checks if the window name supplied is in the list.
 	bool isWindowValid(std::string windowName);
 
-	//---------------------------------------------------------------------------------------
-	// API.
-	//---------------------------------------------------------------------------------------
-
-	// 2D Rendering
-	// --------------------------------
+	// ------------- //
+	//  2 D   A P I  //
+	// ------------- //
 	
 	// Functions supported by the base engine.  Added functionality to choose MCC.
 	void drawLine(std::string windowName, float position1[2], float position2[2], float color[4]);
@@ -158,15 +152,17 @@ public:
 	// Loads the CPU data to the GPU.
 	void updateBuffers(std::string windowName);
 
-	// 3D Rendering
-	// --------------------------------
+	// ------------- //
+	//  3 D   A P I  //
+	// ------------- //
 
 	void drawQuadFilled3D(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]);
 	void drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]);
 
-	// Window management.
-	// --------------------------------
-	
+	// ----------------------------------- //
+	//  W I N D O W   M A N A G E M E N T  //
+	// ----------------------------------- //
+
 	// Adds an MCC to the dict.
 	void addWindow(std::string windowName, std::string engineType);
 	// Removes an MCC from the dict.
@@ -174,9 +170,10 @@ public:
 	void windowError(std::string windowName);
 	void parametersError(const std::exception &e);
 
-	// Testing.
-	// --------------------------------
-	
+	// -------------- //
+	//  T E S T I N G //
+	// -------------- //
+
 	// Draws a demo.
 	void drawDemo(std::string windowName, unsigned int loopCount);
 };

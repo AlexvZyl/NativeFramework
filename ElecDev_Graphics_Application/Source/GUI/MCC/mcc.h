@@ -5,10 +5,13 @@
 /*=======================================================================================================================================*/
 
 #include <Core/imgui.h>
-#include <string>
-#include "../stateMachine.h"
-#include <../Graphics/graphicsHandler.h>
-#include <GLFW/glfw3.h>
+#include "../GUIState.h"
+
+/*=======================================================================================================================================*/
+/* Forward Declerarions                                                                                                                  */
+/*=======================================================================================================================================*/
+
+class GraphicsHandler;
 
 /*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */
@@ -19,16 +22,18 @@ class MCC
 public:
 
 	//Variables
-	stateMachine* states;
+	GUIState* m_guiState;
 	GraphicsHandler* graphicsHandler;
 	ImVec2 pos;
 	ImGuiID dock;
 
 	//Constructor
-	MCC(stateMachine* states, GraphicsHandler* graphicsHandler);
+	MCC(GUIState* guiState, GraphicsHandler* graphicsHandler);
 
 	//Renderer
 	void renderGraphics(ImGuiID dock);
-	void deQueueInput();
 };
 
+/*=======================================================================================================================================*/
+/* EOF.				                                                                                                                     */
+/*=======================================================================================================================================*/

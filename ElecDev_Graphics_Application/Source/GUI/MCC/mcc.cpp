@@ -1,50 +1,39 @@
+/*=======================================================================================================================================*/
+/* Include.	                                                                                                                             */
+/*=======================================================================================================================================*/
+
 #include "mcc.h"
 #include <Core/imgui.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
 #include <cfenv>
-#include "stateMachine.h"
 #include <string>
-
+#include "Graphics/graphicsHandler.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
-
-/*=======================================================================================================================================*/
-/* Additive functions                                                                                                                    */
-/*=======================================================================================================================================*/
-
-
 
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
 
 // Constructor.
-MCC::MCC(stateMachine* states, GraphicsHandler* graphicsHandler)
-	: states(states), graphicsHandler(graphicsHandler)
+MCC::MCC(GUIState* guiState, GraphicsHandler* graphicsHandler)
+	: m_guiState(guiState), graphicsHandler(graphicsHandler)
 {
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;
-
-	//graphicsHandler->addMcc("Test");
 }
 
 // Render the graphics scene.
 void MCC::renderGraphics(ImGuiID dock) 
 {
 	bool open = true;
-
-	//ImGui::SetNextWindowDockID(ImGuiID(1), ImGuiCond_Once);
-
-	//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(4), ImGuiCond_Once);
 	
 	if (graphicsHandler->m_windowsDictionary.size() != 0) {
 		std::vector<std::string> toRemove;
 		for (auto struc : graphicsHandler->m_windowsDictionary)
 		{
-			
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
 			if (struc.second->close) {
@@ -58,16 +47,20 @@ void MCC::renderGraphics(ImGuiID dock)
 					// It also allows customization
 					std::string childName = struc.first + "Render";
 					ImGui::BeginChild(childName.c_str());
-					this->states->renderWindowHovered = ImGui::IsWindowHovered();
+					m_guiState->renderWindowHovered = ImGui::IsWindowHovered();
 					struc.second->isHovered = ImGui::IsWindowHovered();
 					ImVec2 temp = ImGui::GetIO().MousePos;
 					temp.x -= ImGui::GetWindowPos().x;
 					temp.y -= ImGui::GetWindowPos().y;
-					struc.second->mouseCoords = temp;
+					struc.second->mouseCoords[0] = temp[0];
+					struc.second->mouseCoords[1] = temp[1];
 
-					if (ImGui::GetWindowSize().x != struc.second->viewportDimentions.x || ImGui::GetWindowSize().y != struc.second->viewportDimentions.y) {
+					if (ImGui::GetWindowSize().x != struc.second->viewportDimentions[0] || ImGui::GetWindowSize().y != struc.second->viewportDimentions[1]) 
+					{
 						struc.second->resizeEvent = true;
-						struc.second->viewportDimentions = ImGui::GetWindowSize();
+						ImVec2 temp = ImGui::GetWindowSize();
+						struc.second->viewportDimentions[0] = temp[0];
+						struc.second->viewportDimentions[1] = temp[1];
 					}
 
 					// Set the active engineGL.
@@ -94,8 +87,10 @@ void MCC::renderGraphics(ImGuiID dock)
 					//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
 
 					if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
-						states->renderResizeEvent = true;
-						states->renderWindowSize = ImGui::GetWindowSize();
+						m_guiState->renderResizeEvent = true;
+						ImVec2 temp = ImGui::GetWindowSize();
+						m_guiState->renderWindowSize[0] = temp[0];
+						m_guiState->renderWindowSize[1] = temp[1];
 					}
 					pos.x = ImGui::GetWindowSize().x;
 					pos.y = ImGui::GetWindowSize().y;

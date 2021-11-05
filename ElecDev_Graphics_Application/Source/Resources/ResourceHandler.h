@@ -41,6 +41,9 @@
 #define ARIAL_SDF_MIN_FNT 243
 #define ARIAL_SDF_MIN_PNG 242	
 //-------------------------------------------------------------------------------------------------
+// ImGui Fonts. 
+#define RUDA_BOLD_TTF 238
+//-------------------------------------------------------------------------------------------------
 // Application icon.
 #define IDI_ICON1 241			// Exe icon.
 #define ICON_PNG 240			// GLFW icon.

@@ -1,14 +1,18 @@
 #pragma once
 
 /*=======================================================================================================================================*/
-/* Includes                                                                                                                              */
+/* Includes.                                                                                                                             */
 /*=======================================================================================================================================*/
 
-#include <Core/imgui.h>
-#include <string>
-#include "../stateMachine.h"
-#include <../Graphics/graphicsHandler.h>
-#include <GLFW/glfw3.h>
+#include "GUIState.h"
+#include "ImGUI/Core/imgui.h"
+
+/*=======================================================================================================================================*/
+/* Forward Declerations.                                                                                                                 */
+/*=======================================================================================================================================*/
+
+class GraphicsHandler;
+class PyInterface;
 
 /*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */
@@ -19,16 +23,20 @@ class Graphics
 public:
 
 	//Variables
-	stateMachine* states;
+	GUIState* m_guiState;
 	ImVec2 pos;
 	GraphicsHandler* graphicsHandler;
 	ImGuiID dock;
+	PyInterface* m_pyInterface;
 
 	//Constructor
-	Graphics(stateMachine* states, GraphicsHandler* graphicsHandler);
+	Graphics(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface);
 
 	//Renderer
 	void renderGraphics(ImGuiID dock);
 	void deQueueInput();
 };
 
+/*=======================================================================================================================================*/
+/* EOF.	                                                                                                                                 */
+/*=======================================================================================================================================*/

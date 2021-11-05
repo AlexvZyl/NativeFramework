@@ -6,11 +6,10 @@
 
 // To use resources.
 #include <Windows.h>
-
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 #include <Core/imgui.h>
 #include <string>
-#include "../stateMachine.h"
+#include "../GUIState.h"
 
 // Resource loading.
 #include "../Resources/ResourceHandler.h"
@@ -80,7 +79,7 @@ public:
 
 	std::string sideBarFlag;
 
-	stateMachine* states;
+	GUIState* m_guiState;
 	ImVec2 MCCPos;
 
 	ImGuiID* dock;
@@ -94,7 +93,7 @@ public:
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	Ribbons(stateMachine* states);
+	Ribbons(GUIState* guiState);
 
 	// Function that handles which engine should be active.
 	void renderRibbons(ImGuiID* dock);
