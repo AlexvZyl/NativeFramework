@@ -39,7 +39,7 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 		1
 	);
 	std::vector < VertexData > vec1 = { v1, v2 };
-	vao->writeData(vec1);
+	vao->appendDataCPU(vec1);
 	vao->updateGPU();
 	component = new Component2D();
 

@@ -123,13 +123,6 @@ FrameBufferObject::~FrameBufferObject()
 // Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height)
 {
-	//// Bind MSAA FBO and delete textures.
-	//GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
-	//GLCall(glDeleteTextures(1, &m_msaaColorTextureID));
-	//GLCall(glDeleteTextures(1, &m_msaaDepthStencilBufferID));
-	//// Bind render FBO and delete textures.
-	//GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
-	//GLCall(glDeleteTextures(1, &m_renderColorTextureID));
 	// Recreate the attachments with the new size.
 	createAttachments(width, height);
 	// Save the dimenions.

@@ -28,7 +28,6 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
     //setTheme();
  
 	m_guiState->toolsExpanded = false;
-	m_guiState->toolsMode = 0;
 	this->textureID = 0;
 
 	this->graphicsHandler = graphicsHandler;

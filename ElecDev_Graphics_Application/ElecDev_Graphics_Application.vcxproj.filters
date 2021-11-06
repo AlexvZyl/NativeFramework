@@ -874,9 +874,6 @@
     <ClInclude Include="Source\GUIState.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUI\Ribbons\stb_image.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\External\Misc\stb_image.h">
       <Filter>Source</Filter>
     </ClInclude>

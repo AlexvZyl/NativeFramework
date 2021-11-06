@@ -20,7 +20,7 @@ void Base2DEngineGL::drawLine(float position1[2], float position2[2], float colo
 	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = {v1,v2};
 	// Write to CPU side buffer.
-	m_linesVAO->writeData(vertices);
+	m_linesVAO->appendDataCPU(vertices);
 }
 
 // Draw clear triangle.
@@ -32,7 +32,7 @@ void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], f
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v1 };
 	// Write to CPU side buffer.
-	m_linesVAO->writeData(vertices);
+	m_linesVAO->appendDataCPU(vertices);
 }
 
 // Draw filled triangle.
@@ -44,7 +44,7 @@ void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], 
 	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v3 };
 	// Write to CPU side buffer.
-	m_trianglesVAO->writeData(vertices);
+	m_trianglesVAO->appendDataCPU(vertices);
 }
 
 // Draw a clear quad.
@@ -58,7 +58,7 @@ void Base2DEngineGL::drawQuadClear(float position[2], float width, float height,
 	VertexData v4(position[0]-width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v2, v3, v3, v4, v4, v1 };
 	// Write to CPU side buffer.
-	m_linesVAO->writeData(vertices);
+	m_linesVAO->appendDataCPU(vertices);
 }
 
 // Draw a filled quad.
@@ -72,7 +72,7 @@ void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height
 	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0);
 	std::vector<VertexData> vertices = { v1, v2, v3, v3, v4, v1 };
 	// Write to CPU side buffer.
-	m_trianglesVAO->writeData(vertices);
+	m_trianglesVAO->appendDataCPU(vertices);
 }
 
 // Draws a clear circle.
@@ -95,7 +95,7 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 	}
 	// Write to CPU side buffer.
-	m_linesVAO->writeData(vertices);
+	m_linesVAO->appendDataCPU(vertices);
 }
 
 // Draws a filled circle.
@@ -118,7 +118,7 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 		vertices.insert(vertices.end(), verticesTemp.begin(), verticesTemp.end());
 	}
 	// Write to CPU side buffer.
-	m_trianglesVAO->writeData(vertices);
+	m_trianglesVAO->appendDataCPU(vertices);
 }
 
 // Adds text to the VBO object.
@@ -212,7 +212,7 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 			VertexDataTextured v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0);
 			VertexDataTextured v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0);
 			std::vector<VertexDataTextured> verticesTex = { v1, v2, v3, v3, v4, v1 };
-			m_texturedTrianglesVAO->writeData(verticesTex);
+			m_texturedTrianglesVAO->appendDataCPU(verticesTex);
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f + i, 0.5f + k };

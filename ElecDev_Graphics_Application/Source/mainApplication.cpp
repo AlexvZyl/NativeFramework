@@ -30,6 +30,8 @@
 #include "PythonInterface.h"
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
+// Measure time.
+#include <chrono>
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
@@ -125,7 +127,8 @@ int main(int, char**)
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // VSync buffer size.
+    // VSync.  If set to 0 it is disabled.
+    glfwSwapInterval(0);
 
     // Load GLFW icon.
     BITMAP bitmap = loadImageFromResource(ICON_PNG);
@@ -182,7 +185,8 @@ int main(int, char**)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 
-    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+    // When viewports are enabled we tweak WindowRounding/WindowBg 
+    // so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
@@ -221,7 +225,7 @@ int main(int, char**)
     // The callbacks cannot be used with a method, so it has to call a normal function.
     graphicsHandler = new GraphicsHandler(&guiState);
 
-    // cerate python interfacing object.
+    // Create a python interfacing object.
     PyInterface pyInterface(graphicsHandler, guiHandler, &guiState);
 
     // Create GUI handler object.
@@ -239,8 +243,18 @@ int main(int, char**)
     // Set waiting for events.
     bool wait = false;
 
+    // Calculate frametime in ns.
+    double fps = 60;
+    double targetFrameTime = 1 / fps;
+    double totFrameTime = 0;
+    double currTime = 0;
+    double prevTime = 0;
+
     // Input message.
     std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
+
+    // Reset glfw time.
+    glfwSetTime(0);
 
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
@@ -248,21 +262,31 @@ int main(int, char**)
         // Poll commands from python interface.
         pyInterface.deQueueInput();
 
-        // Clear buffers for OpenGL.
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
         else { glfwPollEvents(); }        // App runs continuously.
      
-        // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
-        graphicsHandler->renderGraphics();
+        // Frametime calculations.
+        currTime = glfwGetTime();
+        totFrameTime += currTime - prevTime;
+        prevTime = currTime;
 
-        // Render ImGUI to screen.
-        guiHandler->renderGui(io, window);
+        // Render screen with fps cap.
+        if (totFrameTime > targetFrameTime) 
+        {
+            // Clear buffers for OpenGL.
+            GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-        // Swap the OpenGL buffers.
-        glfwSwapBuffers(window);
+            // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
+            graphicsHandler->renderGraphics();
+
+            // Render ImGUI to screen.
+            guiHandler->renderGui(io, window);
+
+            // Swap the OpenGL buffers.
+            glfwSwapBuffers(window);
+            totFrameTime = 0;
+        }
     }
 
     /*===================================================================================================================================*/

@@ -18,10 +18,10 @@
 /* Forward Declerations.                                                                                                                 */
 /*=======================================================================================================================================*/
 
-// Core components.
+// App components.
 class GraphicsHandler;
 class PyInterface;
-// GUI Components.
+// GUI components.
 class Ribbons;
 class Toolbar;
 class Graphics;
