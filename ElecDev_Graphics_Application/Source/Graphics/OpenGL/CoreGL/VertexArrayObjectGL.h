@@ -9,9 +9,6 @@
 #include <glad/glad.h>
 #include <glm.hpp>
 
-
-class Polygon2D;
-
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
@@ -25,6 +22,8 @@ class Polygon2D;
 struct Colour
 {
 	float R, G, B, A;
+	// Default constructor.
+	Colour() { R = 0; G = 0; B = 0; A = 1; }
 	//Creates a colour with the specified values.
 	Colour(float r, float g, float b, float a)
 	{ R = r; G = g; B = b; A = a; }
@@ -61,21 +60,6 @@ struct VertexData
 		position[0] = pos.x; position[1] = pos.y; position[2] = pos.z;
 		// Assign color.
 		color[0] = col.R; color[1] = col.G; color[2] = col.B; color[3] = col.A;
-		// Assign ID.
-		entityID[0] = eID;
-	}
-
-	VertexData(glm::vec3 pos, Colour col, unsigned int eID)
-	{
-		// Assign position.
-		position[0] = pos.x;
-		position[1] = pos.y;
-		position[2] = pos.z;
-		// Assign color.
-		color[0] = col.r;
-		color[1] = col.g;
-		color[2] = col.b;
-		color[3] = col.a;
 		// Assign ID.
 		entityID[0] = eID;
 	}
@@ -139,7 +123,7 @@ private:
 	unsigned int m_vAID;	 // VAO ID.
 	unsigned int m_vBID;	 // VBO ID.
 	GLenum m_bufferType;	 // Data type used in this VAO.		
-	GLsizei m_bufferPtr = 0; // Pointer that shows where in the buffer data need to be written.
+	GLsizei m_bufferIndex = 0; // Pointer that shows where in the buffer data need to be written.
 
 public:
 
@@ -226,9 +210,6 @@ public:
 
 	// Append data on the CPU side memory for textured vertices.
 	void appendDataCPU(Polygon2D* polygon);
-	// Assign data to the CPU side memory for untextured vertices.
-	// If the VAO is empty it creates a new one with the vertices specified.
-	void assignDataCPU(Polygon2D* polygon, unsigned int index);
 	// Assign data to the GPU side memory for textured vertices.
 	// since this funtion is going to be called in performance critical scenarios.
 	// If you use this function it will update faster, but you also lose the ability
@@ -236,7 +217,7 @@ public:
 	// Error handling is not added to this function to make it as fast as possible, so
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
-	void assignDataGPU(Polygon2D* polygon, unsigned int index);
+	void assignDataGPU(Polygon2D* polygon);
 };
 
 //=============================================================================================================================================//
