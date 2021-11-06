@@ -8,6 +8,9 @@
 #include "ErrorHandlerGL.h"
 #include <glad/glad.h>
 
+
+class Polygon2D;
+
 //=============================================================================================================================================//
 //  Data structures.																														   //
 //=============================================================================================================================================//
@@ -91,8 +94,8 @@ struct Colour
 		this->b = b;
 		this->a = a;
 	}
-	//Could add another constructors that sets a specified colour defined in a string
-	//i.e. Colour(char* colour , float a)
+	//Could add another constructor that sets a specified colour defined in a string
+	//i.e. Colour(std::string colour_name , float a)
 };
 
 // Structure that contains the untextured vertex data.
@@ -127,6 +130,21 @@ struct VertexData
 
 	//Adds vertex data from position and colour structures
 	VertexData(float3 pos, Colour col, unsigned int eID)
+	{
+		// Assign position.
+		position[0] = pos.x;
+		position[1] = pos.y;
+		position[2] = pos.z;
+		// Assign color.
+		color[0] = col.r;
+		color[1] = col.g;
+		color[2] = col.b;
+		color[3] = col.a;
+		// Assign ID.
+		entityID[0] = eID;
+	}
+
+	VertexData(glm::vec3 pos, Colour col, unsigned int eID)
 	{
 		// Assign position.
 		position[0] = pos.x;
@@ -265,6 +283,8 @@ public:
 	// Assign data to the CPU side memory for untextured vertices.
 	// If the VAO is empty it creates a new one with the vertices specified.
 	void assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index);
+
+	void appendDataCPU(Polygon2D* poly);
 	// This function deletes the data on the CPU side for when only the GPU is being updated and
 	// the CPU side data is no longer required.
 	void deleteDataCPU();

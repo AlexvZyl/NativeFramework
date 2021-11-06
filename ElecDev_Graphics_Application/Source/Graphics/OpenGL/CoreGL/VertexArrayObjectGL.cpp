@@ -3,6 +3,7 @@
 //=============================================================================================================================================//
 
 #include "VertexArrayObjectGL.h"
+#include "Polygon.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -120,6 +121,10 @@ void VertexArrayObject::assignDataCPU(std::vector<VertexDataTextured> vertices, 
 			index++;
 		}
 	}
+}
+
+void VertexArrayObject::appendDataCPU(Polygon2D* poly)
+{
 }
 
 void VertexArrayObject::updateGPU()

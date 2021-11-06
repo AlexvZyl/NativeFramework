@@ -166,6 +166,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
@@ -238,6 +240,8 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\SPDLog\async.h" />
     <ClInclude Include="Source\External\SPDLog\async_logger-inl.h" />
