@@ -100,6 +100,7 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
     <ClCompile Include="Source\PythonInterface.cpp" />
+    <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -871,9 +872,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUIState.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GUI\Ribbons\stb_image.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Misc\stb_image.h">

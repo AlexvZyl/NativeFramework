@@ -27,7 +27,21 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
-	float color[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	vao = new VertexArrayObject(GL_LINES);
+	VertexData v1(
+		0.0f, 0.0f, 0.0f,
+		1.0f, 0.0f, 0.0f, 1.0f,
+		1
+	);
+	VertexData v2(
+		1.0f, 1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f, 1.0f,
+		1
+	);
+	std::vector < VertexData > vec1 = { v1, v2 };
+	vao->appendDataCPU(vec1);
+	vao->updateGPU();
+	component = new Component2D();
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
 	

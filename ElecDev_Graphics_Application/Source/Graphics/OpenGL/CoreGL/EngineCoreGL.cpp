@@ -163,7 +163,7 @@ void EngineCoreGL::updateGPU()
 	 VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
 	 std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	 // Create background.
-	 m_backgroundVAO->writeData(vertices);
+	 m_backgroundVAO->appendDataCPU(vertices);
 	 m_backgroundVAO->updateGPU();
  }
 

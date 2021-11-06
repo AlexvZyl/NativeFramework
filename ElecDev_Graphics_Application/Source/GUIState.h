@@ -1,6 +1,12 @@
 #pragma once
 
 /*=======================================================================================================================================*/
+/* Includes.                                                                                                                             */
+/*=======================================================================================================================================*/
+
+#include "imgui.h"
+
+/*=======================================================================================================================================*/
 /* Struture.                                                                                                                             */
 /*=======================================================================================================================================*/
 
@@ -13,7 +19,9 @@ struct GUIState
 
 	// Window States.
 	bool toolsExpanded = false;
-	int toolsMode = 0; // 0 = nothing, 1 = Draw MCC, 2 = Block Diagram, 3 = Draw Circuit Bucket.
+	bool drawMCC = false;
+	bool blockDiagram = false;
+	bool circuitBucket = false;
 	bool startMainGraphics = true;
 	bool startDemoWindow = false;
 	bool showGraphicsWindow = true;
@@ -25,8 +33,8 @@ struct GUIState
 	bool userWindowHovered = false;
 
 	// Render windows information.
-	float renderWindowMouseCoordinate[2] = { 0,0 };
-	float renderWindowSize[2] = { 500,500 };
+	ImVec2 renderWindowMouseCoordinate = { 0,0 };
+	ImVec2 renderWindowSize = { 500,500 };
 };
 
 /*=======================================================================================================================================*/

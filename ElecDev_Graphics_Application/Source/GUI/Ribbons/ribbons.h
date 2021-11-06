@@ -18,7 +18,6 @@
 /* Class.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-#pragma once
 class Ribbons
 {
 public:
@@ -27,10 +26,8 @@ public:
 	//  Variables.
 	//--------------------------------------------------------------------------------------------------------------
 
-
 	bool show_app_main_menu_bar;
 	bool show_app_documents;
-
 	bool show_app_console;
 	bool show_app_log;
 	bool show_app_layout;
@@ -42,11 +39,9 @@ public:
 	bool show_app_fullscreen;
 	bool show_app_window_titles;
 	bool show_app_custom_rendering;
-
 	bool show_app_metrics;
 	bool show_app_style_editor;
 	bool show_app_about;
-
 	bool no_titlebar;
 	bool no_scrollbar;
 	bool no_menu;
@@ -59,34 +54,25 @@ public:
 	bool no_bring_to_front;
 	bool unsaved_document;
 	bool my_tool_active;
-
 	bool drawToggle;
-
     int image1_width;
     int image1_height;
     GLuint image1_texture;
     bool ret1;
-
     int image2_width;
     int image2_height;
     GLuint image2_texture;
     bool ret2;
-
     int image3_width;
     int image3_height;
     GLuint image3_texture;
     bool ret3;
-
 	std::string sideBarFlag;
-
 	GUIState* m_guiState;
 	ImVec2 MCCPos;
-
 	ImGuiID* dock;
 	ImGuiID left;
-
 	bool first[3];
-
 
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.

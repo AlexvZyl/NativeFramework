@@ -95,10 +95,6 @@ struct Colour
 	//i.e. Colour(char* colour , float a)
 };
 
-
-
-
-
 // Structure that contains the untextured vertex data.
 struct VertexData
 {
@@ -231,7 +227,7 @@ public:
 	// Data stored CPU side.  This allows the buffers to be resized dynamically as more or less memory is required.
 	// Data should not be stored and read from OpenGL (GPU side).
 	std::vector<VertexData> m_vertexDataCPU;
-	std::vector<VertexDataTextured> m_VertexDataTexturedCPU;
+	std::vector<VertexDataTextured> m_vertexDataTexturedCPU;
 	// Pointer that shows where in the buffer data need to be written.
 	GLsizei m_bufferPtr = 0;
 
@@ -244,26 +240,57 @@ public:
 	// Destructor.
 	~VertexArrayObject();
 
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
+	// ------------------ //
+	//  R E N D E R I N G //
+	// ------------------ //
 
-	// Append data on the CPU side memory for untextured vertices.
-	void writeData(std::vector<VertexData> vertices);
-	// Append data on the CPU side memory for textured vertices.
-	void writeData(std::vector<VertexDataTextured> vertices);
-	// Assign data to the CPU side memory for untextured vertices.
-	void assignData(std::vector<VertexData> vertices);
-	// Assign data to the CPU side memory for untextured vertices.
-	void assignData(std::vector<VertexDataTextured> vertices);
-	// Sends the data to the GPU.
-	void updateGPU();
 	// Draws the data in the VAO.
 	void render();
 	// Binds the VAO.
 	void bind() const;
 	// Unbinds the VAO.
 	void unbind() const;
+
+	// ----------------------- //
+	//  C P U   B U F F E R S  //
+	// ----------------------- //
+
+	// Append data on the CPU side memory for untextured vertices.
+	void appendDataCPU(std::vector<VertexData> vertices);
+	// Append data on the CPU side memory for textured vertices.
+	void appendDataCPU(std::vector<VertexDataTextured> vertices);
+	// Assign data to the CPU side memory for untextured vertices.
+	// If the VAO is empty it creates a new one with the vertices specified.
+	void assignDataCPU(std::vector<VertexData> vertices, unsigned int index);
+	// Assign data to the CPU side memory for untextured vertices.
+	// If the VAO is empty it creates a new one with the vertices specified.
+	void assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index);
+	// This function deletes the data on the CPU side for when only the GPU is being updated and
+	// the CPU side data is no longer required.
+	void deleteDataCPU();
+	// Sends the CPU data to the GPU.
+	void updateGPU();
+
+	// ----------------------- //
+	//  G P U   B U F F E R S  //
+	// ----------------------- //
+
+	// Assign data to the GPU side memory for untextured vertices.
+	// since this funtion is going to be called in performance critical scenarios.
+	// If you use this function it will update faster, but you also lose the ability
+	// to read the CPU side data.
+	// Error handling is not added to this function to make it as fast as possible, so
+	// be very careful to not lose track of sizes of data, if it has been created etc.
+	// This does not check if the array is empty and create a new one if it is empty.
+	void assignDataGPU(std::vector<VertexData> vertices, unsigned int index);
+	// Assign data to the GPU side memory for textured vertices.
+	// since this funtion is going to be called in performance critical scenarios.
+	// If you use this function it will update faster, but you also lose the ability
+	// to read the CPU side data.
+	// Error handling is not added to this function to make it as fast as possible, so
+	// be very careful to not lose track of sizes of data, if it has been created etc.
+	// This does not check if the array is empty and create a new one if it is empty.
+	void assignDataGPU(std::vector<VertexDataTextured> vertices, unsigned int index);
 };
 
 //=============================================================================================================================================//

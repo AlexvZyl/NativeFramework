@@ -15,13 +15,13 @@
 #include "GLFW/glfw3.h"
 
 /*=======================================================================================================================================*/
-/* Forward Declerations.                                                                                                                             */
+/* Forward Declerations.                                                                                                                 */
 /*=======================================================================================================================================*/
 
-// Core components.
+// App components.
 class GraphicsHandler;
 class PyInterface;
-// GUI Components.
+// GUI components.
 class Ribbons;
 class Toolbar;
 class Graphics;
@@ -72,7 +72,6 @@ public:
 	GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface);
 	// Destructor.
 	~GUIHandler();
-	void deQueueInput();
 
 	// Function that handles which engine should be active.
 	void renderGui(ImGuiIO& io, GLFWwindow* window);

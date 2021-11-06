@@ -36,7 +36,7 @@ void Base3DEngineGL::drawQuadFilled3D(float position1[3], float position2[3], fl
 		0
 	);
 	std::vector<VertexData> vertices = { v1,v2,v3,v3,v4,v1 };
-	m_trianglesVAO->writeData(vertices);
+	m_trianglesVAO->appendDataCPU(vertices);
 }
 
 void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], float position3[3], float position4[3], float depth, float color[4]) 
@@ -110,7 +110,7 @@ void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], fl
 		v3, v7, v8, v8, v4, v3,
 		v4,v8, v5, v5, v1, v4
 	};
-	m_trianglesVAO->writeData(vertices);
+	m_trianglesVAO->appendDataCPU(vertices);
 }
 
 //=============================================================================================================================================//
@@ -182,13 +182,13 @@ void Base3DEngineGL::autoCenter()
 		min[1] = m_trianglesVAO->m_vertexDataCPU[0].position[1];
 	}
 	// If triangels is empty init with textured triangles.
-	else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
+	else if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU.size())
 	{
 		// Init min/max values.
-		max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
-		max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
-		min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[0];
-		min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[0].position[1];
+		max[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[0];
+		max[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[1];
+		min[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[0];
+		min[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[0].position[1];
 	}
 
 	//----------------------------------------------------------------------
@@ -227,30 +227,30 @@ void Base3DEngineGL::autoCenter()
 	// Textured triangles.
 	//----------------------------------------------------------------------
 
-	if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size())
+	if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU.size())
 	{
 		// Find the maximum and minimum values for x and y.
-		for (int i = 0; i < m_texturedTrianglesVAO->m_VertexDataTexturedCPU.size(); i++)
+		for (int i = 0; i < m_texturedTrianglesVAO->m_vertexDataTexturedCPU.size(); i++)
 		{
 			// Check max for x.
-			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] > max[0])
+			if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0] > max[0])
 			{
-				max[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
+				max[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0];
 			}
 			// Check min for x.
-			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0] < min[0])
+			else if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0] < min[0])
 			{
-				min[0] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[0];
+				min[0] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[0];
 			}
 			// Check max for y.
-			if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] > max[1])
+			if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1] > max[1])
 			{
-				max[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
+				max[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1];
 			}
 			// Check min for y.
-			else if (m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1] < min[1])
+			else if (m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1] < min[1])
 			{
-				min[1] = m_texturedTrianglesVAO->m_VertexDataTexturedCPU[i].position[1];
+				min[1] = m_texturedTrianglesVAO->m_vertexDataTexturedCPU[i].position[1];
 			}
 		}
 	}
@@ -332,7 +332,7 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 													vb3, vb2, vt2, vt2, vt3, vb3,
 													vb4, vb3, vt3, vt3, vt4, vb4,
 													vb4, vt4, vt1, vt1, vb1, vb4 };
-				m_trianglesVAO->writeData(vertices);
+				m_trianglesVAO->appendDataCPU(vertices);
 
 				// 3D Cube bottom vertices.
 				VertexData vb1_l(			// Top left.
@@ -380,7 +380,7 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 				std::vector<VertexData> vertices_l = { vb1_l, vb2_l, vb2_l, vb3_l, vb3_l, vb4_l, vb4_l, vb1_l, vb1_l, vb3_l,
 														vt1_l, vt2_l, vt2_l, vt3_l, vt3_l, vt4_l, vt4_l, vt1_l,
 														vb4_l, vt4_l, vb3_l, vt3_l, vb2_l, vt2_l, vb1_l, vt1_l };
-				m_linesVAO->writeData(vertices_l);
+				m_linesVAO->appendDataCPU(vertices_l);
 
 
 				// Render a texture to the cubes.
@@ -414,7 +414,7 @@ void Base3DEngineGL::drawDemo(unsigned int loopCount)
 					i + j + k
 				);	
 				std::vector<VertexDataTextured> tVertices = {tv1, tv2, tv3, tv3, tv4, tv1};
-				m_texturedTrianglesVAO->writeData(tVertices);
+				m_texturedTrianglesVAO->appendDataCPU(tVertices);
 			}
 		}
 	}
