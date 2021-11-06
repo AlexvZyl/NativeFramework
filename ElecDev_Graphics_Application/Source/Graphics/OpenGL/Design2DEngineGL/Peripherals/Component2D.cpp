@@ -39,16 +39,12 @@ Component2D::Component2D()
 	edges->updateGPU();
 }
 
-Component2D::Component2D(float centreCoords[2])
+Component2D::Component2D(float centreCoords[2]):Component2D()
 {
-	Component2D();
 	moveTo(centreCoords);
-	draw();
 }
 
 Component2D::~Component2D() {
-	//delete shape;
-	//delete edges;
 }
 
 void Component2D::draw()
@@ -64,6 +60,8 @@ void Component2D::draw()
 		shapeVertices[i] = VertexData(vertices[i], shapeColour, shapeID);
 		edgeVertices[i] = VertexData(vertices[i], shapeColour, edgeID++);
 	}
+
+	//It may be faster to edit the buffers rather than recreate them each time -- This implementation prioritises memory usage over runtime
 	std::vector<VertexData> shapeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[0] };
 	std::vector<VertexData> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0] };
 	// Write to GPU side buffer.

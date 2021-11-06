@@ -20,6 +20,10 @@ private:
 	Colour shapeColour;
 	Colour edgeColour;
 
+	//title
+	std::string title;
+	float2 titlePos;
+
 	//port specifications
 	int n_ports_north = 0;
 	int n_ports_south = 0;

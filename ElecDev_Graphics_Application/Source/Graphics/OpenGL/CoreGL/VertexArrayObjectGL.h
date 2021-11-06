@@ -9,6 +9,9 @@
 #include <glad/glad.h>
 #include <glm.hpp>
 
+
+class Polygon2D;
+
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
@@ -58,6 +61,21 @@ struct VertexData
 		position[0] = pos.x; position[1] = pos.y; position[2] = pos.z;
 		// Assign color.
 		color[0] = col.R; color[1] = col.G; color[2] = col.B; color[3] = col.A;
+		// Assign ID.
+		entityID[0] = eID;
+	}
+
+	VertexData(glm::vec3 pos, Colour col, unsigned int eID)
+	{
+		// Assign position.
+		position[0] = pos.x;
+		position[1] = pos.y;
+		position[2] = pos.z;
+		// Assign color.
+		color[0] = col.r;
+		color[1] = col.g;
+		color[2] = col.b;
+		color[3] = col.a;
 		// Assign ID.
 		entityID[0] = eID;
 	}
