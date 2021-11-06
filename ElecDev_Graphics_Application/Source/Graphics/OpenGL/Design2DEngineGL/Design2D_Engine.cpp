@@ -44,6 +44,9 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 	component = new Component2D();
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
+	
+	m_components.insert(m_components.begin(), std::make_shared<Component2D>());
+	m_activeComponent = m_components[0];
 }
 
 // Destructor.
@@ -52,8 +55,8 @@ Design2DEngineGL::~Design2DEngineGL()
 	// Call base destructor.
 	Base2DEngineGL::~Base2DEngineGL();
 
-	delete vao;
-	delete component;
+	// Delete helpers.
+	m_components.empty();
 }
 
 //=============================================================================================================================================//
@@ -78,8 +81,9 @@ void Design2DEngineGL::renderLoop()
 
 	// Helpers.
 	m_basicShader->bind();
-	vao->render();
-	component->render();
+	for (int i = 0; i < m_components.size(); i++) {
+		m_components[i]->render();
+	}
 
 	// --------------- //
 	//  C L E A N U P  //

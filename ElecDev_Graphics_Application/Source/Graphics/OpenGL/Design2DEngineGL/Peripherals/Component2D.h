@@ -8,10 +8,9 @@ class Component2D
 {
 	//Private Members
 private:
-
 	//shape and edge data
-	VertexArrayObject* shape;
-	VertexArrayObject* edges;
+	std::shared_ptr<VertexArrayObject> shape;
+	std::shared_ptr<VertexArrayObject> edges;
 
 	//component shape attributes
 	float height = 0.1f;

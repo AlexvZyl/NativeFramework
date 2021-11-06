@@ -14,11 +14,11 @@ Component2D::Component2D()
 	vertices[2] = float3(centre.x + width, centre.y + height, 0.0f);
 	vertices[3] = float3(centre.x - width, centre.y + height, 0.0f);
 
-	// Create Shape VAO's.
-	shape = new VertexArrayObject(GL_TRIANGLES);
-	edges = new VertexArrayObject(GL_LINES);
+	shape = std::make_shared<VertexArrayObject>(GL_TRIANGLES);
+	edges = std::make_shared<VertexArrayObject>(GL_LINES);
 	shapeColour = Colour(1.0f, 0.0f, 0.0f, 0.5f);
 	edgeColour = Colour(1.0f, 0.0f, 0.0f, 1.0f);
+	draw();
 
 	// Set static eID for now.
 	unsigned shapeID = 1;
@@ -48,10 +48,9 @@ Component2D::Component2D(float centreCoords[2])
 	draw();
 }
 
-Component2D::~Component2D() 
-{
-	delete shape;
-	delete edges;
+Component2D::~Component2D() {
+	//delete shape;
+	//delete edges;
 }
 
 void Component2D::draw()
