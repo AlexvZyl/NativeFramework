@@ -10,7 +10,8 @@
 //=============================================================================================================================================//
 
 // Constructor.  Init with BaseEngineGL constructor.
-Base3DEngineGL::Base3DEngineGL(stateMachine* states) : EngineCoreGL(states)
+Base3DEngineGL::Base3DEngineGL(GUIState* guiState) 
+	: EngineCoreGL(guiState)
 {
 	// Starting log.
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
@@ -46,9 +47,9 @@ Base3DEngineGL::~Base3DEngineGL()
 // [MAIN LOOP] Rendering loop.
 void Base3DEngineGL::renderLoop() 
 {
-	// ------------------------------------------------------------	//
-	//  Setup.														//
-	// ------------------------------------------------------------	//
+	// ---------- //
+	//  S E T U P //
+	// ---------- //
 
 	// Enable depth test for the 3D rendering.
 	GLCall(glEnable(GL_DEPTH_TEST));
@@ -64,9 +65,9 @@ void Base3DEngineGL::renderLoop()
 	m_frameBuffer->bind();
 	m_frameBuffer->clear();
 
-	// ------------------------------------------------------------	//
-	//  Rendering.													//
-	// ------------------------------------------------------------	//
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 
 	// Draw background.
 	m_backgroundShader->bind();
@@ -86,17 +87,15 @@ void Base3DEngineGL::renderLoop()
 	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
 	m_texturedTrianglesVAO->render();
 
-	// ------------------------------------------------------------	//
-	//  Cleanup.													//
-	// ------------------------------------------------------------	//
+	// --------------- //
+	//  C L E A N U P  //
+	// --------------- //
 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
 
 	// Disable depth test since its not needed for the 2D engines.
 	GLCall(glDisable(GL_DEPTH_TEST));
-
-	// ------------------------------------------------------------	//
 }
 
 //=============================================================================================================================================//

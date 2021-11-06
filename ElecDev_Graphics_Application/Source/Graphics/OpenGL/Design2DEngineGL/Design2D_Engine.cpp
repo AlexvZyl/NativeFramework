@@ -8,13 +8,22 @@ This is where the interactive 2D design engine is implemented.
 
 // Class include.
 #include "Design2D_Engine.h"
+// General.
+#include <iostream>
+#include <External/Misc/ConsoleColor.h>
+// OpenGL core elements.
+// Resource loading.
+#include "Resources/ResourceHandler.h"
+// Window.
+#include <GLFW/glfw3.h>
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
 // Constructor.
-Design2DEngineGL::Design2DEngineGL(stateMachine* states) : Base2DEngineGL(states)
+Design2DEngineGL::Design2DEngineGL(GUIState* guiState) 
+	: Base2DEngineGL(guiState)
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
@@ -86,9 +95,6 @@ void Design2DEngineGL::resizeEvent(int width, int height)
 {
 	// Call base engine resize event.
 	Base2DEngineGL::resizeEvent(width, height);
-
-	// Now call resizing required for design engine.
-	m_mousePoint->updateProjection();
 }
 
 //=============================================================================================================================================//

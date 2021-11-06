@@ -1,12 +1,21 @@
+/*=======================================================================================================================================*/
+/* Includes.																															 */
+/*=======================================================================================================================================*/
+
 #include "userGUI.h"
 #include <Core/imgui.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
 #include <cfenv>
-
+#include "../PythonInterface.h"
+#include "Graphics/GraphicsHandler.h"
+#include <iterator>
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
+
+/*=======================================================================================================================================*/
+/* Functions.																															 */
+/*=======================================================================================================================================*/
 
 // Hash the input text to be checked against list of commands.
 constexpr size_t hash(const char* str) {
@@ -22,17 +31,16 @@ constexpr size_t hash(const char* str) {
 }
 
 // Constructor.
-userGUI::userGUI(stateMachine* states, GraphicsHandler* graphicsHandler)
-	: states(states), graphicsHandler(graphicsHandler)
+userGUI::userGUI(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
+	: m_guiState(guiState), graphicsHandler(graphicsHandler), m_pyInterface(pyInterface)
 {
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;
-
 }
 
-void userGUI::pushData(std::list<guiHolder>::iterator uiWindow) {
-
+void userGUI::pushData(std::list<guiHolder>::iterator uiWindow) 
+{
 	std::cout << "Pushing data" << std::endl;
 	std::list<element>::iterator elements = uiWindow->elements.begin();
 	std::string output;
@@ -53,14 +61,12 @@ void userGUI::pushData(std::list<guiHolder>::iterator uiWindow) {
 
 	}
 	output.append("]");
-
-	outputQueue tempQueue("ReturnUI", output);
-	states->outputQ.push(tempQueue);
-
+	OutputQueue tempQueue("ReturnUI", output);
+	m_pyInterface->outputQueue.push(tempQueue);
 }
 
-void userGUI::createGUI(std::string guiName, std::string guiPos, std::string docking, std::string parameters) {
-
+void userGUI::createGUI(std::string guiName, std::string guiPos, std::string docking, std::string parameters) 
+{
 	size_t pos = 0;
 	size_t pos_2 = 0;
 	std::string delimiter = ";";
@@ -69,7 +75,6 @@ void userGUI::createGUI(std::string guiName, std::string guiPos, std::string doc
 
 	std::string token;
 	// Add element loop
-
 
 	while ((pos = s.find(delimiter)) != std::string::npos) {
 
@@ -201,8 +206,6 @@ void userGUI::renderUI(ImGuiID* dock) {
 					}
 					case hash("SliderAngle"):
 					{
-
-
 						int range[2];
 						int count = 0;
 						for (std::list<std::string>::iterator it3 = it2->extraParams.begin(); it3 != it2->extraParams.end(); ++it3)
@@ -217,7 +220,6 @@ void userGUI::renderUI(ImGuiID* dock) {
 					}
 					case hash("ComboBox"):
 					{
-
 						static int item_current_idx = 0; // Here we store our selection data as an index.
 						int count = 0;
 						const char* combo_preview_value = it2->data.c_str();
@@ -256,27 +258,24 @@ void userGUI::renderUI(ImGuiID* dock) {
 							it2->data.clear();
 							it2->data.append("False");
 						}
-
 					}
-
-
-
 					default:
 					{
 						break;
 					}
 					}
-
 				}
 				ImGui::End();
-
 			}
-
 			++it;
 		}
-		else {
+		else 
+		{
 			guis.erase(it++);
 		}
 	}
-	
 }
+
+/*=======================================================================================================================================*/
+/* EOF.	    																															 */
+/*=======================================================================================================================================*/

@@ -12,14 +12,16 @@ and notify the user via the terminal interface.
 
 // Class include.
 #include "EngineCoreGL.h"
+#include "Resources/ResourceHandler.h"
+#include "GLFW/glfw3.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
 // Constructor.
-EngineCoreGL::EngineCoreGL(stateMachine* states)
-	:m_states(states)
+EngineCoreGL::EngineCoreGL(GUIState* guiState)
+	:m_guiState(guiState)
 {
 	// Print start message.
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Engine core starting...";
@@ -115,7 +117,7 @@ glm::vec3 EngineCoreGL::pixelCoordsToWorldCoords(float pixelCoords[2])
 glm::vec3 EngineCoreGL::pixelCoordsToCameraCoords(float pixelCoords[2])
 {
 	// Find the viewpwort dimensions.
-	float viewport[2] = { m_states->renderWindowSize.x, m_states->renderWindowSize.y };
+	float viewport[2] = { m_guiState->renderWindowSize[0], m_guiState->renderWindowSize[1]};
 	// Account for pixel offset.
 	float viewportOffset[2] = { (float)viewport[0], (float)viewport[1] };
 	// OpenGL places the (0,0) point in the top left of the screen.  Place it in the bottom left cornder.

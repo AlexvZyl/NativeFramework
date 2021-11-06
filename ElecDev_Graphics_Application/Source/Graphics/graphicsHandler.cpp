@@ -3,20 +3,20 @@ This file will control all of the graphics engines and all of the API's, as well
 This is so that the main loop that will contain both ImGUI calls and pure OpenGL calls can remain clean.
 */
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Class include.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
 
 #include "GraphicsHandler.h"
 #include "GLFW/glfw3.h"
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Constructors & setup.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Constructor & Destructor.																												   //
+//=============================================================================================================================================//
 
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(stateMachine* states)
-	: m_states(states)
+GraphicsHandler::GraphicsHandler(GUIState* guiState)
+	: m_guiState(guiState)
 {
 };
 
@@ -25,17 +25,17 @@ GraphicsHandler::~GraphicsHandler()
 {
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Functions.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Functions.																																   //
+//=============================================================================================================================================//
 
 // [LOOP FUNCTION] Function that handles which engine should be active and is placed into the OpenGL loop.
 void GraphicsHandler::renderGraphics()
 {
 	// Check for ImGUI viewport resize event.
-	if (m_states->renderResizeEvent)
+	if (m_guiState->renderResizeEvent)
 	{
-		resizeEvent((int)m_states->renderWindowSize.x, (int)m_states->renderWindowSize.y);
+		resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]);
 	}
 
 	// Check if there are windows to render.
@@ -55,9 +55,9 @@ bool GraphicsHandler::isWindowValid(std::string windowName)
 	return m_windowsDictionary.find(windowName) != m_windowsDictionary.end();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Mouse event handler.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Mouse events.																															   //
+//=============================================================================================================================================//
 
 // Handle mouse press events.
 void GraphicsHandler::mousePressEvent(int button, int action)
@@ -66,7 +66,7 @@ void GraphicsHandler::mousePressEvent(int button, int action)
 	if (m_windowsDictionary.size() && isWindowValid(m_activeWindow))
 	{
 		// Find cursos position.
-		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords.x , m_windowsDictionary[m_activeWindow]->mouseCoords.y };
+		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords[0] , m_windowsDictionary[m_activeWindow]->mouseCoords[1]};
 
 		// Check if left press.
 		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
@@ -96,7 +96,7 @@ void GraphicsHandler::mouseMoveEvent(int buttonStateLeft, int buttonStateRight)
 	if (m_windowsDictionary.size() && isWindowValid(m_activeWindow))
 	{
 		// Find cursos position.
-		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords.x , m_windowsDictionary[m_activeWindow]->mouseCoords.y };
+		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords[0] , m_windowsDictionary[m_activeWindow]->mouseCoords[1]};
 		m_windowsDictionary[m_activeWindow]->engineGL->mouseMoveEvent(mousePos, buttonStateLeft, buttonStateRight);
 	}
 }
@@ -108,14 +108,14 @@ void GraphicsHandler::mouseScrollEvent(float yOffset)
 	if (m_windowsDictionary.size() && isWindowValid(m_activeWindow)) 
 	{
 		// Find cursor position.
-		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords.x , m_windowsDictionary[m_activeWindow]->mouseCoords.y };
+		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords[0] , m_windowsDictionary[m_activeWindow]->mouseCoords[1]};
 		m_windowsDictionary[m_activeWindow]->engineGL->mouseScrollEvent(mousePos, yOffset);
 	}
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  Window event handler.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  Window events.																															   //
+//=============================================================================================================================================//
 
 // Resize event for the ImGui window.
 void GraphicsHandler::resizeEvent(int width, int height)
@@ -128,13 +128,13 @@ void GraphicsHandler::resizeEvent(int width, int height)
 		{
 			if (engine.second->resizeEvent)
 			{
-				engine.second->engineGL->resizeEvent(engine.second->viewportDimentions.x, engine.second->viewportDimentions.y);
+				engine.second->engineGL->resizeEvent(engine.second->viewportDimentions[0], engine.second->viewportDimentions[1]);
 				engine.second->resizeEvent = false;
 			}
 		}
 	}
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-//  EOF.
-//----------------------------------------------------------------------------------------------------------------------
+//=============================================================================================================================================//
+//  EOF.																																	   //
+//=============================================================================================================================================//

@@ -2,32 +2,34 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
+// Global handlers operating the app.
+#include "Handlers.h"
 // General.
 #include <stdio.h>
 #include <vector>
 #include <iostream>
 #include <string>
-#include <thread>
 // ImGUI (GUI software). 
 #include "Core/imgui.h"
 #include "Implementations/imgui_impl_glfw.h"
 #include "Implementations/imgui_impl_opengl3.h"
-#include "stateMachine.h"
+// GLAD (OpenGL loader).
+#include <glad/glad.h>
 // Resources.
 #include <Misc/stb_image.h>
 #include "Resources/ResourceHandler.h"
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
-// GUI includes.
-#include "GUI/guiHandler.h"
-// Graphics handler include.
-#include <../Graphics/GraphicsHandler.h>
+// Gui states.
+#include "GUIState.h"
+// General.
+#include <thread>
+// Handlers.
+#include "Graphics/GraphicsHandler.h"
+#include "GUI/GuiHandler.h"
+#include "PythonInterface.h"
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
-// GLAD (OpenGL loader).
-#include <glad/glad.h>
-// Python stuff.
-//#include <Python.h>
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
@@ -41,35 +43,13 @@
 #endif
 
 /*=======================================================================================================================================*/
-/* Python interface declarations.                                                                                                        */
-/*=======================================================================================================================================*/
-
-void deQueueInput(stateMachine* states);
-void readingIn(stateMachine* states);
-void deQueueOutput(stateMachine* states);
-void readingOut(stateMachine* states);
-constexpr size_t hash(const char* str);
-void procesInput(std::string inString, stateMachine* states);
-void exceptionLog(const std::exception& e);
-
-/*=======================================================================================================================================*/
-/* Variables/Globals/Defines.                                                                                                            */
-/*=======================================================================================================================================*/
-
-// Defined here, assigned in the main function where it has access to the window.
-// Used as a global variable so that the mouse event callbacks from GLFW can have
-// access to it.
-GraphicsHandler* graphicsHandler;
-GUIHandler* guiHandler;
-
-/*=======================================================================================================================================*/
 /* GLFW callbacks.                                                                                                                       */
 /*=======================================================================================================================================*/
 
 // GLFW error handler.
 static void glfw_error_callback(int error, const char* description)
 {
-    fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white,  "%d: %s\n", error, description);
+    fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
 }
 
 /*=======================================================================================================================================*/
@@ -84,7 +64,7 @@ void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 
 // Handle mouse press events from GLFW.
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
-{   
+{
     // Get button state.
     int buttonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     int buttonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
@@ -108,9 +88,9 @@ int main(int, char**)
     if (!glfwInit())
         return 1;
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // OpenGL Version select.
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    // ----------------------------- //
+    //  O P E N G L   V E R S I O N  //
+    // ----------------------------- //
 
     #if defined(IMGUI_IMPL_OPENGL_ES2)
         // GL ES 2.0 + GLSL 100.
@@ -134,9 +114,9 @@ int main(int, char**)
         //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only.
     #endif
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    /* GLFW setup.                                                                                                                       */
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    // --------------------- //
+    //  G L F W   S E T U P  //
+    // --------------------- //
 
     // Enable 16x MSAA.
     glfwWindowHint(GLFW_SAMPLES, 16);
@@ -157,9 +137,9 @@ int main(int, char**)
     // Set icon.
     glfwSetWindowIcon(window, 1, &icon);
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // Initialize OpenGL loader.
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    // --------------------------- //
+    //  O P E N G L   L O A D E R  //
+    // --------------------------- //
 
     #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
         bool err = gl3wInit() != 0;
@@ -189,21 +169,18 @@ int main(int, char**)
     // Print OpenGL version.
     std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
-    // ImGUI & OpenGL setup. 
-    /*-----------------------------------------------------------------------------------------------------------------------------------*/
+    // ----------------------------------------- //
+    //  I M G U I   &   O P E N G L   S E T U P  // 
+    // ----------------------------------------- //
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.IniFilename = NULL;
-    // Enable keyboard controls.
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+    io.IniFilename = NULL;                                    // Disable imgui ini file.
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable keyboard controls.
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-    //io.ConfigViewportsNoAutoMerge = true;
-    //io.ConfigViewportsNoTaskBarIcon = true;
 
     // Setup ImGui style.
     ImGui::StyleColorsDark();
@@ -240,48 +217,42 @@ int main(int, char**)
     GLCall(glClearColor(0.17f, 0.17f, 0.17f, 1.0f));            // Set the color to which OpenGL clears.
 
     // Create the state machine variables.
-    stateMachine* states = new stateMachine();
-    states->toolsExpanded = false;
-    states->toolsMode = 0;
+    GUIState guiState;
 
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = new GraphicsHandler(states);
+    graphicsHandler = new GraphicsHandler(&guiState);
+
+    // cerate python interfacing object.
+    PyInterface pyInterface(graphicsHandler, guiHandler, &guiState);
 
     // Create GUI handler object.
-    guiHandler = new GUIHandler(states, graphicsHandler);
+    guiHandler = new GUIHandler(&guiState, graphicsHandler, &pyInterface);
 
     /*===================================================================================================================================*/
-    /* Loop                                                                                                                              */
+    /* Render pipeline.                                                                                                                  */
     /*===================================================================================================================================*/
+
+    // Thread reading inputs from pipeline.
+    std::thread t1(&PyInterface::readingIn, &pyInterface);
+    // Thread writing to the pipeline.
+    std::thread t2(&PyInterface::readingOut, &pyInterface);
 
     // Set waiting for events.
     bool wait = false;
-    // Thread reading inputs from pipeline.
-    std::thread t1(readingIn, states);
-    //Thread writing to the pipeline
-    std::thread t2(readingOut, states);
-
-    // Test Python script.
-    //Py_SetProgramName(argv[0]);  /* optional but recommended */
-    /*Py_Initialize();
-    PyObject* obj = Py_BuildValue("s", "C:\\Enerdyne\\GitHub Repos\\ElecDev_Graphics_Application\\ElecDev_Graphics_Application\\Source\\Scripts\\PythonTest.py");
-    FILE* file = _Py_fopen_obj(obj, "r+");
-    PyRun_SimpleFile(file, "PythonTest.py");
-    Py_Finalize();*/
 
     // Input message.
     std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 
-    // [MAIN LOOP] Graphics Pipeline.
-    while (!glfwWindowShouldClose(window) && !states->globalQuit)
+    // [MAIN LOOP].
+    while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
     {
+        // Poll commands from python interface.
+        pyInterface.deQueueInput();
+
         // Clear buffers for OpenGL.
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
-        // Poll commands from python interface.
-        deQueueInput(states);
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
@@ -303,8 +274,9 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    // Clear memory.
     delete graphicsHandler;
-    delete states;
+    delete guiHandler;
 
     // Log exiting.
     std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
@@ -317,360 +289,5 @@ int main(int, char**)
 }
 
 /*=======================================================================================================================================*/
-/* Python interface.                                                                                                                     */
-/*=======================================================================================================================================*/
-
-// Hash the input text to be checked against list of commands.
-constexpr size_t hash(const char* str) {
-    const long long p = 131;
-    const long long m = 4294967291; // 2^32 - 5, largest 32 bit prime
-    long long total = 0;
-    long long current_multiplier = 1;
-    for (int i = 0; str[i] != '\0'; ++i) {
-        total = (total + current_multiplier * str[i]) % m;
-        current_multiplier = (current_multiplier * p) % m;
-    }
-    return total;
-}
-
-// Process the input from python.
-// Divided into different types and processed accordingly.
-void procesInput(std::string inString, stateMachine* states) 
-{
-    // Variables.
-    int startFunc;
-    int endFunc;
-
-    // Functions is shown between (: and :)
-    startFunc = (int)inString.find("[") + 1;
-    endFunc = (int)inString.find("]", startFunc) - 1;
-
-    // Parameters is shown between (: and :).
-    std::string command = inString.substr(startFunc, endFunc);
-    inString = inString.substr(endFunc + 2);
-
-    // Parse into types.
-    switch (hash(command.c_str()))
-    {
-        // Quit the thread.
-        case hash("Quit"):
-        {
-            states->globalQuit = true;
-            break;
-        }
-
-        // Command to be processed by the app.
-        case hash("Command"):
-        {
-            std::string function = inString.substr(1, inString.find("]") - 1);
-            inString = inString.substr(inString.find("]") + 1);
-            std::string params = inString.substr(1, inString.find("]") - 1);
-            states->inputQueueMCC.push(*(new inputQueue(function, params)));
-            break;
-        }
-
-        // Error output of the command is invalid.
-        default:
-        {
-            std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << command << "' type invalid.\n";
-            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
-            break;
-        }
-    }
-}
-
-// Threaded function that reads the messages from python.
-void readingIn(stateMachine* states) 
-{
-    std::string temp;
-    while (true) 
-    {
-        std::getline(std::cin, temp);
-        if (temp != "") 
-        {
-            std::cout << blue << "[INTERFACE] [INFO] : " << white << "Command received." << std::endl;
-            std::string subCommand = "";
-            while (true) 
-            {
-                int nextStart = temp.find("::");
-                if (nextStart == -1) 
-                {
-                    break;
-                }
-                subCommand = temp.substr(0, nextStart);
-                procesInput(subCommand, states);
-                temp = temp.substr(nextStart + 2, temp.size());   
-            }
-        }
-        temp = "";
-    }
-}
-
-void readingOut(stateMachine* states) 
-{
-    while (true) 
-    {
-        deQueueOutput(states);
-    }
-}
-
-void deQueueOutput(stateMachine* states) 
-{
-    while (states->outputQ.size() > 0) 
-    {
-        outputQueue temp = states->outputQ.front();
-        std::cout << temp.command << temp.parameters << std::endl;
-        states->outputQ.pop();
-    }
-}
-
-// Process the funcions laoded by the python thread.
-void deQueueInput(stateMachine* states) {
-
-    // Run while there are commands left to process.
-    while (states->inputQueueMCC.size() > 0) {
-
-        // Processing variables.
-        inputQueue temp = states->inputQueueMCC.front();
-        std::string mccName;
-        std::string text;
-        std::string align;
-        std::vector<float> params;
-        std::string guiName;
-        std::string guiPos;
-        std::string docking;
-        std::string parameters;
-
-        // Try the command and catch exceptions.
-        try {
-
-            // Switch between different commands.
-            switch (hash(temp.command.c_str()))
-            {
-            // Draw line.
-            case hash("DrawLine"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
-                break;
-
-            // Draw clear triangle.
-            case hash("DrawTriangleClear"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 10; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-                break;
-
-            // Draw filled triangle. 
-            case hash("DrawTriangleFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 10; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
-                break;
-
-            // Draw clear quad.
-            case hash("DrawQuadClear"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-                break;
-
-            // Draw filled quad.
-            case hash("DrawQuadFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
-                break;
-
-            // Draw clear circle.
-            case hash("DrawCircleClear"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 7; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-                break;
-
-            // Draw a filled circle.
-            case hash("DrawCircleFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 7; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
-                break;
-
-            // Draw text.
-            case hash("DrawText"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 8; i++)
-                {
-                    // Read text.
-                    if (i == 0)
-                    {
-                        text = temp.parameters.substr(0, temp.parameters.find(";"));
-                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                    }
-                    // Read tex alignment.
-                    if (i == 7)
-                    {
-                        align = temp.parameters.substr(0, temp.parameters.find(";"));
-                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                    }
-                    // Read parameters.
-                    else
-                    {
-                        params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                        temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                    }
-                }
-                graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
-                break;
-
-            // Add MCC window to draw.
-            case hash("AddWindow"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                text = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->addWindow(mccName, text);
-                break;
-
-            // Remove MCC window.
-            case hash("RemoveWindow"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->removeWindow(mccName);
-                break;
-
-            // Draw the demo.
-            case hash("DrawDemo"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
-                break;
-
-            // Center the drawing around (0,0).
-            case hash("AutoCenter"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->autoCenter(mccName);
-                break;
-
-            // Load CPU buffers to GPU.
-            case hash("UpdateDrawing"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                graphicsHandler->updateBuffers(mccName);
-                break;
-
-            case hash("addGUI"):
-                guiName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                guiPos = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                docking = temp.parameters.substr(0, temp.parameters.find(";"));
-                parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                guiHandler->userGUIP->createGUI(guiName, guiPos, docking, parameters);
-                break;
-                
-            /*===================================================================================================================================*/
-            /* 3D API.                                                                                                                           */
-            /*===================================================================================================================================*/
-
-            // Draw filled quad.
-            case hash("DrawQuadFilled3D"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 16; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawQuadFilled3D(mccName, new float[3]{ params[0], params[1], params[2] },
-                                                           new float[3]{ params[3], params[4], params[5] },
-                                                           new float[3]{ params[6], params[7], params[8] },
-                                                           new float[3]{ params[9], params[10], params[11] },
-                                                           new float[4]{params[12],params[13],params[14],params[15]});
-                break;
-
-            // Draw filled quad.
-            case hash("DrawCuboidFilled"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                for (size_t i = 0; i < 17; i++)
-                {
-                    params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
-                    temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                }
-                graphicsHandler->drawCuboidFilled(mccName, new float[3]{ params[0], params[1], params[2] },
-                    new float[3]{ params[3], params[4], params[5] },
-                    new float[3]{ params[6], params[7], params[8] },
-                    new float[3]{ params[9], params[10], params[11] },
-                    params[12],
-                    new float[4]{ params[13],params[14],params[15],params[16] });
-                break;
-
-            default:
-                std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
-                break;
-            }
-
-            std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
-
-            // Remove command from queue.
-            states->inputQueueMCC.pop();
-        }
-        // Catch error and print log.              
-        catch (const std::exception& e)
-        {
-            exceptionLog(e);
-        }
-    }
-}
-
-
-// Print the exception message to the terminal.
-void exceptionLog(const std::exception& e) 
-{
-    std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
-    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
-}
-
-/*=======================================================================================================================================*/
-/* EOF                                                                                                                                   */
+/* EOF.                                                                                                                                  */
 /*=======================================================================================================================================*/

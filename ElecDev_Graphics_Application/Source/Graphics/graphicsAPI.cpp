@@ -52,7 +52,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Set window active.
 			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Base2DEngineGL) });
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_guiState, EngineType::Base2DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
 		}
 		else if (engineType == "Design2D" || engineType == "design2D")
@@ -62,7 +62,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Set window active.
 			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Design2DEngineGL) });
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_guiState, EngineType::Design2DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
@@ -72,7 +72,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Set window active.
 			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_states, EngineType::Base3DEngineGL) });
+			m_windowsDictionary.insert({ windowName, new RenderWindowGL(m_guiState, EngineType::Base3DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
 		}
 		// Catch error.

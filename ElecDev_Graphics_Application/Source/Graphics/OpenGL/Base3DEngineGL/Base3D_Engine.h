@@ -34,7 +34,7 @@ public:
 	// ------------------------------------------------- //
 
 	// Constructor
-	Base3DEngineGL(stateMachine* states);
+	Base3DEngineGL(GUIState* guiState);
 	// Destructor.
 	~Base3DEngineGL();
 

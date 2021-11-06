@@ -12,23 +12,15 @@ as error handling for when a wrong function is called on a engine type.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-// General.
-#include <iostream>
-#include <External/Misc/ConsoleColor.h>
-// OpenGL core elements.
 #include "FrameBufferObjectGL.h"
 #include "VertexArrayObjectGL.h"
 #include "TextRendererGL.h"
 #include "ShaderHandlerGL.h"
 #include "ErrorHandlerGL.h"
-#include <glad/glad.h>
+//#include <glad/glad.h>
 #include <glm.hpp>
 // GUI states.
-#include "StateMachine.h"
-// Resource loading.
-#include "Resources/ResourceHandler.h"
-// Window.
-#include <GLFW/glfw3.h>
+#include "GUIState.h"
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -95,7 +87,7 @@ public:
 	//  S T A T E   M A C H I N E  //
 	// --------------------------- //
 
-	stateMachine* m_states;		// Contains the current state of the application as well as information
+	GUIState* m_guiState;		// Contains the current state of the application as well as information
 								// that is required from the GUI side for the Graphics side.
 
 	// ----------------- //
@@ -111,7 +103,7 @@ public:
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
-	EngineCoreGL(stateMachine* states);
+	EngineCoreGL(GUIState* guiState);
 	~EngineCoreGL();
 
 	// --------------------------------------- //

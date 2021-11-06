@@ -19,10 +19,9 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Ribbons::Ribbons(stateMachine* states) {
-
-    this->states = states;
-
+Ribbons::Ribbons(GUIState* guiState) 
+    : m_guiState(guiState)
+{
     this->show_app_main_menu_bar = false;
     this->show_app_documents = false;
 
@@ -105,7 +104,7 @@ bool Ribbons::topBar() {
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
     ImVec2 work_size = viewport->WorkSize;
     
-    this->states->toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);
+    m_guiState->toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);
 
     //ImGui::BeginDocked(ImGui::GetCurrentWindow(), p_open);
     

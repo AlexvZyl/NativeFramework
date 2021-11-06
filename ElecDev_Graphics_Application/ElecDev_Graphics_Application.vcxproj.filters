@@ -13,7 +13,7 @@
     <ClCompile Include="Source\Graphics\GraphicsHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GUI\guiHandler.cpp">
+    <ClCompile Include="Source\GUI\GuiHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp">
@@ -48,7 +48,6 @@
     </ClCompile>
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\Resources\ResourceHandler.cpp" />
-    <ClCompile Include="Source\GUI\DemoWindow\demoWindow.cpp" />
     <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
@@ -65,11 +64,42 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\MousePointGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\convert.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\depthguard.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\directives.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\emit.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\emitfromevents.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\emitter.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\emitterstate.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\emitterutils.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\exceptions.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\exp.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\memory.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\node.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\node_data.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\nodebuilder.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\nodeevents.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\null.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\ostream_wrapper.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\parse.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\parser.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\regex_yaml.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\scanner.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\scanscalar.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\scantag.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\scantoken.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\simplekey.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\singledocparser.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
+    <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
+    <ClCompile Include="Source\PythonInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -297,7 +327,7 @@
     <ClInclude Include="Source\Graphics\GraphicsHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUI\guiHandler.h">
+    <ClInclude Include="Source\GUI\GuiHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\handed_coordinate_space.hpp">
@@ -687,9 +717,6 @@
     <ClInclude Include="Source\External\glm\gtx\normalize_dot.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUI\notify.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\External\glm\gtx\number_precision.hpp">
       <Filter>Source</Filter>
     </ClInclude>
@@ -843,7 +870,7 @@
     <ClInclude Include="Source\External\glm\gtx\spline.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StateMachine.h">
+    <ClInclude Include="Source\GUIState.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI\Ribbons\stb_image.h">
@@ -1189,7 +1216,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI\Graphics\graphics.h" />
-    <ClInclude Include="Source\GUI\DemoWindow\demoWindow.h" />
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
@@ -1295,11 +1321,89 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\MousePointGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
+    <ClInclude Include="Source\Handlers.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\impl.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\iterator.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\iterator_fwd.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\memory.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\node.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\node_data.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\node_iterator.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\node_ref.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\convert.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\emit.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\impl.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\iterator.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\node.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\parse.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\ptr.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\node\type.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\collectionstack.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\directives.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\emitterstate.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\emitterutils.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\exp.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\indentation.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\nodebuilder.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\nodeevents.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\ptr_vector.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\regex_yaml.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\regeximpl.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\scanner.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\scanscalar.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\scantag.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\setting.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\singledocparser.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\stream.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\streamcharsource.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\stringsource.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\anchordict.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\graphbuilder.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\impl.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\iterator.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\iterator_fwd.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\memory.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node_data.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node_iterator.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node_ref.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\convert.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\emit.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\impl.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\iterator.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\node.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\parse.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\ptr.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\type.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\binary.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\depthguard.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitfromevents.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitter.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitterdef.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emittermanip.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitterstyle.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\eventhandler.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\exceptions.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\mark.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\noexcept.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\null.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\ostream_wrapper.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\parser.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\stlemitter.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\traits.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\yaml.h" />
+    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\dll.h" />
+    <ClInclude Include="Source\PythonInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1789,5 +1893,13 @@
     <ResourceCompile Include="Source\Resources\resource.rc">
       <Filter>Source</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Source\Resources\Fonts\Ruda\Ruda-Black.ttf" />
+    <Font Include="Source\Resources\Fonts\Ruda\Ruda-Bold.ttf" />
+    <Font Include="Source\Resources\Fonts\Ruda\Ruda-ExtraBold.ttf" />
+    <Font Include="Source\Resources\Fonts\Ruda\Ruda-Medium.ttf" />
+    <Font Include="Source\Resources\Fonts\Ruda\Ruda-Regular.ttf" />
+    <Font Include="Source\Resources\Fonts\Ruda\Ruda-SemiBold.ttf" />
   </ItemGroup>
 </Project>
