@@ -11,9 +11,7 @@ class Polygon2D
 private:
 	//VBO members
 	//Pointer to the VAO to use for the polygon
-	VertexArrayObject* m_VAO;
-	//indices for VBO access
-	int start_idx;
+	VertexArrayObject* m_VAO = NULL;
 
 	//polygon shape attributes
 	unsigned n_vertices;
