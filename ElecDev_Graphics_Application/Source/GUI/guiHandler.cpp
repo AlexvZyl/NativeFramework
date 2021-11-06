@@ -11,7 +11,7 @@
 #include "Toolbar/toolbar.h"
 #include "Graphics/graphics.h"
 #include "MCC/mcc.h"
-#include "../GUIState.h"
+#include "../GUI/GUIState.h"
 #include "UserGUI/userGUI.h"
 #include "GuiHandler.h"
 #include "Graphics/OpenGL/CoreGL/ErrorHandlerGL.h"

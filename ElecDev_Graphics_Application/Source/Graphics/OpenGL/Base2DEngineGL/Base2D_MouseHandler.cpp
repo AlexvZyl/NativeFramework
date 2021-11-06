@@ -34,7 +34,11 @@ void Base2DEngineGL::mousePressRight(float pixelCoords[2])
 
 void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
 {
-		
+	// Find current click in world coords.
+	glm::vec3 currmousePosVec = pixelCoordsToCameraCoords(pixelCoords);
+	// Save current mouse pos click.
+	m_prevMouseEventWorldVec[0] = currmousePosVec[0];
+	m_prevMouseEventWorldVec[1] = currmousePosVec[1];
 }
 
 //=============================================================================================================================================//
@@ -42,10 +46,14 @@ void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
 //=============================================================================================================================================//
 
 // Event handler for a mouse move event.
-void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
+void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
 	// Check if left mouse is pressed.
 	if (buttonStateLeft == GLFW_PRESS)
+	{
+
+	}
+	else if (buttonStateMiddle == GLFW_PRESS) 
 	{
 		// Find current mouse position in the world.
 		glm::vec3 currMousePosVec = pixelCoordsToCameraCoords(pixelCoords);
