@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include <cfenv>
-#include "GUIState.h"
+#include "GUI/GUIState.h"
 #include "PythonInterface.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS

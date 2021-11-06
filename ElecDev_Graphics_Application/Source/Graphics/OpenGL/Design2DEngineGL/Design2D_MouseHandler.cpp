@@ -34,7 +34,7 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 //=============================================================================================================================================//
 
 // Event handler for a mouse move event.
-void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight)
+void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
 	// Move the component.
 	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
@@ -43,7 +43,7 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 	m_activeComponent->draw();
 
 	// Call parent event.
-	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight);
+	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }
 
 //=============================================================================================================================================//

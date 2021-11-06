@@ -871,7 +871,7 @@
     <ClInclude Include="Source\External\glm\gtx\spline.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIState.h">
+    <ClInclude Include="Source\GUI\GUIState.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Misc\stb_image.h">
@@ -1323,7 +1323,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
-    <ClInclude Include="Source\Handlers.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\impl.h" />

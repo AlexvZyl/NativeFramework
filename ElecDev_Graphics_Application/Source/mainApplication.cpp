@@ -2,8 +2,6 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-// Global handlers operating the app.
-#include "Handlers.h"
 // General.
 #include <stdio.h>
 #include <vector>
@@ -21,7 +19,7 @@
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
 // Gui states.
-#include "GUIState.h"
+#include "GUI/GUIState.h"
 // General.
 #include <thread>
 // Handlers.
@@ -45,17 +43,25 @@
 #endif
 
 /*=======================================================================================================================================*/
+/* Handler declerations.					                                                                                              /
+/*=======================================================================================================================================*/
+
+// Defined here, assigned in the main function where it has access to the window.
+GraphicsHandler* graphicsHandler;
+GUIHandler* guiHandler;
+
+/*=======================================================================================================================================*/
 /* GLFW callbacks.                                                                                                                       */
 /*=======================================================================================================================================*/
 
 // GLFW error handler.
-static void glfw_error_callback(int error, const char* description)
+void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
 }
 
 /*=======================================================================================================================================*/
-/* Mouse events callbacks.                                                                                                               */
+/* Mouse event callbacks.                                                                                                               */
 /*=======================================================================================================================================*/
 
 // Handle mouse press events from GLFW.
@@ -70,7 +76,8 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
     // Get button state.
     int buttonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     int buttonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-    graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight);
+    int buttonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
+    graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }
 
 // Handle mouse press scroll. from GLFW.
@@ -243,10 +250,10 @@ int main(int, char**)
     // Set waiting for events.
     bool wait = false;
 
-    // Calculate frametime in ns.
+    // Apply FPS Cap.
     double fps = 60;
     double targetFrameTime = 1 / fps;
-    double totFrameTime = 0;
+    double totalFrameTime = 0;
     double currTime = 0;
     double prevTime = 0;
 
@@ -268,11 +275,11 @@ int main(int, char**)
      
         // Frametime calculations.
         currTime = glfwGetTime();
-        totFrameTime += currTime - prevTime;
+        totalFrameTime += currTime - prevTime;
         prevTime = currTime;
 
         // Render screen with fps cap.
-        if (totFrameTime > targetFrameTime) 
+        if (totalFrameTime > targetFrameTime) 
         {
             // Clear buffers for OpenGL.
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
@@ -285,27 +292,28 @@ int main(int, char**)
 
             // Swap the OpenGL buffers.
             glfwSwapBuffers(window);
-            totFrameTime = 0;
+            totalFrameTime = 0;
         }
     }
 
     /*===================================================================================================================================*/
 
-    // Cleanup.
+    // ImGUI cleanup.
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-    // Clear memory.
+
+    // Clear hanlders.
     delete graphicsHandler;
     delete guiHandler;
-
-    // Log exiting.
-    std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
 
     // Close application.
     glfwDestroyWindow(window);
     glfwTerminate();
     exit(0);
+
+    // Log termination.
+    std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
     return 0;
 }
 
