@@ -18,8 +18,8 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 	m_activeComponent = std::make_shared<Component2D>();
+	m_activeComponent->moveTo(pixelCoords);
 	m_components.insert(m_components.end(), m_activeComponent);
-
 }
 
 // Event handler for a mouse right click.
@@ -27,7 +27,6 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Call base engine event.
 	Base2DEngineGL::mousePressRight(pixelCoords);
-
 }
 
 //=============================================================================================================================================//
@@ -61,7 +60,6 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 	m_activeComponent->moveTo(screenCoords);
 	m_activeComponent->draw();
-
 }
 
 //=============================================================================================================================================//

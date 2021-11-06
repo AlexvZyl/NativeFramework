@@ -1,6 +1,5 @@
 #include "Component2D.h"
 
-
 Component2D::Component2D()
 {
 	// --------------------------- //
@@ -18,7 +17,6 @@ Component2D::Component2D()
 	edges = std::make_shared<VertexArrayObject>(GL_LINES);
 	shapeColour = Colour(1.0f, 0.0f, 0.0f, 0.5f);
 	edgeColour = Colour(1.0f, 0.0f, 0.0f, 1.0f);
-	draw();
 
 	// Set static eID for now.
 	unsigned shapeID = 1;
@@ -44,7 +42,7 @@ Component2D::Component2D()
 Component2D::Component2D(float centreCoords[2])
 {
 	Component2D();
-	centre = float2(centreCoords[0], centreCoords[1]);
+	moveTo(centreCoords);
 	draw();
 }
 
@@ -70,8 +68,10 @@ void Component2D::draw()
 	std::vector<VertexData> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0] };
 	// Write to GPU side buffer.
 
-	shape->assignDataGPU(shapeVerticesVec, 0);
-	edges->assignDataGPU(edgeVerticesVec, 0);
+	shape->assignDataCPU(shapeVerticesVec, 0);
+	shape->updateGPU();
+	edges->assignDataCPU(edgeVerticesVec, 0);
+	edges->updateGPU();
 }
 
 void Component2D::moveTo(float pointerPos[2])

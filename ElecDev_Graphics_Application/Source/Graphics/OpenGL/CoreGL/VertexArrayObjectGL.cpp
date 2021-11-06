@@ -22,12 +22,6 @@ VertexArrayObject::VertexArrayObject(GLenum type, bool textured)
 		GLCall(glGenBuffers(1, &m_vBID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 
-		//DEBUG
-		GLint temp;
-		GLCall(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &temp));
-		//END DEBUG
-
-
 		// Potition.
 		GLCall(glEnableVertexArrayAttrib(m_vAID, 0));
 		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, position)));

@@ -19,9 +19,10 @@ public:
 	//  V A R I A B L E S //
 	// ------------------ //
 
-
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
+	VertexArrayObject* vao;
+	Component2D* component;
 
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //
