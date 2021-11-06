@@ -15,76 +15,20 @@ class Polygon2D;
 //  Data structures.																														   //
 //=============================================================================================================================================//
 
-//Vector definitions
-//Note: These could be moved, they are fairly general
-
-//Basic 2D vector
-struct float2
-{
-	float x;
-	float y;
-
-	// Constructors.
-
-	//creates ininitialised float2
-	float2() 
-	{
-		x = 0;
-		y = 0;
-	}
-
-	float2(float x, float y)
-	{
-		this->x = x;
-		this->y = y;
-	}
-};
-
-//basic 3D vector
-struct float3
-{
-	float x;
-	float y;
-	float z;
-
-	// Constructors.
-
-	//creates ininitialised float3
-	float3() 
-	{
-		x = 0;
-		y = 0;
-		z = 0;
-	}
-
-	//Creates a float3 with the specified values.
-	float3(float x, float y, float z)
-	{
-		this->x = x;
-		this->y = y;
-		this->z = z;
-	}
-
-	//Creates a float3 with x and y copied from a float2 plus the specified z value.
-	float3(float2 val, float z)
-	{
-		this->x = val.x;
-		this->y = val.y;
-		this->z = z;
-	}
-};
+//Colour struct definition
 
 struct Colour
 {
-	float r;
-	float g;
-	float b;
-	float a;
+	float r = 0.f;
+	float g = 0.f;
+	float b = 0.f;
+	float a = 0.f;
 
 	// Constructors.
 
 	//creates ininitialised colour
-	Colour() {	}
+	Colour() {
+	}
 
 	//Creates a colour with the specified values.
 	Colour(float r, float g, float b, float a)
@@ -101,8 +45,8 @@ struct Colour
 // Structure that contains the untextured vertex data.
 struct VertexData
 {
-	float position[3] = { 0,0,0 };
-	float color[4] = { 0,0,0,0 };
+	glm::vec3 position = { 0,0,0 };
+	Colour color = Colour( 0,0,0,0 );
 	float raw[7] = { 0,0,0,0,0,0,0 };
 	unsigned int entityID[1] = { 0 };
 	// Constructors.
@@ -120,26 +64,10 @@ struct VertexData
 		position[1] = pos1;
 		position[2] = pos2;
 		// Assign color.
-		color[0] = col0;
-		color[1] = col1;
-		color[2] = col2;
-		color[3] = col3;
-		// Assign ID.
-		entityID[0] = eID;
-	}
-
-	//Adds vertex data from position and colour structures
-	VertexData(float3 pos, Colour col, unsigned int eID)
-	{
-		// Assign position.
-		position[0] = pos.x;
-		position[1] = pos.y;
-		position[2] = pos.z;
-		// Assign color.
-		color[0] = col.r;
-		color[1] = col.g;
-		color[2] = col.b;
-		color[3] = col.a;
+		color.r = col0;
+		color.g = col1;
+		color.b = col2;
+		color.a = col3;
 		// Assign ID.
 		entityID[0] = eID;
 	}
@@ -151,10 +79,7 @@ struct VertexData
 		position[1] = pos.y;
 		position[2] = pos.z;
 		// Assign color.
-		color[0] = col.r;
-		color[1] = col.g;
-		color[2] = col.b;
-		color[3] = col.a;
+		color = col;
 		// Assign ID.
 		entityID[0] = eID;
 	}
@@ -165,10 +90,10 @@ struct VertexData
 		raw[0] = position[0];
 		raw[1] = position[1];
 		raw[2] = position[2];
-		raw[3] = color[0];
-		raw[4] = color[1];
-		raw[5] = color[2];
-		raw[6] = color[3];
+		raw[3] = color.r;
+		raw[4] = color.g;
+		raw[5] = color.b;
+		raw[6] = color.a;
 		return (const void*)raw;
 	}
 };
