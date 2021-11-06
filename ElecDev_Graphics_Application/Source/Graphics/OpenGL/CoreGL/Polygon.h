@@ -19,7 +19,11 @@ class Polygon2D
 private:
 	//VBO members
 	//Pointer to the VAO to use for the polygon
-	VertexArrayObject* m_VAO;
+	VertexArrayObject* m_VAO = NULL;
+
+	//polygon shape attributes
+	unsigned n_vertices;
+	std::vector<VertexData> m_vertices;
 
 	//position of the polygon
 	glm::vec2 m_pos;
