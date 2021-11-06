@@ -22,8 +22,8 @@ public:
 
 	// A virtual mouse point that is used to edit the circuit.
 	MousePoint* m_mousePoint;
-	std::vector<Component2D*> m_components;
-	Component2D* m_activeComponent;
+	std::vector<std::shared_ptr<Component2D>> m_components;
+	std::shared_ptr<Component2D> m_activeComponent;
 
 	//---------------------------------------------------------------------------------------------------------------------
 	//  Constructor and Destructor.
