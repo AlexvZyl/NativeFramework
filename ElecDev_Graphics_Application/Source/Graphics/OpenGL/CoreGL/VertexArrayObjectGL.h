@@ -218,6 +218,8 @@ public:
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
 	void assignDataGPU(Polygon2D* polygon);
+	// Delete the polygon from the VAO.
+	void deleteDataCPU(Polygon2D* polygon);
 };
 
 //=============================================================================================================================================//

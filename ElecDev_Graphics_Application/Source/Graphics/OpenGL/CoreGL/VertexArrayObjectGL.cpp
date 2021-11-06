@@ -172,6 +172,11 @@ void VertexArrayObject::assignDataGPU(Polygon2D* polygon)
 	assignDataGPU(polygon->m_vertices, polygon->start_idx);
 }
 
+void VertexArrayObject::deleteDataCPU(Polygon2D* polygon) 
+{
+	//m_polygon2DCPU.at
+}
+
 //=============================================================================================================================================//
 //  Memory management.																															   //
 //=============================================================================================================================================//
