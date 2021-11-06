@@ -25,7 +25,7 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 	:m_guiState(guiState), m_pyInterface(pyInterface)
 {
     // Set the custom theme.
-    //setTheme();
+    setTheme();
  
 	m_guiState->toolsExpanded = false;
 	this->textureID = 0;
