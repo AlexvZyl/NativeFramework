@@ -2,8 +2,6 @@
 
 #include "../../CoreGL/VertexArrayObjectGL.h"
 
-
-
 class Component2D
 {
 	//Private Members
