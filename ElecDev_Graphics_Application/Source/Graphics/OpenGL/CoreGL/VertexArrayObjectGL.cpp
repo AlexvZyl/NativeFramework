@@ -21,14 +21,21 @@ VertexArrayObject::VertexArrayObject(GLenum type, bool textured)
 		// Generate a VBO for the VAO.
 		GLCall(glGenBuffers(1, &m_vBID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
+
+		//DEBUG
+		GLint temp;
+		GLCall(glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &temp));
+		//END DEBUG
+
+
 		// Potition.
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 0));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 0));
 		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, position)));
 		// Color.
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 1));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 1));
 		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, color)));
 		// Entity ID.
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 2));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 2));
 		GLCall(glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, sizeof(VertexData), (const void*)offsetof(VertexData, entityID)));
 	}
 	// Create textured array.
@@ -38,19 +45,19 @@ VertexArrayObject::VertexArrayObject(GLenum type, bool textured)
 		GLCall(glGenBuffers(1, &m_vBID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 		// Bind Vertex position attribute.
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 0));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 0));
 		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexDataTextured), (const void*)offsetof(VertexDataTextured, position)));
 		// Bind Vertex color attribute.
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 1));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 1));
 		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(VertexDataTextured), (const void*)offsetof(VertexDataTextured, color)));
 		// Bind texture position attribute
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 2));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 2));
 		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexDataTextured), (const void*)offsetof(VertexDataTextured, texturePosition)));
 		// Bind texture ID attribute
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 3));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 3));
 		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(VertexDataTextured), (const void*)offsetof(VertexDataTextured, textureID)));
 		// Entity ID.
-		GLCall(glEnableVertexArrayAttrib(m_vBID, 4));
+		GLCall(glEnableVertexArrayAttrib(m_vAID, 4));
 		GLCall(glVertexAttribIPointer(4, 1, GL_UNSIGNED_INT, sizeof(VertexDataTextured), (const void*)offsetof(VertexDataTextured, entityID)));
 	}
 }
@@ -134,6 +141,7 @@ void VertexArrayObject::assignData(std::vector<VertexDataTextured> vertices)
 {
 	m_VertexDataTexturedCPU.assign(vertices.begin(), vertices.end());
 }
+
 
 void VertexArrayObject::writeData(std::vector<VertexDataTextured> vertices)
 {

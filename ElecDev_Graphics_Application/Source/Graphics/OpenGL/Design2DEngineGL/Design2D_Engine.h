@@ -19,8 +19,10 @@ public:
 	//  V A R I A B L E S //
 	// ------------------ //
 
-	VertexArrayObject* vao;//testing
-	Component2D* component;
+	// A virtual mouse point that is used to edit the circuit.
+	MousePoint* m_mousePoint;
+	std::vector<std::shared_ptr<Component2D>> m_components;
+	std::shared_ptr<Component2D> m_activeComponent;
 
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //

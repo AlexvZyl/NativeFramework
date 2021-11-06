@@ -91,7 +91,6 @@ struct Colour
 		this->b = b;
 		this->a = a;
 	}
-
 	//Could add another constructors that sets a specified colour defined in a string
 	//i.e. Colour(char* colour , float a)
 };
@@ -107,16 +106,15 @@ struct VertexData
 	float color[4] = { 0,0,0,0 };
 	float raw[7] = { 0,0,0,0,0,0,0 };
 	unsigned int entityID[1] = { 0 };
-
 	// Constructors.
 
 	//create an unititialised VertexData structure
 	VertexData() {};
 
 	//Adds vertex data from floats
-	VertexData(float pos0, float pos1, float pos2,
-		float col0, float col1, float col2, float col3,
-		unsigned int eID)
+	VertexData(float pos0, float pos1, float pos2, 
+			   float col0, float col1, float col2, float col3, 
+			   unsigned int eID)
 	{
 		// Assign position.
 		position[0] = pos0;
