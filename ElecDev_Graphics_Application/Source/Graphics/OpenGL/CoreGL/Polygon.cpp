@@ -5,7 +5,7 @@
 #include "Polygon.h"
 
 //=============================================================================================================================================//
-//  Includes.																																   //
+//  Constructor & Destructor.																																   //
 //=============================================================================================================================================//
 
 Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
@@ -21,9 +21,14 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
 		m_vertices.insert(m_vertices.end(), VertexData(vertices[i], m_colour, eID));
 		m_vertices.insert(m_vertices.end(), VertexData(vertices[i+1], m_colour, eID));
 	}
-
 	//pass to VAO
 	m_VAO->appendDataCPU(this);
+	//m_VAO->updateGPU();
+}
+
+Polygon2D::~Polygon2D() 
+{
+
 }
 
 //=============================================================================================================================================//

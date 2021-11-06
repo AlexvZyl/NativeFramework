@@ -165,6 +165,7 @@ void VertexArrayObject::appendDataCPU(Polygon2D* polygon)
 	m_polygon2DCPU.push_back(polygon);
 	polygon->start_idx = m_bufferIndex;
 	m_bufferIndex += polygon->m_vertices.size();
+	updateGPU();
 }
 
 void VertexArrayObject::assignDataGPU(Polygon2D* polygon) 
@@ -229,12 +230,15 @@ void VertexArrayObject::updateGPU()
 	// ----------------- //
 	else if (m_polygon2DCPU.size())
 	{
+		// Calculate the size of the new VBO.
+		unsigned int vertexCount = 0;
+		for (Polygon2D* polygon : m_polygon2DCPU) { vertexCount += polygon->m_vertices.size(); }
 		// Reset the buffer pointer.
 		unsigned int index = 0;
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataCPU.size() * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
 		for (Polygon2D* polygon : m_polygon2DCPU) 
 		{

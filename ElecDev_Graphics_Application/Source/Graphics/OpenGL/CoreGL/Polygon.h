@@ -21,10 +21,6 @@ private:
 	//Pointer to the VAO to use for the polygon
 	VertexArrayObject* m_VAO = NULL;
 
-	//polygon shape attributes
-	unsigned n_vertices;
-	std::vector<VertexData> m_vertices;
-
 	//position of the polygon
 	glm::vec2 m_pos;
 
@@ -36,6 +32,8 @@ private:
 public:
 	//indices for VBO access
 	unsigned int start_idx;
+
+
 
 	//polygon shape attributes
 	unsigned n_vertices;
