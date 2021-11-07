@@ -1,24 +1,30 @@
 #pragma once
 
-#include "../../CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Polygon.h"
 
 class Component2D
 {
 	//Private Members
 private:
 	//shape and edge data
-	std::shared_ptr<VertexArrayObject> shape;
+	std::shared_ptr<VertexArrayObject> shapeVAO;
 	std::shared_ptr<VertexArrayObject> edges;
+	Polygon2D shape;
 
 	//component shape attributes
 	float height = 0.1f;
 	float width = 0.1f;
-	float3 vertices[4];
-	float2 centre;
+	std::vector<glm::vec3> vertices;
+	glm::vec2 centre;
 
 	//colour attributes
 	Colour shapeColour;
 	Colour edgeColour;
+
+	//title
+	std::string title;
+	glm::vec2 titlePos;
 
 	//port specifications
 	int n_ports_north = 0;

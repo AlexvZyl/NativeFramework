@@ -2,6 +2,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+#include "Polygon.h"
 #include "VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
@@ -73,7 +74,7 @@ void VertexArrayObject::render()
 	// Bind the VAO.
 	GLCall(glBindVertexArray(m_vAID));
 	// Draw call.
-	GLCall(glDrawArrays(m_bufferType, 0, m_bufferPtr));
+	GLCall(glDrawArrays(m_bufferType, 0, m_bufferIndex));
 }
 
 void VertexArrayObject::bind() const { GLCall(glBindVertexArray(m_vAID)); }
@@ -81,17 +82,12 @@ void VertexArrayObject::bind() const { GLCall(glBindVertexArray(m_vAID)); }
 void VertexArrayObject::unbind() const { GLCall(glBindVertexArray(0)); }
 
 //=============================================================================================================================================//
-//  CPU Buffers.																															   //
+//  Vertex Data Untextured.  																												   //
 //=============================================================================================================================================//
 
 void VertexArrayObject::appendDataCPU(std::vector<VertexData> vertices)
 {
 	m_vertexDataCPU.insert(m_vertexDataCPU.end(), vertices.begin(), vertices.end());
-}
-
-void VertexArrayObject::appendDataCPU(std::vector<VertexDataTextured> vertices)
-{
-	m_vertexDataTexturedCPU.insert(m_vertexDataTexturedCPU.end(), vertices.begin(), vertices.end());
 }
 
 void VertexArrayObject::assignDataCPU(std::vector<VertexData> vertices, unsigned int index)
@@ -108,75 +104,6 @@ void VertexArrayObject::assignDataCPU(std::vector<VertexData> vertices, unsigned
 	}
 }
 
-void VertexArrayObject::assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index)
-{
-	// Create the VAO if it is empty.
-	if (!m_vertexDataTexturedCPU.size()) { appendDataCPU(vertices); }
-	else 
-	{
-		for (VertexDataTextured& vertex : vertices)
-		{
-			m_vertexDataTexturedCPU.at(index) = vertex;
-			index++;
-		}
-	}
-}
-
-void VertexArrayObject::updateGPU()
-{
-	// A VAO can only contain one of the vertex data types.
-	// --------------------------------------- //
-	//  U N T E X T U R E D   V E R T I C E S  //
-	// --------------------------------------- //
-	if (m_vertexDataCPU.size())
-	{
-		// Reset the buffer pointer.
-		m_bufferPtr = 0;
-		// Bind VBO.
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
-		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataCPU.size() * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
-		// Populate with vertex data.
-		for (VertexData& vertex : m_vertexDataCPU)
-		{
-			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, m_bufferPtr * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, m_bufferPtr * sizeof(vertex) + offsetof(VertexData, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
-			m_bufferPtr += 1;
-		}
-	}
-	// ----------------------------------- //
-	//  T E X T U R E D   V E R T I C E S  //
-	// ----------------------------------- //
-	else if (m_vertexDataTexturedCPU.size())
-	{
-		// Reset the buffer pointer.
-		m_bufferPtr = 0;
-		// Bind VBO
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
-		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataTexturedCPU.size() * sizeof(VertexDataTextured), NULL, GL_DYNAMIC_DRAW));
-		// Populate with vertex data.
-		for (VertexDataTextured& vertex : m_vertexDataTexturedCPU)
-		{
-			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, m_bufferPtr * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, m_bufferPtr * sizeof(vertex) + offsetof(VertexDataTextured, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
-			m_bufferPtr += 1;
-		}
-	}
-}
-
-void VertexArrayObject::deleteDataCPU()
-{
-	if (m_vertexDataCPU.size()) { m_vertexDataCPU.clear(); m_vertexDataCPU.shrink_to_fit(); }
-	if (m_vertexDataTexturedCPU.size()) { m_vertexDataTexturedCPU.clear(); m_vertexDataTexturedCPU.shrink_to_fit(); }
-}
-
-//=============================================================================================================================================//
-//  GPU Buffers.																															   //
-//=============================================================================================================================================//
-
 void VertexArrayObject::assignDataGPU(std::vector<VertexData> vertices, unsigned int index)
 {
 	// Bind VBO.
@@ -188,6 +115,29 @@ void VertexArrayObject::assignDataGPU(std::vector<VertexData> vertices, unsigned
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexData, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
 		index += 1;
+	}
+}
+
+//=============================================================================================================================================//
+//  Vertex Data Textured.																													   //
+//=============================================================================================================================================//
+
+void VertexArrayObject::appendDataCPU(std::vector<VertexDataTextured> vertices)
+{
+	m_vertexDataTexturedCPU.insert(m_vertexDataTexturedCPU.end(), vertices.begin(), vertices.end());
+}
+
+void VertexArrayObject::assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index)
+{
+	// Create the VAO if it is empty.
+	if (!m_vertexDataTexturedCPU.size()) { appendDataCPU(vertices); }
+	else 
+	{
+		for (VertexDataTextured& vertex : vertices)
+		{
+			m_vertexDataTexturedCPU.at(index) = vertex;
+			index++;
+		}
 	}
 }
 
@@ -203,6 +153,121 @@ void VertexArrayObject::assignDataGPU(std::vector<VertexDataTextured> vertices, 
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexDataTextured, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
 		index += 1;
 	}
+}
+
+//=============================================================================================================================================//
+//  Polygons.																																   //
+//=============================================================================================================================================//
+
+void VertexArrayObject::appendDataCPU(Polygon2D* polygon) 
+{
+	// Add the polygon to the vector.
+	m_polygon2DCPU.push_back(polygon);
+	polygon->start_idx = m_bufferIndex;
+	m_bufferIndex += polygon->m_vertices.size();
+}
+
+void VertexArrayObject::assignDataGPU(Polygon2D* polygon) 
+{
+	//assignDataGPU(polygon->m_vertices, polygon->start_idx);
+	unsigned index = polygon->start_idx;
+
+	// Bind VBO.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
+	// Populate with vertex data.
+	for (VertexData& vertex : polygon->m_vertices)
+	{
+		// Write the data to the buffer.
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexData, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
+		index += 1;
+	}
+}
+
+void VertexArrayObject::deleteDataCPU(Polygon2D* polygon) 
+{
+	//m_polygon2DCPU.at
+}
+
+//=============================================================================================================================================//
+//  Memory management.																															   //
+//=============================================================================================================================================//
+
+void VertexArrayObject::updateGPU()
+{
+	// A VAO can only contain one of the vertex data types.
+	// --------------------------------------- //
+	//  U N T E X T U R E D   V E R T I C E S  //
+	// --------------------------------------- //
+	if (m_vertexDataCPU.size())
+	{
+		// Reset the buffer pointer.
+		unsigned int index = 0;
+		// Bind VBO.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
+		// Define buffer size.
+		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataCPU.size() * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
+		// Populate with vertex data.
+		for (VertexData& vertex : m_vertexDataCPU)
+		{
+			// Write the data to the buffer.
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexData, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
+			index += 1;
+		}
+	}
+	// ----------------------------------- //
+	//  T E X T U R E D   V E R T I C E S  //
+	// ----------------------------------- //
+	else if (m_vertexDataTexturedCPU.size())
+	{
+		// Reset the buffer pointer.
+		unsigned int index = 0;
+		// Bind VBO
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
+		// Define buffer size.
+		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataTexturedCPU.size() * sizeof(VertexDataTextured), NULL, GL_DYNAMIC_DRAW));
+		// Populate with vertex data.
+		for (VertexDataTextured& vertex : m_vertexDataTexturedCPU)
+		{
+			// Write the data to the buffer.
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexDataTextured, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
+			index += 1;
+		}
+	}
+	// ----------------- //
+	//  P O L Y G O N S  //
+	// ----------------- //
+	else if (m_polygon2DCPU.size())
+	{
+		// Calculate the size of the new VBO.
+		unsigned int vertexCount = 0;
+		for (Polygon2D* polygon : m_polygon2DCPU) { vertexCount += polygon->m_vertices.size(); }
+		// Reset the buffer pointer.
+		unsigned int index = 0;
+		// Bind VBO.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
+		// Define buffer size.
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
+		// Populate with vertex data.
+		for (Polygon2D* polygon : m_polygon2DCPU) 
+		{
+			for (VertexData& vertex : polygon->m_vertices)
+			{
+				// Write the data to the buffer.
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexData, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
+				index += 1;
+			}
+		}
+	}
+}
+
+void VertexArrayObject::wipeCPU()
+{
+	if (m_vertexDataCPU.size()) { m_vertexDataCPU.clear(); m_vertexDataCPU.shrink_to_fit(); }
+	if (m_vertexDataTexturedCPU.size()) { m_vertexDataTexturedCPU.clear(); m_vertexDataTexturedCPU.shrink_to_fit(); }
 }
 
 //=============================================================================================================================================//

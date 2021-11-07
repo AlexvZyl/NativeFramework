@@ -17,8 +17,8 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 {
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
-	m_activeComponent = std::make_shared<Component2D>();
-	m_activeComponent->moveTo(pixelCoords);
+
+	m_activeComponent = std::make_shared<Component2D>(pixelCoords);
 	m_components.insert(m_components.end(), m_activeComponent);
 }
 

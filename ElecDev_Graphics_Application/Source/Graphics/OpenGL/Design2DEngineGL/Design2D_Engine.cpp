@@ -27,21 +27,23 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
-	vao = new VertexArrayObject(GL_LINES);
-	VertexData v1(
-		0.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f, 1.0f,
-		1
-	);
-	VertexData v2(
-		1.0f, 1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f, 1.0f,
-		1
-	);
-	std::vector < VertexData > vec1 = { v1, v2 };
-	vao->appendDataCPU(vec1);
-	vao->updateGPU();
-	component = new Component2D();
+
+	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
+	glm::vec3 v2(0.5f, 0.5f, 0.0f);
+	glm::vec3 v3(0.5f, -0.5f, 0.0f);
+	glm::vec3 v4(-0.5f, -0.5f, 0.0f);
+	std::vector<glm::vec3> vertices = { v1, v2, v3, v4 };
+	polygon = new Polygon2D(vertices, m_trianglesVAO);
+	
+
+	glm::vec3 v11(-0.5f, -0.5f, 0.0f);
+	glm::vec3 v21(0.5f, -0.5f, 0.0f);
+	glm::vec3 v31(0.5f, 0.5f, 0.0f);
+	glm::vec3 v41(-0.5f, 0.5f, 0.0f);
+	std::vector<glm::vec3> vertices1 = { v11, v21, v31, v41 };
+	polygon1 = new Polygon2D(vertices1, m_trianglesVAO);
+	polygon1->setColour(Colour(0.f, 0.f, 1.f, 0.5f));
+	polygon1->update();
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
 	
@@ -57,6 +59,8 @@ Design2DEngineGL::~Design2DEngineGL()
 
 	// Delete helpers.
 	m_components.empty();
+
+	//delete polygon;
 }
 
 //=============================================================================================================================================//

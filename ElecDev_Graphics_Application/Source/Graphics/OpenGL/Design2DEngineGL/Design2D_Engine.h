@@ -7,6 +7,8 @@
 #include "../Base2DEngineGL/Base2D_Engine.h"
 #include "Peripherals/Component2D.h"
 
+#include "CoreGL/Polygon.h"
+
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
@@ -21,8 +23,8 @@ public:
 
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
-	VertexArrayObject* vao;
-	Component2D* component;
+	Polygon2D* polygon;
+	Polygon2D* polygon1;
 
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //
