@@ -165,7 +165,6 @@ void VertexArrayObject::appendDataCPU(Polygon2D* polygon)
 	m_polygon2DCPU.push_back(polygon);
 	polygon->start_idx = m_bufferIndex;
 	m_bufferIndex += polygon->m_vertices.size();
-	updateGPU();
 }
 
 void VertexArrayObject::assignDataGPU(Polygon2D* polygon) 
@@ -175,7 +174,7 @@ void VertexArrayObject::assignDataGPU(Polygon2D* polygon)
 
 void VertexArrayObject::deleteDataCPU(Polygon2D* polygon) 
 {
-	//m_polygon2DCPU.at
+
 }
 
 //=============================================================================================================================================//

@@ -6,7 +6,7 @@
 
 #include <vector>
 #include <glm.hpp>
-#include "VertexArrayObjectGL.h"
+#include "../VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
 //  Class.																																	   //

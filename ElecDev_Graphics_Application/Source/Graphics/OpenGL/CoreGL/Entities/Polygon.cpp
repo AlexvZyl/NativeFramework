@@ -64,7 +64,7 @@ void Polygon2D::setColour(Colour col)
 
 }
 
-void Polygon2D::setEID(eID)
+void Polygon2D::setEID(unsigned int eID)
 {
 	m_eID = eID;
 }
