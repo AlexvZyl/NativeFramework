@@ -1,14 +1,16 @@
 #pragma once
 
-#include "../../CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Polygon.h"
 
 class Component2D
 {
 	//Private Members
 private:
 	//shape and edge data
-	std::shared_ptr<VertexArrayObject> shape;
+	std::shared_ptr<VertexArrayObject> shapeVAO;
 	std::shared_ptr<VertexArrayObject> edges;
+	Polygon2D shape;
 
 	//component shape attributes
 	float height = 0.1f;

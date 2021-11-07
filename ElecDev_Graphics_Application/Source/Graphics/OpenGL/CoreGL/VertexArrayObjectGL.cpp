@@ -165,12 +165,23 @@ void VertexArrayObject::appendDataCPU(Polygon2D* polygon)
 	m_polygon2DCPU.push_back(polygon);
 	polygon->start_idx = m_bufferIndex;
 	m_bufferIndex += polygon->m_vertices.size();
-	updateGPU();
 }
 
 void VertexArrayObject::assignDataGPU(Polygon2D* polygon) 
 {
-	assignDataGPU(polygon->m_vertices, polygon->start_idx);
+	//assignDataGPU(polygon->m_vertices, polygon->start_idx);
+	unsigned index = polygon->start_idx;
+
+	// Bind VBO.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
+	// Populate with vertex data.
+	for (VertexData& vertex : polygon->m_vertices)
+	{
+		// Write the data to the buffer.
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex) + offsetof(VertexData, entityID), sizeof(vertex.entityID), (const GLvoid*)vertex.entityID));
+		index += 1;
+	}
 }
 
 void VertexArrayObject::deleteDataCPU(Polygon2D* polygon) 

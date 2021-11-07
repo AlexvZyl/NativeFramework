@@ -46,12 +46,12 @@ struct VertexData
 			   unsigned int eID)
 	{
 		// Assign position.
-		position[0] = pos0; position[1] = pos1; position[2] = pos2;
+		position.x = pos0; position.y = pos1; position.z = pos2;
 		// Assign color.
-		color.r = col0;
-		color.g = col1;
-		color.b = col2;
-		color.a = col3;
+		color.R = col0;
+		color.G = col1;
+		color.B = col2;
+		color.A = col3;
 		// Assign ID.
 		entityID[0] = eID;
 	}
@@ -60,7 +60,7 @@ struct VertexData
 	VertexData(glm::vec3 pos, Colour col, unsigned int eID)
 	{
 		// Assign position.
-		position[0] = pos.x; position[1] = pos.y; position[2] = pos.z;
+		position = pos;
 		// Assign color.
 		color = col;
 		// Assign ID.
@@ -70,13 +70,13 @@ struct VertexData
 	// Return a pointer to the raw data so that OpenGL can write it to the GPU.
 	const void* rawData()
 	{
-		raw[0] = position[0];
-		raw[1] = position[1];
-		raw[2] = position[2];
-		raw[3] = color.r;
-		raw[4] = color.g;
-		raw[5] = color.b;
-		raw[6] = color.a;
+		raw[0] = position.x;
+		raw[1] = position.y;
+		raw[2] = position.z;
+		raw[3] = color.R;
+		raw[4] = color.G;
+		raw[5] = color.B;
+		raw[6] = color.A;
 		return (const void*)raw;
 	}
 };
