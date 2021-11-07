@@ -11,6 +11,7 @@
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
+class VertexArrayObject;
 struct VertexDataTextured;
 struct VertexData;
 
@@ -29,14 +30,7 @@ public:
 	std::vector<VertexData> m_vertexData;					// The untextured vertex data used for the entity.
 	std::vector<VertexDataTextured> m_vertexDataTextured;	// The textured vertex data used for the entity.
 	unsigned int m_bufferStartIndex;						// The start position of the entity in the VAO.
-
-	// ------------------- //
-	//  F U N C T I O N S  //
-	// ------------------- //
-
-	virtual void translate(glm::vec3 translation);
-	virtual void rotate(glm::vec3 rotation);
-	virtual void scale(glm::vec3 scaling);
+	VertexArrayObject* m_VAO = NULL;						// Pointer to the VAO that the entity is drawn to.
 };
 
 //=============================================================================================================================================//

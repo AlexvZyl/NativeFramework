@@ -156,7 +156,7 @@ void VertexArrayObject::assignDataGPU(std::vector<VertexDataTextured> vertices, 
 }
 
 //=============================================================================================================================================//
-//  Entity.																																   //
+//  Entity.																																	   //
 //=============================================================================================================================================//
 
 void VertexArrayObject::appendDataCPU(Entity* entity)
@@ -188,7 +188,7 @@ void VertexArrayObject::deleteDataCPU(Entity* Entity)
 }
 
 //=============================================================================================================================================//
-//  Memory management.																															   //
+//  Memory management.																														   //
 //=============================================================================================================================================//
 
 void VertexArrayObject::updateGPU()
@@ -235,7 +235,7 @@ void VertexArrayObject::updateGPU()
 		}
 	}
 	// ----------------- //
-	//  P O L Y G O N S  //
+	//  E N T I T I E S  //
 	// ----------------- //
 	else if (m_entityCPU.size())
 	{
@@ -266,6 +266,7 @@ void VertexArrayObject::wipeCPU()
 {
 	if (m_vertexDataCPU.size()) { m_vertexDataCPU.clear(); m_vertexDataCPU.shrink_to_fit(); }
 	if (m_vertexDataTexturedCPU.size()) { m_vertexDataTexturedCPU.clear(); m_vertexDataTexturedCPU.shrink_to_fit(); }
+	if (m_entityCPU.size()) { m_entityCPU.clear(); m_entityCPU.shrink_to_fit(); }
 }
 
 //=============================================================================================================================================//

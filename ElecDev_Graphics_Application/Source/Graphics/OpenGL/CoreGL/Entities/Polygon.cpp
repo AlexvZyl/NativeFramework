@@ -17,12 +17,12 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
 	m_VAO = VAO;
 	// Populate VertexData structures.
 	for (int i = 1; i < n_vertices-1; i++) {
-		m_vertices.insert(m_vertices.end(), VertexData(vertices[0], m_colour, m_eID));
-		m_vertices.insert(m_vertices.end(), VertexData(vertices[i], m_colour, m_eID));
-		m_vertices.insert(m_vertices.end(), VertexData(vertices[i+1], m_colour, m_eID));
+		m_vertexData.insert(m_vertexData.end(), VertexData(vertices[0], m_colour, m_eID));
+		m_vertexData.insert(m_vertexData.end(), VertexData(vertices[i], m_colour, m_eID));
+		m_vertexData.insert(m_vertexData.end(), VertexData(vertices[i+1], m_colour, m_eID));
 	}
 	//pass to VAO
-	n_vertices = m_vertices.size();
+	n_vertices = m_vertexData.size();
 	m_VAO->appendDataCPU(this);
 	m_VAO->updateGPU();
 }
@@ -40,7 +40,7 @@ void Polygon2D::update()
 void Polygon2D::translate(glm::vec2 transVec)
 {
 	for (int i = 0; i < n_vertices; i++) {
-		m_vertices[i].position += glm::vec3(transVec, 0);
+		m_vertexData[i].position += glm::vec3(transVec, 0);
 	}
 	m_pos += transVec;
 	m_VAO->assignDataGPU(this);
@@ -59,7 +59,7 @@ void Polygon2D::setColour(Colour col)
 {
 	m_colour = col;
 	for (int i = 0; i < n_vertices; i++) {
-		m_vertices[i].color = m_colour;
+		m_vertexData[i].color = m_colour;
 	}
 
 }
@@ -68,7 +68,7 @@ void Polygon2D::setEID(unsigned eID)
 {
 	m_eID = eID;
 	for (int i = 0; i < n_vertices; i++) {
-		m_vertices[i].entityID[0] = m_eID;
+		m_vertexData[i].entityID[0] = m_eID;
 	}
 }
 
