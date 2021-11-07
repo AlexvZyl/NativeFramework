@@ -24,6 +24,7 @@ public:
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
 	Polygon2D* polygon;
+	Polygon2D* polygon1;
 
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //

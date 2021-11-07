@@ -68,7 +68,7 @@ void Polygon2D::setEID(unsigned eID)
 {
 	m_eID = eID;
 	for (int i = 0; i < n_vertices; i++) {
-		m_vertices[i].entityID[1] = m_eID;
+		m_vertices[i].entityID[0] = m_eID;
 	}
 }
 
