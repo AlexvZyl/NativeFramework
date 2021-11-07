@@ -49,7 +49,7 @@ void Base3DEngineGL::mousePressMiddle(float pixelCoords[2])
 //  Mouse movement.																															   //
 //=============================================================================================================================================//
 
-void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight) 
+void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {	
 	// Implement rotation.
 	if (buttonStateLeft == GLFW_PRESS) 
@@ -67,7 +67,7 @@ void Base3DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 		m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
 	}
 	// Implement panning.
-	if (buttonStateRight == GLFW_PRESS)
+	if (buttonStateMiddle == GLFW_PRESS)
 	{	
 		// Calculate the change in mouse movement.
 		float mouseMovementWorld[2] = { (pixelCoords[0] - m_prevMouseEventPixelCoords[0]), (pixelCoords[1] - m_prevMouseEventPixelCoords[1]) };

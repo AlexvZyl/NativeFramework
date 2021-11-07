@@ -1,8 +1,16 @@
 #pragma once
+
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
+
 #include <vector>
 #include <glm.hpp>
 #include "VertexArrayObjectGL.h"
 
+//=============================================================================================================================================//
+//  Class.																																	   //
+//=============================================================================================================================================//
 
 class Polygon2D
 {
@@ -13,10 +21,6 @@ private:
 	//Pointer to the VAO to use for the polygon
 	VertexArrayObject* m_VAO = NULL;
 
-	//polygon shape attributes
-	unsigned n_vertices;
-	std::vector<VertexData> m_vertices;
-
 	//position of the polygon
 	glm::vec2 m_pos;
 
@@ -26,6 +30,14 @@ private:
 
 	//Public Members
 public:
+	//indices for VBO access
+	unsigned int start_idx;
+
+
+
+	//polygon shape attributes
+	unsigned n_vertices;
+	std::vector<VertexData> m_vertices;
 
 	//Constructors
 
@@ -35,7 +47,6 @@ public:
 
 	//Adds a polygon with the given vertices centred at (0,0) to a VBO
 	Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO);
-
 
 	//Remove a polygon from the VBO and deconstruct
 	~Polygon2D();
@@ -59,3 +70,6 @@ public:
 	void setEID(unsigned eID);
 };
 
+//=============================================================================================================================================//
+//  EOF.																																   //
+//=============================================================================================================================================//

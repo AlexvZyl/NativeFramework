@@ -13,8 +13,8 @@ private:
 	//component shape attributes
 	float height = 0.1f;
 	float width = 0.1f;
-	float3 vertices[4];
-	float2 centre;
+	std::vector<glm::vec3> vertices;
+	glm::vec2 centre;
 
 	//colour attributes
 	Colour shapeColour;
@@ -22,7 +22,7 @@ private:
 
 	//title
 	std::string title;
-	float2 titlePos;
+	glm::vec2 titlePos;
 
 	//port specifications
 	int n_ports_north = 0;

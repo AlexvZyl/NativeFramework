@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
@@ -210,7 +211,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
@@ -241,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\SPDLog\async.h" />
@@ -421,7 +422,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
@@ -429,7 +429,6 @@
     <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\PythonInterface.h" />
     <ClInclude Include="Source\Logging\logHandler.h" />
-    <ClInclude Include="Source\Handlers.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
@@ -799,7 +798,7 @@
     <ClInclude Include="Source\GUI\toolbar.h" />
     <ClInclude Include="Source\GUI\Ribbons\ribbons.h" />
     <ClInclude Include="Source\GUI\Toolbar\toolbar.h" />
-    <ClInclude Include="Source\GUIState.h" />
+    <ClInclude Include="Source\GUI\GUIState.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
   </ItemGroup>
   <ItemGroup>

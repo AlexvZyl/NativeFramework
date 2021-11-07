@@ -7,11 +7,11 @@ Component2D::Component2D()
 	// --------------------------- //
 
 	// Create vertices.
-	centre = float2(0.0f, 0.0f);
-	vertices[0] = float3(centre.x - width, centre.y - height, 0.0f);
-	vertices[1] = float3(centre.x + width, centre.y - height, 0.0f);
-	vertices[2] = float3(centre.x + width, centre.y + height, 0.0f);
-	vertices[3] = float3(centre.x - width, centre.y + height, 0.0f);
+	centre = glm::vec2(0.0f, 0.0f);
+	vertices[0] = glm::vec3(centre.x - width, centre.y - height, 0.0f);
+	vertices[1] = glm::vec3(centre.x + width, centre.y - height, 0.0f);
+	vertices[2] = glm::vec3(centre.x + width, centre.y + height, 0.0f);
+	vertices[3] = glm::vec3(centre.x - width, centre.y + height, 0.0f);
 
 	shape = std::make_shared<VertexArrayObject>(GL_TRIANGLES);
 	edges = std::make_shared<VertexArrayObject>(GL_LINES);
@@ -74,11 +74,11 @@ void Component2D::draw()
 
 void Component2D::moveTo(float pointerPos[2])
 {
-	centre = float2(pointerPos[0], pointerPos[1]);
-	vertices[0] = float3(centre.x - width, centre.y - height, 0.0f);
-	vertices[1] = float3(centre.x + width, centre.y - height, 0.0f);
-	vertices[2] = float3(centre.x + width, centre.y + height, 0.0f);
-	vertices[3] = float3(centre.x - width, centre.y + height, 0.0f);
+	centre = glm::vec2(pointerPos[0], pointerPos[1]);
+	vertices[0] = glm::vec3(centre.x - width, centre.y - height, 0.0f);
+	vertices[1] = glm::vec3(centre.x + width, centre.y - height, 0.0f);
+	vertices[2] = glm::vec3(centre.x + width, centre.y + height, 0.0f);
+	vertices[3] = glm::vec3(centre.x - width, centre.y + height, 0.0f);
 	draw();
 }
 

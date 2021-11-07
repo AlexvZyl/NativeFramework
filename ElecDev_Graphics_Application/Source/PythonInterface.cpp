@@ -5,7 +5,7 @@
 #include "PythonInterface.h" 
 #include <stdio.h>
 #include <External/Misc/ConsoleColor.h>
-#include "GUIState.h"
+#include "GUI/GUIState.h"
 #include "Graphics/GraphicsHandler.h"
 #include "GUI/GuiHandler.h"
 #include "GUI/UserGUI/userGUI.h"

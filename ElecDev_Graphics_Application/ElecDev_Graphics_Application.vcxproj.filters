@@ -67,7 +67,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
@@ -101,6 +100,9 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
     <ClCompile Include="Source\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -871,7 +873,7 @@
     <ClInclude Include="Source\External\glm\gtx\spline.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUIState.h">
+    <ClInclude Include="Source\GUI\GUIState.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Misc\stb_image.h">
@@ -1322,8 +1324,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
-    <ClInclude Include="Source\Handlers.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\impl.h" />
@@ -1402,6 +1402,9 @@
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\yaml.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\dll.h" />
     <ClInclude Include="Source\PythonInterface.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

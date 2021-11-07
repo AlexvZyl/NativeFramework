@@ -7,7 +7,11 @@
 #include <vector>
 #include "ErrorHandlerGL.h"
 #include <glad/glad.h>
+#include <glm.hpp>
 
+//=============================================================================================================================================//
+//  Forward declerations.																													   //
+//=============================================================================================================================================//
 
 class Polygon2D;
 
@@ -15,31 +19,14 @@ class Polygon2D;
 //  Data structures.																														   //
 //=============================================================================================================================================//
 
-//Colour struct definition
-
 struct Colour
 {
-	float r = 0.f;
-	float g = 0.f;
-	float b = 0.f;
-	float a = 0.f;
-
-	// Constructors.
-
-	//creates ininitialised colour
-	Colour() {
-	}
-
+	float R, G, B, A;
+	// Default constructor.
+	Colour() { R = 0; G = 0; B = 0; A = 1; }
 	//Creates a colour with the specified values.
 	Colour(float r, float g, float b, float a)
-	{
-		this->r = r;
-		this->g = g;
-		this->b = b;
-		this->a = a;
-	}
-	//Could add another constructor that sets a specified colour defined in a string
-	//i.e. Colour(std::string colour_name , float a)
+	{ R = r; G = g; B = b; A = a; }
 };
 
 // Structure that contains the untextured vertex data.
@@ -49,20 +36,17 @@ struct VertexData
 	Colour color = Colour( 0,0,0,0 );
 	float raw[7] = { 0,0,0,0,0,0,0 };
 	unsigned int entityID[1] = { 0 };
-	// Constructors.
 
-	//create an unititialised VertexData structure
+	// Default.
 	VertexData() {};
 
-	//Adds vertex data from floats
+	// Adds vertex data from floats.
 	VertexData(float pos0, float pos1, float pos2, 
 			   float col0, float col1, float col2, float col3, 
 			   unsigned int eID)
 	{
 		// Assign position.
-		position[0] = pos0;
-		position[1] = pos1;
-		position[2] = pos2;
+		position[0] = pos0; position[1] = pos1; position[2] = pos2;
 		// Assign color.
 		color.r = col0;
 		color.g = col1;
@@ -72,12 +56,11 @@ struct VertexData
 		entityID[0] = eID;
 	}
 
+	//Adds vertex data from position and colour structures
 	VertexData(glm::vec3 pos, Colour col, unsigned int eID)
 	{
 		// Assign position.
-		position[0] = pos.x;
-		position[1] = pos.y;
-		position[2] = pos.z;
+		position[0] = pos.x; position[1] = pos.y; position[2] = pos.z;
 		// Assign color.
 		color = col;
 		// Assign ID.
@@ -115,19 +98,13 @@ struct VertexDataTextured
 		unsigned int eID)
 	{
 		// Assign position.
-		position[0] = pos0;
-		position[1] = pos1;
-		position[2] = pos2;
+		position[0] = pos0; position[1] = pos1; position[2] = pos2;
 		// Assign color.
-		color[0] = col0;
-		color[1] = col1;
-		color[2] = col2;
-		color[3] = col3;
+		color[0] = col0; color[1] = col1; color[2] = col2; color[3] = col3;
 		// Assign entity ID.
 		entityID[0] = eID;
 		// Assign texture ID position.
-		texturePosition[0] = texPos0;
-		texturePosition[1] = texPos1;
+		texturePosition[0] = texPos0; texturePosition[1] = texPos1;
 		// Assigne texture ID.
 		textureID = (unsigned int)texID;
 	}
@@ -135,15 +112,9 @@ struct VertexDataTextured
 	// Return a pointer to the raw data so that OpenGL can write it to the GPU.
 	const void* rawData()
 	{
-		raw[0] = position[0];
-		raw[1] = position[1];
-		raw[2] = position[2];
-		raw[3] = color[0];
-		raw[4] = color[1];
-		raw[5] = color[2];
-		raw[6] = color[3];
-		raw[7] = texturePosition[0];
-		raw[8] = texturePosition[1];
+		raw[0] = position[0]; raw[1] = position[1]; raw[2] = position[2];
+		raw[3] = color[0]; raw[4] = color[1]; raw[5] = color[2]; raw[6] = color[3];
+		raw[7] = texturePosition[0]; raw[8] = texturePosition[1];
 		raw[9] = textureID;
 		return (const void*)raw;
 	}
@@ -157,9 +128,10 @@ class VertexArrayObject
 {
 private:
 
-	unsigned int m_vAID;	// VAO ID.
-	unsigned int m_vBID;	// VBO ID.
-	GLenum m_bufferType;	// Data type used in this VAO.		
+	unsigned int m_vAID;	 // VAO ID.
+	unsigned int m_vBID;	 // VBO ID.
+	GLenum m_bufferType;	 // Data type used in this VAO.		
+	GLsizei m_bufferIndex = 0; // Pointer that shows where in the buffer data need to be written.
 
 public:
 
@@ -171,8 +143,7 @@ public:
 	// Data should not be stored and read from OpenGL (GPU side).
 	std::vector<VertexData> m_vertexDataCPU;
 	std::vector<VertexDataTextured> m_vertexDataTexturedCPU;
-	// Pointer that shows where in the buffer data need to be written.
-	GLsizei m_bufferPtr = 0;
+	std::vector<Polygon2D*> m_polygon2DCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -183,9 +154,9 @@ public:
 	// Destructor.
 	~VertexArrayObject();
 
-	// ------------------ //
-	//  R E N D E R I N G //
-	// ------------------ //
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 
 	// Draws the data in the VAO.
 	void render();
@@ -194,32 +165,26 @@ public:
 	// Unbinds the VAO.
 	void unbind() const;
 
-	// ----------------------- //
-	//  C P U   B U F F E R S  //
-	// ----------------------- //
+	// ----------------------------------- //
+	//  M E M O R Y   M A N A G E M E N T  //
+	// ----------------------------------- //
 
-	// Append data on the CPU side memory for untextured vertices.
-	void appendDataCPU(std::vector<VertexData> vertices);
-	// Append data on the CPU side memory for textured vertices.
-	void appendDataCPU(std::vector<VertexDataTextured> vertices);
-	// Assign data to the CPU side memory for untextured vertices.
-	// If the VAO is empty it creates a new one with the vertices specified.
-	void assignDataCPU(std::vector<VertexData> vertices, unsigned int index);
-	// Assign data to the CPU side memory for untextured vertices.
-	// If the VAO is empty it creates a new one with the vertices specified.
-	void assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index);
-
-	void appendDataCPU(Polygon2D* poly);
 	// This function deletes the data on the CPU side for when only the GPU is being updated and
 	// the CPU side data is no longer required.
-	void deleteDataCPU();
+	// Be careful when calling this function!
+	void wipeCPU();
 	// Sends the CPU data to the GPU.
 	void updateGPU();
 
-	// ----------------------- //
-	//  G P U   B U F F E R S  //
-	// ----------------------- //
+	// ----------------- //
+	//  V E R T I C E S  //
+	// ----------------- //
 
+	// Append data on the CPU side memory for untextured vertices.
+	void appendDataCPU(std::vector<VertexData> vertices);
+	// Assign data to the CPU side memory for untextured vertices.
+	// If the VAO is empty it creates a new one with the vertices specified.
+	void assignDataCPU(std::vector<VertexData> vertices, unsigned int index);
 	// Assign data to the GPU side memory for untextured vertices.
 	// since this funtion is going to be called in performance critical scenarios.
 	// If you use this function it will update faster, but you also lose the ability
@@ -228,6 +193,16 @@ public:
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
 	void assignDataGPU(std::vector<VertexData> vertices, unsigned int index);
+
+	// ----------------------------------- //
+	//  T E X T U R E D   V E R T I C E S  //
+	// ----------------------------------- //
+	
+	// Append data on the CPU side memory for textured vertices.
+	void appendDataCPU(std::vector<VertexDataTextured> vertices);
+	// Assign data to the CPU side memory for untextured vertices.
+	// If the VAO is empty it creates a new one with the vertices specified.
+	void assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index);
 	// Assign data to the GPU side memory for textured vertices.
 	// since this funtion is going to be called in performance critical scenarios.
 	// If you use this function it will update faster, but you also lose the ability
@@ -236,6 +211,23 @@ public:
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
 	void assignDataGPU(std::vector<VertexDataTextured> vertices, unsigned int index);
+
+	// ----------------- //
+	//  P O L Y G O N S  //
+	// ----------------- //
+
+	// Append data on the CPU side memory for textured vertices.
+	void appendDataCPU(Polygon2D* polygon);
+	// Assign data to the GPU side memory for textured vertices.
+	// since this funtion is going to be called in performance critical scenarios.
+	// If you use this function it will update faster, but you also lose the ability
+	// to read the CPU side data.
+	// Error handling is not added to this function to make it as fast as possible, so
+	// be very careful to not lose track of sizes of data, if it has been created etc.
+	// This does not check if the array is empty and create a new one if it is empty.
+	void assignDataGPU(Polygon2D* polygon);
+	// Delete the polygon from the VAO.
+	void deleteDataCPU(Polygon2D* polygon);
 };
 
 //=============================================================================================================================================//

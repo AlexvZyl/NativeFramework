@@ -7,6 +7,8 @@
 #include "../Base2DEngineGL/Base2D_Engine.h"
 #include "Peripherals/Component2D.h"
 
+#include "CoreGL/Polygon.h"
+
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
@@ -21,6 +23,7 @@ public:
 
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
+	Polygon2D* polygon;
 
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //
@@ -55,7 +58,7 @@ public:
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight(float pixelCoords[2]);
-	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight);
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 };
 
