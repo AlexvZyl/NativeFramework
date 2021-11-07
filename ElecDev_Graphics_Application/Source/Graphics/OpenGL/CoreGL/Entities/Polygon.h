@@ -4,8 +4,6 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include <vector>
-#include <glm.hpp>
 #include "../VertexArrayObjectGL.h"
 #include "Entity.h"
 
@@ -18,13 +16,10 @@ class Polygon2D : public Entity
 
 	//Private Members
 private:
-	//VBO members
-	
-
-	//position of the polygon
+	//position of the entity
 	glm::vec2 m_pos;
 
-	//other polygon attributes
+	//other entity attributes
 	Colour m_colour;
 	unsigned m_eID = 0;
 

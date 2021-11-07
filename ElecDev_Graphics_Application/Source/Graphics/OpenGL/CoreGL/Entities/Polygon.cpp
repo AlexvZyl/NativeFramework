@@ -10,7 +10,6 @@
 
 Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
 {
-	//set it all up
 	m_pos = glm::vec2(0.f, 0.f);
 	m_colour = Colour(1.f, 0.f, 0.f, 0.5f);
 	n_vertices = vertices.size();
