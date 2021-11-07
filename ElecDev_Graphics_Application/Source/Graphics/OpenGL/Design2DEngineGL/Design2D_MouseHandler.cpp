@@ -7,6 +7,9 @@ This is where the drawing enigine mouse events are handled.
 //=============================================================================================================================================//
 
 #include "Design2D_Engine.h"
+// Entities.
+#include "Peripherals/Component2D.h"
+#include "CoreGL/Entities/Polygon.h"
 
 //=============================================================================================================================================//
 //  Press event.																															   //

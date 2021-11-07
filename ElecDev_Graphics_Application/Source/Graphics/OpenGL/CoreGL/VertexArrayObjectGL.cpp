@@ -2,7 +2,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Polygon.h"
+#include "Entities/Entity.h"
 #include "VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
@@ -156,26 +156,24 @@ void VertexArrayObject::assignDataGPU(std::vector<VertexDataTextured> vertices, 
 }
 
 //=============================================================================================================================================//
-//  Polygons.																																   //
+//  Entity.																																	   //
 //=============================================================================================================================================//
 
-void VertexArrayObject::appendDataCPU(Polygon2D* polygon) 
+void VertexArrayObject::appendDataCPU(Entity* entity)
 {
 	// Add the polygon to the vector.
-	m_polygon2DCPU.push_back(polygon);
-	polygon->start_idx = m_bufferIndex;
-	m_bufferIndex += polygon->m_vertices.size();
+	m_entityCPU.push_back(entity);
+	entity->m_bufferStartIndex = m_bufferIndex;
+	m_bufferIndex += entity->m_vertexData.size();
 }
 
-void VertexArrayObject::assignDataGPU(Polygon2D* polygon) 
+void VertexArrayObject::assignDataGPU(Entity* entity)
 {
-	//assignDataGPU(polygon->m_vertices, polygon->start_idx);
-	unsigned index = polygon->start_idx;
-
+	unsigned index = entity->m_bufferStartIndex;
 	// Bind VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 	// Populate with vertex data.
-	for (VertexData& vertex : polygon->m_vertices)
+	for (VertexData& vertex : entity->m_vertexData)
 	{
 		// Write the data to the buffer.
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
@@ -184,13 +182,13 @@ void VertexArrayObject::assignDataGPU(Polygon2D* polygon)
 	}
 }
 
-void VertexArrayObject::deleteDataCPU(Polygon2D* polygon) 
+void VertexArrayObject::deleteDataCPU(Entity* Entity)
 {
-	//m_polygon2DCPU.at
+
 }
 
 //=============================================================================================================================================//
-//  Memory management.																															   //
+//  Memory management.																														   //
 //=============================================================================================================================================//
 
 void VertexArrayObject::updateGPU()
@@ -237,13 +235,13 @@ void VertexArrayObject::updateGPU()
 		}
 	}
 	// ----------------- //
-	//  P O L Y G O N S  //
+	//  E N T I T I E S  //
 	// ----------------- //
-	else if (m_polygon2DCPU.size())
+	else if (m_entityCPU.size())
 	{
 		// Calculate the size of the new VBO.
 		unsigned int vertexCount = 0;
-		for (Polygon2D* polygon : m_polygon2DCPU) { vertexCount += polygon->m_vertices.size(); }
+		for (Entity* entity : m_entityCPU) { vertexCount += entity->m_vertexData.size(); }
 		// Reset the buffer pointer.
 		unsigned int index = 0;
 		// Bind VBO.
@@ -251,9 +249,9 @@ void VertexArrayObject::updateGPU()
 		// Define buffer size.
 		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
-		for (Polygon2D* polygon : m_polygon2DCPU) 
+		for (Entity* polygon : m_entityCPU) 
 		{
-			for (VertexData& vertex : polygon->m_vertices)
+			for (VertexData& vertex : polygon->m_vertexData)
 			{
 				// Write the data to the buffer.
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * sizeof(vertex), sizeof(vertex) - sizeof(vertex.entityID), vertex.rawData()));
@@ -268,6 +266,7 @@ void VertexArrayObject::wipeCPU()
 {
 	if (m_vertexDataCPU.size()) { m_vertexDataCPU.clear(); m_vertexDataCPU.shrink_to_fit(); }
 	if (m_vertexDataTexturedCPU.size()) { m_vertexDataTexturedCPU.clear(); m_vertexDataTexturedCPU.shrink_to_fit(); }
+	if (m_entityCPU.size()) { m_entityCPU.clear(); m_entityCPU.shrink_to_fit(); }
 }
 
 //=============================================================================================================================================//

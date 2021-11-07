@@ -17,7 +17,6 @@ as error handling for when a wrong function is called on a engine type.
 #include "TextRendererGL.h"
 #include "ShaderHandlerGL.h"
 #include "ErrorHandlerGL.h"
-//#include <glad/glad.h>
 #include <glm.hpp>
 // GUI states.
 #include "GUI/GUIState.h"

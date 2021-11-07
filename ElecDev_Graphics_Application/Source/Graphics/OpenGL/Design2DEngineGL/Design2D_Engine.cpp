@@ -16,6 +16,9 @@ This is where the interactive 2D design engine is implemented.
 #include "Resources/ResourceHandler.h"
 // Window.
 #include <GLFW/glfw3.h>
+// Entities.
+#include "Peripherals/Component2D.h"
+#include "CoreGL/Entities/Polygon.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
