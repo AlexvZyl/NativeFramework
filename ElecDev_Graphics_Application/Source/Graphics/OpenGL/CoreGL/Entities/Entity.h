@@ -6,8 +6,6 @@
 
 #include <vector>
 #include <glm.hpp>
-#include "External/GLM/glm.hpp"
-#include "External/Misc/ConsoleColor.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -36,17 +34,9 @@ public:
 	//  F U N C T I O N S  //
 	// ------------------- //
 
-	void functionNotImplemented(std::string functionName) 
-	{ std::cout << red << "\n[OPENGL] [ERROR] : " << white << "'" << functionName << "' is not implemented for the entity type.\n"; }
-
-	virtual void translate(glm::vec3 translation) 
-	{
-		for (VertexData& vertex : m_vertexData) 
-		{
-		}
-	}
-	virtual void rotate(glm::vec3 rotation) { functionNotImplemented(__FUNCTION__); };
-	virtual void scale(glm::vec3 scaling) { functionNotImplemented(__FUNCTION__); };
+	virtual void translate(glm::vec3 translation);
+	virtual void rotate(glm::vec3 rotation);
+	virtual void scale(glm::vec3 scaling);
 };
 
 //=============================================================================================================================================//
