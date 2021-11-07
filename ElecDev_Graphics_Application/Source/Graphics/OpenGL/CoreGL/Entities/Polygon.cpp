@@ -31,6 +31,44 @@ Polygon2D::~Polygon2D()
 
 }
 
+Polygon2D::~Polygon2D()
+{
+}
+
+void Polygon2D::draw()
+{
+}
+
+void Polygon2D::translate(glm::vec2 transVec)
+{
+	for (int i = 0; i < n_vertices; i++) {
+		m_vertices[i].position += glm::vec3(transVec, 0);
+	}
+	m_pos += transVec;
+}
+
+void Polygon2D::translateTo(glm::vec2 pos)
+{
+	translate(pos - m_pos);
+}
+
+void Polygon2D::rotate(float angle)
+{
+}
+
+void Polygon2D::setColour(Colour col)
+{
+	for (int i = 0; i < n_vertices; i++) {
+		m_vertices[i].color = col;
+	}
+
+}
+
+void Polygon2D::setEID(eID)
+{
+	m_eID = eID;
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

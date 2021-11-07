@@ -26,7 +26,7 @@ private:
 
 	//other polygon attributes
 	Colour m_colour;
-	unsigned eID = 0;
+	unsigned m_eID = 0;
 
 	//Public Members
 public:
@@ -45,7 +45,7 @@ public:
 	//**should change this to only accept GL_TRIANGLE type VAOs**
 	//Polygon2D(unsigned n_vertices, VertexArrayObject* VAO);
 
-	//Adds a polygon with the given vertices to a VBO
+	//Adds a polygon with the given vertices centred at (0,0) to a VBO
 	Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO);
 
 	//Remove a polygon from the VBO and deconstruct
@@ -53,9 +53,6 @@ public:
 
 	//Draw the polygon
 	void draw();
-
-	//Render the polygon -- Possibly keep the rendering seperate --
-	void render();
 
 	//Perform a translation operation
 	void translate(glm::vec2 transVec);
@@ -65,6 +62,12 @@ public:
 	
 	//Perform a rotation operation
 	void rotate(float angle);
+
+	//Set the colour of the polygon
+	void setColour(Colour col);
+
+	//Set the entity ID
+	void setEID(unsigned eID);
 };
 
 //=============================================================================================================================================//

@@ -32,8 +32,8 @@ struct Colour
 // Structure that contains the untextured vertex data.
 struct VertexData
 {
-	float position[3] = { 0,0,0 };
-	float color[4] = { 0,0,0,0 };
+	glm::vec3 position = { 0,0,0 };
+	Colour color = Colour( 0,0,0,0 );
 	float raw[7] = { 0,0,0,0,0,0,0 };
 	unsigned int entityID[1] = { 0 };
 
@@ -48,7 +48,10 @@ struct VertexData
 		// Assign position.
 		position[0] = pos0; position[1] = pos1; position[2] = pos2;
 		// Assign color.
-		color[0] = col0; color[1] = col1; color[2] = col2; color[3] = col3;
+		color.r = col0;
+		color.g = col1;
+		color.b = col2;
+		color.a = col3;
 		// Assign ID.
 		entityID[0] = eID;
 	}
@@ -59,7 +62,7 @@ struct VertexData
 		// Assign position.
 		position[0] = pos.x; position[1] = pos.y; position[2] = pos.z;
 		// Assign color.
-		color[0] = col.R; color[1] = col.G; color[2] = col.B; color[3] = col.A;
+		color = col;
 		// Assign ID.
 		entityID[0] = eID;
 	}
@@ -67,8 +70,13 @@ struct VertexData
 	// Return a pointer to the raw data so that OpenGL can write it to the GPU.
 	const void* rawData()
 	{
-		raw[0] = position[0]; raw[1] = position[1]; raw[2] = position[2];
-		raw[3] = color[0]; raw[4] = color[1]; raw[5] = color[2]; raw[6] = color[3];
+		raw[0] = position[0];
+		raw[1] = position[1];
+		raw[2] = position[2];
+		raw[3] = color.r;
+		raw[4] = color.g;
+		raw[5] = color.b;
+		raw[6] = color.a;
 		return (const void*)raw;
 	}
 };
