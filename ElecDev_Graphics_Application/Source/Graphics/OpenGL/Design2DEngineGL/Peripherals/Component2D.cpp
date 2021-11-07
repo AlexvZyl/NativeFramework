@@ -8,12 +8,12 @@ Component2D::Component2D()
 
 	// Create vertices.
 	centre = glm::vec2(0.0f, 0.0f);
-	vertices[0] = glm::vec3(centre.x - width, centre.y - height, 0.0f);
-	vertices[1] = glm::vec3(centre.x + width, centre.y - height, 0.0f);
-	vertices[2] = glm::vec3(centre.x + width, centre.y + height, 0.0f);
-	vertices[3] = glm::vec3(centre.x - width, centre.y + height, 0.0f);
+	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y - height, 0.0f));
+	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y - height, 0.0f));
+	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
+	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	shape = std::make_shared<VertexArrayObject>(GL_TRIANGLES);
+	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES);
 	edges = std::make_shared<VertexArrayObject>(GL_LINES);
 	shapeColour = Colour(1.0f, 0.0f, 0.0f, 0.5f);
 	edgeColour = Colour(1.0f, 0.0f, 0.0f, 1.0f);
@@ -21,20 +21,24 @@ Component2D::Component2D()
 	// Set static eID for now.
 	unsigned shapeID = 1;
 	unsigned edgeID = 2;
-	VertexData shapeVertices[4];
+	//VertexData shapeVertices[4];
 	VertexData edgeVertices[4];
 
 	// Populate VertexData structures.
 	for (int i = 0; i < 4; i++) {
-		shapeVertices[i] = VertexData(vertices[i], shapeColour, shapeID);
-		edgeVertices[i] = VertexData(vertices[i], shapeColour, edgeID++);
+		//shapeVertices[i] = VertexData(vertices[i], shapeColour, shapeID);
+		edgeVertices[i] = VertexData(vertices[i], edgeColour, edgeID++);
 	}
-	std::vector<VertexData> shapeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[0] };
-	std::vector<VertexData> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0] };
+	//std::vector<VertexData> shapeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[0] };
+	shape = Polygon2D(vertices, shapeVAO.get());
+	shape.setColour(shapeColour);
+	shape.setEID(shapeID);
+	shape.update();
+	std::vector<VertexData> edgeVerticesVec = { edgeVertices[0], edgeVertices[1], edgeVertices[1], edgeVertices[2], edgeVertices[2], edgeVertices[3], edgeVertices[3], edgeVertices[0] };
 
 	// Write to CPU side buffer.
-	shape->assignDataCPU(shapeVerticesVec, 0);
-	shape->updateGPU();
+	//shape->assignDataCPU(shapeVerticesVec, 0);
+	//shape->updateGPU();
 	edges->assignDataCPU(edgeVerticesVec, 0);
 	edges->updateGPU();
 }
@@ -66,14 +70,15 @@ void Component2D::draw()
 	std::vector<VertexData> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0] };
 	// Write to GPU side buffer.
 
-	shape->assignDataCPU(shapeVerticesVec, 0);
-	shape->updateGPU();
+	//shape->assignDataCPU(shapeVerticesVec, 0);
+	//shape->updateGPU();
 	edges->assignDataCPU(edgeVerticesVec, 0);
 	edges->updateGPU();
 }
 
 void Component2D::moveTo(float pointerPos[2])
 {
+	shape.translateTo(glm::vec2(pointerPos[0], pointerPos[1]));
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 	vertices[0] = glm::vec3(centre.x - width, centre.y - height, 0.0f);
 	vertices[1] = glm::vec3(centre.x + width, centre.y - height, 0.0f);
@@ -84,6 +89,6 @@ void Component2D::moveTo(float pointerPos[2])
 
 void Component2D::render()
 {
-	shape->render();
+	shapeVAO->render();
 	edges->render();
 }
