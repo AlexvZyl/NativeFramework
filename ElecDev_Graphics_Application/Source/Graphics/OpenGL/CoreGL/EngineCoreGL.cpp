@@ -165,7 +165,6 @@ void EngineCoreGL::updateGPU()
 	//			|	    |	    |	    |
 	//			13 ---- 14 ---- 15 ---- 16
 
-
 	// Create the VAO.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Assign background data.

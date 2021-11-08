@@ -24,7 +24,7 @@
     <ProjectGuid>{26e8aca6-08dd-4daa-b218-0dda29b22b32}</ProjectGuid>
     <RootNamespace>ElecDevGraphicsApplication</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ElecDev</ProjectName>
+    <ProjectName>Lumen</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -241,7 +241,6 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\External\Misc\BinaryToCompressed.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />

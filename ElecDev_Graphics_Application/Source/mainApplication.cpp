@@ -132,7 +132,7 @@ int main(int, char**)
     // Enable 16x MSAA.
     glfwWindowHint(GLFW_SAMPLES, 16);
     // Create GLFW window.
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "ElecDev", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
     if (window == NULL)
         return 1;
     glfwMakeContextCurrent(window);
@@ -261,7 +261,7 @@ int main(int, char**)
     double prevTime = 0;
 
     // Input message.
-    std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
+    std::cout << green << "\n[LUMEN] [INPUT] : " << white;
 
     // Reset glfw time.
     glfwSetTime(0);
@@ -316,7 +316,7 @@ int main(int, char**)
     exit(0);
 
     // Log termination.
-    std::cout << blue << "\n\n[ELECDEV] [INFO] : " << white << "Program terminated." << std::endl;
+    std::cout << blue << "\n\n[LUMEN] [INFO] : " << white << "Program terminated." << std::endl;
     return 0;
 }
 

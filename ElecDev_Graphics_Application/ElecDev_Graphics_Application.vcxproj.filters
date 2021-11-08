@@ -1408,7 +1408,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />
-    <ClInclude Include="Source\External\Misc\BinaryToCompressed.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
