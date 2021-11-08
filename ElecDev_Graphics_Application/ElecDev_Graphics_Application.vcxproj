@@ -241,6 +241,7 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\External\Misc\BinaryToCompressed.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />

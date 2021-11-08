@@ -6,11 +6,11 @@ This is where the drawing enigine mouse events are handled.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include <GLFW/glfw3.h>
 #include "Design2D_Engine.h"
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
+#include <GLFW/glfw3.h>
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -75,7 +75,7 @@ void Design2DEngineGL::keyPressEvent(int key)
 	// Example usage.
 	if (key == GLFW_KEY_E) 
 	{
-		// Do E.
+		m_trianglesVAO->wipeCPU();
 	}
 }
 

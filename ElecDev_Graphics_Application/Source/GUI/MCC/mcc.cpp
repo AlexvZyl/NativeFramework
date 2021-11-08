@@ -36,13 +36,11 @@ void MCC::renderGraphics(ImGuiID dock)
 		{
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 
-			if (struc.second->close) {
+			if (struc.second->close) 
+			{
+				//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1, 1));
 				if (ImGui::Begin(struc.second->windowName.c_str(), &struc.second->close))
 				{
-
-					//ImGui::GetCurrentWindow()->DockNode = ImGui::DockBuilderGetCentralNode(dock);
-
-					//ImGui::SetWindowSize(ImVec2(500, 500), ImGuiCond_Once);
 					// Using a Child allow to fill all the space of the window.
 					// It also allows customization
 					std::string childName = struc.first + "Render";

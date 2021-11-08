@@ -19,7 +19,7 @@ void GUIHandler::setTheme()
 	ImGui::GetStyle().ChildRounding = 4.0f;
 	
 	ImGuiStyle& style = ImGui::GetStyle();
-	style.FrameRounding = 4.0f;
+	style.FrameRounding = 5.0f;
 	style.WindowRounding = 5.0f;
 	style.ItemSpacing = ImVec2(12, 6);
 	style.ItemInnerSpacing = ImVec2(8, 4);
@@ -30,7 +30,7 @@ void GUIHandler::setTheme()
 	style.GrabRounding = 3.0f;
 
 	ImVec4* colors = ImGui::GetStyle().Colors;
-	colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
+	colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
 	colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.48f);
 
@@ -38,16 +38,23 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_ChildBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 	colors[ImGuiCol_PopupBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
 
-	colors[ImGuiCol_Border] = ImVec4(0.23f, 0.23f, 0.23f, 1.00f);
-	colors[ImGuiCol_BorderShadow] = ImVec4(0.68f, 0.63f, 0.63f, 1.00f);
+	colors[ImGuiCol_Border] = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+	colors[ImGuiCol_BorderShadow] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
 
 	colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 
 	colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+	colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	//colors[ImGuiCol_TitleBgActive] = ImVec4(0.0f, 0.110f, 0.114f, 1.0f);
 	colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
+
+	colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.57f, 0.58f, 0.86f);
+	colors[ImGuiCol_TabHovered] = ImVec4(0.20f, 0.68f, 0.42f, 0.83f);
+	colors[ImGuiCol_TabActive] = ImVec4(0.0f, 0.416f, 0.424f, 1.00f);
+	colors[ImGuiCol_TabUnfocused] = ImVec4(0.14f, 0.41f, 0.42f, 0.46f);
+	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.41f, 0.42f, 1.00f);
 
 	colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 
@@ -61,7 +68,7 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 
-	colors[ImGuiCol_Button] = ImVec4(0.0f, 0.416f, 0.424f, 1.00f);
+	colors[ImGuiCol_Button] = ImVec4(0.0f, 0.490f, 0.498f, 1.00f);
 	colors[ImGuiCol_ButtonHovered] = ImVec4(0.20f, 0.612f, 0.624f, 0.83f);
 	colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 
@@ -69,7 +76,7 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_HeaderHovered] = ImVec4(0.20f, 0.68f, 0.42f, 0.83f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 
-	colors[ImGuiCol_Separator] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
+	colors[ImGuiCol_Separator] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
 	colors[ImGuiCol_SeparatorHovered] = ImVec4(0.20f, 0.68f, 0.42f, 0.83f);
 	colors[ImGuiCol_SeparatorActive] = ImVec4(0.36f, 0.75f, 0.10f, 1.00f);
 
@@ -77,13 +84,7 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 	colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 
-	colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.57f, 0.58f, 0.86f);
-	colors[ImGuiCol_TabHovered] = ImVec4(0.20f, 0.68f, 0.42f, 0.83f);
-	colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.68f, 0.42f, 1.00f);
-	colors[ImGuiCol_TabUnfocused] = ImVec4(0.14f, 0.41f, 0.42f, 0.46f);
-	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.14f, 0.41f, 0.42f, 1.00f);
-
-	colors[ImGuiCol_DockingPreview] = ImVec4(0.00f, 1.00f, 0.21f, 0.70f);
+	colors[ImGuiCol_DockingPreview] = ImVec4(0.00f, 0.808f, 0.824f, 1.00f);
 	colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
 
 	colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
@@ -105,8 +106,12 @@ void GUIHandler::setTheme()
 
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 
-	
+	// ------------------------- //
+	//  L O A D I N G   F O N T  //
+	// ------------------------- //
 
+	
+	
 	/*===================================================================================================================================*/
 	/* Theme 1.			 																												 */
 	/*===================================================================================================================================*/
