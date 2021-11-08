@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+All entities have to be a child of this class.  The data contained in this class is all that is required 
+for a VAO to be able to render the entity to the screen.
+*/
+
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//

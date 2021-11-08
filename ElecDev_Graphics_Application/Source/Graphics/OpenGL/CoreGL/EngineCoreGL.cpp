@@ -176,7 +176,7 @@ void EngineCoreGL::updateGPU()
  }
 
  //=============================================================================================================================================//
- //  Mouse handling.																															//
+ //  User input.																																//
  //=============================================================================================================================================//
 
  void EngineCoreGL::mouseScrollEvent(float pixelCoords[2], float yOffset) { functionNotImplementedError(__FUNCTION__); }
@@ -184,6 +184,7 @@ void EngineCoreGL::updateGPU()
  void EngineCoreGL::mousePressRight(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); }
  void EngineCoreGL::mousePressMiddle(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); }
  void EngineCoreGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle) { functionNotImplementedError(__FUNCTION__); }
+ void EngineCoreGL::keyPressEvent(int key) { functionNotImplementedError(__FUNCTION__); }
 
 //=============================================================================================================================================//
 //  2D API.																																	   //

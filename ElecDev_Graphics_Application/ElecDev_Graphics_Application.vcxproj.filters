@@ -52,14 +52,14 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_InputHandler.cpp" />
     <ClCompile Include="Source\Logging\logHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_InputHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
@@ -1852,6 +1852,7 @@
     </None>
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
+    <None Include="Source\GUI\GUIColors.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">

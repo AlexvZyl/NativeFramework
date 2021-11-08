@@ -137,9 +137,9 @@ public:
 	float m_deltaTime = 0.0f;	// The difference between the last 2 rendred frame.
 	float m_lastFrame = 0.0f;	// The time of the previous frame.
 
-	// ------------------------------ //
-	//  M O U S E   H A N D L I N G   //
-	// ------------------------------ //
+	// --------------------- //
+	//  U S E R   I N P U T  //
+	// --------------------- //
 	
 	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };		// Stores the previous mouse event information.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	// Stores the vector that goes into the world.
@@ -148,6 +148,7 @@ public:
 	virtual void mousePressMiddle(float pixelCoords[2]);
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);	
+	virtual void keyPressEvent(int key);
 
 	// ------------- //
 	//  2 D   A P I  //
