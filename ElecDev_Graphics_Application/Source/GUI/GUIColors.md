@@ -1,6 +1,6 @@
 Turqoise colors:
 
-[0.0 , 0.022 , 0.224]
+[0.0 , 0.220 , 0.224]
 ![image](https://user-images.githubusercontent.com/81622310/140620538-6edc4fad-c7d4-4b8f-ac27-f2006edbe7fe.png)
 
 [0 , 0.318 , 0.322]	
