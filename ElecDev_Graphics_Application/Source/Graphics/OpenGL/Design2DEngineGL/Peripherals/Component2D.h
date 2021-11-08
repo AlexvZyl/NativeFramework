@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreGL/VertexArrayObjectGL.h"
-#include "CoreGL/Polygon.h"
+#include "CoreGL/Entities/Polygon.h"
 
 class Component2D
 {

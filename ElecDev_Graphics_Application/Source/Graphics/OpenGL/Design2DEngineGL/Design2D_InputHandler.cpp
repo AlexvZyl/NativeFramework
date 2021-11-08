@@ -6,7 +6,11 @@ This is where the drawing enigine mouse events are handled.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+#include <GLFW/glfw3.h>
 #include "Design2D_Engine.h"
+// Entities.
+#include "Peripherals/Component2D.h"
+#include "CoreGL/Entities/Polygon.h"
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -60,6 +64,19 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 	m_activeComponent->moveTo(screenCoords);
 	m_activeComponent->draw();
+}
+
+//=============================================================================================================================================//
+//  Key press.																																   //
+//=============================================================================================================================================//
+
+void Design2DEngineGL::keyPressEvent(int key) 
+{
+	// Example usage.
+	if (key == GLFW_KEY_E) 
+	{
+		// Do E.
+	}
 }
 
 //=============================================================================================================================================//

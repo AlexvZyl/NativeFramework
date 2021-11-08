@@ -5,9 +5,13 @@
 //=============================================================================================================================================//
 
 #include "../Base2DEngineGL/Base2D_Engine.h"
-#include "Peripherals/Component2D.h"
 
-#include "CoreGL/Polygon.h"
+//=============================================================================================================================================//
+//  Forward declerations																													   //
+//=============================================================================================================================================//
+ 
+class Component2D;
+class Polygon2D;
 
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
@@ -52,15 +56,16 @@ public:
 
 	virtual void resizeEvent(int width, int height);
 
-	// -------------------------- //
-	//  W I N D O W   E V E N T S //
-	// -------------------------- //
+	// --------------------- //
+	//  U S E R   I N P U T  //
+	// --------------------- //
 
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight(float pixelCoords[2]);
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
+	virtual void keyPressEvent(int key);
 };
 
 //=============================================================================================================================================//

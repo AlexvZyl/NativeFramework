@@ -64,13 +64,11 @@ void glfw_error_callback(int error, const char* description)
 /* Mouse event callbacks.                                                                                                               */
 /*=======================================================================================================================================*/
 
-// Handle mouse press events from GLFW.
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
     graphicsHandler->mousePressEvent(button, action);
 }
 
-// Handle mouse press events from GLFW.
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
     // Get button state.
@@ -80,10 +78,14 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
     graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }
 
-// Handle mouse press scroll. from GLFW.
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
     graphicsHandler->mouseScrollEvent((float)yoffset);
+}
+
+void keyPresssedEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS) { graphicsHandler->keyPressEvent(key); }
 }
 
 /*=======================================================================================================================================*/
@@ -215,6 +217,7 @@ int main(int, char**)
     glfwSetMouseButtonCallback(window, mousePressEvent);        // Mouse press event.
     glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
+    glfwSetKeyCallback(window, keyPresssedEvent);               // Key press event.
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.

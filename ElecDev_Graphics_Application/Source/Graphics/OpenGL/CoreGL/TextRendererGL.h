@@ -48,6 +48,8 @@ private:
 		float xAdvance=0;		// Amount that the cursor should move to draw a new character.
 	};
 
+	VertexArrayObject* m_VAO;
+
 public:
 
 	// Character dictionary that contains the info on each character.

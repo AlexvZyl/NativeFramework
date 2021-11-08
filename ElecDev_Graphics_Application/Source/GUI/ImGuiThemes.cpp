@@ -17,7 +17,6 @@ void GUIHandler::setTheme()
 	ImGui::GetStyle().FrameRounding = 4.0f;
 	ImGui::GetStyle().GrabRounding = 4.0f;
 	ImGui::GetStyle().ChildRounding = 4.0f;
-	//ImGuiStyle& style = ImGui::GetStyle();
 	
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.FrameRounding = 4.0f;
@@ -46,7 +45,7 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 
-	colors[ImGuiCol_TitleBg] = ImVec4(0.0f, 0.54f, 0.552f, 1.00f);
+	colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 	colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
 
@@ -62,8 +61,8 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 
-	colors[ImGuiCol_Button] = ImVec4(0.0f, 0.54f, 0.552f, 1.00f);
-	colors[ImGuiCol_ButtonHovered] = ImVec4(0.20f, 0.68f, 0.42f, 0.83f);
+	colors[ImGuiCol_Button] = ImVec4(0.0f, 0.416f, 0.424f, 1.00f);
+	colors[ImGuiCol_ButtonHovered] = ImVec4(0.20f, 0.612f, 0.624f, 0.83f);
 	colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 
 	colors[ImGuiCol_Header] = ImVec4(0.20f, 0.68f, 0.42f, 0.58f);

@@ -6,20 +6,20 @@
 
 #include <vector>
 #include <glm.hpp>
-#include "VertexArrayObjectGL.h"
+#include "../VertexArrayObjectGL.h"
+#include "Entity.h"
 
 //=============================================================================================================================================//
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Polygon2D
+class Polygon2D : Entity
 {
 
 	//Private Members
 private:
 	//VBO members
-	//Pointer to the VAO to use for the polygon
-	VertexArrayObject* m_VAO = NULL;
+	
 
 	//position of the polygon
 	glm::vec2 m_pos;
@@ -30,17 +30,11 @@ private:
 
 	//Public Members
 public:
-	//indices for VBO access
-	unsigned int start_idx;
-
-
 
 	//polygon shape attributes
 	unsigned n_vertices;
-	std::vector<VertexData> m_vertices;
 
 	//Construct
-
 	Polygon2D() = default;
 
 	//Creates a regular polygon with n_vertices vertices centred at (0, 0)

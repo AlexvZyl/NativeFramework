@@ -136,10 +136,6 @@ TextRenderer::TextRenderer(int fontID, int atlasID)
 
 			// Add cahracter data to dictionary.
 			m_characterDictionary.insert({c.id, c});
-
-			// Print the data.
-			//std::cout << line << "\n";
-			//std::cout << c.id << " , " << c.x * 512 << " , " << c.y * 512 << " , " << c.width * 512 << " , " << c.height * 512 << " , " << c.xOffset * 512 << " , " << c.yOffset * 512 << " , " << c.xAdvance * 512 << "\n\n";
 		}
 		// Increment line counter.
 		lineCount++;

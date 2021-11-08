@@ -166,7 +166,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
@@ -203,10 +204,10 @@
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_InputHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
@@ -215,7 +216,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_MouseHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_InputHandler.cpp" />
     <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
@@ -240,7 +241,9 @@
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
@@ -946,6 +949,7 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
+    <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />

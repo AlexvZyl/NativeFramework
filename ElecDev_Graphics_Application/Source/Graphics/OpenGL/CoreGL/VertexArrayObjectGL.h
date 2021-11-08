@@ -13,7 +13,7 @@
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-class Polygon2D;
+class Entity;
 
 //=============================================================================================================================================//
 //  Data structures.																														   //
@@ -143,7 +143,7 @@ public:
 	// Data should not be stored and read from OpenGL (GPU side).
 	std::vector<VertexData> m_vertexDataCPU;
 	std::vector<VertexDataTextured> m_vertexDataTexturedCPU;
-	std::vector<Polygon2D*> m_polygon2DCPU;
+	std::vector<Entity*> m_entityCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -217,7 +217,7 @@ public:
 	// ----------------- //
 
 	// Append data on the CPU side memory for textured vertices.
-	void appendDataCPU(Polygon2D* polygon);
+	void appendDataCPU(Entity* entity);
 	// Assign data to the GPU side memory for textured vertices.
 	// since this funtion is going to be called in performance critical scenarios.
 	// If you use this function it will update faster, but you also lose the ability
@@ -225,9 +225,9 @@ public:
 	// Error handling is not added to this function to make it as fast as possible, so
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
-	void assignDataGPU(Polygon2D* polygon);
+	void assignDataGPU(Entity* entity);
 	// Delete the polygon from the VAO.
-	void deleteDataCPU(Polygon2D* polygon);
+	void deleteDataCPU(Entity* entity);
 };
 
 //=============================================================================================================================================//
