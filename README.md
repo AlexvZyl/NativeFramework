@@ -1,4 +1,4 @@
-# ElecDev Graphics Application
+# Lumen Graphics Engine
 
 This is the graphics application that is to be used with the ElecDev software.  It is built to be a standalone executable that can interface with Excel.
 
