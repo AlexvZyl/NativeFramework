@@ -70,12 +70,12 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 //  Key press.																																   //
 //=============================================================================================================================================//
 
-void Design2DEngineGL::keyPressEvent(int key) 
+void Design2DEngineGL::keyEvent(int key, int action) 
 {
 	// Example usage.
-	if (key == GLFW_KEY_E) 
+	if (key==GLFW_KEY_E && action==GLFW_PRESS) 
 	{
-		m_trianglesVAO->wipeCPU();
+		// Do E.
 	}
 }
 

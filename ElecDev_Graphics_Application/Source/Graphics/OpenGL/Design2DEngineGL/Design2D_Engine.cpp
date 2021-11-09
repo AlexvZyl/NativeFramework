@@ -30,7 +30,6 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
-
 	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
 	glm::vec3 v2(0.5f, 0.5f, 0.0f);
 	glm::vec3 v3(0.5f, -0.5f, 0.0f);

@@ -83,9 +83,9 @@ void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
     graphicsHandler->mouseScrollEvent((float)yoffset);
 }
 
-void keyPresssedEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
+void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (action == GLFW_PRESS) { graphicsHandler->keyPressEvent(key); }
+    graphicsHandler->keyEvent(key, action);
 }
 
 /*=======================================================================================================================================*/
@@ -217,7 +217,7 @@ int main(int, char**)
     glfwSetMouseButtonCallback(window, mousePressEvent);        // Mouse press event.
     glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
-    glfwSetKeyCallback(window, keyPresssedEvent);               // Key press event.
+    glfwSetKeyCallback(window, keyEvent);                       // Key press event.
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
@@ -226,6 +226,7 @@ int main(int, char**)
     GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
     GLCall(glClearColor(0.17f, 0.17f, 0.17f, 1.0f));            // Set the color to which OpenGL clears.
+    GLCall(glEnable(GL_DEPTH_TEST));
 
     // Create the state machine variables.
     GUIState guiState;

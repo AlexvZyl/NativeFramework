@@ -65,7 +65,7 @@ public:
 	virtual void mousePressRight(float pixelCoords[2]);
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
-	virtual void keyPressEvent(int key);
+	virtual void keyEvent(int key, int action);
 };
 
 //=============================================================================================================================================//

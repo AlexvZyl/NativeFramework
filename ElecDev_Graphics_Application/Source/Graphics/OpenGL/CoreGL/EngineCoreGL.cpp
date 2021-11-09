@@ -170,10 +170,10 @@ void EngineCoreGL::updateGPU()
 	// Assign background data.
 	float bgColor1[4] = { (float)182 / 255, (float)200 / 255, (float)255 / 255, 0.8f };
 	float bgColor2[4] = { (float)222 / 255, (float)255 / 255, (float)255 / 255, 0.8f };
-	VertexData v5(1.0f, 1.0f, 0.0f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3], 0);		//  Top right.
-	VertexData v6(-1.0f, 1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom left.
-	VertexData v8(1.0f, -1.0f, 0.0f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
+	VertexData v5(1.0f, 1.0f, -0.9f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3], 0);		//  Top right.
+	VertexData v6(-1.0f, 1.0f, -0.9f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Top left.
+	VertexData v7(-1.0f, -1.0f, -0.9f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom left.
+	VertexData v8(1.0f, -1.0f, -0.9f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
 	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	// Create background.
 	m_backgroundVAO->appendDataCPU(vertices);
@@ -197,7 +197,7 @@ void EngineCoreGL::updateGPU()
  void EngineCoreGL::mousePressRight(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); }
  void EngineCoreGL::mousePressMiddle(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); }
  void EngineCoreGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle) { functionNotImplementedError(__FUNCTION__); }
- void EngineCoreGL::keyPressEvent(int key) { functionNotImplementedError(__FUNCTION__); }
+ void EngineCoreGL::keyEvent(int key, int action) { functionNotImplementedError(__FUNCTION__); }
 
 //=============================================================================================================================================//
 //  2D API.																																	   //

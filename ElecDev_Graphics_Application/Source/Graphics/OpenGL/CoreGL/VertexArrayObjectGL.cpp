@@ -186,7 +186,9 @@ void VertexArrayObject::assignDataGPU(Entity* entity)
 
 void VertexArrayObject::deleteDataCPU(Entity* Entity)
 {
-
+	// Delete entity.
+	// Change entity buffers.
+	updateGPU();
 }
 
 //=============================================================================================================================================//

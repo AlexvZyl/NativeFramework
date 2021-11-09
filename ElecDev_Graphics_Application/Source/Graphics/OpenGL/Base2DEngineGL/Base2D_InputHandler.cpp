@@ -106,7 +106,7 @@ void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 //  Key press.																																   //
 //=============================================================================================================================================//
 
-void Base2DEngineGL::keyPressEvent(int key) 
+void Base2DEngineGL::keyEvent(int key, int action) 
 {
 
 }
