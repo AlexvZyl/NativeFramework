@@ -35,6 +35,11 @@ struct GUIState
 	// Render windows information.
 	ImVec2 renderWindowMouseCoordinate = { 0,0 };
 	ImVec2 renderWindowSize = { 500,500 };
+
+	// Engine.
+	bool portHovered = false;
+	bool placingComponent = false;
+
 };
 
 /*=======================================================================================================================================*/

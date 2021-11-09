@@ -110,9 +110,9 @@ void GraphicsHandler::mouseScrollEvent(float yOffset)
 	}
 }
 
-void GraphicsHandler::keyPressEvent(int key) 
+void GraphicsHandler::keyEvent(int key, int action) 
 {
-	m_windowsDictionary[m_activeWindow]->engineGL->keyPressEvent(key);
+	m_windowsDictionary[m_activeWindow]->engineGL->keyEvent(key, action);
 }
 
 //=============================================================================================================================================//

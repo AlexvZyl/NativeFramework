@@ -108,7 +108,7 @@ void Base3DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 //  Key press.																																   //
 //=============================================================================================================================================//
 
-void Base3DEngineGL::keyPressEvent(int key) 
+void Base3DEngineGL::keyEvent(int key, int action) 
 {
 
 }

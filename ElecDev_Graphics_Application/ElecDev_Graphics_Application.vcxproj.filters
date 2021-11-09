@@ -101,7 +101,7 @@
     <ClCompile Include="Source\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.cpp" />
   </ItemGroup>
@@ -1404,7 +1404,7 @@
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\dll.h" />
     <ClInclude Include="Source\PythonInterface.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />

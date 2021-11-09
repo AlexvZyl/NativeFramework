@@ -51,9 +51,6 @@ void Base3DEngineGL::renderLoop()
 	//  S E T U P //
 	// ---------- //
 
-	// Enable depth test for the 3D rendering.
-	GLCall(glEnable(GL_DEPTH_TEST));
-
 	// Set glViewport for the ImGUI context.
 	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0],
 							(GLsizei)m_imGuiViewportDimensions[1]));
@@ -93,9 +90,6 @@ void Base3DEngineGL::renderLoop()
 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
-
-	// Disable depth test since its not needed for the 2D engines.
-	GLCall(glDisable(GL_DEPTH_TEST));
 }
 
 //=============================================================================================================================================//

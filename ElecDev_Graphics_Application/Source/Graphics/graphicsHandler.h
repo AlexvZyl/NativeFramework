@@ -124,7 +124,7 @@ public:
 	void mousePressEvent(int button, int action);											// Handle mouse press events.
 	void mouseMoveEvent(int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);	// Handle mouse move events.
 	void mouseScrollEvent(float yOffset);													// Handle mouse scroll events.
-	void keyPressEvent(int key);															// Handle keyboard inputs.
+	void keyEvent(int key, int action);														// Handle keyboard inputs.
 
 	// -------------------------- //
 	//  W I N D O W   E V E N T S //

@@ -88,6 +88,7 @@ void VertexArrayObject::unbind() const { GLCall(glBindVertexArray(0)); }
 void VertexArrayObject::appendDataCPU(std::vector<VertexData> vertices)
 {
 	m_vertexDataCPU.insert(m_vertexDataCPU.end(), vertices.begin(), vertices.end());
+	m_bufferIndex += vertices.size();
 }
 
 void VertexArrayObject::assignDataCPU(std::vector<VertexData> vertices, unsigned int index)
@@ -125,6 +126,7 @@ void VertexArrayObject::assignDataGPU(std::vector<VertexData> vertices, unsigned
 void VertexArrayObject::appendDataCPU(std::vector<VertexDataTextured> vertices)
 {
 	m_vertexDataTexturedCPU.insert(m_vertexDataTexturedCPU.end(), vertices.begin(), vertices.end());
+	m_bufferIndex += vertices.size();
 }
 
 void VertexArrayObject::assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index)
@@ -184,7 +186,9 @@ void VertexArrayObject::assignDataGPU(Entity* entity)
 
 void VertexArrayObject::deleteDataCPU(Entity* Entity)
 {
-
+	// Delete entity.
+	// Change entity buffers.
+	updateGPU();
 }
 
 //=============================================================================================================================================//

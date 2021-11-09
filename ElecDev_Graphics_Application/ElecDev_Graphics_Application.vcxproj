@@ -24,7 +24,7 @@
     <ProjectGuid>{26e8aca6-08dd-4daa-b218-0dda29b22b32}</ProjectGuid>
     <RootNamespace>ElecDevGraphicsApplication</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ElecDev</ProjectName>
+    <ProjectName>Lumen</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -169,7 +169,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
@@ -245,7 +245,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\SPDLog\async.h" />
     <ClInclude Include="Source\External\SPDLog\async_logger-inl.h" />

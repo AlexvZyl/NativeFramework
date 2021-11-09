@@ -53,6 +53,7 @@ void Polygon2D::translateTo(glm::vec2 pos)
 
 void Polygon2D::rotate(float angle)
 {
+
 }
 
 void Polygon2D::setColour(Colour col)
