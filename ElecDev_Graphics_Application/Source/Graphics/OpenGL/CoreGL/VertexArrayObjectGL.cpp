@@ -94,7 +94,7 @@ void VertexArrayObject::appendDataCPU(std::vector<VertexData> vertices)
 void VertexArrayObject::assignDataCPU(std::vector<VertexData> vertices, unsigned int index)
 {
 	// Create the VAO if it is empty.
-	if (!m_vertexDataCPU.size()) { appendDataCPU(vertices); }
+	if (!m_bufferIndex) { appendDataCPU(vertices); }
 	else 
 	{
 		for (VertexData& vertex : vertices)
@@ -132,7 +132,7 @@ void VertexArrayObject::appendDataCPU(std::vector<VertexDataTextured> vertices)
 void VertexArrayObject::assignDataCPU(std::vector<VertexDataTextured> vertices, unsigned int index)
 {
 	// Create the VAO if it is empty.
-	if (!m_vertexDataTexturedCPU.size()) { appendDataCPU(vertices); }
+	if (!m_bufferIndex) { appendDataCPU(vertices); }
 	else 
 	{
 		for (VertexDataTextured& vertex : vertices)
@@ -208,7 +208,7 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataCPU.size() * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_bufferIndex) * sizeof(VertexData), NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
 		for (VertexData& vertex : m_vertexDataCPU)
 		{
@@ -228,7 +228,7 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vBID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexDataTexturedCPU.size() * sizeof(VertexDataTextured), NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_bufferIndex) * sizeof(VertexDataTextured), NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
 		for (VertexDataTextured& vertex : m_vertexDataTexturedCPU)
 		{

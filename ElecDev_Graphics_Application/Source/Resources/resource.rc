@@ -57,7 +57,8 @@ ICON_PNG						RCDATA						"Icons\\circuitImage.png"
 //-------------------------------------------------------------------------------------------------
 // Shaders.
 BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
-BACKGROUND_SHADER				TEXTFILE					"Shaders\\backgroundShader.shader"
+BACKGROUND_SHADER_2D			TEXTFILE					"Shaders\\backgroundShader2D.shader"
+BACKGROUND_SHADER_3D			TEXTFILE					"Shaders\\backgroundShader3D.shader"
 TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.shader"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.

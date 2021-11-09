@@ -17,6 +17,9 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
+	// Create the background shader.
+	m_backgroundShader = new Shader(BACKGROUND_SHADER_2D);
+
 	// --------------------------------- //
 	//  P R O J E C T I O N   S E T U P  //
 	// --------------------------------- //

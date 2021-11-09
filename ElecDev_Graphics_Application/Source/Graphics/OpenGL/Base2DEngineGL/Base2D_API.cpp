@@ -139,7 +139,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_vertexDataTexturedCPU, text, coords, color, scale);
+		m_textRenderer->writeText(m_texturedTrianglesVAO, text, coords, color, scale);
 	}
 	// Right allign the text.
 	else if (align == "R" || align == "r") 
@@ -149,7 +149,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_vertexDataTexturedCPU, text, coords, color, scale);
+		m_textRenderer->writeText(m_texturedTrianglesVAO, text, coords, color, scale);
 	}
 	// Left allign the text.
 	else if (align == "L" || align == "l") 
@@ -157,7 +157,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of the coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(&m_texturedTrianglesVAO->m_vertexDataTexturedCPU, text, coords, color, scale);
+		m_textRenderer->writeText(m_texturedTrianglesVAO, text, coords, color, scale);
 	}
 	// Display error.
 	else 

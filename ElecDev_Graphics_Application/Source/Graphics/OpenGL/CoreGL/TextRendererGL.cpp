@@ -151,7 +151,7 @@ TextRenderer::~TextRenderer()
 }
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-void TextRenderer::writeText(std::vector<VertexDataTextured>* bufferCPU, std::string text, float coords[2], float color[4], float scale)
+void TextRenderer::writeText(VertexArrayObject* vao, std::string text, float coords[2], float color[4], float scale)
 {	
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
@@ -212,7 +212,7 @@ void TextRenderer::writeText(std::vector<VertexDataTextured>* bufferCPU, std::st
 	}
 
 	// Write all of the vertices to the CPU side buffer.
-	bufferCPU->insert(bufferCPU->end(), vertices.begin(), vertices.end());
+	vao->appendDataCPU(vertices);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

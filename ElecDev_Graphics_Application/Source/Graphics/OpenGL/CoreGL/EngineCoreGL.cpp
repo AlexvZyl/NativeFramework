@@ -32,7 +32,6 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 
 	// Compile the shaders, using the resources embedded in the exe.
 	m_basicShader = new Shader(BASIC_SHADER);
-	m_backgroundShader = new Shader(BACKGROUND_SHADER);
 	m_textureShader = new Shader(TEXTURE_SHADER);
 
 	// Set default values for the shaders.  The background shader does not require
@@ -168,12 +167,12 @@ void EngineCoreGL::updateGPU()
 	// Create the VAO.
 	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
 	// Assign background data.
-	float bgColor1[4] = { (float)182 / 255, (float)200 / 255, (float)255 / 255, 0.8f };
-	float bgColor2[4] = { (float)222 / 255, (float)255 / 255, (float)255 / 255, 0.8f };
-	VertexData v5(1.0f, 1.0f, -0.9f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3], 0);		//  Top right.
-	VertexData v6(-1.0f, 1.0f, -0.9f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, -0.9f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom left.
-	VertexData v8(1.0f, -1.0f, -0.9f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
+	float bgColor1[4] = { (float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f };
+	float bgColor2[4] = { (float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f };
+	VertexData v5(1.0f, 1.0f, 0.99f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3], 0);		//  Top right.
+	VertexData v6(-1.0f, 1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Top left.
+	VertexData v7(-1.0f, -1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom left.
+	VertexData v8(1.0f, -1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
 	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
 	// Create background.
 	m_backgroundVAO->appendDataCPU(vertices);

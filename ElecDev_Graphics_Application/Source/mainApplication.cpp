@@ -254,7 +254,7 @@ int main(int, char**)
     // Set waiting for events.
     bool wait = false;
 
-    // Apply FPS Cap.
+    // FPS cap settings.
     double fps = 60;
     double targetFrameTime = 1 / fps;
     double totalFrameTime = 0;

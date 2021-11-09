@@ -953,8 +953,9 @@
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
+    <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
+    <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
     <None Include="Source\Resources\Shaders\basicShader.shader" />
-    <None Include="Source\Resources\Shaders\backgroundShader.shader" />
     <None Include="Source\Resources\Shaders\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>
