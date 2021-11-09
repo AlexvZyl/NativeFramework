@@ -12,14 +12,20 @@ as error handling for when a wrong function is called on a engine type.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "FrameBufferObjectGL.h"
-#include "VertexArrayObjectGL.h"
-#include "TextRendererGL.h"
+#include "Entities/Entity.h"
+#include "FontLoader.h"
 #include "ShaderHandlerGL.h"
 #include "ErrorHandlerGL.h"
 #include <glm.hpp>
 // GUI states.
 #include "GUI/GUIState.h"
+
+//=============================================================================================================================================//
+//  Forward declerations.																													   //
+//=============================================================================================================================================//
+
+class VertexArrayObject;
+class FrameBufferObject;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -80,7 +86,10 @@ public:
 												// Also implements MSAA.
 												 
 	// Text rendering.
-	TextRenderer* m_textRenderer;				// Handles the text redering for the engine.
+	Font m_font;								// Font used when rendering text.
+
+	// Entities.
+	std::vector<Entity*> m_entities;			//  Vector that containts all of the rendered entities.
 
 	// --------------------------- //
 	//  S T A T E   M A C H I N E  //

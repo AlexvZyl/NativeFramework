@@ -1,36 +1,49 @@
 #pragma once
 
+/*
+The parent class that contains all of the information that a vertex type can contain.
+BufferLayout is used to setup the VAO.
+*/
+
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Entity.h"
-#include <string>
-#include <map>
+#include "GLAD/glad.h"
+#include <vector>
 
 //=============================================================================================================================================//
-//  Forward declarations.																													   //
+//  Forward declerations.																													   //
+//=============================================================================================================================================//
+ 
+ 
+
+//=============================================================================================================================================//
+//  Vertex Layout Struct.																													   //
 //=============================================================================================================================================//
 
-class VertexArrayObject;
-struct Character;
-struct Font;
+// Used to describe the layout of the VAO for the vertex type.
+struct BufferLayout 
+{
+	GLuint index;
+	GLint size;
+	GLenum type;
+	GLboolean normalized;
+	GLsizei stride;
+	const GLvoid* pointer;
+};
 
 //=============================================================================================================================================//
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Text : public Entity
+class Vertex
 {
-public:
 
-	// Constructor.
-	// Takes the normal texture information as input, as well as the VAO that it has to render to
-	// and also the font that it has to use to render.
-	Text(std::string text, glm::vec3 position, glm::vec4 color, float scale, 
-		 unsigned int eID, VertexArrayObject* vao, Font* font);
-	// Destructor.
-	~Text();
+private:
+
+public:
+	std::vector<BufferLayout> m_bufferLayout;
 };
 
 //=============================================================================================================================================//

@@ -5,6 +5,7 @@
 // The base 2D engine.
 #include "Base3D_Engine.h"
 #include "Resources/ResourceHandler.h"
+#include "CoreGL/FrameBufferObjectGL.h"
 
 //=============================================================================================================================================//
 //  Constructor and Destructor.																												   //

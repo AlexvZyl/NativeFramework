@@ -13,6 +13,7 @@ and notify the user via the terminal interface.
 // Class include.
 #include "EngineCoreGL.h"
 #include "Resources/ResourceHandler.h"
+#include "CoreGL/FrameBufferObjectGL.h"
 #include "GLFW/glfw3.h"
 
 //=============================================================================================================================================//
@@ -60,12 +61,12 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	//  C R E A T E   T E X T   R E N D E R E R  //
 	// ----------------------------------------- //
 
-	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
+	m_font = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1 };
 	GLCall(glUniform1iv(loc, 2, samplers));
-	GLCall(glBindTextureUnit(1, m_textRenderer->m_textureID));	// Text Atlas.
+	GLCall(glBindTextureUnit(1, m_font.textureID));	// Text Atlas.
 
 	// Print done message.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core done.\n";
@@ -81,7 +82,6 @@ EngineCoreGL::~EngineCoreGL()
 	delete m_backgroundVAO;			// "
 	delete m_trianglesVAO;			// "
 	delete m_texturedTrianglesVAO;	// "
-	delete m_textRenderer;			// Text renderer.
 	delete m_frameBuffer;			// FBO.
 }
 
