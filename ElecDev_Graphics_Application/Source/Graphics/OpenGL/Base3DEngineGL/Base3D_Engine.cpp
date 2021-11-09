@@ -4,6 +4,7 @@
 
 // The base 2D engine.
 #include "Base3D_Engine.h"
+#include "Resources/ResourceHandler.h"
 
 //=============================================================================================================================================//
 //  Constructor and Destructor.																												   //
@@ -15,6 +16,9 @@ Base3DEngineGL::Base3DEngineGL(GUIState* guiState)
 {
 	// Starting log.
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
+
+	// Create the background shader.
+	m_backgroundShader = new Shader(BACKGROUND_SHADER_3D);
 
 	// Create the camera.
 	float position[3] = {0.0f, 4.0f, 6.0f};

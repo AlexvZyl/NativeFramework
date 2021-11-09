@@ -61,7 +61,7 @@ public:
 	// Destructor.
 	~TextRenderer();
 	// Writes the text to the CPU side buffer supplied.
-	void writeText(std::vector<VertexDataTextured>* bufferCPU, std::string text, float coords[2], float color[4], float scale);
+	void writeText(VertexArrayObject* vao, std::string text, float coords[2], float color[4], float scale);
 
 };
 

@@ -1736,9 +1736,6 @@
     <None Include="Source\External\glm\gtx\spline.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\backgroundShader.shader">
-      <Filter>Source</Filter>
-    </None>
     <None Include="Source\External\glm\gtx\std_based_type.inl">
       <Filter>Source</Filter>
     </None>
@@ -1853,6 +1850,8 @@
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\GUI\GUIColors.md" />
+    <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
+    <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">
