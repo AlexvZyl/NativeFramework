@@ -7,6 +7,7 @@ Engine API.
 //=============================================================================================================================================//
 
 #include "Base2D_Engine.h"
+#include "../CoreGL/Entities/Text.h"
 
 //=============================================================================================================================================//
 //  Rendering.																																   //
@@ -124,12 +125,14 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 // Adds text to the VBO object.
 void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, std::string align)
 {
+	// Convert color to GLM.
+	glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
 	// Calculate the length & height of the string.
 	float length = 0;
-	float height = m_textRenderer->m_characterDictionary[text[0]].height;
+	float height = m_font.characterDictionary[text[0]].height;
 	for (char c : text)
 	{
-		length += m_textRenderer->m_characterDictionary[c].xAdvance;
+		length += m_font.characterDictionary[c].xAdvance;
 	}
 	// Center the text.
 	if (align == "C" || align == "c")
@@ -139,7 +142,8 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(m_texturedTrianglesVAO, text, coords, color, scale);
+		m_entities.push_back(new Text(text, glm::vec3(coords[0], coords[1], 0.0f), colorGLM, scale,
+									  0, m_texturedTrianglesVAO, &m_font));
 	}
 	// Right allign the text.
 	else if (align == "R" || align == "r") 
@@ -149,7 +153,8 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(m_texturedTrianglesVAO, text, coords, color, scale);
+		m_entities.push_back(new Text(text, glm::vec3(coords[0], coords[1], 0.0f), colorGLM, scale,
+							          0, m_texturedTrianglesVAO, &m_font));
 	}
 	// Left allign the text.
 	else if (align == "L" || align == "l") 
@@ -157,7 +162,8 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 		// Place on top of the coordinate.
 		coords[1] = coords[1] + height * scale;
 		// Write text to CPU side buffer.
-		m_textRenderer->writeText(m_texturedTrianglesVAO, text, coords, color, scale);
+		m_entities.push_back(new Text(text, glm::vec3(coords[0], coords[1], 0.0f), colorGLM, scale,
+									  0, m_texturedTrianglesVAO, &m_font));
 	}
 	// Display error.
 	else 

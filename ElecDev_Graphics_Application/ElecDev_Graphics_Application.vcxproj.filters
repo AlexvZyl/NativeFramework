@@ -65,7 +65,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
@@ -103,8 +102,8 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1324,7 +1323,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextRendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoader.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
@@ -1408,7 +1407,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.h" />
   </ItemGroup>
   <ItemGroup>
@@ -1854,6 +1853,7 @@
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
     <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
+    <None Include="Source\Resources\Shaders\circleShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">

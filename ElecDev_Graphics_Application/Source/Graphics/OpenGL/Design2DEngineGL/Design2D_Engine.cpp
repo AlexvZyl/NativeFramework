@@ -19,6 +19,7 @@ This is where the interactive 2D design engine is implemented.
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
+#include "CoreGL/FrameBufferObjectGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
