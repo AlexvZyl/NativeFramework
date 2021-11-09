@@ -96,22 +96,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ⬜ Implement stencil buffers.
 - ⬜ Expand texture rendering capabilities.
 
-### Design 2D Engine (Child of Base 2D Engine)
-
-- ⬜ Mouse event handler.
-- ⬜ Component generation and buffer management.
-- ⬜ Cable generation.
-- ⬜ Add virtual mouse point that snaps to parts of the drawings to make editing easier.
-- ⬜ Port software from the PyQt interface:
-  - ⬜ Create a state machine for type of user interface.
-- ⬜ Improve engine with a better UI:
-  - ⬜ Auto alignment.
-  - ⬜ Move components.
-- ⬜ Add symbol library.
-- ⬜ Add template circuits.
-- ⬜ Able to enter a circuit and define it from the inside.  Add as many layers as needed.
-- ⬜ Add helper class the draws lines and highlites components that are selected.
-
 ### Base 3D Engine
 
 - ✅ Add Base3D engine that can have a window instance.
