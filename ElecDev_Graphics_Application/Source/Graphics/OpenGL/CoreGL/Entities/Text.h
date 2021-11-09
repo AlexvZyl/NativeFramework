@@ -21,8 +21,6 @@ class Text : Entity
 private:
 
 
-
-
 public:
 
 };
