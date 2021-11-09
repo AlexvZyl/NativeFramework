@@ -167,7 +167,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
@@ -245,7 +244,6 @@
   <ItemGroup>
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
