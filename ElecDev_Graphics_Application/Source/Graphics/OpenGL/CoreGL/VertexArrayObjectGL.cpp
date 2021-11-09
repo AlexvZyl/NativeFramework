@@ -4,6 +4,7 @@
 
 #include "Entities/Entity.h"
 #include "VertexArrayObjectGL.h"
+#include "External/Misc/ConsoleColor.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -186,9 +187,29 @@ void VertexArrayObject::assignDataGPU(Entity* entity)
 
 void VertexArrayObject::deleteDataCPU(Entity* Entity)
 {
-	// Delete entity.
-	// Change entity buffers.
-	updateGPU();
+	// Find entity that has to be deleted.
+	auto iterator = std::find(m_entityCPU.begin(), m_entityCPU.end(), Entity);
+	// Check if the entity was found.
+	if (iterator != m_entityCPU.end()) 
+	{
+		// Find index based on the iterator.
+		int index = std::distance(m_entityCPU.begin(), iterator);
+		// Delete entity entry.
+		m_entityCPU.erase(m_entityCPU.begin() + index);
+		// Change buffer index to the end of the untouched entity.
+		if(index != 0){ m_bufferIndex = m_entityCPU[index - 1]->m_bufferStartIndex + m_entityCPU[index - 1]->m_vertexData.size(); }
+		else { m_bufferIndex = 0; }
+		// Update the buffer indeces of the entities.
+		for (int i = index; i < m_entityCPU.size(); i++) 
+		{
+			m_entityCPU[i]->m_bufferStartIndex = m_bufferIndex;
+			m_bufferIndex += m_entityCPU[i]->m_vertexData.size();
+		}
+		// Apply changes to the buffer.
+		updateGPU();
+	}
+	// Entity was not found.
+	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "Tried to delete entity, but it is not in the list."; }
 }
 
 //=============================================================================================================================================//
