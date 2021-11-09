@@ -57,7 +57,6 @@ Toolbar::Toolbar(GUIState* guiState)
 
 void Toolbar::renderToolbar()
 {
-
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -79,7 +78,6 @@ void Toolbar::renderToolbar()
         }
         ImGui::EndMainMenuBar();
     }
-
 };
 
 /*=======================================================================================================================================*/

@@ -60,9 +60,9 @@ public:
 
 	virtual void resizeEvent(float width, float height);
 
-	// ------------------------- //
-	//  M O U S E   E V E N T S  //
-	// ------------------------- //
+	// ----------------------- //
+	//  U S E R   I N P U T S  //
+	// ----------------------- //
 
 	// Handling mouse events.
 	virtual void mousePressLeft(float pixelCoords[2]);
@@ -70,6 +70,7 @@ public:
 	virtual void mousePressMiddle(float pixelCoords[2]);
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
+	virtual void keyEvent(int key, int action);
 };
 
 //=============================================================================================================================================//

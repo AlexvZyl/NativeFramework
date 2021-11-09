@@ -17,6 +17,9 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
+	// Create the background shader.
+	m_backgroundShader = new Shader(BACKGROUND_SHADER_2D);
+
 	// --------------------------------- //
 	//  P R O J E C T I O N   S E T U P  //
 	// --------------------------------- //
@@ -31,7 +34,9 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 	// Save projection values to be used with resizing of the window.
 	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
 	// Create projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], 0.1f, 1.0f);
+	m_projectionValues[4] = -1.0f;
+	m_projectionValues[5] = 1.0f;
+	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
 
 	// Assign projection matrices to shader.
 	m_basicShader->bind();
@@ -81,6 +86,7 @@ void Base2DEngineGL::renderLoop()
 
 	// Calculate and update the engine matrices.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
+
 	
 	// Render to frame buffer.
 	m_frameBuffer->bind();
@@ -108,7 +114,7 @@ void Base2DEngineGL::renderLoop()
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //
-
+	// 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
 }

@@ -24,30 +24,31 @@
 //-------------------------------------------------------------------------------------------------
 // Shaders
 #define BASIC_SHADER 253
-#define BACKGROUND_SHADER 252
-#define TEXTURE_SHADER 251
+#define BACKGROUND_SHADER_2D 252
+#define BACKGROUND_SHADER_3D 251
+#define TEXTURE_SHADER 250
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
-#define COMPONENT_PNG 250				
-#define DRAW_CIRCUIT_BUCKETS_PNG 249
-#define DRAW_MCC_PNG 248				
+#define COMPONENT_PNG 249				
+#define DRAW_CIRCUIT_BUCKETS_PNG 248
+#define DRAW_MCC_PNG 247				
 //-------------------------------------------------------------------------------------------------
 // OpenGL Textures.
-#define CIRCUIT_TREE_PNG 247
+#define CIRCUIT_TREE_PNG 246
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
-#define ARIAL_SDF_FNT 246		
-#define ARIAL_SDF_PNG 245		
+#define ARIAL_SDF_FNT 245		
+#define ARIAL_SDF_PNG 244		
 #define ARIAL_SDF_MIN_FNT 243
 #define ARIAL_SDF_MIN_PNG 242	
 //-------------------------------------------------------------------------------------------------
 // ImGui Fonts. 
-#define RUDA_BOLD_TTF 238
+#define RUDA_BOLD_TTF 241
 //-------------------------------------------------------------------------------------------------
 // Application icon.
-#define IDI_ICON1 241			// Exe icon.
-#define ICON_PNG 240			// GLFW icon.
-#define PANDA 239
+#define IDI_ICON1 240			// Exe icon.
+#define ICON_PNG 239			// GLFW icon.
+#define PANDA 238
 //-------------------------------------------------------------------------------------------------
 
 /*=======================================================================================================================================*/

@@ -81,7 +81,7 @@ void PyInterface::procesInput(std::string inString)
     // Error output of the command is invalid.
     default:
     {
-        std::cout << red << "\n[PyInterface] [ERROR] : " << white << " '" << command << "' type invalid.\n";
+        std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << command << "' type invalid.\n";
         std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
         break;
     }
@@ -101,7 +101,7 @@ void PyInterface::readingIn()
         std::getline(std::cin, temp);
         if (temp != "")
         {
-            std::cout << blue << "[PyInterface] [INFO] : " << white << "Command received." << std::endl;
+            std::cout << blue << "[INTERFACE] [INFO] : " << white << "Command received." << std::endl;
             std::string subCommand = "";
             while (true)
             {
@@ -365,7 +365,7 @@ void PyInterface::deQueueInput()
                 break;
 
             default:
-                std::cout << red << "\n[PyInterface] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
+                std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << temp.command.c_str() << "' function invalid. \n";
                 break;
             }
 
@@ -385,7 +385,7 @@ void PyInterface::deQueueInput()
 // Print the exception message to the terminal.
 void PyInterface::exceptionLog(const std::exception& e)
 {
-    std::cout << red << "\n[PyInterface] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
+    std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
     std::cout << green << "\n[ELECDEV] [INPUT] : " << white;
 }
 

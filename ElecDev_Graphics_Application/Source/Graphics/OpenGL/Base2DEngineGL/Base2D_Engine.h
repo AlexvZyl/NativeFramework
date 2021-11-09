@@ -65,15 +65,16 @@ public:
 	virtual void drawDemo(unsigned int loopCount);								
 	virtual void autoCenter();
 
-	// ------------------------- //
-	//  M O U S E   E V E N T S  //
-	// ------------------------- //
+	// --------------------- //
+	//  U S E R   I N P U T  //
+	// --------------------- //
 
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight(float pixelCoords[2]);
 	virtual void mousePressMiddle(float pixelCoords[2]);
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);	
+	virtual void keyEvent(int key, int action);
 };
 
 //=============================================================================================================================================//

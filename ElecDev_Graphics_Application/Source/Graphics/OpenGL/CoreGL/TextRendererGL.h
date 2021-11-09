@@ -48,6 +48,8 @@ private:
 		float xAdvance=0;		// Amount that the cursor should move to draw a new character.
 	};
 
+	VertexArrayObject* m_VAO;
+
 public:
 
 	// Character dictionary that contains the info on each character.
@@ -59,7 +61,7 @@ public:
 	// Destructor.
 	~TextRenderer();
 	// Writes the text to the CPU side buffer supplied.
-	void writeText(std::vector<VertexDataTextured>* bufferCPU, std::string text, float coords[2], float color[4], float scale);
+	void writeText(VertexArrayObject* vao, std::string text, float coords[2], float color[4], float scale);
 
 };
 

@@ -30,8 +30,7 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
-
-	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
+	/*glm::vec3 v1(-0.5f, 0.5f, 0.0f);
 	glm::vec3 v2(0.5f, 0.5f, 0.0f);
 	glm::vec3 v3(0.5f, -0.5f, 0.0f);
 	glm::vec3 v4(-0.5f, -0.5f, 0.0f);
@@ -46,7 +45,7 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 	std::vector<glm::vec3> vertices1 = { v11, v21, v31, v41 };
 	polygon1 = new Polygon2D(vertices1, m_trianglesVAO);
 	polygon1->setColour(Colour(0.f, 0.f, 1.f, 0.5f));
-	polygon1->update();
+	polygon1->update();*/
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
 	

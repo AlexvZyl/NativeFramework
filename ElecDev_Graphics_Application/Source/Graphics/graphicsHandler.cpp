@@ -56,10 +56,9 @@ bool GraphicsHandler::isWindowValid(std::string windowName)
 }
 
 //=============================================================================================================================================//
-//  Mouse events.																															   //
+//  User Input.																																   //
 //=============================================================================================================================================//
 
-// Handle mouse press events.
 void GraphicsHandler::mousePressEvent(int button, int action)
 {	
 	// Check if window dict is empty or inactive.
@@ -89,7 +88,6 @@ void GraphicsHandler::mousePressEvent(int button, int action)
 	}
 }
 
-// Handle mouse move events.
 void GraphicsHandler::mouseMoveEvent(int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
 	// Check if window dict is empty or inactive.
@@ -101,7 +99,6 @@ void GraphicsHandler::mouseMoveEvent(int buttonStateLeft, int buttonStateRight, 
 	}
 }
 
-// Handle mouse scroll events.
 void GraphicsHandler::mouseScrollEvent(float yOffset) 
 {	
 	// Check if window dict is empty or inactive.
@@ -113,11 +110,15 @@ void GraphicsHandler::mouseScrollEvent(float yOffset)
 	}
 }
 
+void GraphicsHandler::keyEvent(int key, int action) 
+{
+	m_windowsDictionary[m_activeWindow]->engineGL->keyEvent(key, action);
+}
+
 //=============================================================================================================================================//
 //  Window events.																															   //
 //=============================================================================================================================================//
 
-// Resize event for the ImGui window.
 void GraphicsHandler::resizeEvent(int width, int height)
 {
 	// Check if the dict is not empty.	

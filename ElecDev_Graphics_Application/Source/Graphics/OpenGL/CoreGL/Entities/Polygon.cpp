@@ -52,6 +52,7 @@ void Polygon2D::translateTo(glm::vec2 pos)
 
 void Polygon2D::rotate(float angle)
 {
+
 }
 
 void Polygon2D::setColour(Colour col)
@@ -69,6 +70,12 @@ void Polygon2D::setEID(unsigned eID)
 	for (int i = 0; i < n_vertices; i++) {
 		m_vertexData[i].entityID[0] = m_eID;
 	}
+}
+
+void Polygon2D::destroy() 
+{
+	m_VAO->deleteDataCPU(this);
+	delete this;
 }
 
 //=============================================================================================================================================//
