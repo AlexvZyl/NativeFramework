@@ -104,6 +104,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1408,6 +1409,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\VertexData.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
