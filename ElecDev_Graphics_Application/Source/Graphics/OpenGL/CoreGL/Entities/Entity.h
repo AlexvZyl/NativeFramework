@@ -11,7 +11,14 @@ for a VAO to be able to render the entity to the screen.
 
 #include <vector>
 #include <glm.hpp>
-#include "CoreGL/VertexArrayObjectGL.h"
+#include <memory>
+
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
+
+class VertexArrayObject;
+struct Vertex;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -25,32 +32,33 @@ public:
 	//  V A R I A B L E S  //
 	// ------------------- //
 
-	std::vector<VertexData> m_vertexData;					// The untextured vertex data used for the entity.
-	std::vector<VertexDataTextured> m_vertexDataTextured;	// The textured vertex data used for the entity.
-	unsigned int m_bufferStartIndex;						// The start position of the entity in the VAO.
-	VertexArrayObject* m_VAO = NULL;						// Pointer to the VAO that the entity is drawn to.
+	std::vector<std::shared_ptr<Vertex>> m_vertices;	// The untextured vertex data used for the entity.
+	VertexArrayObject* m_VAO;							// Pointer to the VAO that the entity is drawn to.
+	unsigned int m_bufferStartIndex;					// The start position of the entity in the VAO.
+	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};			// Gives the option to track the center of the entity.
+														// Useful for rotation, scaling and moving to a point.
+	glm::vec4 m_globalColor = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
+	unsigned int m_globalEntityID = 0;					// Saves the global entity ID.
 
 	// ------------------- //
 	//  F U N C T I O N S  //
 	// ------------------- //
 
 	// Translate the entity by the given vector.
-	void translate(glm::vec3 translation)
-	{
-		for (VertexData& vertex : m_vertexData) { vertex.position += translation; } 
-	}
-
+	void translate(glm::vec3 translation);
+	void translateTo(glm::vec3 position);
 	// Rotates the entity by the given vector and center point.
-	void rotate(glm::vec3 rotation, glm::vec3 center) 
-	{	
-		
-	}
-
+	void rotate(glm::vec3 rotation);
 	// Scales the entity by the given vector and center point.
-	void scale(glm::vec3 scaling, glm::vec3 center) 
-	{
-
-	}
+	void scale(glm::vec3 scaling);
+	// Sets the color for all of the vertices.
+	void setColor(glm::vec4 color);
+	// Sets the entty ID of the entity.
+	void setEntityID(unsigned int eID);
+	// Updates the entity directly on the GPU.
+	void update();
+	// Deletes the entity and clears the memory.
+	void destroy();
 };
 
 //=============================================================================================================================================//

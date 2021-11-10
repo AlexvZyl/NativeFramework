@@ -8,6 +8,18 @@
 
 #include "../Resources/ResourceHandler.h"
 #include "ShaderHandlerGL.h"
+// OpenGL.
+#include "ErrorHandlerGL.h"
+#include <glad/glad.h>
+#include <glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+// General.
+#include <iostream>
+// File streaming.
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include "External/Misc/ConsoleColor.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.

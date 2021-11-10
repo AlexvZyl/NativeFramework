@@ -12,13 +12,11 @@ as error handling for when a wrong function is called on a engine type.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Entities/Entity.h"
-#include "FontLoader.h"
-#include "ShaderHandlerGL.h"
-#include "ErrorHandlerGL.h"
-#include <glm.hpp>
-// GUI states.
-#include "GUI/GUIState.h"
+#include "Entities/Entity.h"	// For rendering entities in OpenGL.
+#include "FontLoader.h"			// For loading fonts into the app.
+#include "ErrorHandlerGL.h"		// For OpenGL error handling.
+#include <glm.hpp>				// OpenGL maths.
+#include "GUI/GUIState.h"		// The GUI states and other information.
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -26,6 +24,7 @@ as error handling for when a wrong function is called on a engine type.
 
 class VertexArrayObject;
 class FrameBufferObject;
+class Shader;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -71,32 +70,32 @@ public:
 	// ---------------------------------- //
 
 	// Shaders.
-	Shader* m_basicShader;						// Renders movable elements without textures.
-	Shader* m_backgroundShader;					// Renders the background.
-	Shader* m_textureShader;					// Renders movable elements with textures.
+	std::shared_ptr<Shader> m_basicShader;				// Renders movable elements without textures.
+	std::shared_ptr<Shader> m_backgroundShader;			// Renders the background.
+	std::shared_ptr<Shader> m_textureShader;			// Renders movable elements with textures.
 
 	// Vertex arrays.
-	VertexArrayObject* m_linesVAO;				// Lines.
-	VertexArrayObject* m_trianglesVAO;			// Triangles.
-	VertexArrayObject* m_texturedTrianglesVAO;	// Textured Triangles.
-	VertexArrayObject* m_backgroundVAO;			// Background has a seperate VAO since it should not move.
+	std::shared_ptr<VertexArrayObject> m_linesVAO;				// Lines.
+	std::shared_ptr<VertexArrayObject> m_trianglesVAO;			// Triangles.
+	std::shared_ptr<VertexArrayObject> m_texturedTrianglesVAO;	// Textured Triangles.
+	std::shared_ptr<VertexArrayObject> m_backgroundVAO;			// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer Object.
-	FrameBufferObject* m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
-												// Also implements MSAA.
+	std::shared_ptr<FrameBufferObject> m_frameBuffer;	// FBO to render scene onto.  Stores the OpenGL scene as a texture.
+														// Also implements MSAA.
 												 
 	// Text rendering.
-	Font m_font;								// Font used when rendering text.
+	Font m_font;										// Font used when rendering text.
 
 	// Entities.
-	std::vector<Entity*> m_entities;			//  Vector that containts all of the rendered entities.
+	std::vector<std::shared_ptr<Entity>> m_entities;	//  Vector that containts all of the rendered entities.
 
 	// --------------------------- //
 	//  S T A T E   M A C H I N E  //
 	// --------------------------- //
 
-	GUIState* m_guiState;		// Contains the current state of the application as well as information
-								// that is required from the GUI side for the Graphics side.
+	std::shared_ptr<GUIState> m_guiState;	// Contains the current state of the application as well as information
+											// that is required from the GUI side for the Graphics side.
 
 	// ----------------- //
 	//  V I E W P O R T  //

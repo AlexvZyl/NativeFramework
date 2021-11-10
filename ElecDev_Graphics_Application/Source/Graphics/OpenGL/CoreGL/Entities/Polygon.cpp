@@ -2,7 +2,9 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+#include "Vertex.h"
 #include "Polygon.h"
+#include "CoreGL/VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																										       	   //
@@ -10,73 +12,23 @@
 
 Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
 {
-	//set it all up
-	m_pos = glm::vec2(0.f, 0.f);
-	m_colour = Colour(1.f, 0.f, 0.f, 0.5f);
+	// Set it all up.
+	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
+	m_globalColor = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	n_vertices = vertices.size();
 	m_VAO = VAO;
+
 	// Populate VertexData structures.
 	for (int i = 1; i < n_vertices-1; i++) {
-		m_vertexData.insert(m_vertexData.end(), VertexData(vertices[0], m_colour, m_eID));
-		m_vertexData.insert(m_vertexData.end(), VertexData(vertices[i], m_colour, m_eID));
-		m_vertexData.insert(m_vertexData.end(), VertexData(vertices[i+1], m_colour, m_eID));
+		m_vertices.insert(m_vertices.end(), std::make_shared<VertexData>(vertices[0], m_globalColor, m_globalEntityID));
+		m_vertices.insert(m_vertices.end(), std::make_shared<VertexData>(vertices[i], m_globalColor, m_globalEntityID));
+		m_vertices.insert(m_vertices.end(), std::make_shared<VertexData>(vertices[i+1], m_globalColor, m_globalEntityID));
 	}
-	//pass to VAO
-	n_vertices = m_vertexData.size();
+
+	// Pass to VAO.
+	n_vertices = m_vertices.size();
 	m_VAO->appendDataCPU(this);
 	m_VAO->updateGPU();
-}
-
-Polygon2D::~Polygon2D() 
-{
-
-}
-
-void Polygon2D::update()
-{
-	m_VAO->assignDataGPU(this);
-}
-
-void Polygon2D::translate(glm::vec2 transVec)
-{
-	for (int i = 0; i < n_vertices; i++) {
-		m_vertexData[i].position += glm::vec3(transVec, 0);
-	}
-	m_pos += transVec;
-	m_VAO->assignDataGPU(this);
-}
-
-void Polygon2D::translateTo(glm::vec2 pos)
-{
-	translate(pos - m_pos);
-}
-
-void Polygon2D::rotate(float angle)
-{
-
-}
-
-void Polygon2D::setColour(Colour col)
-{
-	m_colour = col;
-	for (int i = 0; i < n_vertices; i++) {
-		m_vertexData[i].color = m_colour;
-	}
-
-}
-
-void Polygon2D::setEID(unsigned eID)
-{
-	m_eID = eID;
-	for (int i = 0; i < n_vertices; i++) {
-		m_vertexData[i].entityID[0] = m_eID;
-	}
-}
-
-void Polygon2D::destroy() 
-{
-	m_VAO->deleteDataCPU(this);
-	delete this;
 }
 
 //=============================================================================================================================================//
