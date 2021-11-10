@@ -22,8 +22,13 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
-	m_activeComponent = std::make_shared<Component2D>(pixelCoords);
-	m_components.insert(m_components.end(), m_activeComponent);
+	if (designerState == COMPONENT_PLACE) {
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+		m_activeComponent->place(screenCoords);
+		m_components.insert(m_components.end(), m_activeComponent);
+		m_activeComponent = std::make_shared<Component2D>(pixelCoords);
+	}
 }
 
 // Event handler for a mouse right click.
@@ -40,12 +45,13 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 // Event handler for a mouse move event.
 void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
-	// Move the component.
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
-	m_activeComponent->moveTo(screenCoords);
-	m_activeComponent->draw();
-
+	if (designerState == COMPONENT_PLACE) {
+		// Move the component.
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+		m_activeComponent->moveTo(screenCoords);
+		m_activeComponent->draw();
+	}
 	// Call parent event.
 	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }
@@ -59,11 +65,12 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	// Call the base engine event.
 	Base2DEngineGL::mouseScrollEvent(pixelCoords, yOffset);
 
+	/*
 	// Move the component.
 	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 	m_activeComponent->moveTo(screenCoords);
-	m_activeComponent->draw();
+	m_activeComponent->draw();*/
 }
 
 //=============================================================================================================================================//
@@ -72,7 +79,7 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action) 
 {
-	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
+	/*/glm::vec3 v1(-0.5f, 0.5f, 0.0f);
 	glm::vec3 v2(0.5f, 0.5f, 0.0f);
 	glm::vec3 v3(0.5f, -0.5f, 0.0f);
 	glm::vec3 v4(-0.5f, -0.5f, 0.0f);
@@ -96,7 +103,20 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2->destroy(); }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }*/
+
+	if (action == GLFW_PRESS) {
+		switch (key) {
+		case GLFW_KEY_P:
+			designerState = COMPONENT_PLACE;
+			m_activeComponent = std::make_shared<Component2D>();
+			break;
+		case GLFW_KEY_ESCAPE:
+			designerState = ENTITY_SELECT;
+			break;
+		}
+	}
+
 }
 
 //=============================================================================================================================================//

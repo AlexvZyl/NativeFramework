@@ -57,4 +57,7 @@ public:
 
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(float pointerPos[2]);
+
+	//Place a component
+	void place(float pos[2]);
 };

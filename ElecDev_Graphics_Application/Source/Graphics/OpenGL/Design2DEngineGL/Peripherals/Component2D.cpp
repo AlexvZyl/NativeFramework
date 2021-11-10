@@ -87,6 +87,13 @@ void Component2D::moveTo(float pointerPos[2])
 	draw();
 }
 
+void Component2D::place(float pos[2])
+{	//ensure the component is at the desired position
+	this->moveTo(pos);
+
+	//Move to placement layer
+}
+
 void Component2D::render()
 {
 	shapeVAO->render();
