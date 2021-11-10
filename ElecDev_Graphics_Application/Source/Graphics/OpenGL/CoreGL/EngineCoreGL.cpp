@@ -68,8 +68,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	//  C R E A T E   T E X T   R E N D E R E R  //
 	// ----------------------------------------- //
 
-	m_font = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);							// Load the font.
-	m_font.textureID = loadBitmapToGL(loadImageFromResource(ARIAL_SDF_PNG));	// Load font atlas as texture.
+	m_font = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1 };

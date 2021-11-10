@@ -31,7 +31,7 @@ Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
 			position.z,																	// z
 			color[0], color[1], color[2], color[3],										// Color.
 			c.x, 1.0f - c.y,															// Texture coordinates.
-			1.0f,																		// Slot 1 is reserved for the text font atlas.
+			1.0f,																			// Slot 1 is reserved for the text font atlas.
 			eID																			// The entity ID.  Fow now empty.
 		);
 		std::shared_ptr<VertexDataTextured> v2 = std::make_shared<VertexDataTextured>(	// Top Right.
@@ -40,7 +40,7 @@ Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
 			position.z,																	// z
 			color[0], color[1], color[2], color[3],										// Color.
 			c.x + c.width, 1.0f - c.y,													// Texture coordinates.
-			1.0f,																		// Slot 1 is reserved for the text font atlas.
+			1.0f,																			// Slot 1 is reserved for the text font atlas.
 			eID																			// The entity ID.  Fow now empty.
 		);
 		std::shared_ptr<VertexDataTextured> v3 = std::make_shared<VertexDataTextured>(	// Bottom right.
@@ -49,7 +49,7 @@ Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
 			position.z,																	// z
 			color[0], color[1], color[2], color[3],										// Color.
 			c.x + c.width, 1.0f - c.y - c.height,										// Texture coordinates.
-			1.0f,																		// Slot 1 is reserved for the text font atlas.
+			1.0f,																			// Slot 1 is reserved for the text font atlas.
 			eID																			// The entity ID.  Fow now empty.
 		);
 		std::shared_ptr<VertexDataTextured> v4 = std::make_shared<VertexDataTextured>(	// Bottom left.
@@ -58,7 +58,7 @@ Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
 			position.z,																	// z
 			color[0], color[1], color[2], color[3],										// Color.
 			c.x, 1.0f - c.y - c.height,													// Texture coordinates.
-			1.0f,																		// Slot 1 is reserved for the text font atlas.
+			1.0f,																			// Slot 1 is reserved for the text font atlas.
 			eID																			// The entity ID.  Fow now empty.
 		);
 		// Move the cursor right so that it can draw the next character.
@@ -68,6 +68,7 @@ Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
 	}
 	// Write all of the vertices to the CPU side buffer.
 	vao->appendDataCPU(this);
+	//vao->appendDataCPU(m_vertices);
 }
 
 Text::~Text() 
