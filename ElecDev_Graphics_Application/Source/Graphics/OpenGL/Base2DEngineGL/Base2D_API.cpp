@@ -201,13 +201,13 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 			drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
 
-			//// Test textures.
-			//std::shared_ptr v1 = std::make_shared<VertexDataTextured>(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f, 0);
-			//std::shared_ptr v2 = std::make_shared<VertexDataTextured>(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f, 0);
-			//std::shared_ptr v3 = std::make_shared<VertexDataTextured>(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0);
-			//std::shared_ptr v4 = std::make_shared<VertexDataTextured>(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0);
-			//std::vector<std::shared_ptr<Vertex>> verticesTex = {v1,v2,v3,v3,v4,v1};
-			//m_texturedTrianglesVAO->appendDataCPU(verticesTex);
+			// Test textures.
+			std::shared_ptr v1 = std::make_shared<VertexDataTextured>(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f, 0);
+			std::shared_ptr v2 = std::make_shared<VertexDataTextured>(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f, 0);
+			std::shared_ptr v3 = std::make_shared<VertexDataTextured>(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0);
+			std::shared_ptr v4 = std::make_shared<VertexDataTextured>(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0);
+			std::vector<std::shared_ptr<Vertex>> verticesTex = {v1,v2,v3,v3,v4,v1};
+			m_texturedTrianglesVAO->appendDataCPU(verticesTex);
 
 			// Test the text rendering.
 			float pos[2] = { 0.5f + i, 0.5f + k };
