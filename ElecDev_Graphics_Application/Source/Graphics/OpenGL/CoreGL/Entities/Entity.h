@@ -38,8 +38,8 @@ public:
 	unsigned int m_bufferStartIndex;					// The start position of the entity in the VAO.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};			// Gives the option to track the center of the entity.
 														// Useful for rotation, scaling and moving to a point.
-	glm::vec4 m_globalColor = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
-	unsigned int m_globalEntityID = 0;					// Saves the global entity ID.
+	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
+	unsigned int m_entityID = 0;					// Saves the global entity ID.
 
 	// ------------------- //
 	//  F U N C T I O N S  //

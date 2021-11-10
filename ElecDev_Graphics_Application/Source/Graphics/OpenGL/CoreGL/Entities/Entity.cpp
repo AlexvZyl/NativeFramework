@@ -36,13 +36,13 @@ void Entity::scale(glm::vec3 scaling)
 void Entity::setColor(glm::vec4 color) 
 {
 	for (std::shared_ptr<Vertex> vertex : m_vertices) { vertex->color = color; }
-	m_globalColor = color;
+	m_colour = color;
 }
 
 void Entity::setEntityID(unsigned int eID) 
 {
 	for (std::shared_ptr<Vertex> vertex : m_vertices) { vertex->entityID = eID; }
-	m_globalEntityID = eID;
+	m_entityID = eID;
 }
 
 void Entity::destroy() 
@@ -51,7 +51,7 @@ void Entity::destroy()
 	m_VAO->deleteDataCPU(this); m_VAO->updateGPU();
 	// Clear the data from the CPU.
 	m_vertices.clear(); m_vertices.shrink_to_fit();
-	delete this;
+	//this->~Entity()
 }
 
 void Entity::update() 

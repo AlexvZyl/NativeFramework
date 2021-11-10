@@ -95,9 +95,9 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	std::vector<glm::vec3> vertices3 = { v9, v10, v11, v12 };
 
 	// Add components.
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(vertices3, m_trianglesVAO); }
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(vertices1, m_trianglesVAO); }
-	if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(vertices2, m_trianglesVAO); }
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(vertices3, m_trianglesVAO.get()); }
+	if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(vertices1, m_trianglesVAO.get()); }
+	if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(vertices2, m_trianglesVAO.get()); }
 
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }

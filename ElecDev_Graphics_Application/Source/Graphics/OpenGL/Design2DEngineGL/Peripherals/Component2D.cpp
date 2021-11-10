@@ -17,19 +17,19 @@ Component2D::Component2D()
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
 	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
-	edgesVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
-	shapeColour = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
-	edgeColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	borderVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
+	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.9f);
+	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
 	//VertexData shapeVertices[4];
 	std::shared_ptr<VertexData> edgeVertices[4];
 
 	shape = std::make_shared<Polygon2D>(vertices, shapeVAO.get());
-	shape->setColour(shapeColour);
+	shape->setColor(shapeColour);
 	shape->setLayer(componentLayer);
 	shape->update();
 	border = std::make_shared<Polygon2D>(vertices, borderVAO.get());
-	border->setColour(borderColour);
+	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
 }
@@ -44,8 +44,10 @@ Component2D::~Component2D() {
 
 void Component2D::moveTo(float pointerPos[2])
 {
-	shape->translateTo(glm::vec2(pointerPos[0], pointerPos[1]));
-	border->translateTo(glm::vec2(pointerPos[0], pointerPos[1]));
+	shape->translateTo(glm::vec3(pointerPos[0], pointerPos[1], 0.f));
+	border->translateTo(glm::vec3(pointerPos[0], pointerPos[1], 0.f));
+	shape->update();
+	border->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
@@ -53,8 +55,8 @@ void Component2D::place(float pos[2])
 {	//ensure the component is at the desired position
 	moveTo(pos);
 	setLayer(0.0f);
-	shape->setColour(Colour(0.f, 0.f, 1.f, 0.5f));
-	border->setColour(Colour(0.5f, 0.5f, 0.5f, 1.f));
+	shape->setColor(glm::vec4(0.f, 0.f, 1.f, 0.5f));
+	border->setColor(glm::vec4(0.f, 0.f, 0.f, 1.f));
 	shape->update();
 	border->update();
 	//Move to placement layer
