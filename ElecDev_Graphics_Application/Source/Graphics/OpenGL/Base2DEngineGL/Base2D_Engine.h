@@ -41,7 +41,7 @@ public:
 	// ------------------- //
 
 	// Testing texture.
-	GLuint m_texture=0;
+	unsigned int m_texture=0;
 	// Rendering loop.
 	virtual void renderLoop();
 	// Get the ID to the FBO rendered texture.

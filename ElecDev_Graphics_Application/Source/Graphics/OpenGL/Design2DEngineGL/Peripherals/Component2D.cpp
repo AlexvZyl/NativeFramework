@@ -1,4 +1,7 @@
+
 #include "Component2D.h"
+#include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/VertexArrayObjectGL.h"
 
 Component2D::Component2D()
 {
@@ -13,13 +16,13 @@ Component2D::Component2D()
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES);
-	borderVAO = std::make_shared<VertexArrayObject>(GL_LINES);
-	shapeColour = Colour(0.7f, 0.7f, 0.9f, 0.5f);
-	borderColour = Colour(0.5f, 0.5f, 0.5f, 0.5f);
+	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
+	edgesVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
+	shapeColour = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
+	edgeColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	//VertexData shapeVertices[4];
-	VertexData edgeVertices[4];
+	std::shared_ptr<VertexData> edgeVertices[4];
 
 	shape = std::make_shared<Polygon2D>(vertices, shapeVAO.get());
 	shape->setColour(shapeColour);

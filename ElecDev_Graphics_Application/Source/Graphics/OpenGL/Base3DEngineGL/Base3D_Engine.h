@@ -11,7 +11,12 @@ Some modifications will have to be applied to the matrices and the mouse handlin
 
 // The base 2D engine.
 #include "../CoreGL/EngineCoreGL.h"
-#include "Peripherals/CameraGL.h"
+
+//=============================================================================================================================================//
+//  Forward declerations.																													   //
+//=============================================================================================================================================//
+
+class Camera;
 
 //=============================================================================================================================================//
 //  Base 3D Engine Class.																													   //
@@ -27,7 +32,7 @@ public:
 	// ------------------- //
 	
 	// 3D scene camera.
-	Camera* m_camera;
+	std::shared_ptr<Camera> m_camera;
 		
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //

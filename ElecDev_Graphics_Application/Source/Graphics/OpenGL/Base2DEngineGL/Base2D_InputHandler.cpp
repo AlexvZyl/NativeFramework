@@ -8,6 +8,8 @@ This is where the drawing enigine mouse events are handled.
 
 #include "Base2D_Engine.h"
 #include "GLFW/glfw3.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Mouse Presses.																															   //
@@ -48,6 +50,8 @@ void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
 // Event handler for a mouse move event.
 void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
+	std::cout << "\n" << getEntityID(pixelCoords) << "\n";
+
 	// Check if left mouse is pressed.
 	if (buttonStateLeft == GLFW_PRESS)
 	{

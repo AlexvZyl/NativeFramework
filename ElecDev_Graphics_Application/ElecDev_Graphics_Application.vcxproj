@@ -166,6 +166,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoader.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
@@ -241,6 +243,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.h" />
