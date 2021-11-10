@@ -148,5 +148,38 @@ struct VertexDataTextured : public Vertex
 };
 
 //=============================================================================================================================================//
+//  Circle Vertex Data																														   //
+//=============================================================================================================================================//
+
+// The circle vertex data requires a local coordinate system.
+struct VertexDataCircle : public Vertex
+{
+	float rawData[9] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+	glm::vec2 localCoords = {0.f,0.f};
+
+	// Constructor.
+	VertexDataCircle() { setup(); }
+	VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCoords, unsigned int eID)
+	{
+		position = pos; color = clr; entityID = eID; localCoords = lclCoords;
+		setup();
+	}
+
+	void setup()
+	{
+		dataSize = idOffset = sizeof(position) + sizeof(color) + sizeof(localCoords);
+		totalSize = dataSize + sizeof(entityID);
+	}
+
+	virtual const void* dataGL() override
+	{
+		rawData[0] = position.x; rawData[1] = position.y; rawData[2] = position.z;
+		rawData[3] = color.r; rawData[4] = color.g; rawData[5] = color.b; rawData[6] = color.a;
+		rawData[7] = localCoords.x; rawData[8] = localCoords.y;
+		return (const void*)rawData;
+	}
+};
+
+//=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//
