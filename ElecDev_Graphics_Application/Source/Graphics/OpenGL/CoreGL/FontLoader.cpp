@@ -142,8 +142,6 @@ Font loadFont(int fontID, int atlasID)
 		// Increment line counter.
 		lineCount++;
 	}
-	// Load font atlas as texture.
-	font.textureID = loadBitmapToGL(loadImageFromResource(ARIAL_SDF_PNG));
 	// Return the created font.
 	return font;
 }
