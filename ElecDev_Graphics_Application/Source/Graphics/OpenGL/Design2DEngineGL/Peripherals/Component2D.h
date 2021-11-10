@@ -14,6 +14,8 @@
 //=============================================================================================================================================//
 
 class VertexArrayObject;
+struct Font;
+class Text;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -26,8 +28,10 @@ private:
 	//shape and edge data
 	std::shared_ptr<VertexArrayObject> shapeVAO;
 	std::shared_ptr<VertexArrayObject> borderVAO;
+	std::shared_ptr<VertexArrayObject> textVAO;
 	std::shared_ptr<Polygon2D> shape;
 	std::shared_ptr<Polygon2D> border;
+	std::shared_ptr<Text> title;
 
 	//component shape attributes
 	float height = 0.1f;
@@ -42,7 +46,7 @@ private:
 	glm::vec4 borderColour;
 
 	//title
-	std::string title;
+	static Font titleFont;
 	glm::vec2 titlePos;
 
 	//port specifications

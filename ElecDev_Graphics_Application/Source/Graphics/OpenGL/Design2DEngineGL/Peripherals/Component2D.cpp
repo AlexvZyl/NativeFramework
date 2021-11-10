@@ -2,6 +2,13 @@
 #include "Component2D.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/FontLoader.h"
+#include "CoreGL/Entities/Text.h"
+#include "Resources/ResourceHandler.h"
+
+//Add font for component titles
+Font Component2D::titleFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
+
 
 Component2D::Component2D()
 {
@@ -18,6 +25,7 @@ Component2D::Component2D()
 
 	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
 	borderVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
+	textVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, true);
 	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.9f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
@@ -32,6 +40,8 @@ Component2D::Component2D()
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
+	title = std::make_shared<Text>("Generic Component", glm::vec3(centre, componentLayer + borderLayerOffset), glm::vec4(0.f, 0.f, 1.f, 1.f), 1.f, 0, textVAO, &titleFont);
+
 }
 
 Component2D::Component2D(float centreCoords[2]):Component2D()
