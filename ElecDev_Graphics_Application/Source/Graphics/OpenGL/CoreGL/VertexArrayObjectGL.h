@@ -130,7 +130,6 @@ private:
 
 	unsigned int m_vAID;	 // VAO ID.
 	unsigned int m_vBID;	 // VBO ID.
-	GLenum m_bufferType;	 // Data type used in this VAO.		
 	GLsizei m_bufferIndex = 0; // Pointer that shows where in the buffer data need to be written.
 
 public:
@@ -141,6 +140,7 @@ public:
 
 	// Data stored CPU side.  This allows the buffers to be resized dynamically as more or less memory is required.
 	// Data should not be stored and read from OpenGL (GPU side).
+	GLenum m_bufferType;	 // Data type used in this VAO.		
 	std::vector<VertexData> m_vertexDataCPU;
 	std::vector<VertexDataTextured> m_vertexDataTexturedCPU;
 	std::vector<Entity*> m_entityCPU;
