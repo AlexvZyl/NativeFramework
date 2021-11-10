@@ -38,7 +38,7 @@ public:
 	// Vertices stores CPU side.
 	std::vector<std::shared_ptr<Vertex>> m_vertexCPU;
 	// Entities stored CPU side.
-	std::vector<std::shared_ptr<Entity>> m_entityCPU;
+	std::vector<Entity*> m_entityCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //

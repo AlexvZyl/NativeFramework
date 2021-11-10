@@ -138,8 +138,7 @@ void VertexArrayObject::assignDataGPU(std::vector<std::shared_ptr<Vertex>> verti
 void VertexArrayObject::appendDataCPU(Entity* entity)
 {
 	// Add the polygon to the vector.
-	std::shared_ptr<Entity> entityTemp(entity);
-	m_entityCPU.push_back(entityTemp);
+	m_entityCPU.push_back(entity);
 	entity->m_bufferStartIndex = m_bufferIndex;
 	m_bufferIndex += entity->m_vertices.size();
 }
@@ -162,8 +161,7 @@ void VertexArrayObject::assignDataGPU(Entity* entity)
 void VertexArrayObject::deleteDataCPU(Entity* entity)
 {
 	// Find entity that has to be deleted.
-	std::shared_ptr<Entity> entityTemp(entity);
-	auto iterator = std::find(m_entityCPU.begin(), m_entityCPU.end(), entityTemp);
+	auto iterator = std::find(m_entityCPU.begin(), m_entityCPU.end(), entity);
 	// Check if the entity was found.
 	if (iterator != m_entityCPU.end())
 	{
@@ -198,7 +196,7 @@ void VertexArrayObject::updateGPU()
 	{
 		// Calculate the size of the new VBO.
 		unsigned int vertexCount = 0;
-		for (std::shared_ptr<Entity> entity : m_entityCPU)
+		for (Entity* entity : m_entityCPU)
 		{ vertexCount += entity->m_vertices.size(); }		// Add entities vertices.
 		vertexCount += m_vertexCPU.size();					// Add normal vertices.
 		// Reset the buffer pointer.
@@ -208,7 +206,7 @@ void VertexArrayObject::updateGPU()
 		// Define buffer size.
 		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_vertexCPU[0]->totalSize, NULL, GL_DYNAMIC_DRAW))
 		// Populate with entity vertex data.
-		for (std::shared_ptr<Entity> entity : m_entityCPU)
+		for (Entity* entity : m_entityCPU)
 		{
 			for (std::shared_ptr<Vertex> vertex : entity->m_vertices)
 			{
@@ -254,7 +252,7 @@ void VertexArrayObject::updateGPU()
 	{
 		// Calculate the size of the new VBO.
 		unsigned int vertexCount = 0;
-		for (std::shared_ptr<Entity> entity : m_entityCPU) { vertexCount += entity->m_vertices.size(); }
+		for (Entity* entity : m_entityCPU) { vertexCount += entity->m_vertices.size(); }
 		// Reset the buffer pointer.
 		unsigned int index = 0;
 		// Bind VBO.
@@ -262,7 +260,7 @@ void VertexArrayObject::updateGPU()
 		// Define buffer size.
 		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_entityCPU[0]->m_vertices[0]->totalSize, NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
-		for (std::shared_ptr<Entity> entity : m_entityCPU) 
+		for (Entity* entity : m_entityCPU) 
 		{
 			for (std::shared_ptr<Vertex> vertex : entity->m_vertices)
 			{
