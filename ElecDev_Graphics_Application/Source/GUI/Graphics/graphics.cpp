@@ -80,8 +80,8 @@ void Graphics::renderGraphics(ImGuiID dock) {
 		ImGui::BeginChild("Render");
 		this->m_guiState->renderWindowHovered = ImGui::IsWindowHovered();
 		ImVec2 temp = ImGui::GetIO().MousePos;
-		temp.x -= ImGui::GetWindowPos().x;
-		temp.y -= ImGui::GetWindowPos().y;
+		temp.x -= ImGui::GetMousePos().x;
+		temp.y -= ImGui::GetMousePos().y;
 		m_guiState->renderWindowMouseCoordinate[0] = temp.x;
 		m_guiState->renderWindowMouseCoordinate[1] = temp.y;
 
