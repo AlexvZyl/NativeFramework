@@ -105,7 +105,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }
 
 	if (action == GLFW_PRESS) {
-		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.x };
+		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		switch (key) {
