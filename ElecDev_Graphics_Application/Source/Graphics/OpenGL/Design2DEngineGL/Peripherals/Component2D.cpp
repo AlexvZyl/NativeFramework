@@ -41,6 +41,7 @@ Component2D::Component2D()
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
 	title = std::make_shared<Text>("Generic Component", glm::vec3(centre, componentLayer + borderLayerOffset), glm::vec4(0.f, 0.f, 1.f, 1.f), 1.f, 0, textVAO, &titleFont);
+	title->update();
 
 }
 
