@@ -110,9 +110,13 @@ void GraphicsHandler::mouseScrollEvent(float yOffset)
 	}
 }
 
-void GraphicsHandler::keyEvent(int key, int action) 
+void GraphicsHandler::keyEvent(int key, int action)
 {
-	m_windowsDictionary[m_activeWindow]->engineGL->keyEvent(key, action);
+	// Check if window dict is empty or inactive.
+	if (m_windowsDictionary.size() && isWindowValid(m_activeWindow))
+	{
+		m_windowsDictionary[m_activeWindow]->engineGL->keyEvent(key, action);
+	}
 }
 
 //=============================================================================================================================================//

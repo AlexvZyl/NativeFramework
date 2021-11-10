@@ -5,6 +5,14 @@
 // The base 2D engine.
 #include "Base3D_Engine.h"
 #include "Resources/ResourceHandler.h"
+#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/ShaderHandlerGL.h"
+#include <iostream>
+#include "Misc/ConsoleColor.h"
+#include "GLM/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "Peripherals/CameraGL.h"
 
 //=============================================================================================================================================//
 //  Constructor and Destructor.																												   //
@@ -18,12 +26,12 @@ Base3DEngineGL::Base3DEngineGL(GUIState* guiState)
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
 
 	// Create the background shader.
-	m_backgroundShader = new Shader(BACKGROUND_SHADER_3D);
+	m_backgroundShader = std::make_shared<Shader>(BACKGROUND_SHADER_3D);
 
 	// Create the camera.
 	float position[3] = {0.0f, 4.0f, 6.0f};
 	float target[3] = { 0.0f, 0.0f, 0.0f };
-	m_camera = new Camera(position, target, &m_viewMatrix);
+	m_camera = std::make_shared<Camera>(position, target, &m_viewMatrix);
 	// Init the view matrix according to the camera setup.
 	m_camera->updateView();
 
@@ -37,9 +45,6 @@ Base3DEngineGL::Base3DEngineGL(GUIState* guiState)
 // Destructor.
 Base3DEngineGL::~Base3DEngineGL() 
 {
-	// Clear 3D engine memory.
-	delete m_camera;
-
 	// Call core destructor.
 	EngineCoreGL::~EngineCoreGL();
 }

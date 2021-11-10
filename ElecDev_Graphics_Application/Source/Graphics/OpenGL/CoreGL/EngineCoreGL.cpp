@@ -12,8 +12,16 @@ and notify the user via the terminal interface.
 
 // Class include.
 #include "EngineCoreGL.h"
+#include "VertexArrayObjectGL.h"
 #include "Resources/ResourceHandler.h"
+#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/Entities/Vertex.h"
 #include "GLFW/glfw3.h"
+#include "ShaderHandlerGL.h"
+#include <iostream>
+#include "Misc/ConsoleColor.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -31,8 +39,8 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	// ----------------------------------------- //
 
 	// Compile the shaders, using the resources embedded in the exe.
-	m_basicShader = new Shader(BASIC_SHADER);
-	m_textureShader = new Shader(TEXTURE_SHADER);
+	m_basicShader = std::make_shared<Shader>(BASIC_SHADER);
+	m_textureShader = std::make_shared<Shader>(TEXTURE_SHADER);
 
 	// Set default values for the shaders.  The background shader does not require
 	// this setup, since it does not work with the MVP matrices.
@@ -50,22 +58,22 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	//  C R E A T E   B A S I C   V A O ' S  //
 	// ------------------------------------- //
 
-	m_linesVAO = new VertexArrayObject(GL_LINES);
-	m_trianglesVAO = new VertexArrayObject(GL_TRIANGLES);
-	m_texturedTrianglesVAO = new VertexArrayObject(GL_TRIANGLES, true);
-	m_frameBuffer = new FrameBufferObject((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
+	m_linesVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
+	m_trianglesVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
+	m_texturedTrianglesVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, true);
+	m_frameBuffer = std::make_shared<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 	createDefaultBackground();
 
 	// ----------------------------------------- //
 	//  C R E A T E   T E X T   R E N D E R E R  //
 	// ----------------------------------------- //
 
-	m_textRenderer = new TextRenderer(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
+	m_font = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1 };
 	GLCall(glUniform1iv(loc, 2, samplers));
-	GLCall(glBindTextureUnit(1, m_textRenderer->m_textureID));	// Text Atlas.
+	GLCall(glBindTextureUnit(1, m_font.textureID));	// Text Atlas.
 
 	// Print done message.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core done.\n";
@@ -74,15 +82,6 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 // Destructor.
 EngineCoreGL::~EngineCoreGL()
 {
-	delete m_basicShader;			// Shader. 
-	delete m_backgroundShader;		// "
-	delete m_textureShader;			// "
-	delete m_linesVAO;				// VAO.
-	delete m_backgroundVAO;			// "
-	delete m_trianglesVAO;			// "
-	delete m_texturedTrianglesVAO;	// "
-	delete m_textRenderer;			// Text renderer.
-	delete m_frameBuffer;			// FBO.
 }
 
 //=============================================================================================================================================//
@@ -165,15 +164,16 @@ void EngineCoreGL::updateGPU()
 	//			13 ---- 14 ---- 15 ---- 16
 
 	// Create the VAO.
-	m_backgroundVAO = new VertexArrayObject(GL_TRIANGLES);
+	m_backgroundVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
 	// Assign background data.
-	float bgColor1[4] = { (float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f };
-	float bgColor2[4] = { (float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f };
-	VertexData v5(1.0f, 1.0f, 0.99f, bgColor2[0], bgColor2[1], bgColor2[2], bgColor2[3], 0);		//  Top right.
-	VertexData v6(-1.0f, 1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Top left.
-	VertexData v7(-1.0f, -1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom left.
-	VertexData v8(1.0f, -1.0f, 0.99f, bgColor1[0], bgColor1[1], bgColor1[2], bgColor1[3], 0);	//  Bottom right.
-	std::vector<VertexData> vertices = { v5, v6, v7, v7, v8, v5 };
+	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f);
+	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f);
+	// Create and push the vertices.
+	std::shared_ptr<VertexData> v1 = std::make_shared<VertexData>(glm::vec3(1.0f, 1.0f, 0.99f), bgColor2, -1);	//  Top right.
+	std::shared_ptr<VertexData> v2 = std::make_shared<VertexData>(glm::vec3(-1.0f, 1.0f, 0.99), bgColor1, -1);	//  Top left.
+	std::shared_ptr<VertexData> v3 = std::make_shared<VertexData>(glm::vec3(-1.0f, -1.0f, 0.99), bgColor1, -1);	//  Bottom left.
+	std::shared_ptr<VertexData> v4 = std::make_shared<VertexData>(glm::vec3(1.0f, -1.0f, 0.99), bgColor1, -1);	//  Bottom right.
+	std::vector<std::shared_ptr<Vertex>> vertices = {v1,v2,v3,v3,v4,v1};
 	// Create background.
 	m_backgroundVAO->appendDataCPU(vertices);
 	m_backgroundVAO->updateGPU();

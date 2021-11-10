@@ -6,6 +6,12 @@
 #include "../../Resources/ResourceHandler.h"
 // Class include.
 #include "Base2D_Engine.h"
+#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/ShaderHandlerGL.h"
+#include <iostream>
+#include "Misc/ConsoleColor.h"
+#include "glm/gtc/matrix_transform.hpp"
 
 //=============================================================================================================================================//
 //  Costructor & Destructor.																												   //
@@ -18,7 +24,7 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
 	// Create the background shader.
-	m_backgroundShader = new Shader(BACKGROUND_SHADER_2D);
+	m_backgroundShader = std::make_shared<Shader>(BACKGROUND_SHADER_2D);
 
 	// --------------------------------- //
 	//  P R O J E C T I O N   S E T U P  //

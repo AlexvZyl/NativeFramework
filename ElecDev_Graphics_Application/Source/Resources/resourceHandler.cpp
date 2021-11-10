@@ -5,7 +5,7 @@
 // General.
 #include "ResourceHandler.h"
 #include <iostream>
-
+#include "glad/glad.h"
 // Loading from resource.
 #include <gdiplus.h>
 #include <Shlwapi.h>
@@ -87,8 +87,6 @@ unsigned int loadBitmapToGL(BITMAP bitmap)
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	return textureID;
 }
-
-//int loadFontFromResource() {}
 
 /*=======================================================================================================================================*/
 /* EOF.                                                                                                                                  */

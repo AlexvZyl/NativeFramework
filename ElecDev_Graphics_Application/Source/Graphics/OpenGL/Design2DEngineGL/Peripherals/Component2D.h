@@ -1,7 +1,23 @@
 #pragma once
 
-#include "CoreGL/VertexArrayObjectGL.h"
+//=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
+
 #include "CoreGL/Entities/Polygon.h"
+#include <string>
+#include "glm.hpp"
+#include <memory>
+
+//=============================================================================================================================================//
+//  Forward declerations.																													   //
+//=============================================================================================================================================//
+
+class VertexArrayObject;
+
+//=============================================================================================================================================//
+//  Class.																																	   //
+//=============================================================================================================================================//
 
 class Component2D
 {
@@ -9,7 +25,7 @@ class Component2D
 private:
 	//shape and edge data
 	std::shared_ptr<VertexArrayObject> shapeVAO;
-	std::shared_ptr<VertexArrayObject> edges;
+	std::shared_ptr<VertexArrayObject> edgesVAO;
 	Polygon2D shape;
 
 	//component shape attributes
@@ -19,8 +35,8 @@ private:
 	glm::vec2 centre;
 
 	//colour attributes
-	Colour shapeColour;
-	Colour edgeColour;
+	glm::vec4 shapeColour;
+	glm::vec4 edgeColour;
 
 	//title
 	std::string title;
