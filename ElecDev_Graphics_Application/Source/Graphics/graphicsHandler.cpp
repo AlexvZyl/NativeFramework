@@ -96,6 +96,8 @@ void GraphicsHandler::mouseMoveEvent(int buttonStateLeft, int buttonStateRight, 
 		// Find cursos position.
 		float mousePos[2] = { m_windowsDictionary[m_activeWindow]->mouseCoords[0] , m_windowsDictionary[m_activeWindow]->mouseCoords[1]};
 		m_windowsDictionary[m_activeWindow]->engineGL->mouseMoveEvent(mousePos, buttonStateLeft, buttonStateRight, buttonStateMiddle);
+		m_guiState->renderWindowMouseCoordinate[0] = mousePos[0];
+		m_guiState->renderWindowMouseCoordinate[1] = mousePos[1];
 	}
 }
 
