@@ -3,7 +3,7 @@
 //=============================================================================================================================================//
 
 #include "Polygon.h"
-
+#include "EntityManager.h"
 //=============================================================================================================================================//
 //  Constructor & Destructor.																										       	   //
 //=============================================================================================================================================//
@@ -14,9 +14,10 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
 	m_colour = Colour(1.f, 0.f, 0.f, 0.5f);
 	n_vertices = vertices.size();
 	m_VAO = VAO;
+	m_eID = EntityManager::generateEID();
 
 	// Populate VertexData structures.
-	if (m_VAO->m_bufferType = GL_TRIANGLES) {
+	if (m_VAO->m_bufferType == GL_TRIANGLES) {
 		//Tile the polygon in triangles sharing vertex 0.
 		for (int i = 1; i < n_vertices - 1; i++) {
 			m_vertexData.insert(m_vertexData.end(), VertexData(vertices[0], m_colour, m_eID));
@@ -24,7 +25,7 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject* VAO)
 			m_vertexData.insert(m_vertexData.end(), VertexData(vertices[i + 1], m_colour, m_eID));
 		}
 	}
-	else if (m_VAO->m_bufferType = GL_LINES) {
+	else if (m_VAO->m_bufferType == GL_LINES) {
 		//add lines in a loop
 		for (int i = 0; i < n_vertices - 1; i++) {
 			m_vertexData.insert(m_vertexData.end(), VertexData(vertices[i], m_colour, m_eID));
@@ -89,7 +90,15 @@ void Polygon2D::setEID(unsigned eID)
 void Polygon2D::destroy() 
 {
 	m_VAO->deleteDataCPU(this);
-	delete this;
+	this->~Polygon2D();
+}
+
+void Polygon2D::setLayer(float layer)
+{
+	for (int i = 0; i < n_vertices; i++) {
+		m_vertexData[i].position.z = layer;
+	}
+	m_VAO->assignDataGPU(this);
 }
 
 //=============================================================================================================================================//

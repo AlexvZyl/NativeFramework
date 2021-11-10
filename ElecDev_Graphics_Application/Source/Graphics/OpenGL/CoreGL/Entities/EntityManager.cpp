@@ -1,5 +1,9 @@
 #include "EntityManager.h"
 
+
+unsigned EntityManager::lastID = 0;
+std::vector<unsigned> EntityManager::freeIDs;
+
 unsigned EntityManager::generateEID()
 {
 	//Check to see if there are any freed (recycled) IDs

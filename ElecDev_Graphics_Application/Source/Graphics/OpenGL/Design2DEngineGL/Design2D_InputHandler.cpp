@@ -50,7 +50,6 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->moveTo(screenCoords);
-		m_activeComponent->draw();
 	}
 	// Call parent event.
 	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight, buttonStateMiddle);
@@ -79,7 +78,7 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action) 
 {
-	/*/glm::vec3 v1(-0.5f, 0.5f, 0.0f);
+	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
 	glm::vec3 v2(0.5f, 0.5f, 0.0f);
 	glm::vec3 v3(0.5f, -0.5f, 0.0f);
 	glm::vec3 v4(-0.5f, -0.5f, 0.0f);
@@ -103,16 +102,20 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2->destroy(); }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }*/
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }
 
 	if (action == GLFW_PRESS) {
+		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.x };
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		switch (key) {
 		case GLFW_KEY_P:
 			designerState = COMPONENT_PLACE;
-			m_activeComponent = std::make_shared<Component2D>();
+			m_activeComponent = std::make_shared<Component2D>(screenCoords);
 			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
+			m_activeComponent->destroy();
 			break;
 		}
 	}

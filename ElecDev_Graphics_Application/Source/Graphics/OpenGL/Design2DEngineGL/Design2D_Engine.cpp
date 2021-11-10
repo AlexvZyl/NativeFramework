@@ -94,7 +94,6 @@ void Design2DEngineGL::renderLoop()
 	if (m_activeComponent != NULL) {
 		m_activeComponent->render();
 	}
-
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //

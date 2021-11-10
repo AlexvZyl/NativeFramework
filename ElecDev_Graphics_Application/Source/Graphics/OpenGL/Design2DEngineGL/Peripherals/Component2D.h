@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CoreGL/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Polygon.h"
 
 class Component2D
@@ -9,18 +8,21 @@ class Component2D
 private:
 	//shape and edge data
 	std::shared_ptr<VertexArrayObject> shapeVAO;
-	std::shared_ptr<VertexArrayObject> edges;
-	Polygon2D shape;
+	std::shared_ptr<VertexArrayObject> borderVAO;
+	std::shared_ptr<Polygon2D> shape;
+	std::shared_ptr<Polygon2D> border;
 
 	//component shape attributes
 	float height = 0.1f;
 	float width = 0.1f;
 	std::vector<glm::vec3> vertices;
 	glm::vec2 centre;
+	float componentLayer = 0.9f;
+	float borderLayerOffset = 0.01f;
 
 	//colour attributes
 	Colour shapeColour;
-	Colour edgeColour;
+	Colour borderColour;
 
 	//title
 	std::string title;
@@ -49,8 +51,6 @@ public:
 	//Deconstructor
 	~Component2D();
 
-	//Draw the component
-	void draw();
 
 	//Render the component
 	void render();
@@ -60,4 +60,8 @@ public:
 
 	//Place a component
 	void place(float pos[2]);
+
+	void setLayer(float layer);
+
+	void destroy();
 };
