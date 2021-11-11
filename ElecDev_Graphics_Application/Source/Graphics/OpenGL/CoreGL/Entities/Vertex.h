@@ -48,7 +48,7 @@ struct Vertex
 	int totalSize = 0;							// All of the data.
 	int dataSize = 0;							// All of the color texture data.
 	int idOffset = 0;							// Offset to the entity ID.
-	int idSize = 0;
+	int idSize = sizeof(entityID);
 	// Formats the data so that OpenGL can use it.
 	virtual const void* dataGL() { return (const void*)NULL; }
 	// Returns the ID in a format that OpenGL can use.
