@@ -29,9 +29,6 @@ Component2D::Component2D()
 	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.9f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	//VertexData shapeVertices[4];
-	std::shared_ptr<VertexData> edgeVertices[4];
-
 	shape = std::make_unique<Polygon2D>(&vertices, shapeVAO.get());
 	shape->setColor(&shapeColour);
 	shape->setLayer(componentLayer);
@@ -44,7 +41,6 @@ Component2D::Component2D()
 	glm::vec4 texCol1(0.f, 0.f, 1.f, 1.f);
 	title = std::make_unique<Text>("Generic Component", &texPos1, &texCol1, 1.f, 0, textVAO.get(), &titleFont);
 	title->update();
-
 }
 
 Component2D::Component2D(float centreCoords[2]):Component2D()

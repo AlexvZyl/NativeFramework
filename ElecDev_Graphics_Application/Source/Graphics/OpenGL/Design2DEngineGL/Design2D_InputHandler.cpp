@@ -111,7 +111,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		switch (key) {
 		case GLFW_KEY_P:
 			designerState = COMPONENT_PLACE;
-			m_activeComponent = std::make_shared<Component2D>(screenCoords);
+			m_activeComponent = std::make_unique<Component2D>(screenCoords);
 			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;

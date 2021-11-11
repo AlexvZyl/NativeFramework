@@ -25,6 +25,7 @@ and notify the user via the terminal interface.
 #include "CoreGL/Entities/Vertex.h"
 //#include "Fonts.h"
 #include "FontLoader.h"
+#include <memory>
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -61,9 +62,9 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	//  C R E A T E   B A S I C   V A O ' S  //
 	// ------------------------------------- //
 
-	m_linesVAO				= std::make_unique<VertexArrayObject>(GL_LINES);
-	m_trianglesVAO			= std::make_unique<VertexArrayObject>(GL_TRIANGLES);
-	m_texturedTrianglesVAO	= std::make_unique<VertexArrayObject>(GL_TRIANGLES);
+	m_linesVAO				= std::make_unique<VertexArrayObject>(GL_LINES, false, false);
+	m_trianglesVAO			= std::make_unique<VertexArrayObject>(GL_TRIANGLES, false, false);
+	m_texturedTrianglesVAO	= std::make_unique<VertexArrayObject>(GL_TRIANGLES, true, false);
 	m_frameBuffer			= std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 	createDefaultBackground();
 
@@ -172,19 +173,21 @@ void EngineCoreGL::updateGPU()
 	// Assign background data.
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f);
 	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f);
-	// Create and push the vertices.
 	glm::vec3 pos1(1.0f, 1.0f, 0.99f);
 	glm::vec3 pos2(-1.0f, 1.0f, 0.99);
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99);
 	glm::vec3 pos4(1.0f, -1.0f, 0.99);
-	VertexData v1(&pos1, &bgColor2, -1);	//  Top right.
-	VertexData v2(&pos2, &bgColor1, -1);	//  Top left.
-	VertexData v3(&pos3, &bgColor1, -1);	//  Bottom left.
-	VertexData v4(&pos4, &bgColor1, -1);	//  Bottom right.
-	std::vector<Vertex> vertices = {v1,v2,v3,v3,v4,v1};
+	// Create and append the vertices.
+	Vertex* v1 = new VertexData(&pos1, &bgColor2, -1);	//  Top right.
+	Vertex* v2 = new VertexData(&pos2, &bgColor1, -1);	//  Top left.
+	Vertex* v3 = new VertexData(&pos3, &bgColor1, -1);	//  Bottom left.
+	Vertex* v4 = new VertexData(&pos4, &bgColor1, -1);	//  Bottom right.
 	// Create background.
+	std::vector<Vertex*> vertices = { v1,v2,v3,v3,v4,v1 };
 	m_backgroundVAO->appendDataCPU(&vertices);
 	m_backgroundVAO->updateGPU();
+	// Clear memory.
+	vertices.clear(); vertices.shrink_to_fit();
  }
 
  float EngineCoreGL::deltaTime()

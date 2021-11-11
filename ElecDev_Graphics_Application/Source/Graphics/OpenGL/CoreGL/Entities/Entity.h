@@ -33,7 +33,7 @@ public:
 	//  V A R I A B L E S  //
 	// ------------------- //
 
-	std::vector<Vertex> m_vertices;					// The untextured vertex data used for the entity.
+	std::vector<Vertex*> m_vertices;				// The untextured vertex data used for the entity.
 	VertexArrayObject* m_VAO;						// Pointer to the VAO that the entity is drawn to.
 	unsigned int m_bufferStartIndex;				// The start position of the entity in the VAO.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.

@@ -72,8 +72,8 @@ public:
 
 	// Shaders.
 	std::unique_ptr<Shader> m_basicShader;						// Renders movable elements without textures.
-	std::unique_ptr<Shader> m_backgroundShader;					// Renders the background.
 	std::unique_ptr<Shader> m_textureShader;					// Renders movable elements with textures.
+	std::unique_ptr<Shader> m_backgroundShader;					// Renders the background.
 
 	// Vertex arrays.
 	std::unique_ptr<VertexArrayObject> m_linesVAO;				// Lines.
@@ -86,6 +86,8 @@ public:
 																// Also implements MSAA.
 
 	Font m_defaultFont;											// The default font for the rendering engine.
+
+	std::vector<std::unique_ptr<Entity>> m_entities;			// Vector containing the entties to be rendered.
 
 	// --------------------------- //
 	//  S T A T E   M A C H I N E  //

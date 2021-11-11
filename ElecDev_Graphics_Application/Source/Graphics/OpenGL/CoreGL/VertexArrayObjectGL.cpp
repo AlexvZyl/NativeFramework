@@ -20,20 +20,15 @@ VertexArrayObject::VertexArrayObject(GLenum type, bool textured, bool circle)
 	GLCall(glGenVertexArrays(1, &m_VAOID));
 	GLCall(glBindVertexArray(m_VAOID));
 
-	//// Iterate through the vertex specification.
-	//for(Vertex& vertex : )
-
 	// Create untextured array.
 	if (!textured)
 	{
 		int vertexSize = sizeof(VertexData::position) + sizeof(VertexData::color) + sizeof(VertexData::entityID);
 		int colOffset = sizeof(VertexData::position);
 		int idOffset = sizeof(VertexData::position) + sizeof(VertexData::color);
-
 		// Generate a VBO for the VAO.
 		GLCall(glGenBuffers(1, &m_VBOID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-
 		// Potition.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 0));
 		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)0));
@@ -103,30 +98,29 @@ void VertexArrayObject::unbind() const { GLCall(glBindVertexArray(0)); }
 //  Vertex.					  																												   //
 //=============================================================================================================================================//
 
-void VertexArrayObject::appendDataCPU(std::vector<Vertex>* vertices)
+void VertexArrayObject::appendDataCPU(std::vector<Vertex*>* vertices)
 {
-	m_vertexCPU.insert(m_vertexCPU.end(), vertices->begin(), vertices->end());
+	m_vertexCPU.insert(m_vertexCPU.begin(), vertices->begin(), vertices->end());
 	m_bufferIndex += vertices->size();
 }
-
-void VertexArrayObject::assignDataCPU(std::vector<Vertex>* vertices, unsigned int index)
+void VertexArrayObject::assignDataCPU(std::vector<Vertex*>* vertices, unsigned int index)
 {
 	// Create the VAO if it is empty.
 	if (!m_bufferIndex) { appendDataCPU(vertices); }
 	// Otherwise replace current data.
-	else { std::copy(vertices->begin(), vertices->end(), m_vertexCPU.begin()+index); }
+	else { m_vertexCPU.insert(m_vertexCPU.begin()+index, vertices->begin(), vertices->end()); }
 }
 
-void VertexArrayObject::assignDataGPU(std::vector<Vertex>* vertices, unsigned int index)
+void VertexArrayObject::assignDataGPU(std::vector<Vertex*>* vertices, unsigned int index)
 {
 	// Bind VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 	// Populate with vertex data.
-	for (Vertex vertex : *vertices)
+	for (Vertex* vertex : *vertices)
 	{
 		// Write the data to the buffer.
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.idOffset, vertex.idSize, vertex.idGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->idOffset, vertex->idSize, vertex->idGL()));
 		index += 1;
 	}
 }
@@ -149,11 +143,11 @@ void VertexArrayObject::assignDataGPU(Entity* entity)
 	// Bind VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 	// Populate with vertex data.
-	for (Vertex vertex : entity->m_vertices)
+	for (Vertex* vertex : entity->m_vertices)
 	{
 		// Write the data to the buffer.
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
 		index += 1;
 	}
 }
@@ -204,24 +198,24 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_vertexCPU[0].totalSize, NULL, GL_DYNAMIC_DRAW))
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_vertexCPU[0]->totalSize, NULL, GL_DYNAMIC_DRAW))
 		// Populate with entity vertex data.
 		for (Entity* entity : m_entityCPU)
 		{
-			for (Vertex vertex : entity->m_vertices)
+			for (Vertex* vertex : entity->m_vertices)
 			{
 				// Write the data to the buffer.
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
 				index += 1;
 			}
 		}
 		// Populate with normal vertex data.
-		for (Vertex vertex : m_vertexCPU)
+		for (Vertex* vertex : m_vertexCPU)
 		{
 			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
 			index += 1;
 		}
 	}
@@ -235,13 +229,13 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_bufferIndex) * m_vertexCPU[0].totalSize, NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_bufferIndex) * m_vertexCPU[0]->totalSize, NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
-		for (Vertex vertex : m_vertexCPU)
+		for (Vertex* vertex : m_vertexCPU)
 		{
 			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
 			index += 1;
 		}
 	}
@@ -258,15 +252,15 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_entityCPU[0]->m_vertices[0].totalSize, NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_entityCPU[0]->m_vertices[0]->totalSize, NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
 		for (Entity* entity : m_entityCPU) 
 		{
-			for (Vertex vertex : entity->m_vertices)
+			for (Vertex* vertex : entity->m_vertices)
 			{
 				// Write the data to the buffer.
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
 				index += 1;
 			}
 		}

@@ -25,14 +25,14 @@ void Entity::destroy()
 
 void Entity::translate(glm::vec3* translation)
 {
-	for (Vertex vertex : m_vertices) { vertex.position += *translation; }
+	for (Vertex* vertex : m_vertices) { vertex->position += *translation; }
 	m_trackedCenter += *translation;
 }
 
 void Entity::translateTo(glm::vec3* position) 
 { 
 	glm::vec3 translation = *position - m_trackedCenter; 
-	for (Vertex vertex : m_vertices) { vertex.position += translation; }
+	for (Vertex* vertex : m_vertices) { vertex->position += translation; }
 	m_trackedCenter += translation;
 }
 
@@ -48,13 +48,13 @@ void Entity::scale(glm::vec3* scaling)
 
 void Entity::setColor(glm::vec4* color) 
 {
-	for (Vertex vertex : m_vertices) { vertex.color = *color; }
+	for (Vertex* vertex : m_vertices) { vertex->color = *color; }
 	m_colour = *color;
 }
 
 void Entity::setEntityID(unsigned int eID) 
 {
-	for (Vertex vertex : m_vertices) { vertex.entityID = eID; }
+	for (Vertex* vertex : m_vertices) { vertex->entityID = eID; }
 	m_entityID = eID;
 }
 

@@ -18,8 +18,9 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
 	// This has to be compensated for in the funciton.
-
 	// Iterate through characters.
+
+	m_VAO = vao;
 	float advance = 0;
 	for (int i = 0; i < (int)text.length(); i++)
 	{
@@ -32,7 +33,7 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			position->y - (c.yOffset) * scale,									// y
 			position->z);														// z
 		glm::vec2 texCoords1(c.x, 1.0f - c.y);									// Texture coordinates.
-		VertexDataTextured v1(
+		Vertex* v1 = new VertexDataTextured(
 			&pos1,																// Position.
 			color,																// Color.
 			&texCoords1,														// Texture coordinates.
@@ -45,7 +46,7 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			position->y - (c.yOffset) * scale,									// y
 			position->z);														// z
 		glm::vec2 texCoords2(c.x + c.width, 1.0f - c.y);						// Texture coordinates.
-		VertexDataTextured v2(																
+		Vertex* v2 = new VertexDataTextured(																
 			&pos2,																// Position.
 			color,																// Color.
 			&texCoords2,														// Texture coordinates.
@@ -57,7 +58,7 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			position->y + (-1 * c.yOffset - c.height) * scale,					// y	
 			position->z);														// z
 		glm::vec2 texCoords3(c.x + c.width, 1.0f - c.y - c.height);				// Texture coordinates.
-		VertexDataTextured v3(																		
+		Vertex* v3 = new VertexDataTextured(																		
 			&pos3,																// Position
 			color,																// Color.
 			&texCoords3,														// Texture coordinates.
@@ -69,7 +70,7 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			position->y + (-1 * c.yOffset - c.height) * scale,					// y
 			position->z);														// z
 		glm::vec2 texCoords4(c.x, 1.0f - c.y - c.height);						// Texture coordinates.
-		VertexDataTextured v4(																	
+		Vertex* v4 = new VertexDataTextured(																	
 			&pos4,																// z
 			color,																// Color.
 			&texCoords4,														// Texture coordinates.
@@ -77,13 +78,12 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			eID);																// The entity ID.  Fow now empty.
 		
 		// Move the cursor right so that it can draw the next character.
-		std::vector<VertexDataTextured> vertices = {v1,v2,v3,v3,v4,v1};
-		m_vertices.insert(m_vertices.end(), vertices.begin(), vertices.end());
+		m_vertices.insert(m_vertices.end(), {v1,v2,v3,v3,v4,v1});
 		advance += c.xAdvance;
 	}
 	// Write all of the vertices to the CPU side buffer.
-	vao->appendDataCPU(this);
-	vao->updateGPU();
+	m_VAO->appendDataCPU(this);
+	m_VAO->updateGPU();
 }
 
 Text::~Text() 
