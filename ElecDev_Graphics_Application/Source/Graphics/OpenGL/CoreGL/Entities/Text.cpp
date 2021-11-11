@@ -6,22 +6,22 @@
 #include "Text.h"
 #include "../FontLoader.h"
 #include "CoreGL/Entities/Vertex.h"
+#include "EntityManager.h"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
 //=============================================================================================================================================//
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
-		   unsigned int eID, VertexArrayObject* vao, Font* font)
+Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, VertexArrayObject* vao, Font* font)
 {
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
 	// This has to be compensated for in the funciton.
-	m_VAO = vao;
 	// Iterate through characters.
-
+	m_trackedCenter = *position;
 	m_VAO = vao;
+	m_entityID = EntityManager::generateEID();
 	float advance = 0;
 	for (int i = 0; i < (int)text.length(); i++)
 	{
@@ -39,7 +39,7 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			color,																// Color.
 			&texCoords1,														// Texture coordinates.
 			1.0f,																// Slot 1 is reserved for the text font atlas.
-			eID);																// The entity ID.  Fow now empty.
+			m_entityID);																// The entity ID.  Fow now empty.
 																			
 
 		glm::vec3 pos2(															// Top Right.
@@ -52,7 +52,7 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			color,																// Color.
 			&texCoords2,														// Texture coordinates.
 			1.0f,																// Slot 1 is reserved for the text font atlas.
-			eID);																// The entity ID.  Fow now empty.
+			m_entityID);																// The entity ID.  Fow now empty.
 		
 		glm::vec3 pos3(															// Bottom Right.
 			position->x + (advance + c.xOffset + c.width) * scale,				// x
@@ -64,22 +64,39 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 			color,																// Color.
 			&texCoords3,														// Texture coordinates.
 			1.0f,																// Slot 1 is reserved for the text font atlas.
-			eID);																// The entity ID.  Fow now empty.
+			m_entityID);																// The entity ID.  Fow now empty.
+
+		Vertex* v4 = new VertexDataTextured(
+			&pos3,																// Position
+			color,																// Color.
+			&texCoords3,														// Texture coordinates.
+			1.0f,																// Slot 1 is reserved for the text font atlas.
+			m_entityID);																// The entity ID.  Fow now empty.
 
 		glm::vec3 pos4(															// Bottom Left.
 			position->x + (advance + c.xOffset) * scale,						// x
 			position->y + (-1 * c.yOffset - c.height) * scale,					// y
 			position->z);														// z
 		glm::vec2 texCoords4(c.x, 1.0f - c.y - c.height);						// Texture coordinates.
-		Vertex* v4 = new VertexDataTextured(																	
+		//Vertex* v4 = (Vertex*) malloc(sizeof(VertexDataTextured));					//FIX THIS!!
+		//memcpy(v4, v3, sizeof(VertexDataTextured));
+		Vertex* v5 = new VertexDataTextured(																	
 			&pos4,																// z
 			color,																// Color.
 			&texCoords4,														// Texture coordinates.
 			1.0f,																// Slot 1 is reserved for the text font atlas.
-			eID);																// The entity ID.  Fow now empty.
-		
+			m_entityID);																// The entity ID.  Fow now empty.
+		//Vertex* v6 = (Vertex*) malloc(sizeof(VertexDataTextured));						//FIX THIS!!!
+		//memcpy(v4, v3, sizeof(VertexDataTextured));
+
+		Vertex* v6 = new VertexDataTextured(
+			&pos1,																// Position.
+			color,																// Color.
+			&texCoords1,														// Texture coordinates.
+			1.0f,																// Slot 1 is reserved for the text font atlas.
+			m_entityID);																// The entity ID.  Fow now empty.
 		// Move the cursor right so that it can draw the next character.
-		m_vertices.insert(m_vertices.end(), {v1,v2,v3,v3,v4,v1});
+		m_vertices.insert(m_vertices.end(), {v1,v2, v3, v4,v5, v6});		//FIX THIS!!!!!!!
 		advance += c.xAdvance;
 	}
 	// Write all of the vertices to the CPU side buffer.
@@ -91,6 +108,14 @@ Text::~Text()
 {
 }
 
+
+void Text::setLayer(float layer)
+{
+	for (int i = 0; i < m_vertices.size(); i++) {
+		m_vertices[i]->position.z = layer;
+	}
+	m_VAO->assignDataGPU(this);
+}
 //=============================================================================================================================================//
 //  EOF.																																   //
 //=============================================================================================================================================//

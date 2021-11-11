@@ -51,6 +51,8 @@ public:
 	void translate(glm::vec3* translation);
 	// Translate the entity to the given position.
 	void translateTo(glm::vec3* position);
+	//Translates the entity in the XY plane, keeping the same Z value.
+	void translateTo(glm::vec2* position);
 	// Rotates the entity by the given vector and center point.
 	void rotate(glm::vec3* rotation);
 	// Scales the entity by the given vector and center point.

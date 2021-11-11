@@ -36,6 +36,13 @@ void Entity::translateTo(glm::vec3* position)
 	m_trackedCenter += translation;
 }
 
+void Entity::translateTo(glm::vec2* position)
+{
+	glm::vec3 translation = glm::vec3(*position, m_trackedCenter.z) - m_trackedCenter;
+	for (Vertex* vertex : m_vertices) { vertex->position += translation; }
+	m_trackedCenter += translation;
+}
+
 void Entity::rotate(glm::vec3* rotation)
 {
 

@@ -27,10 +27,10 @@ public:
 	// Constructor.
 	// Takes the normal texture information as input, as well as the VAO that it has to render to
 	// and also the font that it has to use to render.
-	Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, 
-		 unsigned int eID, VertexArrayObject* vao, Font* font);
+	Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, VertexArrayObject* vao, Font* font);
 	// Destructor.
 	~Text();
+	void setLayer(float layer);
 };
 
 //=============================================================================================================================================//

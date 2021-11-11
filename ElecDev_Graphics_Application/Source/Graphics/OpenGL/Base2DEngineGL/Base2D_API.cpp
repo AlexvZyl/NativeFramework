@@ -170,7 +170,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 
 	// Write text to CPU side buffer.
 	glm::vec3 texPos(coords[0], coords[1], 0.0f);
-	m_entities.push_back(std::make_unique<Text>(text, &texPos, &colorGLM, scale, 0, m_texturedTrianglesVAO.get(), &m_defaultFont));
+	m_entities.push_back(std::make_unique<Text>(text, &texPos, &colorGLM, scale, m_texturedTrianglesVAO.get(), &m_defaultFont));
 	m_texturedTrianglesVAO->appendDataCPU(m_entities.back().get());
 }
 
