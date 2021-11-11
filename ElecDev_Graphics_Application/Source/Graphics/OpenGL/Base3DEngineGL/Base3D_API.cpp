@@ -15,55 +15,55 @@
 void Base3DEngineGL::drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]) 
 {
 	// Create the vertices.
-	std::shared_ptr v1 = std::make_shared<VertexData>(
+	VertexData v1(
 		position1[0], position1[1], position1[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v2 = std::make_shared<VertexData>(
+	VertexData v2(
 		position2[0], position2[1], position2[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v3 = std::make_shared<VertexData>(
+	VertexData v3(
 		position3[0], position3[1], position3[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v4 = std::make_shared<VertexData>(
+	VertexData v4(
 		position4[0], position4[1], position4[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
-	std::vector<std::shared_ptr<Vertex>> vertices = { v1,v2,v3,v3,v4,v1 };
-	m_trianglesVAO->appendDataCPU(vertices);
+	std::vector<Vertex> vertices = { v1,v2,v3,v3,v4,v1 };
+	m_trianglesVAO->appendDataCPU(&vertices);
 }
 
 void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], float position3[3], float position4[3], float depth, float color[4]) 
 {
 	// Create the vertices.
-	std::shared_ptr v1 = std::make_shared<VertexData>(
+	VertexData v1(
 		position1[0], position1[1], position1[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v2 = std::make_shared<VertexData>(
+	VertexData v2(
 		position2[0], position2[1], position2[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v3 = std::make_shared<VertexData>(
+	VertexData v3(
 		position3[0], position3[1], position3[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v4 = std::make_shared<VertexData>(
+	VertexData v4(
 		position4[0], position4[1], position4[2],
 		color[0], color[1], color[2], color[3],
 		0
@@ -81,32 +81,32 @@ void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], fl
 	glm::vec3 depthVector = depth * glm::normalize(glm::cross(vector1, vector2));
 
 	// Create depth vertices.
-	std::shared_ptr v5 = std::make_shared<VertexData>(
+	VertexData v5(
 		position1[0] + depthVector[0], position1[1] + depthVector[1], position1[2] + depthVector[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v6 = std::make_shared<VertexData>(
+	VertexData v6(
 		position2[0] + depthVector[0], position2[1] + depthVector[1], position2[2] + depthVector[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v7 = std::make_shared<VertexData>(
+	VertexData v7(
 		position3[0] + depthVector[0], position3[1] + depthVector[1], position3[2] + depthVector[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 	// Create the vertices.
-	std::shared_ptr v8 = std::make_shared<VertexData>(
+	VertexData v8(
 		position4[0] + depthVector[0], position4[1] + depthVector[1], position4[2] + depthVector[2],
 		color[0], color[1], color[2], color[3],
 		0
 	);
 
 	// Push to vertex data.
-	std::vector<std::shared_ptr<Vertex>> vertices = 
+	std::vector<Vertex> vertices = 
 	{
 		v1, v2, v3, v3, v4, v1,
 		v5, v6, v7, v7, v8, v5,
@@ -115,7 +115,7 @@ void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], fl
 		v3, v7, v8, v8, v4, v3,
 		v4, v8, v5, v5, v1, v4
 	};
-	m_trianglesVAO->appendDataCPU(vertices);
+	m_trianglesVAO->appendDataCPU(&vertices);
 }
 
 //=============================================================================================================================================//

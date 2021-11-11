@@ -4,6 +4,7 @@
 
 #include "Circle.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Entities/Vertex.h"
 
 //=============================================================================================================================================//
 //  Includes.																																   //

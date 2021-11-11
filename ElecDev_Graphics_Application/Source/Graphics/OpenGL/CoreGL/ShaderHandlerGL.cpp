@@ -25,6 +25,9 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
+// Default.
+Shader::Shader() {}
+
 // Constructor generates the shaders.
 Shader::Shader(unsigned int shaderID)
     : m_rendererID(0)
@@ -138,10 +141,10 @@ void Shader::setFloat(const std::string& name, float value)
 {
     GLCall( glUniform1f(glGetUniformLocation(m_rendererID, name.c_str()), value) );
 }
-void Shader::setMat4(const std::string& name, glm::mat4 value)
+void Shader::setMat4(const std::string& name, glm::mat4* value)
 {
     // Check if the uniform exists.
-    GLCall ( glUniformMatrix4fv( getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value) ) );
+    GLCall ( glUniformMatrix4fv( getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(*value) ) );
 }
 
 // Get the uniform location.

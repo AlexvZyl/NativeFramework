@@ -13,10 +13,11 @@ as error handling for when a wrong function is called on a engine type.
 //=============================================================================================================================================//
 
 #include "Entities/Entity.h"	// For rendering entities in OpenGL.
-#include "FontLoader.h"			// For loading fonts into the app.
 #include "ErrorHandlerGL.h"		// For OpenGL error handling.
 #include <glm.hpp>				// OpenGL maths.
 #include "GUI/GUIState.h"		// The GUI states and other information.
+#include <string>
+#include "FontLoader.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -45,63 +46,59 @@ public:
 	// ----------------- //
 
 	// MVP Matrices.
-	glm::mat4 m_modelMatrix = glm::mat4(1.0f);			// The model matrix that places the object in the world.  Is going to be 
-														// kept an identity matrix for now.
-	glm::mat4 m_viewMatrix = glm::mat4(1.0f);			// The matrix that handles the camera movement.
-														// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);		// The matrix that handles the clipping plane (which part of the world is
-														// going to be visible to the screen?)
-	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);		// The matrix that handles the viewport transform.  Converts screen pixel
-														// coordinates to the OpenGL uniform coordinate system.
-														
+	glm::mat4 m_modelMatrix = glm::mat4(1.0f);					// The model matrix that places the object in the world.  Is going to be 
+																// kept an identity matrix for now.
+	glm::mat4 m_viewMatrix = glm::mat4(1.0f);					// The matrix that handles the camera movement.
+																// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
+	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);				// The matrix that handles the clipping plane (which part of the world is
+																// going to be visible to the screen?)
+	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);				// The matrix that handles the viewport transform.  Converts screen pixel
+																// coordinates to the OpenGL uniform coordinate system.
+																
 	// View matrix components.
-	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);		// Handles camera scaling.
-	glm::mat4 m_translationMatrix = glm::mat4(1.0f);	// Handles camera translations.
-	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);		// Handles camera rotations.
+	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);				// Handles camera scaling.
+	glm::mat4 m_translationMatrix = glm::mat4(1.0f);			// Handles camera translations.
+	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);				// Handles camera rotations.
 
 	// We need matrices to store the base view of the drawing.  This is to fall back to when right clicking, and this has to 
 	// be updated with resizing and when auto sizing and scaling funtions are called.
-	glm::mat4 m_scalingMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera scaling.
-	glm::mat4 m_translationMatrixBase = glm::mat4(1.0f);// Stores base matrix for camera translation.
-	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);	// Stores base matrix for camera rotation.
+	glm::mat4 m_scalingMatrixBase = glm::mat4(1.0f);			// Stores base matrix for camera scaling.
+	glm::mat4 m_translationMatrixBase = glm::mat4(1.0f);		// Stores base matrix for camera translation.
+	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);			// Stores base matrix for camera rotation.
 
 	// ---------------------------------- //
 	//  R E N D E R I N G   O B J E C T S //
 	// ---------------------------------- //
 
 	// Shaders.
-	std::shared_ptr<Shader> m_basicShader;				// Renders movable elements without textures.
-	std::shared_ptr<Shader> m_backgroundShader;			// Renders the background.
-	std::shared_ptr<Shader> m_textureShader;			// Renders movable elements with textures.
+	std::unique_ptr<Shader> m_basicShader;						// Renders movable elements without textures.
+	std::unique_ptr<Shader> m_backgroundShader;					// Renders the background.
+	std::unique_ptr<Shader> m_textureShader;					// Renders movable elements with textures.
 
 	// Vertex arrays.
-	std::shared_ptr<VertexArrayObject> m_linesVAO;				// Lines.
-	std::shared_ptr<VertexArrayObject> m_trianglesVAO;			// Triangles.
-	std::shared_ptr<VertexArrayObject> m_texturedTrianglesVAO;	// Textured Triangles.
-	std::shared_ptr<VertexArrayObject> m_backgroundVAO;			// Background has a seperate VAO since it should not move.
+	std::unique_ptr<VertexArrayObject> m_linesVAO;				// Lines.
+	std::unique_ptr<VertexArrayObject> m_trianglesVAO;			// Triangles.
+	std::unique_ptr<VertexArrayObject> m_texturedTrianglesVAO;	// Textured Triangles.
+	std::unique_ptr<VertexArrayObject> m_backgroundVAO;			// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer Object.
-	std::shared_ptr<FrameBufferObject> m_frameBuffer;	// FBO to render scene onto.  Stores the OpenGL scene as a texture.
-														// Also implements MSAA.
-												 
-	// Text rendering.
-	Font m_font;										// Font used when rendering text.
+	std::unique_ptr<FrameBufferObject> m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
+																// Also implements MSAA.
 
-	// Entities.
-	std::vector<std::shared_ptr<Entity>> m_entities;	//  Vector that containts all of the rendered entities.
+	Font m_defaultFont;											// The default font for the rendering engine.
 
 	// --------------------------- //
 	//  S T A T E   M A C H I N E  //
 	// --------------------------- //
 
-	std::shared_ptr<GUIState> m_guiState;	// Contains the current state of the application as well as information
-											// that is required from the GUI side for the Graphics side.
+	GUIState* m_guiState;										// Contains the current state of the application as well as information
+																// that is required from the GUI side for the Graphics side.
 
 	// ----------------- //
 	//  V I E W P O R T  //
 	// ----------------- //
 
-	float m_imGuiViewportDimensions[2] = { 500, 500 };		// Stores the dimensions of the viewport that the OpenGL context gets drawn to.  
+	float m_imGuiViewportDimensions[2] = { 500, 500 };			// Stores the dimensions of the viewport that the OpenGL context gets drawn to.  
 															
 	// Resizes the viewport, projection matrix and FBO.
 	virtual void resizeEvent(float width, float height);	

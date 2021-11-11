@@ -12,6 +12,9 @@
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
+// Default.
+FrameBufferObject::FrameBufferObject() {};
+
 // Constructor.
 FrameBufferObject::FrameBufferObject(int width, int height, int MSAA) 
 	: m_MSAA(MSAA)

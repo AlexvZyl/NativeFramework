@@ -13,7 +13,7 @@
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-VertexArrayObject::VertexArrayObject(GLenum type, bool textured)
+VertexArrayObject::VertexArrayObject(GLenum type, bool textured, bool circle)
 	: m_bufferType(type)
 {
 	// Generate the VAO.
@@ -103,30 +103,30 @@ void VertexArrayObject::unbind() const { GLCall(glBindVertexArray(0)); }
 //  Vertex.					  																												   //
 //=============================================================================================================================================//
 
-void VertexArrayObject::appendDataCPU(std::vector<std::shared_ptr<Vertex>> vertices)
+void VertexArrayObject::appendDataCPU(std::vector<Vertex>* vertices)
 {
-	m_vertexCPU.insert(m_vertexCPU.end(), vertices.begin(), vertices.end());
-	m_bufferIndex += vertices.size();
+	m_vertexCPU.insert(m_vertexCPU.end(), vertices->begin(), vertices->end());
+	m_bufferIndex += vertices->size();
 }
 
-void VertexArrayObject::assignDataCPU(std::vector<std::shared_ptr<Vertex>> vertices, unsigned int index)
+void VertexArrayObject::assignDataCPU(std::vector<Vertex>* vertices, unsigned int index)
 {
 	// Create the VAO if it is empty.
 	if (!m_bufferIndex) { appendDataCPU(vertices); }
 	// Otherwise replace current data.
-	else { std::copy(vertices.begin(), vertices.end(), m_vertexCPU.begin()+index); }
+	else { std::copy(vertices->begin(), vertices->end(), m_vertexCPU.begin()+index); }
 }
 
-void VertexArrayObject::assignDataGPU(std::vector<std::shared_ptr<Vertex>> vertices, unsigned int index)
+void VertexArrayObject::assignDataGPU(std::vector<Vertex>* vertices, unsigned int index)
 {
 	// Bind VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 	// Populate with vertex data.
-	for (std::shared_ptr<Vertex> vertex : vertices)
+	for (Vertex vertex : *vertices)
 	{
 		// Write the data to the buffer.
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->idOffset, vertex->idSize, vertex->idGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.idOffset, vertex.idSize, vertex.idGL()));
 		index += 1;
 	}
 }
@@ -149,11 +149,11 @@ void VertexArrayObject::assignDataGPU(Entity* entity)
 	// Bind VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 	// Populate with vertex data.
-	for (std::shared_ptr<Vertex> vertex : entity->m_vertices)
+	for (Vertex vertex : entity->m_vertices)
 	{
 		// Write the data to the buffer.
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
 		index += 1;
 	}
 }
@@ -204,24 +204,24 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_vertexCPU[0]->totalSize, NULL, GL_DYNAMIC_DRAW))
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_vertexCPU[0].totalSize, NULL, GL_DYNAMIC_DRAW))
 		// Populate with entity vertex data.
 		for (Entity* entity : m_entityCPU)
 		{
-			for (std::shared_ptr<Vertex> vertex : entity->m_vertices)
+			for (Vertex vertex : entity->m_vertices)
 			{
 				// Write the data to the buffer.
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
 				index += 1;
 			}
 		}
 		// Populate with normal vertex data.
-		for (std::shared_ptr<Vertex> vertex : m_vertexCPU)
+		for (Vertex vertex : m_vertexCPU)
 		{
 			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
 			index += 1;
 		}
 	}
@@ -235,13 +235,13 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_bufferIndex) * m_vertexCPU[0]->totalSize, NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_bufferIndex) * m_vertexCPU[0].totalSize, NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
-		for (std::shared_ptr<Vertex> vertex : m_vertexCPU)
+		for (Vertex vertex : m_vertexCPU)
 		{
 			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
 			index += 1;
 		}
 	}
@@ -258,15 +258,15 @@ void VertexArrayObject::updateGPU()
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_entityCPU[0]->m_vertices[0]->totalSize, NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_entityCPU[0]->m_vertices[0].totalSize, NULL, GL_DYNAMIC_DRAW));
 		// Populate with vertex data.
 		for (Entity* entity : m_entityCPU) 
 		{
-			for (std::shared_ptr<Vertex> vertex : entity->m_vertices)
+			for (Vertex vertex : entity->m_vertices)
 			{
 				// Write the data to the buffer.
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize, vertex->dataSize, vertex->dataGL()));
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->totalSize + vertex->idOffset, vertex->idSize, vertex->idGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize, vertex.dataSize, vertex.dataGL()));
+				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.totalSize + vertex.idOffset, vertex.idSize, vertex.idGL()));
 				index += 1;
 			}
 		}

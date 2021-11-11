@@ -26,12 +26,12 @@ class Component2D
 	//Private Members
 private:
 	//shape and edge data
-	std::shared_ptr<VertexArrayObject> shapeVAO;
-	std::shared_ptr<VertexArrayObject> borderVAO;
-	std::shared_ptr<VertexArrayObject> textVAO;
-	std::shared_ptr<Polygon2D> shape;
-	std::shared_ptr<Polygon2D> border;
-	std::shared_ptr<Text> title;
+	std::unique_ptr<VertexArrayObject> shapeVAO;
+	std::unique_ptr<VertexArrayObject> borderVAO;
+	std::unique_ptr<VertexArrayObject> textVAO;
+	std::unique_ptr<Polygon2D> shape;
+	std::unique_ptr<Polygon2D> border;
+	std::unique_ptr<Text> title;
 
 	//component shape attributes
 	float height = 0.1f;

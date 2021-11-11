@@ -22,6 +22,9 @@ and notify the user via the terminal interface.
 #include "Misc/ConsoleColor.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "CoreGL/Entities/Vertex.h"
+//#include "Fonts.h"
+#include "FontLoader.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -39,42 +42,42 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	// ----------------------------------------- //
 
 	// Compile the shaders, using the resources embedded in the exe.
-	m_basicShader = std::make_shared<Shader>(BASIC_SHADER);
-	m_textureShader = std::make_shared<Shader>(TEXTURE_SHADER);
+	m_basicShader	= std::make_unique<Shader>(BASIC_SHADER);
+	m_textureShader = std::make_unique<Shader>(TEXTURE_SHADER);
 
 	// Set default values for the shaders.  The background shader does not require
 	// this setup, since it does not work with the MVP matrices.
 	glm::mat4 identity = glm::mat4(1.0f);
 	m_basicShader->bind();
-	m_basicShader->setMat4("worldMatrix", identity);
-	m_basicShader->setMat4("projectionMatrix", identity);
-	m_basicShader->setMat4("viewMatrix", identity);
+	m_basicShader->setMat4("worldMatrix", &identity);
+	m_basicShader->setMat4("projectionMatrix", &identity);
+	m_basicShader->setMat4("viewMatrix", &identity);
 	m_textureShader->bind();
-	m_textureShader->setMat4("worldMatrix", identity);
-	m_textureShader->setMat4("projectionMatrix", identity);
-	m_textureShader->setMat4("viewMatrix", identity);
+	m_textureShader->setMat4("worldMatrix", &identity);
+	m_textureShader->setMat4("projectionMatrix", &identity);
+	m_textureShader->setMat4("viewMatrix", &identity);
 
 	// ------------------------------------- //
 	//  C R E A T E   B A S I C   V A O ' S  //
 	// ------------------------------------- //
 
-	m_linesVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
-	m_trianglesVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
-	m_texturedTrianglesVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, true);
-	m_frameBuffer = std::make_shared<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
+	m_linesVAO				= std::make_unique<VertexArrayObject>(GL_LINES);
+	m_trianglesVAO			= std::make_unique<VertexArrayObject>(GL_TRIANGLES);
+	m_texturedTrianglesVAO	= std::make_unique<VertexArrayObject>(GL_TRIANGLES);
+	m_frameBuffer			= std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 	createDefaultBackground();
 
 	// ----------------------------------------- //
 	//  C R E A T E   T E X T   R E N D E R E R  //
 	// ----------------------------------------- //
 
-	m_font = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);							// Load font.
-	m_font.textureID = loadBitmapToGL(loadImageFromResource(ARIAL_SDF_PNG));	// Load font atlas as texture.
+	m_defaultFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);							// Load font from resource.
+	m_defaultFont.textureID = loadBitmapToGL(loadImageFromResource(ARIAL_SDF_PNG));	// Load font atlas as texture.
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1 };
 	GLCall(glUniform1iv(loc, 2, samplers));
-	GLCall(glBindTextureUnit(1, m_font.textureID));	// Text Atlas.
+	GLCall(glBindTextureUnit(1, m_defaultFont.textureID));	// Text Atlas.
 
 	// Print done message.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core done.\n";
@@ -165,18 +168,22 @@ void EngineCoreGL::updateGPU()
 	//			13 ---- 14 ---- 15 ---- 16
 
 	// Create the VAO.
-	m_backgroundVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
+	m_backgroundVAO = std::make_unique<VertexArrayObject>(GL_TRIANGLES, false, false);
 	// Assign background data.
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f);
 	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f);
 	// Create and push the vertices.
-	std::shared_ptr<VertexData> v1 = std::make_shared<VertexData>(glm::vec3(1.0f, 1.0f, 0.99f), bgColor2, -1);	//  Top right.
-	std::shared_ptr<VertexData> v2 = std::make_shared<VertexData>(glm::vec3(-1.0f, 1.0f, 0.99), bgColor1, -1);	//  Top left.
-	std::shared_ptr<VertexData> v3 = std::make_shared<VertexData>(glm::vec3(-1.0f, -1.0f, 0.99), bgColor1, -1);	//  Bottom left.
-	std::shared_ptr<VertexData> v4 = std::make_shared<VertexData>(glm::vec3(1.0f, -1.0f, 0.99), bgColor1, -1);	//  Bottom right.
-	std::vector<std::shared_ptr<Vertex>> vertices = {v1,v2,v3,v3,v4,v1};
+	glm::vec3 pos1(1.0f, 1.0f, 0.99f);
+	glm::vec3 pos2(-1.0f, 1.0f, 0.99);
+	glm::vec3 pos3(-1.0f, -1.0f, 0.99);
+	glm::vec3 pos4(1.0f, -1.0f, 0.99);
+	VertexData v1(&pos1, &bgColor2, -1);	//  Top right.
+	VertexData v2(&pos2, &bgColor1, -1);	//  Top left.
+	VertexData v3(&pos3, &bgColor1, -1);	//  Bottom left.
+	VertexData v4(&pos4, &bgColor1, -1);	//  Bottom right.
+	std::vector<Vertex> vertices = {v1,v2,v3,v3,v4,v1};
 	// Create background.
-	m_backgroundVAO->appendDataCPU(vertices);
+	m_backgroundVAO->appendDataCPU(&vertices);
 	m_backgroundVAO->updateGPU();
  }
 

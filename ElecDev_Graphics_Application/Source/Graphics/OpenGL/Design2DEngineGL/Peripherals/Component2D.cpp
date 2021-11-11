@@ -23,24 +23,27 @@ Component2D::Component2D()
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
-	borderVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
-	textVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, true);
+	shapeVAO = std::make_unique<VertexArrayObject>(GL_TRIANGLES, false, false);
+	borderVAO = std::make_unique<VertexArrayObject>(GL_LINES, false, false);
+	textVAO = std::make_unique<VertexArrayObject>(GL_TRIANGLES, true, false);
 	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.9f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
 	//VertexData shapeVertices[4];
 	std::shared_ptr<VertexData> edgeVertices[4];
 
-	shape = std::make_shared<Polygon2D>(vertices, shapeVAO.get());
-	shape->setColor(shapeColour);
+	shape = std::make_unique<Polygon2D>(&vertices, shapeVAO.get());
+	shape->setColor(&shapeColour);
 	shape->setLayer(componentLayer);
 	shape->update();
-	border = std::make_shared<Polygon2D>(vertices, borderVAO.get());
-	border->setColor(borderColour);
+	border = std::make_unique<Polygon2D>(&vertices, borderVAO.get());
+	border->setColor(&borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
-	title = std::make_shared<Text>("Generic Component", glm::vec3(centre, componentLayer + borderLayerOffset), glm::vec4(0.f, 0.f, 1.f, 1.f), 1.f, 0, textVAO, &titleFont);
+	glm::vec3 texPos1(centre, componentLayer + borderLayerOffset);
+	glm::vec4 texCol1(0.f, 0.f, 1.f, 1.f);
+	title = std::make_unique<Text>("Generic Component", &texPos1, &texCol1, 1.f, 0, textVAO.get(), &titleFont);
+	title->update();
 
 }
 
@@ -54,8 +57,9 @@ Component2D::~Component2D() {
 
 void Component2D::moveTo(float pointerPos[2])
 {
-	shape->translateTo(glm::vec3(pointerPos[0], pointerPos[1], 0.f));
-	border->translateTo(glm::vec3(pointerPos[0], pointerPos[1], 0.f));
+	glm::vec3 translateDestination(pointerPos[0], pointerPos[1], 0.f);
+	shape->translateTo(&translateDestination);
+	border->translateTo(&translateDestination);
 	shape->update();
 	border->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
@@ -65,8 +69,10 @@ void Component2D::place(float pos[2])
 {	//ensure the component is at the desired position
 	moveTo(pos);
 	setLayer(0.0f);
-	shape->setColor(glm::vec4(0.f, 0.f, 1.f, 0.5f));
-	border->setColor(glm::vec4(0.f, 0.f, 0.f, 1.f));
+	glm::vec4 color1(0.f, 0.f, 1.f, 0.5f);
+	glm::vec4 color2(0.f, 0.f, 0.f, 1.f);
+	shape->setColor(&color1);
+	border->setColor(&color2);
 	shape->update();
 	border->update();
 	//Move to placement layer

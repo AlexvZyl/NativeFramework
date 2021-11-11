@@ -14,6 +14,10 @@ BufferLayout is used to setup the VAO.
 #include "GLM/glm.hpp"
 
 //=============================================================================================================================================//
+//  Includes.																																   //
+//=============================================================================================================================================//
+
+//=============================================================================================================================================//
 //  Struct layout.																															   //
 //=============================================================================================================================================//
 
@@ -44,7 +48,7 @@ struct Vertex
 	int totalSize = 0;							// All of the data.
 	int dataSize = 0;							// All of the color texture data.
 	int idOffset = 0;							// Offset to the entity ID.
-	int idSize = sizeof(entityID);
+	int idSize = 0;
 	// Formats the data so that OpenGL can use it.
 	virtual const void* dataGL() { return (const void*)NULL; }
 	// Returns the ID in a format that OpenGL can use.
@@ -61,9 +65,9 @@ struct VertexData : public Vertex
 
 	// Constructor.
 	VertexData() { setup(); }
-	VertexData(glm::vec3 pos, glm::vec4 clr, unsigned int eID)
+	VertexData(glm::vec3* pos, glm::vec4* clr, unsigned int eID)
 	{
-		position = pos; color = clr; entityID = eID;
+		position = *pos; color = *clr; entityID = eID;
 		setup();
 	}
 	VertexData(float pos0, float pos1, float pos2,
@@ -82,6 +86,7 @@ struct VertexData : public Vertex
 		setup();
 	}
 
+	// Setup vertex size.
 	void setup() 
 	{
 		dataSize = idOffset = sizeof(position) + sizeof(color);
@@ -106,11 +111,11 @@ struct VertexDataTextured : public Vertex
 	float textureID = 0;
 	float rawData[10] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
-	// Constructor.
+	// Constructors.
 	VertexDataTextured() { setup(); }
-	VertexDataTextured(glm::vec3 pos, glm::vec4 clr, glm::vec2 texCoords, float texID, unsigned int eID)
+	VertexDataTextured(glm::vec3* pos, glm::vec4* clr, glm::vec2* texCoords, float texID, unsigned int eID)
 	{
-		position = pos; color = clr; entityID = eID; textureCoords = texCoords; textureID = texID; entityID = eID;
+		position = *pos; color = *clr; entityID = eID; textureCoords = *texCoords; textureID = texID; entityID = eID;
 		setup();
 	}
 	VertexDataTextured(float pos0, float pos1, float pos2,
@@ -131,6 +136,7 @@ struct VertexDataTextured : public Vertex
 		setup();
 	}
 
+	// Setup vertex size.
 	void setup() 
 	{
 		dataSize = idOffset = sizeof(position) + sizeof(color) + sizeof(textureCoords) + sizeof(textureID);
@@ -157,7 +163,7 @@ struct VertexDataCircle : public Vertex
 	float rawData[9] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 	glm::vec2 localCoords = {0.f,0.f};
 
-	// Constructor.
+	// Constructors.
 	VertexDataCircle() { setup(); }
 	VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCoords, unsigned int eID)
 	{
