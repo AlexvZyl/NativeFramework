@@ -32,6 +32,7 @@ private:
 	std::shared_ptr<Polygon2D> shape;
 	std::shared_ptr<Polygon2D> border;
 	std::shared_ptr<Text> title;
+	static unsigned componentID;
 
 	//component shape attributes
 	float height = 0.1f;
@@ -47,7 +48,10 @@ private:
 
 	//title
 	static Font titleFont;
-	glm::vec2 titlePos;
+	glm::vec3 titlePos;
+	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
+	std::string titleString;
+	float titleSize = 0.2f;
 
 	//port specifications
 	int n_ports_north = 0;

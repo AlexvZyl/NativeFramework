@@ -111,11 +111,14 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		switch (key) {
 		case GLFW_KEY_P:
 			designerState = COMPONENT_PLACE;
+			//add a dummy component
 			m_activeComponent = std::make_shared<Component2D>(screenCoords, m_trianglesVAO.get(), m_linesVAO.get(), m_texturedTrianglesVAO.get());
 			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
-			m_activeComponent->destroy();
+			//m_activeComponent->destroy();
+			//Remove the dummy component
+			m_activeComponent = NULL;//runs deconstructor
 			break;
 		}
 	}

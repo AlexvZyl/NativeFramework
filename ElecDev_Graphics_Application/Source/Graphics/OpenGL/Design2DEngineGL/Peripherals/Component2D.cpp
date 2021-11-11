@@ -8,6 +8,7 @@
 
 //Add font for component titles
 Font Component2D::titleFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
+unsigned Component2D::componentID = 0;
 
 
 Component2D::Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO)
@@ -26,7 +27,8 @@ Component2D::Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* lin
 	engine_trianglesVAO = trianglesVAO;
 	engine_linesVAO = linesVAO;
 	engine_texturedTrianglesVAO = texturedTrianglesVAO;
-	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.9f);
+	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.5f);
+	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
 	//VertexData shapeVertices[4];
@@ -40,9 +42,9 @@ Component2D::Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* lin
 	border->setColor(&borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
-	glm::vec3 texPos1(centre, componentLayer + borderLayerOffset);
-	glm::vec4 texCol1(0.f, 0.f, 1.f, 1.f);
-	title = std::make_shared<Text>("Generic Component", &texPos1, &texCol1, 1.f, 0, engine_texturedTrianglesVAO, &titleFont);
+	titlePos = glm::vec3(centre, componentLayer + borderLayerOffset);
+	titleString = "Component " + std::to_string(componentID++);
+	title = std::make_shared<Text>(titleString, &titlePos, &titleColour, titleSize, engine_texturedTrianglesVAO, &titleFont);
 	title->update();
 
 }
@@ -57,11 +59,13 @@ Component2D::~Component2D() {
 
 void Component2D::moveTo(float pointerPos[2])
 {
-	glm::vec3 translateDestination(pointerPos[0], pointerPos[1], 0.f);
+	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
 	shape->translateTo(&translateDestination);
 	border->translateTo(&translateDestination);
+	title->translateTo(&translateDestination);
 	shape->update();
 	border->update();
+	title->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
@@ -69,12 +73,15 @@ void Component2D::place(float pos[2])
 {	//ensure the component is at the desired position
 	moveTo(pos);
 	setLayer(0.0f);
-	glm::vec4 color1(0.f, 0.f, 1.f, 0.5f);
-	glm::vec4 color2(0.f, 0.f, 0.f, 1.f);
-	shape->setColor(&color1);
-	border->setColor(&color2);
+	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
+	titleColour = { 0.f, 0.f, 1.f, 1.0f };
+	borderColour = { 0.f, 0.f, 0.f, 1.f };
+	shape->setColor(&shapeColour);
+	border->setColor(&borderColour);
+	title->setColor(&titleColour);
 	shape->update();
 	border->update();
+	title->update();
 	//Move to placement layer
 }
 
@@ -82,6 +89,7 @@ void Component2D::setLayer(float layer)
 {
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
+	title->setLayer(layer + borderLayerOffset);
 	componentLayer = layer;
 }
 
@@ -89,6 +97,7 @@ void Component2D::destroy()
 {
 	shape->destroy();
 	border->destroy();
+	title->destroy();
 }
 
 void Component2D::render()
