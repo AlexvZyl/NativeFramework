@@ -26,8 +26,9 @@ class Component2D
 	//Private Members
 private:
 	//shape and edge data
-	std::shared_ptr<VertexArrayObject> shapeVAO;
-	std::shared_ptr<VertexArrayObject> borderVAO;
+	VertexArrayObject* engine_trianglesVAO;
+	VertexArrayObject* engine_linesVAO;
+	VertexArrayObject* engine_texturedTrianglesVAO;
 	std::shared_ptr<Polygon2D> shape;
 	std::shared_ptr<Polygon2D> border;
 	std::shared_ptr<Text> title;
@@ -60,14 +61,13 @@ private:
 	//Public Members
 public:
 
-	std::shared_ptr<VertexArrayObject> textVAO;
 	//Constructors
 
 	//Creates a generic component centred at (0, 0)
-	Component2D();
+	Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO);
 
 	//Creates a generic component centred at the specified coordinates
-	Component2D(float centreCoords[2]);
+	Component2D(float centreCoords[2], VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO);
 
 	//Deconstructor
 	~Component2D();
