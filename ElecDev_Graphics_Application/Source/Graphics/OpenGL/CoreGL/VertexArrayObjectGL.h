@@ -31,12 +31,13 @@ private:
 public:
 
 	GLenum m_bufferType;		// Data type used in this VAO.	
+
 	// --------- //
 	//  D A T A  //
 	// --------- //
 
 	// Vertices stores CPU side.
-	std::vector<std::shared_ptr<Vertex>> m_vertexCPU;
+	std::vector<Vertex*> m_vertexCPU;
 	// Entities stored CPU side.
 	std::vector<Entity*> m_entityCPU;
 
@@ -45,7 +46,8 @@ public:
 	// ------------------------------------------------- //
 
 	// Constructor.
-	VertexArrayObject(GLenum type, bool textured);
+	VertexArrayObject();							// Default.
+	VertexArrayObject(GLenum type, bool textured, bool circle);
 	// Destructor.
 	~VertexArrayObject();
 
@@ -76,10 +78,10 @@ public:
 	// ----------------- //
 
 	// Append data on the CPU side memory for untextured vertices.
-	void appendDataCPU(std::vector<std::shared_ptr<Vertex>> vertices);
+	void appendDataCPU(std::vector<Vertex*>* vertices);
 	// Assign data to the CPU side memory for untextured vertices.
 	// If the VAO is empty it creates a new one with the vertices specified.
-	void assignDataCPU(std::vector<std::shared_ptr<Vertex>> vertices, unsigned int index);
+	void assignDataCPU(std::vector<Vertex*>* vertices, unsigned int index);
 	// Assign data to the GPU side memory for untextured vertices.
 	// since this funtion is going to be called in performance critical scenarios.
 	// If you use this function it will update faster, but you also lose the ability
@@ -87,7 +89,7 @@ public:
 	// Error handling is not added to this function to make it as fast as possible, so
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
-	void assignDataGPU(std::vector<std::shared_ptr<Vertex>> vertices, unsigned int index);
+	void assignDataGPU(std::vector<Vertex*>* vertices, unsigned int index);
 
 	// ----------------- //
 	//  E N T I T I E S  //

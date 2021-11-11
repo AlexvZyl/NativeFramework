@@ -32,7 +32,8 @@ private:
 
 public:
 
-	// Constructor.
+	// Constructors.
+	FrameBufferObject();
 	FrameBufferObject(int width, int height, int MSAA);
 	// Destructor.
 	~FrameBufferObject();

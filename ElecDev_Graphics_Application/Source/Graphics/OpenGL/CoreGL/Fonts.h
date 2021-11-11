@@ -1,40 +1,21 @@
 #pragma once
 
+/*
+This header file contains all of the fonts that is used in the application and can be included anywhere in the project to access them.
+*/
+
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include <vector>
-#include <glm.hpp>
-#include "Entity.h"
+//#include "Resources/ResourceHandler.h"
+#include "FontLoader.h"
 
 //=============================================================================================================================================//
-//  Forward dclerations.																													   //
+//  Fonts.																																	   //
 //=============================================================================================================================================//
 
-class VertexArrayObject;
-
-//=============================================================================================================================================//
-//  Class.																																	   //
-//=============================================================================================================================================//
-
-class Polygon2D : public Entity
-{
-public:
-
-	//polygon shape attributes
-	unsigned n_vertices;
-
-	Polygon2D() = default;
-
-	//Adds a polygon with the given vertices centred at (0,0) to a VAO
-	Polygon2D(std::vector<glm::vec3>* vertices, VertexArrayObject* VAO);
-
-	//Remove a polygon from the VBO and deconstruct
-	~Polygon2D();
-	//change the layer in which the polygon is drawn
-	void setLayer(float layer);
-};
+//static Font defaultFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

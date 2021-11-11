@@ -42,9 +42,9 @@ void GraphicsHandler::renderGraphics()
 	if (m_windowsDictionary.size()) 
 	{
 		// Render each window.
-		for (auto window : m_windowsDictionary)
+		for (auto& [name, window] : m_windowsDictionary)
 		{
-			window.second->engineGL->renderLoop();
+			window->engineGL->renderLoop();
 		}
 	}
 };
@@ -132,12 +132,12 @@ void GraphicsHandler::resizeEvent(int width, int height)
 	if (m_windowsDictionary.size())
 	{
 		// Run resize event for each engine.
-		for (auto engine : m_windowsDictionary)
+		for (auto const& [name, window] : m_windowsDictionary)
 		{
-			if (engine.second->resizeEvent)
+			if (window->resizeEvent)
 			{
-				engine.second->engineGL->resizeEvent(engine.second->viewportDimentions[0], engine.second->viewportDimentions[1]);
-				engine.second->resizeEvent = false;
+				window->engineGL->resizeEvent(window->viewportDimentions[0], window->viewportDimentions[1]);
+				window->resizeEvent = false;
 			}
 		}
 	}

@@ -12,6 +12,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  General.
 #include <string>
 #include <variant>
+#include <map>
 // OpenGL engines.
 #include "OpenGL/CoreGL/EngineCoreGL.h"
 #include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
@@ -35,7 +36,7 @@ struct RenderWindowGL
 	// The rendering engine.
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
-	EngineCoreGL* engineGL;
+	std::unique_ptr<EngineCoreGL> engineGL;
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
@@ -48,22 +49,23 @@ struct RenderWindowGL
 	bool resizeEvent = true;
 	bool close = true;
 
-	// Constructor.
+	// Constructors.
+	RenderWindowGL() {};
 	RenderWindowGL(GUIState* guiState, EngineType engineType) 
 	{
 		if (engineType == EngineType::Base2DEngineGL) 
 		{
-			engineGL = new Base2DEngineGL(guiState);
+			engineGL = std::make_unique<Base2DEngineGL>(guiState);
 			engineType = EngineType::Base2DEngineGL;
 		}
 		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL =  new Design2DEngineGL(guiState);
+			engineGL = std::make_unique<Design2DEngineGL>(guiState);
 			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
-			engineGL = new Base3DEngineGL(guiState);
+			engineGL = std::make_unique<Base3DEngineGL>(guiState);
 			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
@@ -73,7 +75,6 @@ struct RenderWindowGL
 	// Destructor.
 	~RenderWindowGL()
 	{
-		delete engineGL;
 	}
 };
 
@@ -90,7 +91,7 @@ public:
 	// ------------------- //
 
 	// Map that holds the windows and their names.
-	std::map<std::string, RenderWindowGL*> m_windowsDictionary;
+	std::map<std::string, std::unique_ptr<RenderWindowGL>> m_windowsDictionary;
 
 	// Variable that holds the active window name.
 	std::string m_activeWindow;
