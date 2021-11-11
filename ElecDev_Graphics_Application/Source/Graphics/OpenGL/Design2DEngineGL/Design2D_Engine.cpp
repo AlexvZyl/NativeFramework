@@ -15,13 +15,14 @@ This is where the interactive 2D design engine is implemented.
 // Resource loading.
 #include "Resources/ResourceHandler.h"
 // Window.
-#include <GLFW/glfw3.h>
+
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/ShaderHandlerGL.h"
-
+#include "CoreGL/VertexArrayObjectGL.h"
+#include <GLFW/glfw3.h>
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
@@ -95,6 +96,9 @@ void Design2DEngineGL::renderLoop()
 	if (m_activeComponent != NULL) {
 		m_activeComponent->render();
 	}
+
+	//m_textureShader->bind();
+	//m_activeComponent->textVAO->render();
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //

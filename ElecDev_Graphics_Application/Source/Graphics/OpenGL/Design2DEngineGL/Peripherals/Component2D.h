@@ -28,7 +28,6 @@ private:
 	//shape and edge data
 	std::shared_ptr<VertexArrayObject> shapeVAO;
 	std::shared_ptr<VertexArrayObject> borderVAO;
-	std::shared_ptr<VertexArrayObject> textVAO;
 	std::shared_ptr<Polygon2D> shape;
 	std::shared_ptr<Polygon2D> border;
 	std::shared_ptr<Text> title;
@@ -61,6 +60,7 @@ private:
 	//Public Members
 public:
 
+	std::shared_ptr<VertexArrayObject> textVAO;
 	//Constructors
 
 	//Creates a generic component centred at (0, 0)

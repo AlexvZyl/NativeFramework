@@ -13,12 +13,12 @@
 
 // Writes the text to the buffer based on the font loaded in the constructor.
 Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
-		   unsigned int eID, std::shared_ptr<VertexArrayObject> vao, Font* font)
+		   unsigned int eID, VertexArrayObject* vao, Font* font)
 {
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
 	// This has to be compensated for in the funciton.
-
+	m_VAO = vao;
 	// Iterate through characters.
 	float advance = 0;
 	for (int i = 0; i < (int)text.length(); i++)
@@ -67,7 +67,8 @@ Text::Text(std::string text, glm::vec3 position, glm::vec4 color, float scale,
 		advance += c.xAdvance;
 	}
 	// Write all of the vertices to the CPU side buffer.
-	vao->appendDataCPU(this);
+	m_VAO->appendDataCPU(this);
+	m_VAO->updateGPU();
 	//vao->appendDataCPU(m_vertices);
 }
 

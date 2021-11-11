@@ -28,7 +28,7 @@ public:
 	// Takes the normal texture information as input, as well as the VAO that it has to render to
 	// and also the font that it has to use to render.
 	Text(std::string text, glm::vec3 position, glm::vec4 color, float scale, 
-		 unsigned int eID, std::shared_ptr<VertexArrayObject> vao, Font* font);
+		 unsigned int eID, VertexArrayObject* vao, Font* font);
 	// Destructor.
 	~Text();
 };

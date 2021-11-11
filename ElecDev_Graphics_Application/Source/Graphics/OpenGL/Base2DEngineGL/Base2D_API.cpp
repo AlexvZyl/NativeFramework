@@ -158,7 +158,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 
 	// Write text to CPU side buffer.
 	m_entities.push_back(std::make_shared<Text>(text, glm::vec3(coords[0], coords[1], 0.0f), colorGLM, scale,
-												0, m_texturedTrianglesVAO, &m_font));
+												0, m_texturedTrianglesVAO.get(), &m_font));
 }
 
 // Draws the demo drawing.
