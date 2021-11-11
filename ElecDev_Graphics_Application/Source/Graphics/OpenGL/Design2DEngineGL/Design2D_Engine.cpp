@@ -95,10 +95,10 @@ void Design2DEngineGL::renderLoop()
 	}
 	if (m_activeComponent != NULL) {
 		m_activeComponent->render();
+		m_textureShader->bind();
+		m_activeComponent->textVAO->render();
 	}
 
-	//m_textureShader->bind();
-	//m_activeComponent->textVAO->render();
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //
