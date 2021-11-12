@@ -12,7 +12,7 @@ Font Component2D::titleFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 unsigned Component2D::componentID = 0;
 
 
-Component2D::Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO)
+Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO)
 {
 	// --------------------------- //
 	//  I N I T I A L   S E T U P  //
@@ -32,24 +32,24 @@ Component2D::Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* lin
 	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	std::shared_ptr<VertexData> edgeVertices[4];
+	//std::shared_ptr<VertexData> edgeVertices[4];
 
-	shape = std::make_shared<Polygon2D>(&vertices, engine_trianglesVAO);
+	shape = std::make_shared<Polygon2D<VertexData>>(&vertices, engine_trianglesVAO);
 	shape->setColor(&shapeColour);
 	shape->setLayer(componentLayer);
 	shape->update();
-	border = std::make_shared<Polygon2D>(&vertices, engine_linesVAO);
+	border = std::make_shared<Polygon2D<VertexData>>(&vertices, engine_linesVAO);
 	border->setColor(&borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
 	titlePos = glm::vec3(centre, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = std::make_shared<Text>(titleString, &titlePos, &titleColour, titleSize, engine_texturedTrianglesVAO, &titleFont);
+	title = std::make_shared<Text<VertexDataTextured>>(titleString, &titlePos, &titleColour, titleSize, engine_texturedTrianglesVAO, &titleFont, "C");
 	title->update();
 
 }
 
-Component2D::Component2D(float centreCoords[2], VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO):Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO)
+Component2D::Component2D(float centreCoords[2], VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO)
 {
 	moveTo(centreCoords);
 }

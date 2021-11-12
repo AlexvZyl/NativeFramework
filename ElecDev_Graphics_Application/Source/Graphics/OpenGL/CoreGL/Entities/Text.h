@@ -44,10 +44,9 @@ public:
 
 	// Constructor.
 	Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, 
-		 unsigned int eID, VertexArrayObject<VertexType>* vao, Font* font, std::string align);
+		 unsigned int eID, VertexArrayObject<VertexType>* vao, Font* font, std::string align = "C");
 	// Destructor.
 	~Text();
-	void setLayer(float layer);
 };
 
 //=============================================================================================================================================//
