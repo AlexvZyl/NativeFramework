@@ -54,7 +54,7 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 	else if (typeid(VertexType)==typeid(VertexDataTextured))
 	{
 		int vertexSize = sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec2) +
-						 sizeof(glm::vec2) + sizeof(VertexDataTextured::entityID);
+						 sizeof(float) + sizeof(VertexDataTextured::entityID);
 		int offset = 0;
 		// Generate a VBO for the VAO.
 		GLCall(glGenBuffers(1, &m_VBOID));

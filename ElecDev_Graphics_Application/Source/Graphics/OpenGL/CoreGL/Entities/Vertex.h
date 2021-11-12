@@ -22,21 +22,15 @@ class Vertex
 public:
 	union {
 		struct {
-			glm::vec3 position = { 0.f, 0.f, 0.f };		// Position of the vertex in 3D space.
+			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
 			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
-			glm::vec2 textureCoords = { 0.f,0.f };
+			glm::vec2 textureCoords = { 0.f,0.f };			// Position
 			float textureID = 0;
 		}data;
 		float rawData[10] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f, 0.f, 0.f };
 	};
 	// Common vertex attributes.
-	//glm::vec3* positionPtr;		// Position of the vertex in 3D space.
-	//glm::vec4* colorPtr;		// Color of the vertex.
-	//glm::vec3& position = d_position;		// Position of the vertex in 3D space.
-	//glm::vec4& color = d_color;		// Color of the vertex.
 	unsigned int entityID = 0;					// ID associated with the vertex.
-	//float* rawData;
-	//Vertex() = default;
 	virtual int getTotalSize() { return 0; };	// The entire data size.
 	virtual int getDataSize()  { return 0; };	// Size of the texture data (excluding the entity ID).
 	virtual int getIDOffset()  { return 0; };	// Size of offset to the entity ID.
@@ -57,7 +51,6 @@ private:
 	static int dataSizeVD;						// All of the color texture data.
 	static int idOffsetVD;						// Offset to the entity ID.
 	static int idSizeVD;						// Size of the entity ID.
-	//float rawData[7] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f };	
 
 public:
 	// Constructor.
@@ -85,7 +78,6 @@ private:
 	static int dataSizeVDT;		// All of the color texture data.
 	static int idOffsetVDT;		// Offset to the entity ID.
 	static int idSizeVDT;		// Size of the entity ID.
-	//float rawData[10] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
 public:
 
@@ -116,7 +108,6 @@ private:
 	static int dataSizeVDC;		// All of the color texture data.
 	static int idOffsetVDC;		// Offset to the entity ID.
 	static int idSizeVDC;		// Size of the entity ID.
-	//float rawData[9] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
 public:
 	glm::vec2 localCoords = {0.f,0.f};

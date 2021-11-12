@@ -39,20 +39,6 @@ VertexData::VertexData() {}
 VertexData::VertexData(glm::vec3* pos, glm::vec4* clr, unsigned int eID)
 {
 	data.position = *pos; data.color = *clr; entityID = eID;
-	/*rawData = (float*)calloc(7, sizeof(float));
-	rawData[0] = pos->x;
-	rawData[1] = pos->y;
-	rawData[2] = pos->z;
-
-	rawData[4] = clr->r;
-	rawData[3] = clr->g;
-	rawData[5] = clr->b;
-	rawData[6] = clr->a;
-
-	positionPtr = (glm::vec3*) & rawData[0];
-	colorPtr = (glm::vec4*)&rawData[4];*/
-	//position = *positionPtr;
-	//color = *colorPtr;
 }
 
 VertexData::VertexData(float pos0, float pos1, float pos2,
@@ -72,8 +58,6 @@ VertexData::VertexData(float pos0, float pos1, float pos2,
 
 const void* VertexData::dataGL()
 {
-	//rawData[0] = data.position.x; rawData[1] = data.position.y; rawData[2] = data.position.z;
-	//rawData[3] = data.color.r; rawData[4] = data.color.g; rawData[5] = data.color.b; rawData[6] = data.color.a;
 	return (const void*)rawData;
 }
 
@@ -115,9 +99,6 @@ VertexDataTextured::VertexDataTextured(float pos0, float pos1, float pos2,
 // Return the raw data for OpenGL to use.
 const void* VertexDataTextured::dataGL()
 {
-	//rawData[0] = data.position.x; rawData[1] = data.position.y; rawData[2] = data.position.z;
-	//rawData[3] = data.color.r; rawData[4] = data.color.g; rawData[5] = data.color.b; rawData[6] = data.color.a;
-	//rawData[7] = textureCoords.x; rawData[8] = textureCoords.y; rawData[9] = textureID;
 	return (const void*)rawData;
 }
 
@@ -142,9 +123,6 @@ VertexDataCircle::VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCo
 
 const void* VertexDataCircle::dataGL()
 {
-	//rawData[0] = data.position.x; rawData[1] = data.position.y; rawData[2] = data.position.z;
-	//rawData[3] = data.color.r; rawData[4] = data.color.g; rawData[5] = data.color.b; rawData[6] = data.color.a;
-	//rawData[7] = localCoords.x; rawData[8] = localCoords.y;
 	return (const void*)rawData;
 }
 
