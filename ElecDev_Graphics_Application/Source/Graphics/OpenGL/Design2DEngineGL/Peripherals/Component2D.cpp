@@ -6,13 +6,17 @@
 #include "CoreGL/FontLoader.h"
 #include "CoreGL/Entities/Text.h"
 #include "Resources/ResourceHandler.h"
+#include "CoreGL/Entities/Circle.h"
 
 //Add font for component titles
 Font Component2D::titleFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 unsigned Component2D::componentID = 0;
 
 
-Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO)
+Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, 
+						 VertexArrayObject<VertexData>* linesVAO, 
+						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
+						 VertexArrayObject<VertexDataCircle>* circleVAO)
 {
 	// --------------------------- //
 	//  I N I T I A L   S E T U P  //
@@ -28,6 +32,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArra
 	engine_trianglesVAO = trianglesVAO;
 	engine_linesVAO = linesVAO;
 	engine_texturedTrianglesVAO = texturedTrianglesVAO;
+	engine_circleVAO = circleVAO;
 	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.5f);
 	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
@@ -47,9 +52,17 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArra
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, &titlePos, &titleColour, titleSize, engine_texturedTrianglesVAO, &titleFont, "C");
 	title->update();
 
+	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 0.2f, 0.2f);
+	port1->update();
+
 }
 
-Component2D::Component2D(float centreCoords[2], VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO):Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO)
+Component2D::Component2D(float centreCoords[2], 
+						 VertexArrayObject<VertexData>* trianglesVAO, 
+						 VertexArrayObject<VertexData>* linesVAO, 
+						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
+						 VertexArrayObject<VertexDataCircle>* circleVAO)
+	:Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO)
 {
 	moveTo(centreCoords);
 }
@@ -64,9 +77,11 @@ void Component2D::moveTo(float pointerPos[2])
 	shape->translateTo(&translateDestination);
 	border->translateTo(&translateDestination);
 	title->translateTo(&translateDestination);
+	port1->translateTo(&translateDestination);
 	shape->update();
 	border->update();
 	title->update();
+	port1->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 

@@ -37,6 +37,7 @@
 #define BACKGROUND_SHADER_2D 252
 #define BACKGROUND_SHADER_3D 251
 #define TEXTURE_SHADER 250
+#define CIRCLE_SHADER 237
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 #define COMPONENT_PNG 249				

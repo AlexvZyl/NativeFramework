@@ -110,10 +110,12 @@ private:
 	static int idSizeVDC;		// Size of the entity ID.
 
 public:
-	glm::vec2 localCoords = {0.f,0.f};
+	glm::vec2 localCoords={0.f, 0.f};
+	float thickness=0;
+	float fade=0;
 	// Constructors.
 	VertexDataCircle();
-	VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCoords, unsigned int eID);
+	VertexDataCircle(glm::vec3& Position, glm::vec2& local, glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
 
 	virtual const void* dataGL() override;	// Return the raw data for OpenGL to use.
 	virtual int getTotalSize() override;	// The entire data size.

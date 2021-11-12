@@ -30,6 +30,7 @@ class Shader;
 class Vertex;
 class VertexData;
 class VertexDataTextured;
+class VertexDataCircle;
 class VertexDataTexturedCircle;
 
 struct Font;
@@ -81,11 +82,13 @@ public:
 	std::unique_ptr<Shader> m_basicShader;						// Renders movable elements without textures.
 	std::unique_ptr<Shader> m_textureShader;					// Renders movable elements with textures.
 	std::unique_ptr<Shader> m_backgroundShader;					// Renders the background.
+	std::unique_ptr<Shader> m_circleShader;						// Renders circles.
 
 	// Vertex arrays.
 	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;						// Lines.
 	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;					// Triangles.
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;	// Textured Triangles.
+	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;				// Normal circles.
 	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;					// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer Object.

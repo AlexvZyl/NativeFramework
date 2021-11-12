@@ -75,36 +75,41 @@ void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height
 // Draws a clear circle.
 void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[4])
 {
-	std::vector<VertexData> vertices;
-	for (int i = 0; i <= m_circleResolution; i++)
-	{
-		// Create one of the lines that make up the circle.
-		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_circleResolution);
-		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);
-		float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_circleResolution);
-		float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_circleResolution);
-		vertices.push_back(VertexData(x1, y1, 0.0f, color[0], color[1], color[2], color[3], 0));
-		vertices.push_back(VertexData(x2, y2, 0.0f, color[0], color[1], color[2], color[3], 0));
-	}
-	// Write to CPU side buffer.
-	m_linesVAO->appendDataCPU(&vertices);
+	glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
+	glm::vec3 pos1(coords[0] - radius, coords[1] + radius, 0.f);
+	glm::vec3 pos2(coords[0] + radius, coords[1] + radius, 0.f);
+	glm::vec3 pos3(coords[0] + radius, coords[1] - radius, 0.f);
+	glm::vec3 pos4(coords[0] - radius, coords[1] - radius, 0.f);
+	glm::vec2 local1(-1.f, +1.f);
+	glm::vec2 local2(+1.f, +1.f);
+	glm::vec2 local3(+1.f, -1.f);
+	glm::vec2 local4(-1.f, -1.f);
+	VertexDataCircle v1(pos1, local1, colorGLM, 0.1f, 0.005f, 0.f);
+	VertexDataCircle v2(pos2, local2, colorGLM, 0.1f, 0.005f, 0.f);
+	VertexDataCircle v3(pos3, local3, colorGLM, 0.1f, 0.005f, 0.f);
+	VertexDataCircle v4(pos4, local4, colorGLM, 0.1f, 0.005f, 0.f);
+	std::vector<VertexDataCircle> vertices = { v1,v2,v3,v3,v4,v1 };
+	m_circlesVAO->appendDataCPU(&vertices);
 }
 
 // Draws a filled circle.
 void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color[4])
 {
-	std::vector<VertexData> vertices;
-	for (int i = 0; i <= m_circleResolution; i++)
-	{
-		float x1 = coords[0] + radius * std::cos((i - 1) * PI * 2 / m_circleResolution);
-		float y1 = coords[1] + radius * std::sin((i - 1) * PI * 2 / m_circleResolution);
-		float x2 = coords[0] + radius * std::cos(i * PI * 2 / m_circleResolution);
-		float y2 = coords[1] + radius * std::sin(i * PI * 2 / m_circleResolution);
-		vertices.push_back(VertexData(coords[0], coords[1], 0.0f, color[0], color[1], color[2], color[3], 0));
-		vertices.push_back(VertexData(x1, y1, 0.0f, color[0], color[1], color[2], color[3], 0));
-		vertices.push_back(VertexData(x2, y2, 0.0f, color[0], color[1], color[2], color[3], 0));
-	}
-	m_trianglesVAO->appendDataCPU(&vertices);
+	glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
+	glm::vec3 pos1(coords[0] - radius, coords[1] + radius, 0.f);
+	glm::vec3 pos2(coords[0] + radius, coords[1] + radius, 0.f);
+	glm::vec3 pos3(coords[0] + radius, coords[1] - radius, 0.f);
+	glm::vec3 pos4(coords[0] - radius, coords[1] - radius, 0.f);
+	glm::vec2 local1(-1.f, +1.f);
+	glm::vec2 local2(+1.f, +1.f);
+	glm::vec2 local3(+1.f, -1.f);
+	glm::vec2 local4(-1.f, -1.f);
+	VertexDataCircle v1(pos1, local1, colorGLM, 1.f, 0.005f, 0.f);
+	VertexDataCircle v2(pos2, local2, colorGLM, 1.f, 0.005f, 0.f);
+	VertexDataCircle v3(pos3, local3, colorGLM, 1.f, 0.005f, 0.f);
+	VertexDataCircle v4(pos4, local4, colorGLM, 1.f, 0.005f, 0.f);
+	std::vector<VertexDataCircle> vertices = {v1,v2,v3,v3,v4,v1};
+	m_circlesVAO->appendDataCPU(&vertices);
 }
 
 // Adds text to the VBO object.
@@ -141,7 +146,7 @@ void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4],
 	// Display error.
 	else
 	{
-		std::cout << "[INTERFACE][ERROR] '" << align << "' is not a valid alignment.\n\n";
+		std::cout << "[INTERFACE] [ERROR]: '" << align << "' is not a valid alignment.\n\n";
 		return;
 	}
 	//// Write text to CPU side buffer.
@@ -209,6 +214,7 @@ void Base2DEngineGL::updateGPU()
 	m_linesVAO->updateGPU();
 	m_trianglesVAO->updateGPU();
 	m_texturedTrianglesVAO->updateGPU();
+	m_circlesVAO->updateGPU();
 }
 
 //=============================================================================================================================================//
