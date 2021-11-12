@@ -14,108 +14,110 @@
 
 void Base3DEngineGL::drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]) 
 {
-	// Create the vertices.
-	std::shared_ptr v1 = std::make_shared<VertexData>(
-		position1[0], position1[1], position1[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v2 = std::make_shared<VertexData>(
-		position2[0], position2[1], position2[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v3 = std::make_shared<VertexData>(
-		position3[0], position3[1], position3[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v4 = std::make_shared<VertexData>(
-		position4[0], position4[1], position4[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	std::vector<std::shared_ptr<Vertex>> vertices = { v1,v2,v3,v3,v4,v1 };
-	m_trianglesVAO->appendDataCPU(vertices);
+	//// Create the vertices.
+	//Vertex* v1 = new VertexData(
+	//	position1[0], position1[1], position1[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v2 = new VertexData(
+	//	position2[0], position2[1], position2[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v3 = new VertexData(
+	//	position3[0], position3[1], position3[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v4 = new VertexData(
+	//	position4[0], position4[1], position4[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//std::vector<Vertex*> vertices = {v1,v2,v3,v3,v4,v1};
+	//m_trianglesVAO->appendDataCPU(&vertices);
+	//vertices.clear(), vertices.shrink_to_fit();
 }
 
 void Base3DEngineGL::drawCuboidFilled(float position1[3], float position2[3], float position3[3], float position4[3], float depth, float color[4]) 
 {
-	// Create the vertices.
-	std::shared_ptr v1 = std::make_shared<VertexData>(
-		position1[0], position1[1], position1[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v2 = std::make_shared<VertexData>(
-		position2[0], position2[1], position2[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v3 = std::make_shared<VertexData>(
-		position3[0], position3[1], position3[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v4 = std::make_shared<VertexData>(
-		position4[0], position4[1], position4[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
+	//// Create the vertices.
+	//Vertex* v1 = new VertexData(
+	//	position1[0], position1[1], position1[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v2 = new VertexData(
+	//	position2[0], position2[1], position2[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v3 = new VertexData(
+	//	position3[0], position3[1], position3[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v4 = new VertexData(
+	//	position4[0], position4[1], position4[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
 
-	// Calculate the depth vector.
-	glm::vec3 vector1 = glm::vec3(
-		position1[0] - position2[0],
-		position1[1] - position2[1],
-		position1[2] - position2[2]);
-	glm::vec3 vector2 = glm::vec3(
-		position3[0] - position2[0],
-		position3[1] - position2[1],
-		position3[2] - position2[2]);
-	glm::vec3 depthVector = depth * glm::normalize(glm::cross(vector1, vector2));
+	//// Calculate the depth vector.
+	//glm::vec3 vector1 = glm::vec3(
+	//	position1[0] - position2[0],
+	//	position1[1] - position2[1],
+	//	position1[2] - position2[2]);
+	//glm::vec3 vector2 = glm::vec3(
+	//	position3[0] - position2[0],
+	//	position3[1] - position2[1],
+	//	position3[2] - position2[2]);
+	//glm::vec3 depthVector = depth * glm::normalize(glm::cross(vector1, vector2));
 
-	// Create depth vertices.
-	std::shared_ptr v5 = std::make_shared<VertexData>(
-		position1[0] + depthVector[0], position1[1] + depthVector[1], position1[2] + depthVector[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v6 = std::make_shared<VertexData>(
-		position2[0] + depthVector[0], position2[1] + depthVector[1], position2[2] + depthVector[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v7 = std::make_shared<VertexData>(
-		position3[0] + depthVector[0], position3[1] + depthVector[1], position3[2] + depthVector[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
-	// Create the vertices.
-	std::shared_ptr v8 = std::make_shared<VertexData>(
-		position4[0] + depthVector[0], position4[1] + depthVector[1], position4[2] + depthVector[2],
-		color[0], color[1], color[2], color[3],
-		0
-	);
+	//// Create depth vertices.
+	//Vertex* v5 = new VertexData(
+	//	position1[0] + depthVector[0], position1[1] + depthVector[1], position1[2] + depthVector[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v6 = new VertexData(
+	//	position2[0] + depthVector[0], position2[1] + depthVector[1], position2[2] + depthVector[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v7 = new VertexData(
+	//	position3[0] + depthVector[0], position3[1] + depthVector[1], position3[2] + depthVector[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
+	//// Create the vertices.
+	//Vertex* v8 = new VertexData(
+	//	position4[0] + depthVector[0], position4[1] + depthVector[1], position4[2] + depthVector[2],
+	//	color[0], color[1], color[2], color[3],
+	//	0
+	//);
 
-	// Push to vertex data.
-	std::vector<std::shared_ptr<Vertex>> vertices = 
-	{
-		v1, v2, v3, v3, v4, v1,
-		v5, v6, v7, v7, v8, v5,
-		v1, v2, v5, v5, v6, v2,
-		v2, v3, v7, v7, v6, v2,
-		v3, v7, v8, v8, v4, v3,
-		v4, v8, v5, v5, v1, v4
-	};
-	m_trianglesVAO->appendDataCPU(vertices);
+	//// Push to vertex data.
+	//std::vector<Vertex*> vertices = 
+	//{
+	//	v1, v2, v3, v3, v4, v1,
+	//	v5, v6, v7, v7, v8, v5,
+	//	v1, v2, v5, v5, v6, v2,
+	//	v2, v3, v7, v7, v6, v2,
+	//	v3, v7, v8, v8, v4, v3,
+	//	v4, v8, v5, v5, v1, v4
+	//};
+	//m_trianglesVAO->appendDataCPU(&vertices);
+	//vertices.clear(); vertices.shrink_to_fit();
 }
 
 //=============================================================================================================================================//

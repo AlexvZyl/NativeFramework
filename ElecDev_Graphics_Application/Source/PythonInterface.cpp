@@ -148,7 +148,6 @@ void PyInterface::deQueueInput()
     // Run while there are commands left to process.
     while (inputQueueWindow.size() > 0) 
     {
-
         // Processing variables.
         InputQueue temp = inputQueueWindow.front();
         std::string mccName;

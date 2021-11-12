@@ -47,8 +47,8 @@
 /*=======================================================================================================================================*/
 
 // Defined here, assigned in the main function where it has access to the window.
-GraphicsHandler* graphicsHandler;
-GUIHandler* guiHandler;
+std::unique_ptr<GraphicsHandler> graphicsHandler;
+std::unique_ptr<GUIHandler> guiHandler;
 
 /*=======================================================================================================================================*/
 /* GLFW callbacks.                                                                                                                       */
@@ -221,7 +221,7 @@ int main(int, char**)
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));                           // Disable the depth testing since it will be enabled only when rendring 3D scenes.
+    GLCall(glEnable(GL_DEPTH_TEST));                            // Disable the depth testing since it will be enabled only when rendring 3D scenes.
     GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
     GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
@@ -233,13 +233,13 @@ int main(int, char**)
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = new GraphicsHandler(&guiState);
+    graphicsHandler = std::make_unique<GraphicsHandler>(&guiState);
 
     // Create a python interfacing object.
-    PyInterface pyInterface(graphicsHandler, guiHandler, &guiState);
+    PyInterface pyInterface(graphicsHandler.get(), guiHandler.get(), &guiState);
 
     // Create GUI handler object.
-    guiHandler = new GUIHandler(&guiState, graphicsHandler, &pyInterface);
+    guiHandler = std::make_unique<GUIHandler>(&guiState, graphicsHandler.get(), &pyInterface);
 
     /*===================================================================================================================================*/
     /* Render pipeline.                                                                                                                  */
@@ -305,10 +305,6 @@ int main(int, char**)
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
-    // Clear hanlders.
-    delete graphicsHandler;
-    delete guiHandler;
 
     // Close application.
     glfwDestroyWindow(window);

@@ -41,6 +41,7 @@ void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
 	// Save current mouse pos click.
 	m_prevMouseEventWorldVec[0] = currmousePosVec[0];
 	m_prevMouseEventWorldVec[1] = currmousePosVec[1];
+	std::cout << "\n" << getEntityID(pixelCoords) << "\n";
 }
 
 //=============================================================================================================================================//
@@ -50,7 +51,7 @@ void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
 // Event handler for a mouse move event.
 void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
-	std::cout << "\n" << getEntityID(pixelCoords) << "\n";
+	//std::cout << "\n" << getEntityID(pixelCoords) << "\n";
 
 	// Check if left mouse is pressed.
 	if (buttonStateLeft == GLFW_PRESS)

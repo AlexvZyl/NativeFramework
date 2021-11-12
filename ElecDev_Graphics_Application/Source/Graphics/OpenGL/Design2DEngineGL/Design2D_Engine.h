@@ -11,11 +11,15 @@
 //=============================================================================================================================================//
  
 class Component2D;
+
+template<typename VetexType>
 class Polygon2D;
 
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
+enum designState { COMPONENT_PLACE, ENTITY_SELECT };
+
 
 class Design2DEngineGL : public Base2DEngineGL
 {
@@ -24,12 +28,13 @@ public:
 	// ------------------ //
 	//  V A R I A B L E S //
 	// ------------------ //
-
+	
+	designState designerState = ENTITY_SELECT;
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
-	Polygon2D* p1;
-	Polygon2D* p2;
-	Polygon2D* p3;
+	Polygon2D<VertexData>* p1;
+	Polygon2D<VertexData>* p2;
+	Polygon2D<VertexData>* p3;
 	
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //

@@ -26,7 +26,7 @@ Base3DEngineGL::Base3DEngineGL(GUIState* guiState)
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 3D engine starting...";
 
 	// Create the background shader.
-	m_backgroundShader = std::make_shared<Shader>(BACKGROUND_SHADER_3D);
+	m_backgroundShader = std::make_unique<Shader>(BACKGROUND_SHADER_3D);
 
 	// Create the camera.
 	float position[3] = {0.0f, 4.0f, 6.0f};
@@ -84,13 +84,13 @@ void Base3DEngineGL::renderLoop()
 
 	// Draw basic entities.
 	m_basicShader->bind();
-	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
+	m_basicShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_trianglesVAO->render();
 	m_linesVAO->render();
 
 	// Draw textured entities.
 	m_textureShader->bind();
-	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
+	m_textureShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_texturedTrianglesVAO->render();
 
 	// --------------- //
@@ -116,9 +116,9 @@ void Base3DEngineGL::resizeEvent(float width, float height)
 
 	// Apply changes to shaders.
 	m_basicShader->bind();
-	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_basicShader->setMat4("projectionMatrix", &m_projectionMatrix);
 	m_textureShader->bind();
-	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_textureShader->setMat4("projectionMatrix", &m_projectionMatrix);
 	
 	// Resize the frame buffer.
 	m_frameBuffer->resize(width, height);

@@ -83,7 +83,7 @@ void Graphics::renderGraphics(ImGuiID dock) {
 		temp.x -= ImGui::GetWindowPos().x;
 		temp.y -= ImGui::GetWindowPos().y;
 		m_guiState->renderWindowMouseCoordinate[0] = temp.x;
-		m_guiState->renderWindowMouseCoordinate[1] = temp.x;
+		m_guiState->renderWindowMouseCoordinate[1] = temp.y;
 
 		//ImGui::SetWindowDock(ImGui::GetCurrentWindow(), ImGuiID(0), ImGuiCond_Once);
 
@@ -91,7 +91,7 @@ void Graphics::renderGraphics(ImGuiID dock) {
 			m_guiState->renderResizeEvent = true;
 			ImVec2 temp = ImGui::GetWindowSize();
 			m_guiState->renderWindowSize[0] = temp.x;
-			m_guiState->renderWindowSize[0] = temp.y;
+			m_guiState->renderWindowSize[1] = temp.y;
 		}
 		pos.x = ImGui::GetWindowSize().x;
 		pos.y = ImGui::GetWindowSize().y;

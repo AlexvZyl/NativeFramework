@@ -12,7 +12,9 @@
 //  Forward declarations.																													   //
 //=============================================================================================================================================//
 
+template<typename VertexType>
 class VertexArrayObject;
+class VertexDataTextured;
 struct Character;
 struct Font;
 
@@ -20,15 +22,29 @@ struct Font;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Text : public Entity
+template<typename VertexType=VertexDataTextured>
+class Text : public Entity<VertexType>
 {
 public:
 
+	// ------------ //
+	//  E N T I T Y //
+	// ------------ //
+
+	using Entity<VertexType>::m_vertices;
+	using Entity<VertexType>::m_VAO;
+	using Entity<VertexType>::m_bufferStartIndex;
+	using Entity<VertexType>::m_trackedCenter;
+	using Entity<VertexType>::m_colour;
+	using Entity<VertexType>::m_entityID;
+
+	// --------- //
+	//  T E X T  //
+	// --------- //
+
 	// Constructor.
-	// Takes the normal texture information as input, as well as the VAO that it has to render to
-	// and also the font that it has to use to render.
-	Text(std::string text, glm::vec3 position, glm::vec4 color, float scale, 
-		 unsigned int eID, std::shared_ptr<VertexArrayObject> vao, Font* font);
+	Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, 
+		 VertexArrayObject<VertexType>* vao, Font* font, std::string align = "C");
 	// Destructor.
 	~Text();
 };

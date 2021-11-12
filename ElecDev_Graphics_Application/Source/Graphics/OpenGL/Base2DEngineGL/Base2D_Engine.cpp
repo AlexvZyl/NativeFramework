@@ -12,6 +12,7 @@
 #include <iostream>
 #include "Misc/ConsoleColor.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "CoreGL/Fonts.h"
 
 //=============================================================================================================================================//
 //  Costructor & Destructor.																												   //
@@ -24,7 +25,7 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
 	// Create the background shader.
-	m_backgroundShader = std::make_shared<Shader>(BACKGROUND_SHADER_2D);
+	m_backgroundShader = std::make_unique<Shader>(BACKGROUND_SHADER_2D);
 
 	// --------------------------------- //
 	//  P R O J E C T I O N   S E T U P  //
@@ -46,9 +47,9 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 
 	// Assign projection matrices to shader.
 	m_basicShader->bind();
-	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_basicShader->setMat4("projectionMatrix", &m_projectionMatrix);
 	m_textureShader->bind();
-	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_textureShader->setMat4("projectionMatrix", &m_projectionMatrix);
 
 	// ------------------------------- //
 	//  R E N D E R I N G   S E T U P  //
@@ -108,14 +109,19 @@ void Base2DEngineGL::renderLoop()
 
 	// Draw basic entities.
 	m_basicShader->bind();
-	m_basicShader->setMat4("viewMatrix", m_viewMatrix);
+	m_basicShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_trianglesVAO->render();
 	m_linesVAO->render();
 
 	// Draw textured entities.
 	m_textureShader->bind();
-	m_textureShader->setMat4("viewMatrix", m_viewMatrix);
+	m_textureShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_texturedTrianglesVAO->render();
+
+	// Draw Circles.
+	m_circleShader->bind();
+	m_circleShader->setMat4("viewMatrix", &m_viewMatrix);
+	m_circlesVAO->render();
 
 	// --------------- //
 	//  C L E A N U P  //
@@ -159,9 +165,11 @@ void Base2DEngineGL::resizeEvent(float width, float height)
 
 	// Apply changes to shaders.
 	m_basicShader->bind();
-	m_basicShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_basicShader->setMat4("projectionMatrix", &m_projectionMatrix);
 	m_textureShader->bind();
-	m_textureShader->setMat4("projectionMatrix", m_projectionMatrix);
+	m_textureShader->setMat4("projectionMatrix", &m_projectionMatrix);
+	m_circleShader->bind();
+	m_circleShader->setMat4("projectionMatrix", &m_projectionMatrix);
 
 	// Resize FBO attachments.
 	m_frameBuffer->resize(width, height);

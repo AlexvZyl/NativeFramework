@@ -17,8 +17,5 @@ public:
 
 };
 
-//initialise static variables
-unsigned EntityManager::lastID = 0;
-std::vector<unsigned> EntityManager::freeIDs;
 
 

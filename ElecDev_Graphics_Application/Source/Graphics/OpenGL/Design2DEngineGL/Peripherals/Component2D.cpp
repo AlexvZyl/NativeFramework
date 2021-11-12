@@ -1,9 +1,22 @@
 
 #include "Component2D.h"
 #include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/FontLoader.h"
+#include "CoreGL/Entities/Text.h"
+#include "Resources/ResourceHandler.h"
+#include "CoreGL/Entities/Circle.h"
 
-Component2D::Component2D()
+//Add font for component titles
+Font Component2D::titleFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
+unsigned Component2D::componentID = 0;
+
+
+Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, 
+						 VertexArrayObject<VertexData>* linesVAO, 
+						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
+						 VertexArrayObject<VertexDataCircle>* circleVAO)
 {
 	// --------------------------- //
 	//  I N I T I A L   S E T U P  //
@@ -16,80 +29,95 @@ Component2D::Component2D()
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	shapeVAO = std::make_shared<VertexArrayObject>(GL_TRIANGLES, false);
-	edgesVAO = std::make_shared<VertexArrayObject>(GL_LINES, false);
-	shapeColour = glm::vec4(1.0f, 0.0f, 0.0f, 0.5f);
-	edgeColour = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	engine_trianglesVAO = trianglesVAO;
+	engine_linesVAO = linesVAO;
+	engine_texturedTrianglesVAO = texturedTrianglesVAO;
+	engine_circleVAO = circleVAO;
+	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.5f);
+	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
+	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	// Set static eID for now.
-	unsigned shapeID = 1;
-	unsigned edgeID = 2;
-	//VertexData shapeVertices[4];
-	std::shared_ptr<VertexData> edgeVertices[4];
+	//std::shared_ptr<VertexData> edgeVertices[4];
 
-	// Populate VertexData structures.
-	for (int i = 0; i < 4; i++) {
-		//shapeVertices[i] = VertexData(vertices[i], shapeColour, shapeID);
-		edgeVertices[i] = std::make_shared<VertexData>(vertices[i], edgeColour, edgeID++);
-	}
-	//std::vector<VertexData> shapeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[0] };
-	shape = Polygon2D(vertices, shapeVAO.get());
-	shape.setColor(shapeColour);
-	shape.setEntityID(shapeID);
-	shape.update();
-	std::vector<std::shared_ptr<Vertex>> edgeVerticesVec = { edgeVertices[0], edgeVertices[1], edgeVertices[1], edgeVertices[2], edgeVertices[2], edgeVertices[3], edgeVertices[3], edgeVertices[0] };
+	shape = std::make_shared<Polygon2D<VertexData>>(&vertices, engine_trianglesVAO);
+	shape->setColor(&shapeColour);
+	shape->setLayer(componentLayer);
+	shape->update();
+	border = std::make_shared<Polygon2D<VertexData>>(&vertices, engine_linesVAO);
+	border->setColor(&borderColour);
+	border->setLayer(componentLayer + borderLayerOffset);
+	border->update();
+	titlePos = glm::vec3(centre, componentLayer + borderLayerOffset);
+	titleString = "Component " + std::to_string(componentID++);
+	title = std::make_shared<Text<VertexDataTextured>>(titleString, &titlePos, &titleColour, titleSize, engine_texturedTrianglesVAO, &titleFont, "C");
+	title->update();
 
-	// Write to CPU side buffer.
-	edgesVAO->assignDataCPU(edgeVerticesVec, 0);
-	edgesVAO->updateGPU();
+	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 0.2f, 0.2f);
+	port1->update();
+
 }
 
-Component2D::Component2D(float centreCoords[2]):Component2D()
+Component2D::Component2D(float centreCoords[2], 
+						 VertexArrayObject<VertexData>* trianglesVAO, 
+						 VertexArrayObject<VertexData>* linesVAO, 
+						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
+						 VertexArrayObject<VertexDataCircle>* circleVAO)
+	:Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO)
 {
 	moveTo(centreCoords);
 }
 
-Component2D::~Component2D() {
-}
-
-void Component2D::draw()
+Component2D::~Component2D() 
 {
-	// Set static eID for now.
-	unsigned shapeID = 1;
-	unsigned edgeID = 2;
-	std::shared_ptr<Vertex> shapeVertices[4];
-	std::shared_ptr<Vertex> edgeVertices[4];
-
-	// Populate VertexData structures.
-	for (int i = 0; i < 4; i++) {
-		shapeVertices[i] = std::make_shared<VertexData>(vertices[i], shapeColour, shapeID);
-		edgeVertices[i] = std::make_shared<VertexData>(vertices[i], shapeColour, edgeID++);
-	}
-
-	//It may be faster to edit the buffers rather than recreate them each time -- This implementation prioritises memory usage over runtime
-	std::vector<std::shared_ptr<Vertex>> shapeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[0] };
-	std::vector<std::shared_ptr<Vertex>> edgeVerticesVec = { shapeVertices[0], shapeVertices[1], shapeVertices[1], shapeVertices[2], shapeVertices[2], shapeVertices[3], shapeVertices[3], shapeVertices[0] };
-	// Write to GPU side buffer.
-
-	//shape->assignDataCPU(shapeVerticesVec, 0);
-	//shape->updateGPU();
-	edgesVAO->assignDataCPU(edgeVerticesVec, 0);
-	edgesVAO->updateGPU();
 }
 
 void Component2D::moveTo(float pointerPos[2])
 {
-	shape.translateTo(glm::vec3(pointerPos[0], pointerPos[1], 0.f));
+	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
+	shape->translateTo(&translateDestination);
+	border->translateTo(&translateDestination);
+	title->translateTo(&translateDestination);
+	port1->translateTo(&translateDestination);
+	shape->update();
+	border->update();
+	title->update();
+	port1->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
-	vertices[0] = glm::vec3(centre.x - width, centre.y - height, 0.0f);
-	vertices[1] = glm::vec3(centre.x + width, centre.y - height, 0.0f);
-	vertices[2] = glm::vec3(centre.x + width, centre.y + height, 0.0f);
-	vertices[3] = glm::vec3(centre.x - width, centre.y + height, 0.0f);
-	draw();
+}
+
+void Component2D::place(float pos[2])
+{	//ensure the component is at the desired position
+	moveTo(pos);
+	setLayer(0.0f);
+	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
+	titleColour = { 0.f, 0.f, 1.f, 1.0f };
+	borderColour = { 0.f, 0.f, 0.f, 1.f };
+	shape->setColor(&shapeColour);
+	border->setColor(&borderColour);
+	title->setColor(&titleColour);
+	shape->update();
+	border->update();
+	title->update();
+	//Move to placement layer
+}
+
+void Component2D::setLayer(float layer)
+{
+	shape->setLayer(layer);
+	border->setLayer(layer + borderLayerOffset);
+	title->setLayer(layer + borderLayerOffset);
+	componentLayer = layer;
+}
+
+void Component2D::destroy()
+{
+	shape->destroy();
+	border->destroy();
+	title->destroy();
 }
 
 void Component2D::render()
 {
-	shapeVAO->render();
-	edgesVAO->render();
+	//deprecated
+	//rendering of VAOs moved to engine
 }

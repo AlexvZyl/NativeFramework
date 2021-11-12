@@ -5,7 +5,6 @@ layout(location = 0) in vec3 v_pos;
 layout(location = 1) in vec4 v_color;
 layout(location = 2) in uint v_entityID;
 
-uniform mat4 worldMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
@@ -15,7 +14,7 @@ flat out uint f_entityID;
 void main()
 {
 	f_color = v_color;
-    gl_Position = projectionMatrix * viewMatrix * worldMatrix * vec4(v_pos, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * vec4(v_pos, 1.0);
 	f_entityID = v_entityID;
 }
 
