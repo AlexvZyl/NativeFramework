@@ -7,13 +7,14 @@
 #include "../FontLoader.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "EntityManager.h"
+# include<iostream>
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
 //=============================================================================================================================================//
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, VertexArrayObject* vao, Font* font)
+Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, VertexArrayObject* vao, Font* font, std::string align = "C")
 {
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
@@ -23,6 +24,45 @@ Text::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
 	m_VAO = vao;
 	m_entityID = EntityManager::generateEID();
 	float advance = 0;
+
+	//Correct allignment
+		// Convert color to GLM.
+	glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
+	// Calculate the length & height of the string.
+	float length = 0;
+	float height = font->characterDictionary[text[0]].height;
+	for (char c : text) { length += font->characterDictionary[c].xAdvance; }
+	// Center the text.
+	if (align == "C" || align == "c")
+	{
+		// Place the coords in the center of the text.
+		position->x = position->x - (length * scale) / 2;
+		// Place on top of coordinate.
+		position->y = position->y + height * scale;
+	}
+	// Right allign the text.
+	else if (align == "R" || align == "r")
+	{
+		// Align text to right.
+		position->x = position->x - length * scale;
+		// Place on top of coordinate.
+		position->y = position->y + height * scale;
+	}
+	// Left allign the text.
+	else if (align == "L" || align == "l")
+	{
+		// Place on top of the coordinate.
+		position->y = position->y + height * scale;
+	}
+	// Display error.
+	else
+	{
+		std::cout << "[INTERFACE][ERROR] '" << align << "' is not a valid alignment.\n\n";
+		return;
+	}
+
+
+
 	for (int i = 0; i < (int)text.length(); i++)
 	{
 		// Load character.
