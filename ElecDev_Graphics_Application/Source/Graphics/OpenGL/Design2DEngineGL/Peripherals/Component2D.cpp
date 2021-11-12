@@ -49,7 +49,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArra
 
 }
 
-Component2D::Component2D(float centreCoords[2], VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO)
+Component2D::Component2D(float centreCoords[2], VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO):Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO)
 {
 	moveTo(centreCoords);
 }

@@ -16,7 +16,7 @@
 // Writes the text to the buffer based on the font loaded in the constructor.
 template<typename VertexType>
 Text<VertexType>::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
-		   unsigned int eID, VertexArrayObject<VertexType>* vao, Font* font, std::string align)
+	VertexArrayObject<VertexType>* vao, Font* font, std::string align)
 {
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
@@ -28,8 +28,6 @@ Text<VertexType>::Text(std::string text, glm::vec3* position, glm::vec4* color, 
 	float advance = 0;
 
 	//Correct allignment
-		// Convert color to GLM.
-	glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
 	// Calculate the length & height of the string.
 	float length = 0;
 	float height = font->characterDictionary[text[0]].height;
