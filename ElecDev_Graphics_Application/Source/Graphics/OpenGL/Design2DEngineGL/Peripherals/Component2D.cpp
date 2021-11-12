@@ -1,6 +1,7 @@
 
 #include "Component2D.h"
 #include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/VertexArrayObjectGL.h"
 #include "CoreGL/FontLoader.h"
 #include "CoreGL/Entities/Text.h"
@@ -31,7 +32,6 @@ Component2D::Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* lin
 	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	//VertexData shapeVertices[4];
 	std::shared_ptr<VertexData> edgeVertices[4];
 
 	shape = std::make_shared<Polygon2D>(&vertices, engine_trianglesVAO);
@@ -54,7 +54,8 @@ Component2D::Component2D(float centreCoords[2], VertexArrayObject* trianglesVAO,
 	moveTo(centreCoords);
 }
 
-Component2D::~Component2D() {
+Component2D::~Component2D() 
+{
 }
 
 void Component2D::moveTo(float pointerPos[2])

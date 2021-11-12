@@ -10,18 +10,40 @@
 //  Forward decleration.																													   //
 //=============================================================================================================================================//
 
+template<typename VertexType>
 class VertexArrayObject;
+class VertexDataCircle;
 
 //=============================================================================================================================================//
 //  Circle class.		 																													   //
 //=============================================================================================================================================//
 
-class Circle : public Entity
+template <typename VertexType=VertexDataCircle>
+class Circle : public Entity<VertexType>
 {
 public:
 
 private:
-	Circle(VertexArrayObject* vao, glm::vec3 center, float radius, glm::vec4 color, unsigned int eID);
+
+	// ------------ //
+	//  E N T I T Y //
+	// ------------ //
+
+	using Entity<VertexType>::m_vertices;
+	using Entity<VertexType>::m_VAO;
+	using Entity<VertexType>::m_bufferStartIndex;
+	using Entity<VertexType>::m_trackedCenter;
+	using Entity<VertexType>::m_colour;
+	using Entity<VertexType>::m_entityID;
+
+	// ------------- //
+	//  C I R C L E  //
+	// ------------- //
+
+	// Constructors. 
+	Circle();
+	Circle(const VertexArrayObject<VertexType>* vao, const glm::vec3* center, float radius, const glm::vec4* color);
+	// Destructor.
 	~Circle();
 };
 

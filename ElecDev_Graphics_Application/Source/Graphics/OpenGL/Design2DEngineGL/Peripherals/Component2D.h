@@ -4,18 +4,26 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "CoreGL/Entities/Polygon.h"
 #include <string>
 #include "glm.hpp"
 #include <memory>
+#include <vector>
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-class VertexArrayObject;
-struct Font;
+template<typename VertexType>
 class Text;
+template<typename VertexType>
+class Polygon2D;
+template<typename VertexType>
+class VertexArrayObject;
+
+struct Font;
+class VertexData;
+class VertexDataTextured;
+class VertexDataCircle;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -26,12 +34,12 @@ class Component2D
 	//Private Members
 private:
 	//shape and edge data
-	VertexArrayObject* engine_trianglesVAO;
-	VertexArrayObject* engine_linesVAO;
-	VertexArrayObject* engine_texturedTrianglesVAO;
-	std::shared_ptr<Polygon2D> shape;
-	std::shared_ptr<Polygon2D> border;
-	std::shared_ptr<Text> title;
+	VertexArrayObject<VertexData>* engine_trianglesVAO;
+	VertexArrayObject<VertexData>* engine_linesVAO;
+	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
+	std::shared_ptr<Polygon2D<VertexData>> shape;
+	std::shared_ptr<Polygon2D<VertexData>> border;
+	std::shared_ptr<Text<VertexDataTextured>> title;
 	static unsigned componentID;
 
 	//component shape attributes
@@ -62,31 +70,23 @@ private:
 	//interaction attributes
 	bool selected = true;
 
-	//Public Members
 public:
 
-	//Constructors
-
 	//Creates a generic component centred at (0, 0)
-	Component2D(VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO);
+	Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO);
 
 	//Creates a generic component centred at the specified coordinates
-	Component2D(float centreCoords[2], VertexArrayObject* trianglesVAO, VertexArrayObject* linesVAO, VertexArrayObject* texturedTrianglesVAO);
+	Component2D(float centreCoords[2], VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO);
 
 	//Deconstructor
 	~Component2D();
 
-
 	//Render the component
 	void render();
-
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(float pointerPos[2]);
-
 	//Place a component
 	void place(float pos[2]);
-
 	void setLayer(float layer);
-
 	void destroy();
 };

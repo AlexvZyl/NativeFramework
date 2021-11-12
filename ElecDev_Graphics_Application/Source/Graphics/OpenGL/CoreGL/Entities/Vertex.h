@@ -14,143 +14,83 @@ BufferLayout is used to setup the VAO.
 #include "GLM/glm.hpp"
 
 //=============================================================================================================================================//
-//  Includes.																																   //
-//=============================================================================================================================================//
-
-//=============================================================================================================================================//
-//  Struct layout.																															   //
-//=============================================================================================================================================//
-
-// Used to describe the layout of the VAO for the vertex type.
-struct BufferLayout
-{
-	GLuint index;
-	GLint size;
-	GLenum type;
-	GLboolean normalized;
-	GLsizei stride;
-	const GLvoid* pointer;
-};
-
-// This is required to setup te VAO's.
-//std::vector<BufferLayout> bufferLayout;
-
-//=============================================================================================================================================//
 //  Vertex Specification.																													   //
 //=============================================================================================================================================//
 
-struct Vertex
+class Vertex
 {
+public:
 	// Common vertex attributes.
 	glm::vec3 position = { 0.f,0.f,0.f };		// Position of the vertex in 3D space.
 	glm::vec4 color = { 0.f,0.f,0.f,0.f };		// Color of the vertex.
 	unsigned int entityID = 0;					// ID associated with the vertex.
-	int totalSize = 0;							// All of the data.
-	int dataSize = 0;							// All of the color texture data.
-	int idOffset = 0;							// Offset to the entity ID.
-	int idSize = sizeof(entityID);
-	// Formats the data so that OpenGL can use it.
-	virtual const void* dataGL() { return (const void*)NULL; }
-	// Returns the ID in a format that OpenGL can use.
-	const void* idGL() { return (const void*)&entityID; }
+
+	virtual int getTotalSize() { return 0; };	// The entire data size.
+	virtual int getDataSize()  { return 0; };	// Size of the texture data (excluding the entity ID).
+	virtual int getIDOffset()  { return 0; };	// Size of offset to the entity ID.
+	virtual int getIDSize()    { return 0; };	// Size of the entity ID variable.					
+
+	virtual const void* dataGL() { return (const void*)NULL; }	// Formats the data so that OpenGL can use it.
+	const void* idGL() { return (const void*)&entityID; }		// Returns the ID in a format that OpenGL can use.
 };
 
 //=============================================================================================================================================//
 //  Basic vertex. 																															   //
 //=============================================================================================================================================//
 
-struct VertexData : public Vertex
+class VertexData : public Vertex
 {
+private: 
+	static int totalSizeVD;						// All of the data.
+	static int dataSizeVD;						// All of the color texture data.
+	static int idOffsetVD;						// Offset to the entity ID.
+	static int idSizeVD;						// Size of the entity ID.
 	float rawData[7] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
+public:
 	// Constructor.
-	VertexData() { setup(); }
-	VertexData(glm::vec3* pos, glm::vec4* clr, unsigned int eID)
-	{
-		position = *pos; color = *clr; entityID = eID;
-		setup();
-	}
+	VertexData();
+	VertexData(glm::vec3* pos, glm::vec4* clr, unsigned int eID);
 	VertexData(float pos0, float pos1, float pos2,
-		float col0, float col1, float col2, float col3,
-		unsigned int eID)
-	{
-		// Assign position.
-		position.x = pos0; position.y = pos1; position.z = pos2;
-		// Assign color.
-		color.r = col0;
-		color.g = col1;
-		color.b = col2;
-		color.a = col3;
-		// Assign ID.
-		entityID = eID;
-		setup();
-	}
-
-	// Setup vertex size.
-	void setup() 
-	{
-		dataSize = idOffset = sizeof(position) + sizeof(color);
-		totalSize = dataSize + sizeof(entityID);
-	}
-
-	virtual const void* dataGL() override
-	{
-		rawData[0] = position.x; rawData[1] = position.y; rawData[2] = position.z;
-		rawData[3] = color.r; rawData[4] = color.g; rawData[5] = color.b; rawData[6] = color.a;
-		return (const void*) rawData;
-	}
+			   float col0, float col1, float col2, float col3,
+			   unsigned int eID);
+	
+	virtual const void* dataGL() override;	// Return the raw data for OpenGL to use.
+	virtual int getTotalSize() override;	// The entire data size.
+	virtual int getDataSize() override;		// Size of the texture data (excluding the entity ID).
+	virtual int getIDOffset() override;		// Size of offset to the entity ID.
+	virtual int getIDSize() override;		// Size of the entity ID variable.			
 };
 
 //=============================================================================================================================================//
 //  Textured basic vertex. 																													   //
 //=============================================================================================================================================//
 
-struct VertexDataTextured : public Vertex
+class VertexDataTextured : public Vertex
 {
-	glm::vec2 textureCoords = { 0.f,0.f };
-	float textureID = 0;
+private:
+	static int totalSizeVDT;	// All of the data.
+	static int dataSizeVDT;		// All of the color texture data.
+	static int idOffsetVDT;		// Offset to the entity ID.
+	static int idSizeVDT;		// Size of the entity ID.
 	float rawData[10] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
+public:
+	glm::vec2 textureCoords = { 0.f,0.f };
+	float textureID = 0;
 	// Constructors.
-	VertexDataTextured() { setup(); }
-	VertexDataTextured(glm::vec3* pos, glm::vec4* clr, glm::vec2* texCoords, float texID, unsigned int eID)
-	{
-		position = *pos; color = *clr; entityID = eID; textureCoords = *texCoords; textureID = texID; entityID = eID;
-		setup();
-	}
+	VertexDataTextured();
+	VertexDataTextured(glm::vec3* pos, glm::vec4* clr, glm::vec2* texCoords, float texID, unsigned int eID);
 	VertexDataTextured(float pos0, float pos1, float pos2,
 		float col0, float col1, float col2, float col3,
 		float texPos0, float texPos1, float texID,
-		unsigned int eID)
-	{
-		// Assign position.
-		position.x = pos0; position.y = pos1; position.z = pos2;
-		// Assign color.
-		color.r = col0; color.g = col1; color.b = col2; color.a = col3;
-		// Assign entity ID.
-		entityID = eID;
-		// Assign texture ID position.
-		textureCoords.x = texPos0; textureCoords.y = texPos1;
-		// Assigne texture ID.
-		textureID = (unsigned int)texID;
-		setup();
-	}
-
-	// Setup vertex size.
-	void setup() 
-	{
-		dataSize = idOffset = sizeof(position) + sizeof(color) + sizeof(textureCoords) + sizeof(textureID);
-		totalSize = dataSize + sizeof(entityID);
-	}
-
-	// Return the raw data for OpenGL to use.
-	virtual const void* dataGL() override
-	{
-		rawData[0] = position.x; rawData[1] = position.y; rawData[2] = position.z;
-		rawData[3] = color.r; rawData[4] = color.g; rawData[5] = color.b; rawData[6] = color.a;
-		rawData[7] = textureCoords.x; rawData[8] = textureCoords.y; rawData[9] = textureID;
-		return (const void*)rawData;
-	}
+		unsigned int eID);
+	
+	virtual const void* dataGL() override;	// Return the raw data for OpenGL to use.
+	virtual int getTotalSize() override;	// The entire data size.
+	virtual int getDataSize() override;		// Size of the texture data (excluding the entity ID).
+	virtual int getIDOffset() override;		// Size of offset to the entity ID.
+	virtual int getIDSize() override;		// Size of the entity ID variable.			
 };
 
 //=============================================================================================================================================//
@@ -158,32 +98,26 @@ struct VertexDataTextured : public Vertex
 //=============================================================================================================================================//
 
 // The circle vertex data requires a local coordinate system.
-struct VertexDataCircle : public Vertex
+class VertexDataCircle : public Vertex
 {
+private:
+	static int totalSizeVDC;	// All of the data.
+	static int dataSizeVDC;		// All of the color texture data.
+	static int idOffsetVDC;		// Offset to the entity ID.
+	static int idSizeVDC;		// Size of the entity ID.
 	float rawData[9] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
+
+public:
 	glm::vec2 localCoords = {0.f,0.f};
-
 	// Constructors.
-	VertexDataCircle() { setup(); }
-	VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCoords, unsigned int eID)
-	{
-		position = pos; color = clr; entityID = eID; localCoords = lclCoords;
-		setup();
-	}
+	VertexDataCircle();
+	VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCoords, unsigned int eID);
 
-	void setup()
-	{
-		dataSize = idOffset = sizeof(position) + sizeof(color) + sizeof(localCoords);
-		totalSize = dataSize + sizeof(entityID);
-	}
-
-	virtual const void* dataGL() override
-	{
-		rawData[0] = position.x; rawData[1] = position.y; rawData[2] = position.z;
-		rawData[3] = color.r; rawData[4] = color.g; rawData[5] = color.b; rawData[6] = color.a;
-		rawData[7] = localCoords.x; rawData[8] = localCoords.y;
-		return (const void*)rawData;
-	}
+	virtual const void* dataGL() override;	// Return the raw data for OpenGL to use.
+	virtual int getTotalSize() override;	// The entire data size.
+	virtual int getDataSize() override;		// Size of the texture data (excluding the entity ID).
+	virtual int getIDOffset() override;		// Size of offset to the entity ID.
+	virtual int getIDSize() override;		// Size of the entity ID variable.			
 };
 
 //=============================================================================================================================================//
