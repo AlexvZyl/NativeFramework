@@ -17,14 +17,14 @@ for a VAO to be able to render the entity to the screen.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+template<typename VertexType>
 class VertexArrayObject;
-struct Vertex;
-
 
 //=============================================================================================================================================//
 //  Class.																																	   //
 //=============================================================================================================================================//
 
+template<typename VertexType>
 class Entity
 {
 public:
@@ -33,8 +33,8 @@ public:
 	//  V A R I A B L E S  //
 	// ------------------- //
 
-	std::vector<Vertex*> m_vertices;				// The untextured vertex data used for the entity.
-	VertexArrayObject* m_VAO;						// Pointer to the VAO that the entity is drawn to.
+	std::vector<VertexType> m_vertices;				// The untextured vertex data used for the entity.
+	VertexArrayObject<VertexType>* m_VAO;			// Pointer to the VAO that the entity is drawn to.
 	unsigned int m_bufferStartIndex;				// The start position of the entity in the VAO.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
@@ -45,6 +45,8 @@ public:
 	//  F U N C T I O N S  //
 	// ------------------- //
 
+	// Constructor.
+	Entity();
 	// Destructor.
 	~Entity();
 	// Translate the entity by the given vector.
@@ -63,6 +65,8 @@ public:
 	void update();
 	// Deletes the entity and clears the memory.
 	void destroy();
+	// Set the entity later.
+	void setLayer(float layer);
 };
 
 //=============================================================================================================================================//

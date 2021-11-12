@@ -4,18 +4,26 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "CoreGL/Entities/Polygon.h"
 #include <string>
 #include "glm.hpp"
 #include <memory>
+#include <vector>
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-class VertexArrayObject;
-struct Font;
+template<typename VertexType>
 class Text;
+template<typename VertexType>
+class Polygon2D;
+template<typename VertexType>
+class VertexArrayObject;
+
+struct Font;
+class VertexData;
+class VertexDataTextured;
+class VertexDataCircle;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -26,12 +34,12 @@ class Component2D
 	//Private Members
 private:
 	//shape and edge data
-	std::unique_ptr<VertexArrayObject> shapeVAO;
-	std::unique_ptr<VertexArrayObject> borderVAO;
-	std::unique_ptr<VertexArrayObject> textVAO;
-	std::unique_ptr<Polygon2D> shape;
-	std::unique_ptr<Polygon2D> border;
-	std::unique_ptr<Text> title;
+	VertexArrayObject<VertexData>* shapeVAO;
+	VertexArrayObject<VertexData>* borderVAO;
+	VertexArrayObject<VertexDataTextured>* textVAO;
+	Polygon2D<VertexData>* shape;
+	Polygon2D<VertexData>* border;
+	Text<VertexDataTextured>* title;
 
 	//component shape attributes
 	float height = 0.1f;
@@ -58,31 +66,21 @@ private:
 	//interaction attributes
 	bool selected = true;
 
-	//Public Members
 public:
-
-	//Constructors
 
 	//Creates a generic component centred at (0, 0)
 	Component2D();
-
 	//Creates a generic component centred at the specified coordinates
 	Component2D(float centreCoords[2]);
-
 	//Deconstructor
 	~Component2D();
 
-
 	//Render the component
 	void render();
-
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(float pointerPos[2]);
-
 	//Place a component
 	void place(float pos[2]);
-
 	void setLayer(float layer);
-
 	void destroy();
 };

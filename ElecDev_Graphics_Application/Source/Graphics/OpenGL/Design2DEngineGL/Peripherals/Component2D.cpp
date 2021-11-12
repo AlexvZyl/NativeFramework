@@ -1,6 +1,7 @@
 
 #include "Component2D.h"
 #include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/VertexArrayObjectGL.h"
 #include "CoreGL/FontLoader.h"
 #include "CoreGL/Entities/Text.h"
@@ -23,23 +24,23 @@ Component2D::Component2D()
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	shapeVAO = std::make_unique<VertexArrayObject>(GL_TRIANGLES, false, false);
-	borderVAO = std::make_unique<VertexArrayObject>(GL_LINES, false, false);
-	textVAO = std::make_unique<VertexArrayObject>(GL_TRIANGLES, true, false);
+	shapeVAO = new VertexArrayObject<VertexData>(GL_TRIANGLES);
+	borderVAO = new VertexArrayObject<VertexData>(GL_LINES);
+	textVAO = new VertexArrayObject<VertexDataTextured>(GL_TRIANGLES);
 	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.9f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	shape = std::make_unique<Polygon2D>(&vertices, shapeVAO.get());
+	shape = new Polygon2D<VertexData>(&vertices, shapeVAO);
 	shape->setColor(&shapeColour);
 	shape->setLayer(componentLayer);
 	shape->update();
-	border = std::make_unique<Polygon2D>(&vertices, borderVAO.get());
+	border = new Polygon2D<VertexData>(&vertices, borderVAO);
 	border->setColor(&borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
 	glm::vec3 texPos1(centre, componentLayer + borderLayerOffset);
 	glm::vec4 texCol1(0.f, 0.f, 1.f, 1.f);
-	title = std::make_unique<Text>("Generic Component", &texPos1, &texCol1, 1.f, 0, textVAO.get(), &titleFont);
+	title = new Text("Generic Component", &texPos1, &texCol1, 1.f, 0, textVAO, &titleFont);
 	title->update();
 }
 
@@ -48,7 +49,8 @@ Component2D::Component2D(float centreCoords[2]):Component2D()
 	moveTo(centreCoords);
 }
 
-Component2D::~Component2D() {
+Component2D::~Component2D() 
+{
 }
 
 void Component2D::moveTo(float pointerPos[2])

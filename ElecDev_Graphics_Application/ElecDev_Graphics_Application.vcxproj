@@ -176,6 +176,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoader.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Fonts.h" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />

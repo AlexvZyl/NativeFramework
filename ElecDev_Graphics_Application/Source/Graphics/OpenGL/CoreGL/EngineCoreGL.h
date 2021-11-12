@@ -17,15 +17,22 @@ as error handling for when a wrong function is called on a engine type.
 #include <glm.hpp>				// OpenGL maths.
 #include "GUI/GUIState.h"		// The GUI states and other information.
 #include <string>
-#include "FontLoader.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
+template<typename VertexType>
 class VertexArrayObject;
+
 class FrameBufferObject;
 class Shader;
+class Vertex;
+class VertexData;
+class VertexDataTextured;
+class VertexDataTexturedCircle;
+
+struct Font;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -76,18 +83,18 @@ public:
 	std::unique_ptr<Shader> m_backgroundShader;					// Renders the background.
 
 	// Vertex arrays.
-	std::unique_ptr<VertexArrayObject> m_linesVAO;				// Lines.
-	std::unique_ptr<VertexArrayObject> m_trianglesVAO;			// Triangles.
-	std::unique_ptr<VertexArrayObject> m_texturedTrianglesVAO;	// Textured Triangles.
-	std::unique_ptr<VertexArrayObject> m_backgroundVAO;			// Background has a seperate VAO since it should not move.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;						// Lines.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;					// Triangles.
+	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;	// Textured Triangles.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;					// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer Object.
 	std::unique_ptr<FrameBufferObject> m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
 																// Also implements MSAA.
 
-	Font m_defaultFont;											// The default font for the rendering engine.
+	std::unique_ptr<Font> m_defaultFont;						// The default font for the rendering engine.
 
-	std::vector<std::unique_ptr<Entity>> m_entities;			// Vector containing the entties to be rendered.
+	std::vector<Entity<VertexDataTextured>> m_textEnities;		// Vector containing the entties to be rendered.
 
 	// --------------------------- //
 	//  S T A T E   M A C H I N E  //
