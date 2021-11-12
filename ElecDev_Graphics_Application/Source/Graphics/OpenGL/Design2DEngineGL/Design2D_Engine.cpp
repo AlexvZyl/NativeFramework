@@ -33,12 +33,7 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 {
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
-
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
-
-
-	std::cout<<"\n" << "glm::vec3 size = " << sizeof(glm::vec3) << "\n";
-	std::cout << "float[3] size = " << sizeof(float[3]);
 	
 
 	//m_activeComponent = std::make_shared<Component2D>();
