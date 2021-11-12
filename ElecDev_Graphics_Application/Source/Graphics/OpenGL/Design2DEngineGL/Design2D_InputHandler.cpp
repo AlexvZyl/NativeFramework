@@ -27,7 +27,11 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
 		m_components.insert(m_components.end(), m_activeComponent);
-		m_activeComponent = std::make_shared<Component2D>(pixelCoords, m_trianglesVAO.get(), m_linesVAO.get(), m_texturedTrianglesVAO.get());
+		m_activeComponent = std::make_shared<Component2D>(pixelCoords, 
+														  m_trianglesVAO.get(),			
+														  m_linesVAO.get(), 
+														  m_texturedTrianglesVAO.get(),
+														  m_circlesVAO.get());
 	}
 }
 
@@ -112,7 +116,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		case GLFW_KEY_P:
 			designerState = COMPONENT_PLACE;
 			//add a dummy component
-			m_activeComponent = std::make_shared<Component2D>(screenCoords, m_trianglesVAO.get(), m_linesVAO.get(), m_texturedTrianglesVAO.get());
+			m_activeComponent = std::make_shared<Component2D>(screenCoords, m_trianglesVAO.get(), m_linesVAO.get(), m_texturedTrianglesVAO.get(), m_circlesVAO.get());
 			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;

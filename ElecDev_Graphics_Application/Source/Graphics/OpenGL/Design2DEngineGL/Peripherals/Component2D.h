@@ -18,6 +18,8 @@ class Text;
 template<typename VertexType>
 class Polygon2D;
 template<typename VertexType>
+class Circle;
+template<typename VertexType>
 class VertexArrayObject;
 
 struct Font;
@@ -37,9 +39,11 @@ private:
 	VertexArrayObject<VertexData>* engine_trianglesVAO;
 	VertexArrayObject<VertexData>* engine_linesVAO;
 	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
+	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 	std::shared_ptr<Polygon2D<VertexData>> shape;
 	std::shared_ptr<Polygon2D<VertexData>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
+	std::shared_ptr<Circle<VertexDataCircle>> port1;
 	static unsigned componentID;
 
 	//component shape attributes
@@ -73,10 +77,17 @@ private:
 public:
 
 	//Creates a generic component centred at (0, 0)
-	Component2D(VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO);
+	Component2D(VertexArrayObject<VertexData>* trianglesVAO,
+			    VertexArrayObject<VertexData>* linesVAO, 
+				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO, 
+				VertexArrayObject<VertexDataCircle>* circleVAO);
 
 	//Creates a generic component centred at the specified coordinates
-	Component2D(float centreCoords[2], VertexArrayObject<VertexData>* trianglesVAO, VertexArrayObject<VertexData>* linesVAO, VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO);
+	Component2D(float centreCoords[2], 
+				VertexArrayObject<VertexData>* trianglesVAO,	
+				VertexArrayObject<VertexData>* linesVAO, 
+				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
+				VertexArrayObject<VertexDataCircle>* circleVAO);
 
 	//Deconstructor
 	~Component2D();

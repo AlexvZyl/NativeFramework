@@ -43,18 +43,20 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	// Compile the shaders, using the resources embedded in the exe.
 	m_basicShader	= std::make_unique<Shader>(BASIC_SHADER);
 	m_textureShader = std::make_unique<Shader>(TEXTURE_SHADER);
+	m_circleShader	= std::make_unique<Shader>(CIRCLE_SHADER);
 
 	// Set default values for the shaders.  The background shader does not require
 	// this setup, since it does not work with the MVP matrices.
 	glm::mat4 identity = glm::mat4(1.0f);
-	m_basicShader->bind();
-	m_basicShader->setMat4("worldMatrix", &identity);
-	m_basicShader->setMat4("projectionMatrix", &identity);
-	m_basicShader->setMat4("viewMatrix", &identity);
-	m_textureShader->bind();
-	m_textureShader->setMat4("worldMatrix", &identity);
-	m_textureShader->setMat4("projectionMatrix", &identity);
-	m_textureShader->setMat4("viewMatrix", &identity);
+	m_basicShader	->bind();
+	m_basicShader	->setMat4("projectionMatrix", &identity);
+	m_basicShader	->setMat4("viewMatrix", &identity);
+	m_textureShader	->bind();
+	m_textureShader	->setMat4("projectionMatrix", &identity);
+	m_textureShader	->setMat4("viewMatrix", &identity);
+	m_circleShader	->bind();
+	m_circleShader	->setMat4("projectionMatrix", &identity);
+	m_circleShader	->setMat4("viewMatrix", &identity);
 
 	// ------------------------------------- //
 	//  C R E A T E   B A S I C   V A O ' S  //
@@ -63,6 +65,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
 	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_texturedTrianglesVAO	= std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
+	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
 	m_frameBuffer			= std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 	createDefaultBackground();
 
@@ -149,6 +152,7 @@ void EngineCoreGL::updateGPU()
 	m_linesVAO->updateGPU();
 	m_trianglesVAO->updateGPU();
 	m_texturedTrianglesVAO->updateGPU();
+	m_circlesVAO->updateGPU();
 }																								
 
  void EngineCoreGL::createDefaultBackground() 

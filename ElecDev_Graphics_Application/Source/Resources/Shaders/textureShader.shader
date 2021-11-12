@@ -7,7 +7,6 @@ layout(location = 2) in vec2 v_texCoord;
 layout(location = 3) in float v_texID;
 layout(location = 4) in uint v_entityID;
 
-uniform mat4 worldMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
@@ -21,7 +20,7 @@ void main()
 	f_color =v_color;
 	f_texCoord = v_texCoord;
 	f_texID = v_texID;
-	gl_Position = projectionMatrix * viewMatrix * worldMatrix * vec4(pos, 1.0);
+	gl_Position = projectionMatrix * viewMatrix * vec4(pos, 1.0);
 	f_entityID = v_entityID;
 }
 

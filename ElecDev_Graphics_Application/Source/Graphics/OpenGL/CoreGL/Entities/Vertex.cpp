@@ -23,8 +23,8 @@ int VertexDataTextured::totalSizeVDT		= VertexDataTextured::dataSizeVDT + Vertex
 
 // Vertex Data Circle.
 int VertexDataCircle::idSizeVDC				= sizeof(VertexDataCircle::entityID);
-int VertexDataCircle::dataSizeVDC			= sizeof(VertexDataCircle::position) + sizeof(VertexDataCircle::color)
-											+ sizeof(VertexDataCircle::localCoords);
+int VertexDataCircle::dataSizeVDC			= sizeof(VertexDataCircle::position) + sizeof(VertexDataCircle::color) + sizeof(VertexDataCircle::localCoords)
+											+ sizeof(VertexDataCircle::fade) + sizeof(VertexDataCircle::thickness);
 int VertexDataCircle::idOffsetVDC			= VertexDataCircle::dataSizeVDC;
 int VertexDataCircle::totalSizeVDC			= VertexDataCircle::dataSizeVDC + VertexDataCircle::idSizeVDC;
 
@@ -119,17 +119,22 @@ int VertexDataTextured::getIDSize()    { return idSizeVDT;	  };
 // Constructors.
 VertexDataCircle::VertexDataCircle() {}
 
-VertexDataCircle::VertexDataCircle(glm::vec3 pos, glm::vec4 clr, glm::vec2 lclCoords, unsigned int eID)
+VertexDataCircle::VertexDataCircle(glm::vec3& Position, glm::vec2& localCoord, glm::vec4& Colour, float Thickness, float Fade, unsigned int eID)
 {
-	position = pos; color = clr; entityID = eID; localCoords = lclCoords;
+	position = Position; 
+	localCoords = localCoord;
+	color = Colour; entityID = eID;
+	thickness = Thickness;
+	fade = Fade;
 }
-
 
 const void* VertexDataCircle::dataGL()
 {
 	rawData[0] = position.x; rawData[1] = position.y; rawData[2] = position.z;
 	rawData[3] = color.r; rawData[4] = color.g; rawData[5] = color.b; rawData[6] = color.a;
-	rawData[7] = localCoords.x; rawData[8] = localCoords.y;
+	rawData[7] = localCoords[0]; rawData[8] = localCoords[1];
+	rawData[9] = thickness;
+	rawData[10] = fade;
 	return (const void*)rawData;
 }
 

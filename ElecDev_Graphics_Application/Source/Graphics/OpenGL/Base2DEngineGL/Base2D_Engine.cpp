@@ -118,6 +118,11 @@ void Base2DEngineGL::renderLoop()
 	m_textureShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_texturedTrianglesVAO->render();
 
+	// Draw Circles.
+	m_circleShader->bind();
+	m_circleShader->setMat4("viewMatrix", &m_viewMatrix);
+	m_circlesVAO->render();
+
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //
@@ -163,6 +168,8 @@ void Base2DEngineGL::resizeEvent(float width, float height)
 	m_basicShader->setMat4("projectionMatrix", &m_projectionMatrix);
 	m_textureShader->bind();
 	m_textureShader->setMat4("projectionMatrix", &m_projectionMatrix);
+	m_circleShader->bind();
+	m_circleShader->setMat4("projectionMatrix", &m_projectionMatrix);
 
 	// Resize FBO attachments.
 	m_frameBuffer->resize(width, height);
