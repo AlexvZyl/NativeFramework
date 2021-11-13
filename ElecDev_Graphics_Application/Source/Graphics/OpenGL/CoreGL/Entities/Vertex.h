@@ -50,7 +50,7 @@ private:
 public:
 	// Constructor.
 	VertexData();
-	VertexData(glm::vec3* pos, glm::vec4* clr, unsigned int eID);
+	VertexData(glm::vec3& pos, glm::vec4& clr, unsigned int eID);
 	VertexData(float pos0, float pos1, float pos2,
 			   float col0, float col1, float col2, float col3,
 			   unsigned int eID);
@@ -80,7 +80,7 @@ public:
 	float textureID = 0;
 	// Constructors.
 	VertexDataTextured();
-	VertexDataTextured(glm::vec3* pos, glm::vec4* clr, glm::vec2* texCoords, float texID, unsigned int eID);
+	VertexDataTextured(glm::vec3& pos, glm::vec4& clr, glm::vec2& texCoords, float texID, unsigned int eID);
 	VertexDataTextured(float pos0, float pos1, float pos2,
 		float col0, float col1, float col2, float col3,
 		float texPos0, float texPos1, float texID,

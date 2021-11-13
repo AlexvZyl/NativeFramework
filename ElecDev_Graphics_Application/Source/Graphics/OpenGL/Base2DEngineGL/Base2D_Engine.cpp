@@ -110,23 +110,27 @@ void Base2DEngineGL::renderLoop()
 	// Draw basic entities.
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", &m_viewMatrix);
-	m_trianglesVAO->render();
 	m_linesVAO->render();
+	m_trianglesVAO->render();
+	m_lineEntitiesVAO->render();
+	m_triangleEntitiesVAO->render();
 
 	// Draw textured entities.
 	m_textureShader->bind();
 	m_textureShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_texturedTrianglesVAO->render();
+	m_triangleTexturedEntitiesVAO->render();
 
 	// Draw Circles.
 	m_circleShader->bind();
 	m_circleShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_circlesVAO->render();
+	m_circleEntitiesVAO->render();
 
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //
-	// 
+	 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
 }
