@@ -28,9 +28,6 @@ private:
 	// ------------ //
 
 	using Entity<VertexType>::m_vertices;
-	using Entity<VertexType>::m_indices;
-	using Entity<VertexType>::m_vertexCount;
-	using Entity<VertexType>::m_indexCount;
 	using Entity<VertexType>::m_VAO;
 	using Entity<VertexType>::m_bufferStartIndex;
 	using Entity<VertexType>::m_trackedCenter;
@@ -46,8 +43,8 @@ private:
 	static inline glm::vec2 local3 = {1.f, -1.f};
 	static inline glm::vec2 local4 = {-1.f, -1.f};
 
-	float m_thickness = 0;
-	float m_fade = 0;
+	float m_thickness = 1.f;
+	float m_fade = 0.001f;
 
 public:
 

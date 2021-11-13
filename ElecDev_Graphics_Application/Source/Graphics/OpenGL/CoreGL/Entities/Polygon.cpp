@@ -15,31 +15,43 @@ template<typename VertexType>
 Polygon2D<VertexType>::Polygon2D(){};
 
 template<typename VertexType>
-Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayObject<VertexType>* VAO)
+Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>* vertices, VertexArrayObject<VertexType>* VAO)
 {
 	// General seyup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
-	m_vertexCount = vertices.size();
+	n_vertices = vertices->size();
 	m_VAO = VAO;
 	m_entityID = EntityManager::generateEID();
 
-	// Create the vertices.
-	for (glm::vec3 vertex : vertices)
-		m_vertices.push_back(VertexData(vertex, m_colour, m_entityID));
-
-	// Assign the indices based on the VAO type.
+	// Populate VertexData structures.
 	if (m_VAO->m_bufferType == GL_TRIANGLES) 
-	{
-		m_indices = {0,1,2,2,3,0};
-		m_indexCount = 6;
+{
+		//Tile the polygon in triangles sharing vertex 0.
+		for (int i = 1; i < n_vertices - 1; i++) 
+		{
+			VertexData v1(&vertices->at(0), &m_colour, m_entityID);
+			VertexData v2(&vertices->at(i), &m_colour, m_entityID);
+			VertexData v3(&vertices->at(i + 1), &m_colour, m_entityID);
+			m_vertices.insert(m_vertices.end(), { v1,v2,v3 });
+		}
 	}
 	else if (m_VAO->m_bufferType == GL_LINES) 
 	{
-		m_indices = { 0,1,1,2,2,3,3,0 };
-		m_indexCount = 8;
+		// Add lines in a loop.
+		for (int i = 0; i < n_vertices - 1; i++) 
+		{
+			VertexData v1(&vertices->at(i), &m_colour, m_entityID);
+			VertexData v2(&vertices->at(i + 1), &m_colour, m_entityID);
+			m_vertices.insert(m_vertices.end(), { v1,v2 });
+		}
+		// Close loop.
+		VertexData v1(&vertices->at(n_vertices-1), &m_colour, m_entityID);
+		VertexData v2(&vertices->at(0), &m_colour, m_entityID);
+		m_vertices.insert(m_vertices.end(), { v1,v2 });
 	}
 	// Pass to VAO.
+	n_vertices = m_vertices.size();
 	m_VAO->appendDataCPU(this);
 	m_VAO->updateGPU();
 }

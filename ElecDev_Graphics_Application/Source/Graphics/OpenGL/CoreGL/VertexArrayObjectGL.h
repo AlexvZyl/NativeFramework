@@ -26,11 +26,9 @@ class VertexArrayObject
 {
 private:
 	
-	unsigned int m_VAOID;			// Vertex Array Object.
-	unsigned int m_VBOID;			// Vertex Buffer Objext.	
-	unsigned int m_IBOID;			// Index Buffer Object.
-	unsigned int m_vertexCount = 0;	// Pointer that shows where in the buffer data need to be written.
-	unsigned int m_indexCount = 0;	// Counting the amount of indices.
+	unsigned int m_VAOID;		// VAO ID.
+	unsigned int m_VBOID;		// VBO ID.	
+	GLsizei m_bufferIndex = 0;	// Pointer that shows where in the buffer data need to be written.
 	bool m_isUpdated = false;		// Checks if there is data CPU side that has not been updated GPU side.
 
 public:
@@ -43,9 +41,6 @@ public:
 
 	// Vertices stores CPU side.
 	std::vector<VertexType> m_vertexCPU;
-	// The indeces bot the buffer.
-	std::vector<unsigned> m_indexCPU;
-
 	// Entities stored CPU side.
 	std::vector<Entity<VertexType>*> m_entityCPU;
 
@@ -86,7 +81,18 @@ public:
 	// ----------------- //
 
 	// Append data on the CPU side memory for untextured vertices.
-	void appendDataCPU(std::vector<VertexType>& vertices, std::vector<unsigned> indices);
+	void appendDataCPU(std::vector<VertexType>* vertices);
+	// Assign data to the CPU side memory for untextured vertices.
+	// If the VAO is empty it creates a new one with the vertices specified.
+	void assignDataCPU(std::vector<VertexType>* vertices, unsigned int index);
+	// Assign data to the GPU side memory for untextured vertices.
+	// since this funtion is going to be called in performance critical scenarios.
+	// If you use this function it will update faster, but you also lose the ability
+	// to read the CPU side data.
+	// Error handling is not added to this function to make it as fast as possible, so
+	// be very careful to not lose track of sizes of data, if it has been created etc.
+	// This does not check if the array is empty and create a new one if it is empty.
+	void assignDataGPU(std::vector<VertexType>* vertices, unsigned int index);
 
 	// ----------------- //
 	//  E N T I T I E S  //
