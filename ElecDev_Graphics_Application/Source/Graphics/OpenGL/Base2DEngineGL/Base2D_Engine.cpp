@@ -87,13 +87,14 @@ void Base2DEngineGL::renderLoop()
 	//  S E T U P  //
 	// ----------- //
 
+	// Enable blending.
+	GLCall(glEnable(GL_BLEND));
 	// Set glViewport for the ImGUI context.
 	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0], 
 							(GLsizei)m_imGuiViewportDimensions[1]));
 
 	// Calculate and update the engine matrices.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-
 	
 	// Render to frame buffer.
 	m_frameBuffer->bind();
@@ -110,25 +111,31 @@ void Base2DEngineGL::renderLoop()
 	// Draw basic entities.
 	m_basicShader->bind();
 	m_basicShader->setMat4("viewMatrix", &m_viewMatrix);
-	m_trianglesVAO->render();
 	m_linesVAO->render();
+	m_trianglesVAO->render();
+	m_lineEntitiesVAO->render();
+	m_triangleEntitiesVAO->render();
 
 	// Draw textured entities.
 	m_textureShader->bind();
 	m_textureShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_texturedTrianglesVAO->render();
+	m_triangleTexturedEntitiesVAO->render();
 
 	// Draw Circles.
 	m_circleShader->bind();
 	m_circleShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_circlesVAO->render();
+	m_circleEntitiesVAO->render();
 
 	// --------------- //
 	//  C L E A N U P  //
 	// --------------- //
-	// 
+	 
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
+	// Disable blending.
+	GLCall(glDisable(GL_BLEND));
 }
 
 // Return the ID to the texture that is rendered via the FBO.

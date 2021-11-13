@@ -25,16 +25,18 @@ void Base2DEngineGL::drawLine(float position1[2], float position2[2], float colo
 		VertexData(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3], 0),
 		VertexData(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
-	m_linesVAO->appendDataCPU(&vertices);
+	m_linesVAO->appendDataCPU(vertices, {0,1});
 }
 
 void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4])
 {
-	VertexData v1(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v2(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v3(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0);
-	std::vector<VertexData> vertices = {v1,v2,v2,v3,v3,v1};
-	m_linesVAO->appendDataCPU(&vertices);
+	std::vector<VertexData> vertices =
+	{
+		VertexData(position1[0], position1[1], 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0)
+	};
+	m_linesVAO->appendDataCPU(vertices, {0,1,1,2,2,0});
 }
 
 void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]) 
@@ -45,31 +47,35 @@ void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], 
 		VertexData(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0),
 		VertexData(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
-	m_trianglesVAO->appendDataCPU(&vertices);
+	m_trianglesVAO->appendDataCPU(vertices, {0,1,2});
 }
 
 // Draw a clear quad.
 void Base2DEngineGL::drawQuadClear(float position[2], float width, float height, float color[4]) 
 {
 	width /= 2;	height /= 2;
-	VertexData v1(position[0]+width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v2(position[0]+width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v3(position[0]-width, position[1]-height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v4(position[0]-width, position[1]+height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	std::vector<VertexData> vertices = {v1,v2,v2,v3,v3,v4,v4,v1};
-	m_linesVAO->appendDataCPU(&vertices);
+	std::vector<VertexData> vertices =
+	{
+		VertexData(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0)
+	};
+	m_linesVAO->appendDataCPU(vertices, {0,1,1,2,2,3,3,0});
 }
 
 // Draw a filled quad.
 void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height, float color[4]) 
 {
 	width /= 2;	height /= 2;
-	VertexData v1(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v2(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v3(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	VertexData v4(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0);
-	std::vector<VertexData> vertices = { v1,v2,v3,v3,v4,v1 };
-	m_trianglesVAO->appendDataCPU(&vertices);
+	std::vector<VertexData> vertices = 
+	{
+		VertexData(position[0] + width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position[0] + width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position[0] - width, position[1] - height, 0.0f, color[0], color[1], color[2], color[3], 0),
+		VertexData(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0)
+	};
+	m_trianglesVAO->appendDataCPU(vertices, {0,1,2,2,3,0});
 }
 
 // Draws a clear circle.
@@ -84,12 +90,14 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 	glm::vec2 local2(+1.f, +1.f);
 	glm::vec2 local3(+1.f, -1.f);
 	glm::vec2 local4(-1.f, -1.f);
-	VertexDataCircle v1(pos1, local1, colorGLM, 0.1f, 0.005f, 0.f);
-	VertexDataCircle v2(pos2, local2, colorGLM, 0.1f, 0.005f, 0.f);
-	VertexDataCircle v3(pos3, local3, colorGLM, 0.1f, 0.005f, 0.f);
-	VertexDataCircle v4(pos4, local4, colorGLM, 0.1f, 0.005f, 0.f);
-	std::vector<VertexDataCircle> vertices = { v1,v2,v3,v3,v4,v1 };
-	m_circlesVAO->appendDataCPU(&vertices);
+	std::vector<VertexDataCircle> vertices =
+	{
+		VertexDataCircle(pos1, local1, colorGLM, 0.1f, 0.005f, 0.f),
+		VertexDataCircle(pos2, local2, colorGLM, 0.1f, 0.005f, 0.f),
+		VertexDataCircle(pos3, local3, colorGLM, 0.1f, 0.005f, 0.f),
+		VertexDataCircle(pos4, local4, colorGLM, 0.1f, 0.005f, 0.f)
+	};
+	m_circlesVAO->appendDataCPU(vertices, {0,1,2,2,3,0});
 }
 
 // Draws a filled circle.
@@ -104,12 +112,14 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 	glm::vec2 local2(+1.f, +1.f);
 	glm::vec2 local3(+1.f, -1.f);
 	glm::vec2 local4(-1.f, -1.f);
-	VertexDataCircle v1(pos1, local1, colorGLM, 1.f, 0.005f, 0.f);
-	VertexDataCircle v2(pos2, local2, colorGLM, 1.f, 0.005f, 0.f);
-	VertexDataCircle v3(pos3, local3, colorGLM, 1.f, 0.005f, 0.f);
-	VertexDataCircle v4(pos4, local4, colorGLM, 1.f, 0.005f, 0.f);
-	std::vector<VertexDataCircle> vertices = {v1,v2,v3,v3,v4,v1};
-	m_circlesVAO->appendDataCPU(&vertices);
+	std::vector<VertexDataCircle> vertices
+	{
+		VertexDataCircle(pos1, local1, colorGLM, 1.f, 0.005f, 0.f),
+		VertexDataCircle(pos2, local2, colorGLM, 1.f, 0.005f, 0.f),
+		VertexDataCircle(pos3, local3, colorGLM, 1.f, 0.005f, 0.f),
+		VertexDataCircle(pos4, local4, colorGLM, 1.f, 0.005f, 0.f)
+	};
+	m_circlesVAO->appendDataCPU(vertices, {0,1,2,2,3,0});
 }
 
 // Adds text to the VBO object.
@@ -193,7 +203,7 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 			VertexDataTextured v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0);
 			VertexDataTextured v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0);
 			std::vector<VertexDataTextured> vertices = {v1,v2,v3,v3,v4,v1};
-			m_texturedTrianglesVAO->appendDataCPU(&vertices);
+			//m_texturedTrianglesVAO->appendDataCPU(&vertices);
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };

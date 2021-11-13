@@ -62,11 +62,15 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	//  C R E A T E   B A S I C   V A O ' S  //
 	// ------------------------------------- //
 
-	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
-	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_texturedTrianglesVAO	= std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_frameBuffer			= std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
+	m_linesVAO					  = std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
+	m_trianglesVAO				  = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
+	m_texturedTrianglesVAO		  = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
+	m_circlesVAO				  = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
+	m_lineEntitiesVAO			  = std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
+	m_triangleEntitiesVAO	      = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
+	m_triangleTexturedEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
+	m_circleEntitiesVAO			  = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
+	m_frameBuffer				  = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 	createDefaultBackground();
 
 	// ----------------------------------------- //
@@ -180,13 +184,15 @@ void EngineCoreGL::updateGPU()
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99);
 	glm::vec3 pos4(1.0f, -1.0f, 0.99);
 	// Create and append the vertices.
-	VertexData v1(&pos1, &bgColor2, -1);	//  Top right.
-	VertexData v2(&pos2, &bgColor1, -1);	//  Top left.
-	VertexData v3(&pos3, &bgColor1, -1);	//  Bottom left.
-	VertexData v4(&pos4, &bgColor1, -1);	//  Bottom right.
+	std::vector<VertexData> vertices = 
+	{
+		VertexData(pos1, bgColor2, -1),	//  Top right.
+		VertexData(pos2, bgColor1, -1),	//  Top left.
+		VertexData(pos3, bgColor1, -1),	//  Bottom left.
+		VertexData(pos4, bgColor1, -1)	//  Bottom right.
+	};
 	// Create background.
-	std::vector<VertexData> vertices = { v1,v2,v3,v3,v4,v1 };
-	m_backgroundVAO->appendDataCPU(&vertices);
+	m_backgroundVAO->appendDataCPU(vertices, {0,1,2,2,3,0});
 	m_backgroundVAO->updateGPU();
  }
 
