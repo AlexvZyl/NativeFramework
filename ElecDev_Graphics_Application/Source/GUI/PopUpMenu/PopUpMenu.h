@@ -16,12 +16,11 @@ class PopUpMenu
 private:
 
 	GUIState* m_guiState;
-	GraphicsHandler* m_graphicsHandler;
 
 public:
 
 	// Constructor.
-	PopUpMenu(GUIState* guiState, GraphicsHandler* graphicsHandler);
+	PopUpMenu(GUIState* guiState);
 	// Render call.
 	void render();
 

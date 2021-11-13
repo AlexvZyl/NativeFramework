@@ -21,7 +21,7 @@
 GraphicsScene::GraphicsScene(GUIState* guiState, GraphicsHandler* graphicsHandler)
 	: m_guiState(guiState), graphicsHandler(graphicsHandler)
 {
-	m_popUpMenu = new PopUpMenu(guiState, graphicsHandler);
+	m_popUpMenu = new PopUpMenu(guiState);
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;

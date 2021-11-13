@@ -13,20 +13,21 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-PopUpMenu::PopUpMenu(GUIState* guiState, GraphicsHandler* graphicsHandler)
-    : m_guiState(guiState), m_graphicsHandler(graphicsHandler)
+PopUpMenu::PopUpMenu(GUIState* guiState)
+    : m_guiState(guiState)
 {}
 
 // Render call.
 void PopUpMenu::render() 
 {
     ImVec2 parentPos = ImGui::GetWindowPos();
-    ImGui::SetNextWindowPos(ImVec2(m_guiState->popUpPosition.x+parentPos.x, 
+    ImGui::SetNextWindowPos(ImVec2(m_guiState->popUpPosition.x + parentPos.x, 
                                    m_guiState->popUpPosition.y + parentPos.y));
     ImGui::Begin("PopUpMenu", &m_guiState->popUpMenu, ImGuiWindowFlags_NoDecoration |
                                                       ImGuiWindowFlags_NoMove       |
                                                       ImGuiWindowFlags_NoDocking    |
                                                       ImGuiWindowFlags_NoFocusOnAppearing);
+
     if (ImGui::MenuItem("Add component", "C")) { /* Do stuff */ }
     if (ImGui::MenuItem("Add port", "P")) { /* Do stuff */ }
     ImGui::Separator();
