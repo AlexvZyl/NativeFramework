@@ -37,22 +37,27 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 
-	//std::shared_ptr<VertexData> edgeVertices[4];
+	std::shared_ptr<VertexData> edgeVertices[4];
 
-	shape = std::make_shared<Polygon2D<VertexData>>(&vertices, engine_trianglesVAO);
-	shape->setColor(&shapeColour);
+	// Main shape.
+	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO);
+	shape->setColor(shapeColour);
 	shape->setLayer(componentLayer);
 	shape->update();
-	border = std::make_shared<Polygon2D<VertexData>>(&vertices, engine_linesVAO);
-	border->setColor(&borderColour);
+	// Component border.
+	border = std::make_shared<Polygon2D<VertexData>>(vertices, engine_linesVAO);
+	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
+	// Component title.
 	titlePos = glm::vec3(centre, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = std::make_shared<Text<VertexDataTextured>>(titleString, &titlePos, &titleColour, titleSize, engine_texturedTrianglesVAO, &titleFont, "C");
+	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, "C");
 	title->update();
-
-	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 0.2f, 0.2f);
+	// Port.
+	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 1.0f, 0.2f);
+	port1->setColor(shapeColour);
+	port1->setLayer(componentLayer);
 	port1->update();
 
 }
@@ -62,7 +67,7 @@ Component2D::Component2D(float centreCoords[2],
 						 VertexArrayObject<VertexData>* linesVAO, 
 						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
 						 VertexArrayObject<VertexDataCircle>* circleVAO)
-	:Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO)
+	: Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO)
 {
 	moveTo(centreCoords);
 }
@@ -74,10 +79,10 @@ Component2D::~Component2D()
 void Component2D::moveTo(float pointerPos[2])
 {
 	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
-	shape->translateTo(&translateDestination);
-	border->translateTo(&translateDestination);
-	title->translateTo(&translateDestination);
-	port1->translateTo(&translateDestination);
+	shape->translateTo(translateDestination);
+	border->translateTo(translateDestination);
+	title->translateTo(translateDestination);
+	port1->translateTo(translateDestination);
 	shape->update();
 	border->update();
 	title->update();
@@ -92,9 +97,9 @@ void Component2D::place(float pos[2])
 	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
 	titleColour = { 0.f, 0.f, 1.f, 1.0f };
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
-	shape->setColor(&shapeColour);
-	border->setColor(&borderColour);
-	title->setColor(&titleColour);
+	shape->setColor(shapeColour);
+	border->setColor(borderColour);
+	title->setColor(titleColour);
 	shape->update();
 	border->update();
 	title->update();
@@ -115,10 +120,4 @@ void Component2D::destroy()
 	shape->destroy();
 	border->destroy();
 	title->destroy();
-}
-
-void Component2D::render()
-{
-	//deprecated
-	//rendering of VAOs moved to engine
 }

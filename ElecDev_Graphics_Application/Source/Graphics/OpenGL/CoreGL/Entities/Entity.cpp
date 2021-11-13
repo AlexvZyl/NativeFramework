@@ -25,8 +25,18 @@ Entity<VertexType>::~Entity()
 template<typename VertexType>
 void Entity<VertexType>::destroy() 
 { 
-	this->~Entity(); }
+	this->~Entity(); 
+}
 
+//=============================================================================================================================================//
+//  Memory management.																														   //
+//=============================================================================================================================================//
+
+template<typename VertexType>
+void Entity<VertexType>::offsetIndices(int offset) 
+{
+	for (unsigned& index : m_indices) { index += offset; }
+}
 
 //=============================================================================================================================================//
 //  Rendering.																																   //
@@ -43,36 +53,36 @@ void Entity<VertexType>::update()
 //=============================================================================================================================================//
 
 template<typename VertexType>
-void Entity<VertexType>::translate(glm::vec3* translation)
+void Entity<VertexType>::translate(glm::vec3& translation)
 {
-	for (Vertex& vertex : m_vertices) { vertex.data.position += *translation; }
+	for (Vertex& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += *translation;
 }
 
 template<typename VertexType>
-void Entity<VertexType>::translateTo(glm::vec3* position)
+void Entity<VertexType>::translateTo(glm::vec3& position)
 { 
-	glm::vec3 translation = *position - m_trackedCenter; 
+	glm::vec3 translation = position - m_trackedCenter; 
 	for (Vertex& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
 }
 
 template<typename VertexType>
-void Entity<VertexType>::translateTo(glm::vec2* position)
+void Entity<VertexType>::translateTo(glm::vec2& position)
 {
-	glm::vec3 translation = glm::vec3(*position, m_trackedCenter.z) - m_trackedCenter;
+	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
 	for (Vertex& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
 }
 
 template<typename VertexType>
-void Entity<VertexType>::rotate(glm::vec3* rotation)
+void Entity<VertexType>::rotate(glm::vec3& rotation)
 {
 
 }
 
 template<typename VertexType>
-void Entity<VertexType>::scale(glm::vec3* scaling)
+void Entity<VertexType>::scale(glm::vec3& scaling)
 {
 
 }
@@ -82,9 +92,9 @@ void Entity<VertexType>::scale(glm::vec3* scaling)
 //=============================================================================================================================================//
 
 template<typename VertexType>
-void Entity<VertexType>::setColor(glm::vec4* color)
+void Entity<VertexType>::setColor(glm::vec4& color)
 {
-	for (Vertex& vertex : m_vertices) { vertex.data.color = *color; }
+	for (Vertex& vertex : m_vertices) { vertex.data.color = color; }
 	m_colour = *color;
 }
 
