@@ -93,7 +93,9 @@ bool Ribbons::topBar()
                                     ImGuiWindowFlags_NoMove         | 
                                     ImGuiWindowFlags_NoResize       |     
                                     ImGuiWindowFlags_NoScrollbar    | 
-                                    ImGuiWindowFlags_NoCollapse;
+                                    ImGuiWindowFlags_NoCollapse     |
+                                    ImGuiWindowFlags_NoFocusOnAppearing;
+
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
     ImVec2 work_size = viewport->WorkSize;

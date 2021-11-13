@@ -9,8 +9,7 @@
 // GUI Components.
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
-#include "Graphics/graphics.h"
-#include "MCC/mcc.h"
+#include "GraphicsScene/GraphicsScene.h"
 #include "../GUI/GUIState.h"
 #include "UserGUI/userGUI.h"
 #include "GuiHandler.h"
@@ -34,9 +33,8 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 
 	this->toolbar = new Toolbar(m_guiState);
 	this->ribbons = new Ribbons(m_guiState);
-	this->graphics = new Graphics(m_guiState, this->graphicsHandler, m_pyInterface);
 	this->userGUIP = new userGUI(m_guiState, this->graphicsHandler, m_pyInterface);
-	this->mcc = new MCC(m_guiState, graphicsHandler);	
+	m_graphicsScene = new GraphicsScene(m_guiState, graphicsHandler);
 };
 
 // Destructor.
@@ -44,9 +42,8 @@ GUIHandler::~GUIHandler()
 {
 	delete toolbar;
 	delete ribbons;
-	delete graphics;
 	delete userGUIP;
-	delete mcc;
+	delete m_graphicsScene;
 }
 
 /*=======================================================================================================================================*/
@@ -95,7 +92,7 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 
 	if (m_guiState->showGraphicsWindow) 
 	{
-		this->mcc->renderGraphics(this->dock);
+		m_graphicsScene->renderGraphics(this->dock);
 	}
 
 	ImGui::End();

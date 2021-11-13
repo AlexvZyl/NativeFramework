@@ -35,6 +35,7 @@ public:
 	Polygon2D<VertexData>* p1;
 	Polygon2D<VertexData>* p2;
 	Polygon2D<VertexData>* p3;
+	unsigned int m_currentEntityID = 0;
 	
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //

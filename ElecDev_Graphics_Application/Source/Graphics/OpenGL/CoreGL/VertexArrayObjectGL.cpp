@@ -265,10 +265,23 @@ void VertexArrayObject<VertexType>::updateGPU()
 		unsigned int index = 0;
 		// Bind VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		// Define buffer size.
-		GLCall(glBufferData(GL_ARRAY_BUFFER, vertexCount * m_vertexCPU[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW))
-		// Populate with entity vertex data.
-		for (Entity<VertexType>* entity : m_entityCPU)
+		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexCount * m_entityCPU[0]->m_vertices[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
+		// Resize IBO.
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), NULL, GL_DYNAMIC_DRAW));
+		// Assign buffer pointers.s
+		unsigned int verticesIndex = 0;
+		unsigned int indicesIndex = 0;
+		// Populate index data.
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		for (Entity<VertexType>* entity : m_entityCPU) 
+		{
+			GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indicesIndex * sizeof(GLuint), entity->m_indexCount * sizeof(GLuint), static_cast<const void*>(&(entity->m_indices[0]))));
+			indicesIndex += entity->m_indexCount;
+		}
+		// Populate vertex data.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		for (Entity<VertexType>* entity : m_entityCPU) 
 		{
 			for (VertexType& vertex : entity->m_vertices)
 			{
