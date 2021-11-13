@@ -26,6 +26,10 @@ struct GUIState
 	bool startDemoWindow = false;
 	bool showGraphicsWindow = true;
 
+	// Popup menu.
+	ImVec2 popUpPosition = {0.f, 0.f};
+	bool popUpMenu = false;
+
 	// Action states.
 	bool renderWindowHovered=false;
 	bool renderResizeEvent=true;

@@ -29,9 +29,9 @@ void Base2DEngineGL::mousePressLeft(float pixelCoords[2])
 void Base2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Reset the view values to the base matrices.
-	m_scalingMatrix = m_scalingMatrixBase;
+	/*m_scalingMatrix = m_scalingMatrixBase;
 	m_translationMatrix = m_translationMatrixBase;
-	m_rotationMatrix = m_rotationMatrixBase;
+	m_rotationMatrix = m_rotationMatrixBase;*/
 }
 
 void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])

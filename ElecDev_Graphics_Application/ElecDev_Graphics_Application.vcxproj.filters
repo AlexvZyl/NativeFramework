@@ -43,9 +43,8 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\Resources\ResourceHandler.cpp" />
-    <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
+    <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Logging\logHandler.cpp" />
@@ -106,6 +105,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_InputHandler.cpp" />
+    <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1215,8 +1215,7 @@
     <ClInclude Include="Source\External\glm\gtx\wrap.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GUI\Graphics\graphics.h" />
-    <ClInclude Include="Source\GUI\MCC\mcc.h" />
+    <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\SPDLog\cfg\argv.h" />
@@ -1410,6 +1409,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
+    <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

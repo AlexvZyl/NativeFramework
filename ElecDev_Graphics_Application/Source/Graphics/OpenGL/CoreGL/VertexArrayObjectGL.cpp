@@ -10,6 +10,8 @@
 #include "ErrorHandlerGL.h"
 #include <algorithm>
 #include <functional>
+#include <chrono>
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -246,18 +248,20 @@ void VertexArrayObject<VertexType>::updateGPU()
 		// Resize IBO.
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), NULL, GL_DYNAMIC_DRAW));
-		// Reset the buffer pointerss
+		// Assign buffer pointers.s
 		unsigned int verticesIndex = 0;
 		unsigned int indicesIndex = 0;
-		// Populate with vertex data.
-		for (Entity<VertexType>* entity : m_entityCPU)
+		// Populate index data.
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		for (Entity<VertexType>* entity : m_entityCPU) 
 		{
-			// Write to the IBO
-			GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 			GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indicesIndex * sizeof(GLuint), entity->m_indexCount * sizeof(GLuint), static_cast<const void*>(&(entity->m_indices[0]))));
 			indicesIndex += entity->m_indexCount;
-			// Write to VBO.
-			GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		}
+		// Populate vertex data.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		for (Entity<VertexType>* entity : m_entityCPU) 
+		{
 			for (VertexType& vertex : entity->m_vertices)
 			{
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, verticesIndex * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
