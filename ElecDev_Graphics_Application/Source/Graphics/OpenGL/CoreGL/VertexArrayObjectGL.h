@@ -25,7 +25,7 @@ template <class VertexType>
 class VertexArrayObject
 {
 private:
-	
+
 	unsigned int m_VAOID;			// Vertex Array Object.
 	unsigned int m_VBOID;			// Vertex Buffer Objext.	
 	unsigned int m_IBOID;			// Index Buffer Object.
@@ -54,7 +54,7 @@ public:
 	// ------------------------------------------------- //
 
 	// Constructor.
-	VertexArrayObject();						
+	VertexArrayObject();
 	VertexArrayObject(GLenum type);
 	// Destructor.
 	~VertexArrayObject();

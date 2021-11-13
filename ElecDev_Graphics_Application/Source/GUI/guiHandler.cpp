@@ -9,8 +9,7 @@
 // GUI Components.
 #include "Ribbons/ribbons.h"
 #include "Toolbar/toolbar.h"
-#include "Graphics/graphics.h"
-#include "MCC/mcc.h"
+#include "GraphicsScene/GraphicsScene.h"
 #include "../GUI/GUIState.h"
 #include "UserGUI/userGUI.h"
 #include "GuiHandler.h"
@@ -24,9 +23,9 @@
 GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
 	:m_guiState(guiState), m_pyInterface(pyInterface)
 {
-    // Set the custom theme.
-    setTheme();
- 
+	// Set the custom theme.
+	setTheme();
+
 	m_guiState->toolsExpanded = false;
 	this->textureID = 0;
 
@@ -34,19 +33,17 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 
 	this->toolbar = new Toolbar(m_guiState);
 	this->ribbons = new Ribbons(m_guiState);
-	this->graphics = new Graphics(m_guiState, this->graphicsHandler, m_pyInterface);
 	this->userGUIP = new userGUI(m_guiState, this->graphicsHandler, m_pyInterface);
-	this->mcc = new MCC(m_guiState, graphicsHandler);	
+	m_graphicsScene = new GraphicsScene(m_guiState, graphicsHandler);
 };
 
 // Destructor.
-GUIHandler::~GUIHandler() 
+GUIHandler::~GUIHandler()
 {
 	delete toolbar;
 	delete ribbons;
-	delete graphics;
 	delete userGUIP;
-	delete mcc;
+	delete m_graphicsScene;
 }
 
 /*=======================================================================================================================================*/
@@ -93,9 +90,9 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	this->ribbons->renderRibbons(&this->dock);
 	this->userGUIP->renderUI(&this->dock);
 
-	if (m_guiState->showGraphicsWindow) 
+	if (m_guiState->showGraphicsWindow)
 	{
-		this->mcc->renderGraphics(this->dock);
+		m_graphicsScene->renderGraphics(this->dock);
 	}
 
 	ImGui::End();
@@ -121,7 +118,7 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 /* Docking.																																 */
 /*=======================================================================================================================================*/
 
-void GUIHandler::createDock(ImVec2 work_size) 
+void GUIHandler::createDock(ImVec2 work_size)
 {
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	//ImGui::DockBuilderRemoveNode(dockspace_id);
@@ -164,7 +161,7 @@ void GUIHandler::resetDock(ImGuiID dockspace_id) {
 
 		switch (hash(it->docking.c_str()))
 		{
-		case (hash("LEFT")):	
+		case (hash("LEFT")):
 			ImGui::DockBuilderSplitNode(dock, ImGuiDir_Left, 0.2f, &it->dockPos, &dock);
 			break;
 		case (hash("RIGHT")):
@@ -182,7 +179,7 @@ void GUIHandler::resetDock(ImGuiID dockspace_id) {
 		}
 		it->docked = true;
 		++it;
-		
+
 	}
 	this->dock = dock;
 	this->dockSpaceID = dockspace_id;

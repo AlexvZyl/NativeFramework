@@ -10,13 +10,15 @@
 #include "ErrorHandlerGL.h"
 #include <algorithm>
 #include <functional>
+#include <chrono>
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
 template <typename VertexType>
-VertexArrayObject<VertexType>::VertexArrayObject(){}
+VertexArrayObject<VertexType>::VertexArrayObject() {}
 
 template <typename VertexType>
 VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
@@ -34,7 +36,7 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	if (typeid(VertexType)==typeid(VertexData))
+	if (typeid(VertexType) == typeid(VertexData))
 	{
 		int vertexSize = sizeof(VertexData::position) + sizeof(VertexData::color) + sizeof(VertexData::entityID);
 		int colOffset = sizeof(VertexData::position);
@@ -52,15 +54,15 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
 		GLCall(glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, vertexSize, (const void*)idOffset));
 	}
-	
+
 	// ----------------------------------- //
 	//  V E R T I C E S   T E X T U R E D  //
 	// ----------------------------------- //
 
-	else if (typeid(VertexType)==typeid(VertexDataTextured))
+	else if (typeid(VertexType) == typeid(VertexDataTextured))
 	{
 		int vertexSize = sizeof(VertexDataTextured::position) + sizeof(VertexDataTextured::color) + sizeof(VertexDataTextured::textureCoords) +
-						 sizeof(VertexDataTextured::textureID) + sizeof(VertexDataTextured::entityID);
+			sizeof(VertexDataTextured::textureID) + sizeof(VertexDataTextured::entityID);
 		int offset = 0;
 		// Generate.
 		GLCall(glGenBuffers(1, &m_VBOID));
@@ -90,10 +92,10 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 	//  V E R T I C E S   C I R C L E S  //
 	// --------------------------------- //
 
-	else if (typeid(VertexType)== typeid(VertexDataCircle))
+	else if (typeid(VertexType) == typeid(VertexDataCircle))
 	{
 		int vertexSize = sizeof(VertexDataCircle::position) + sizeof(VertexDataCircle::color) + sizeof(VertexDataCircle::fade) +
-						 sizeof(VertexDataCircle::thickness) + sizeof(VertexDataCircle::entityID) + sizeof(VertexDataCircle::localCoords);
+			sizeof(VertexDataCircle::thickness) + sizeof(VertexDataCircle::entityID) + sizeof(VertexDataCircle::localCoords);
 		int offset = 0;
 		// Generate.
 		GLCall(glGenBuffers(1, &m_VBOID));
@@ -129,7 +131,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 {
 	wipeCPU();
 	GLCall(glDeleteBuffers(1, &m_VBOID))
-	GLCall(glDeleteVertexArrays(1, &m_VAOID));
+		GLCall(glDeleteVertexArrays(1, &m_VAOID));
 }
 
 //=============================================================================================================================================//
@@ -218,7 +220,7 @@ void VertexArrayObject<VertexType>::deleteDataCPU(Entity<VertexType>* entity)
 		{
 			m_entityCPU[i]->m_bufferStartIndex -= entity->m_vertexCount;
 			m_entityCPU[i]->m_indecesStartIndex -= entity->m_indexCount;
-			m_entityCPU[i]->offsetIndices(-1*(entity->m_vertexCount));
+			m_entityCPU[i]->offsetIndices(-1 * (entity->m_vertexCount));
 		}
 		m_vertexCount -= entity->m_vertexCount;
 		m_indexCount -= entity->m_indexCount;
@@ -246,18 +248,20 @@ void VertexArrayObject<VertexType>::updateGPU()
 		// Resize IBO.
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), NULL, GL_DYNAMIC_DRAW));
-		// Reset the buffer pointerss
+		// Assign buffer pointers.s
 		unsigned int verticesIndex = 0;
 		unsigned int indicesIndex = 0;
-		// Populate with vertex data.
+		// Populate index data.
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 		for (Entity<VertexType>* entity : m_entityCPU)
 		{
-			// Write to the IBO
-			GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 			GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indicesIndex * sizeof(GLuint), entity->m_indexCount * sizeof(GLuint), static_cast<const void*>(&(entity->m_indices[0]))));
 			indicesIndex += entity->m_indexCount;
-			// Write to VBO.
-			GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		}
+		// Populate vertex data.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		for (Entity<VertexType>* entity : m_entityCPU)
+		{
 			for (VertexType& vertex : entity->m_vertices)
 			{
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, verticesIndex * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
@@ -275,7 +279,7 @@ void VertexArrayObject<VertexType>::updateGPU()
 		unsigned int index = 0;
 		// Resize VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount) * m_vertexCPU[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
 		// Write the data to the buffers.
 		for (VertexType& vertex : m_vertexCPU)
 		{
@@ -286,7 +290,7 @@ void VertexArrayObject<VertexType>::updateGPU()
 		}
 		// Resize IBO and write data.
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount*sizeof(GLuint), static_cast<const void*>(&m_indexCPU[0]), GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), static_cast<const void*>(&m_indexCPU[0]), GL_DYNAMIC_DRAW));
 	}
 	m_isUpdated = true;
 }

@@ -31,12 +31,12 @@ enum class EngineType
 
 // Data type that holds the window that is to be drawn, as well as information regarding the window.
 // Should be able to hold all of the different types of OpenGL engines.
-struct RenderWindowGL 
+struct RenderWindowGL
 {
 	// The rendering engine.
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
-	std::unique_ptr<EngineCoreGL> engineGL;
+	std::shared_ptr<EngineCoreGL> engineGL;
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
@@ -46,26 +46,27 @@ struct RenderWindowGL
 
 	// State machine information.
 	bool isHovered = false;
+	bool isFocused = false;
 	bool resizeEvent = true;
 	bool close = true;
 
 	// Constructors.
 	RenderWindowGL() {};
-	RenderWindowGL(GUIState* guiState, EngineType engineType) 
+	RenderWindowGL(GUIState* guiState, EngineType engineType)
 	{
-		if (engineType == EngineType::Base2DEngineGL) 
+		if (engineType == EngineType::Base2DEngineGL)
 		{
-			engineGL = std::make_unique<Base2DEngineGL>(guiState);
+			engineGL = std::make_shared<Base2DEngineGL>(guiState);
 			engineType = EngineType::Base2DEngineGL;
 		}
 		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL = std::make_unique<Design2DEngineGL>(guiState);
+			engineGL = std::make_shared<Design2DEngineGL>(guiState);
 			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
-			engineGL = std::make_unique<Base3DEngineGL>(guiState);
+			engineGL = std::make_shared<Base3DEngineGL>(guiState);
 			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
@@ -91,10 +92,10 @@ public:
 	// ------------------- //
 
 	// Map that holds the windows and their names.
-	std::map<std::string, std::unique_ptr<RenderWindowGL>> m_windowsDictionary;
+	std::map<std::string, std::shared_ptr<RenderWindowGL>> m_windowsDictionary;
 
 	// Variable that holds the active window name.
-	std::string m_activeWindow;
+	std::shared_ptr<RenderWindowGL> m_activeWindow;
 
 	// State machine variable.
 	GUIState* m_guiState;
@@ -119,7 +120,7 @@ public:
 	// --------------------- //
 	//  U S E R   I N P U T  //
 	// --------------------- //
-	
+
 	// Mouse events are automatically assigned to the active window.
 	// The active window is changed from the ImGUI side as the mouse moves.
 	void mousePressEvent(int button, int action);											// Handle mouse press events.
@@ -134,12 +135,14 @@ public:
 	// Resizes the engines.
 	void resizeEvent(int width, int height);
 	// Checks if the window name supplied is in the list.
+	bool isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow);
 	bool isWindowValid(std::string windowName);
+	bool isActiveWindowValid();
 
 	// ------------- //
 	//  2 D   A P I  //
 	// ------------- //
-	
+
 	// Functions supported by the base engine.  Added functionality to choose MCC.
 	void drawLine(std::string windowName, float position1[2], float position2[2], float color[4]);
 	void drawTriangleClear(std::string windowName, float position1[2], float position2[2], float position3[2], float color[4]);
@@ -170,7 +173,7 @@ public:
 	// Removes an MCC from the dict.
 	void removeWindow(std::string windowName);
 	void windowError(std::string windowName);
-	void parametersError(const std::exception &e);
+	void parametersError(const std::exception& e);
 
 	// -------------- //
 	//  T E S T I N G //

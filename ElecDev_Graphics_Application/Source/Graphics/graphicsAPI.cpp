@@ -26,11 +26,6 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	{
 		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Name '" << windowName << "' already used.\n";
 	}
-	// Prevent 'NULL' being used as a  name.
-	else if (windowName == "NULL")
-	{
-		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'NULL' is not a valid name. It is reserved for the inactive state.\n";
-	}
 	else
 	{
 		// Remove leading white spaces.
@@ -39,7 +34,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			engineType.erase(engineType.begin());
 		}
 		// Remove white spaces at end.
-		while (engineType[engineType.length()-1] == ' ')
+		while (engineType[engineType.length() - 1] == ' ')
 		{
 			engineType.pop_back();
 		}
@@ -49,34 +44,34 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
-			// Set window active.
-			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_unique<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL) });
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
+			// Set active window.
+			m_activeWindow = m_windowsDictionary[windowName];
 		}
 		else if (engineType == "Design2D" || engineType == "design2D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
-			// Set window active.
-			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_unique<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL) });
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
+			// Set active window.
+			m_activeWindow = m_windowsDictionary[windowName];
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
-			// Set window active.
-			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_unique<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL) });
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
+			// Set active window.
+			m_activeWindow = m_windowsDictionary[windowName];
 		}
 		// Catch error.
-		else 
+		else
 		{
 			std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << engineType << "' is not a valid engine type.\n";
 		}
@@ -88,13 +83,13 @@ void GraphicsHandler::removeWindow(std::string windowName)
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))
-	{		
+	{
 		// Remove by key.
 		m_windowsDictionary.erase(windowName);
 		// Set window inactive.
 		if (m_windowsDictionary.size() != 0)
 		{
-			m_activeWindow = "NULL";
+			m_activeWindow = NULL;
 		}
 	}
 	else { windowError(windowName); }
@@ -301,7 +296,7 @@ void GraphicsHandler::drawDemo(std::string windowName, unsigned int loopCount)
 // 3D Rendering.																										 //
 // ===================================================================================================================== //
 
-void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]) 
+void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4])
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))
@@ -315,7 +310,7 @@ void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3],
 	else { windowError(windowName); }
 }
 
-void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]) 
+void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4])
 {
 	// Check if window exists.
 	if (isWindowValid(windowName))
@@ -334,13 +329,13 @@ void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3],
 // ===================================================================================================================== //
 
 // Print error messages.
-void GraphicsHandler::windowError(std::string windowName) 
+void GraphicsHandler::windowError(std::string windowName)
 {
 	std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'" << windowName << "' is an invalid name.\n";
 }
-void GraphicsHandler::parametersError(const std::exception& e) 
+void GraphicsHandler::parametersError(const std::exception& e)
 {
-	std::cout << red <<"\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
+	std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Invalid parameters caused exception : '" << e.what() << "'.\n";
 }
 
 // ===================================================================================================================== //
