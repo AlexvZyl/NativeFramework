@@ -98,7 +98,7 @@ void Entity<VertexType>::setEntityID(unsigned int eID)
 template<typename VertexType>
 void Entity<VertexType>::setLayer(float layer)
 {
-	for (Vertex& vertex : m_vertices) { vertex.data.position.z = layer; }
+	for (Vertex& vertex : m_vertices) { vertex.position.z = layer; }
 }
 
 //=============================================================================================================================================//

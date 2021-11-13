@@ -20,21 +20,11 @@ BufferLayout is used to setup the VAO.
 class Vertex
 {
 public:
-	union {
-		struct {
-			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
-			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
-			glm::vec2 textureCoords = { 0.f,0.f };			// Position
-			float textureID = 0.f;
-			float fade = 0.f;
-		}data;
-		float rawData[11];
-	};
-	glm::vec3* position;					// Position of the vertex in 3D space.
-	glm::vec4* color;							// Color of the vertex.
 	// Common vertex attributes.
+	glm::vec3 position = { 0.f,0.f,0.f };		// Position of the vertex in 3D space.
+	glm::vec4 color = { 0.f,0.f,0.f,0.f };		// Color of the vertex.
 	unsigned int entityID = 0;					// ID associated with the vertex.
-	Vertex();
+
 	virtual int getTotalSize() { return 0; };	// The entire data size.
 	virtual int getDataSize()  { return 0; };	// Size of the texture data (excluding the entity ID).
 	virtual int getIDOffset()  { return 0; };	// Size of offset to the entity ID.
@@ -55,6 +45,7 @@ private:
 	static int dataSizeVD;						// All of the color texture data.
 	static int idOffsetVD;						// Offset to the entity ID.
 	static int idSizeVD;						// Size of the entity ID.
+	float rawData[7] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
 public:
 	// Constructor.
@@ -82,10 +73,11 @@ private:
 	static int dataSizeVDT;		// All of the color texture data.
 	static int idOffsetVDT;		// Offset to the entity ID.
 	static int idSizeVDT;		// Size of the entity ID.
+	float rawData[10] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
 public:
-	glm::vec2* textureCoords = &data.textureCoords;			// Position
-	float* textureID = &data.textureID;
+	glm::vec2 textureCoords = { 0.f,0.f };
+	float textureID = 0;
 	// Constructors.
 	//VertexDataTextured() = default;
 	VertexDataTextured(glm::vec3* pos, glm::vec4* clr, glm::vec2* texCoords, float texID, unsigned int eID);
@@ -113,13 +105,14 @@ private:
 	static int dataSizeVDC;		// All of the color texture data.
 	static int idOffsetVDC;		// Offset to the entity ID.
 	static int idSizeVDC;		// Size of the entity ID.
+	float rawData[11] = { 0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f };
 
 public:
-	glm::vec2* localCoords = &data.textureCoords;			// Position
-	float* thickness = &data.textureID;
-	float* fade = &data.fade;
+	glm::vec2 localCoords={0.f, 0.f};
+	float thickness=0;
+	float fade=0;
 	// Constructors.
-	//VertexDataCircle() = default;
+	VertexDataCircle();
 	VertexDataCircle(glm::vec3& Position, glm::vec2& local, glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
 
 	virtual const void* dataGL() override;	// Return the raw data for OpenGL to use.
