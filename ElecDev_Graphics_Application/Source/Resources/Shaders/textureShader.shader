@@ -51,8 +51,6 @@ void main()
 	{
 		float distance = (1.0 - texture(f_textures[index], f_texCoord).a);
 		float alpha = (1.0 - smoothstep(width, width + edge, distance));
-		if (alpha < 0.25)
-			discard;
 		o_color = vec4(f_color[0], f_color[1], f_color[2], alpha);
 	}
 	else 
