@@ -30,9 +30,9 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 
 	if (typeid(VertexType)==typeid(VertexData))
 	{
-		int vertexSize = sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(VertexData::entityID);
-		int colOffset = sizeof(glm::vec3);
-		int idOffset = sizeof(glm::vec3) + sizeof(glm::vec4);
+		int vertexSize = sizeof(*VertexData::position) + sizeof(*VertexData::color) + sizeof(VertexData::entityID);
+		int colOffset = sizeof(*VertexData::position);
+		int idOffset = sizeof(*VertexData::position) + sizeof(*VertexData::color);
 		// Generate a VBO for the VAO.
 		GLCall(glGenBuffers(1, &m_VBOID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
@@ -53,8 +53,8 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 
 	else if (typeid(VertexType)==typeid(VertexDataTextured))
 	{
-		int vertexSize = sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec2) +
-						 sizeof(float) + sizeof(VertexDataTextured::entityID);
+		int vertexSize = sizeof(*VertexDataTextured::position) + sizeof(* VertexDataTextured::color) + sizeof(*VertexDataTextured::textureCoords) +
+						 sizeof(*VertexDataTextured::textureID) + sizeof(VertexDataTextured::entityID);
 		int offset = 0;
 		// Generate a VBO for the VAO.
 		GLCall(glGenBuffers(1, &m_VBOID));
@@ -62,19 +62,19 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 		// Bind Vertex position attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 0));
 		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(glm::vec3);
+		offset += sizeof(*VertexDataTextured::position);
 		// Bind Vertex color attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
 		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(glm::vec4);
+		offset += sizeof(*VertexDataTextured::color);
 		// Bind texture position attribute
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
 		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(glm::vec2);
+		offset += sizeof(*VertexDataTextured::textureCoords);
 		// Bind texture ID attribute
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
 		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(float);
+		offset += sizeof(*VertexDataTextured::textureID);
 		// Entity ID.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
 		GLCall(glVertexAttribIPointer(4, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
@@ -86,8 +86,8 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 
 	else if (typeid(VertexType)== typeid(VertexDataCircle))
 	{
-		int vertexSize = sizeof(VertexDataCircle::position) + sizeof(VertexDataCircle::color) + sizeof(VertexDataCircle::fade) +
-						 sizeof(VertexDataCircle::thickness) + sizeof(VertexDataCircle::entityID) + sizeof(VertexDataCircle::localCoords);
+		int vertexSize = sizeof(*VertexDataCircle::position) + sizeof(*VertexDataCircle::color) + sizeof(*VertexDataCircle::fade) +
+						 sizeof(*VertexDataCircle::thickness) + sizeof(VertexDataCircle::entityID) + sizeof(*VertexDataCircle::localCoords);
 		int offset = 0;
 		// Generate a VBO for the VAO.
 		GLCall(glGenBuffers(1, &m_VBOID));
@@ -95,23 +95,23 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 		// Bind Vertex position attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 0));
 		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::position);
+		offset += sizeof(*VertexDataCircle::position);
 		// Bind Vertex color attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
 		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::color);
+		offset += sizeof(*VertexDataCircle::color);
 		// Local coords attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
 		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::localCoords);
+		offset += sizeof(*VertexDataCircle::localCoords);
 		// Circle thickness attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
 		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::thickness);
+		offset += sizeof(*VertexDataCircle::thickness);
 		// Circle fade attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
 		GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::fade);
+		offset += sizeof(*VertexDataCircle::fade);
 		// Entity ID.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
 		GLCall(glVertexAttribIPointer(5, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
