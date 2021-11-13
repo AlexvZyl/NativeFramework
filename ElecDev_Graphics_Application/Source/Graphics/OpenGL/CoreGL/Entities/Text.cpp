@@ -15,8 +15,8 @@
 
 // Writes the text to the buffer based on the font loaded in the constructor.
 template<typename VertexType>
-Text<VertexType>::Text(std::string& text, glm::vec3& position, glm::vec4& color, float scale,
-	VertexArrayObject<VertexType>* vao, Font& font, std::string& align)
+Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
+				       VertexArrayObject<VertexType>* vao, Font& font, std::string align)
 {
 	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
 	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
@@ -26,6 +26,8 @@ Text<VertexType>::Text(std::string& text, glm::vec3& position, glm::vec4& color,
 	m_VAO = vao;
 	m_entityID = EntityManager::generateEID();
 	float advance = 0;
+	m_vertexCount = 0;
+	m_indexCount = 0;
 
 	//Correct allignment
 	// Calculate the length & height of the string.
@@ -114,13 +116,25 @@ Text<VertexType>::Text(std::string& text, glm::vec3& position, glm::vec4& color,
 			texCoords4,															// Texture coordinates.
 			1.0f,																// Slot 1 is reserved for the text font atlas.
 			m_entityID);														// The entity ID.  Fow now empty.
-		// Move the cursor right so that it can draw the next character.
-		/*m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 };
 		
-		advance += c.xAdvance;*/
+		// Create vertices.
+		m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 });
+		m_indices.insert(m_indices.end(), 
+			{
+				0 + m_vertexCount,
+				1 + m_vertexCount,
+				2 + m_vertexCount,
+				2 + m_vertexCount,
+				3 + m_vertexCount,
+				0 + m_vertexCount
+			});
+		m_vertexCount += 4;
+		m_indexCount += 6;
+		// Move the cursor right so that it can draw the next character.
+		advance += c.xAdvance;
 	}
 	// Write all of the vertices to the CPU side buffer.
-	//m_VAO->appendDataCPU(this);
+	m_VAO->appendDataCPU(this);
 }
 
 template<typename VertexType>

@@ -22,7 +22,8 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
-	if (designerState == COMPONENT_PLACE) {
+	if (designerState == COMPONENT_PLACE) 
+	{
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);

@@ -91,9 +91,6 @@ public:
 
 	//Deconstructor
 	~Component2D();
-
-	//Render the component
-	void render();
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(float pointerPos[2]);
 	//Place a component

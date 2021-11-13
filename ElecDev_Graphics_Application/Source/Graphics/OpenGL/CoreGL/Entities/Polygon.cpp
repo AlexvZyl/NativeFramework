@@ -23,31 +23,22 @@ Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayOb
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
 	m_entityID = EntityManager::generateEID();
-	
-	// Populate VertexData structures.
+
+	// Create the vertices.
+	for (glm::vec3 vertex : vertices)
+		m_vertices.push_back(VertexData(vertex, m_colour, m_entityID));
+
+	// Assign the indices based on the VAO type.
 	if (m_VAO->m_bufferType == GL_TRIANGLES) 
-{
-		// Create the polygon from the vertices.
-		for (glm::vec3 vertex : vertices) 
-			m_vertices.push_back(VertexData(vertex, m_colour, m_entityID));
+	{
 		m_indices = {0,1,2,2,3,0};
 		m_indexCount = 6;
 	}
 	else if (m_VAO->m_bufferType == GL_LINES) 
 	{
-		//// Add lines in a loop.
-		//for (int i = 0; i < n_vertices - 1; i++) 
-		//{
-		//	VertexData v1(&vertices->at(i), &m_colour, m_entityID);
-		//	VertexData v2(&vertices->at(i + 1), &m_colour, m_entityID);
-		//	m_vertices.insert(m_vertices.end(), { v1,v2 });
-		//}
-		//// Close loop.
-		//VertexData v1(&vertices->at(n_vertices-1), &m_colour, m_entityID);
-		//VertexData v2(&vertices->at(0), &m_colour, m_entityID);
-		//m_vertices.insert(m_vertices.end(), { v1,v2 });
+		m_indices = { 0,1,1,2,2,3,3,0 };
+		m_indexCount = 8;
 	}
-
 	// Pass to VAO.
 	m_VAO->appendDataCPU(this);
 	m_VAO->updateGPU();
