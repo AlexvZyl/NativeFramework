@@ -85,11 +85,15 @@ public:
 	std::unique_ptr<Shader> m_circleShader;						// Renders circles.
 
 	// Vertex arrays.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;						// Lines.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;					// Triangles.
-	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;	// Textured Triangles.
-	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;				// Normal circles.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;					// Background has a seperate VAO since it should not move.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;								// Lines.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;							// Triangles.
+	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;			// Textured Triangles.
+	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;						// Normal circles.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_lineEntitiesVAO;						// Drawing line entities.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_triangleEntitiesVAO;					// Drawing triangle entities.
+	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_triangleTexturedEntitiesVAO;	// Drawing textured triangle entities.
+	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circleEntitiesVAO;				// Drawing circle entities.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;							// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer Object.
 	std::unique_ptr<FrameBufferObject> m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
@@ -186,13 +190,6 @@ public:
 
 	virtual void drawQuadFilled3D(float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]);
 	virtual void drawCuboidFilled(float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]);
-
-	// ----------------- //
-	//  S E T T I N G S  //
-	// ----------------- //
-
-	int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
-									// demanding at high values and high circle count.  Has to be changed into a dynamic value.
 
 	// ------------------------------- //
 	//  E R R O R   F U N C T I O N S  //

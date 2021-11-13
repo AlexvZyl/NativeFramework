@@ -40,9 +40,9 @@ Vertex::Vertex() {
 
 // Constructor.
 
-VertexData::VertexData(glm::vec3* pos, glm::vec4* clr, unsigned int eID)
+VertexData::VertexData(glm::vec3& pos, glm::vec4& clr, unsigned int eID)
 {
-	*position = *pos; *color = *clr; entityID = eID;
+	*position = pos; *color = clr; entityID = eID;
 }
 
 VertexData::VertexData(float pos0, float pos1, float pos2,
@@ -77,9 +77,9 @@ int VertexData::getIDSize()	   { return idSizeVD;	 };
 
 // Constructors.
 
-VertexDataTextured::VertexDataTextured(glm::vec3* pos, glm::vec4* clr, glm::vec2* texCoords, float texID, unsigned int eID)
+VertexDataTextured::VertexDataTextured(glm::vec3& pos, glm::vec4& clr, glm::vec2& texCoords, float texID, unsigned int eID)
 {
-	*position = *pos; *color = *clr; entityID = eID; *textureCoords = *texCoords; *textureID = texID; entityID = eID;
+	*position = pos; *color = clr; entityID = eID; *textureCoords = texCoords; *textureID = texID; entityID = eID;
 }
 
 VertexDataTextured::VertexDataTextured(float pos0, float pos1, float pos2,
