@@ -110,8 +110,7 @@ void Component2D::setLayer(float layer)
 {
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
-	title->setLayer(layer + borderLayerOffset);
-	port1->setLayer(layer + borderLayerOffset);
+	//title->setLayer(layer + borderLayerOffset);
 	componentLayer = layer;
 }
 
