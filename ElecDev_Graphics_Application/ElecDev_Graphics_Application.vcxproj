@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -227,6 +227,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_InputHandler.cpp" />
+    <ClCompile Include="Source\GUI\Graphics\graphics.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
     <ClCompile Include="Source\GUI\GuiHandler.cpp" />
@@ -240,8 +241,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsHandler.cpp" />
     <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
-    <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
-    <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
+    <ClCompile Include="Source\GUI\MCC\mcc.cpp" />
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\PythonInterface.cpp" />
@@ -440,8 +440,8 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoader.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
-    <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
-    <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
+    <ClInclude Include="Source\GUI\Graphics\graphics.h" />
+    <ClInclude Include="Source\GUI\MCC\mcc.h" />
     <ClInclude Include="Source\PythonInterface.h" />
     <ClInclude Include="Source\Logging\logHandler.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />

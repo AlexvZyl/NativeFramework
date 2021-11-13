@@ -1,42 +1,42 @@
 #pragma once
 
 /*=======================================================================================================================================*/
-/* Includes                                                                                                                              */
+/* Includes.                                                                                                                             */
 /*=======================================================================================================================================*/
 
-#include <Core/imgui.h>
-#include "../GUIState.h"
+#include "GUI/GUIState.h"
+#include "ImGUI/Core/imgui.h"
 
 /*=======================================================================================================================================*/
-/* Forward Declerarions                                                                                                                  */
+/* Forward Declerations.                                                                                                                 */
 /*=======================================================================================================================================*/
 
 class GraphicsHandler;
-class PopUpMenu;
+class PyInterface;
 
 /*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-class GraphicsScene
+class Graphics
 {
 public:
 
 	//Variables
 	GUIState* m_guiState;
-	GraphicsHandler* graphicsHandler;
 	ImVec2 pos;
+	GraphicsHandler* graphicsHandler;
 	ImGuiID dock;
-	PopUpMenu* m_popUpMenu;
+	PyInterface* m_pyInterface;
 
 	//Constructor
-	GraphicsScene(GUIState* guiState, GraphicsHandler* graphicsHandler);
-	~GraphicsScene();
+	Graphics(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface);
 
 	//Renderer
 	void renderGraphics(ImGuiID dock);
+	void deQueueInput();
 };
 
 /*=======================================================================================================================================*/
-/* EOF.				                                                                                                                     */
+/* EOF.	                                                                                                                                 */
 /*=======================================================================================================================================*/

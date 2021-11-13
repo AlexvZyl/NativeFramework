@@ -40,8 +40,6 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Call base engine event.
 	Base2DEngineGL::mousePressRight(pixelCoords);
-	// Update current entity ID.
-	m_currentEntityID = getEntityID(pixelCoords);
 }
 
 //=============================================================================================================================================//

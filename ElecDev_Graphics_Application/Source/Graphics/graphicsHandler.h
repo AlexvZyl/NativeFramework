@@ -36,7 +36,7 @@ struct RenderWindowGL
 	// The rendering engine.
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
-	std::shared_ptr<EngineCoreGL> engineGL;
+	std::unique_ptr<EngineCoreGL> engineGL;
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
@@ -46,7 +46,6 @@ struct RenderWindowGL
 
 	// State machine information.
 	bool isHovered = false;
-	bool isFocused = false;
 	bool resizeEvent = true;
 	bool close = true;
 
@@ -56,17 +55,17 @@ struct RenderWindowGL
 	{
 		if (engineType == EngineType::Base2DEngineGL) 
 		{
-			engineGL = std::make_shared<Base2DEngineGL>(guiState);
+			engineGL = std::make_unique<Base2DEngineGL>(guiState);
 			engineType = EngineType::Base2DEngineGL;
 		}
 		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL = std::make_shared<Design2DEngineGL>(guiState);
+			engineGL = std::make_unique<Design2DEngineGL>(guiState);
 			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
-			engineGL = std::make_shared<Base3DEngineGL>(guiState);
+			engineGL = std::make_unique<Base3DEngineGL>(guiState);
 			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
@@ -92,10 +91,10 @@ public:
 	// ------------------- //
 
 	// Map that holds the windows and their names.
-	std::map<std::string, std::shared_ptr<RenderWindowGL>> m_windowsDictionary;
+	std::map<std::string, std::unique_ptr<RenderWindowGL>> m_windowsDictionary;
 
 	// Variable that holds the active window name.
-	std::shared_ptr<RenderWindowGL> m_activeWindow;
+	std::string m_activeWindow;
 
 	// State machine variable.
 	GUIState* m_guiState;
@@ -135,9 +134,7 @@ public:
 	// Resizes the engines.
 	void resizeEvent(int width, int height);
 	// Checks if the window name supplied is in the list.
-	bool isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow);
 	bool isWindowValid(std::string windowName);
-	bool isActiveWindowValid();
 
 	// ------------- //
 	//  2 D   A P I  //

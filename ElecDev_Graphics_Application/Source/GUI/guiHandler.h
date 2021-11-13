@@ -24,8 +24,9 @@ class PyInterface;
 // GUI components.
 class Ribbons;
 class Toolbar;
+class Graphics;
 class userGUI;
-class GraphicsScene;
+class MCC;
 
 /*=======================================================================================================================================*/
 /* Class.																																 */
@@ -47,8 +48,9 @@ public:
 
 	Toolbar* toolbar;
 	Ribbons* ribbons;
+	Graphics* graphics;
 	userGUI* userGUIP;
-	GraphicsScene* m_graphicsScene;
+	MCC* mcc;
 	ImGuiID dock;
 	ImGuiID dockSpaceID;
 

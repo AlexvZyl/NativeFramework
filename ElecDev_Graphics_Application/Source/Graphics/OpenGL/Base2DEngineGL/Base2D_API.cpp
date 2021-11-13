@@ -188,13 +188,12 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 			float ctPos3[2] = { 1.0f + i, -0.5f + k };
 			float ctColor[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 			drawTriangleClear(ctPos1, ctPos2, ctPos3, ctColor);
-			std::vector<VertexDataTextured> vertices = {
-				VertexDataTextured(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f, 0),
-				VertexDataTextured(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f, 0),
-				VertexDataTextured(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0),
-				VertexDataTextured(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0)
-			};;
-			m_texturedTrianglesVAO->appendDataCPU(vertices, {0,1,2,2,3,0});
+			VertexDataTextured v1(1.25f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 2.0f, 0);
+			VertexDataTextured v2(1.25f + i, 0.75f + k, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 2.0f, 0);
+			VertexDataTextured v3(0.75f + i, 0.75f + k, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f, 0);
+			VertexDataTextured v4(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0);
+			std::vector<VertexDataTextured> vertices = {v1,v2,v3,v3,v4,v1};
+			m_texturedTrianglesVAO->appendDataCPU(&vertices);
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };

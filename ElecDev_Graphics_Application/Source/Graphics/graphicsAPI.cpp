@@ -26,6 +26,11 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	{
 		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "Name '" << windowName << "' already used.\n";
 	}
+	// Prevent 'NULL' being used as a  name.
+	else if (windowName == "NULL")
+	{
+		std::cout << red << "\n[INTERFACE] [ERROR] : " << white << "'NULL' is not a valid name. It is reserved for the inactive state.\n";
+	}
 	else
 	{
 		// Remove leading white spaces.
@@ -44,31 +49,31 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL) });
+			m_windowsDictionary.insert({ windowName, std::make_unique<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
-			// Set active window.
-			m_activeWindow = m_windowsDictionary[windowName];
 		}
 		else if (engineType == "Design2D" || engineType == "design2D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL) });
+			m_windowsDictionary.insert({ windowName, std::make_unique<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
-			// Set active window.
-			m_activeWindow = m_windowsDictionary[windowName];
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
+			// Set window active.
+			m_activeWindow = windowName;
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL) });
+			m_windowsDictionary.insert({ windowName, std::make_unique<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL) });
 			m_windowsDictionary[windowName]->windowName = windowName;
-			// Set active window.
-			m_activeWindow = m_windowsDictionary[windowName];
 		}
 		// Catch error.
 		else 
@@ -89,7 +94,7 @@ void GraphicsHandler::removeWindow(std::string windowName)
 		// Set window inactive.
 		if (m_windowsDictionary.size() != 0)
 		{
-			m_activeWindow = NULL;
+			m_activeWindow = "NULL";
 		}
 	}
 	else { windowError(windowName); }
