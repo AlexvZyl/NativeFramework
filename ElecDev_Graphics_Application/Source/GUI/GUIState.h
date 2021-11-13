@@ -13,9 +13,7 @@
 struct GUIState
 {
 	// Default constructor.
-	GUIState() 
-	{
-	}
+	GUIState() {}
 
 	// Window States.
 	bool toolsExpanded = false;
@@ -26,9 +24,15 @@ struct GUIState
 	bool startDemoWindow = false;
 	bool showGraphicsWindow = true;
 
+	// Circuit designer states.
+
+	// Popup menu.
+	ImVec2 popUpPosition = { 0.f, 0.f };
+	bool popUpMenu = false;
+
 	// Action states.
-	bool renderWindowHovered=false;
-	bool renderResizeEvent=true;
+	bool renderWindowHovered = false;
+	bool renderResizeEvent = true;
 	bool globalQuit = false;
 	bool userWindowHovered = false;
 

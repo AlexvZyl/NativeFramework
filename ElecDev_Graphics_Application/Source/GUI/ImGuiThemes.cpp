@@ -14,10 +14,6 @@ void GUIHandler::setTheme()
 	ImGui::StyleColorsDark();
 	//ImGui::StyleColorsLight();
 
-	ImGui::GetStyle().FrameRounding = 4.0f;
-	ImGui::GetStyle().GrabRounding = 4.0f;
-	ImGui::GetStyle().ChildRounding = 4.0f;
-	
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.FrameRounding = 5.0f;
 	style.WindowRounding = 5.0f;
@@ -28,10 +24,14 @@ void GUIHandler::setTheme()
 	style.ScrollbarRounding = 9.0f;
 	style.GrabMinSize = 5.0f;
 	style.GrabRounding = 3.0f;
+	style.ChildRounding = 4.0f;
+	style.TabRounding = 4.0f;
+	style.PopupRounding = 5.0f;
+	style.WindowPadding = ImVec2(1.f, 1.f);
 
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
-	colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+	colors[ImGuiCol_TextDisabled] = ImVec4(0.0f, 0.808f, 0.824f, 0.9f);
 	colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.48f);
 
 	colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
@@ -46,8 +46,8 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 
 	colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-	//colors[ImGuiCol_TitleBgActive] = ImVec4(0.0f, 0.110f, 0.114f, 1.0f);
+	//colors[ImGuiCol_TitleBgActive] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	colors[ImGuiCol_TitleBgActive] = ImVec4(0.0f, 0.150f, 0.154f, 0.5f);
 	colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
 
 	colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.57f, 0.58f, 0.86f);
@@ -73,7 +73,7 @@ void GUIHandler::setTheme()
 	colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 
 	colors[ImGuiCol_Header] = ImVec4(0.20f, 0.68f, 0.42f, 0.58f);
-	colors[ImGuiCol_HeaderHovered] = ImVec4(0.20f, 0.68f, 0.42f, 0.83f);
+	colors[ImGuiCol_HeaderHovered] = ImVec4(0.0f, 0.150f, 0.154f, 1.0f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 
 	colors[ImGuiCol_Separator] = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -110,8 +110,8 @@ void GUIHandler::setTheme()
 	//  L O A D I N G   F O N T  //
 	// ------------------------- //
 
-	
-	
+
+
 	/*===================================================================================================================================*/
 	/* Theme 1.			 																												 */
 	/*===================================================================================================================================*/
