@@ -237,7 +237,7 @@ int main(int, char**)
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = std::make_unique<GraphicsHandler>(&guiState);
+    graphicsHandler = std::make_unique<GraphicsHandler>(&guiState, window);
 
     // Create a python interfacing object.
     PyInterface pyInterface(graphicsHandler.get(), guiHandler.get(), &guiState);
@@ -288,6 +288,9 @@ int main(int, char**)
         // Render screen with fps cap.
         if (totalFrameTime > targetFrameTime) 
         {
+            // Reset frametime.
+            totalFrameTime = 0;
+
             // Clear buffers for OpenGL.
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
@@ -296,10 +299,12 @@ int main(int, char**)
 
             // Render ImGUI to screen.
             guiHandler->renderGui(io, window);
-
+            
             // Swap the OpenGL buffers.
             glfwSwapBuffers(window);
-            totalFrameTime = 0;
+
+            // Force push OpenGL commands to the GPU.
+            GLCall(glFinish());
         }
     }
 

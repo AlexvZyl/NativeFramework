@@ -16,7 +16,6 @@ This is where the drawing enigine mouse events are handled.
 //  Press event.																															   //
 //=============================================================================================================================================//
 
-// Event handler for a mouse left click.
 void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 {
 	// Call base engine event.
@@ -36,7 +35,6 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	}
 }
 
-// Event handler for a mouse right click.
 void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Call base engine event.
@@ -45,11 +43,16 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	m_currentEntityID = getEntityID(pixelCoords);
 }
 
+void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
+{
+	// Call base engine event.
+	Base2DEngineGL::mousePressMiddle(pixelCoords);
+}
+
 //=============================================================================================================================================//
 //  Move event.																																   //
 //=============================================================================================================================================//
 
-// Event handler for a mouse move event.
 void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
 	if (designerState == COMPONENT_PLACE) {
@@ -133,7 +136,6 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			break;
 		}
 	}
-
 }
 
 //=============================================================================================================================================//

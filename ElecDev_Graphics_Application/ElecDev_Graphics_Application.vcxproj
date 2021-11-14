@@ -230,6 +230,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
     <ClCompile Include="Source\GUI\GuiHandler.cpp" />
@@ -441,6 +442,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
+    <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
     <ClInclude Include="Source\PythonInterface.h" />

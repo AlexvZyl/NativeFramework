@@ -15,7 +15,8 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //=============================================================================================================================================//
 
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(GUIState* guiState) : m_guiState(guiState) {};
+GraphicsHandler::GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow) : 
+	m_guiState(guiState), m_glfwWindow(glfwWindow) {};
 
 // Destructor.
 GraphicsHandler::~GraphicsHandler(){};
@@ -34,9 +35,9 @@ void GraphicsHandler::renderLoop()
 	// Resize event.
 	if (m_guiState->renderResizeEvent) { resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]); }
 	// Mouse events.
-	if (inputEvent.mouseMoveEvent)	   { mouseMoveEvent(); inputEvent.mouseMoveEvent = false; }
 	if (inputEvent.mousePressEvent)    { mousePressEvent(); inputEvent.mousePressEvent = false; }
 	if (inputEvent.mouseScrollEvent)   { mouseScrollEvent(); inputEvent.mouseScrollEvent = false; }
+	if (inputEvent.mouseMoveEvent)	   { mouseMoveEvent(); inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (inputEvent.keyEvent)		   { keyEvent(); inputEvent.keyEvent = false; }
 	
@@ -84,7 +85,7 @@ void GraphicsHandler::mousePressEvent()
 			if (isWindowValid(m_activeWindow)) 
 			{
 				m_guiState->popUpMenu = true;
-				m_guiState->popUpPosition = { mousePos[0], mousePos[1] };
+				m_guiState->popUpPosition = {m_guiState->imguiGlobalMouseCoords};
 			}
 		}
 
@@ -94,8 +95,6 @@ void GraphicsHandler::mousePressEvent()
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressMiddle(mousePos);
-			// Close popup.
-			m_guiState->popUpMenu = false;
 		}
 	}
 }
@@ -135,12 +134,10 @@ void GraphicsHandler::keyEvent()
 	{
 		m_activeWindow->engineGL->keyEvent(inputEvent.key, inputEvent.keyAction);
 	}
-	// Close popup.
-	m_guiState->popUpMenu = false;
 }
 
 //=============================================================================================================================================//
-//  Window.                                                                   																														     //
+//  Window.                                                                   																   //
 //=============================================================================================================================================//
 
 bool GraphicsHandler::isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow)

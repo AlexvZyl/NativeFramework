@@ -20,6 +20,12 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
 
 //=============================================================================================================================================//
+//  Forward declerations.			    											                                                           //
+//=============================================================================================================================================//
+
+struct GLFWwindow;
+
+//=============================================================================================================================================//
 //  Render Window data.																														                                                             //
 //=============================================================================================================================================//
 
@@ -128,13 +134,15 @@ public:
 	GUIState* m_guiState;
 	// Stores the information on input events.
 	InputEvent inputEvent;
+	// The window.
+	GLFWwindow* m_glfwWindow;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
 	// Constructor with GLFW window.
-	GraphicsHandler(GUIState* guiState);
+	GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow);
 	// Destructor.
 	~GraphicsHandler();
 
