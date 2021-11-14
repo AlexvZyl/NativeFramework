@@ -26,6 +26,8 @@ class Ribbons;
 class Toolbar;
 class userGUI;
 class GraphicsScene;
+class ComponentEditor;
+class PopUpMenu;
 
 /*=======================================================================================================================================*/
 /* Class.																																 */
@@ -40,6 +42,8 @@ public:
 	// ------------------ //
 
 	GUIState* m_guiState;
+	ComponentEditor* m_componentEditor;
+	PopUpMenu* m_popUpMenu;
 
 	GraphicsHandler* graphicsHandler;
 

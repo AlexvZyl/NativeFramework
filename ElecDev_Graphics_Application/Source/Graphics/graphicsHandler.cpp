@@ -34,9 +34,9 @@ void GraphicsHandler::renderLoop()
 	// Resize event.
 	if (m_guiState->renderResizeEvent) { resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]); }
 	// Mouse events.
-	if (inputEvent.mouseMoveEvent)	   { mouseMoveEvent(); inputEvent.mouseMoveEvent = false; }
 	if (inputEvent.mousePressEvent)    { mousePressEvent(); inputEvent.mousePressEvent = false; }
 	if (inputEvent.mouseScrollEvent)   { mouseScrollEvent(); inputEvent.mouseScrollEvent = false; }
+	if (inputEvent.mouseMoveEvent)	   { mouseMoveEvent(); inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (inputEvent.keyEvent)		   { keyEvent(); inputEvent.keyEvent = false; }
 	
@@ -94,8 +94,6 @@ void GraphicsHandler::mousePressEvent()
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressMiddle(mousePos);
-			// Close popup.
-			m_guiState->popUpMenu = false;
 		}
 	}
 }
@@ -135,12 +133,10 @@ void GraphicsHandler::keyEvent()
 	{
 		m_activeWindow->engineGL->keyEvent(inputEvent.key, inputEvent.keyAction);
 	}
-	// Close popup.
-	m_guiState->popUpMenu = false;
 }
 
 //=============================================================================================================================================//
-//  Window			.																														   //
+//  Window.																																	   //
 //=============================================================================================================================================//
 
 bool GraphicsHandler::isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow)

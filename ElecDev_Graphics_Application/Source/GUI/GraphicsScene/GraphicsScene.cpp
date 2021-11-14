@@ -13,6 +13,9 @@
 #include <Core/imgui_internal.h>
 #include "../PopUpMenu/PopUpMenu.h"
 
+#include "../GUIState.h"
+
+
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
@@ -21,16 +24,12 @@
 GraphicsScene::GraphicsScene(GUIState* guiState, GraphicsHandler* graphicsHandler)
 	: m_guiState(guiState), graphicsHandler(graphicsHandler)
 {
-	m_popUpMenu = new PopUpMenu(guiState);
 	this->pos.x = 0;
 	this->pos.y = 0;
 	this->dock = 0;
 }
 
-GraphicsScene::~GraphicsScene()
-{
-	delete m_popUpMenu;
-}
+GraphicsScene::~GraphicsScene(){}
 
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
@@ -102,9 +101,6 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 					ImVec2 wsize = ImGui::GetWindowSize();
 					// Because I use the texture from OpenGL, I need to invert the V from the UV.
 					ImGui::Image((ImTextureID)window->engineGL->getRenderTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
-
-					// Popup Menu.
-					if (m_guiState->popUpMenu) { m_popUpMenu->render(); }
 
 					// End.
 					ImGui::EndChild();

@@ -14,12 +14,13 @@
 #include "UserGUI/userGUI.h"
 #include "GuiHandler.h"
 #include "Graphics/OpenGL/CoreGL/ErrorHandlerGL.h"
+#include "ComponentEditor/ComponentEditor.h"
+#include "PopUpMenu/PopUpMenu.h"
 
 /*=======================================================================================================================================*/
 /* Constructor & Destructor.																											 */
 /*=======================================================================================================================================*/
 
-// Constructor.
 GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
 	:m_guiState(guiState), m_pyInterface(pyInterface)
 {
@@ -28,22 +29,23 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 
 	m_guiState->toolsExpanded = false;
 	this->textureID = 0;
-
 	this->graphicsHandler = graphicsHandler;
-
 	this->toolbar = new Toolbar(m_guiState);
 	this->ribbons = new Ribbons(m_guiState);
 	this->userGUIP = new userGUI(m_guiState, this->graphicsHandler, m_pyInterface);
+	m_popUpMenu = new PopUpMenu(guiState);
 	m_graphicsScene = new GraphicsScene(m_guiState, graphicsHandler);
+	m_componentEditor = new ComponentEditor(m_guiState, graphicsHandler);
 };
 
-// Destructor.
 GUIHandler::~GUIHandler()
 {
 	delete toolbar;
 	delete ribbons;
 	delete userGUIP;
 	delete m_graphicsScene;
+	delete m_popUpMenu;
+	delete m_componentEditor;
 }
 
 /*=======================================================================================================================================*/
@@ -53,6 +55,10 @@ GUIHandler::~GUIHandler()
 // [MAIN LOOP] Render the GUI to the screen.
 void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 {
+	// ----------- //
+	//  S E T U P  //
+	// ----------- //
+
 	// Assign values to viewport for ImGUI.
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -63,7 +69,7 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	//Begion Docking Space
+	// Begin Docking Space.
 	ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -86,14 +92,24 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	createDock(work_size);
 	// End Docking space
 
+	// ----------------------------- //
+	//  G U I   C O M P O N E N T S  //
+	// ----------------------------- //
+
+	// Render GUI components.
 	this->toolbar->renderToolbar();
 	this->ribbons->renderRibbons(&this->dock);
 	this->userGUIP->renderUI(&this->dock);
 
-	if (m_guiState->showGraphicsWindow)
-	{
-		m_graphicsScene->renderGraphics(this->dock);
-	}
+	// Render OpenGL contexts.
+	if (m_guiState->showGraphicsWindow) { m_graphicsScene->renderGraphics(this->dock); }
+	// Render OpenGL context helper GUI's.
+	if (m_guiState->popUpMenu)		    { m_popUpMenu->render(); }
+	if (m_guiState->componentEditor)    { m_componentEditor->render(); }
+
+	// -------------------------------- //
+	//   I M G U I   R E N D E R I N G  //
+	// -------------------------------- //
 
 	ImGui::End();
 	ImGui::PopStyleVar();
@@ -101,7 +117,7 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	//Render ImGUI into screen.
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+	
 	// Update and Render additional Platform Windows
 	// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
 	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)

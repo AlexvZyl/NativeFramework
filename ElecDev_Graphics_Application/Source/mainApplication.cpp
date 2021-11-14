@@ -288,6 +288,9 @@ int main(int, char**)
         // Render screen with fps cap.
         if (totalFrameTime > targetFrameTime) 
         {
+            // Reset frametime.
+            totalFrameTime = 0;
+
             // Clear buffers for OpenGL.
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
@@ -296,10 +299,12 @@ int main(int, char**)
 
             // Render ImGUI to screen.
             guiHandler->renderGui(io, window);
-
+            
             // Swap the OpenGL buffers.
             glfwSwapBuffers(window);
-            totalFrameTime = 0;
+
+            // Force push OpenGL commands to the GPU.
+            GLCall(glFinish());
         }
     }
 
