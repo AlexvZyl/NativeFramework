@@ -59,6 +59,9 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	//  S E T U P  //
 	// ----------- //
 
+	// Update mouse position.
+	m_guiState->imguiGlobalMouseCoords = ImGui::GetMousePos();
+
 	// Assign values to viewport for ImGUI.
 	int display_w, display_h;
 	glfwGetFramebufferSize(window, &display_w, &display_h);

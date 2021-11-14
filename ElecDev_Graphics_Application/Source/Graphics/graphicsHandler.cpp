@@ -85,7 +85,7 @@ void GraphicsHandler::mousePressEvent()
 			if (isWindowValid(m_activeWindow)) 
 			{
 				m_guiState->popUpMenu = true;
-				m_guiState->popUpPosition = {m_guiState->renderWindowMouseCoordinate};
+				m_guiState->popUpPosition = {m_guiState->imguiGlobalMouseCoords};
 			}
 		}
 

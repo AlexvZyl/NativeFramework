@@ -21,7 +21,7 @@ PopUpMenu::PopUpMenu(GUIState* guiState)
 void PopUpMenu::render()
 {
     // Place at mouse position.
-    ImGui::SetNextWindowPos(m_guiState->popUpPosition, ImGuiCond_Once);
+    ImGui::SetNextWindowPos(m_guiState->popUpPosition);
 
     // Popup menu.
     if (ImGui::Begin("PopUpMenu", &m_guiState->popUpMenu, ImGuiWindowFlags_NoDecoration |
@@ -38,7 +38,6 @@ void PopUpMenu::render()
             m_guiState->componentEditor = true;
         }
         if (ImGui::MenuItem("Add port", "P", false, false)) { /* Do stuff */ }
-        ImGui::Separator();
         if (ImGui::MenuItem("Remove component", "R")) { /* Do stuff */ }
         ImGui::End();
     }
