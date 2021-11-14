@@ -80,17 +80,13 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	ImGui::SetNextWindowPos(ImVec2(work_pos.x, work_pos.y));
 	ImGui::SetNextWindowSize(ImVec2(work_size.x, work_size.y));
 	ImGui::SetNextWindowViewport(viewport->ID);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
 	bool p_open = true;
 
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
-	ImGui::PopStyleVar(2);
 
-	createDock(work_size);
 	// End Docking space
+	createDock(work_size);
 
 	// ----------------------------- //
 	//  G U I   C O M P O N E N T S  //
@@ -112,7 +108,6 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	// -------------------------------- //
 
 	ImGui::End();
-	ImGui::PopStyleVar();
 
 	//Render ImGUI into screen.
 	ImGui::Render();

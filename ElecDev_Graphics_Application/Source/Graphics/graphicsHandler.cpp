@@ -15,7 +15,8 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //=============================================================================================================================================//
 
 // With GLFW window.
-GraphicsHandler::GraphicsHandler(GUIState* guiState) : m_guiState(guiState) {};
+GraphicsHandler::GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow) : 
+	m_guiState(guiState), m_glfwWindow(glfwWindow) {};
 
 // Destructor.
 GraphicsHandler::~GraphicsHandler(){};
@@ -84,7 +85,7 @@ void GraphicsHandler::mousePressEvent()
 			if (isWindowValid(m_activeWindow)) 
 			{
 				m_guiState->popUpMenu = true;
-				m_guiState->popUpPosition = { mousePos[0], mousePos[1] };
+				m_guiState->popUpPosition = {m_guiState->renderWindowMouseCoordinate};
 			}
 		}
 

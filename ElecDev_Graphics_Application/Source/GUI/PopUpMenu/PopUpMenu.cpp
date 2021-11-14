@@ -21,14 +21,12 @@ PopUpMenu::PopUpMenu(GUIState* guiState)
 void PopUpMenu::render()
 {
     // Place at mouse position.
-    ImVec2 parentPos = ImGui::GetWindowPos();
-    ImGui::SetNextWindowPos(ImVec2(m_guiState->popUpPosition.x + parentPos.x,
-                                   m_guiState->popUpPosition.y + parentPos.y));
+    ImGui::SetNextWindowPos(m_guiState->popUpPosition, ImGuiCond_Once);
 
     // Popup menu.
     if (ImGui::Begin("PopUpMenu", &m_guiState->popUpMenu, ImGuiWindowFlags_NoDecoration |
-        ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoDocking)) 
+                                                          ImGuiWindowFlags_NoMove |
+                                                          ImGuiWindowFlags_NoDocking))
     {
         // Close if not focused/
         m_guiState->popUpMenu = ImGui::IsWindowFocused();

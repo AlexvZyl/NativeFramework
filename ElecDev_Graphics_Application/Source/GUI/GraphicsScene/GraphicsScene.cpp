@@ -41,6 +41,12 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 	bool open = true;
 	if (graphicsHandler->m_windowsDictionary.size() != 0) {
 		std::vector<std::string> toRemove;
+
+		// ----------------------------- //
+		//  R E N D E R   W I N D O W S  //
+		// ----------------------------- //
+
+		// Iterate through all of the render windows.
 		for (auto const& [name, window] : graphicsHandler->m_windowsDictionary)
 		{
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
@@ -56,10 +62,8 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 					window->isHovered = ImGui::IsWindowHovered();
 					window->isFocused = ImGui::IsWindowFocused();
 					ImVec2 temp = ImGui::GetIO().MousePos;
-					temp.x -= ImGui::GetWindowPos().x;
-					temp.y -= ImGui::GetWindowPos().y;
-					window->mouseCoords[0] = temp[0];
-					window->mouseCoords[1] = temp[1];
+					window->mouseCoords[0] = temp.x - ImGui::GetWindowPos().x;
+					window->mouseCoords[1] = temp.y - ImGui::GetWindowPos().y;
 					if (ImGui::GetWindowSize().x != window->viewportDimentions[0] || ImGui::GetWindowSize().y != window->viewportDimentions[1])
 					{
 						window->resizeEvent = true;
@@ -67,12 +71,15 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 						window->viewportDimentions[0] = temp[0];
 						window->viewportDimentions[1] = temp[1];
 					}
+
+					// ----------- //
+					//  F O C U S  //
+					// ----------- //
+
 					// Set the active engineGL.
 					if (window->isFocused)
-					{
-						graphicsHandler->m_activeWindow = graphicsHandler->m_windowsDictionary[name];
-					}
-					// Reset mouse coordinates.
+					{ graphicsHandler->m_activeWindow = graphicsHandler->m_windowsDictionary[name]; }
+					// If the window is not focused.
 					else
 					{
 						// If the active engineGL is the current engineGL, disable.
@@ -89,6 +96,7 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 						window->engineGL->m_prevMouseEventPixelCoords[0] = NULL;
 						window->engineGL->m_prevMouseEventPixelCoords[1] = NULL;
 					}
+
 					if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
 						m_guiState->renderResizeEvent = true;
 						ImVec2 temp = ImGui::GetWindowSize();
@@ -107,14 +115,12 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 				}
 				ImGui::End();
 			}
-			else {
-				toRemove.push_back(name.c_str());
-			}
+			// Add window to remove.
+			else 
+			{ toRemove.push_back(name.c_str()); }
 		}
-		for (auto remove : toRemove)
-		{
-			graphicsHandler->removeWindow(remove);
-		}
+		// Remove windows that have been closed.
+		for (auto remove : toRemove) { graphicsHandler->removeWindow(remove); }
 	}
 }
 

@@ -15,11 +15,11 @@ ComponentEditor::ComponentEditor(GUIState* guiState, GraphicsHandler* graphicsHa
 
 void ComponentEditor::render() 
 {
-	ImVec2 parentPos = ImGui::GetWindowPos();
-	ImGui::SetNextWindowPos(ImVec2(m_guiState->popUpPosition.x + parentPos.x,
-	m_guiState->popUpPosition.y + parentPos.y));
+	// Place editor at correct position.
+	ImGui::SetNextWindowPos(m_guiState->popUpPosition);
 	// Editor menu.
-	ImGui::Begin("Comoponent Editor");
+	ImGui::Begin("Comoponent Editor", &m_guiState->componentEditor, ImGuiWindowFlags_NoDocking 
+																	);
 	ImGui::End();
 }
 
