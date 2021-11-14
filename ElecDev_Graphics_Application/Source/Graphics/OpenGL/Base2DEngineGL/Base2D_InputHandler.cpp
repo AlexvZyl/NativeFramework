@@ -29,9 +29,9 @@ void Base2DEngineGL::mousePressLeft(float pixelCoords[2])
 void Base2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Reset the view values to the base matrices.
-	m_scalingMatrix = m_scalingMatrixBase;
+	/*m_scalingMatrix = m_scalingMatrixBase;
 	m_translationMatrix = m_translationMatrixBase;
-	m_rotationMatrix = m_rotationMatrixBase;
+	m_rotationMatrix = m_rotationMatrixBase;*/
 }
 
 void Base2DEngineGL::mousePressMiddle(float pixelCoords[2])
@@ -58,7 +58,7 @@ void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 	{
 
 	}
-	else if (buttonStateMiddle == GLFW_PRESS) 
+	else if (buttonStateMiddle == GLFW_PRESS)
 	{
 		// Find current mouse position in the world.
 		glm::vec3 currMousePosVec = pixelCoordsToCameraCoords(pixelCoords);
@@ -76,9 +76,9 @@ void Base2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, i
 //  Mouse Scroll.																															   //
 //=============================================================================================================================================//
 
-void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset) 
-{	
-	
+void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
+{
+
 	// Calculate zoom value based on mouse wheel scroll.
 	//----------------------------------------------------------
 	// Define the scaling value.
@@ -111,7 +111,7 @@ void Base2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 //  Key press.																																   //
 //=============================================================================================================================================//
 
-void Base2DEngineGL::keyEvent(int key, int action) 
+void Base2DEngineGL::keyEvent(int key, int action)
 {
 
 }

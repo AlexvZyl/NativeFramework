@@ -29,6 +29,9 @@ public:
 	// ------------ //
 
 	using Entity<VertexType>::m_vertices;		
+	using Entity<VertexType>::m_indices;
+	using Entity<VertexType>::m_vertexCount;
+	using Entity<VertexType>::m_indexCount;
 	using Entity<VertexType>::m_VAO;		
 	using Entity<VertexType>::m_bufferStartIndex;			
 	using Entity<VertexType>::m_trackedCenter;
@@ -39,11 +42,9 @@ public:
 	// P O L Y G O N   2 D  //
 	// -------------------- //
 	
-	// Number of vertices.
-	unsigned n_vertices=0;
 	// Constructors.
 	Polygon2D();
-	Polygon2D(std::vector<glm::vec3>* vertices, VertexArrayObject<VertexType>* VAO);
+	Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayObject<VertexType>* VAO);
 	// Deconstructor
 	~Polygon2D();
 };

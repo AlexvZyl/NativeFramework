@@ -32,6 +32,9 @@ public:
 	// ------------ //
 
 	using Entity<VertexType>::m_vertices;
+	using Entity<VertexType>::m_indices;
+	using Entity<VertexType>::m_vertexCount;
+	using Entity<VertexType>::m_indexCount;
 	using Entity<VertexType>::m_VAO;
 	using Entity<VertexType>::m_bufferStartIndex;
 	using Entity<VertexType>::m_trackedCenter;
@@ -43,8 +46,8 @@ public:
 	// --------- //
 
 	// Constructor.
-	Text(std::string text, glm::vec3* position, glm::vec4* color, float scale, 
-		 VertexArrayObject<VertexType>* vao, Font* font, std::string align = "C");
+	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
+		 VertexArrayObject<VertexType>* vao, Font& font, std::string align = "C");
 	// Destructor.
 	~Text();
 };

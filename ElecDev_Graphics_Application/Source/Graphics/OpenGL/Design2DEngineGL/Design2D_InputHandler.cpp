@@ -22,16 +22,17 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
-	if (designerState == COMPONENT_PLACE) {
+	if (designerState == COMPONENT_PLACE)
+	{
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
 		m_components.insert(m_components.end(), m_activeComponent);
-		m_activeComponent = std::make_shared<Component2D>(pixelCoords, 
-														  m_trianglesVAO.get(),			
-														  m_linesVAO.get(), 
-														  m_texturedTrianglesVAO.get(),
-														  m_circlesVAO.get());
+		m_activeComponent = std::make_shared<Component2D>(pixelCoords,
+			m_triangleEntitiesVAO.get(),
+			m_lineEntitiesVAO.get(),
+			m_triangleTexturedEntitiesVAO.get(),
+			m_circleEntitiesVAO.get());
 	}
 }
 
@@ -40,6 +41,8 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 {
 	// Call base engine event.
 	Base2DEngineGL::mousePressRight(pixelCoords);
+	// Update current entity ID.
+	m_currentEntityID = getEntityID(pixelCoords);
 }
 
 //=============================================================================================================================================//
@@ -80,7 +83,7 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 //  Key press.																																   //
 //=============================================================================================================================================//
 
-void Design2DEngineGL::keyEvent(int key, int action) 
+void Design2DEngineGL::keyEvent(int key, int action)
 {
 	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
 	glm::vec3 v2(0.5f, 0.5f, 0.0f);
@@ -92,16 +95,16 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	glm::vec3 v7(0.5f + 1, -0.5f + 1, 0.0f);
 	glm::vec3 v8(-0.5f + 1, -0.5f + 1, 0.0f);
 	std::vector<glm::vec3> vertices2 = { v5, v6, v7, v8 };
-	glm::vec3 v9(-0.5f-1, 0.5f-1, 0.0f);
-	glm::vec3 v10(0.5f-1, 0.5f-1, 0.0f);
-	glm::vec3 v11(0.5f-1, -0.5f-1, 0.0f);
-	glm::vec3 v12(-0.5f-1, -0.5f-1, 0.0f);
+	glm::vec3 v9(-0.5f - 1, 0.5f - 1, 0.0f);
+	glm::vec3 v10(0.5f - 1, 0.5f - 1, 0.0f);
+	glm::vec3 v11(0.5f - 1, -0.5f - 1, 0.0f);
+	glm::vec3 v12(-0.5f - 1, -0.5f - 1, 0.0f);
 	std::vector<glm::vec3> vertices3 = { v9, v10, v11, v12 };
 
 	// Add components.
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(&vertices3, m_trianglesVAO.get()); }
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(&vertices1, m_trianglesVAO.get()); }
-	if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(&vertices2, m_trianglesVAO.get()); }
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(vertices3, m_triangleEntitiesVAO.get()); }
+	if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(vertices1, m_triangleEntitiesVAO.get()); }
+	if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(vertices2, m_triangleEntitiesVAO.get()); }
 
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
@@ -116,7 +119,11 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		case GLFW_KEY_P:
 			designerState = COMPONENT_PLACE;
 			//add a dummy component
-			m_activeComponent = std::make_shared<Component2D>(screenCoords, m_trianglesVAO.get(), m_linesVAO.get(), m_texturedTrianglesVAO.get(), m_circlesVAO.get());
+			m_activeComponent = std::make_shared<Component2D>(screenCoords,
+				m_triangleEntitiesVAO.get(),
+				m_lineEntitiesVAO.get(),
+				m_triangleTexturedEntitiesVAO.get(),
+				m_circleEntitiesVAO.get());
 			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
