@@ -6,7 +6,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 */
 
 //=============================================================================================================================================//
-//  Includes.																																   //
+//  Includes.																																                                                                   //
 //=============================================================================================================================================//
 
 //  General.
@@ -20,7 +20,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
 
 //=============================================================================================================================================//
-//  Render Window data.																														   //
+//  Render Window data.																														                                                             //
 //=============================================================================================================================================//
 
 // Type that holds the different engines available.
@@ -36,7 +36,7 @@ struct RenderWindowGL
 	// The rendering engine.
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
-	std::unique_ptr<EngineCoreGL> engineGL;
+	std::shared_ptr<EngineCoreGL> engineGL;
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
@@ -56,17 +56,17 @@ struct RenderWindowGL
 	{
 		if (engineType == EngineType::Base2DEngineGL)
 		{
-			engineGL = std::make_unique<Base2DEngineGL>(guiState);
+			engineGL = std::make_shared<Base2DEngineGL>(guiState);
 			engineType = EngineType::Base2DEngineGL;
 		}
 		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL = std::make_unique<Design2DEngineGL>(guiState);
+			engineGL = std::make_shared<Design2DEngineGL>(guiState);
 			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
-			engineGL = std::make_unique<Base3DEngineGL>(guiState);
+			engineGL = std::make_shared<Base3DEngineGL>(guiState);
 			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
@@ -78,7 +78,7 @@ struct RenderWindowGL
 };
 
 //=============================================================================================================================================//
-//  Input event data.																														   //
+//  Input event data.																														                                                               //
 //=============================================================================================================================================//
 
 // This struct is used to store the information on input events so that it can be handled on a
@@ -109,7 +109,7 @@ struct InputEvent
 };
 
 //=============================================================================================================================================//
-//  Graphis Handler.																														   //
+//  Graphis Handler.																														                                                               //
 //=============================================================================================================================================//
 
 class GraphicsHandler
@@ -167,7 +167,7 @@ public:
 	bool isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow);
 	// Checks if the window name supplied is in the list.
 	bool isWindowValid(std::string windowName);
-	// Checks if the window name supplied is in the list.
+
 	bool isActiveWindowValid();
 
 	// ------------- //
@@ -215,5 +215,5 @@ public:
 };
 
 //=============================================================================================================================================//
-//  EOF.																																	   //
+//  EOF.																																	                                                                     //
 //=============================================================================================================================================//

@@ -29,6 +29,7 @@ struct GUIState
 	bool popUpMenu = false;
 	bool componentEditor = false;
 
+
 	// Action states.
 	bool renderWindowHovered = false;
 	bool renderResizeEvent = true;
