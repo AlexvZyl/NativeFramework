@@ -94,7 +94,7 @@ void Entity<VertexType>::scale(glm::vec3& scaling)
 template<typename VertexType>
 void Entity<VertexType>::setColor(glm::vec4& color)
 {
-	for (Vertex& vertex : m_vertices) { *(vertex.color) = color; }
+	for (Vertex& vertex : m_vertices) { vertex.data.color = color; }
 	m_colour = color;
 }
 

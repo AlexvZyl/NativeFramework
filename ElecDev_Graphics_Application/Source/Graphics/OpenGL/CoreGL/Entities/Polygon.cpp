@@ -17,7 +17,7 @@ Polygon2D<VertexType>::Polygon2D(){};
 template<typename VertexType>
 Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayObject<VertexType>* VAO)
 {
-	// General seyup.
+	// General setup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();

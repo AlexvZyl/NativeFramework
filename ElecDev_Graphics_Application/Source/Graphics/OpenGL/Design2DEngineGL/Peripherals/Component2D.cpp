@@ -42,7 +42,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	// Main shape.
 	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO);
 	shape->setColor(shapeColour);
-	shape->setLayer(componentLayer);
+	shape->setLayer(0.001f);//temp fix
 	shape->update();
 	// Component border.
 	border = std::make_shared<Polygon2D<VertexData>>(vertices, engine_linesVAO);
@@ -55,7 +55,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, "C");
 	title->update();
 	// Port.
-	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 1.0f, 0.2f);
+	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 0.3f, 0.3f);
 	port1->setColor(shapeColour);
 	port1->setLayer(componentLayer);
 	port1->update();
@@ -100,9 +100,11 @@ void Component2D::place(float pos[2])
 	shape->setColor(shapeColour);
 	border->setColor(borderColour);
 	title->setColor(titleColour);
+	port1->setColor(shapeColour);
 	shape->update();
 	border->update();
 	title->update();
+	port1->update();
 	//Move to placement layer
 }
 
