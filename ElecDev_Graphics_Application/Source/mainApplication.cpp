@@ -66,26 +66,30 @@ void glfw_error_callback(int error, const char* description)
 
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
-    graphicsHandler->mousePressEvent(button, action);
+    graphicsHandler->inputEvent.mousePressEvent = true;
+    graphicsHandler->inputEvent.mousePressButton = button;
+    graphicsHandler->inputEvent.mousePressAction = action;
 }
 
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-    // Get button state.
-    int buttonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    int buttonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-    int buttonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
-    graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight, buttonStateMiddle);
+    graphicsHandler->inputEvent.mouseMoveEvent = true;
+    graphicsHandler->inputEvent.mouseMoveButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    graphicsHandler->inputEvent.mouseMoveButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    graphicsHandler->inputEvent.mouseMoveButtonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);   
 }
 
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
-    graphicsHandler->mouseScrollEvent((float)yoffset);
+    graphicsHandler->inputEvent.mouseScrollEvent = true;
+    graphicsHandler->inputEvent.mouseScrollY = yoffset;
 }
 
 void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    graphicsHandler->keyEvent(key, action);
+    graphicsHandler->inputEvent.keyEvent = true;
+    graphicsHandler->inputEvent.key = key;
+    graphicsHandler->inputEvent.keyAction = action;
 }
 
 /*=======================================================================================================================================*/
@@ -288,7 +292,7 @@ int main(int, char**)
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
             // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
-            graphicsHandler->renderGraphics();
+            graphicsHandler->renderLoop();
 
             // Render ImGUI to screen.
             guiHandler->renderGui(io, window);

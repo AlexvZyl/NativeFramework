@@ -24,7 +24,6 @@ as error handling for when a wrong function is called on a engine type.
 
 template<typename VertexType>
 class VertexArrayObject;
-
 class FrameBufferObject;
 class Shader;
 class Vertex;
@@ -32,7 +31,6 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class VertexDataTexturedCircle;
-
 struct Font;
 
 //=============================================================================================================================================//
