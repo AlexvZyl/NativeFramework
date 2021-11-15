@@ -31,14 +31,23 @@ void PopUpMenu::render()
         // Close if not focused/
         m_guiState->popUpMenu = ImGui::IsWindowFocused();
         // Render menu items.
-        if (ImGui::MenuItem("Add component", "C")) { /* Do stuff */ }
+        if (ImGui::MenuItem("Add component", "C")) 
+        {
+            m_guiState->popUpMenu = false;
+        }
         if (ImGui::MenuItem("Component Editor", "E"))
         {
             m_guiState->popUpMenu = false;
             m_guiState->componentEditor = true;
         }
-        if (ImGui::MenuItem("Add port", "P", false, false)) { /* Do stuff */ }
-        if (ImGui::MenuItem("Remove component", "R")) { /* Do stuff */ }
+        if (ImGui::MenuItem("Add port", "P", false, false)) 
+        { 
+            m_guiState->popUpMenu = false;
+        }
+        if (ImGui::MenuItem("Remove component", "R")) 
+        { 
+            m_guiState->popUpMenu = false;
+        }
         ImGui::End();
     }
 }
