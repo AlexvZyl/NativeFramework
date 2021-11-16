@@ -92,10 +92,8 @@ void Base2DEngineGL::renderLoop()
 	// Set glViewport for the ImGUI context.
 	GLCall(glViewport(0, 0, (GLsizei)m_imGuiViewportDimensions[0], 
 							(GLsizei)m_imGuiViewportDimensions[1]));
-
 	// Calculate and update the engine matrices.
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	
 	// Render to frame buffer.
 	m_frameBuffer->bind();
 	m_frameBuffer->clear();
@@ -139,10 +137,7 @@ void Base2DEngineGL::renderLoop()
 }
 
 // Return the ID to the texture that is rendered via the FBO.
-unsigned int Base2DEngineGL::getRenderTexture()
-{
-	return m_frameBuffer->getRenderTexture();
-}
+unsigned int Base2DEngineGL::getRenderTexture() { return m_frameBuffer->getRenderTexture(); }
 
 //=============================================================================================================================================//
 //  Window Functions.																														   //

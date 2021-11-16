@@ -55,8 +55,10 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, "C");
 	title->update();
 	// Port.
-	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, titlePos, 0.2, shapeColour, 0.3f, 0.3f);
-	port1->setColor(shapeColour);
+	portOffset = glm::vec2(centre+glm::vec2(width, 0.f));
+	glm::vec3 portPos = glm::vec3(portOffset, componentLayer + borderLayerOffset);
+	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, portPos, 0.01, borderColour, 0.2f, 0.0f);
+	port1->setColor(borderColour);
 	port1->setLayer(componentLayer);
 	port1->update();
 
@@ -82,7 +84,8 @@ void Component2D::moveTo(float pointerPos[2])
 	shape->translateTo(translateDestination);
 	border->translateTo(translateDestination);
 	title->translateTo(translateDestination);
-	port1->translateTo(translateDestination);
+	glm::vec2 portDest = translateDestination + portOffset;
+	port1->translateTo(portDest);
 	shape->update();
 	border->update();
 	title->update();
@@ -100,7 +103,7 @@ void Component2D::place(float pos[2])
 	shape->setColor(shapeColour);
 	border->setColor(borderColour);
 	title->setColor(titleColour);
-	port1->setColor(shapeColour);
+	port1->setColor(borderColour);
 	shape->update();
 	border->update();
 	title->update();

@@ -82,7 +82,7 @@ void Design2DEngineGL::renderLoop()
 //  Events.																																	   //
 //=============================================================================================================================================//
 
-void Design2DEngineGL::resizeEvent(int width, int height)
+void Design2DEngineGL::resizeEvent(float width, float height)
 {
 	// Call base engine resize event.
 	Base2DEngineGL::resizeEvent(width, height);

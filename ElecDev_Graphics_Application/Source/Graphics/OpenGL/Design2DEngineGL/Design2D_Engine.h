@@ -51,7 +51,7 @@ public:
 	// ------------------- //
 
 	// Rendering loop.
-	virtual void renderLoop();
+	virtual void renderLoop() override;
 
 	// ------- //
 	//  A P I  //
@@ -61,18 +61,19 @@ public:
 	//  W I N D O W   E V E N T S  //
 	// --------------------------- //
 
-	virtual void resizeEvent(int width, int height);
+	virtual void resizeEvent(float width, float height) override;
 
 	// --------------------- //
 	//  U S E R   I N P U T  //
 	// --------------------- //
 
 	// Handling mouse events.
-	virtual void mousePressLeft(float pixelCoords[2]);
-	virtual void mousePressRight(float pixelCoords[2]);
-	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
-	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
-	virtual void keyEvent(int key, int action);
+	virtual void mousePressLeft(float pixelCoords[2]) override;
+	virtual void mousePressRight(float pixelCoords[2]) override;
+	virtual void mousePressMiddle(float pixelCoords[2]) override;
+	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle) override;
+	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset) override;
+	virtual void keyEvent(int key, int action) override;
 };
 
 //=============================================================================================================================================//

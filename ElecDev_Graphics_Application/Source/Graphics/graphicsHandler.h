@@ -6,7 +6,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 */
 
 //=============================================================================================================================================//
-//  Includes.																																   //
+//  Includes.																																                                                                   //
 //=============================================================================================================================================//
 
 //  General.
@@ -20,7 +20,13 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
 
 //=============================================================================================================================================//
-//  Data.																																	   //
+//  Forward declerations.			    											                                                           //
+//=============================================================================================================================================//
+
+struct GLFWwindow;
+
+//=============================================================================================================================================//
+//  Render Window data.																														                                                             //
 //=============================================================================================================================================//
 
 // Type that holds the different engines available.
@@ -40,18 +46,18 @@ struct RenderWindowGL
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
-	float viewportDimentions[2];
-	float mouseCoords[2];
-	std::string windowName;
+	float viewportDimentions[2];	//
+	float mouseCoords[2];			//
+	std::string windowName;			// The window name of the scene.
 
 	// State machine information.
-	bool isHovered = false;
-	bool isFocused = false;
-	bool resizeEvent = true;
-	bool close = true;
+	bool isHovered = false;			// Is the mouse currently hovering over the window?
+	bool isFocused = false;			// Is the window focused by ImGui?
+	bool resizeEvent = true;		// Did a resize event occur for the window?
+	bool close = true;				// Determines if the window should close.
 
 	// Constructors.
-	RenderWindowGL() {};
+	RenderWindowGL(){};
 	RenderWindowGL(GUIState* guiState, EngineType engineType)
 	{
 		if (engineType == EngineType::Base2DEngineGL)
@@ -74,13 +80,42 @@ struct RenderWindowGL
 	}
 
 	// Destructor.
-	~RenderWindowGL()
-	{
-	}
+	~RenderWindowGL(){}
 };
 
 //=============================================================================================================================================//
-//  Graphis Handler.																														   //
+//  Input event data.																														                                                               //
+//=============================================================================================================================================//
+
+// This struct is used to store the information on input events so that it can be handled on a
+// frame by frame basis and not every single time it occurs.
+struct InputEvent
+{
+	// Mouse press event information.
+	bool mousePressEvent = false;;				// Was a mouse button pressed?
+	//glm::vec2 mousePressPixels = { 0.f, 0.f };	// Pixel coords of mouse press.
+	int mousePressButton = 0;					// The mouse button that was pressed.
+	int mousePressAction = 0;					// Was it pressed or released?
+
+	// Mouse move event.
+	bool mouseMoveEvent = false;				// Did a mouse move event occur?
+	//glm::vec2 mouseMovePixels = { 0.f, 0.f };	// Position of the mouse.
+	int mouseMoveButtonStateLeft = 0;			// Left mouse pressed or released.
+	int mouseMoveButtonStateRight = 0;			// Righ mouse pressed or released.
+	int mouseMoveButtonStateMiddle = 0;			// Middle mouse pressed or released.
+
+	// Mouse scroll event.
+	bool mouseScrollEvent = false;				// Did a scroll event occur?
+	float mouseScrollY = 0;						// Amount of scrolling.
+
+	// Key event.
+	bool keyEvent = false;						// Did a key event occur?
+	int key = 0;								// The key that triggered the event.
+	int keyAction = 0;							// Is the key pressed or released?
+};
+
+//=============================================================================================================================================//
+//  Graphis Handler.																														                                                               //
 //=============================================================================================================================================//
 
 class GraphicsHandler
@@ -93,19 +128,21 @@ public:
 
 	// Map that holds the windows and their names.
 	std::map<std::string, std::shared_ptr<RenderWindowGL>> m_windowsDictionary;
-
 	// Variable that holds the active window name.
 	std::shared_ptr<RenderWindowGL> m_activeWindow;
-
 	// State machine variable.
 	GUIState* m_guiState;
+	// Stores the information on input events.
+	InputEvent inputEvent;
+	// The window.
+	GLFWwindow* m_glfwWindow;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
 	// Constructor with GLFW window.
-	GraphicsHandler(GUIState* guiState);
+	GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow);
 	// Destructor.
 	~GraphicsHandler();
 
@@ -115,7 +152,7 @@ public:
 
 	// Renders the graphics of all of the engines.
 	// Can be improved by only rendering the engines that are viewable.  Does ImGUI do this automatically?
-	void renderGraphics();
+	void renderLoop();
 
 	// --------------------- //
 	//  U S E R   I N P U T  //
@@ -123,10 +160,10 @@ public:
 
 	// Mouse events are automatically assigned to the active window.
 	// The active window is changed from the ImGUI side as the mouse moves.
-	void mousePressEvent(int button, int action);											// Handle mouse press events.
-	void mouseMoveEvent(int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);	// Handle mouse move events.
-	void mouseScrollEvent(float yOffset);													// Handle mouse scroll events.
-	void keyEvent(int key, int action);														// Handle keyboard inputs.
+	void mousePressEvent();		// Handle mouse press events.
+	void mouseMoveEvent();		// Handle mouse move events.
+	void mouseScrollEvent();	// Handle mouse scroll events.
+	void keyEvent();			// Handle keyboard inputs.
 
 	// -------------------------- //
 	//  W I N D O W   E V E N T S //
@@ -136,14 +173,16 @@ public:
 	void resizeEvent(int width, int height);
 	// Checks if the window name supplied is in the list.
 	bool isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow);
+	// Checks if the window name supplied is in the list.
 	bool isWindowValid(std::string windowName);
+
 	bool isActiveWindowValid();
 
 	// ------------- //
 	//  2 D   A P I  //
 	// ------------- //
 
-	// Functions supported by the base engine.  Added functionality to choose MCC.
+	// Functions supported by the base engine.
 	void drawLine(std::string windowName, float position1[2], float position2[2], float color[4]);
 	void drawTriangleClear(std::string windowName, float position1[2], float position2[2], float position3[2], float color[4]);
 	void drawTriangleFilled(std::string windowName, float position1[2], float position2[2], float position3[2], float color[4]);
@@ -168,9 +207,9 @@ public:
 	//  W I N D O W   M A N A G E M E N T  //
 	// ----------------------------------- //
 
-	// Adds an MCC to the dict.
+	// Adds an window with an OpenGL context.
 	void addWindow(std::string windowName, std::string engineType);
-	// Removes an MCC from the dict.
+	// Removes the window from ImGui.
 	void removeWindow(std::string windowName);
 	void windowError(std::string windowName);
 	void parametersError(const std::exception& e);
@@ -184,5 +223,5 @@ public:
 };
 
 //=============================================================================================================================================//
-//  EOF.																																	   //
+//  EOF.																																	                                                                     //
 //=============================================================================================================================================//

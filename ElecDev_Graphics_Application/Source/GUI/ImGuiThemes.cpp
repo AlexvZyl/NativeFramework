@@ -28,6 +28,7 @@ void GUIHandler::setTheme()
 	style.TabRounding = 4.0f;
 	style.PopupRounding = 5.0f;
 	style.WindowPadding = ImVec2(1.f, 1.f);
+	style.WindowBorderSize = 0.f;
 
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);

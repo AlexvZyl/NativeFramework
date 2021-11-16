@@ -100,6 +100,7 @@ bool Ribbons::topBar()
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
     ImVec2 work_size = viewport->WorkSize;
     m_guiState->toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);
+
     ImGui::SetWindowSize(ImVec2(work_size.x, 70));
     ImGui::SetWindowPos(work_pos);
     //Create Image Buttons
