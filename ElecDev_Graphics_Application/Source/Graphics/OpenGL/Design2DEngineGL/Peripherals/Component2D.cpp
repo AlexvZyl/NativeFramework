@@ -40,24 +40,24 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	std::shared_ptr<VertexData> edgeVertices[4];
 
 	// Main shape.
-	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO);
+	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
 	shape->update();
 	// Component border.
-	border = std::make_shared<Polygon2D<VertexData>>(vertices, engine_linesVAO);
+	border = std::make_shared<Polygon2D<VertexData>>(vertices, engine_linesVAO, this);
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
 	// Component title.
 	titlePos = glm::vec3(centre, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, "C");
+	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this);
 	title->update();
 	// Port.
 	portOffset = glm::vec2(centre+glm::vec2(width, 0.f));
 	glm::vec3 portPos = glm::vec3(portOffset, componentLayer + borderLayerOffset);
-	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, portPos, 0.01, borderColour, 0.2f, 0.0f);
+	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, portPos, 0.01, borderColour, 0.2f, 0.0f, this);
 	port1->setColor(borderColour);
 	port1->setLayer(componentLayer);
 	port1->update();
@@ -118,6 +118,11 @@ void Component2D::setLayer(float layer)
 	title->setLayer(layer + borderLayerOffset);
 	port1->setLayer(layer + borderLayerOffset);
 	componentLayer = layer;
+}
+
+void Component2D::setContext(GUIState* guiState)
+{
+	guiState->clickedZone.component = true;
 }
 
 void Component2D::destroy()

@@ -53,7 +53,7 @@ public:
 
 	// Constructors. 
 	Circle();
-	Circle(VertexArrayObject<VertexType>* vao, glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade);
+	Circle(VertexArrayObject<VertexType>* vao, glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent);
 	// Destructor.
 	~Circle();
 };

@@ -8,6 +8,7 @@
 #include "glm.hpp"
 #include <memory>
 #include <vector>
+#include "CoreGL/Entities/ManagedEntity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -31,7 +32,7 @@ class VertexDataCircle;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Component2D
+class Component2D: public ManagedEntity
 {
 	//Private Members
 private:
@@ -97,5 +98,6 @@ public:
 	//Place a component
 	void place(float pos[2]);
 	void setLayer(float layer);
+	void setContext(GUIState* guiState);
 	void destroy();
 };
