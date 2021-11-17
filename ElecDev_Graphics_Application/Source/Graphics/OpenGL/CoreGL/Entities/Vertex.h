@@ -20,7 +20,7 @@ BufferLayout is used to setup the VAO.
 class Vertex
 {
 public:
-	union {
+/*	union {
 		struct {
 			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
 			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
@@ -31,7 +31,7 @@ public:
 		float rawData[11];
 	};
 	glm::vec3* position;					// Position of the vertex in 3D space.
-	glm::vec4* color;							// Color of the vertex.
+	glm::vec4* color;							// Color of the vertex.*/
 	// Common vertex attributes.
 	unsigned int entityID = 0;					// ID associated with the vertex.
 	Vertex();
@@ -57,6 +57,15 @@ private:
 	static int idSizeVD;						// Size of the entity ID.
 
 public:
+	union {
+		struct {
+			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
+			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
+		}data;
+		float rawData[7];
+	};
+	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
+	glm::vec4* color = &data.color;							// Color of the vertex.
 	// Constructor.
 	VertexData();
 	VertexData(glm::vec3& pos, glm::vec4& clr, unsigned int eID);
@@ -84,6 +93,18 @@ private:
 	static int idSizeVDT;		// Size of the entity ID.
 
 public:
+	union {
+		struct {
+			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
+			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
+			glm::vec2 textureCoords = { 0.f,0.f };			// Position
+			float textureID = 0.f;
+		}data;
+		float rawData[10];
+	};
+	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
+	glm::vec4* color = &data.color;							// Color of the vertex.
+
 	glm::vec2* textureCoords = &data.textureCoords;			// Position
 	float* textureID = &data.textureID;
 	// Constructors.
@@ -115,8 +136,21 @@ private:
 	static int idSizeVDC;		// Size of the entity ID.
 
 public:
-	glm::vec2* localCoords = &data.textureCoords;			// Position
-	float* thickness = &data.textureID;
+
+	union {
+		struct {
+			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
+			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
+			glm::vec2 localCoords = { 0.f,0.f };			// Position
+			float thickness = 0.f;
+			float fade = 0.f;
+		}data;
+		float rawData[11];
+	};
+	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
+	glm::vec4* color = &data.color;							// Color of the vertex.
+	glm::vec2* localCoords = &data.localCoords;			// Position
+	float* thickness = &data.thickness;
 	float* fade = &data.fade;
 	// Constructors.
 	//VertexDataCircle() = default;

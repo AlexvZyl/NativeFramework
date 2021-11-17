@@ -61,7 +61,7 @@ void Entity<VertexType>::update()
 template<typename VertexType>
 void Entity<VertexType>::translate(glm::vec3& translation)
 {
-	for (Vertex& vertex : m_vertices) { vertex.data.position += translation; }
+	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
 }
 
@@ -69,7 +69,7 @@ template<typename VertexType>
 void Entity<VertexType>::translateTo(glm::vec3& position)
 { 
 	glm::vec3 translation = position - m_trackedCenter; 
-	for (Vertex& vertex : m_vertices) { vertex.data.position += translation; }
+	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
 }
 
@@ -77,7 +77,7 @@ template<typename VertexType>
 void Entity<VertexType>::translateTo(glm::vec2& position)
 {
 	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
-	for (Vertex& vertex : m_vertices) { vertex.data.position += translation; }
+	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
 }
 
@@ -100,21 +100,21 @@ void Entity<VertexType>::scale(glm::vec3& scaling)
 template<typename VertexType>
 void Entity<VertexType>::setColor(glm::vec4& color)
 {
-	for (Vertex& vertex : m_vertices) { vertex.data.color = color; }
+	for (VertexType& vertex : m_vertices) { vertex.data.color = color; }
 	m_colour = color;
 }
 
 template<typename VertexType>
 void Entity<VertexType>::setEntityID(unsigned int eID)
 {
-	for (Vertex& vertex : m_vertices) { vertex.entityID = eID; }
+	for (VertexType& vertex : m_vertices) { vertex.entityID = eID; }
 	m_entityID = eID;
 }
 
 template<typename VertexType>
 void Entity<VertexType>::setLayer(float layer)
 {
-	for (Vertex& vertex : m_vertices) { vertex.data.position.z = layer; }
+	for (VertexType& vertex : m_vertices) { vertex.data.position.z = layer; }
 }
 
 template<typename VertexType>
