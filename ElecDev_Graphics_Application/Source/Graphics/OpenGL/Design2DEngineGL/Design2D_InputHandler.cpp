@@ -12,6 +12,7 @@ This is where the drawing enigine mouse events are handled.
 #include "CoreGL/Entities/Polygon.h"
 #include <GLFW/glfw3.h>
 #include "CoreGL/Entities/EntityManager.h"
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -42,8 +43,13 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	Base2DEngineGL::mousePressRight(pixelCoords);
 	// Update current entity ID.
 	m_currentEntityID = getEntityID(pixelCoords);
-	ManagedEntity* currentEntity = EntityManager::getEntity(m_currentEntityID);
-	currentEntity->setContext(m_guiState);
+	if ((m_currentEntityID == 0) || (m_currentEntityID == -1)) {
+		m_guiState->clickedZone.background = true;
+	}
+	else {
+		ManagedEntity* currentEntity = EntityManager::getEntity(m_currentEntityID);
+		currentEntity->setContext(m_guiState);
+	}
 }
 
 void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
@@ -64,6 +70,8 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->moveTo(screenCoords);
 	}
+	m_currentEntityID = getEntityID(pixelCoords);
+	std::cout << m_currentEntityID << std::endl;
 	// Call parent event.
 	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }

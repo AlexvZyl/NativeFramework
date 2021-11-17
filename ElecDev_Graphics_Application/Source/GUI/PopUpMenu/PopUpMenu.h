@@ -23,6 +23,7 @@ public:
 	PopUpMenu(GUIState* guiState);
 	// Render call.
 	void render();
+	void close();
 
 };
 
