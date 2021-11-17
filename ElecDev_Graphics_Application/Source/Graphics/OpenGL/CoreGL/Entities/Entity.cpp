@@ -24,8 +24,10 @@ Entity<VertexType>::Entity(ManagedEntity* parent):ManagedEntity(parent)
 template<typename VertexType>
 Entity<VertexType>::~Entity() 
 {
-	m_VAO->deleteDataCPU(this); m_VAO->updateGPU();		// Clear the data from the GPU.
-	m_vertices.clear(); m_vertices.shrink_to_fit();		// Clear the data from the CPU.
+	m_VAO->deleteDataCPU(this);		// Clear the data from the GPU.
+	m_VAO->updateGPU();		
+	m_vertices.clear(); 
+	m_vertices.shrink_to_fit();		// Clear the data from the CPU.
 }
 
 template<typename VertexType>

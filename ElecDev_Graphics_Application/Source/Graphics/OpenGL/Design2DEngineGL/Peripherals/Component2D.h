@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include "CoreGL/Entities/ManagedEntity.h"
+#include "Port.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -37,23 +38,19 @@ class Component2D: public ManagedEntity
 	//Private Members
 private:
 	//shape and edge data
-	VertexArrayObject<VertexData>* engine_trianglesVAO;
-	VertexArrayObject<VertexData>* engine_linesVAO;
-	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
-	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 	std::shared_ptr<Polygon2D<VertexData>> shape;
 	std::shared_ptr<Polygon2D<VertexData>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
-	std::shared_ptr<Circle<VertexDataCircle>> port1;
+	std::shared_ptr<Port> port1;
+	std::shared_ptr<Port> port2;
 	static unsigned componentID;
 
 	//component shape attributes
 	float height = 0.1f;
 	float width = 0.1f;
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> vertices2;
 	glm::vec2 centre;
-	float componentLayer = 0.9f;
-	float borderLayerOffset = 0.01f;
 
 	//colour attributes
 	glm::vec4 shapeColour;
@@ -61,7 +58,7 @@ private:
 
 	//title
 	static Font titleFont;
-	glm::vec3 titlePos;
+	glm::vec2 titleOffset = glm::vec2(0, -0.15);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	std::string titleString;
 	float titleSize = 0.2f;
@@ -77,6 +74,15 @@ private:
 	bool selected = true;
 
 public:
+
+	float componentLayer = 0.9f;
+	float borderLayerOffset = 0.01f;
+	float portLayerOffset = 0.02f;
+
+	VertexArrayObject<VertexData>* engine_trianglesVAO;
+	VertexArrayObject<VertexData>* engine_linesVAO;
+	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
+	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 
 	//Creates a generic component centred at (0, 0)
 	Component2D(VertexArrayObject<VertexData>* trianglesVAO,

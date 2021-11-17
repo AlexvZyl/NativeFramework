@@ -23,6 +23,7 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
+
 	if (designerState == COMPONENT_PLACE)
 	{
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
@@ -34,6 +35,20 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 			m_lineEntitiesVAO.get(),
 			m_triangleTexturedEntitiesVAO.get(),
 			m_circleEntitiesVAO.get());
+	}
+	else if (designerState == ENTITY_SELECT) {
+		m_currentEntityID = getEntityID(pixelCoords);
+		if ((m_currentEntityID == 0) || (m_currentEntityID == -1)) {
+
+		}
+		else {
+			ManagedEntity* currentEntity = EntityManager::getEntity(m_currentEntityID);
+			while (currentEntity->m_parent != nullptr) {
+				currentEntity = currentEntity->m_parent;
+			}
+			Component2D* cur = dynamic_cast<Component2D*>(currentEntity);
+			m_activeComponent = std::make_shared<Component2D>(*cur);
+		}
 	}
 }
 
@@ -103,7 +118,7 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action)
 {
-	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
+	/*glm::vec3 v1(-0.5f, 0.5f, 0.0f);
 	glm::vec3 v2(0.5f, 0.5f, 0.0f);
 	glm::vec3 v3(0.5f, -0.5f, 0.0f);
 	glm::vec3 v4(-0.5f, -0.5f, 0.0f);
@@ -127,7 +142,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2->destroy(); }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }*/
 
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
