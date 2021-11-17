@@ -79,7 +79,7 @@ unsigned int loadBitmapToGL(BITMAP bitmap)
 	GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
 	GLCall(glPixelStorei(GL_UNPACK_ALIGNMENT, 4));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));

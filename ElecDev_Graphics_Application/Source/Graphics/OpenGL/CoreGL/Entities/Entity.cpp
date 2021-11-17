@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include <vector>
 #include <glm.hpp>
+#include "../GUI/GUIState.h"
 
 //=============================================================================================================================================//
 //  Constructor and Deconstructor.																											   //
@@ -14,6 +15,11 @@
 
 template<typename VertexType>
 Entity<VertexType>::Entity() {}
+
+template<typename VertexType>
+Entity<VertexType>::Entity(ManagedEntity* parent):ManagedEntity(parent)
+{
+}
 
 template<typename VertexType>
 Entity<VertexType>::~Entity() 
@@ -109,6 +115,15 @@ template<typename VertexType>
 void Entity<VertexType>::setLayer(float layer)
 {
 	for (Vertex& vertex : m_vertices) { vertex.data.position.z = layer; }
+}
+
+template<typename VertexType>
+void Entity<VertexType>::setContext(GUIState* guiState)
+{
+	guiState->clickedZone.primative = true;
+	if (m_parent != nullptr) {
+		m_parent->setContext(guiState);
+	}
 }
 
 //=============================================================================================================================================//

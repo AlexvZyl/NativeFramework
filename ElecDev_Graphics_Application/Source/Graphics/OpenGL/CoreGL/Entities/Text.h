@@ -47,7 +47,7 @@ public:
 
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
-		 VertexArrayObject<VertexType>* vao, Font& font, std::string align = "C");
+		 VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, std::string align = "C");
 	// Destructor.
 	~Text();
 };

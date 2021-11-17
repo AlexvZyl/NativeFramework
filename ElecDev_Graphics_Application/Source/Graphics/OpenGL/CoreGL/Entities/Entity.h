@@ -12,6 +12,7 @@ for a VAO to be able to render the entity to the screen.
 #include <vector>
 #include <glm.hpp>
 #include <memory>
+#include "ManagedEntity.h"
 
 //=============================================================================================================================================//
 //  Includes.																																   //
@@ -19,13 +20,14 @@ for a VAO to be able to render the entity to the screen.
 
 template<typename VertexType>
 class VertexArrayObject;
+class GUIState;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
 //=============================================================================================================================================//
 
 template<typename VertexType>
-class Entity
+class Entity: public ManagedEntity
 {
 public:
 
@@ -43,7 +45,6 @@ public:
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
-	unsigned int m_entityID = 0;					// Saves the global entity ID.
 
 	// ------------------- //
 	//  F U N C T I O N S  //
@@ -51,6 +52,7 @@ public:
 
 	// Constructor.
 	Entity();
+	Entity(ManagedEntity* parent);
 	// Destructor.
 	~Entity();
 	// Translate the entity by the given vector.
@@ -75,6 +77,8 @@ public:
 	void setLayer(float layer);
 	// Offsets the entities' indices to match the VAO.
 	void offsetIndices(int offset);
+	//Set context
+	void setContext(GUIState* guiState);
 };
 
 //=============================================================================================================================================//
