@@ -109,19 +109,19 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 		offset += sizeof(VertexDataCircle::color);
 		// Local coordinates.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
+		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
 		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 		offset += sizeof(VertexDataCircle::localCoords);
 		// Circle thickness.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
+		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
 		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 		offset += sizeof(VertexDataCircle::thickness);
 		// Circle fade.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
+		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
 		GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 		offset += sizeof(VertexDataCircle::fade);
 		// Entity ID.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
+		GLCall(glEnableVertexArrayAttrib(m_VAOID, 5));
 		GLCall(glVertexAttribIPointer(5, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
 	}
 }

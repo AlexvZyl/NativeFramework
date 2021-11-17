@@ -22,7 +22,7 @@ struct VertexOutput
 
 // Output.
 flat out uint f_entityID;
-layout(location = 0) out VertexOutput Output;
+layout(location = 1) out VertexOutput Output;
 
 void main()
 {
@@ -50,8 +50,8 @@ struct VertexOutput
 };
 
 // Input.
-layout(location = 0) in VertexOutput Input;
 flat in uint f_entityID;
+layout(location = 1) in VertexOutput Input;
 // Output.
 layout(location = 0) out vec4 o_color;
 layout(location = 1) out uint o_entityID;
