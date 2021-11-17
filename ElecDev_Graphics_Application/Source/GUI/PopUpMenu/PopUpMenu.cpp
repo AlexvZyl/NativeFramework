@@ -26,7 +26,8 @@ void PopUpMenu::render()
     // Popup menu.
     if (ImGui::Begin("PopUpMenu", &m_guiState->popUpMenu, ImGuiWindowFlags_NoDecoration |
                                                           ImGuiWindowFlags_NoMove |
-                                                          ImGuiWindowFlags_NoDocking))
+                                                          ImGuiWindowFlags_NoDocking |
+                                                          ImGuiWindowFlags_AlwaysAutoResize))
     {
         // Close if not focused/
         if (!ImGui::IsWindowFocused()) {
@@ -44,7 +45,7 @@ void PopUpMenu::render()
                 m_guiState->componentEditor = true;
                 close();
             }
-            if (ImGui::MenuItem("Add port", "P", false, false))
+            if (ImGui::MenuItem("Add port", "P"))
             {
                 close();
             }
