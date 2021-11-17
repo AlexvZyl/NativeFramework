@@ -26,19 +26,23 @@ void PopUpMenu::render()
     // Popup menu.
     if (ImGui::Begin("PopUpMenu", &m_guiState->popUpMenu, ImGuiWindowFlags_NoDecoration |
                                                           ImGuiWindowFlags_NoMove |
-                                                          ImGuiWindowFlags_NoDocking))
+                                                          ImGuiWindowFlags_NoDocking |
+                                                          ImGuiWindowFlags_AlwaysAutoResize))
     {
         // Close if not focused/
         if (!ImGui::IsWindowFocused()) {
             close();
         }
         // Render menu items.
-        if (m_guiState->clickedZone.background) {
+        if (m_guiState->clickedZone.background) 
+        {
             if (ImGui::MenuItem("Add component", "C"))
             {   
                 close();
             }
-        }if (m_guiState->clickedZone.component) {
+        }
+        else if (m_guiState->clickedZone.component) 
+        {
             if (ImGui::MenuItem("Component Editor", "E"))
             {
                 m_guiState->componentEditor = true;
