@@ -30,8 +30,6 @@ int VertexDataCircle::totalSizeVDC			= VertexDataCircle::dataSizeVDC + VertexDat
 
 
 Vertex::Vertex() {
-	position = &data.position;					// Position of the vertex in 3D space.
-	color = &data.color;							// Color of the vertex.
 }
 
 //=============================================================================================================================================//
