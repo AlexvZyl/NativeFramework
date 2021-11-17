@@ -61,7 +61,7 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 
 	else if (typeid(VertexType) == typeid(VertexDataTextured))
 	{
-		int vertexSize = sizeof(*VertexDataTextured::position) + sizeof(* VertexDataTextured::color) + sizeof(*VertexDataTextured::textureCoords) +
+		int vertexSize = sizeof(*VertexDataTextured::position) + sizeof(*VertexDataTextured::color) + sizeof(*VertexDataTextured::textureCoords) +
 						 sizeof(*VertexDataTextured::textureID) + sizeof(VertexDataTextured::entityID);
 		int offset = 0;
 		// Generate.
@@ -107,15 +107,15 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 		// Bind Vertex color attribute.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
 		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::color);
+		offset += sizeof(*VertexDataCircle::color);
 		// Local coordinates.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
 		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::localCoords);
+		offset += sizeof(*VertexDataCircle::localCoords);
 		// Circle thickness.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
 		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(VertexDataCircle::thickness);
+		offset += sizeof(*VertexDataCircle::thickness);
 		// Circle fade.
 		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
 		GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
