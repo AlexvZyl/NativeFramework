@@ -29,18 +29,41 @@ void PopUpMenu::render()
                                                           ImGuiWindowFlags_NoDocking))
     {
         // Close if not focused/
-        m_guiState->popUpMenu = ImGui::IsWindowFocused();
-        // Render menu items.
-        if (ImGui::MenuItem("Add component", "C")) { /* Do stuff */ }
-        if (ImGui::MenuItem("Component Editor", "E"))
-        {
-            m_guiState->popUpMenu = false;
-            m_guiState->componentEditor = true;
+        if (!ImGui::IsWindowFocused()) {
+            close();
         }
-        if (ImGui::MenuItem("Add port", "P", false, false)) { /* Do stuff */ }
-        if (ImGui::MenuItem("Remove component", "R")) { /* Do stuff */ }
+        // Render menu items.
+        if (m_guiState->clickedZone.background) {
+            if (ImGui::MenuItem("Add component", "C"))
+            {   
+                close();
+            }
+        }if (m_guiState->clickedZone.component) {
+            if (ImGui::MenuItem("Component Editor", "E"))
+            {
+                m_guiState->componentEditor = true;
+                close();
+            }
+            if (ImGui::MenuItem("Add port", "P", false, false))
+            {
+                close();
+            }
+            if (ImGui::MenuItem("Remove component", "R"))
+            {
+                close();
+            }
+        }
         ImGui::End();
     }
+}
+
+void PopUpMenu::close()
+{
+    m_guiState->clickedZone.background = false;
+    m_guiState->clickedZone.component = false;
+    m_guiState->clickedZone.primative= false;
+    m_guiState->clickedZone.port = false;
+    m_guiState->popUpMenu = false;
 }
 
 /*=======================================================================================================================================*/

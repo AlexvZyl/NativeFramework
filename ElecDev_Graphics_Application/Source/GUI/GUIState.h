@@ -9,6 +9,14 @@
 /*=======================================================================================================================================*/
 /* Struture.                                                                                                                             */
 /*=======================================================================================================================================*/
+struct Context
+{
+	bool background = false;
+	bool component = false;
+	bool port = false;
+	bool primative = false;
+};
+
 
 struct GUIState
 {
@@ -24,7 +32,10 @@ struct GUIState
 	bool startDemoWindow = false;
 	bool showGraphicsWindow = true;
 
-	// Circuit designer states.
+	// Context menu states.
+	Context clickedZone;
+
+	// Popup menu.
 	ImVec2 popUpPosition = { 0.f, 0.f };
 	bool popUpMenu = false;
 	bool componentEditor = false;

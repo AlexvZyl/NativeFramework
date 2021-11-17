@@ -12,13 +12,13 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade)
+Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent):Entity<VertexType>(parent)
 {
 	// Assign variables.
 	m_VAO = vao;
 	m_trackedCenter = center;
 	m_colour = color;
-	m_entityID = EntityManager::generateEID();
+	//m_entityID = EntityManager::generateEID();
 	m_thickness = thickness;
 	m_fade = fade;
 	// Create position variables.

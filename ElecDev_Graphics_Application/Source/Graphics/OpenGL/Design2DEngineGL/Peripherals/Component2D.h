@@ -8,6 +8,7 @@
 #include "glm.hpp"
 #include <memory>
 #include <vector>
+#include "CoreGL/Entities/ManagedEntity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -31,7 +32,7 @@ class VertexDataCircle;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Component2D
+class Component2D: public ManagedEntity
 {
 	//Private Members
 private:
@@ -70,6 +71,7 @@ private:
 	int n_ports_south = 0;
 	int n_ports_east = 0;
 	int n_ports_west = 0;
+	glm::vec2 portOffset;
 
 	//interaction attributes
 	bool selected = true;
@@ -96,5 +98,6 @@ public:
 	//Place a component
 	void place(float pos[2]);
 	void setLayer(float layer);
+	void setContext(GUIState* guiState);
 	void destroy();
 };

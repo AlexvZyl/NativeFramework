@@ -91,6 +91,9 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	// End Docking space
 	createDock(work_size);
 
+	// Add latest docking branch.
+	//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
 	// ----------------------------- //
 	//  G U I   C O M P O N E N T S  //
 	// ----------------------------- //

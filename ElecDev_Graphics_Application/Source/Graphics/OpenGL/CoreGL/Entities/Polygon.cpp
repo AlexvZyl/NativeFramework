@@ -15,14 +15,13 @@ template<typename VertexType>
 Polygon2D<VertexType>::Polygon2D(){};
 
 template<typename VertexType>
-Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayObject<VertexType>* VAO)
+Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayObject<VertexType>* VAO, ManagedEntity* parent):Entity<VertexType>(parent)
 {
-	// General seyup.
+	// General setup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
-	m_entityID = EntityManager::generateEID();
 
 	// Create the vertices.
 	for (glm::vec3 vertex : vertices)

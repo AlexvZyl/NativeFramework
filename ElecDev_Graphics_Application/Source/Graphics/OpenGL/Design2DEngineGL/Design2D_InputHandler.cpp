@@ -11,6 +11,8 @@ This is where the drawing enigine mouse events are handled.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
 #include <GLFW/glfw3.h>
+#include "CoreGL/Entities/EntityManager.h"
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -41,6 +43,13 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	Base2DEngineGL::mousePressRight(pixelCoords);
 	// Update current entity ID.
 	m_currentEntityID = getEntityID(pixelCoords);
+	if ((m_currentEntityID == 0) || (m_currentEntityID == -1)) {
+		m_guiState->clickedZone.background = true;
+	}
+	else {
+		ManagedEntity* currentEntity = EntityManager::getEntity(m_currentEntityID);
+		currentEntity->setContext(m_guiState);
+	}
 }
 
 void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
@@ -61,6 +70,12 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->moveTo(screenCoords);
 	}
+	m_currentEntityID = getEntityID(pixelCoords);
+
+	#ifdef _DEBUG
+		std::cout << m_currentEntityID << std::endl;
+	#endif
+
 	// Call parent event.
 	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }
@@ -105,9 +120,9 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	std::vector<glm::vec3> vertices3 = { v9, v10, v11, v12 };
 
 	// Add components.
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(vertices3, m_triangleEntitiesVAO.get()); }
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(vertices1, m_triangleEntitiesVAO.get()); }
-	if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(vertices2, m_triangleEntitiesVAO.get()); }
+	//if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(vertices3, m_triangleEntitiesVAO.get()); }
+	//if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(vertices1, m_triangleEntitiesVAO.get()); }
+	//if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(vertices2, m_triangleEntitiesVAO.get()); }
 
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
