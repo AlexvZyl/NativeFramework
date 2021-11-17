@@ -24,7 +24,15 @@ struct GUIState
 	bool startDemoWindow = false;
 	bool showGraphicsWindow = true;
 
-	// Circuit designer states.
+	// Context menu states.
+	enum class clickedZone
+	{
+		BACKGROUND,
+		COMPONENT,
+		PORT
+	};
+
+	// Popup menu.
 	ImVec2 popUpPosition = { 0.f, 0.f };
 	bool popUpMenu = false;
 	bool componentEditor = false;
