@@ -71,7 +71,11 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 		m_activeComponent->moveTo(screenCoords);
 	}
 	m_currentEntityID = getEntityID(pixelCoords);
-	std::cout << m_currentEntityID << std::endl;
+
+	#ifdef _DEBUG
+		std::cout << m_currentEntityID << std::endl;
+	#endif
+
 	// Call parent event.
 	Base2DEngineGL::mouseMoveEvent(pixelCoords, buttonStateLeft, buttonStateRight, buttonStateMiddle);
 }
