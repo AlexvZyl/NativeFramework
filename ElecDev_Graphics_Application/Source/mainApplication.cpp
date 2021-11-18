@@ -270,11 +270,19 @@ int main(int, char**)
     // Reset glfw time.
     glfwSetTime(0);
 
+    // Number of open windows
+    unsigned n_windows = 0;
+
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
     {
         // Poll commands from python interface.
         pyInterface.deQueueInput();
+        if (guiState.blockDiagram) {
+            std::string windowName = "Untitled " + std::to_string(n_windows++);
+            graphicsHandler->addWindow(windowName, "Design2D");
+            guiState.blockDiagram = false;
+        }
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
