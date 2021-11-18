@@ -19,6 +19,7 @@ This is where the interactive 2D design engine is implemented.
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
+#include "CoreGL/Entities/Circle.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/ShaderHandlerGL.h"
 #include "CoreGL/VertexArrayObjectGL.h"
@@ -35,6 +36,20 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 
 
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";	
+
+	/*
+	glm::vec4 circColor = { 0.f, 0.f, 1.f, 1.f };
+	glm::vec3 centre1 = { -0.3f, -0.3f, 0.f };
+	glm::vec3 centre2 = { 0.f, 0.f, 0.f };
+	glm::vec3 centre3 = { 0.3f, 0.3f, 0.f };
+	circ1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), centre1, 0.01, circColor, 1.0f, 0.0f, nullptr);
+	circ1->update();
+	circ2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), centre2, 0.01, circColor, 1.0f, 0.0f, nullptr);
+	circ2->update();
+	circ3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), centre3, 0.01, circColor, 1.0f, 0.0f, nullptr);
+	circ3->update();
+	//*/
+
 }
 
 // Destructor.

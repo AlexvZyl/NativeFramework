@@ -20,20 +20,7 @@ BufferLayout is used to setup the VAO.
 class Vertex
 {
 public:
-/*	union {
-		struct {
-			glm::vec3 position = { 0.f, 0.f, 0.f };				// Position of the vertex in 3D space.
-			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };			// Color of the vertex.
-			glm::vec2 textureCoords = { 0.f,0.f };				// Position
-			float textureID = 0.f;
-			float fade = 0.f;
-		}data;
-		float rawData[11];
-	};
-	glm::vec3* position;					// Position of the vertex in 3D space.
-	glm::vec4* color;							// Color of the vertex.*/
-	// Common vertex attributes.
-	unsigned int entityID = 0;									// ID associated with the vertex.
+	unsigned int entityID = 0;					// ID associated with the vertex.
 	Vertex();
 	virtual int getTotalSize() { return 0; };					// The entire data size.
 	virtual int getDataSize()  { return 0; };					// Size of the texture data (excluding the entity ID).

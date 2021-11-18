@@ -29,6 +29,11 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
+	vertices2.insert(vertices2.end(), glm::vec3(centre.x - width/2, centre.y - height/2, 0.0f));
+	vertices2.insert(vertices2.end(), glm::vec3(centre.x + width/2, centre.y - height/2, 0.0f));
+	vertices2.insert(vertices2.end(), glm::vec3(centre.x + width/2, centre.y + height/2, 0.0f));
+	vertices2.insert(vertices2.end(), glm::vec3(centre.x - width/2, centre.y + height/2, 0.0f));
+
 	engine_trianglesVAO = trianglesVAO;
 	engine_linesVAO = linesVAO;
 	engine_texturedTrianglesVAO = texturedTrianglesVAO;
@@ -50,17 +55,21 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	border->setLayer(componentLayer + borderLayerOffset);
 	border->update();
 	// Component title.
-	titlePos = glm::vec3(centre, componentLayer + borderLayerOffset);
+	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this);
 	title->update();
 	// Port.
 	portOffset = glm::vec2(centre+glm::vec2(width, 0.f));
 	glm::vec3 portPos = glm::vec3(portOffset, componentLayer + borderLayerOffset);
-	port1 = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, portPos, 0.01, borderColour, 0.2f, 0.0f, this);
-	port1->setColor(borderColour);
-	port1->setLayer(componentLayer);
-	port1->update();
+	glm::vec3 port2Pos = glm::vec3(-portOffset, componentLayer + borderLayerOffset);
+	PortType type = PORT_IN;
+	port1 = std::make_shared<Port>(portPos, type, this);
+	port2 = std::make_shared<Port>(port2Pos, type, this);
+	//port1->setColor(borderColour);
+	//port1->setLayer(componentLayer);
+	//port1->update();
+
 
 }
 
@@ -83,13 +92,15 @@ void Component2D::moveTo(float pointerPos[2])
 	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
 	shape->translateTo(translateDestination);
 	border->translateTo(translateDestination);
-	title->translateTo(translateDestination);
+	glm::vec2 titleDest = translateDestination + titleOffset;
+	title->translateTo(titleDest);
 	glm::vec2 portDest = translateDestination + portOffset;
-	port1->translateTo(portDest);
+	glm::vec2 port2Dest = translateDestination - portOffset;
+	port1->moveTo(portDest);
+	port2->moveTo(port2Dest);
 	shape->update();
 	border->update();
 	title->update();
-	port1->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
@@ -103,11 +114,10 @@ void Component2D::place(float pos[2])
 	shape->setColor(shapeColour);
 	border->setColor(borderColour);
 	title->setColor(titleColour);
-	port1->setColor(borderColour);
+	//port1->setColor(borderColour);
 	shape->update();
 	border->update();
 	title->update();
-	port1->update();
 	//Move to placement layer
 }
 
@@ -116,7 +126,8 @@ void Component2D::setLayer(float layer)
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
-	port1->setLayer(layer + borderLayerOffset);
+	port1->setLayer(layer + portLayerOffset);
+	port2->setLayer(layer + portLayerOffset);
 	componentLayer = layer;
 }
 
@@ -125,9 +136,19 @@ void Component2D::setContext(GUIState* guiState)
 	guiState->clickedZone.component = true;
 }
 
+void Component2D::update()
+{
+	shape->update();
+	border->update();
+	title->update();
+	port1->update();
+	port2->update();
+}
+
 void Component2D::destroy()
 {
-	shape->destroy();
-	border->destroy();
-	title->destroy();
+	this->~Component2D();
+	//shape->destroy();
+	//border->destroy();
+	//title->destroy();
 }

@@ -48,7 +48,7 @@ void PopUpMenu::render()
                 m_guiState->componentEditor = true;
                 close();
             }
-            if (ImGui::MenuItem("Add port", "P"))
+            if (ImGui::MenuItem("Edit Ports", "P"))
             {
                 close();
             }
