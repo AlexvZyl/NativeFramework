@@ -146,8 +146,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) { circ2->destroy(); }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { circ3 = nullptr; }*/
+	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2->destroy(); }
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }
 
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };

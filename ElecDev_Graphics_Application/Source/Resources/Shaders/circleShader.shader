@@ -61,7 +61,7 @@ void main()
     // Calculate distance and fill circle with white
     float distance = 1.0 - length(Input.LocalPosition);
     float circleAlpha = smoothstep(0.0, Input.Fade, distance);
-    if (circleAlpha < 0.9)
+    if (circleAlpha < 0.5)
         discard;
     circleAlpha *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
 
