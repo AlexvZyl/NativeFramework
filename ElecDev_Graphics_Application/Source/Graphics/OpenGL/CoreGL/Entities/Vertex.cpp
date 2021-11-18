@@ -94,7 +94,7 @@ VertexDataTextured::VertexDataTextured(float pos0, float pos1, float pos2,
 	// Assign texture ID position.
 	textureCoords->x = texPos0; textureCoords->y = texPos1;
 	// Assigne texture ID.
-	*textureID = (unsigned int)texID;
+	*textureID = (float)texID;
 }
 
 // Return the raw data for OpenGL to use.

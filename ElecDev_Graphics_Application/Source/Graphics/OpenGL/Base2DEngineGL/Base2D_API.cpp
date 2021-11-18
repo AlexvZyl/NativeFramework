@@ -92,10 +92,10 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 	glm::vec2 local4(-1.f, -1.f);
 	std::vector<VertexDataCircle> vertices =
 	{
-		VertexDataCircle(pos1, local1, colorGLM, 0.1f, 0.005f, 0.f),
-		VertexDataCircle(pos2, local2, colorGLM, 0.1f, 0.005f, 0.f),
-		VertexDataCircle(pos3, local3, colorGLM, 0.1f, 0.005f, 0.f),
-		VertexDataCircle(pos4, local4, colorGLM, 0.1f, 0.005f, 0.f)
+		VertexDataCircle(pos1, local1, colorGLM, 0.1f, 0.005f, 0),
+		VertexDataCircle(pos2, local2, colorGLM, 0.1f, 0.005f, 0),
+		VertexDataCircle(pos3, local3, colorGLM, 0.1f, 0.005f, 0),
+		VertexDataCircle(pos4, local4, colorGLM, 0.1f, 0.005f, 0)
 	};
 	m_circlesVAO->appendDataCPU(vertices, { 0,1,2,2,3,0 });
 }
@@ -114,10 +114,10 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 	glm::vec2 local4(-1.f, -1.f);
 	std::vector<VertexDataCircle> vertices
 	{
-		VertexDataCircle(pos1, local1, colorGLM, 1.f, 0.005f, 0.f),
-		VertexDataCircle(pos2, local2, colorGLM, 1.f, 0.005f, 0.f),
-		VertexDataCircle(pos3, local3, colorGLM, 1.f, 0.005f, 0.f),
-		VertexDataCircle(pos4, local4, colorGLM, 1.f, 0.005f, 0.f)
+		VertexDataCircle(pos1, local1, colorGLM, 1.f, 0.005f, 0),
+		VertexDataCircle(pos2, local2, colorGLM, 1.f, 0.005f, 0),
+		VertexDataCircle(pos3, local3, colorGLM, 1.f, 0.005f, 0),
+		VertexDataCircle(pos4, local4, colorGLM, 1.f, 0.005f, 0)
 	};
 	m_circlesVAO->appendDataCPU(vertices, { 0,1,2,2,3,0 });
 }
