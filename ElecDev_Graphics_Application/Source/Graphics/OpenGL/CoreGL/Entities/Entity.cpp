@@ -1,139 +1,48 @@
-//=============================================================================================================================================//
-//  Includes.																																   //
-//=============================================================================================================================================//
+#include "EntityManager.h"
+#include <iostream>
 
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "Vertex.h"
-#include "Entity.h"
-#include <vector>
-#include <glm.hpp>
-#include "../GUI/GUIState.h"
 
-//=============================================================================================================================================//
-//  Constructor and Deconstructor.																											   //
-//=============================================================================================================================================//
+unsigned EntityManager::lastID = 0;
+std::vector<unsigned> EntityManager::freeIDs;
+std::vector<ManagedEntity*> EntityManager::entityLog;
 
-template<typename VertexType>
-Entity<VertexType>::Entity() {}
-
-template<typename VertexType>
-Entity<VertexType>::Entity(ManagedEntity* parent):ManagedEntity(parent)
+unsigned EntityManager::generateEID(ManagedEntity* entity)
 {
-}
-
-template<typename VertexType>
-Entity<VertexType>::~Entity() 
-{
-	m_VAO->deleteDataCPU(this); m_VAO->updateGPU();		// Clear the data from the GPU.
-	m_vertices.clear(); m_vertices.shrink_to_fit();		// Clear the data from the CPU.
-}
-
-template<typename VertexType>
-void Entity<VertexType>::destroy() 
-{ 
-	this->~Entity(); 
-}
-
-//=============================================================================================================================================//
-//  Memory management.																														   //
-//=============================================================================================================================================//
-
-template<typename VertexType>
-void Entity<VertexType>::offsetIndices(int offset) 
-{
-	for (unsigned& index : m_indices) { index += offset; }
-}
-
-//=============================================================================================================================================//
-//  Rendering.																																   //
-//=============================================================================================================================================//
-
-template<typename VertexType>
-void Entity<VertexType>::update()
-{ 
-	m_VAO->assignDataGPU(this); 
-}
-
-//=============================================================================================================================================//
-//  Movement.																																   //
-//=============================================================================================================================================//
-
-template<typename VertexType>
-void Entity<VertexType>::translate(glm::vec3& translation)
-{
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
-	m_trackedCenter += translation;
-}
-
-template<typename VertexType>
-void Entity<VertexType>::translateTo(glm::vec3& position)
-{ 
-	glm::vec3 translation = position - m_trackedCenter; 
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
-	m_trackedCenter += translation;
-}
-
-template<typename VertexType>
-void Entity<VertexType>::translateTo(glm::vec2& position)
-{
-	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
-	m_trackedCenter += translation;
-}
-
-template<typename VertexType>
-void Entity<VertexType>::rotate(glm::vec3& rotation)
-{
-
-}
-
-template<typename VertexType>
-void Entity<VertexType>::scale(glm::vec3& scaling)
-{
-
-}
-
-//=============================================================================================================================================//
-//  Set attributes.																															   //
-//=============================================================================================================================================//
-
-template<typename VertexType>
-void Entity<VertexType>::setColor(glm::vec4& color)
-{
-	for (VertexType& vertex : m_vertices) { vertex.data.color = color; }
-	m_colour = color;
-}
-
-template<typename VertexType>
-void Entity<VertexType>::setEntityID(unsigned int eID)
-{
-	for (VertexType& vertex : m_vertices) { vertex.entityID = eID; }
-	m_entityID = eID;
-}
-
-template<typename VertexType>
-void Entity<VertexType>::setLayer(float layer)
-{
-	for (VertexType& vertex : m_vertices) { vertex.data.position.z = layer; }
-}
-
-template<typename VertexType>
-void Entity<VertexType>::setContext(GUIState* guiState)
-{
-	guiState->clickedZone.primative = true;
-	if (m_parent != nullptr) {
-		m_parent->setContext(guiState);
+	//Check to see if there are any freed (recycled) IDs
+	if (!freeIDs.size()) {
+		entityLog.push_back(entity);
+		return ++lastID;
+	}
+	else {//recycle IDs
+		unsigned freeID = freeIDs.back();
+		freeIDs.pop_back();
+		entityLog[freeID - 1] = entity;
+		return freeID;
 	}
 }
 
-//=============================================================================================================================================//
-//  Instantiations.																															   //
-//=============================================================================================================================================//
+void EntityManager::freeEID(unsigned EID)
+{	
+	//To free the last EID, we can simply decrement LastID
+	if (EID == lastID) {
+		lastID--;
+	}
+	else {//we need to remember to recyce this ID
+		freeIDs.push_back(EID);
+	}
+}
 
-template class Entity<VertexData>;
-template class Entity<VertexDataTextured>;
-template class Entity<VertexDataCircle>;
-
-//=============================================================================================================================================//
-//  EOF.																																	   //
-//=============================================================================================================================================//
+ManagedEntity* EntityManager::getEntity(unsigned EID)
+{
+	if ((EID == 0) || (EID == -1)) {
+		std::cout << "\nEntities with ID = -1 or 0 are not managed by the entity manager.";
+		return nullptr;
+	}
+	if (entityLog.size() >= EID) {
+		return entityLog[EID - 1];
+	}
+	else {
+		std::cout << "\nInvalid eID.";
+		return nullptr;
+	}
+}
