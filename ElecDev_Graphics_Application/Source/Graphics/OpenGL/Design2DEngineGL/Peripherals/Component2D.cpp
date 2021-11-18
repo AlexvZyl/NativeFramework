@@ -64,8 +64,10 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	glm::vec3 portPos = glm::vec3(portOffset, componentLayer + borderLayerOffset);
 	glm::vec3 port2Pos = glm::vec3(-portOffset, componentLayer + borderLayerOffset);
 	PortType type = PORT_IN;
-	port1 = std::make_shared<Port>(portPos, type, this);
-	port2 = std::make_shared<Port>(port2Pos, type, this);
+	//port1 = std::make_shared<Port>(portPos, type, this);
+	//port2 = std::make_shared<Port>(port2Pos, type, this);
+	portsEast.push_back(std::make_shared<Port>(portPos, type, this));
+	portsWest.push_back(std::make_shared<Port>(port2Pos, type, this));
 	//port1->setColor(borderColour);
 	//port1->setLayer(componentLayer);
 	//port1->update();
@@ -94,10 +96,14 @@ void Component2D::moveTo(float pointerPos[2])
 	border->translateTo(translateDestination);
 	glm::vec2 titleDest = translateDestination + titleOffset;
 	title->translateTo(titleDest);
-	glm::vec2 portDest = translateDestination + portOffset;
-	glm::vec2 port2Dest = translateDestination - portOffset;
-	port1->moveTo(portDest);
-	port2->moveTo(port2Dest);
+	//port1->moveTo(portDest);
+	//port2->moveTo(port2Dest);
+	for (int i = 0; i < portsWest.size(); i++) {
+		portsWest[i]->moveTo(translateDestination + portOffset);
+	}
+	for (int i = 0; i < portsEast.size(); i++) {
+		portsEast[i]->moveTo(translateDestination - portOffset);
+	}
 	shape->update();
 	border->update();
 	title->update();
@@ -126,8 +132,14 @@ void Component2D::setLayer(float layer)
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
-	port1->setLayer(layer + portLayerOffset);
-	port2->setLayer(layer + portLayerOffset);
+	//port1->setLayer(layer + portLayerOffset);
+	//port2->setLayer(layer + portLayerOffset);
+	for (int i = 0; i < portsWest.size(); i++) {
+		portsWest[i]->setLayer(layer + portLayerOffset);
+	}
+	for (int i = 0; i < portsEast.size(); i++) {
+		portsEast[i]->setLayer(layer + portLayerOffset);
+	}
 	componentLayer = layer;
 }
 
@@ -141,8 +153,14 @@ void Component2D::update()
 	shape->update();
 	border->update();
 	title->update();
-	port1->update();
-	port2->update();
+	for (int i = 0; i < portsWest.size(); i++) {
+		portsWest[i]->update();
+	}
+	for (int i = 0; i < portsEast.size(); i++) {
+		portsEast[i]->update();
+	}
+	//port1->update();
+	//port2->update();
 }
 
 void Component2D::destroy()

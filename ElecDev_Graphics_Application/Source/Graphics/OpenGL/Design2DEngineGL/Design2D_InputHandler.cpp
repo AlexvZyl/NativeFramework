@@ -50,7 +50,11 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 				currentEntity = currentEntity->m_parent;
 			}
 			Component2D* cur = dynamic_cast<Component2D*>(currentEntity);
-			m_activeComponent = std::make_shared<Component2D>(*cur);
+			//m_activeComponent = dynamic_cast<std::shared_ptr>(cur);
+			m_activeComponent = *std::find_if(begin(m_components), end(m_components), [&](std::shared_ptr<Component2D> current)
+				{
+					return current.get() == cur;
+				});
 		}
 	}
 }
@@ -174,7 +178,12 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			break;
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT) && m_activeComponent != NULL) {
-				m_activeComponent->destroy();
+				auto iterator = std::find(m_components.begin(), m_components.end(), m_activeComponent);
+				if (iterator != m_components.end())
+				{
+					m_components.erase(iterator);
+					m_activeComponent = NULL;
+				}
 			}
 			break;
 		}

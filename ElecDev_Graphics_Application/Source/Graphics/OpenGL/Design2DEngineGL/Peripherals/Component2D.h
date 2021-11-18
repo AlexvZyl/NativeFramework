@@ -41,8 +41,12 @@ private:
 	std::shared_ptr<Polygon2D<VertexData>> shape;
 	std::shared_ptr<Polygon2D<VertexData>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
-	std::shared_ptr<Port> port1;
-	std::shared_ptr<Port> port2;
+	std::vector<std::shared_ptr<Port>> portsNorth;
+	std::vector<std::shared_ptr<Port>> portsSouth;
+	std::vector<std::shared_ptr<Port>> portsEast;
+	std::vector<std::shared_ptr<Port>> portsWest;
+	//std::shared_ptr<Port> port1;
+	//std::shared_ptr<Port> port2;
 	static unsigned componentID;
 
 	//component shape attributes
