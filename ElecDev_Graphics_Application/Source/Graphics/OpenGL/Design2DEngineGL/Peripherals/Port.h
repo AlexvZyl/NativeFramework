@@ -3,20 +3,19 @@
 #include <string>
 #include <memory>
 #include "glm.hpp"
-
+#include "CoreGL/Entities/Circle.h"
+#include "CoreGL/Entities/Vertex.h"
 template<typename VertexType>
 class Text;
 template<typename VertexType>
 class Polygon2D;
 template<typename VertexType>
-class Circle;
-template<typename VertexType>
 class VertexArrayObject;
 
 struct Font;
-class VertexData;
-class VertexDataTextured;
-class VertexDataCircle;
+//class VertexData;
+//class VertexDataTextured;
+//class VertexDataCircle;
 
 class Component2D;
 
@@ -33,19 +32,21 @@ private:
 	//port VAOs and primatives
 	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
 	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
-	std::unique_ptr<Circle<VertexDataCircle>> body;
-	std::unique_ptr<Circle<VertexDataCircle>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
 	glm::vec2 centre;
-	static unsigned portID;
-	glm::vec4 bodyColour = { 0.7f, 0.7f, 0.7f, 1.f };
-	glm::vec4 borderColour = { 0.1f, 0.1f, 0.1f, 1.f };
+	//static unsigned portID;
+	glm::vec4 bodyColour;
+	glm::vec4 borderColour;
 	float portLayer;
+
+	Circle<VertexDataCircle> body;
+	Circle<VertexDataCircle> border;
 
 
 public:
 	Port(glm::vec2 pos, PortType type, Component2D* parent);
-	~Port();
+	Port& operator = (const Port &t);
+	//Port(const Port&) = default;
 	void moveTo(glm::vec2 destination);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
