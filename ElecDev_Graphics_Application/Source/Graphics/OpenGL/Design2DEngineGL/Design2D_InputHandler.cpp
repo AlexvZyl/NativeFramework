@@ -10,6 +10,7 @@ This is where the drawing enigine mouse events are handled.
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
+#include "CoreGL/Entities/Circle.h"
 #include <GLFW/glfw3.h>
 #include "CoreGL/Entities/EntityManager.h"
 #include <iostream>
@@ -30,11 +31,12 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
 		m_components.insert(m_components.end(), m_activeComponent);
-		m_activeComponent = std::make_shared<Component2D>(pixelCoords,
+		m_activeComponent = NULL;/*std::make_shared<Component2D>(pixelCoords,
 			m_triangleEntitiesVAO.get(),
 			m_lineEntitiesVAO.get(),
 			m_triangleTexturedEntitiesVAO.get(),
-			m_circleEntitiesVAO.get());
+			m_circleEntitiesVAO.get());*/
+		designerState = ENTITY_SELECT;
 	}
 	else if (designerState == ENTITY_SELECT) {
 		m_currentEntityID = getEntityID(pixelCoords);
@@ -88,7 +90,7 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 	m_currentEntityID = getEntityID(pixelCoords);
 
 	#ifdef _DEBUG
-		std::cout << m_currentEntityID << std::endl;
+		//std::cout << m_currentEntityID << std::endl;
 	#endif
 
 	// Call parent event.
@@ -141,8 +143,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2->destroy(); }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }*/
+	if (key == GLFW_KEY_S && action == GLFW_PRESS) { circ2->destroy(); }
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) { circ3 = nullptr; }*/
 
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
@@ -163,6 +165,14 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			//m_activeComponent->destroy();
 			//Remove the dummy component
 			m_activeComponent = NULL;//runs deconstructor
+			for (int i = 0; i < m_components.size(); i++) {
+				m_components[i]->update();
+			}
+			break;
+		case GLFW_KEY_DELETE:
+			if ((designerState = ENTITY_SELECT) && m_activeComponent != NULL) {
+				m_activeComponent->destroy();
+			}
 			break;
 		}
 	}

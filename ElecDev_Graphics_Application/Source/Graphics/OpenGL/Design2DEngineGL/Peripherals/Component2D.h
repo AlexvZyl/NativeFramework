@@ -105,5 +105,6 @@ public:
 	void place(float pos[2]);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
+	void update();
 	void destroy();
 };

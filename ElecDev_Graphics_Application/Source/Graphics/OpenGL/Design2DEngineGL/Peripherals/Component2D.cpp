@@ -136,9 +136,19 @@ void Component2D::setContext(GUIState* guiState)
 	guiState->clickedZone.component = true;
 }
 
+void Component2D::update()
+{
+	shape->update();
+	border->update();
+	title->update();
+	port1->update();
+	port2->update();
+}
+
 void Component2D::destroy()
 {
-	shape->destroy();
-	border->destroy();
-	title->destroy();
+	this->~Component2D();
+	//shape->destroy();
+	//border->destroy();
+	//title->destroy();
 }

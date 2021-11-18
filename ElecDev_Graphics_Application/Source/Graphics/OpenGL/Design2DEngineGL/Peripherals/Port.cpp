@@ -42,6 +42,12 @@ void Port::setLayer(float layer)
 	border->update();
 }
 
+void Port::update()
+{
+	body->update();
+	border->update();
+}
+
 void Port::setContext(GUIState* guiState)
 {
 	guiState->clickedZone.port = true;

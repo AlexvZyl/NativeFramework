@@ -49,6 +49,7 @@ public:
 	void moveTo(glm::vec2 destination);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
+	void update();
 
 };
 
