@@ -12,6 +12,7 @@ This is where the drawing enigine mouse events are handled.
 #include "CoreGL/Entities/Polygon.h"
 #include <GLFW/glfw3.h>
 #include "CoreGL/Entities/EntityManager.h"
+#include "CoreGL/Entities/Circle.h"
 #include <iostream>
 
 //=============================================================================================================================================//
@@ -103,26 +104,28 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action)
 {
-	glm::vec3 v1(-0.5f, 0.5f, 0.0f);
-	glm::vec3 v2(0.5f, 0.5f, 0.0f);
-	glm::vec3 v3(0.5f, -0.5f, 0.0f);
-	glm::vec3 v4(-0.5f, -0.5f, 0.0f);
-	std::vector<glm::vec3> vertices1 = { v1, v2, v3, v4 };
-	glm::vec3 v5(-0.5f + 1, 0.5f + 1, 0.0f);
-	glm::vec3 v6(0.5f + 1, 0.5f + 1, 0.0f);
-	glm::vec3 v7(0.5f + 1, -0.5f + 1, 0.0f);
-	glm::vec3 v8(-0.5f + 1, -0.5f + 1, 0.0f);
-	std::vector<glm::vec3> vertices2 = { v5, v6, v7, v8 };
-	glm::vec3 v9(-0.5f - 1, 0.5f - 1, 0.0f);
-	glm::vec3 v10(0.5f - 1, 0.5f - 1, 0.0f);
-	glm::vec3 v11(0.5f - 1, -0.5f - 1, 0.0f);
-	glm::vec3 v12(-0.5f - 1, -0.5f - 1, 0.0f);
-	std::vector<glm::vec3> vertices3 = { v9, v10, v11, v12 };
+	glm::vec3 v1(-1.f, -1.f, 0.0f);
+	glm::vec3 v2(0.f, 0.f, 0.0f);
+	glm::vec3 v3(1.f, 1.f, 0.0f);
+
+	glm::vec4 colour(1.f, 0.f, 0.f, 1.f);
 
 	// Add components.
-	//if (key == GLFW_KEY_Q && action == GLFW_PRESS) { p1 = new Polygon2D(vertices3, m_triangleEntitiesVAO.get()); }
-	//if (key == GLFW_KEY_W && action == GLFW_PRESS) { p2 = new Polygon2D(vertices1, m_triangleEntitiesVAO.get()); }
-	//if (key == GLFW_KEY_E && action == GLFW_PRESS) { p3 = new Polygon2D(vertices2, m_triangleEntitiesVAO.get()); }
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS) 
+	{ 
+		p1 = new Circle<VertexDataCircle>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p1->update();
+	}
+	if (key == GLFW_KEY_W && action == GLFW_PRESS) 
+	{ 
+		p2 = new Circle<VertexDataCircle>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p2->update();
+	}
+	if (key == GLFW_KEY_E && action == GLFW_PRESS) 
+	{
+		p3 = new Circle<VertexDataCircle>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p3->update();
+	}
 
 	// Remove components.
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
