@@ -20,7 +20,7 @@ for a VAO to be able to render the entity to the screen.
 
 template<typename VertexType>
 class VertexArrayObject;
-class GUIState;
+struct GUIState;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
