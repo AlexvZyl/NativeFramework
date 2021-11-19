@@ -34,7 +34,7 @@ private:
 	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 	std::shared_ptr<Text<VertexDataTextured>> title;
 	glm::vec2 centre;
-	//static unsigned portID;
+	static unsigned portID;
 	glm::vec4 bodyColour;
 	glm::vec4 borderColour;
 	float portLayer;
@@ -44,6 +44,7 @@ private:
 
 
 public:
+	std::string label;
 	Port(glm::vec2 pos, PortType type, Component2D* parent);
 	Port& operator = (const Port &t);
 	//Port(const Port&) = default;

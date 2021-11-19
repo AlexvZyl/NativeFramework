@@ -14,6 +14,7 @@ border(parent->engine_circleVAO, pos, 0.011f, borderColour, 1.0f, 0.0f, this)
 	engine_texturedTrianglesVAO = parent->engine_texturedTrianglesVAO;
 	centre = pos;
 	portLayer = parent->componentLayer + parent->portLayerOffset;
+	label = "Port " + std::to_string(parent->numPorts++);
 	//glm::vec3 centre3 = glm::vec3(centre, portLayer);
 	//new (&body) Circle(engine_circleVAO, centre3, 0.01f, bodyColour, 1.0f, 0.0f, this);
 	body.setColor(bodyColour);
@@ -23,6 +24,7 @@ border(parent->engine_circleVAO, pos, 0.011f, borderColour, 1.0f, 0.0f, this)
 	border.setColor(borderColour);
 	border.setLayer(portLayer);
 	border.update();
+	
 }
 
 void Port::moveTo(glm::vec2 destination)

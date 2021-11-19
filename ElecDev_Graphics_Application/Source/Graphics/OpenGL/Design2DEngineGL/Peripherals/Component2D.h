@@ -41,10 +41,6 @@ private:
 	std::shared_ptr<Polygon2D<VertexData>> shape;
 	std::shared_ptr<Polygon2D<VertexData>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
-	std::vector<std::shared_ptr<Port>> portsNorth;
-	std::vector<std::shared_ptr<Port>> portsSouth;
-	std::vector<std::shared_ptr<Port>> portsEast;
-	std::vector<std::shared_ptr<Port>> portsWest;
 	//std::shared_ptr<Port> port1;
 	//std::shared_ptr<Port> port2;
 	static unsigned componentID;
@@ -78,6 +74,13 @@ private:
 	bool selected = true;
 
 public:
+
+	std::vector<std::shared_ptr<Port>> portsNorth;
+	std::vector<std::shared_ptr<Port>> portsSouth;
+	std::vector<std::shared_ptr<Port>> portsEast;
+	std::vector<std::shared_ptr<Port>> portsWest;
+
+	unsigned numPorts = 0;
 
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
