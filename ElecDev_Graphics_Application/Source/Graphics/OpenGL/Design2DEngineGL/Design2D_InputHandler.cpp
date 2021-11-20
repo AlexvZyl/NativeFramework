@@ -43,19 +43,23 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	else if (designerState == ENTITY_SELECT) {
 		m_currentEntityID = getEntityID(pixelCoords);
 		if ((m_currentEntityID == 0) || (m_currentEntityID == -1)) {
-
+			m_activeComponent = NULL;
+			m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 		}
 		else {
 			ManagedEntity* currentEntity = EntityManager::getEntity(m_currentEntityID);
 			while (currentEntity->m_parent != nullptr) {
 				currentEntity = currentEntity->m_parent;
 			}
+
+			//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
 			Component2D* cur = dynamic_cast<Component2D*>(currentEntity);
 			//m_activeComponent = dynamic_cast<std::shared_ptr>(cur);
 			m_activeComponent = *std::find_if(begin(m_components), end(m_components), [&](std::shared_ptr<Component2D> current)
 				{
 					return current.get() == cur;
 				});
+			
 		}
 	}
 }
@@ -72,6 +76,21 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	else {
 		ManagedEntity* currentEntity = EntityManager::getEntity(m_currentEntityID);
 		currentEntity->setContext(m_guiState);
+
+		//Get active component.
+		while (currentEntity->m_parent != nullptr) {
+			currentEntity = currentEntity->m_parent;
+		}
+		//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
+		Component2D* cur = dynamic_cast<Component2D*>(currentEntity);
+		//m_activeComponent = dynamic_cast<std::shared_ptr>(cur);
+		m_activeComponent = *std::find_if(begin(m_components), end(m_components), [&](std::shared_ptr<Component2D> current)
+			{
+				return current.get() == cur;
+			});
+
+		//Pass the active component to the GUI state for editing.
+		m_guiState->active_component = m_activeComponent.get();
 	}
 }
 
@@ -160,13 +179,15 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		switch (key) {
 		case GLFW_KEY_P:
-			designerState = COMPONENT_PLACE;
-			//add a dummy component
-			m_activeComponent = std::make_shared<Component2D>(screenCoords,
-				m_triangleEntitiesVAO.get(),
-				m_lineEntitiesVAO.get(),
-				m_triangleTexturedEntitiesVAO.get(),
-				m_circleEntitiesVAO.get());
+			if (designerState != COMPONENT_PLACE) {
+				designerState = COMPONENT_PLACE;
+				//add a dummy component
+				m_activeComponent = std::make_shared<Component2D>(screenCoords,
+					m_triangleEntitiesVAO.get(),
+					m_lineEntitiesVAO.get(),
+					m_triangleTexturedEntitiesVAO.get(),
+					m_circleEntitiesVAO.get());
+			}
 			break;
 		case GLFW_KEY_O:
 			designerState = ENTITY_SELECT;
@@ -174,7 +195,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			//delete m_activeComponent;
 			//Remove the dummy component
 			m_activeComponent = NULL;//runs deconstructor
-			//m_circleEntitiesVAO->updateGPU();
+			m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 			break;
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT) && m_activeComponent != NULL) {
@@ -183,6 +204,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 				{
 					m_components.erase(iterator);
 					m_activeComponent = NULL;
+					m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 				}
 			}
 			break;
