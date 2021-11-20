@@ -72,7 +72,7 @@ public:
 	// Updates the entity directly on the GPU.
 	void update();
 	// Deletes the entity and clears the memory.
-	void destroy();
+	void wipeMemory();
 	// Set the entity later.
 	void setLayer(float layer);
 	// Offsets the entities' indices to match the VAO.

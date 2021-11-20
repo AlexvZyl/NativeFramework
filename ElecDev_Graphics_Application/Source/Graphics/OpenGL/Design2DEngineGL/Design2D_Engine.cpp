@@ -24,6 +24,7 @@ This is where the interactive 2D design engine is implemented.
 #include "CoreGL/ShaderHandlerGL.h"
 #include "CoreGL/VertexArrayObjectGL.h"
 #include <GLFW/glfw3.h>
+
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
@@ -55,9 +56,6 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 // Destructor.
 Design2DEngineGL::~Design2DEngineGL()
 {
-	// Call base destructor.
-	Base2DEngineGL::~Base2DEngineGL();
-
 	// Delete components.
 	m_components.empty();
 	m_components.shrink_to_fit();

@@ -86,12 +86,8 @@ void GraphicsHandler::removeWindow(std::string windowName)
 	{
 		// Remove by key.
 		m_windowsDictionary.erase(windowName);
-		// Set window inactive.
-		/*if (m_windowsDictionary.size() != 0)
-		{
-			m_activeWindow = NULL;
-		m_activeWindow = NULL;
-		}*/
+		// If the dict is empty make the window incavtive.
+		if (m_windowsDictionary.size() != 0) { m_activeWindow = NULL; }
 	}
 	else { windowError(windowName); }
 }

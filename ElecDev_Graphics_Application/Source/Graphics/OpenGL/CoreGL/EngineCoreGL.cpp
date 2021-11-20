@@ -34,7 +34,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	:m_guiState(guiState)
 {
 	// Print start message.
-	std::cout << blue << "[OPENGL] [INFO] : " << white << "Engine core starting...";
+	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core starting...";
 
 	// ----------------------------------------- //
 	//  C R E A T E   B A S I C   S H A D E R S  //
@@ -90,9 +90,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 }
 
 // Destructor.
-EngineCoreGL::~EngineCoreGL()
-{
-}
+EngineCoreGL::~EngineCoreGL() {}
 
 //=============================================================================================================================================//
 //  Errors.																																	   //

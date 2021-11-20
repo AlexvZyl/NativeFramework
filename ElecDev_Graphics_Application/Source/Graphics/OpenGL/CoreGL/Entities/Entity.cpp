@@ -17,23 +17,29 @@ template<typename VertexType>
 Entity<VertexType>::Entity() {}
 
 template<typename VertexType>
-Entity<VertexType>::Entity(ManagedEntity* parent):ManagedEntity(parent)
-{
-}
+Entity<VertexType>::Entity(ManagedEntity* parent) : ManagedEntity(parent) {}
 
 template<typename VertexType>
 Entity<VertexType>::~Entity() 
 {
-	m_VAO->deleteDataCPU(this);		// Clear the data from the GPU.
-	m_VAO->updateGPU();		
+	// Clear the data from the GPU.
+	m_VAO->deleteDataCPU(this);		
+	// Clear the data from the CPU.
 	m_vertices.clear(); 
-	m_vertices.shrink_to_fit();		// Clear the data from the CPU.
+	m_vertices.shrink_to_fit();		
+	m_VAO->updateGPU();		
 }
 
 template<typename VertexType>
-void Entity<VertexType>::destroy() 
+void Entity<VertexType>::wipeMemory() 
 { 
-	this->~Entity(); 
+	// Clear the data from the GPU.
+	m_VAO->deleteDataCPU(this);		
+	m_VAO->updateGPU();
+	// Clear the data from the CPU.
+	m_vertices.clear();
+	m_vertices.shrink_to_fit();		
+	/*this->~Entity(); */
 }
 
 //=============================================================================================================================================//

@@ -1,3 +1,6 @@
+//=============================================================================================================================================//
+// Includes.																																   //
+//=============================================================================================================================================//
 
 #include "Component2D.h"
 #include "CoreGL/Entities/Vertex.h"
@@ -8,10 +11,17 @@
 #include "Resources/ResourceHandler.h"
 #include "CoreGL/Entities/Circle.h"
 
+//=============================================================================================================================================//
+//  Variables.																																   //
+//=============================================================================================================================================//
+
 //Add font for component titles
 Font Component2D::titleFont = loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG);
 unsigned Component2D::componentID = 0;
 
+//=============================================================================================================================================//
+//  Constructor & Destructor.																												   //
+//=============================================================================================================================================//
 
 Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, 
 						 VertexArrayObject<VertexData>* linesVAO, 
@@ -41,8 +51,6 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.5f);
 	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
 	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
-
-	std::shared_ptr<VertexData> edgeVertices[4];
 
 	// Main shape.
 	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO, this);
@@ -87,7 +95,12 @@ Component2D::Component2D(float centreCoords[2],
 
 Component2D::~Component2D() 
 {
+	//engine_circleVAO->updateGPU();
 }
+
+//=============================================================================================================================================//
+//  Constructor & Destructor.																												   //
+//=============================================================================================================================================//
 
 void Component2D::moveTo(float pointerPos[2])
 {
@@ -163,10 +176,14 @@ void Component2D::update()
 	//port2->update();
 }
 
-void Component2D::destroy()
-{
-	this->~Component2D();
+//void Component2D::destroy()
+//{
+	/*this->~Component2D();*/
 	//shape->destroy();
 	//border->destroy();
 	//title->destroy();
-}
+//}
+
+//=============================================================================================================================================//
+//  EOF.																																	   //
+//=============================================================================================================================================//

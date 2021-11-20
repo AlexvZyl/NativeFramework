@@ -71,10 +71,7 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 };
 
 // Delete and free memory.
-Base2DEngineGL::~Base2DEngineGL() 
-{
-	EngineCoreGL::~EngineCoreGL();
-}
+Base2DEngineGL::~Base2DEngineGL() {}
 
 //=============================================================================================================================================//
 //  Rendering.																																   //

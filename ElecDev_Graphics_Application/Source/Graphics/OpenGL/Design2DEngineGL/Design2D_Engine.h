@@ -34,9 +34,9 @@ public:
 	designState designerState = ENTITY_SELECT;
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
-	Circle<VertexDataCircle>* p1;
-	Circle<VertexDataCircle>* p2;
-	Circle<VertexDataCircle>* p3;
+	std::unique_ptr<Circle<VertexDataCircle>> p1;
+	std::unique_ptr<Circle<VertexDataCircle>> p2;
+	std::unique_ptr<Circle<VertexDataCircle>> p3;
 	unsigned int m_currentEntityID = 0;
 
 	// ------------------------------------------------ //

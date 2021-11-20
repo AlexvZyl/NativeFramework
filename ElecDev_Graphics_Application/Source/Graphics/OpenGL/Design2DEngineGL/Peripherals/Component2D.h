@@ -79,9 +79,9 @@ private:
 
 public:
 
-	float componentLayer = 0.9f;
-	float borderLayerOffset = 0.01f;
-	float portLayerOffset = 0.02f;
+	float componentLayer = -0.9f;
+	float borderLayerOffset = -0.01f;
+	float portLayerOffset = -0.02f;
 
 	VertexArrayObject<VertexData>* engine_trianglesVAO;
 	VertexArrayObject<VertexData>* engine_linesVAO;
@@ -110,5 +110,5 @@ public:
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
 	void update();
-	void destroy();
+	//void destroy();
 };

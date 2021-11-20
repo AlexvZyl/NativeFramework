@@ -15,6 +15,7 @@ This is where the drawing enigine mouse events are handled.
 #include "CoreGL/Entities/EntityManager.h"
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
+#include "CoreGL/VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -134,24 +135,24 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	// Add components.
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) 
 	{ 
-		p1 = new Circle<VertexDataCircle>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.0f, nullptr);
 		p1->update();
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) 
 	{ 
-		p2 = new Circle<VertexDataCircle>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.0f, nullptr);
 		p2->update();
 	}
 	if (key == GLFW_KEY_E && action == GLFW_PRESS) 
 	{
-		p3 = new Circle<VertexDataCircle>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.0f, nullptr);
 		p3->update();
 	}
 
 	// Remove components.
-	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1->destroy(); }
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2->destroy(); }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3->destroy(); }
+	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1 = nullptr; }
+	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2 = nullptr; }
+	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3 = nullptr; }
 
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
@@ -167,14 +168,13 @@ void Design2DEngineGL::keyEvent(int key, int action)
 				m_triangleTexturedEntitiesVAO.get(),
 				m_circleEntitiesVAO.get());
 			break;
-		case GLFW_KEY_ESCAPE:
+		case GLFW_KEY_O:
 			designerState = ENTITY_SELECT;
 			//m_activeComponent->destroy();
+			//delete m_activeComponent;
 			//Remove the dummy component
 			m_activeComponent = NULL;//runs deconstructor
-			for (int i = 0; i < m_components.size(); i++) {
-				m_components[i]->update();
-			}
+			//m_circleEntitiesVAO->updateGPU();
 			break;
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT) && m_activeComponent != NULL) {

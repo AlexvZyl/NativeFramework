@@ -131,7 +131,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 {
 	wipeCPU();
 	GLCall(glDeleteBuffers(1, &m_VBOID))
-		GLCall(glDeleteVertexArrays(1, &m_VAOID));
+	GLCall(glDeleteVertexArrays(1, &m_VAOID));
 }
 
 //=============================================================================================================================================//
@@ -225,6 +225,8 @@ void VertexArrayObject<VertexType>::deleteDataCPU(Entity<VertexType>* entity)
 		m_vertexCount -= entity->m_vertexCount;
 		m_indexCount -= entity->m_indexCount;
 		m_isUpdated = false;
+		m_entityCPU.shrink_to_fit();
+
 	}
 	// Entity was not found.
 	else { std::cout << yellow << "\n[OPENGL] [WARNING]: " << white << "Tried to delete entity, but it is not in the list."; }
