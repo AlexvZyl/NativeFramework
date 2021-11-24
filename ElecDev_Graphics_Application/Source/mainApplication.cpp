@@ -31,6 +31,8 @@
 // Measure time.
 #include <chrono>
 
+#include "CoreGL/FontLoader.h"
+
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
 /*=======================================================================================================================================*/
@@ -98,6 +100,9 @@ void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 
 int main(int, char**)
 {
+    // Test font loading.
+    msdfgenLoadFont();
+
     // Setup window.
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())

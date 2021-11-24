@@ -183,10 +183,10 @@ void Design2DEngineGL::keyEvent(int key, int action)
 				designerState = COMPONENT_PLACE;
 				//add a dummy component
 				m_activeComponent = std::make_shared<Component2D>(screenCoords,
-					m_triangleEntitiesVAO.get(),
-					m_lineEntitiesVAO.get(),
-					m_triangleTexturedEntitiesVAO.get(),
-					m_circleEntitiesVAO.get());
+																  m_triangleEntitiesVAO.get(),
+																  m_lineEntitiesVAO.get(),
+																  m_triangleTexturedEntitiesVAO.get(),
+																  m_circleEntitiesVAO.get());
 			}
 			break;
 		case GLFW_KEY_O:

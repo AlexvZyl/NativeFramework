@@ -7,12 +7,17 @@
 #include <iostream>
 // Used for dictionary.
 #include <map>
+// Resources
 #include "Resources/ResourceHandler.h"
 // File reading.
 #include <fstream>
 #include <cstdlib>
 #include <string>
 #include <sstream>
+// MSDFGen
+#include "External/MSDFGen/msdfgen.h"
+#include "External/MSDFGen/msdfgen-ext.h"
+
 
 //=============================================================================================================================================//
 //  Font loading function.																													   //
@@ -144,6 +149,39 @@ Font loadFont(int fontID, int atlasID)
 	}
 	// Return the created font.
 	return font;
+}
+
+//=============================================================================================================================================//
+//  MSDFGen font generation.																												   //
+//=============================================================================================================================================//
+
+using namespace msdfgen;
+
+void msdfgenLoadFont() 
+{
+	FreetypeHandle* ft = initializeFreetype();
+	if (ft) 
+	{
+		//FontHandle* font = loadFont(ft, "Source\\Resources\\Fonts\\Ruda\\Ruda-Bold.ttf");
+		FontHandle* font = loadFont(ft, "C:\\Windows\\Fonts\\arialbd.ttf");
+		if (font) 
+		{
+			Shape shape;
+			if (loadGlyph(shape, font, 'A')) 
+			{
+				shape.normalize();
+				//                      max. angle
+				edgeColoringSimple(shape, 3.0);
+				//           image width, height
+				Bitmap<float, 3> msdf(32, 32);
+				//                     range, scale, translation
+				generateMSDF(msdf, shape, 4.0, 1.0, Vector2(4.0, 4.0));
+				savePng(msdf, "output.png");
+			}
+			destroyFont(font);
+		}
+		deinitializeFreetype(ft);
+	}
 }
 
 //=============================================================================================================================================//
