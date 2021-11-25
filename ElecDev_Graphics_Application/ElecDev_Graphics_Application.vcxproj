@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\MSDFGen\include</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -158,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\MSDFGen\include;$(SolutionDir)ElecDev_Graphics_Application\Source\External\MSDFGen\freetype\include</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -173,45 +173,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\External\JSON\json.hpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoader.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Fonts.h" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\convert.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\depthguard.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\directives.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\emit.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\emitfromevents.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\emitter.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\emitterstate.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\emitterutils.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\exceptions.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\exp.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\memory.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\node.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\nodebuilder.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\nodeevents.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\node_data.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\null.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\ostream_wrapper.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\parse.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\parser.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\regex_yaml.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\scanner.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\scanscalar.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\scantag.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\scantoken.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\simplekey.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\singledocparser.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
-    <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
@@ -254,108 +225,14 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
-    <ClInclude Include="Source\External\SPDLog\async.h" />
-    <ClInclude Include="Source\External\SPDLog\async_logger-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\async_logger.h" />
-    <ClInclude Include="Source\External\SPDLog\cfg\argv.h" />
-    <ClInclude Include="Source\External\SPDLog\cfg\env.h" />
-    <ClInclude Include="Source\External\SPDLog\cfg\helpers-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\cfg\helpers.h" />
-    <ClInclude Include="Source\External\SPDLog\common-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\common.h" />
-    <ClInclude Include="Source\External\SPDLog\details\backtracer-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\backtracer.h" />
-    <ClInclude Include="Source\External\SPDLog\details\circular_q.h" />
-    <ClInclude Include="Source\External\SPDLog\details\console_globals.h" />
-    <ClInclude Include="Source\External\SPDLog\details\file_helper-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\file_helper.h" />
-    <ClInclude Include="Source\External\SPDLog\details\fmt_helper.h" />
-    <ClInclude Include="Source\External\SPDLog\details\log_msg-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\log_msg.h" />
-    <ClInclude Include="Source\External\SPDLog\details\log_msg_buffer-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\log_msg_buffer.h" />
-    <ClInclude Include="Source\External\SPDLog\details\mpmc_blocking_q.h" />
-    <ClInclude Include="Source\External\SPDLog\details\null_mutex.h" />
-    <ClInclude Include="Source\External\SPDLog\details\os-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\os.h" />
-    <ClInclude Include="Source\External\SPDLog\details\periodic_worker-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\periodic_worker.h" />
-    <ClInclude Include="Source\External\SPDLog\details\registry-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\registry.h" />
-    <ClInclude Include="Source\External\SPDLog\details\synchronous_factory.h" />
-    <ClInclude Include="Source\External\SPDLog\details\tcp_client-windows.h" />
-    <ClInclude Include="Source\External\SPDLog\details\tcp_client.h" />
-    <ClInclude Include="Source\External\SPDLog\details\thread_pool-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\details\thread_pool.h" />
-    <ClInclude Include="Source\External\SPDLog\details\windows_include.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bin_to_hex.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\args.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\chrono.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\color.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\compile.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\core.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\format-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\format.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\locale.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\os.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\ostream.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\printf.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\ranges.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\bundled\xchar.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\chrono.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\compile.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\fmt.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\ostr.h" />
-    <ClInclude Include="Source\External\SPDLog\fmt\xchar.h" />
-    <ClInclude Include="Source\External\SPDLog\formatter.h" />
-    <ClInclude Include="Source\External\SPDLog\fwd.h" />
-    <ClInclude Include="Source\External\SPDLog\logger-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\logger.h" />
-    <ClInclude Include="Source\External\SPDLog\pattern_formatter-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\pattern_formatter.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\android_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\ansicolor_sink-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\ansicolor_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\base_sink-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\base_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\basic_file_sink-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\basic_file_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\daily_file_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\dist_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\dup_filter_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\hourly_file_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\mongo_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\msvc_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\null_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\ostream_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\qt_sinks.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\ringbuffer_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\rotating_file_sink-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\rotating_file_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\sink-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\stdout_color_sinks-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\stdout_color_sinks.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\stdout_sinks-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\stdout_sinks.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\syslog_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\systemd_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\tcp_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\wincolor_sink-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\wincolor_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\sinks\win_eventlog_sink.h" />
-    <ClInclude Include="Source\External\SPDLog\spdlog-inl.h" />
-    <ClInclude Include="Source\External\SPDLog\spdlog.h" />
-    <ClInclude Include="Source\External\SPDLog\stopwatch.h" />
-    <ClInclude Include="Source\External\SPDLog\tweakme.h" />
-    <ClInclude Include="Source\External\SPDLog\version.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\convert.h" />
@@ -374,65 +251,6 @@
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\parse.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\ptr.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\type.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\binary.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\anchordict.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\graphbuilder.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\depthguard.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\dll.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitfromevents.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitter.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitterdef.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emittermanip.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\emitterstyle.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\eventhandler.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\exceptions.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\mark.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\convert.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\impl.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\iterator.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\iterator_fwd.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\memory.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node_data.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node_iterator.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\detail\node_ref.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\emit.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\impl.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\iterator.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\node.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\parse.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\ptr.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\node\type.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\noexcept.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\null.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\ostream_wrapper.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\parser.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\stlemitter.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\traits.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\yaml.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\collectionstack.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\directives.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\emitterstate.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\emitterutils.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\exp.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\indentation.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\nodebuilder.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\nodeevents.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\ptr_vector.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\regeximpl.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\regex_yaml.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\scanner.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\scanscalar.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\scantag.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\setting.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\singledocparser.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\stream.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\streamcharsource.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\stringsource.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
-    <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.h" />
@@ -967,6 +785,8 @@
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
     <None Include="Source\GUI\GUIColors.md" />
+    <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
+    <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
     <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
@@ -981,6 +801,7 @@
     <Image Include="Icons\component.png" />
     <Image Include="Icons\Draw_Circuit_Buckets.png" />
     <Image Include="Icons\Draw_MCC.png" />
+    <Image Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_PNG.png" />

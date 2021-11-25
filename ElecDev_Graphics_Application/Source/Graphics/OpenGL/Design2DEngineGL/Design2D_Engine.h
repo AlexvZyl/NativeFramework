@@ -14,6 +14,8 @@ class Component2D;
 
 template<typename VetexType>
 class Polygon2D;
+template<typename VetexType>
+class Circle;
 
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
@@ -32,9 +34,9 @@ public:
 	designState designerState = ENTITY_SELECT;
 	std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
-	Polygon2D<VertexData>* p1;
-	Polygon2D<VertexData>* p2;
-	Polygon2D<VertexData>* p3;
+	std::unique_ptr<Circle<VertexDataCircle>> p1;
+	std::unique_ptr<Circle<VertexDataCircle>> p2;
+	std::unique_ptr<Circle<VertexDataCircle>> p3;
 	unsigned int m_currentEntityID = 0;
 
 	// ------------------------------------------------ //

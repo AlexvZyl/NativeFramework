@@ -12,7 +12,7 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent):Entity<VertexType>(parent)
+Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent):Entity<VertexType>(parent)
 {
 	// Assign variables.
 	m_VAO = vao;
@@ -40,6 +40,11 @@ Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3& center
 	// Add to VAO.
 	m_VAO->appendDataCPU(this);
 }
+
+template<typename VertexType>
+Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent)
+	: Circle( vao, glm::vec3(center, 0.f), radius, color, thickness, fade, parent)
+{}
 
 template<typename VertexType>
 Circle<VertexType>::~Circle() {}

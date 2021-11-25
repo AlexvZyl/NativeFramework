@@ -114,6 +114,7 @@ bool Ribbons::topBar()
     {
         if (this->sideBarFlag == "Block Diagram") { this->sideBarFlag = "None"; }
         else { this->sideBarFlag = "Block Diagram"; }
+        m_guiState->blockDiagram = true;
     }
     ImGui::SameLine();
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) { this->sideBarFlag = "Draw Circuit Bucket"; }

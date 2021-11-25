@@ -131,7 +131,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 {
 	wipeCPU();
 	GLCall(glDeleteBuffers(1, &m_VBOID))
-		GLCall(glDeleteVertexArrays(1, &m_VAOID));
+	GLCall(glDeleteVertexArrays(1, &m_VAOID));
 }
 
 //=============================================================================================================================================//
@@ -215,7 +215,7 @@ void VertexArrayObject<VertexType>::deleteDataCPU(Entity<VertexType>* entity)
 		int index = std::distance(m_entityCPU.begin(), iterator);
 		// Delete entity entry.
 		m_entityCPU.erase(m_entityCPU.begin() + index);
-		// Update the buffer indeces of the entities.
+		// Update the buffer indices of the entities.
 		for (int i = index; i < m_entityCPU.size(); i++)
 		{
 			m_entityCPU[i]->m_bufferStartIndex -= entity->m_vertexCount;
@@ -225,6 +225,8 @@ void VertexArrayObject<VertexType>::deleteDataCPU(Entity<VertexType>* entity)
 		m_vertexCount -= entity->m_vertexCount;
 		m_indexCount -= entity->m_indexCount;
 		m_isUpdated = false;
+		m_entityCPU.shrink_to_fit();
+
 	}
 	// Entity was not found.
 	else { std::cout << yellow << "\n[OPENGL] [WARNING]: " << white << "Tried to delete entity, but it is not in the list."; }
@@ -264,6 +266,11 @@ void VertexArrayObject<VertexType>::updateGPU()
 		{
 			for (VertexType& vertex : entity->m_vertices)
 			{
+				/*//DEBUG: CHECK that dataGL() returns the correct values
+				for (int i = 0; i < 11; i++) {
+					std::cout << *((float*) vertex.dataGL()+i) << std::endl;
+				}
+				*/
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, verticesIndex * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, verticesIndex * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.idGL()));
 				verticesIndex += 1;

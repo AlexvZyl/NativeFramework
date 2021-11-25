@@ -34,18 +34,21 @@ void PopUpMenu::render()
             close();
         }
         // Render menu items.
-        if (m_guiState->clickedZone.background) {
+        if (m_guiState->clickedZone.background) 
+        {
             if (ImGui::MenuItem("Add component", "C"))
             {   
                 close();
             }
-        }if (m_guiState->clickedZone.component) {
+        }
+        else if (m_guiState->clickedZone.component) 
+        {
             if (ImGui::MenuItem("Component Editor", "E"))
             {
                 m_guiState->componentEditor = true;
                 close();
             }
-            if (ImGui::MenuItem("Add port", "P"))
+            if (ImGui::MenuItem("Edit Ports", "P"))
             {
                 close();
             }

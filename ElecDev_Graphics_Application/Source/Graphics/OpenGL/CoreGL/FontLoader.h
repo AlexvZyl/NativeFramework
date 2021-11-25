@@ -18,33 +18,37 @@ Font loading utility.
 // Stores the information regarding the characters.
 struct Character
 {
-	unsigned int id = 0;		// Character code in ascii.
-	float x = 0;				// Top left coordinate of character.
-	float y = 0;				// Top left coordinate of character
-	float width = 0;			// Width of character in pixels.
-	float height = 0;			// Height of the charcter in pixels
-	float xOffset = 0;			// Offset from the cursor psition.
-	float yOffset = 0;			// Offset from the cursor psition.
-	float xAdvance = 0;			// Amount that the cursor should move to draw a new character.
+	unsigned int id = 0;				// Character code in ascii.
+	float xTextureCoords[2] = { 0,0 };  // Position of the character in the texture that
+	float yTextureCoords[2] = { 0,0 };	// is used by OpenGL.
+	float xPlaneBounds[2] = { 0,0 };    // The local offsets of each character.
+	float yPlaneBounds[2] = { 0,0 };	//
+	float xAdvance = 0;					// Amount that the cursor should move to draw a new character.
+	float width = 0;					// Character dimensions,
+	float height = 0;					// given in size / pixel.
 };
 
 // Struct that contains the information regarding the font used in this renderer.
 struct Font
 {
-	std::string name;											// Name of the font used.
-	int padding = 0;											// Padding around each character.
-	int textureSize[2] = { 0,0 };								// x, y.  Size of the .png file.
-	std::map<unsigned int, Character> characterDictionary;		// Dictionary containing the character information.
-	unsigned int textureID;										// Texture ID for the font atlas.
+	float lineSpace = 0;												// Size of line spacing (vertical).
+	int textureSize[2] = { 0,0 };										// x, y.  Size of the .png file.
+	float pixelsPerEM = 0;												// Pixels per EM.
+	float sizeInEMs = 0;												// The size of the font given in EM's.
+	std::string yOrigin;												// Where the 0 of the y axis is located.
+	std::map<unsigned int, Character> characterDictionary;				// Dictionary containing the character information.
+	std::map<std::pair<unsigned, unsigned>, float> kerningDictionary;	// Dictionary containing the kerning information.
+	unsigned int textureID = NULL;										// Texture ID for the font atlas.
 };
 
 //=============================================================================================================================================//
 //  Function decleration.																													   //
 //=============================================================================================================================================//
 
-// Loads the font from resource and stores the information in 
-// the Font struct.
-Font loadFont(int fontID, int atlasID);
+// Load a font generated from MSDFGen & load the atlas to OpenGL.
+Font msdfLoadFont(int fontID, int atlasID);
+// Load without loading the texture to OpenGL.
+Font msdfLoadFont(int fontID);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

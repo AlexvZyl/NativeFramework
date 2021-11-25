@@ -22,12 +22,19 @@ int VertexDataTextured::idOffsetVDT			= VertexDataTextured::dataSizeVDT;
 int VertexDataTextured::totalSizeVDT		= VertexDataTextured::dataSizeVDT + VertexDataTextured::idSizeVDT;
 
 // Vertex Data Circle.
-int VertexDataCircle::idSizeVDC				= sizeof(VertexDataCircle::entityID);
+int VertexDataCircle::idSizeVDC = sizeof(VertexDataCircle::entityID);
 int VertexDataCircle::dataSizeVDC			= sizeof(*VertexDataCircle::position) + sizeof(*VertexDataCircle::color) + sizeof(*VertexDataCircle::localCoords)
 											+ sizeof(*VertexDataCircle::fade) + sizeof(*VertexDataCircle::fade);
 int VertexDataCircle::idOffsetVDC			= VertexDataCircle::dataSizeVDC;
 int VertexDataCircle::totalSizeVDC			= VertexDataCircle::dataSizeVDC + VertexDataCircle::idSizeVDC;
 
+/*
+int VertexDataCircle::idSizeVDC = sizeof(unsigned);
+int VertexDataCircle::dataSizeVDC = sizeof(glm::vec3) + sizeof(glm::vec4) + sizeof(glm::vec2)
+									+ sizeof(float) + sizeof(float);
+int VertexDataCircle::idOffsetVDC = VertexDataCircle::dataSizeVDC;
+int VertexDataCircle::totalSizeVDC = VertexDataCircle::dataSizeVDC + VertexDataCircle::idSizeVDC;
+*/
 
 Vertex::Vertex() {
 }
@@ -94,7 +101,7 @@ VertexDataTextured::VertexDataTextured(float pos0, float pos1, float pos2,
 	// Assign texture ID position.
 	textureCoords->x = texPos0; textureCoords->y = texPos1;
 	// Assigne texture ID.
-	*textureID = (unsigned int)texID;
+	*textureID = (float)texID;
 }
 
 // Return the raw data for OpenGL to use.
@@ -119,7 +126,8 @@ VertexDataCircle::VertexDataCircle(glm::vec3& Position, glm::vec2& localCoord, g
 {
 	*position = Position; 
 	*localCoords = localCoord;
-	*color = Colour; entityID = eID;
+	*color = Colour;
+	entityID = eID;
 	*thickness = Thickness;
 	*fade = Fade;
 }

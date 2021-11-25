@@ -71,10 +71,7 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 };
 
 // Delete and free memory.
-Base2DEngineGL::~Base2DEngineGL() 
-{
-	EngineCoreGL::~EngineCoreGL();
-}
+Base2DEngineGL::~Base2DEngineGL() {}
 
 //=============================================================================================================================================//
 //  Rendering.																																   //
@@ -101,7 +98,6 @@ void Base2DEngineGL::renderLoop()
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
-		
 	// Draw background.
 	m_backgroundShader->bind();
 	m_backgroundVAO->render();
@@ -119,7 +115,7 @@ void Base2DEngineGL::renderLoop()
 	m_textureShader->setMat4("viewMatrix", &m_viewMatrix);
 	m_texturedTrianglesVAO->render();
 	m_triangleTexturedEntitiesVAO->render();
-
+	
 	// Draw Circles.
 	m_circleShader->bind();
 	m_circleShader->setMat4("viewMatrix", &m_viewMatrix);
