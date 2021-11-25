@@ -40,24 +40,40 @@ const float edge = 0.2;
 
 uniform sampler2D f_textures[3];
 
+// Utility function for MSDF rendering.
+float median(float r, float g, float b) {
+	return max(min(r, g), min(max(r, g), b));
+}
+
 void main()
 {
+	// Get the texture ID.
 	int index = int(f_texID);
+
+	// Render object without texture.
 	if (index == 0)
 	{
 		o_color = f_color;
 	}
+	// Render MSDF text.
 	else if (index == 1)
 	{
-		float distance = (1.0 - texture(f_textures[index], f_texCoord).a);
-		float alpha = (1.0 - smoothstep(width, width + edge, distance));
-		if (alpha < 0.3)
+		vec3 msd = texture(f_textures[1], f_texCoord).rgb;
+		float sd = median(msd.r, msd.g, msd.b);
+		/*float screenPxDistance = screenPxRange() * (sd - 0.5);*/
+		float screenPxDistance = 5 * (sd - 0.5);
+		float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
+		if (opacity == 0)
 			discard;
-		o_color = vec4(f_color[0], f_color[1], f_color[2], alpha);
+		o_color.rgb = f_color.rgb;
+		o_color.a = opacity;
 	}
+	// Render normal textured entities.
 	else 
 	{
 		o_color = texture(f_textures[index], f_texCoord);
 	}
+
+	// Output the entity ID.
 	o_entityID = f_entityID;
 }

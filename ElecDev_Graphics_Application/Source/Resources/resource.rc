@@ -75,6 +75,8 @@ ARIAL_SDF_FNT					TEXTFILE					"Fonts\\Arial_SDF.fnt"
 ARIAL_SDF_PNG					RCDATA						"Fonts\\Arial_SDF_PNG.png"
 ARIAL_SDF_MIN_FNT				TEXTFILE					"Fonts\\Arial_SDF_Min.fnt"
 ARIAL_SDF_MIN_PNG				RCDATA						"Fonts\\Arial_SDF_Min.png"
+ARIAL_BOLD_MSDF_PNG				RCDATA					    "Fonts\\Arial-Bold\\Arial-Bold.png"
+ARIAL_BOLD_MSDF_JSON			TEXTFILE				    "Fonts\\Arial-Bold\\Arial-Bold.json"
 //-------------------------------------------------------------------------------------------------
 // ImGui Fonts.
 RUDA_BOLD_TTF					TEXTFILE					"Fonts\\Ruda\\Ruda-Bold.ttf"

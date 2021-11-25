@@ -52,6 +52,8 @@
 #define ARIAL_SDF_PNG 244		
 #define ARIAL_SDF_MIN_FNT 243
 #define ARIAL_SDF_MIN_PNG 242	
+#define ARIAL_BOLD_MSDF_PNG 237
+#define ARIAL_BOLD_MSDF_JSON 236
 //-------------------------------------------------------------------------------------------------
 // ImGui Fonts. 
 #define RUDA_BOLD_TTF 241
@@ -69,7 +71,7 @@
 // Load the current module.
 HMODULE getCurrentModule();
 
-// Load shader from resource.
+// Load text from resource.
 std::string loadTextFromResource(int textID);
 
 // Loading images.

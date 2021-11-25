@@ -61,7 +61,7 @@ private:
 	glm::vec2 titleOffset = glm::vec2(0, -0.15);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	std::string titleString;
-	float titleSize = 0.2f;
+	float titleSize = 0.035f;
 
 	//port specifications
 	int n_ports_north = 0;

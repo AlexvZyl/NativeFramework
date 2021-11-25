@@ -154,17 +154,17 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	// Add components.
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) 
 	{ 
-		p1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.01f, nullptr);
 		p1->update();
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) 
 	{ 
-		p2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.01f, nullptr);
 		p2->update();
 	}
 	if (key == GLFW_KEY_E && action == GLFW_PRESS) 
 	{
-		p3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.0f, nullptr);
+		p3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.01f, nullptr);
 		p3->update();
 	}
 

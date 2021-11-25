@@ -34,17 +34,17 @@ HMODULE getCurrentModule()
 /* Textfiles.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-// Loads the shader text file from the executable and returns it as a string.
+// Loads the text file from the executable and returns it as a string.
 std::string loadTextFromResource(int textID) 
 {
 	// Load resource from executable.
-	HRSRC shaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(textID), MAKEINTRESOURCE(TEXTFILE));
-	HGLOBAL resourceData = LoadResource(getCurrentModule(), shaderResource);
-	DWORD resourceSize = SizeofResource(getCurrentModule(), shaderResource);
+	HRSRC textResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(textID), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL resourceData = LoadResource(getCurrentModule(), textResource);
+	DWORD resourceSize = SizeofResource(getCurrentModule(), textResource);
 	char* resourceFinal = (char*)LockResource(resourceData);
-	std::string shaderSource;
-	shaderSource.assign(resourceFinal, resourceSize);
-	return shaderSource;
+	std::string textSource;
+	textSource.assign(resourceFinal, resourceSize);
+	return textSource;
 }
 
 /*=======================================================================================================================================*/
@@ -79,7 +79,7 @@ unsigned int loadBitmapToGL(BITMAP bitmap)
 	GLCall(glCreateTextures(GL_TEXTURE_2D, 1, &textureID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
 	GLCall(glPixelStorei(GL_UNPACK_ALIGNMENT, 4));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));

@@ -36,12 +36,12 @@ public:
 	// ------------------- //
 
 	std::vector<VertexType> m_vertices;				// The untextured vertex data used for the entity.
-	unsigned int m_vertexCount;						// Counts the amount of vertices.
-	unsigned int m_indexCount;						// Counts the amount of indices.
+	unsigned int m_vertexCount = 0;					// Counts the amount of vertices.
+	unsigned int m_indexCount = 0;					// Counts the amount of indices.
 	std::vector<unsigned int> m_indices;			// The index buffer used to draw the entity.
 	VertexArrayObject<VertexType>* m_VAO;			// Pointer to the VAO that the entity is drawn to.
-	unsigned int m_bufferStartIndex;				// The start position of the entity in the VAO.
-	unsigned int m_indecesStartIndex;				// The position in the indeces buffer.
+	unsigned int m_bufferStartIndex = 0 ;			// The start position of the entity in the VAO.
+	unsigned int m_indecesStartIndex = 0;			// The position in the indeces buffer.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.

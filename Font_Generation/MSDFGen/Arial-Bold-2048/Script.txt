@@ -1,0 +1,1 @@
+msdfgen.exe -font C:\\Windows\\Fonts\\arialbd.ttf -imageout Arial-Bold-2048\Arial-Bold.png -dimensions 2048 2048 -json Arial-Bold-2048\Arial-Bold.json

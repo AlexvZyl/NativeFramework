@@ -77,11 +77,11 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	//  C R E A T E   T E X T   R E N D E R E R  //
 	// ----------------------------------------- //
 
-	m_defaultFont = std::make_unique<Font>(loadFont(ARIAL_SDF_FNT, ARIAL_SDF_PNG));		// Load font from resource.
-	m_defaultFont->textureID = loadBitmapToGL(loadImageFromResource(ARIAL_SDF_PNG));	// Load font atlas as texture.
+	// Load font from resource.
+	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_BOLD_MSDF_JSON, ARIAL_BOLD_MSDF_PNG)); 
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
-	int samplers[3] = { 0, 1 };
+	int samplers[2] = { 0, 1 };
 	GLCall(glUniform1iv(loc, 2, samplers));
 	GLCall(glBindTextureUnit(1, m_defaultFont->textureID));	// Text Atlas.
 
@@ -151,10 +151,16 @@ unsigned int EngineCoreGL::getEntityID(float pixelCoords[2])
 
 void EngineCoreGL::updateGPU()
 {
+	// Primitives.
 	m_linesVAO->updateGPU();
 	m_trianglesVAO->updateGPU();
 	m_texturedTrianglesVAO->updateGPU();
 	m_circlesVAO->updateGPU();
+	// Entities.
+	m_lineEntitiesVAO->updateGPU();
+	m_triangleEntitiesVAO->updateGPU();
+	m_triangleTexturedEntitiesVAO->updateGPU();
+	m_circleEntitiesVAO->updateGPU();
 }
 
 void EngineCoreGL::createDefaultBackground()

@@ -141,7 +141,11 @@ void FrameBufferObject::bind()	  { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_ms
 // Unbind the FBO.
 void FrameBufferObject::unbind()  { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
 // Clear the FBO.
-void FrameBufferObject::clear()	  { GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)); }
+void FrameBufferObject::clear()	  
+{ 
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									// Clear depth buffer.
+	GLCall(glClearTexImage(m_msaaColorTextureID, 0, GL_RGBA, GL_FLOAT, 0));	// Clear color attachment.
+}
 
 // Get access to the render texture ID.
 // This renders the multisampled FBo the render FBO, which is not multisampled,

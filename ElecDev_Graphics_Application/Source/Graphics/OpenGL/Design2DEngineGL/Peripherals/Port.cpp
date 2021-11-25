@@ -8,7 +8,7 @@ Port::Port(glm::vec2 pos, PortType type, Component2D* parent) :ManagedEntity(par
 bodyColour( 0.7f, 0.7f, 0.7f, 1.f ),
 borderColour(0.1f, 0.1f, 0.1f, 1.f),
 body(parent->engine_circleVAO, pos, 0.01f, bodyColour, 1.0f, 0.0f, this),
-border(parent->engine_circleVAO, pos, 0.011f, borderColour, 1.0f, 0.0f, this)
+border(parent->engine_circleVAO, pos, 0.011f, borderColour, 1.0f, 0.01f, this)
 {
 	engine_circleVAO = parent->engine_circleVAO;
 	engine_texturedTrianglesVAO = parent->engine_texturedTrianglesVAO;
