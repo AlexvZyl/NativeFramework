@@ -19,7 +19,6 @@
 /* Module.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-// Return the current module for resource loading (from the .exe).
 HMODULE getCurrentModule()
 {
 	HMODULE hModule = NULL;
@@ -34,7 +33,6 @@ HMODULE getCurrentModule()
 /* Textfiles.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-// Loads the text file from the executable and returns it as a string.
 std::string loadTextFromResource(int textID) 
 {
 	// Load resource from executable.
@@ -72,7 +70,6 @@ BITMAP loadImageFromResource(int resourceID)
 	return bitmap;
 }
 
-// Loads a bitmap into OpenGL and returns the texture ID.
 unsigned int loadBitmapToGL(BITMAP bitmap) 
 {
 	unsigned int textureID = 0;
@@ -86,6 +83,20 @@ unsigned int loadBitmapToGL(BITMAP bitmap)
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap.bmWidth, bitmap.bmHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void*)bitmap.bmBits));
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	return textureID;
+}
+
+/*=======================================================================================================================================*/
+/* Fonts.	                                                                                                                             */
+/*=======================================================================================================================================*/
+
+void* getFontResourceMemoryLocation(int fontID)
+{;
+	return (void*) LoadResource(getCurrentModule(), FindResourceA(getCurrentModule(), MAKEINTRESOURCEA(fontID), MAKEINTRESOURCEA(RT_FONT)));
+}
+
+unsigned getFontResourceSize(int fontID)
+{
+	return (unsigned) SizeofResource(getCurrentModule(), FindResourceA(getCurrentModule(), MAKEINTRESOURCEA(fontID), MAKEINTRESOURCEA(RT_FONT)));
 }
 
 /*=======================================================================================================================================*/

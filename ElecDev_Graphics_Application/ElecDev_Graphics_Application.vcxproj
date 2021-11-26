@@ -787,9 +787,8 @@
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
+    <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
-    <None Include="Source\Resources\Fonts\Arial_SDF.fnt" />
-    <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
     <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
     <None Include="Source\Resources\Shaders\basicShader.shader" />
@@ -803,8 +802,7 @@
     <Image Include="Icons\Draw_MCC.png" />
     <Image Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
-    <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
-    <Image Include="Source\Resources\Fonts\Arial_SDF_PNG.png" />
+    <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\circuitImage.png" />
@@ -819,6 +817,8 @@
     <ResourceCompile Include="Source\Resources\resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.ttf" />
+    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Regular.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Black.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Bold.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-ExtraBold.ttf" />

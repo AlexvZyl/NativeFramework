@@ -16,7 +16,7 @@
 //=============================================================================================================================================//
 
 //Add font for component titles
-Font Component2D::titleFont = msdfLoadFont(ARIAL_BOLD_MSDF_JSON);
+Font Component2D::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
 unsigned Component2D::componentID = 0;
 
 //=============================================================================================================================================//

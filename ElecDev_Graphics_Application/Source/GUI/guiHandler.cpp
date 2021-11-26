@@ -24,9 +24,6 @@
 GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
 	:m_guiState(guiState), m_pyInterface(pyInterface)
 {
-	// Set the custom theme.
-	setTheme();
-
 	m_guiState->toolsExpanded = false;
 	this->textureID = 0;
 	this->graphicsHandler = graphicsHandler;
@@ -36,6 +33,9 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 	m_popUpMenu = new PopUpMenu(guiState);
 	m_graphicsScene = new GraphicsScene(m_guiState, graphicsHandler);
 	m_componentEditor = new ComponentEditor(m_guiState, graphicsHandler);
+
+	// Set the custom theme.
+	setTheme();
 };
 
 GUIHandler::~GUIHandler()
@@ -85,7 +85,6 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	ImGui::SetNextWindowViewport(viewport->ID);
 	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
 	bool p_open = true;
-
 	ImGui::Begin("DockSpace Demo", &p_open, window_flags);
 
 	// End Docking space
@@ -93,6 +92,9 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 
 	// Add latest docking branch.
 	//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+	// Push own font.
+	ImGui::PushFont(m_fontRobotoMedium);
 
 	// ----------------------------- //
 	//  G U I   C O M P O N E N T S  //
@@ -109,11 +111,16 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	if (m_guiState->popUpMenu)		    { m_popUpMenu->render(); }
 	if (m_guiState->componentEditor)    { m_componentEditor->render(); }
 
-	// -------------------------------- //
-	//   I M G U I   R E N D E R I N G  //
-	// -------------------------------- //
+	// ---------------- //
+	//   C L E A N U P  //
+	// ---------------- //
 
+	ImGui::PopFont();
 	ImGui::End();
+
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 
 	//Render ImGUI into screen.
 	ImGui::Render();

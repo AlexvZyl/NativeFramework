@@ -136,7 +136,7 @@ int main(int, char**)
     // --------------------- //
 
     // Enable 16x MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 16);
+    glfwWindowHint(GLFW_SAMPLES, 2);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
     if (window == NULL)

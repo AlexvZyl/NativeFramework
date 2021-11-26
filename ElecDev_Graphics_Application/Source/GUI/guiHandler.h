@@ -56,6 +56,8 @@ public:
 	ImGuiID dock;
 	ImGuiID dockSpaceID;
 
+	ImFont* m_fontRobotoMedium;
+
 	bool dockCreated = false;
 
 	ImGuiID dock_up_id;

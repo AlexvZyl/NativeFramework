@@ -20,11 +20,6 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, std::string align)
 : Entity<VertexType>(parent)
 {
-	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
-	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
-	// This has to be compensated for in the funciton.
-	// Iterate through characters.
-
 	// Initialize variables.
 	m_trackedCenter = position;
 	m_VAO = vao;
@@ -34,16 +29,16 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 	// ------------------- //
 	//  A L I G N M E N T  //
 	// ------------------- //
-	// 
+	
 	// Calculate the length of the string.
 	float length = 0;
 	for (char c : text) { length += font.characterDictionary[c].xAdvance; }
 	// Center.
-	if (align == "C" || align == "c") {position.x = position.x - (length * scale) / 2; }
+	if (align == "C" || align == "c")		{position.x = position.x - (length * scale) / 2; }
 	// Right.
-	else if (align == "R" || align == "r") { position.x = position.x - length; }
-	// Left alignment is the default.
-	else if (align == "L" || align == "l") { }
+	else if (align == "R" || align == "r")	{ position.x = position.x - (length * scale); }
+	// Left.
+	else if (align == "L" || align == "l")	{ /* Left is default and nothing has to be done. */ }
 	// Display error.
 	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << align << "' is not a valid alignment.\n"; return;	}
 

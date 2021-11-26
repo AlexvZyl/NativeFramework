@@ -1245,9 +1245,6 @@
     </Library>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Resources\Fonts\Arial_SDF.fnt">
-      <Filter>Source</Filter>
-    </None>
     <None Include="Source\External\glm\gtx\associated_min_max.inl">
       <Filter>Source</Filter>
     </None>
@@ -1671,7 +1668,6 @@
     <None Include="Source\External\glm\gtx\wrap.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Fonts\Arial_SDF_Min.fnt" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
@@ -1679,6 +1675,7 @@
     <None Include="Source\Resources\Shaders\circleShader.shader" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
+    <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">
@@ -1709,12 +1706,11 @@
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
-    <Image Include="Source\Resources\Fonts\Arial_SDF_PNG.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
-    <Image Include="Source\Resources\Fonts\Arial_SDF_Min.png" />
     <Image Include="Source\Resources\Icons\panda.bmp" />
     <Image Include="Source\Resources\Icons\circuitImage.png" />
     <Image Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
+    <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -1733,5 +1729,7 @@
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Medium.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Regular.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-SemiBold.ttf" />
+    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.ttf" />
+    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Regular.ttf" />
   </ItemGroup>
 </Project>
