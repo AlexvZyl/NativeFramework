@@ -34,8 +34,7 @@ Font msdfLoadFont(int fontID)
 
 	// Load metrics.
 	JSON metrics = fontInfo["metrics"];
-	font.sizeInEMs = metrics["emSize"];  // This might need to be taken into account when
-										 // calculating the values in pixels below.
+	font.sizeInEMs = metrics["emSize"];
 
 	// Load glyphs (characters).
 	JSON glyphs = fontInfo["glyphs"];

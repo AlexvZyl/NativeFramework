@@ -4,6 +4,7 @@
 /*=======================================================================================================================================*/
 
 #include "Graphics/graphicsHandler.h"
+#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Component2D.h"
 struct GUIState;
 
 /*=======================================================================================================================================*/
@@ -16,6 +17,10 @@ private:
 
 	GUIState* m_guiState;
 	GraphicsHandler* m_graphicsHandler;
+	bool addingPort = false;
+	std::string newName = "Untitled";
+	int newType = 2;
+	int newPos = 0;
 
 public:
 

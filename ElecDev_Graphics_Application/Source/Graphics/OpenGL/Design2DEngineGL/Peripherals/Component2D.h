@@ -50,7 +50,6 @@ private:
 	float width = 0.1f;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> vertices2;
-	glm::vec2 centre;
 
 	//colour attributes
 	glm::vec4 shapeColour;
@@ -58,16 +57,16 @@ private:
 
 	//title
 	static Font titleFont;
-	glm::vec2 titleOffset = glm::vec2(0, -0.15);
+	glm::vec2 titleOffset = glm::vec2(0.f, -0.15f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	std::string titleString;
 	float titleSize = 0.035f;
 
 	//port specifications
-	int n_ports_north = 0;
-	int n_ports_south = 0;
-	int n_ports_east = 0;
-	int n_ports_west = 0;
+	unsigned n_ports_north = 0;
+	unsigned n_ports_south = 0;
+	unsigned n_ports_east = 0;
+	unsigned n_ports_west = 0;
 	glm::vec2 portOffset;
 
 	//interaction attributes
@@ -85,6 +84,7 @@ public:
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
+	glm::vec2 centre;
 
 	VertexArrayObject<VertexData>* engine_trianglesVAO;
 	VertexArrayObject<VertexData>* engine_linesVAO;
@@ -108,10 +108,22 @@ public:
 	~Component2D();
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(float pointerPos[2]);
-	//Place a component
+	//Place the component.
 	void place(float pos[2]);
+	//Move the component to a new layer.
 	void setLayer(float layer);
+	//set the clickedZone.component flag in the GUIState.
 	void setContext(GUIState* guiState);
 	void update();
+	//Highlight the component.
+	void highlight();
+	//Remove the component highlighting.
+	void unhighlight();
+	//Add a port with the given definition to the component.
+	void addPort(int side, PortType type, std::string name);
+	//remove a specified port from the component.
+	void removePort(std::shared_ptr<Port> port);
+	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.
+	void updatePortPositions();
 	//void destroy();
 };

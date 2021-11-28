@@ -48,15 +48,11 @@
 #define CIRCUIT_TREE_PNG 246
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
-#define ARIAL_SDF_FNT 245		
-#define ARIAL_SDF_PNG 244		
-#define ARIAL_SDF_MIN_FNT 243
-#define ARIAL_SDF_MIN_PNG 242	
+#define ROBOTO_MEDIUM_MSDF_PNG 245
+#define ROBOTO_MEDIUM_MSDF_JSON 244
+#define ROBOTO_REGULAR_TTF 243
 #define ARIAL_BOLD_MSDF_PNG 237
 #define ARIAL_BOLD_MSDF_JSON 236
-//-------------------------------------------------------------------------------------------------
-// ImGui Fonts. 
-#define RUDA_BOLD_TTF 241
 //-------------------------------------------------------------------------------------------------
 // Application icon.
 #define IDI_ICON1 240			// Exe icon.
@@ -68,15 +64,21 @@
 /* Functions.                                                                                                                            */
 /*=======================================================================================================================================*/
 
-// Load the current module.
+// Return the current module for resource loading (from the .exe).
 HMODULE getCurrentModule();
 
-// Load text from resource.
+// Loads the text file from the executable and returns it as a string.
 std::string loadTextFromResource(int textID);
 
 // Loading images.
 BITMAP loadImageFromResource(int resourceID);
+// Loads a windows bitmap into OpenGL and returns the texture ID.
 unsigned int loadBitmapToGL(BITMAP bitmap);
+
+// Returns the location of a resource in memory.
+void* getFontResourceMemoryLocation(int fontID);
+// Returns the size of the font resource in bytes.
+unsigned getFontResourceSize(int fontID);
 
 /*=======================================================================================================================================*/
 /* EOF.                                                                                                                                  */
