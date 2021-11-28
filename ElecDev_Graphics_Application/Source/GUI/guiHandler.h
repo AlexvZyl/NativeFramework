@@ -24,9 +24,10 @@ class PyInterface;
 // GUI components.
 class Ribbons;
 class Toolbar;
-class Graphics;
 class userGUI;
-class MCC;
+class GraphicsScene;
+class ComponentEditor;
+class PopUpMenu;
 
 /*=======================================================================================================================================*/
 /* Class.																																 */
@@ -41,6 +42,8 @@ public:
 	// ------------------ //
 
 	GUIState* m_guiState;
+	ComponentEditor* m_componentEditor;
+	PopUpMenu* m_popUpMenu;
 
 	GraphicsHandler* graphicsHandler;
 
@@ -48,11 +51,12 @@ public:
 
 	Toolbar* toolbar;
 	Ribbons* ribbons;
-	Graphics* graphics;
 	userGUI* userGUIP;
-	MCC* mcc;
+	GraphicsScene* m_graphicsScene;
 	ImGuiID dock;
 	ImGuiID dockSpaceID;
+
+	ImFont* m_fontRobotoMedium;
 
 	bool dockCreated = false;
 

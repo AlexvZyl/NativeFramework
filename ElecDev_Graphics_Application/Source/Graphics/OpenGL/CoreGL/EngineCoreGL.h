@@ -24,7 +24,6 @@ as error handling for when a wrong function is called on a engine type.
 
 template<typename VertexType>
 class VertexArrayObject;
-
 class FrameBufferObject;
 class Shader;
 class Vertex;
@@ -32,7 +31,6 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class VertexDataTexturedCircle;
-
 struct Font;
 
 //=============================================================================================================================================//
@@ -45,10 +43,10 @@ const float PI = 3.14159265358979323f;
 //  EngineCoreGL Class.																														   //
 //=============================================================================================================================================//
 
-class EngineCoreGL 
+class EngineCoreGL
 {
 public:
-	
+
 	// ----------------- //
 	//  M A T R I C E S  //
 	// ----------------- //
@@ -62,7 +60,7 @@ public:
 																// going to be visible to the screen?)
 	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);				// The matrix that handles the viewport transform.  Converts screen pixel
 																// coordinates to the OpenGL uniform coordinate system.
-																
+
 	// View matrix components.
 	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);				// Handles camera scaling.
 	glm::mat4 m_translationMatrix = glm::mat4(1.0f);			// Handles camera translations.
@@ -85,11 +83,15 @@ public:
 	std::unique_ptr<Shader> m_circleShader;						// Renders circles.
 
 	// Vertex arrays.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;						// Lines.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;					// Triangles.
-	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;	// Textured Triangles.
-	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;				// Normal circles.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;					// Background has a seperate VAO since it should not move.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;								// Lines.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;							// Triangles.
+	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;			// Textured Triangles.
+	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;						// Normal circles.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_lineEntitiesVAO;						// Drawing line entities.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_triangleEntitiesVAO;					// Drawing triangle entities.
+	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_triangleTexturedEntitiesVAO;	// Drawing textured triangle entities.
+	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circleEntitiesVAO;				// Drawing circle entities.
+	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;							// Background has a seperate VAO since it should not move.
 
 	// Frame Buffer Object.
 	std::unique_ptr<FrameBufferObject> m_frameBuffer;			// FBO to render scene onto.  Stores the OpenGL scene as a texture.
@@ -111,9 +113,9 @@ public:
 	// ----------------- //
 
 	float m_imGuiViewportDimensions[2] = { 500, 500 };			// Stores the dimensions of the viewport that the OpenGL context gets drawn to.  
-															
+
 	// Resizes the viewport, projection matrix and FBO.
-	virtual void resizeEvent(float width, float height);	
+	virtual void resizeEvent(float width, float height);
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -125,27 +127,27 @@ public:
 	// --------------------------------------- //
 	//  R E N D E R I N G   F U N C T I O N S  //
 	// --------------------------------------- //
-	
+
 	// Main loop where the rendering happens.
-	virtual void renderLoop();								
+	virtual void renderLoop();
 	// Updates the buffers on the GPU with the data stored CPU side.  Required 
 	// to call to update the elements that are displayed to the screen.
-	virtual void updateGPU();								
+	virtual void updateGPU();
 	// Autocenters the current scene.
-	virtual void autoCenter();								
+	virtual void autoCenter();
 	// Draws elements to the screen.  Used for debugging and benchmarking.
 	// Should also be implemented to showcase the capabilities of the engine.
-	virtual void drawDemo(unsigned int loopCount);			
+	virtual void drawDemo(unsigned int loopCount);
 	// Returns the FBO texture ID that can be rendered.
-	virtual unsigned int getRenderTexture();			
+	virtual unsigned int getRenderTexture();
 	// Creates the default background for the engines.
-	void createDefaultBackground();							
+	void createDefaultBackground();
 	// Calculates the delta time and returns it.	
 	// This is used to ensure constant movement and sensitivity
 	// regardless of the framerate.
-	float deltaTime();										
+	float deltaTime();
 	// Returns the ID of the entity in the pixel coords.
-	unsigned int getEntityID(float pixelCoords[2]);			
+	unsigned int getEntityID(float pixelCoords[2]);
 	// Calculate the world coordinates from the pixel coordinates.
 	virtual glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
 	// Calculate the camera coordinates from the pixel coordinates.
@@ -157,14 +159,14 @@ public:
 	// --------------------- //
 	//  U S E R   I N P U T  //
 	// --------------------- //
-	
+
 	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };		// Stores the previous mouse event information.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	// Stores the vector that goes into the world.
 	virtual void mousePressLeft(float pixelCoords[2]);
 	virtual void mousePressRight(float pixelCoords[2]);
 	virtual void mousePressMiddle(float pixelCoords[2]);
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
-	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);	
+	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
 	virtual void keyEvent(int key, int action);
 
 	// ------------- //
@@ -179,20 +181,13 @@ public:
 	virtual void drawCircleClear(float position[2], float radius, float color[4]);
 	virtual void drawCircleFilled(float position[2], float radius, float color[4]);
 	virtual void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
-	
+
 	// ------------- //
 	//  3 D   A P I  //
 	// ------------- //
 
 	virtual void drawQuadFilled3D(float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]);
 	virtual void drawCuboidFilled(float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]);
-
-	// ----------------- //
-	//  S E T T I N G S  //
-	// ----------------- //
-
-	int m_circleResolution = 25;	// Determines how perfect the circle is (total lines used to draw it).  Very 
-									// demanding at high values and high circle count.  Has to be changed into a dynamic value.
 
 	// ------------------------------- //
 	//  E R R O R   F U N C T I O N S  //

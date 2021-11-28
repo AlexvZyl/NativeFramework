@@ -19,7 +19,6 @@
 /* Module.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-// Return the current module for resource loading (from the .exe).
 HMODULE getCurrentModule()
 {
 	HMODULE hModule = NULL;
@@ -34,17 +33,16 @@ HMODULE getCurrentModule()
 /* Textfiles.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
-// Loads the shader text file from the executable and returns it as a string.
 std::string loadTextFromResource(int textID) 
 {
 	// Load resource from executable.
-	HRSRC shaderResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(textID), MAKEINTRESOURCE(TEXTFILE));
-	HGLOBAL resourceData = LoadResource(getCurrentModule(), shaderResource);
-	DWORD resourceSize = SizeofResource(getCurrentModule(), shaderResource);
+	HRSRC textResource = FindResource(getCurrentModule(), MAKEINTRESOURCE(textID), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL resourceData = LoadResource(getCurrentModule(), textResource);
+	DWORD resourceSize = SizeofResource(getCurrentModule(), textResource);
 	char* resourceFinal = (char*)LockResource(resourceData);
-	std::string shaderSource;
-	shaderSource.assign(resourceFinal, resourceSize);
-	return shaderSource;
+	std::string textSource;
+	textSource.assign(resourceFinal, resourceSize);
+	return textSource;
 }
 
 /*=======================================================================================================================================*/
@@ -72,7 +70,6 @@ BITMAP loadImageFromResource(int resourceID)
 	return bitmap;
 }
 
-// Loads a bitmap into OpenGL and returns the texture ID.
 unsigned int loadBitmapToGL(BITMAP bitmap) 
 {
 	unsigned int textureID = 0;
@@ -86,6 +83,20 @@ unsigned int loadBitmapToGL(BITMAP bitmap)
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bitmap.bmWidth, bitmap.bmHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void*)bitmap.bmBits));
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	return textureID;
+}
+
+/*=======================================================================================================================================*/
+/* Fonts.	                                                                                                                             */
+/*=======================================================================================================================================*/
+
+void* getFontResourceMemoryLocation(int fontID)
+{;
+	return (void*) LoadResource(getCurrentModule(), FindResourceA(getCurrentModule(), MAKEINTRESOURCEA(fontID), MAKEINTRESOURCEA(RT_FONT)));
+}
+
+unsigned getFontResourceSize(int fontID)
+{
+	return (unsigned) SizeofResource(getCurrentModule(), FindResourceA(getCurrentModule(), MAKEINTRESOURCEA(fontID), MAKEINTRESOURCEA(RT_FONT)));
 }
 
 /*=======================================================================================================================================*/

@@ -8,6 +8,8 @@
 #include "glm.hpp"
 #include <memory>
 #include <vector>
+#include "CoreGL/Entities/ManagedEntity.h"
+#include "Port.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -31,28 +33,23 @@ class VertexDataCircle;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Component2D
+class Component2D: public ManagedEntity
 {
 	//Private Members
 private:
 	//shape and edge data
-	VertexArrayObject<VertexData>* engine_trianglesVAO;
-	VertexArrayObject<VertexData>* engine_linesVAO;
-	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
-	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 	std::shared_ptr<Polygon2D<VertexData>> shape;
 	std::shared_ptr<Polygon2D<VertexData>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
-	std::shared_ptr<Circle<VertexDataCircle>> port1;
+	//std::shared_ptr<Port> port1;
+	//std::shared_ptr<Port> port2;
 	static unsigned componentID;
 
 	//component shape attributes
 	float height = 0.1f;
 	float width = 0.1f;
 	std::vector<glm::vec3> vertices;
-	glm::vec2 centre;
-	float componentLayer = 0.9f;
-	float borderLayerOffset = 0.01f;
+	std::vector<glm::vec3> vertices2;
 
 	//colour attributes
 	glm::vec4 shapeColour;
@@ -60,21 +57,39 @@ private:
 
 	//title
 	static Font titleFont;
-	glm::vec3 titlePos;
+	glm::vec2 titleOffset = glm::vec2(0.f, -0.15f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
 	std::string titleString;
-	float titleSize = 0.2f;
+	float titleSize = 0.035f;
 
 	//port specifications
-	int n_ports_north = 0;
-	int n_ports_south = 0;
-	int n_ports_east = 0;
-	int n_ports_west = 0;
+	unsigned n_ports_north = 0;
+	unsigned n_ports_south = 0;
+	unsigned n_ports_east = 0;
+	unsigned n_ports_west = 0;
+	glm::vec2 portOffset;
 
 	//interaction attributes
 	bool selected = true;
 
 public:
+
+	std::vector<std::shared_ptr<Port>> portsNorth;
+	std::vector<std::shared_ptr<Port>> portsSouth;
+	std::vector<std::shared_ptr<Port>> portsEast;
+	std::vector<std::shared_ptr<Port>> portsWest;
+
+	unsigned numPorts = 0;
+
+	float componentLayer = 0.9f;
+	float borderLayerOffset = 0.01f;
+	float portLayerOffset = 0.02f;
+	glm::vec2 centre;
+
+	VertexArrayObject<VertexData>* engine_trianglesVAO;
+	VertexArrayObject<VertexData>* engine_linesVAO;
+	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
+	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 
 	//Creates a generic component centred at (0, 0)
 	Component2D(VertexArrayObject<VertexData>* trianglesVAO,
@@ -91,13 +106,24 @@ public:
 
 	//Deconstructor
 	~Component2D();
-
-	//Render the component
-	void render();
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(float pointerPos[2]);
-	//Place a component
+	//Place the component.
 	void place(float pos[2]);
+	//Move the component to a new layer.
 	void setLayer(float layer);
-	void destroy();
+	//set the clickedZone.component flag in the GUIState.
+	void setContext(GUIState* guiState);
+	void update();
+	//Highlight the component.
+	void highlight();
+	//Remove the component highlighting.
+	void unhighlight();
+	//Add a port with the given definition to the component.
+	void addPort(int side, PortType type, std::string name);
+	//remove a specified port from the component.
+	void removePort(std::shared_ptr<Port> port);
+	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.
+	void updatePortPositions();
+	//void destroy();
 };

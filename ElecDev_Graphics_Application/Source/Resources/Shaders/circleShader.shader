@@ -22,7 +22,7 @@ struct VertexOutput
 
 // Output.
 flat out uint f_entityID;
-layout(location = 0) out VertexOutput Output;
+layout(location = 1) out VertexOutput Output;
 
 void main()
 {
@@ -50,8 +50,8 @@ struct VertexOutput
 };
 
 // Input.
-layout(location = 0) in VertexOutput Input;
 flat in uint f_entityID;
+layout(location = 1) in VertexOutput Input;
 // Output.
 layout(location = 0) out vec4 o_color;
 layout(location = 1) out uint o_entityID;
@@ -61,6 +61,8 @@ void main()
     // Calculate distance and fill circle with white
     float distance = 1.0 - length(Input.LocalPosition);
     float circleAlpha = smoothstep(0.0, Input.Fade, distance);
+    if (circleAlpha == 0)
+        discard;
     circleAlpha *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
 
     // Set output color

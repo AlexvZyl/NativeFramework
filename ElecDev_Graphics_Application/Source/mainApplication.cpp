@@ -31,6 +31,8 @@
 // Measure time.
 #include <chrono>
 
+#include "CoreGL/FontLoader.h"
+
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
 /*=======================================================================================================================================*/
@@ -66,26 +68,30 @@ void glfw_error_callback(int error, const char* description)
 
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
-    graphicsHandler->mousePressEvent(button, action);
+    graphicsHandler->inputEvent.mousePressEvent = true;
+    graphicsHandler->inputEvent.mousePressButton = button;
+    graphicsHandler->inputEvent.mousePressAction = action;
 }
 
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-    // Get button state.
-    int buttonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    int buttonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-    int buttonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
-    graphicsHandler->mouseMoveEvent(buttonStateLeft, buttonStateRight, buttonStateMiddle);
+    graphicsHandler->inputEvent.mouseMoveEvent = true;
+    graphicsHandler->inputEvent.mouseMoveButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    graphicsHandler->inputEvent.mouseMoveButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    graphicsHandler->inputEvent.mouseMoveButtonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);   
 }
 
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
-    graphicsHandler->mouseScrollEvent((float)yoffset);
+    graphicsHandler->inputEvent.mouseScrollEvent = true;
+    graphicsHandler->inputEvent.mouseScrollY = yoffset;
 }
 
 void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    graphicsHandler->keyEvent(key, action);
+    graphicsHandler->inputEvent.keyEvent = true;
+    graphicsHandler->inputEvent.key = key;
+    graphicsHandler->inputEvent.keyAction = action;
 }
 
 /*=======================================================================================================================================*/
@@ -130,7 +136,7 @@ int main(int, char**)
     // --------------------- //
 
     // Enable 16x MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 16);
+    glfwWindowHint(GLFW_SAMPLES, 2);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
     if (window == NULL)
@@ -220,12 +226,12 @@ int main(int, char**)
     glfwSetKeyCallback(window, keyEvent);                       // Key press event.
 
     // OpenGL settings.
-    GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));                            // Disable the depth testing since it will be enabled only when rendring 3D scenes.
-    GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
-    GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.
-    GLCall(glClearColor(0.17f, 0.17f, 0.17f, 1.0f));            // Set the color to which OpenGL clears.
+    GLCall(glEnable(GL_MULTISAMPLE));                               // Enables MSAA.
+    GLCall(glEnable(GL_DEPTH_TEST));                                // Disable the depth testing since it will be enabled only when rendring 3D scenes.
+    GLCall(glDepthFunc(GL_LESS));                                   // Set the function used with depth testing.
+    GLCall(glEnable(GL_BLEND));                                     // Enable blending for alpha channels.
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));      // Set blend function.  This is the standard setting.
+    GLCall(glClearColor(0.17f, 0.17f, 0.17f, 1.0f));                // Set the color to which OpenGL clears.
 
     // Create the state machine variables.
     GUIState guiState;
@@ -233,7 +239,7 @@ int main(int, char**)
     // Create graphics handler object.
     // For now a global variable is used to be able to have mouse callbacks with a method.
     // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = std::make_unique<GraphicsHandler>(&guiState);
+    graphicsHandler = std::make_unique<GraphicsHandler>(&guiState, window);
 
     // Create a python interfacing object.
     PyInterface pyInterface(graphicsHandler.get(), guiHandler.get(), &guiState);
@@ -266,11 +272,19 @@ int main(int, char**)
     // Reset glfw time.
     glfwSetTime(0);
 
+    // Number of open windows
+    unsigned n_windows = 0;
+
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
     {
         // Poll commands from python interface.
         pyInterface.deQueueInput();
+        if (guiState.blockDiagram) {
+            std::string windowName = "Untitled " + std::to_string(n_windows++);
+            graphicsHandler->addWindow(windowName, "Design2D");
+            guiState.blockDiagram = false;
+        }
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
@@ -284,18 +298,23 @@ int main(int, char**)
         // Render screen with fps cap.
         if (totalFrameTime > targetFrameTime) 
         {
+            // Reset frametime.
+            totalFrameTime = 0;
+
             // Clear buffers for OpenGL.
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
             // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
-            graphicsHandler->renderGraphics();
+            graphicsHandler->renderLoop();
 
             // Render ImGUI to screen.
             guiHandler->renderGui(io, window);
-
+            
             // Swap the OpenGL buffers.
             glfwSwapBuffers(window);
-            totalFrameTime = 0;
+
+            // Force push OpenGL commands to the GPU.
+            GLCall(glFinish());
         }
     }
 

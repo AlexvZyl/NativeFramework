@@ -19,7 +19,7 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Ribbons::Ribbons(GUIState* guiState) 
+Ribbons::Ribbons(GUIState* guiState)
     : m_guiState(guiState)
 {
     this->show_app_main_menu_bar = false;
@@ -84,33 +84,37 @@ void Ribbons::renderRibbons(ImGuiID* dock)
     sideBar();
 }
 
-bool Ribbons::topBar() 
+bool Ribbons::topBar()
 {
     // Menu
     bool* p_open = NULL;
     ImGui::SetNextWindowBgAlpha(1);
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking      | 
-                                    ImGuiWindowFlags_NoMove         | 
-                                    ImGuiWindowFlags_NoResize       |     
-                                    ImGuiWindowFlags_NoScrollbar    | 
-                                    ImGuiWindowFlags_NoCollapse;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoFocusOnAppearing;
+
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
     ImVec2 work_size = viewport->WorkSize;
     m_guiState->toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);
-    ImGui::SetWindowSize(ImVec2(work_size.x,70));
+
+    ImGui::SetWindowSize(ImVec2(work_size.x, 70));
     ImGui::SetWindowPos(work_pos);
     //Create Image Buttons
-    if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30))) 
+    if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30)))
     {
         if (this->sideBarFlag == "Draw MCC") { this->sideBarFlag = "None"; }
         else { this->sideBarFlag = "Draw MCC"; }
     }
     ImGui::SameLine();
-    if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30))) 
+    if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
     {
         if (this->sideBarFlag == "Block Diagram") { this->sideBarFlag = "None"; }
         else { this->sideBarFlag = "Block Diagram"; }
+        m_guiState->blockDiagram = true;
     }
     ImGui::SameLine();
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) { this->sideBarFlag = "Draw Circuit Bucket"; }
@@ -119,21 +123,21 @@ bool Ribbons::topBar()
     return true;
 }
 
-bool Ribbons::sideBar() 
+bool Ribbons::sideBar()
 {
     if (this->sideBarFlag == "Block Diagram") { blockDiagram(); }
     if (this->sideBarFlag == "Draw MCC") { MCC(); }
     return true;
 }
 
-bool Ribbons::MCC() 
+bool Ribbons::MCC()
 {
     bool close = true;
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
     ImVec2 work_size = viewport->WorkSize;
     if (first[1])
-    { 
+    {
         ImGui::SetNextWindowDockID(this->left, ImGuiCond_Once);
         first[1] = false;
     }
@@ -141,14 +145,14 @@ bool Ribbons::MCC()
     if (!close) { this->sideBarFlag = "None"; }
     ImGui::Button("New MCC");
     ImGui::Separator();
-    ImGui::Button("Redraw MCC"); 
+    ImGui::Button("Redraw MCC");
     ImGui::Separator();
-    ImGui::Button("Draw in AutoCAD"); 
+    ImGui::Button("Draw in AutoCAD");
     ImGui::End();
     return true;
 }
 
-bool Ribbons::blockDiagram() 
+bool Ribbons::blockDiagram()
 {
     bool close = true;
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -183,7 +187,7 @@ bool Ribbons::blockDiagram()
     static char str0[128] = "";
     ImGui::InputText("", str0, IM_ARRAYSIZE(str0));
     ImGui::Text("Ground"); ImGui::SameLine();
-    const char* items[] = { "None", "Bottom Left", "Bottom Right"};
+    const char* items[] = { "None", "Bottom Left", "Bottom Right" };
     static const char* current_item = NULL;
     if (ImGui::BeginCombo("##combo", current_item)) // The second parameter is the label previewed before opening the combo.
     {
@@ -192,8 +196,8 @@ bool Ribbons::blockDiagram()
             bool is_selected = (current_item == items[n]); // You can store your selection however you want, outside or inside your objects
             if (ImGui::Selectable(items[n], is_selected))
                 current_item = items[n];
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
         }
         ImGui::EndCombo();
     }
@@ -211,10 +215,10 @@ bool Ribbons::BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize)
     const ImGuiStyle& style = g.Style;
     float x = ImGui::GetCursorPosX();
     float y = ImGui::GetCursorPosY();
-    ImVec2 size(buttonSize.x, buttonSize.x/2);
+    ImVec2 size(buttonSize.x, buttonSize.x / 2);
     bool pressed = ImGui::Button("Draw\nMCC", buttonSize);
     // Arrow
-    ImVec2 center(window->Pos.x + x + buttonSize.x*0.9, window->Pos.y + y + buttonSize.y / 4);
+    ImVec2 center(window->Pos.x + x + buttonSize.x * 0.9, window->Pos.y + y + buttonSize.y / 4);
     float r = 8.f;
     center.y += r * 0.25f;
     ImVec2 a = center + ImVec2(0, 1) * r;
@@ -224,13 +228,13 @@ bool Ribbons::BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize)
     window->DrawList->AddTriangleFilled(a, b, c, ImGui::GetColorU32(ImGuiCol_Text));
     // Popup
     ImVec2 popupPos;
-    popupPos.x = window->Pos.x + x + buttonSize.x/4;
+    popupPos.x = window->Pos.x + x + buttonSize.x / 4;
     popupPos.y = window->Pos.y + y + buttonSize.y;
     ImGui::SetNextWindowPos(popupPos);
     if (pressed) { this->drawToggle = !this->drawToggle; }
     if (this->drawToggle)
     {
-        ImGui::Begin("Draw MCC", &this->my_tool_active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
+        ImGui::Begin("Draw MCC", &this->my_tool_active, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize);
         //ImGui::SetWindowPos(popupPos);
         ImGui::Button("asjdjd");
         ImGui::End();
@@ -254,9 +258,9 @@ bool Ribbons::LoadTextureFromFile(const char* filename, GLuint* out_texture, int
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // Upload pixels into texture
-    #if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
-        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    #endif
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
     stbi_image_free(image_data);
     *out_texture = image_texture;

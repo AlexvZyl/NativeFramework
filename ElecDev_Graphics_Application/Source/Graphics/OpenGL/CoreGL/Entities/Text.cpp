@@ -8,6 +8,7 @@
 # include<iostream>
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/FontLoader.h"
+#include "External/Misc/ConsoleColor.h"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
@@ -15,113 +16,152 @@
 
 // Writes the text to the buffer based on the font loaded in the constructor.
 template<typename VertexType>
-Text<VertexType>::Text(std::string text, glm::vec3* position, glm::vec4* color, float scale,
-	VertexArrayObject<VertexType>* vao, Font* font, std::string align)
+Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
+					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, std::string align)
+: Entity<VertexType>(parent)
 {
-	// In the shader the function 'texture()' is used.  This assumes that the (0,0) point is in the top left
-	// (standard for OpenGL).  However, BaseEngineGL is written where the (0,0) point is in the bottom left.
-	// This has to be compensated for in the funciton.
-	// Iterate through characters.
-	m_trackedCenter = *position;
+	// Initialize variables.
+	m_trackedCenter = position;
 	m_VAO = vao;
-	m_entityID = EntityManager::generateEID();
-	float advance = 0;
+	/*m_entityID = EntityManager::generateEID();*/
+	m_entityID = 10;
 
-	//Correct allignment
-	// Calculate the length & height of the string.
+	// ------------------- //
+	//  A L I G N M E N T  //
+	// ------------------- //
+	
+	// Calculate the length of the string.
 	float length = 0;
-	float height = font->characterDictionary[text[0]].height;
-	for (char c : text) { length += font->characterDictionary[c].xAdvance; }
-	// Center the text.
-	if (align == "C" || align == "c")
-	{
-		// Place the coords in the center of the text.
-		position->x = position->x - (length * scale) / 2;
-		// Place on top of coordinate.
-		position->y = position->y + height * scale;
-	}
-	// Right allign the text.
-	else if (align == "R" || align == "r")
-	{
-		// Align text to right.
-		position->x = position->x - length * scale;
-		// Place on top of coordinate.
-		position->y = position->y + height * scale;
-	}
-	// Left allign the text.
-	else if (align == "L" || align == "l")
-	{
-		// Place on top of the coordinate.
-		position->y = position->y + height * scale;
-	}
+	for (char c : text) { length += font.characterDictionary[c].xAdvance; }
+	// Center.
+	if (align == "C" || align == "c")		{position.x = position.x - (length * scale) / 2; }
+	// Right.
+	else if (align == "R" || align == "r")	{ position.x = position.x - (length * scale); }
+	// Left.
+	else if (align == "L" || align == "l")	{ /* Left is default and nothing has to be done. */ }
 	// Display error.
-	else
-	{
-		std::cout << "[INTERFACE][ERROR] '" << align << "' is not a valid alignment.\n\n";
-		return;
-	}
+	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << align << "' is not a valid alignment.\n"; return;	}
 
+	// ----------------------------- //
+	//  Q U A D   R E N D E R I N G  //
+	// ----------------------------- //
 
+	// Vertices layout.
+	//
+	//   2 ------ 3
+	//	 |   /\   |
+	//   |	/__\  |
+	//   | /    \ |
+	//   1 ------ 4
+	//
+	// The texture ID '1' is reserved for font atlasses.
+	// Our engine does not need the ability to be able to render text
+	// with more than one font.
 
+	float totalAdvance = 0;
+	// Generate a quad for each character.
 	for (int i = 0; i < (int)text.length(); i++)
 	{
 		// Load character.
-		Character c = font->characterDictionary.at(text[i]);
+		Character c = font.characterDictionary.at(text[i]);
 
-		// Create vertex data.
-		glm::vec3 pos1(															// Top left.
-			position->x + (advance + c.xOffset) * scale,						// x
-			position->y - (c.yOffset) * scale,									// y
-			position->z);														// z
-		glm::vec2 texCoords1(c.x, 1.0f - c.y);									// Texture coordinates.
+		// Retrieve kerning value from dictionary.
+		float kerning = 0;
+		// Never apply kerning to first character.
+		if (i != 0) 
+		{
+			unsigned currCharacter = font.characterDictionary.at(text[i]).id;
+			unsigned prevCharacter = font.characterDictionary.at(text[i - 1]).id;
+			std::pair kerningPair(prevCharacter, currCharacter);
+			// Check if kerning exists for current pair.
+			if (font.kerningDictionary.count(kerningPair))
+			{
+				kerning = font.kerningDictionary.at(kerningPair);
+			}
+		}
+
+		// Vertex 1.
+		glm::vec3 pos1
+		(
+			position.x + ( totalAdvance + c.xPlaneBounds[0] + kerning	)	*	scale,
+			position.y + ( c.yPlaneBounds[0]							)	*	scale,
+			position.z
+		);
+		glm::vec2 tex1(c.xTextureCoords[0], c.yTextureCoords[0]);
 		VertexDataTextured v1(
-			&pos1,																// Position.
-			color,																// Color.
-			&texCoords1,														// Texture coordinates.
-			1.0f,																// Slot 1 is reserved for the text font atlas.
-			m_entityID);																// The entity ID.  Fow now empty.
-																			
+			pos1,
+			color,
+			tex1,
+			1,
+			m_entityID
+		);
 
-		glm::vec3 pos2(															// Top Right.
-			position->x + (advance + c.xOffset + c.width) * scale,				// x
-			position->y - (c.yOffset) * scale,									// y
-			position->z);														// z
-		glm::vec2 texCoords2(c.x + c.width, 1.0f - c.y);						// Texture coordinates.
+		// Vertex 2.
+		glm::vec3 pos2
+		( 
+			position.x + ( totalAdvance + c.xPlaneBounds[0] + kerning	)	*	scale,
+			position.y + ( c.yPlaneBounds[0] + c.height					)	*	scale,
+			position.z
+		);
+		glm::vec2 tex2(c.xTextureCoords[0], c.yTextureCoords[1]);
 		VertexDataTextured v2(
-			&pos2,																// Position.
-			color,																// Color.
-			&texCoords2,														// Texture coordinates.
-			1.0f,																// Slot 1 is reserved for the text font atlas.
-			m_entityID);																// The entity ID.  Fow now empty.
-		
-		glm::vec3 pos3(															// Bottom Right.
-			position->x + (advance + c.xOffset + c.width) * scale,				// x
-			position->y + (-1 * c.yOffset - c.height) * scale,					// y	
-			position->z);														// z
-		glm::vec2 texCoords3(c.x + c.width, 1.0f - c.y - c.height);				// Texture coordinates.
-		VertexDataTextured v3(
-			&pos3,																// Position
-			color,																// Color.
-			&texCoords3,														// Texture coordinates.
-			1.0f,																// Slot 1 is reserved for the text font atlas.
-			m_entityID);																// The entity ID.  Fow now empty.
+			pos2,
+			color,
+			tex2,
+			1,
+			m_entityID
+		);
 
-		glm::vec3 pos4(															// Bottom Left.
-			position->x + (advance + c.xOffset) * scale,						// x
-			position->y + (-1 * c.yOffset - c.height) * scale,					// y
-			position->z);														// z
-		glm::vec2 texCoords4(c.x, 1.0f - c.y - c.height);						// Texture coordinates.
+		// Vertex 3.
+		glm::vec3 pos3
+		( 
+			position.x + ( totalAdvance + c.xPlaneBounds[0] + c.width + kerning	)	*	scale,
+			position.y + ( c.yPlaneBounds[0] + c.height							)	*	scale,
+			position.z
+		);
+		glm::vec2 tex3(c.xTextureCoords[1], c.yTextureCoords[1]);
+		VertexDataTextured v3(
+			pos3,
+			color,
+			tex3,
+			1,
+			m_entityID
+		);
+		
+		// Vertex 4.
+		glm::vec3 pos4
+		( 
+			position.x + ( totalAdvance + c.xPlaneBounds[0] + c.width + kerning	)	*	scale,
+			position.y + ( c.yPlaneBounds[0]									)	*	scale,
+			position.z
+		);
+		glm::vec2 tex4(c.xTextureCoords[1], c.yTextureCoords[0]);
 		VertexDataTextured v4(
-			&pos4,																// z
-			color,																// Color.
-			&texCoords4,														// Texture coordinates.
-			1.0f,																// Slot 1 is reserved for the text font atlas.
-			m_entityID);																// The entity ID.  Fow now empty.
-		// Move the cursor right so that it can draw the next character.
-		m_vertices.insert(m_vertices.end(), {v1,v2, v3, v3,v4, v1});
-		advance += c.xAdvance;
+			pos4,
+			color,
+			tex4,
+			1,
+			m_entityID
+		);
+
+		// Insert vertices.
+		m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 });
+		// Insert indices.
+		m_indices.insert(m_indices.end(),
+			{
+				0 + m_vertexCount,
+				1 + m_vertexCount,
+				2 + m_vertexCount,
+				2 + m_vertexCount,
+				3 + m_vertexCount,
+				0 + m_vertexCount
+			});
+		m_vertexCount += 4;
+		m_indexCount += 6;
+		// Move cursor for next character.
+		totalAdvance += c.xAdvance + kerning;
 	}
-	// Write all of the vertices to the CPU side buffer.
+	// Write data to VAO.
 	m_VAO->appendDataCPU(this);
 }
 
