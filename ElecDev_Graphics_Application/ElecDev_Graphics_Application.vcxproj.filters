@@ -1676,6 +1676,7 @@
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
     <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
+    <None Include="Source\Resources\Shaders\staticTextureShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">

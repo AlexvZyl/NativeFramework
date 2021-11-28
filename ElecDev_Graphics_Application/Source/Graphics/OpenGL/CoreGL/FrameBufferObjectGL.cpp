@@ -4,9 +4,13 @@
 
 // Class include.
 #include <glad/glad.h>
-#include "FrameBufferObjectGL.h"
-#include "ErrorHandlerGL.h"
+#include "Resources/ResourceHandler.h"
 #include "External/Misc/ConsoleColor.h"
+#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/ErrorHandlerGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/ShaderHandlerGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -42,6 +46,35 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	// Save the dimenions.
 	m_viewport[0] = width;
 	m_viewport[1] = height;
+
+	// ----------------------- //
+	//  R E N D E R   Q U A D  //
+	// ----------------------- //
+
+	// Create the quad.
+	m_renderVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
+	std::vector<VertexDataTextured> vertices =
+	{
+		VertexDataTextured(-1.f, -1.f,  0.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,   1.f,  1),
+		VertexDataTextured(-1.f,  1.f,  0.f,   0.f, 1.f, 0.f, 1.f,   0.f, 1.f,   1.f,  1),
+		VertexDataTextured( 1.f,  1.f,  0.f,   0.f, 0.f, 1.f, 1.f,   1.f, 1.f,   1.f,  1),
+		VertexDataTextured( 1.f, -1.f,  0.f,   0.f, 0.f, 0.f, 1.f,   1.f, 0.f,   1.f,  1),
+	};
+	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
+	m_renderVAO->appendDataCPU(vertices, indices);
+	m_renderVAO->updateGPU();
+
+	// Generate the shader.
+	m_shader = std::make_unique <Shader>(STATIC_TEXTURE_SHADER);
+	unsigned texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
+	m_shader->bind();
+	//glm::mat4 identity = glm::mat4(1.0f);
+	//m_shader->setMat4("projectionMatrix", &identity);
+	GLCall(auto loc = glGetUniformLocation(m_shader->m_rendererID, "f_textures"));
+	int samplers[2] = { 0, 1 };
+	GLCall(glUniform1iv(loc, 2, samplers));
+	GLCall(glBindTextureUnit(0, m_msaaColorTextureID));
+	GLCall(glBindTextureUnit(1, texture));
 }
 
 // Create the FBO attachments.
@@ -80,7 +113,7 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
 	// Generate and attach color texture.
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderColorTextureID));
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
@@ -96,6 +129,9 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_renderEntityIDTextureID, 0));
+	// Enable draw buffers.
+	GLenum renderDrawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	GLCall(glDrawBuffers(2, drawBuffers));
 	// Check for completion errror.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO is not complete.\n" << std::endl;
@@ -136,21 +172,27 @@ void FrameBufferObject::resize(int width, int height)
 	m_viewport[1] = height;
 }
 
-// Bind the FBO.
-void FrameBufferObject::bind()	  { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID)); }
-// Unbind the FBO.
-void FrameBufferObject::unbind()  { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
-// Clear the FBO.
+unsigned int FrameBufferObject::getRenderTexture() { renderFromMSAA(); return m_renderColorTextureID; }
+
+void FrameBufferObject::bind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID)); }
+
+void FrameBufferObject::bindRender() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID)); }
+												   
+void FrameBufferObject::unbind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
+
 void FrameBufferObject::clear()	  
 { 
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									// Clear depth buffer.
 	GLCall(glClearTexImage(m_msaaColorTextureID, 0, GL_RGBA, GL_FLOAT, 0));	// Clear color attachment.
 }
 
-// Get access to the render texture ID.
-// This renders the multisampled FBo the render FBO, which is not multisampled,
-// but does have the processing effect.
-unsigned int FrameBufferObject::getRenderTexture()
+void FrameBufferObject::clearRender()
+{
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									  // Clear depth buffer.
+	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); // Clear color attachment.
+}
+
+void FrameBufferObject::blitFromMSAA()
 {
 	// Resolve the MSAA and copy to the render FBO.
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_msaaFrameBufferID));
@@ -159,7 +201,6 @@ unsigned int FrameBufferObject::getRenderTexture()
 	GLCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
 	GLCall(glBlitFramebuffer(0, 0, m_viewport[0], m_viewport[1], 0, 0, m_viewport[0], m_viewport[1], GL_COLOR_BUFFER_BIT, GL_LINEAR));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	return m_renderColorTextureID;
 }	
 
 // Return the ID of the entity at the pixel coordinates.
@@ -178,6 +219,16 @@ unsigned int FrameBufferObject::getEntityID(float pixelCoords[2])
 	GLCall(glReadPixels((int)pixelCoords[0], (int)pixelCoords[1], 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	return entityID;
+}
+
+void FrameBufferObject::renderFromMSAA() 
+{
+	// Setup.
+	bindRender();
+	clearRender();
+	m_shader->bind();
+	m_renderVAO->render();
+	unbind();
 }
 
 //=============================================================================================================================================//

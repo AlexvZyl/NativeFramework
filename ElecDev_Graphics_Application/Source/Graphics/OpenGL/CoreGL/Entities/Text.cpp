@@ -17,7 +17,8 @@
 // Writes the text to the buffer based on the font loaded in the constructor.
 template<typename VertexType>
 Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
-					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, std::string align)
+					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, 
+					   std::string horizontalAlignment, std::string verticalAlignment)
 : Entity<VertexType>(parent)
 {
 	// Initialize variables.
@@ -30,17 +31,35 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 	//  A L I G N M E N T  //
 	// ------------------- //
 	
-	// Calculate the length of the string.
+	// Horizontal alignment.
 	float length = 0;
-	for (char c : text) { length += font.characterDictionary[c].xAdvance; }
-	// Center.
-	if (align == "C" || align == "c")		{position.x = position.x - (length * scale) / 2; }
-	// Right.
-	else if (align == "R" || align == "r")	{ position.x = position.x - (length * scale); }
-	// Left.
-	else if (align == "L" || align == "l")	{ /* Left is default and nothing has to be done. */ }
+	// Calculate the string length.
+	for (int i = 0; i < (int)text.length(); i++)
+	{ 
+		// Retrieve kerning value from dictionary.
+		float kerning = 0;
+		if (i != 0)		// Kerning does not apply to the first character.
+		{
+			unsigned currCharacter = font.characterDictionary.at(text[i]).id;
+			unsigned prevCharacter = font.characterDictionary.at(text[i - 1]).id;
+			// Check if kerning exists for current pair.
+			if (font.kerningDictionary.count(kerningPair))
+				kerning = font.kerningDictionary.at(std::pair kerningPair(prevCharacter, currCharacter));
+		}
+		length += font.characterDictionary[c].xAdvance + kerning; 
+	}
+	if		(horizontalAlignment == "C" || horizontalAlignment == "c")	{ position.x = position.x - (length * scale) / 2; }
+	else if (horizontalAlignment == "R" || horizontalAlignment == "r")	{ position.x = position.x - (length * scale);	  }
+	else if (horizontalAlignment == "L" || horizontalAlignment == "l")	{ /* Left is the default setting. */			  }
 	// Display error.
-	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << align << "' is not a valid alignment.\n"; return;	}
+	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << align << "' is not a valid horizontal alignment.\n"; return;	}
+
+	// Vertical alignment.
+	if		(verticalAlignment == "C" || verticalAlignment == "c") { position.y -= font.lineHeight / 2;   }
+	else if (verticalAlignment == "T" || verticalAlignment == "t") { position.y -= font.lineHeight;		  }
+	else if (verticalAlignment == "B" || verticalAlignment == "b") { /* Bottom is the default setting. */ }
+	// Display error.
+	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << align << "' is not a valid horizontal alignment.\n"; return; }
 
 	// ----------------------------- //
 	//  Q U A D   R E N D E R I N G  //
@@ -67,17 +86,13 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
-		// Never apply kerning to first character.
-		if (i != 0) 
+		if (i != 0)		// Kerning does not apply to the first character.
 		{
 			unsigned currCharacter = font.characterDictionary.at(text[i]).id;
 			unsigned prevCharacter = font.characterDictionary.at(text[i - 1]).id;
-			std::pair kerningPair(prevCharacter, currCharacter);
 			// Check if kerning exists for current pair.
-			if (font.kerningDictionary.count(kerningPair))
-			{
-				kerning = font.kerningDictionary.at(kerningPair);
-			}
+			if (font.kerningDictionary.count(kerningPair)) 
+				kerning = font.kerningDictionary.at(std::pair kerningPair(prevCharacter, currCharacter));
 		}
 
 		// Vertex 1.

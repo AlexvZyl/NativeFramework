@@ -32,6 +32,7 @@ struct Character
 struct Font
 {
 	float lineSpace = 0;												// Size of line spacing (vertical).
+	float lineHeight = 0;												// The height of the lines for the font.
 	int textureSize[2] = { 0,0 };										// x, y.  Size of the .png file.
 	float pixelsPerEM = 0;												// Pixels per EM.
 	float sizeInEMs = 0;												// The size of the font given in EM's.
