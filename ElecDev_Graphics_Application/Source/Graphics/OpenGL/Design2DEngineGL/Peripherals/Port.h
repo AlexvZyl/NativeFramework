@@ -32,7 +32,10 @@ private:
 	//port VAOs and primatives
 	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
 	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
-	std::shared_ptr<Text<VertexDataTextured>> title;
+	glm::vec2 titleOffset;
+	static Font titleFont;
+	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
+	float titleSize = 0.02f;
 	glm::vec2 centre;
 	static unsigned portID;
 	glm::vec4 bodyColour;
@@ -41,17 +44,23 @@ private:
 
 	Circle<VertexDataCircle> body;
 	Circle<VertexDataCircle> border;
+	std::shared_ptr<Text<VertexDataTextured>> title;
 
 
 public:
-	std::string label;
-	Port(glm::vec2 pos, PortType type, Component2D* parent);
+	std::string m_label;
+	glm::vec2 m_offset = { 0, 0 };
+	PortType m_type;
+	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	Port& operator = (const Port &t);
 	//Port(const Port&) = default;
 	void moveTo(glm::vec2 destination);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
 	void update();
+	void highlight();
+	void unhighlight();
+	void setOffset(glm::vec2 offset);
 
 };
 

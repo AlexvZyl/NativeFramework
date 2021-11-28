@@ -36,7 +36,7 @@ void PopUpMenu::render()
         // Render menu items.
         if (m_guiState->clickedZone.background) 
         {
-            if (ImGui::MenuItem("Add component", "C"))
+            if (ImGui::MenuItem("Place component", "P"))
             {   
                 close();
             }
@@ -45,6 +45,7 @@ void PopUpMenu::render()
         {
             if (ImGui::MenuItem("Component Editor", "E"))
             {
+                ImGui::SetNextWindowPos(m_guiState->popUpPosition);
                 m_guiState->componentEditor = true;
                 close();
             }
