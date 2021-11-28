@@ -65,7 +65,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "C");
+	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
 	title->update();
 	// Port.
 	portOffset = glm::vec2(centre+glm::vec2(width, 0.f));

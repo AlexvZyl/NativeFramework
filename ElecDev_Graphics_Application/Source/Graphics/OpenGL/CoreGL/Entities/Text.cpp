@@ -16,7 +16,7 @@
 
 // Writes the text to the buffer based on the font loaded in the constructor.
 template<typename VertexType>
-Text<VertexType>::Text(std::string text, glm::vec3& positionRef, glm::vec4& color, float scale, 
+Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
 					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, 
 					   std::string horizontalAlignment, std::string verticalAlignment)
 : Entity<VertexType>(parent)
@@ -25,7 +25,7 @@ Text<VertexType>::Text(std::string text, glm::vec3& positionRef, glm::vec4& colo
 	m_VAO = vao;
 	/*m_entityID = EntityManager::generateEID();*/
 	m_entityID = 10;
-	glm::vec3 position = positionRef;
+	m_trackedCenter = position;  // This isn't really correct...
 
 	// ------------------- //
 	//  A L I G N M E N T  //
@@ -61,11 +61,6 @@ Text<VertexType>::Text(std::string text, glm::vec3& positionRef, glm::vec4& colo
 	else if (verticalAlignment == "B" || verticalAlignment == "b") { /* Bottom is the default setting. */ }
 	// Display error.
 	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << verticalAlignment << "' is not a valid vertical alignment.\n"; return; }
-
-	// Assign center.
-	m_trackedCenter.x = position.x - (length * scale ) / 2;
-	m_trackedCenter.y = position.y - (font.lineHeight * scale) / 2;
-	m_trackedCenter.z = position.z;
 
 	// ----------------- //
 	//  T E X T   B O X  //
