@@ -137,14 +137,21 @@ void Shader::setInt(const std::string& name, int value)
 {
     GLCall( glUniform1i(glGetUniformLocation(m_rendererID, name.c_str()), value) );
 }
+void Shader::setIntArray(const std::string& name, const int* value, unsigned count)
+{
+    GLCall(glUniform1iv(glGetUniformLocation(m_rendererID, name.c_str()), count, value));
+}
 void Shader::setFloat(const std::string& name, float value)
 {
     GLCall( glUniform1f(glGetUniformLocation(m_rendererID, name.c_str()), value) );
 }
 void Shader::setMat4(const std::string& name, glm::mat4* value)
 {
-    // Check if the uniform exists.
-    GLCall ( glUniformMatrix4fv( getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(*value) ) );
+    GLCall ( glUniformMatrix4fv(glGetUniformLocation(m_rendererID, name.c_str()), 1, GL_FALSE, glm::value_ptr(*value) ) );
+}
+void Shader::setSamplerMSAA(const std::string& name, int* textureID, unsigned count)
+{
+    GLCall(glUniform1iv(glGetUniformLocation(m_rendererID, name.c_str()), count, textureID));
 }
 
 // Get the uniform location.

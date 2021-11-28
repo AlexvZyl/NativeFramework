@@ -11,18 +11,17 @@ This is where the interactive 2D design engine is implemented.
 // General.
 #include <iostream>
 #include <External/Misc/ConsoleColor.h>
-// OpenGL core elements.
 // Resource loading.
 #include "Resources/ResourceHandler.h"
-// Window.
-
 // Entities.
 #include "Peripherals/Component2D.h"
+// OpenGL core elements.
 #include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/Entities/Circle.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/ShaderHandlerGL.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+// Window.
 #include <GLFW/glfw3.h>
 
 //=============================================================================================================================================//
@@ -81,7 +80,7 @@ void Design2DEngineGL::renderLoop()
 	//  R E N D E R I N G  //
 	// ------------------- //
 
-	// Helpers.
+	
 
 	// --------------- //
 	//  C L E A N U P  //

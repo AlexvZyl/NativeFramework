@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
@@ -226,6 +227,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.h" />
@@ -795,6 +797,7 @@
     <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
     <None Include="Source\Resources\Shaders\basicShader.shader" />
     <None Include="Source\Resources\Shaders\circleShader.shader" />
+    <None Include="Source\Resources\Shaders\staticTextureShader.shader" />
     <None Include="Source\Resources\Shaders\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>

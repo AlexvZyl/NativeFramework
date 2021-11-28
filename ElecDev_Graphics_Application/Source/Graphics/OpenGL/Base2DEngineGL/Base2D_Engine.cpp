@@ -59,9 +59,9 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 	m_texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
-	int samplers[3] = { 0, 1, 2 };
-	GLCall(glUniform1iv(loc, 3, samplers));
-	GLCall(glBindTextureUnit(2, m_texture));
+	int samplers[4] = { 0, 1, 2, 3 };
+	GLCall(glUniform1iv(loc, 4, samplers));
+	GLCall(glBindTextureUnit(3, m_texture));
 
 	//---------------------------------------------------------------------------------------
 
@@ -98,6 +98,7 @@ void Base2DEngineGL::renderLoop()
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
+
 	// Draw background.
 	m_backgroundShader->bind();
 	m_backgroundVAO->render();
