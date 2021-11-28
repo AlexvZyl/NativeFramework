@@ -32,7 +32,6 @@ struct Character
 struct Font
 {
 	float lineSpace = 0;												// Size of line spacing (vertical).
-	float lineHeight = 0;												// The height of the lines for the font.
 	int textureSize[2] = { 0,0 };										// x, y.  Size of the .png file.
 	float pixelsPerEM = 0;												// Pixels per EM.
 	float sizeInEMs = 0;												// The size of the font given in EM's.
@@ -40,6 +39,11 @@ struct Font
 	std::map<unsigned int, Character> characterDictionary;				// Dictionary containing the character information.
 	std::map<std::pair<unsigned, unsigned>, float> kerningDictionary;	// Dictionary containing the kerning information.
 	unsigned int textureID = NULL;										// Texture ID for the font atlas.
+	float lineHeight = 0;												// The height of the lines for the font.
+	float ascender = 0;
+	float descender = 0;
+	float underLineY = 0;
+	float underLineThickness = 0;
 };
 
 //=============================================================================================================================================//

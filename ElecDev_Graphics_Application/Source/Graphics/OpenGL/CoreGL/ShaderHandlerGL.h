@@ -43,10 +43,14 @@ public:
     void setBool(const std::string& name, bool value);
     // Set a int variable in the shader.
     void setInt(const std::string& name, int value);
+    // Set an int array in the shader.
+    void setIntArray(const std::string& name, const int* value, unsigned count);
     // Set a float variable in the shader.
     void setFloat(const std::string& name, float value);
     // Set a mat4 variable in the shader.
     void setMat4(const std::string& name, glm::mat4* value);
+    // Set a multisampled sampler vaue.
+    void setSamplerMSAA(const std::string& name, int* textureID, unsigned count);
 
 private:
 

@@ -73,7 +73,6 @@ public:
 	// This copies the multisampled FBO the render FBO, which is not multisampled,
 	// but does have the processing effect.
 	void blitFromMSAA();
-
 	// This renders the texture from the MSAA attachment to a quad on the
 	// render attachment.  the FBO does not have its own shader, so a static
 	// shader has to be bound before hand.
@@ -81,12 +80,11 @@ public:
 
 	// Resizing the texure when the window resizes.
 	void resize(int width, int height);
-
 	// Clears the MSAA attachment of the FBO.
 	void clear();
 	// Clears the render attachment of the FBO.
 	void clearRender();
-	// Returns the entity ID based on the coordinates provided.
+	// Return the ID of the entity at the pixel coordinates.
 	unsigned int getEntityID(float pixelCoords[2]);
 
 };

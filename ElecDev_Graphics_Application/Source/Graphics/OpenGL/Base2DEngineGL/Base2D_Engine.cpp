@@ -61,7 +61,7 @@ Base2DEngineGL::Base2DEngineGL(GUIState* guiState)
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[4] = { 0, 1, 2, 3 };
 	GLCall(glUniform1iv(loc, 4, samplers));
-	GLCall(glBindTextureUnit(2, m_texture));
+	GLCall(glBindTextureUnit(3, m_texture));
 
 	//---------------------------------------------------------------------------------------
 

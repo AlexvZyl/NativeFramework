@@ -56,6 +56,11 @@ public:
 	// Has to be overridden from the parent class since the
 	// parent class will change the text box colour as well.
 	virtual void setColor(glm::vec4& color) override;
+	// Sets the later of the text entity.
+	// This has to be overridden so that the box and text can be 
+	// set seperately.
+	virtual void setLayer(float layer) override;
+
 };
 
 //=============================================================================================================================================//

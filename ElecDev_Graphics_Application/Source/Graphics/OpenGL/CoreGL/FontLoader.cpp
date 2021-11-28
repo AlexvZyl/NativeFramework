@@ -33,9 +33,13 @@ Font msdfLoadFont(int fontID)
 	font.pixelsPerEM	= atlas["size"];
 
 	// Load metrics.
-	JSON metrics	= fontInfo["metrics"];
-	font.sizeInEMs	= metrics["emSize"];
-	font.lineHeight = metrics["lineHeight"];
+	JSON metrics			= fontInfo["metrics"];
+	font.sizeInEMs			= metrics["emSize"];
+	font.lineHeight			= metrics["lineHeight"];
+	font.ascender			= metrics["ascender"];
+	font.descender			= metrics["descender"];
+	font.underLineY			= metrics["underlineY"];
+	font.underLineThickness = metrics["underlineThickness"];
 
 	// Load glyphs (characters).
 	JSON glyphs = fontInfo["glyphs"];

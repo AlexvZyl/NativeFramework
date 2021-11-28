@@ -70,7 +70,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	m_triangleEntitiesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_triangleTexturedEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	m_circleEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 32);
+	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
 	createDefaultBackground();
 
 	// ----------------------------------------- //

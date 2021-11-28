@@ -38,7 +38,7 @@ flat in uint f_entityID;
 const float width = 0.4;
 const float edge = 0.2;
 
-uniform sampler2D f_textures[3];
+uniform sampler2D f_textures[4];
 
 // Utility function for MSDF rendering.
 float median(float r, float g, float b) {
