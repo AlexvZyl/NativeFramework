@@ -22,7 +22,6 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 : Entity<VertexType>(parent)
 {
 	// Initialize variables.
-	m_trackedCenter = position;
 	m_VAO = vao;
 	/*m_entityID = EntityManager::generateEID();*/
 	m_entityID = 10;
@@ -55,11 +54,16 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << horizontalAlignment << "' is not a valid horizontal alignment.\n"; return;	}
 
 	// Vertical alignment.
-	if		(verticalAlignment == "C" || verticalAlignment == "c") { position.y -= font.lineHeight / 2;   }
-	else if (verticalAlignment == "T" || verticalAlignment == "t") { position.y -= font.lineHeight;		  }
+	if		(verticalAlignment == "C" || verticalAlignment == "c") { position.y -= (font.lineHeight * scale) / 2;   }
+	else if (verticalAlignment == "T" || verticalAlignment == "t") { position.y -= (font.lineHeight * scale);   	}
 	else if (verticalAlignment == "B" || verticalAlignment == "b") { /* Bottom is the default setting. */ }
 	// Display error.
 	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << verticalAlignment << "' is not a valid vertical alignment.\n"; return; }
+
+	// Assign center.
+	m_trackedCenter.x = position.x - (length * scale ) / 2;
+	m_trackedCenter.y = position.y - (font.lineHeight * scale) / 2
+	m_trackedCenter.z = position.z;
 
 	// ----------------- //
 	//  T E X T   B O X  //
