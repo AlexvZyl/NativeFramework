@@ -250,6 +250,12 @@ void Text<VertexType>::setBoxColour(glm::vec4 colour)
 	for (int i = 0; i < 4; i++) { *m_vertices[i].color = colour; }
 }
 
+template <typename VertexType>
+void Text<VertexType>::setColor(glm::vec4& color) 
+{
+	for (int i = 4; i < m_vertices.size(); i++) { *m_vertices[i].color = color; }
+}
+
 //=============================================================================================================================================//
 //  Instantiations.																															   //
 //=============================================================================================================================================//

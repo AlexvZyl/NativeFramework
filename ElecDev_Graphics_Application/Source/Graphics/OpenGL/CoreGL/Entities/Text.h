@@ -46,12 +46,16 @@ public:
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 		 VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent,
-		 std::string horizontalAlignment = "C", std::string verticalAlignment = "B");
+		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
 	// Destructor.
 	~Text();
 
-	// Text box manipulation.
+	// Sets the text box colour.
 	void setBoxColour(glm::vec4 colour);
+	// Sets the text colour only.
+	// Has to be overridden from the parent class since the
+	// parent class will change the text box colour as well.
+	virtual void setColor(glm::vec4& color) override;
 };
 
 //=============================================================================================================================================//
