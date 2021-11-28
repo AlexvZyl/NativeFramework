@@ -20,7 +20,7 @@ class Circle;
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
-enum designState { COMPONENT_PLACE, ENTITY_SELECT };
+enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE};
 
 
 class Design2DEngineGL : public Base2DEngineGL
@@ -76,6 +76,9 @@ public:
 	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle) override;
 	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset) override;
 	virtual void keyEvent(int key, int action) override;
+
+	//Helper functions
+	virtual void setActiveComponent(unsigned eID);
 };
 
 //=============================================================================================================================================//

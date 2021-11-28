@@ -10,6 +10,8 @@
 #include "CoreGL/Entities/Text.h"
 #include "Resources/ResourceHandler.h"
 #include "CoreGL/Entities/Circle.h"
+#include <iostream>
+#include "External/Misc/ConsoleColor.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -39,18 +41,20 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
+	/*/
 	vertices2.insert(vertices2.end(), glm::vec3(centre.x - width/2, centre.y - height/2, 0.0f));
 	vertices2.insert(vertices2.end(), glm::vec3(centre.x + width/2, centre.y - height/2, 0.0f));
 	vertices2.insert(vertices2.end(), glm::vec3(centre.x + width/2, centre.y + height/2, 0.0f));
 	vertices2.insert(vertices2.end(), glm::vec3(centre.x - width/2, centre.y + height/2, 0.0f));
+	*/
 
 	engine_trianglesVAO = trianglesVAO;
 	engine_linesVAO = linesVAO;
 	engine_texturedTrianglesVAO = texturedTrianglesVAO;
 	engine_circleVAO = circleVAO;
-	shapeColour = glm::vec4(0.5f, 0.5f, 0.9f, 0.5f);
-	titleColour = glm::vec4(0.3f, 0.3f, 0.9f, 0.5f);
-	borderColour = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
+	shapeColour = { 0.5f, 0.5f, 0.9f, 0.5f };
+	titleColour = { 0.3f, 0.3f, 0.9f, 0.5f };
+	borderColour = { 0.8f, 1.0f, .8f, 1.f };
 
 	// Main shape.
 	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO, this);
@@ -67,19 +71,9 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	titleString = "Component " + std::to_string(componentID++);
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
 	title->update();
-	// Port.
-	portOffset = glm::vec2(centre+glm::vec2(width, 0.f));
-	glm::vec3 portPos = glm::vec3(portOffset, componentLayer + borderLayerOffset);
-	glm::vec3 port2Pos = glm::vec3(-portOffset, componentLayer + borderLayerOffset);
-	PortType type = PORT_IN;
-	//port1 = std::make_shared<Port>(portPos, type, this);
-	//port2 = std::make_shared<Port>(port2Pos, type, this);
-	portsEast.push_back(std::make_shared<Port>(portPos, type, this));
-	portsWest.push_back(std::make_shared<Port>(port2Pos, type, this));
-	//port1->setColor(borderColour);
-	//port1->setLayer(componentLayer);
-	//port1->update();
-
+	// Add some test ports. (TO BE REMOVED)
+	addPort(0, PORT_IN, "Test in");
+	addPort(1, PORT_OUT, "Test out");
 
 }
 
@@ -112,10 +106,16 @@ void Component2D::moveTo(float pointerPos[2])
 	//port1->moveTo(portDest);
 	//port2->moveTo(port2Dest);
 	for (int i = 0; i < portsWest.size(); i++) {
-		portsWest[i]->moveTo(translateDestination + portOffset);
+		portsWest[i]->moveTo(translateDestination);
 	}
 	for (int i = 0; i < portsEast.size(); i++) {
-		portsEast[i]->moveTo(translateDestination - portOffset);
+		portsEast[i]->moveTo(translateDestination);
+	}
+	for (int i = 0; i < portsNorth.size(); i++) {
+		portsNorth[i]->moveTo(translateDestination);
+	}
+	for (int i = 0; i < portsSouth.size(); i++) {
+		portsSouth[i]->moveTo(translateDestination);
 	}
 	shape->update();
 	border->update();
@@ -129,9 +129,7 @@ void Component2D::place(float pos[2])
 	setLayer(0.0f);
 	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
 	titleColour = { 0.f, 0.f, 1.f, 1.0f };
-	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	shape->setColor(shapeColour);
-	border->setColor(borderColour);
 	title->setColor(titleColour);
 	//port1->setColor(borderColour);
 	shape->update();
@@ -153,6 +151,12 @@ void Component2D::setLayer(float layer)
 	for (int i = 0; i < portsEast.size(); i++) {
 		portsEast[i]->setLayer(layer + portLayerOffset);
 	}
+	for (int i = 0; i < portsNorth.size(); i++) {
+		portsNorth[i]->setLayer(layer + portLayerOffset);
+	}
+	for (int i = 0; i < portsSouth.size(); i++) {
+		portsSouth[i]->setLayer(layer + portLayerOffset);
+	}
 	componentLayer = layer;
 }
 
@@ -172,8 +176,157 @@ void Component2D::update()
 	for (int i = 0; i < portsEast.size(); i++) {
 		portsEast[i]->update();
 	}
+	for (int i = 0; i < portsNorth.size(); i++) {
+		portsNorth[i]->update();
+	}
+	for (int i = 0; i < portsSouth.size(); i++) {
+		portsSouth[i]->update();
+	}
 	//port1->update();
 	//port2->update();
+}
+
+void Component2D::highlight()
+{
+	borderColour = { 0.8f, 1.0f, .8f, 1.f };
+	border->setColor(borderColour);
+	border->update();
+
+	for (int i = 0; i < portsWest.size(); i++) {
+		portsWest[i]->highlight();
+	}
+	for (int i = 0; i < portsEast.size(); i++) {
+		portsEast[i]->highlight();
+	}
+	for (int i = 0; i < portsNorth.size(); i++) {
+		portsNorth[i]->highlight();
+	}
+	for (int i = 0; i < portsSouth.size(); i++) {
+		portsSouth[i]->highlight();
+	}
+}
+
+void Component2D::unhighlight()
+{
+	borderColour = { 0.f, 0.f, 0.f, 1.f };
+	border->setColor(borderColour);
+	border->update();
+
+	for (int i = 0; i < portsWest.size(); i++) {
+		portsWest[i]->unhighlight();
+	}
+	for (int i = 0; i < portsEast.size(); i++) {
+		portsEast[i]->unhighlight();
+	}
+	for (int i = 0; i < portsNorth.size(); i++) {
+		portsNorth[i]->unhighlight();
+	}
+	for (int i = 0; i < portsSouth.size(); i++) {
+		portsSouth[i]->unhighlight();
+	}
+}
+
+void Component2D::addPort(int side, PortType type, std::string name)
+{
+	switch(side){
+	case 0:
+		portsWest.push_back(std::make_shared<Port>(glm::vec2(-width, 0.f), type, this, name));
+		break;
+	case 1:
+		portsEast.push_back(std::make_shared<Port>(glm::vec2(width, 0.f), type, this, name));
+		break;
+	case 2:
+		portsNorth.push_back(std::make_shared<Port>(glm::vec2(0.f, height), type, this, name));
+		break;
+	case 3:
+		portsSouth.push_back(std::make_shared<Port>(glm::vec2(0.f, -height), type, this, name));
+		break;
+	default:
+		//If we get here, then the side value is not valid.
+		std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Cannot add a port to side " << side << " (require side < 4).";
+	}
+	updatePortPositions();
+}
+
+void Component2D::removePort(std::shared_ptr<Port> port)
+{
+
+	std::vector<std::shared_ptr<Port>>* allPorts[4] = {&portsWest,
+														&portsEast,
+														&portsNorth,
+														&portsSouth};
+
+	for (int i = 0; i < 4; i++) {
+		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
+
+		auto port_to_remove = std::find(begin(portsSide), end(portsSide), port);
+
+		if (port_to_remove != end(portsSide)) {
+			portsSide.erase(port_to_remove);
+			portsSide.shrink_to_fit();
+			updatePortPositions();
+			return;
+		}
+	}
+	//Warn the user if the port was not found on this component (i.e. if we have not returned yet).
+	std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Tried to delete port "<<port->m_label<< ", but it does not belong to component "<< titleString <<".";
+
+}
+
+void Component2D::updatePortPositions()
+{
+	std::vector<std::shared_ptr<Port>>* allPorts[4] = {	&portsWest,
+														&portsEast,
+														&portsNorth,
+														&portsSouth };
+
+	unsigned* n_ports_sides[4] = {&n_ports_west, &n_ports_east, &n_ports_north, &n_ports_south};
+
+	for (int i = 0; i < 4; i++) {
+		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
+		unsigned* n_ports = n_ports_sides[i];
+		if (portsSide.size() != *n_ports) {
+			*n_ports = portsSide.size();
+
+			//Placement is dependent on which side we are on.
+			glm::vec2 offset_side;
+			switch (i) {
+			case 0:
+				//Set west offsets
+				offset_side = glm::vec2(-width, -height);
+				for (int j = 0; j < *n_ports; j++) {
+					glm::vec2 offset_j = glm::vec2(0.f, 2.f * (j+1) * height / (*n_ports + 1));
+					portsSide[j]->setOffset(offset_side + offset_j);
+				}
+				break;
+			case 1:
+				//Set east offsets
+				offset_side = glm::vec2(width, -height);
+				for (int j = 0; j < *n_ports; j++) {
+					glm::vec2 offset_j = glm::vec2(0.f, 2.f * (j + 1) * height / (*n_ports + 1));
+					portsSide[j]->setOffset(offset_side + offset_j);
+				}
+				break;
+			case 2:
+				//Set north offsets
+				offset_side = glm::vec2(-width, height);
+				for (int j = 0; j < *n_ports; j++) {
+					glm::vec2 offset_j = glm::vec2(2.f * (j + 1) * width / (*n_ports + 1), 0.f);
+					portsSide[j]->setOffset(offset_side + offset_j);
+				}
+				break;
+			case 3:
+				//Set south offsets
+				offset_side = glm::vec2(-width, -height);
+				for (int j = 0; j < *n_ports; j++) {
+					glm::vec2 offset_j = glm::vec2(2.f * (j + 1) * width / (*n_ports + 1), 0.f);
+					portsSide[j]->setOffset(offset_side + offset_j);
+				}
+				break;
+			}
+		}
+	}
+
 }
 
 //void Component2D::destroy()
