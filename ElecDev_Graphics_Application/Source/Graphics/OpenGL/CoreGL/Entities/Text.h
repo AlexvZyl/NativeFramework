@@ -1,5 +1,7 @@
 #pragma once
 
+// The first 4 vertices in the text vertex buffer contains the text box.
+
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
@@ -41,16 +43,15 @@ public:
 	using Entity<VertexType>::m_colour;
 	using Entity<VertexType>::m_entityID;
 
-	// --------- //
-	//  T E X T  //
-	// --------- //
-
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 		 VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent,
 		 std::string horizontalAlignment = "C", std::string verticalAlignment = "B");
 	// Destructor.
 	~Text();
+
+	// Text box manipulation.
+	void setBoxColour(glm::vec4 colour);
 };
 
 //=============================================================================================================================================//
