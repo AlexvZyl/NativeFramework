@@ -6,8 +6,6 @@ class LineSegment :
     public Entity<VertexData>
 {
 private:
-    std::shared_ptr<VertexData> start;
-    std::shared_ptr<VertexData> end;
 
 
 public:
