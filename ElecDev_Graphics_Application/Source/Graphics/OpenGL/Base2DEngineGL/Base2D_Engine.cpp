@@ -127,6 +127,10 @@ void Base2DEngineGL::renderLoop()
 	//  C L E A N U P  //
 	// --------------- //
 	 
+	/*m_textureShader->bind();
+	m_frameBuffer->blitFromMSAA();
+	m_frameBuffer->renderFromMSAA();*/
+
 	// Stop rendering to the current FBO.
 	m_frameBuffer->unbind();
 	// Disable blending.

@@ -70,7 +70,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	m_triangleEntitiesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_triangleTexturedEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	m_circleEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
+	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 16);
 	createDefaultBackground();
 
 	// ----------------------------------------- //
@@ -181,8 +181,8 @@ void EngineCoreGL::createDefaultBackground()
 	// Create the VAO.
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	// Assign background data.
-	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f);
-	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f);
+	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
+	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 1.f);
 	/*glm::vec4 bgColor1((float)35 / 255, (float)35 / 255, (float)40 / 255, 1.f);
 	glm::vec4 bgColor2((float)35 / 255, (float)35 / 255, (float)40 / 255, 1.f);*/
 	glm::vec3 pos1(1.0f, 1.0f, 0.99f);

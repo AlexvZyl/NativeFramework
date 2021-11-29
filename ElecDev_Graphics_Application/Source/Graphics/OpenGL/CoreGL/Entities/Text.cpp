@@ -23,9 +23,8 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 {
 	// Initialize variables.
 	m_VAO = vao;
-	/*m_entityID = EntityManager::generateEID();*/
-	m_entityID = 10;
-	m_trackedCenter = position;  // This isn't really correct...
+	m_entityID = EntityManager::generateEID(parent);
+	m_trackedCenter = position;  //  This does not track the center, but rather the cursor positioin.
 
 	// ------------------- //
 	//  A L I G N M E N T  //
@@ -216,7 +215,6 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 	}
 	// Write data to VAO.
 	m_VAO->appendDataCPU(this);
-
 }
 
 template<typename VertexType>
