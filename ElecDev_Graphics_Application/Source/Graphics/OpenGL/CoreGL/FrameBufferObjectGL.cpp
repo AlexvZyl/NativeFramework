@@ -36,7 +36,6 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	GLCall(glGenFramebuffers(1, &m_renderFrameBufferID));
 	GLCall(glGenTextures(1, &m_renderColorTextureID));
 	GLCall(glGenTextures(1, &m_renderEntityIDTextureID));
-	GLCall(glGenTextures(1, &m_processedTextureID));
 	// Check for generation error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
 	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO could not be generated.\n"; }
@@ -126,15 +125,6 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_renderEntityIDTextureID, 0));
-	// Generate processed texture.
-	GLCall(glBindTexture(GL_TEXTURE_2D, m_processedTextureID));
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_processedTextureID, 0));
 
 	// ------------------------------------- //
 	//  R E N D E R   A T T A C H M E N T S  //
@@ -166,7 +156,6 @@ FrameBufferObject::~FrameBufferObject()
 	GLCall(glDeleteTextures(1, &m_msaaEntityIDTextureID));
 	GLCall(glDeleteTextures(1, &m_renderColorTextureID));
 	GLCall(glDeleteTextures(1, &m_renderEntityIDTextureID));
-	GLCall(glDeleteTextures(1, &m_processedTextureID));
 	// Delete the buffers.
 	GLCall(glDeleteFramebuffers(1, &m_msaaFrameBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_renderFrameBufferID));
@@ -192,7 +181,7 @@ void FrameBufferObject::resize(int width, int height)
 unsigned int FrameBufferObject::getRenderTexture() 
 { 
 	renderFromMSAA(); 
-	//blitFromMSAA();
+	blitFromMSAA();
 	return m_renderColorTextureID; 
 }
 
@@ -240,7 +229,7 @@ void FrameBufferObject::blitFromMSAA()
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_msaaFrameBufferID));
 	GLCall(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_renderFrameBufferID));
 	GLCall(glReadBuffer(GL_COLOR_ATTACHMENT0));
-	GLCall(glDrawBuffer(GL_COLOR_ATTACHMENT2));
+	GLCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
 	GLCall(glBlitFramebuffer(0, 0, m_viewport[0], m_viewport[1], 0, 0, m_viewport[0], m_viewport[1], GL_COLOR_BUFFER_BIT, GL_LINEAR));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	// Enable draw buffers.

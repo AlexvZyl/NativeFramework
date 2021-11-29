@@ -33,7 +33,6 @@ private:
 	unsigned int m_renderFrameBufferID;			// FBO ID.
 	unsigned int m_renderColorTextureID;		// Texture ID.	
 	unsigned int m_renderEntityIDTextureID;		// Texture containing the entity ID's.
-	unsigned int m_processedTextureID;			// Texture that contains the resolved MSAA texture.
 
 	// MSAA FBO.
 	unsigned int m_msaaFrameBufferID;			// FBO ID.
