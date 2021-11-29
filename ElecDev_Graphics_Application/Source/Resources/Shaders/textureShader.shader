@@ -38,6 +38,8 @@ flat in uint f_entityID;
 const float width = 0.4;
 const float edge = 0.2;
 
+uniform float screenPxRange;
+
 uniform sampler2D f_textures[4];
 
 // Utility function for MSDF rendering.
@@ -58,10 +60,10 @@ void main()
 	// Render MSDF text.
 	else if (index == 1)
 	{
+		float screenPxRangeTemp = 10;
 		vec3 msd = texture(f_textures[1], f_texCoord).rgb;
 		float sd = median(msd.r, msd.g, msd.b);
-		/*float screenPxDistance = screenPxRange() * (sd - 0.5);*/
-		float screenPxDistance = 5 * (sd - 0.5);
+		float screenPxDistance = screenPxRangeTemp * (sd - 0.5);
 		float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
 		if (opacity == 0)
 			discard;

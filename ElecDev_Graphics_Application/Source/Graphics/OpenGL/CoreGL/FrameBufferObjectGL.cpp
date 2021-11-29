@@ -36,9 +36,12 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	GLCall(glGenFramebuffers(1, &m_renderFrameBufferID));
 	GLCall(glGenTextures(1, &m_renderColorTextureID));
 	GLCall(glGenTextures(1, &m_renderEntityIDTextureID));
+	GLCall(glGenTextures(1, &m_processedTextureID));
 	// Check for generation error.
 	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
 	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO could not be generated.\n"; }
+
+	// Post processing.
 
 	// Create attachments for the FBO's.
 	createAttachments(width, height);
@@ -58,7 +61,7 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 		VertexDataTextured(-1.f, -1.f,  0.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,   2.f,  1),
 		VertexDataTextured(-1.f,  1.f,  0.f,   0.f, 1.f, 0.f, 1.f,   0.f, 1.f,   2.f,  1),
 		VertexDataTextured( 1.f,  1.f,  0.f,   0.f, 0.f, 1.f, 1.f,   1.f, 1.f,   2.f,  1),
-		VertexDataTextured( 1.f, -1.f,  0.f,   0.f, 0.f, 0.f, 1.f,   1.f, 0.f,   2.f,  1),
+		VertexDataTextured( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1),
 	};
 	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
 	m_renderVAO->appendDataCPU(vertices, indices);
@@ -85,15 +88,12 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
 	// Generate and attach MSAA color texture.
 	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));
-	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_RGBA, width, height, GL_TRUE));
+	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_RGBA8, width, height, GL_TRUE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID, 0));
 	// Generate and attach MSAA entityID buffer.
 	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDTextureID));
 	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_R32UI, width, height, GL_TRUE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDTextureID, 0));
-	// Enable draw buffers.
-	GLenum drawBuffers[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-	GLCall(glDrawBuffers(2, drawBuffers));
 	// Create depth/stencil MSAA buffer texture.
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_msaaDepthStencilBufferID));
 	GLCall(glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_MSAA, GL_DEPTH24_STENCIL8, width, height));
@@ -110,7 +110,7 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
 	// Generate and attach color texture.
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderColorTextureID));
-	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
@@ -126,12 +126,28 @@ void FrameBufferObject::createAttachments(int width, int height)
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_renderEntityIDTextureID, 0));
-	// Enable draw buffers.
-	GLenum renderDrawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-	GLCall(glDrawBuffers(2, drawBuffers));
+	// Generate processed texture.
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_processedTextureID));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_processedTextureID, 0));
+
+	// ------------------------------------- //
+	//  R E N D E R   A T T A C H M E N T S  //
+	// ------------------------------------- //
+
 	// Check for completion errror.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO is not complete.\n" << std::endl;
+
+	// Enable draw buffers.
+	GLenum drawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	GLCall(glNamedFramebufferDrawBuffers(m_msaaFrameBufferID, 2, drawBuffers));
+	GLCall(glNamedFramebufferDrawBuffers(m_renderFrameBufferID, 2, drawBuffers));
 
 	// --------------- //
 	//  C L E A N U P  //
@@ -150,6 +166,7 @@ FrameBufferObject::~FrameBufferObject()
 	GLCall(glDeleteTextures(1, &m_msaaEntityIDTextureID));
 	GLCall(glDeleteTextures(1, &m_renderColorTextureID));
 	GLCall(glDeleteTextures(1, &m_renderEntityIDTextureID));
+	GLCall(glDeleteTextures(1, &m_processedTextureID));
 	// Delete the buffers.
 	GLCall(glDeleteFramebuffers(1, &m_msaaFrameBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_renderFrameBufferID));
@@ -172,7 +189,12 @@ void FrameBufferObject::resize(int width, int height)
 	m_shader->setIntArray("textureSize", m_viewport, 2);
 }
 
-unsigned int FrameBufferObject::getRenderTexture() { /*renderFromMSAA()*/ blitFromMSAA(); return m_renderColorTextureID; }
+unsigned int FrameBufferObject::getRenderTexture() 
+{ 
+	renderFromMSAA(); 
+	//blitFromMSAA();
+	return m_renderColorTextureID; 
+}
 
 void FrameBufferObject::bind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID)); }
 
@@ -205,7 +227,10 @@ unsigned int FrameBufferObject::getEntityID(float pixelCoords[2])
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
 	GLCall(glReadBuffer(GL_COLOR_ATTACHMENT1));
 	GLCall(glReadPixels((int)pixelCoords[0], (int)pixelCoords[1], 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	// Enable draw buffers.
+	GLenum drawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	GLCall(glNamedFramebufferDrawBuffers(m_msaaFrameBufferID, 2, drawBuffers));
+	GLCall(glNamedFramebufferDrawBuffers(m_renderFrameBufferID, 2, drawBuffers));
 	return entityID;
 }
 
@@ -215,23 +240,26 @@ void FrameBufferObject::blitFromMSAA()
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_msaaFrameBufferID));
 	GLCall(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_renderFrameBufferID));
 	GLCall(glReadBuffer(GL_COLOR_ATTACHMENT0));
-	GLCall(glDrawBuffer(GL_COLOR_ATTACHMENT0));
+	GLCall(glDrawBuffer(GL_COLOR_ATTACHMENT2));
 	GLCall(glBlitFramebuffer(0, 0, m_viewport[0], m_viewport[1], 0, 0, m_viewport[0], m_viewport[1], GL_COLOR_BUFFER_BIT, GL_LINEAR));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	// Enable draw buffers.
+	GLenum drawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	GLCall(glNamedFramebufferDrawBuffers(m_msaaFrameBufferID, 2, drawBuffers));
+	GLCall(glNamedFramebufferDrawBuffers(m_renderFrameBufferID, 2, drawBuffers));
 }	
 
 void FrameBufferObject::renderFromMSAA() 
 {
-	GLCall(glEnable(GL_BLEND));
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));		  // Bind the render FBO.
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									  // Clear depth buffer.
-	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); // Clear color attachment.
-	m_shader->bind();														  // Bind the custom shader.
-	GLCall(glActiveTexture(GL_TEXTURE2));									  // Activate texture slot 2.
-	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));	  // Bind the MSAA texture.
-	m_renderVAO->render();													  // Render the quad.
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));							  // Unbind the FBO.
-	GLCall(glDisable(GL_BLEND));
+	GLCall(glViewport(0,0, m_viewport[0], m_viewport[1]));  // This might cause issues with ImGui.		
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));		  
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									  
+	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); 
+	GLCall(glActiveTexture(GL_TEXTURE2));									  
+    GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));	  
+	m_shader->bind();														  
+	m_renderVAO->render();													  
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));							  
 }
 
 //=============================================================================================================================================//
