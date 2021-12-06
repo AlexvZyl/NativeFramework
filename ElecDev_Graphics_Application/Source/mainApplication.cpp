@@ -15,7 +15,7 @@
 #include <glad/glad.h>
 // Resources.
 #include <Misc/stb_image.h>
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
 // Gui states.
@@ -25,7 +25,7 @@
 // Handlers.
 #include "Graphics/GraphicsHandler.h"
 #include "GUI/GuiHandler.h"
-#include "PythonInterface.h"
+#include "Utilities/PythonInterface/PythonInterface.h"
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
 // Measure time.
@@ -314,7 +314,7 @@ int main(int, char**)
             glfwSwapBuffers(window);
 
             // Force push OpenGL commands to the GPU.
-            //GLCall(glFinish());
+            GLCall(glFinish());
         }
     }
 

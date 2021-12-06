@@ -12,7 +12,7 @@
 #include "../GUIState.h"
 
 // Resource loading.
-#include "../Resources/ResourceHandler.h"
+#include "../Utilities/Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */

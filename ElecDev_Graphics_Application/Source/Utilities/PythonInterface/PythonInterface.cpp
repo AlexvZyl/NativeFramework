@@ -2,7 +2,7 @@
 /* Includes.					                                                                                                         */
 /*=======================================================================================================================================*/
 
-#include "PythonInterface.h" 
+#include "Utilities/PythonInterface/PythonInterface.h" 
 #include <stdio.h>
 #include <External/Misc/ConsoleColor.h>
 #include "GUI/GUIState.h"
