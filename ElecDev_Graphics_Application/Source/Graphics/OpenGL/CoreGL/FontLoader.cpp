@@ -7,7 +7,7 @@
 // Used for dictionary.
 #include <map>
 // Resources
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 // JSON parsing.
 #include "External/JSON/json.hpp"
 

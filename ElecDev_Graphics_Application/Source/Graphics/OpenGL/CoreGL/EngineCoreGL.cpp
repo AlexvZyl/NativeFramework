@@ -13,7 +13,7 @@ and notify the user via the terminal interface.
 // Class include.
 #include "EngineCoreGL.h"
 #include "VertexArrayObjectGL.h"
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "GLFW/glfw3.h"
 #include "ShaderHandlerGL.h"
@@ -70,7 +70,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	m_triangleEntitiesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_triangleTexturedEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	m_circleEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 16);
+	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 1);
 	createDefaultBackground();
 
 	// ----------------------------------------- //

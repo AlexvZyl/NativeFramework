@@ -4,7 +4,7 @@
 #include "CoreGL/Entities/Text.h"
 #include "GUI/GUIState.h"
 #include "CoreGL/FontLoader.h"
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 
 //Add font for component titles
 Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);

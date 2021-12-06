@@ -8,7 +8,7 @@
 #include "CoreGL/VertexArrayObjectGL.h"
 #include "CoreGL/FontLoader.h"
 #include "CoreGL/Entities/Text.h"
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"

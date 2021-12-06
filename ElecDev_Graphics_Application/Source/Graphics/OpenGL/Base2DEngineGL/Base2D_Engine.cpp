@@ -3,7 +3,7 @@
 //=============================================================================================================================================//
 
 // Needed to load resources.
-#include "../../Resources/ResourceHandler.h"
+#include "../../Utilities/Resources/ResourceHandler.h"
 // Class include.
 #include "Base2D_Engine.h"
 #include "CoreGL/FrameBufferObjectGL.h"
