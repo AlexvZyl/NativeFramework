@@ -46,7 +46,7 @@
     <ClCompile Include="Source\Utilities\Resources\ResourceHandler.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
-    <ClCompile Include="Source\Utilities\Logging\logHandler.cpp" />
+    <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_InputHandler.cpp" />
@@ -81,6 +81,7 @@
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Serialiser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1192,7 +1193,7 @@
     </ClInclude>
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
-    <ClInclude Include="Source\Utilities\Logging\logHandler.h" />
+    <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.h" />
@@ -1236,6 +1237,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1710,7 +1712,6 @@
     <Image Include="Icons\circuitIcon.ico" />
     <Image Include="Source\Utilities\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Utilities\Resources\Icons\circuitIcon.bmp" />
-    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Utilities\Resources\Icons\panda.bmp" />
     <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />

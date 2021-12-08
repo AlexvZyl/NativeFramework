@@ -18,8 +18,4 @@ public:
 	//free a specified EID to be reused
 	static void freeEID(unsigned EID);
 	static ManagedEntity* getEntity(unsigned EID);
-
 };
-
-
-

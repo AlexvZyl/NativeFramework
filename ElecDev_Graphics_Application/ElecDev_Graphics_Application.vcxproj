@@ -220,11 +220,12 @@
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
-    <ClCompile Include="Source\Utilities\Logging\logHandler.cpp" />
+    <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\MainApplication.cpp" />
     <ClCompile Include="Source\Utilities\Resources\ResourceHandler.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Serialiser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
@@ -270,7 +271,7 @@
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
     <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
-    <ClInclude Include="Source\Utilities\Logging\logHandler.h" />
+    <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
     <ClInclude Include="Source\Utilities\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
@@ -642,6 +643,7 @@
     <ClInclude Include="Source\GUI\GUIState.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.h" />
+    <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
