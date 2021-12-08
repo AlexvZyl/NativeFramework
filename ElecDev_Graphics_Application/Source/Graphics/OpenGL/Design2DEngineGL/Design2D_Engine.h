@@ -20,8 +20,9 @@ class Circle;
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
-enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE};
 
+// Design engine states.
+enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE};
 
 class Design2DEngineGL : public Base2DEngineGL
 {
