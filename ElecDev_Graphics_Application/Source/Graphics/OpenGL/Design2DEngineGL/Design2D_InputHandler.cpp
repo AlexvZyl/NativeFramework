@@ -31,7 +31,7 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
-		m_components.insert(m_components.end(), m_activeComponent);
+		m_circuit.m_components.insert(m_circuit.m_components.end(), m_activeComponent);
 		designerState = ENTITY_SELECT;
 	}
 	else if (designerState == ENTITY_SELECT) {
@@ -146,7 +146,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 																  m_triangleEntitiesVAO.get(),
 																  m_lineEntitiesVAO.get(),
 																  m_triangleTexturedEntitiesVAO.get(),
-																  m_circleEntitiesVAO.get());
+																  m_circleEntitiesVAO.get(),
+																	&m_circuit);
 			}
 			break;
 		case GLFW_KEY_ESCAPE:
@@ -159,10 +160,10 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			break;
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT) && m_activeComponent) {
-				auto iterator = std::find(m_components.begin(), m_components.end(), m_activeComponent);
-				if (iterator != m_components.end())
+				auto iterator = std::find(m_circuit.m_components.begin(), m_circuit.m_components.end(), m_activeComponent);
+				if (iterator != m_circuit.m_components.end())
 				{
-					m_components.erase(iterator);
+					m_circuit.m_components.erase(iterator);
 					m_activeComponent = NULL;
 					m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 				}
@@ -189,14 +190,14 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 		m_guiState->clickedZone.background = false;
 		ManagedEntity* currentEntity = EntityManager::getEntity(eID);
 		currentEntity->setContext(m_guiState);
-		while (currentEntity->m_parent != nullptr) {
+		while (currentEntity->m_type != EntityType::COMPONENT) {
 			currentEntity = currentEntity->m_parent;
 		}
 
 		//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
 		Component2D* cur = dynamic_cast<Component2D*>(currentEntity);
 		//m_activeComponent = dynamic_cast<std::shared_ptr>(cur);
-		m_activeComponent = *std::find_if(begin(m_components), end(m_components), [&](std::shared_ptr<Component2D> current)
+		m_activeComponent = *std::find_if(begin(m_circuit.m_components), end(m_circuit.m_components), [&](std::shared_ptr<Component2D> current)
 			{
 				return current.get() == cur;
 			});

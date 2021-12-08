@@ -81,6 +81,9 @@
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1236,6 +1239,9 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1710,7 +1716,6 @@
     <Image Include="Icons\circuitIcon.ico" />
     <Image Include="Source\Utilities\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Utilities\Resources\Icons\circuitIcon.bmp" />
-    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Utilities\Resources\Icons\panda.bmp" />
     <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />
