@@ -12,12 +12,12 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(Design2DEngineGL& engine, Circuit circuit) 
+void saveToYAML(Circuit circuit, std::string folder)
 {
 	
 }
 
-void saveToBIN(Design2DEngineGL& engine, Circuit circuit)
+void saveToBIN(Circuit circuit, std::string folder)
 {
 
 }
@@ -26,12 +26,12 @@ void saveToBIN(Design2DEngineGL& engine, Circuit circuit)
 //  Deserialisation.																														   //
 //=============================================================================================================================================//
 
-void loadFromYAML(Design2DEngineGL& engine, Circuit circuit)
+void loadFromYAML(Design2DEngineGL& engine, std::string file)
 {
 
 }
 
-void loadFromBIN(Design2DEngineGL& engine, Circuit circuit)
+void loadFromBIN(Design2DEngineGL& engine, std::string file)
 {
 
 }

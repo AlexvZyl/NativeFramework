@@ -23,18 +23,18 @@ class Design2DEngineGL;
 //=============================================================================================================================================//
 
 // Store a circuit in a YAML file.
-void saveToYAML(Design2DEngineGL& engine, Circuit circuit);
+void saveToYAML(Circuit circuit, std::string folder= "");
 // Store a circuit in a BIN file.
-void saveToBIN(Design2DEngineGL& engine, Circuit circuit);
+void saveToBIN(Circuit circuit, std::string folder = "");
 
 //=============================================================================================================================================//
 //  Deserialisation.																														   //
 //=============================================================================================================================================//
 
 // Load a circuit from YAML file.
-void loadFromYAML(Design2DEngineGL& engine, Circuit circuit);
+void loadFromYAML(Design2DEngineGL& engine, std::string file);
 // Load a circuit from BIN file.
-void loadFromBIN(Design2DEngineGL& engine, Circuit circuit);
+void loadFromBIN(Design2DEngineGL& engine, std::string file);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //
