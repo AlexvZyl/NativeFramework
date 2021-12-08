@@ -28,6 +28,7 @@ struct Font;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
+class Circuit;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -95,14 +96,14 @@ public:
 	Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 			    VertexArrayObject<VertexData>* linesVAO, 
 				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO, 
-				VertexArrayObject<VertexDataCircle>* circleVAO);
+				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
 
 	//Creates a generic component centred at the specified coordinates
 	Component2D(float centreCoords[2], 
 				VertexArrayObject<VertexData>* trianglesVAO,	
 				VertexArrayObject<VertexData>* linesVAO, 
 				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-				VertexArrayObject<VertexDataCircle>* circleVAO);
+				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
 
 	//Deconstructor
 	~Component2D();

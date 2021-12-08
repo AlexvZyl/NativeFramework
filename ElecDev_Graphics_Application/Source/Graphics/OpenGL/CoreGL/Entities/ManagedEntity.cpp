@@ -3,14 +3,11 @@
 #include "EntityManager.h"
 
 
-ManagedEntity::ManagedEntity()
+ManagedEntity::ManagedEntity(EntityType type, ManagedEntity* parent)
 {
 	m_entityID = EntityManager::generateEID(this);
-}
-
-ManagedEntity::ManagedEntity(ManagedEntity* parent) : ManagedEntity()
-{
 	m_parent = parent;
+	m_type = type;
 }
 
 

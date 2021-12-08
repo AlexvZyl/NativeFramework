@@ -96,25 +96,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 - ⬜ Implement stencil buffers.
 - ⬜ Expand texture rendering capabilities.
 
-### Base 3D Engine
-
-- ✅ Add Base3D engine that can have a window instance.
-- ✅ Implement perspective projection matrix.
-- ✅ Create a demo drawing.
-- ✅ Add a depth buffer to the FBO.
-- ✅ Implement 3D mouse handling:
-    - ✅ Scrolling.
-    - ✅ Moving.
-    - ✅ Clicks.
-- ✅ Add a camera class that is used in the 3D engine.
-- ⬜ Add skybox.
-- ⬜ Implement API.
-    - ⬜ Text.
-    - ✅ Cuboids.
-    - ⬜ Quads.
-    - ⬜ Triangles.
-    - ⬜ Circles.
-
 ### Long Term Dreams
 
 - ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].

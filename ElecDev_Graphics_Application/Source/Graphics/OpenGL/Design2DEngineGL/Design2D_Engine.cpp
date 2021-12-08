@@ -56,8 +56,8 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState)
 Design2DEngineGL::~Design2DEngineGL()
 {
 	// Delete components.
-	m_components.empty();
-	m_components.shrink_to_fit();
+	m_circuit.m_components.empty();
+	m_circuit.m_components.shrink_to_fit();
 }
 
 //=============================================================================================================================================//

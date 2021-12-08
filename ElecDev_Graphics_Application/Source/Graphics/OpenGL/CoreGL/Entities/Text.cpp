@@ -23,7 +23,6 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 {
 	// Initialize variables.
 	m_VAO = vao;
-	m_entityID = EntityManager::generateEID(parent);
 	m_trackedCenter = position;  //  This does not track the center, but rather the cursor position.
 
 	// ------------------- //
