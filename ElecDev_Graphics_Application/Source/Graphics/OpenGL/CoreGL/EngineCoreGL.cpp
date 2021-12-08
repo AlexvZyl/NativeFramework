@@ -13,7 +13,7 @@ and notify the user via the terminal interface.
 // Class include.
 #include "EngineCoreGL.h"
 #include "VertexArrayObjectGL.h"
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "GLFW/glfw3.h"
 #include "ShaderHandlerGL.h"
@@ -70,7 +70,7 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	m_triangleEntitiesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_triangleTexturedEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	m_circleEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 8);
+	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 1);
 	createDefaultBackground();
 
 	// ----------------------------------------- //
@@ -81,8 +81,8 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState)
 	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON, ROBOTO_MEDIUM_MSDF_PNG));
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
-	int samplers[2] = { 0, 1 };
-	GLCall(glUniform1iv(loc, 2, samplers));
+	int samplers[3] = { 0, 1, 2 };		// 0 = No texture, 1 = Font atlas, 2+ = Any other textures.
+	GLCall(glUniform1iv(loc, 3, samplers));
 	GLCall(glBindTextureUnit(1, m_defaultFont->textureID));	// Text Atlas.
 
 	// Print done message.
@@ -181,8 +181,10 @@ void EngineCoreGL::createDefaultBackground()
 	// Create the VAO.
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	// Assign background data.
-	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 0.9f);
-	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 0.9f);
+	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
+	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 1.f);
+	/*glm::vec4 bgColor1((float)35 / 255, (float)35 / 255, (float)40 / 255, 1.f);
+	glm::vec4 bgColor2((float)35 / 255, (float)35 / 255, (float)40 / 255, 1.f);*/
 	glm::vec3 pos1(1.0f, 1.0f, 0.99f);
 	glm::vec3 pos2(-1.0f, 1.0f, 0.99);
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99);

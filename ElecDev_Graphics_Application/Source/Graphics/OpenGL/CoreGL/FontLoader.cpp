@@ -7,7 +7,7 @@
 // Used for dictionary.
 #include <map>
 // Resources
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 // JSON parsing.
 #include "External/JSON/json.hpp"
 
@@ -21,20 +21,25 @@ Font msdfLoadFont(int fontID)
 	Font font;
 
 	// Load the layout from resource.
-	using JSON = nlohmann::json;
+	using JSON			 = nlohmann::json;
 	std::string jsonFile = loadTextFromResource(fontID);
-	JSON fontInfo = JSON::parse(jsonFile);
+	JSON fontInfo		 = JSON::parse(jsonFile);
 
 	// Load atlas information.
 	JSON atlas = fontInfo["atlas"];
 	font.textureSize[0] = atlas["height"];
 	font.textureSize[1] = atlas["width"];
-	font.yOrigin = atlas["yOrigin"];
-	font.pixelsPerEM = atlas["size"];
+	font.yOrigin		= atlas["yOrigin"];
+	font.pixelsPerEM	= atlas["size"];
 
 	// Load metrics.
-	JSON metrics = fontInfo["metrics"];
-	font.sizeInEMs = metrics["emSize"];
+	JSON metrics			= fontInfo["metrics"];
+	font.sizeInEMs			= metrics["emSize"];
+	font.lineHeight			= metrics["lineHeight"];
+	font.ascender			= metrics["ascender"];
+	font.descender			= metrics["descender"];
+	font.underLineY			= metrics["underlineY"];
+	font.underLineThickness = metrics["underlineThickness"];
 
 	// Load glyphs (characters).
 	JSON glyphs = fontInfo["glyphs"];
@@ -76,8 +81,8 @@ Font msdfLoadFont(int fontID)
 	JSON kerning = fontInfo["kerning"];
 	for (unsigned i = 0; i < kerning.size(); i++)
 	{
-		unsigned unicode1 = kerning[i]["unicode1"];
-		unsigned unicode2 = kerning[i]["unicode2"];
+		unsigned unicode1  = kerning[i]["unicode1"];
+		unsigned unicode2  = kerning[i]["unicode2"];
 		float kerningValue = kerning[i]["advance"];
 		font.kerningDictionary.insert({std::make_pair(unicode1, unicode2), kerningValue});
 	}
@@ -88,15 +93,8 @@ Font msdfLoadFont(int fontID)
 
 Font msdfLoadFont(int fontID, int atlasID)
 {
-	// Load layout information.
-	Font font = msdfLoadFont(fontID);
-
-	// Load the atlas into memory.
-	BITMAP atlas = loadImageFromResource(atlasID);
-	// Load the atlas to OpenGL.	
-	font.textureID = loadBitmapToGL(atlas);
-
-	// Done.
+	Font font = msdfLoadFont(fontID);									// Load layout information.
+	font.textureID = loadBitmapToGL(loadImageFromResource(atlasID));	// Load the atlas into memory and load the bitmap to OpenGL.
 	return font;
 }
 

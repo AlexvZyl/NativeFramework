@@ -36,6 +36,11 @@ struct Font
 	float pixelsPerEM = 0;												// Pixels per EM.
 	float sizeInEMs = 0;												// The size of the font given in EM's.
 	std::string yOrigin;												// Where the 0 of the y axis is located.
+	float lineHeight = 0;												// The height of the lines for the font.
+	float ascender = 0;													// Box top value.
+	float descender = 0;												// Box bottom value.
+	float underLineY = 0;												// Line Y value.
+	float underLineThickness = 0;										// Line thickness.
 	std::map<unsigned int, Character> characterDictionary;				// Dictionary containing the character information.
 	std::map<std::pair<unsigned, unsigned>, float> kerningDictionary;	// Dictionary containing the kerning information.
 	unsigned int textureID = NULL;										// Texture ID for the font atlas.

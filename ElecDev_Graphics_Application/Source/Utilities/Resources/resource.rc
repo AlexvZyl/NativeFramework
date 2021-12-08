@@ -60,6 +60,7 @@ BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
 BACKGROUND_SHADER_2D			TEXTFILE					"Shaders\\backgroundShader2D.shader"
 BACKGROUND_SHADER_3D			TEXTFILE					"Shaders\\backgroundShader3D.shader"
 TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.shader"
+STATIC_TEXTURE_SHADER			TEXTFILE					"Shaders\\staticTextureShader.shader"
 CIRCLE_SHADER					TEXTFILE					"Shaders\\circleShader.shader"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.

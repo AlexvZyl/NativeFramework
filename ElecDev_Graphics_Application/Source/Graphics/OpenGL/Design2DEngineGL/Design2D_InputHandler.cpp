@@ -26,7 +26,6 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
-
 	if (designerState == COMPONENT_PLACE)
 	{
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
@@ -48,9 +47,8 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	// Update current entity ID.
 	m_currentEntityID = getEntityID(pixelCoords);
 	setActiveComponent(m_currentEntityID);
-
-		//Pass the active component to the GUI state for editing.
-		m_guiState->active_component = m_activeComponent.get();
+	// Pass the active component to the GUI state for editing.
+	m_guiState->active_component = m_activeComponent.get();
 }
 
 void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
@@ -157,7 +155,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			//delete m_activeComponent;
 			//Remove the dummy component
 			m_activeComponent = NULL;//runs deconstructor
-			m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
+			m_circleEntitiesVAO->updateGPU(); // Temporary work-around for disappearing circles.
 			break;
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT) && m_activeComponent) {

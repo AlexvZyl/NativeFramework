@@ -15,7 +15,7 @@
 #include <glad/glad.h>
 // Resources.
 #include <Misc/stb_image.h>
-#include "Resources/ResourceHandler.h"
+#include "Utilities/Resources/ResourceHandler.h"
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
 // Gui states.
@@ -25,7 +25,7 @@
 // Handlers.
 #include "Graphics/GraphicsHandler.h"
 #include "GUI/GuiHandler.h"
-#include "PythonInterface.h"
+#include "Utilities/PythonInterface/PythonInterface.h"
 // Include GLFW (window) after OpenGL definition.
 #include <GLFW/glfw3.h>
 // Measure time.
@@ -227,11 +227,11 @@ int main(int, char**)
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                               // Enables MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));                                // Disable the depth testing since it will be enabled only when rendring 3D scenes.
+    GLCall(glEnable(GL_DEPTH_TEST));                                // Enables depth testing for the OpenGL scenes.
     GLCall(glDepthFunc(GL_LESS));                                   // Set the function used with depth testing.
     GLCall(glEnable(GL_BLEND));                                     // Enable blending for alpha channels.
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));      // Set blend function.  This is the standard setting.
-    GLCall(glClearColor(0.17f, 0.17f, 0.17f, 1.0f));                // Set the color to which OpenGL clears.
+    GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));               // Set the color to which OpenGL clears.
 
     // Create the state machine variables.
     GUIState guiState;

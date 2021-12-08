@@ -43,10 +43,10 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Resources\ResourceHandler.cpp" />
+    <ClCompile Include="Source\Utilities\Resources\ResourceHandler.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
-    <ClCompile Include="Source\Logging\logHandler.cpp" />
+    <ClCompile Include="Source\Utilities\Logging\logHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_InputHandler.cpp" />
@@ -59,7 +59,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
-    <ClCompile Include="Source\PythonInterface.cpp" />
+    <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
@@ -79,6 +79,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
@@ -792,7 +793,7 @@
     <ClInclude Include="Source\External\glm\gtc\reciprocal.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Resources\ResourceHandler.h">
+    <ClInclude Include="Source\Utilities\Resources\ResourceHandler.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Boost\Includes\bind\detail\result_traits.hpp">
@@ -1193,7 +1194,7 @@
     </ClInclude>
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
-    <ClInclude Include="Source\Logging\logHandler.h" />
+    <ClInclude Include="Source\Utilities\Logging\logHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.h" />
@@ -1221,7 +1222,7 @@
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\parse.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\ptr.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\type.h" />
-    <ClInclude Include="Source\PythonInterface.h" />
+    <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.h" />
@@ -1235,6 +1236,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
@@ -1254,7 +1256,7 @@
     <None Include="Source\External\glm\gtx\associated_min_max.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\basicShader.shader">
+    <None Include="Source\Utilities\Resources\Shaders\basicShader.shader">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\bit.inl">
@@ -1572,7 +1574,7 @@
     <None Include="Source\External\glm\gtx\texture.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\textureShader.shader">
+    <None Include="Source\Utilities\Resources\Shaders\textureShader.shader">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\transform.inl">
@@ -1674,26 +1676,27 @@
     <None Include="Source\External\glm\gtx\wrap.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\PythonScripts\PythonTest.py" />
+    <None Include="Source\Utilities\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\GUI\GUIColors.md" />
-    <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
-    <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
-    <None Include="Source\Resources\Shaders\circleShader.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\backgroundShader2D.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\backgroundShader3D.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\circleShader.shader" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
-    <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
-    <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
+    <None Include="Source\Utilities\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
+    <None Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
+    <None Include="Source\Utilities\Resources\Shaders\staticTextureShader.shader" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Source\Resources\Textures\circuitTree.png">
+    <Image Include="Source\Utilities\Resources\Textures\circuitTree.png">
       <Filter>Source</Filter>
     </Image>
-    <Image Include="Source\Resources\Icons\component.png">
+    <Image Include="Source\Utilities\Resources\Icons\component.png">
       <Filter>Source</Filter>
     </Image>
     <Image Include="Icons\component.png">
       <Filter>Source</Filter>
     </Image>
-    <Image Include="Source\Resources\Icons\Draw_Circuit_Buckets.png">
+    <Image Include="Source\Utilities\Resources\Icons\Draw_Circuit_Buckets.png">
       <Filter>Source</Filter>
     </Image>
     <Image Include="Icons\Draw_Circuit_Buckets.png">
@@ -1702,21 +1705,21 @@
     <Image Include="Icons\Draw_MCC.png">
       <Filter>Source</Filter>
     </Image>
-    <Image Include="Source\Resources\Icons\Draw_MCC.png">
+    <Image Include="Source\Utilities\Resources\Icons\Draw_MCC.png">
       <Filter>Source</Filter>
     </Image>
     <Image Include="Source\Resources\Icons\mainIcon.ico">
       <Filter>Source</Filter>
     </Image>
     <Image Include="Icons\circuitIcon.ico" />
-    <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
-    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
+    <Image Include="Source\Utilities\Resources\Icons\circuitIcon128.ico" />
+    <Image Include="Source\Utilities\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
-    <Image Include="Source\Resources\Icons\panda.bmp" />
-    <Image Include="Source\Resources\Icons\circuitImage.png" />
-    <Image Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
-    <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
+    <Image Include="Source\Utilities\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />
+    <Image Include="Source\Utilities\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
+    <Image Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -1724,7 +1727,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Source\Resources\resource.rc">
+    <ResourceCompile Include="Source\Utilities\Resources\resource.rc">
       <Filter>Source</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -1735,7 +1738,7 @@
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Medium.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Regular.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-SemiBold.ttf" />
-    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.ttf" />
-    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Regular.ttf" />
+    <Font Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.ttf" />
+    <Font Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Regular.ttf" />
   </ItemGroup>
 </Project>

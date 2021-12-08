@@ -177,6 +177,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
@@ -220,16 +221,17 @@
     <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
-    <ClCompile Include="Source\PythonInterface.cpp" />
-    <ClCompile Include="Source\Logging\logHandler.cpp" />
+    <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
+    <ClCompile Include="Source\Utilities\Logging\logHandler.cpp" />
     <ClCompile Include="Source\MainApplication.cpp" />
-    <ClCompile Include="Source\Resources\ResourceHandler.cpp" />
+    <ClCompile Include="Source\Utilities\Resources\ResourceHandler.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.h" />
@@ -271,9 +273,9 @@
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
-    <ClInclude Include="Source\PythonInterface.h" />
-    <ClInclude Include="Source\Logging\logHandler.h" />
-    <ClInclude Include="Source\Resources\ResourceHandler.h" />
+    <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
+    <ClInclude Include="Source\Utilities\Logging\logHandler.h" />
+    <ClInclude Include="Source\Utilities\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\arg.hpp" />
@@ -792,39 +794,40 @@
     <None Include="Source\External\glm\gtx\wrap.inl" />
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
-    <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
-    <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
-    <None Include="Source\Resources\PythonScripts\PythonTest.py" />
-    <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
-    <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
-    <None Include="Source\Resources\Shaders\basicShader.shader" />
-    <None Include="Source\Resources\Shaders\circleShader.shader" />
-    <None Include="Source\Resources\Shaders\textureShader.shader" />
+    <None Include="Source\Utilities\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
+    <None Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
+    <None Include="Source\Utilities\Resources\PythonScripts\PythonTest.py" />
+    <None Include="Source\Utilities\Resources\Shaders\backgroundShader2D.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\backgroundShader3D.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\basicShader.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\circleShader.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\staticTextureShader.shader" />
+    <None Include="Source\Utilities\Resources\Shaders\textureShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icons\circuitIcon.ico" />
     <Image Include="Icons\component.png" />
     <Image Include="Icons\Draw_Circuit_Buckets.png" />
     <Image Include="Icons\Draw_MCC.png" />
-    <Image Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
+    <Image Include="Source\Utilities\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
-    <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
-    <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
-    <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
-    <Image Include="Source\Resources\Icons\circuitImage.png" />
+    <Image Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
+    <Image Include="Source\Utilities\Resources\Icons\circuitIcon128.ico" />
+    <Image Include="Source\Utilities\Resources\Icons\circuitIcon.bmp" />
+    <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
-    <Image Include="Source\Resources\Icons\panda.bmp" />
-    <Image Include="Source\Resources\Textures\circuitTree.png" />
-    <Image Include="Source\Resources\Icons\component.png" />
-    <Image Include="Source\Resources\Icons\Draw_Circuit_Buckets.png" />
-    <Image Include="Source\Resources\Icons\Draw_MCC.png" />
+    <Image Include="Source\Utilities\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Utilities\Resources\Textures\circuitTree.png" />
+    <Image Include="Source\Utilities\Resources\Icons\component.png" />
+    <Image Include="Source\Utilities\Resources\Icons\Draw_Circuit_Buckets.png" />
+    <Image Include="Source\Utilities\Resources\Icons\Draw_MCC.png" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Source\Resources\resource.rc" />
+    <ResourceCompile Include="Source\Utilities\Resources\resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.ttf" />
-    <Font Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Regular.ttf" />
+    <Font Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.ttf" />
+    <Font Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Regular.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Black.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-Bold.ttf" />
     <Font Include="Source\Resources\Fonts\Ruda\Ruda-ExtraBold.ttf" />

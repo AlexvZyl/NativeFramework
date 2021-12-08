@@ -56,29 +56,29 @@ public:
 	// Destructor.
 	~Entity();
 	// Translate the entity by the given vector.
-	void translate(glm::vec3& translation);
+	virtual void translate(glm::vec3& translation);
 	// Translate the entity to the given position.
-	void translateTo(glm::vec3& position);
+	virtual void translateTo(glm::vec3& position);
 	//Translates the entity in the XY plane, keeping the same Z value.
-	void translateTo(glm::vec2& position);
+	virtual void translateTo(glm::vec2& position);
 	// Rotates the entity by the given vector and center point.
-	void rotate(glm::vec3& rotation);
+	virtual void rotate(glm::vec3& rotation);
 	// Scales the entity by the given vector and center point.
-	void scale(glm::vec3& scaling);
+	virtual void scale(glm::vec3& scaling);
 	// Sets the color for all of the vertices.
-	void setColor(glm::vec4& color);
+	virtual void setColor(glm::vec4& color);
 	// Sets the entty ID of the entity.
-	void setEntityID(unsigned int eID);
+	virtual void setEntityID(unsigned int eID);
 	// Updates the entity directly on the GPU.
-	void update();
+	virtual void update();
 	// Deletes the entity and clears the memory.
-	void wipeMemory();
+	virtual void wipeMemory();
 	// Set the entity later.
-	void setLayer(float layer);
+	virtual void setLayer(float layer);
 	// Offsets the entities' indices to match the VAO.
-	void offsetIndices(int offset);
+	virtual void offsetIndices(int offset);
 	//Set context
-	void setContext(GUIState* guiState);
+	virtual void setContext(GUIState* guiState);
 };
 
 //=============================================================================================================================================//
