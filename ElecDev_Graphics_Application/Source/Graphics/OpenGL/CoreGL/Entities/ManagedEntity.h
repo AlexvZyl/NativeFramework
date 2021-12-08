@@ -6,7 +6,7 @@ private:
 
 public:
 	ManagedEntity* m_parent = nullptr;							// Parent of the managed entity
-	unsigned int m_entityID = 0;						// Saves the global entity ID.
+	unsigned int m_entityID = 0;								// Saves the global entity ID.
 
 	ManagedEntity();
 	ManagedEntity(ManagedEntity* parent);
