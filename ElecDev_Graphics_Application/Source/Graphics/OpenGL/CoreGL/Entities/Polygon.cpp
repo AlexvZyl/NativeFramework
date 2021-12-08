@@ -15,7 +15,7 @@ template<typename VertexType>
 Polygon2D<VertexType>::Polygon2D(){};
 
 template<typename VertexType>
-Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayObject<VertexType>* VAO, ManagedEntity* parent):Entity<VertexType>(parent)
+Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, ManagedEntity* parent) :Entity<VertexType>(parent)
 {
 	// General setup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
@@ -28,12 +28,12 @@ Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3>& vertices, VertexArrayOb
 		m_vertices.push_back(VertexData(vertex, m_colour, m_entityID));
 
 	// Assign the indices based on the VAO type.
-	if (m_VAO->m_bufferType == GL_TRIANGLES) 
+	if (m_VAO->m_bufferType == GL_TRIANGLES)
 	{
-		m_indices = {0,1,2,2,3,0};
+		m_indices = { 0,1,2,2,3,0 };
 		m_indexCount = 6;
 	}
-	else if (m_VAO->m_bufferType == GL_LINES) 
+	else if (m_VAO->m_bufferType == GL_LINES)
 	{
 		m_indices = { 0,1,1,2,2,3,3,0 };
 		m_indexCount = 8;
