@@ -14,10 +14,7 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Entity<VertexType>::Entity() {}
-
-template<typename VertexType>
-Entity<VertexType>::Entity(ManagedEntity* parent) : ManagedEntity(parent) {}
+Entity<VertexType>::Entity(ManagedEntity* parent) : ManagedEntity(EntityType::PRIMATIVE, parent) {}
 
 template<typename VertexType>
 Entity<VertexType>::~Entity() 

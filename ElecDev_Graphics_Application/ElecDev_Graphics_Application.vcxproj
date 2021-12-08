@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
@@ -229,6 +230,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />

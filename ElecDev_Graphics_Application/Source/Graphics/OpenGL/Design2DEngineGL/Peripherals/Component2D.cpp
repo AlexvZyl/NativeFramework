@@ -12,6 +12,7 @@
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
+#include "Circuit.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -28,7 +29,7 @@ unsigned Component2D::componentID = 0;
 Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, 
 						 VertexArrayObject<VertexData>* linesVAO, 
 						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-						 VertexArrayObject<VertexDataCircle>* circleVAO)
+						 VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent):ManagedEntity(EntityType::COMPONENT, parent)
 {
 	// --------------------------- //
 	//  I N I T I A L   S E T U P  //
@@ -81,8 +82,8 @@ Component2D::Component2D(float centreCoords[2],
 						 VertexArrayObject<VertexData>* trianglesVAO, 
 						 VertexArrayObject<VertexData>* linesVAO, 
 						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-						 VertexArrayObject<VertexDataCircle>* circleVAO)
-	: Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO)
+						 VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent)
+	: Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO, parent)
 {
 	moveTo(centreCoords);
 }
