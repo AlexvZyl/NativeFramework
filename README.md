@@ -12,7 +12,7 @@ This is the graphics application that is to be used with the ElecDev software.  
 * OpenGL Maths (GLM): [https://github.com/g-truc/glm].
 * Must have program for debugging graphics, [https://renderdoc.org/].
 
-*Note: The ImGUI docs can be found in the ImGUI.h file, it is not online or on the Git repo!*
+*Note: The ImGUI docs can be found in the ImGUI.h file and on the git repo.  Sadly, it is not very extensive.*
 
 ### OpenGL Learning Resources
 
