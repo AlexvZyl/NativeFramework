@@ -21,8 +21,9 @@ class Circle;
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
-enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE};
 
+// Design engine states.
+enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE};
 
 class Design2DEngineGL : public Base2DEngineGL
 {
@@ -34,8 +35,8 @@ public:
 
 	designState designerState = ENTITY_SELECT;
 	//std::vector<std::shared_ptr<Component2D>> m_components;
-	Circuit m_circuit;
 	std::shared_ptr<Component2D> m_activeComponent;
+	std::unique_ptr<Circuit> m_circuit;
 	std::unique_ptr<Circle<VertexDataCircle>> p1;
 	std::unique_ptr<Circle<VertexDataCircle>> p2;
 	std::unique_ptr<Circle<VertexDataCircle>> p3;

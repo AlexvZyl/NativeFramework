@@ -17,6 +17,10 @@ This is where the drawing enigine mouse events are handled.
 #include <iostream>
 #include "CoreGL/VertexArrayObjectGL.h"
 
+// Serialisation.
+#include "Utilities/Serialisation/Serialiser.h"
+#include "CoreGL/Entities/Text.h"
+
 //=============================================================================================================================================//
 //  Press event.																															   //
 //=============================================================================================================================================//
@@ -31,7 +35,7 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
-		m_circuit.m_components.insert(m_circuit.m_components.end(), m_activeComponent);
+		m_circuit->m_components.insert(m_circuit->m_components.end(), m_activeComponent);
 		designerState = ENTITY_SELECT;
 	}
 	else if (designerState == ENTITY_SELECT) {
@@ -134,11 +138,13 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
-		switch (key) {
+		switch (key) 
+		{
+		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_P:
 			if (designerState != COMPONENT_PLACE) {
 				designerState = COMPONENT_PLACE;
-				//add a dummy component
+				// Add a dummy component
 				if (m_activeComponent) {
 					m_activeComponent->unhighlight();
 				}
@@ -147,9 +153,10 @@ void Design2DEngineGL::keyEvent(int key, int action)
 																  m_lineEntitiesVAO.get(),
 																  m_triangleTexturedEntitiesVAO.get(),
 																  m_circleEntitiesVAO.get(),
-																	&m_circuit);
+																  m_circuit.get());
 			}
 			break;
+		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
 			//m_activeComponent->destroy();
@@ -158,17 +165,32 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			m_activeComponent = NULL;//runs deconstructor
 			m_circleEntitiesVAO->updateGPU(); // Temporary work-around for disappearing circles.
 			break;
+		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT) && m_activeComponent) {
-				auto iterator = std::find(m_circuit.m_components.begin(), m_circuit.m_components.end(), m_activeComponent);
-				if (iterator != m_circuit.m_components.end())
+				auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
+				if (iterator != m_circuit->m_components.end())
 				{
-					m_circuit.m_components.erase(iterator);
+					m_circuit->m_components.erase(iterator);
 					m_activeComponent = NULL;
 					m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 				}
 			}
 			break;
+		// --------------------------------------------------------------------------------------------------------------- //
+		case GLFW_KEY_Z:
+			saveToYAML(*m_circuit.get(), "Testing");
+			break;
+		// --------------------------------------------------------------------------------------------------------------- //
+		case GLFW_KEY_X:
+			loadFromYAML(*this, "Test.lmn", "Testing");
+			break;
+		// --------------------------------------------------------------------------------------------------------------- //
+		case GLFW_KEY_T:
+			m_circuit->m_components.back()->title->updateText("Changed");
+			m_circuit->m_components.back()->title->update();
+			break;
+		// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
 }
@@ -197,7 +219,7 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 		//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
 		Component2D* cur = dynamic_cast<Component2D*>(currentEntity);
 		//m_activeComponent = dynamic_cast<std::shared_ptr>(cur);
-		m_activeComponent = *std::find_if(begin(m_circuit.m_components), end(m_circuit.m_components), [&](std::shared_ptr<Component2D> current)
+		m_activeComponent = *std::find_if(begin(m_circuit->m_components), end(m_circuit->m_components), [&](std::shared_ptr<Component2D> current)
 			{
 				return current.get() == cur;
 			});

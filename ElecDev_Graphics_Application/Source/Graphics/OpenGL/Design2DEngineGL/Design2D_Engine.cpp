@@ -32,32 +32,24 @@ This is where the interactive 2D design engine is implemented.
 Design2DEngineGL::Design2DEngineGL(GUIState* guiState) 
 	: Base2DEngineGL(guiState)
 {
+	// Starting.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
+	// Default circuit (In this case handled like a default scene).
+	m_circuit = std::make_unique<Circuit>("Test", "AE");
 
+	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";	
-
-	/*
-	glm::vec4 circColor = { 0.f, 0.f, 1.f, 1.f };
-	glm::vec3 centre1 = { -0.3f, -0.3f, 0.f };
-	glm::vec3 centre2 = { 0.f, 0.f, 0.f };
-	glm::vec3 centre3 = { 0.3f, 0.3f, 0.f };
-	circ1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), centre1, 0.01, circColor, 1.0f, 0.0f, nullptr);
-	circ1->update();
-	circ2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), centre2, 0.01, circColor, 1.0f, 0.0f, nullptr);
-	circ2->update();
-	circ3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), centre3, 0.01, circColor, 1.0f, 0.0f, nullptr);
-	circ3->update();
-	//*/
-
 }
 
 // Destructor.
 Design2DEngineGL::~Design2DEngineGL()
 {
 	// Delete components.
-	m_circuit.m_components.empty();
-	m_circuit.m_components.shrink_to_fit();
+	m_circuit->m_components.empty();
+	m_circuit->m_components.shrink_to_fit();
+	m_circuit->m_cables.empty();
+	m_circuit->m_cables.shrink_to_fit();
 }
 
 //=============================================================================================================================================//

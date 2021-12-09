@@ -121,10 +121,7 @@ void PyInterface::readingIn()
 
 void PyInterface::readingOut()
 {
-    while (true)
-    {
-        deQueueOutput();
-    }
+    while (true) { deQueueOutput(); }
 }
 
 /*=======================================================================================================================================*/

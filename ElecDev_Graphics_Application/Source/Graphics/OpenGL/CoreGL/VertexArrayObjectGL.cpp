@@ -185,7 +185,7 @@ void VertexArrayObject<VertexType>::appendDataCPU(Entity<VertexType>* entity)
 template <typename VertexType>
 void VertexArrayObject<VertexType>::assignDataGPU(Entity<VertexType>* entity)
 {
-	// Make sure all of the data is on the GPU side.
+	// This should only run if GPU and CPU is synced.
 	if (m_isUpdated)
 	{
 		unsigned index = entity->m_bufferStartIndex;
@@ -200,6 +200,7 @@ void VertexArrayObject<VertexType>::assignDataGPU(Entity<VertexType>* entity)
 			index += 1;
 		}
 	}
+	// Otherwise assign the data by updating the GPU.
 	else { updateGPU(); }
 }
 
@@ -226,7 +227,6 @@ void VertexArrayObject<VertexType>::deleteDataCPU(Entity<VertexType>* entity)
 		m_indexCount -= entity->m_indexCount;
 		m_isUpdated = false;
 		m_entityCPU.shrink_to_fit();
-
 	}
 	// Entity was not found.
 	else { std::cout << yellow << "\n[OPENGL] [WARNING]: " << white << "Tried to delete entity, but it is not in the list."; }
@@ -266,11 +266,6 @@ void VertexArrayObject<VertexType>::updateGPU()
 		{
 			for (VertexType& vertex : entity->m_vertices)
 			{
-				/*//DEBUG: CHECK that dataGL() returns the correct values
-				for (int i = 0; i < 11; i++) {
-					std::cout << *((float*) vertex.dataGL()+i) << std::endl;
-				}
-				*/
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, verticesIndex * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
 				GLCall(glBufferSubData(GL_ARRAY_BUFFER, verticesIndex * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.idGL()));
 				verticesIndex += 1;
@@ -299,6 +294,8 @@ void VertexArrayObject<VertexType>::updateGPU()
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), static_cast<const void*>(&m_indexCPU[0]), GL_DYNAMIC_DRAW));
 	}
+
+	// The CPU and GPU data is now synced.
 	m_isUpdated = true;
 }
 

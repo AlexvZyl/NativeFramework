@@ -36,7 +36,12 @@ void Entity<VertexType>::wipeMemory()
 	// Clear the data from the CPU.
 	m_vertices.clear();
 	m_vertices.shrink_to_fit();		
-	/*this->~Entity(); */
+	m_indices.clear();
+	m_indices.shrink_to_fit();
+	m_indecesStartIndex = 0;
+	m_bufferStartIndex = 0;
+	m_vertexCount = 0;
+	m_indexCount = 0;
 }
 
 //=============================================================================================================================================//

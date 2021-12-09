@@ -1,19 +1,29 @@
 //=============================================================================================================================================//
-//  Includes.  																																   //
+//  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Circuit.h"
+#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
+#include "Serialiser.h"
 
 //=============================================================================================================================================//
-//  Constructor & Destructor.																												   //
+//  GLM serialisation.																														   //
 //=============================================================================================================================================//
 
-Circuit::Circuit(std::string label, std::string type)
-	: ManagedEntity(EntityType::CIRCUIT), m_label(label), m_type(type)
-{}
+YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec2 vec)
+{
+	return emitter << YAML::Flow << YAML::BeginSeq << vec[0] << vec[1] << YAML::EndSeq;
+}
 
-Circuit::~Circuit() {}
+YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec3 vec)
+{
+	return emitter << YAML::Flow << YAML::BeginSeq << vec[0] << vec[1] << vec[3] << YAML::EndSeq;
+}
+
+YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4 vec)
+{
+	return emitter << YAML::Flow << YAML::BeginSeq << vec[0] << vec[1] << vec[2] << vec[3] << YAML::EndSeq;
+}
 
 //=============================================================================================================================================//
-//  EOF.    																																   //
+//  EOF.																																	   //
 //=============================================================================================================================================//

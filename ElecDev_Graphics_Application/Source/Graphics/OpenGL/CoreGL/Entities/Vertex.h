@@ -20,7 +20,7 @@ BufferLayout is used to setup the VAO.
 class Vertex
 {
 public:
-	unsigned int entityID = 0;					// ID associated with the vertex.
+	unsigned int entityID = 0;									// ID associated with the vertex.
 	Vertex();
 	virtual int getTotalSize() { return 0; };					// The entire data size.
 	virtual int getDataSize()  { return 0; };					// Size of the texture data (excluding the entity ID).
@@ -38,10 +38,10 @@ public:
 class VertexData : public Vertex
 {
 private: 
-	static int totalSizeVD;						// All of the data.
-	static int dataSizeVD;						// All of the color texture data.
-	static int idOffsetVD;						// Offset to the entity ID.
-	static int idSizeVD;						// Size of the entity ID.
+	static int totalSizeVD;		// All of the data.
+	static int dataSizeVD;		// All of the color texture data.
+	static int idOffsetVD;		// Offset to the entity ID.
+	static int idSizeVD;		// Size of the entity ID.
 
 public:
 	union {
@@ -53,6 +53,7 @@ public:
 	};
 	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
 	glm::vec4* color = &data.color;							// Color of the vertex.
+
 	// Constructor.
 	VertexData();
 	VertexData(glm::vec3& pos, glm::vec4& clr, unsigned int eID);
@@ -134,9 +135,9 @@ public:
 		}data;
 		float rawData[11];
 	};
-	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
-	glm::vec4* color = &data.color;							// Color of the vertex.
-	glm::vec2* localCoords = &data.localCoords;			// Position
+	glm::vec3* position = &data.position;			// Position of the vertex in 3D space.
+	glm::vec4* color = &data.color;					// Color of the vertex.
+	glm::vec2* localCoords = &data.localCoords;		// Position
 	float* thickness = &data.thickness;
 	float* fade = &data.fade;
 	// Constructors.

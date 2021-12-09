@@ -44,6 +44,7 @@ struct Font
 	std::map<unsigned int, Character> characterDictionary;				// Dictionary containing the character information.
 	std::map<std::pair<unsigned, unsigned>, float> kerningDictionary;	// Dictionary containing the kerning information.
 	unsigned int textureID = NULL;										// Texture ID for the font atlas.
+	std::string name;
 };
 
 //=============================================================================================================================================//
