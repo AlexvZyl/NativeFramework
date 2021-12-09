@@ -15,19 +15,7 @@
 // OpenGL error handler.
 #include <Graphics/OpenGL/CoreGL/ErrorHandlerGL.h>
 
-/*=======================================================================================================================================*/
-/* Module.	                                                                                                                             */
-/*=======================================================================================================================================*/
-
-HMODULE getCurrentModule()
-{
-	HMODULE hModule = NULL;
-	GetModuleHandleEx(
-		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-		(LPCTSTR)getCurrentModule,
-		&hModule);
-	return hModule;
-}
+#include "Utilities/Windows/WindowsUtilities.h"
 
 /*=======================================================================================================================================*/
 /* Textfiles.	                                                                                                                             */

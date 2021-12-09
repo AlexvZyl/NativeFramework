@@ -65,9 +65,6 @@
 /* Functions.                                                                                                                            */
 /*=======================================================================================================================================*/
 
-// Return the current module for resource loading (from the .exe).
-HMODULE getCurrentModule();
-
 // Loads the text file from the executable and returns it as a string.
 std::string loadTextFromResource(int textID);
 

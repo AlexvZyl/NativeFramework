@@ -28,7 +28,7 @@ enum PortType
 
 class Port: public ManagedEntity
 {
-private:
+public:
 	//port VAOs and primatives
 	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
 	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
@@ -46,8 +46,6 @@ private:
 	Circle<VertexDataCircle> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
 
-
-public:
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
 	PortType m_type;
