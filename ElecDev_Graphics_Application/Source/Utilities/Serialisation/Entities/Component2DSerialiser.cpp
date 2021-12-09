@@ -23,6 +23,12 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> c
 	emitter << YAML::Key << "Number of ports" << YAML::Value << comp->numPorts;
 	emitter << YAML::Key << "Internal circuit" << YAML::Value << "Test AE 234";
 
+	// Shape.
+	emitter << YAML::Key << "Shape" << YAML::Value;
+	emitter << YAML::BeginMap;
+		emitter << YAML::Key << "Colour" << YAML::Value << comp->shapeColour;
+	emitter << YAML::EndMap;
+
 	// Title.
 	emitter << YAML::Key << "Title" << YAML::Value;
 	emitter << YAML::BeginMap;
@@ -66,6 +72,32 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Co
 	// Done.
 	emitter << YAML::EndMap;
 	return emitter;
+}
+
+//=============================================================================================================================================//
+//  Deserialise single Component2D  																										   //
+//=============================================================================================================================================//
+
+void deserialise(YAML::Node yamlComp, std::shared_ptr<Component2D> component) 
+{
+	component->selected = false;
+	component->unhighlight();
+	// Move component.
+	float position[2] = {
+		yamlComp["Centre"][0].as<float>(),
+		yamlComp["Centre"][1].as<float>()
+	};
+	component->moveTo(position);
+
+	// Set shape colour.
+	YAML::Node shape = yamlComp["Shape"];
+	glm::vec4 shapeColour(
+		shape["Colour"][0].as<float>(),
+		shape["Colour"][1].as<float>(),
+		shape["Colour"][2].as<float>(),
+		shape["Colour"][3].as<float>()
+	);
+	component->shapeColour = shapeColour;
 }
 
 //=============================================================================================================================================//

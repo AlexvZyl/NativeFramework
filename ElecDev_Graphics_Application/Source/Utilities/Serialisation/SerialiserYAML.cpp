@@ -92,26 +92,21 @@ void loadFromYAML(Design2DEngineGL& engine, std::string file, std::string folder
 	// Load all of the components.
     YAML::Node componentList = yamlFile["Components"];
 	// Iterate through all of the components.
-	for (YAML::iterator it = componentList.begin(); it != componentList.end(); ++it)
+	for (YAML::iterator comp = componentList.begin(); comp != componentList.end(); ++comp)
 	{
-		// Get component from iterator.
-		YAML::Node comp = it->second;
 		// Create component.
-		engine.m_circuit->m_components.push_back
-		(
-			std::make_shared<Component2D>
-			(
-				engine.m_trianglesVAO.get(),
-				engine.m_linesVAO.get(),
-				engine.m_texturedTrianglesVAO.get(),
-				engine.m_circlesVAO.get(),
-				engine.m_circuit.get()
-			)
-		);
-		// Assign component data.
-
-
-		
+		std::shared_ptr<Component2D> component = std::make_shared<Component2D>
+												 (
+												 engine.m_trianglesVAO.get(),
+												 engine.m_linesVAO.get(),
+												 engine.m_texturedTrianglesVAO.get(),
+												 engine.m_circlesVAO.get(),
+												 engine.m_circuit.get()
+												);
+		// Load data into componenet.
+		deserialise(comp->second, component);
+		// Push into componenets.
+		engine.m_circuit->m_components.push_back(component);
 	}
 
 	// ------------- //
