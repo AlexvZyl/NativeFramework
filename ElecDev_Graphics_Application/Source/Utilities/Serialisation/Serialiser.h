@@ -17,12 +17,15 @@ storing circuit templates/diagrams in a YAML format.
 //  Forward decelrations.																													   //
 //=============================================================================================================================================//
 
+// Classes.
 class Circuit;
 class Design2DEngineGL;
-enum PortType;
 class Port;
 class Component2D;
 class Cable;
+
+// Enums.
+enum PortType;
 
 //=============================================================================================================================================//
 //  Static variables.																														   //

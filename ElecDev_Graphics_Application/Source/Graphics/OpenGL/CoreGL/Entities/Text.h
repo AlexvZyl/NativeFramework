@@ -43,13 +43,29 @@ public:
 	using Entity<VertexType>::m_colour;
 	using Entity<VertexType>::m_entityID;
 
+	// --------- //
+	//  T E X T  //
+	// --------- //
+
+	float m_textScale = 1;
+	Font* m_font;
+	std::string m_verticalAlign;
+	std::string m_horizontalAlign;
+	float m_textLength = 0;
+	glm::vec3 m_cursorStart = {0.f, 0.f, 0.f};
+
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 		 VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent,
 		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
+	// Initiliser.  Used to allow the changing of the class without having
+	// to destroy it.
+	void generateText(std::string text);
 	// Destructor.
 	~Text();
 
+	// Updates the text of the text entity.
+	void updateText(std::string text);
 	// Sets the text box colour.
 	void setBoxColour(glm::vec4 colour);
 	// Sets the text colour only.
@@ -60,7 +76,6 @@ public:
 	// This has to be overridden so that the box and text can be 
 	// set seperately.
 	virtual void setLayer(float layer) override;
-
 };
 
 //=============================================================================================================================================//

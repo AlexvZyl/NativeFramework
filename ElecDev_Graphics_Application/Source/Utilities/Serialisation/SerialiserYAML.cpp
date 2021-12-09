@@ -37,6 +37,16 @@ void saveToYAML(Circuit& circuit, std::string folder)
 	YAML::Emitter yamlEmitter;
 	yamlEmitter << YAML::BeginMap;
 
+	// --------- //
+	//  F I L E  //
+	// --------- //
+
+	yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
+	yamlEmitter << YAML::BeginMap;
+		yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
+		yamlEmitter << YAML::Key << "Type" << YAML::Value << "Circuit";
+	yamlEmitter << YAML::EndMap;
+
 	// --------------- //
 	//  C I R C U I T  //
 	// --------------- //
@@ -95,17 +105,14 @@ void loadFromYAML(Design2DEngineGL& engine, std::string file, std::string folder
 	for (YAML::iterator comp = componentList.begin(); comp != componentList.end(); ++comp)
 	{
 		// Create component.
-		std::shared_ptr<Component2D> component = std::make_shared<Component2D>
-												 (
-												 engine.m_trianglesVAO.get(),
-												 engine.m_linesVAO.get(),
-												 engine.m_texturedTrianglesVAO.get(),
-												 engine.m_circlesVAO.get(),
-												 engine.m_circuit.get()
-												);
-		// Load data into componenet.
-		deserialise(comp->second, component);
-		// Push into componenets.
+		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine.m_trianglesVAO.get(),
+																			   engine.m_linesVAO.get(),
+																			   engine.m_texturedTrianglesVAO.get(),
+																			   engine.m_circlesVAO.get(),
+																			   engine.m_circuit.get());
+		// Load data into component.
+		deserialise(comp->second, component);	// The second part of the iterator is the YAML Node.
+		// Push onto componenets vector.
 		engine.m_circuit->m_components.push_back(component);
 	}
 

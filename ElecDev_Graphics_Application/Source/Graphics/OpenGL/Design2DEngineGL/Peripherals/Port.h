@@ -59,6 +59,5 @@ public:
 	void highlight();
 	void unhighlight();
 	void setOffset(glm::vec2 offset);
-
 };
 

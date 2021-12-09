@@ -19,6 +19,7 @@ This is where the drawing enigine mouse events are handled.
 
 // Serialisation.
 #include "Utilities/Serialisation/Serialiser.h"
+#include "CoreGL/Entities/Text.h"
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -183,6 +184,11 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_X:
 			loadFromYAML(*this, "Test.lmn", "Testing");
+			break;
+		// --------------------------------------------------------------------------------------------------------------- //
+		case GLFW_KEY_T:
+			m_circuit->m_components.back()->title->updateText("Changed");
+			m_circuit->m_components.back()->title->update();
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		}
