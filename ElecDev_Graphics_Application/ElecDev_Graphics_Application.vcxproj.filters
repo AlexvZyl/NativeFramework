@@ -81,7 +81,7 @@
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
-    <ClCompile Include="Source\Utilities\Serialisation\Serialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.cpp" />
@@ -117,6 +117,12 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\singledocparser.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\PortSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">

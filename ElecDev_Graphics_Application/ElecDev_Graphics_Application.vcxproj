@@ -259,7 +259,13 @@
     <ClCompile Include="Source\Utilities\Resources\ResourceHandler.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
-    <ClCompile Include="Source\Utilities\Serialisation\Serialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\PortSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>

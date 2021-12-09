@@ -36,14 +36,19 @@ class Circuit;
 
 class Component2D: public ManagedEntity
 {
-	//Private Members
-private:
+public:
+
 	//shape and edge data
 	std::shared_ptr<Polygon2D<VertexData>> shape;
 	std::shared_ptr<Polygon2D<VertexData>> border;
 	std::shared_ptr<Text<VertexDataTextured>> title;
 	//std::shared_ptr<Port> port1;
 	//std::shared_ptr<Port> port2;
+	VertexArrayObject<VertexData>* engine_trianglesVAO;
+	VertexArrayObject<VertexData>* engine_linesVAO;
+	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
+	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
+
 	static unsigned componentID;
 
 	//component shape attributes
@@ -73,8 +78,6 @@ private:
 	//interaction attributes
 	bool selected = true;
 
-public:
-
 	std::vector<std::shared_ptr<Port>> portsNorth;
 	std::vector<std::shared_ptr<Port>> portsSouth;
 	std::vector<std::shared_ptr<Port>> portsEast;
@@ -87,11 +90,7 @@ public:
 	float portLayerOffset = 0.02f;
 	glm::vec2 centre;
 
-	VertexArrayObject<VertexData>* engine_trianglesVAO;
-	VertexArrayObject<VertexData>* engine_linesVAO;
-	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
-	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
-
+	
 	//Creates a generic component centred at (0, 0)
 	Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 			    VertexArrayObject<VertexData>* linesVAO, 

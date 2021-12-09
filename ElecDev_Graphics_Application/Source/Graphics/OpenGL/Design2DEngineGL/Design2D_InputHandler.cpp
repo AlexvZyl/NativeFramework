@@ -143,7 +143,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		case GLFW_KEY_P:
 			if (designerState != COMPONENT_PLACE) {
 				designerState = COMPONENT_PLACE;
-				//add a dummy component
+				// Add a dummy component
 				if (m_activeComponent) {
 					m_activeComponent->unhighlight();
 				}
@@ -177,8 +177,12 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			}
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
-		case GLFW_KEY_S:
-			saveToYAML(*(m_circuit.get()), "Testing");
+		case GLFW_KEY_Z:
+			saveToYAML(*m_circuit.get(), "Testing");
+			break;
+		// --------------------------------------------------------------------------------------------------------------- //
+		case GLFW_KEY_X:
+			loadFromYAML(*this, "Test.lmn", "Testing");
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		}

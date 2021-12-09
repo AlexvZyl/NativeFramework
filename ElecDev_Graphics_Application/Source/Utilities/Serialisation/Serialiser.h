@@ -12,7 +12,6 @@ storing circuit templates/diagrams in a YAML format.
 #include <string>
 #include "External/GLM/glm.hpp"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
 
 //=============================================================================================================================================//
 //  Forward decelrations.																													   //
@@ -20,6 +19,14 @@ storing circuit templates/diagrams in a YAML format.
 
 class Circuit;
 class Design2DEngineGL;
+enum PortType;
+class Port;
+class Component2D;
+class Cable;
+
+//=============================================================================================================================================//
+//  Static variables.																														   //
+//=============================================================================================================================================//
 
 static std::string assetsFolder = "Assets\\";
 
@@ -37,22 +44,39 @@ void saveToBIN(Circuit& circuit, std::string folder = "");
 //=============================================================================================================================================//
 
 // Load a circuit from YAML file.
-void loadFromYAML(Design2DEngineGL& engine, std::string file);
+void loadFromYAML(Design2DEngineGL& engine, std::string file, std::string folder = "");
 // Load a circuit from BIN file.
-void loadFromBIN(Design2DEngineGL& engine, std::string file);
+void loadFromBIN(Design2DEngineGL& engine, std::string file, std::string folder = "");
 
 //=============================================================================================================================================//
 //  Utilities.																																   //
 //=============================================================================================================================================//
 
 // Overloads the << operator so that YAML-cpp can work with port types.
-inline YAML::Emitter& operator<<(YAML::Emitter& emitter, PortType type);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, PortType type);
 // Overloads the << operator so that YAML-cpp can accept glm::vec2.
-inline YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec2 vec);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec2 vec);
 // Overloads the << operator so that YAML-cpp can accept glm::vec3.
-inline YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec3 vec);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec3 vec);
 // Overloads the << operator so that YAML-cpp can accept glm::vec4.
-inline YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4 vec);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4 vec);
+
+//=============================================================================================================================================//
+//  Components.																																   //
+//=============================================================================================================================================//
+
+// Serialise a single port.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Port> port);
+// Serialise a port vector.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Port>> portVector);
+// Serialise a single Component2D.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> comp);
+// Serialise a Component2D vecrtor.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Component2D>> compVector);
+// Serialise a single cable.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable> cable);
+// Serialise a Cable vector.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Cable>> cableVector);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

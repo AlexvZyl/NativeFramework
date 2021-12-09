@@ -5,6 +5,7 @@ class ManagedEntity;
 class EntityManager
 {
 private:
+
 	//Store the last ID used
 	static unsigned lastID;
 	//Vector to store any IDs that have been freed before reuse
@@ -13,6 +14,7 @@ private:
 	static std::vector<ManagedEntity*> entityLog;
 
 public:
+
 	//Generate a new EID
 	static unsigned generateEID(ManagedEntity* entity);
 	//free a specified EID to be reused
