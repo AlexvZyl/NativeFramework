@@ -56,6 +56,8 @@ void saveToBIN(Circuit& circuit, std::string folder = "");
 void loadFromYAML(Design2DEngineGL& engine, std::string file, std::string folder = "");
 // Deserialise a circuit from a BIN file.
 void loadFromBIN(Design2DEngineGL& engine, std::string file, std::string folder = "");
+// Overloads the << operator so that YAML-cpp can work with circuits.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit circuit);
 
 //=============================================================================================================================================//
 //  Ports.																																	   //
