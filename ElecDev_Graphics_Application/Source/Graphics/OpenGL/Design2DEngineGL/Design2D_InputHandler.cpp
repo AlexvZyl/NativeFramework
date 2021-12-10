@@ -117,17 +117,14 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) 
 	{ 
 		p1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.01f, nullptr);
-		p1->update();
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) 
 	{ 
 		p2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.01f, nullptr);
-		p2->update();
 	}
 	if (key == GLFW_KEY_E && action == GLFW_PRESS) 
 	{
 		p3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.01f, nullptr);
-		p3->update();
 	}
 
 	// Remove components.
@@ -160,11 +157,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
-			//m_activeComponent->destroy();
-			//delete m_activeComponent;
 			//Remove the dummy component
-			m_activeComponent = NULL;//runs deconstructor
-			//m_circleEntitiesVAO->updateGPU(); // Temporary work-around for disappearing circles.
+			m_activeComponent = NULL; // Runs deconstructor.
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
@@ -174,7 +168,6 @@ void Design2DEngineGL::keyEvent(int key, int action)
 				{
 					m_circuit->m_components.erase(iterator);
 					m_activeComponent = NULL;
-					//m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 				}
 			}
 			break;
@@ -183,13 +176,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			saveToYAML(m_circuit, "Testing");
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
-		case GLFW_KEY_X:
-			loadFromYAML(*this, "Test.lmn", "Testing");
-			break;
-		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_T:
 			m_circuit->m_components.back()->title->updateText("Changed");
-			m_circuit->m_components.back()->title->update();
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		}
@@ -204,7 +192,6 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 	}
 	if ((eID == 0) || (eID == -1)) {
 			m_activeComponent = NULL;
-			m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 		m_guiState->clickedZone.background = true;
 	}
 	else {

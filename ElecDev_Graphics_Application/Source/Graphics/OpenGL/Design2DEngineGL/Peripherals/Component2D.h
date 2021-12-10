@@ -114,7 +114,6 @@ public:
 	void setLayer(float layer);
 	//set the clickedZone.component flag in the GUIState.
 	void setContext(GUIState* guiState);
-	void update();
 	//Highlight the component.
 	void highlight();
 	//Remove the component highlighting.

@@ -55,13 +55,9 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	}
 	body.setColor(bodyColour);
 	body.setLayer(portLayer);
-	body.update();
 	//new (&border) Circle(engine_circleVAO, centre3, 0.011f, borderColour, 1.0f, 0.0f, this);
 	border.setColor(borderColour);
 	border.setLayer(portLayer);
-	border.update();
-
-	title->update();
 }
 
 void Port::moveTo(glm::vec2 destination)
@@ -73,9 +69,6 @@ void Port::moveTo(glm::vec2 destination)
 	body.translateTo(centre);
 	border.translateTo(centre);
 	title->translateTo(titlePos);
-	body.update();
-	border.update();
-	title->update();
 }
 
 Port& Port::operator=(const Port& t)
@@ -88,30 +81,18 @@ void Port::setLayer(float layer)
 	body.setLayer(layer);
 	border.setLayer(layer);
 	title->setLayer(layer);
-	body.update();
-	border.update();
-	title->update();
-}
-
-void Port::update()
-{
-	body.update();
-	border.update();
-	title->update();
 }
 
 void Port::highlight()
 {
 	borderColour = { 0.8f, 1.0f, .8f, 1.f };
 	border.setColor(borderColour);
-	border.update();
 }
 
 void Port::unhighlight()
 {
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border.setColor(borderColour);
-	border.update();
 }
 
 void Port::setOffset(glm::vec2 offset)

@@ -130,7 +130,8 @@ template <typename VertexType>
 VertexArrayObject<VertexType>::~VertexArrayObject()
 {
 	wipeCPU();
-	GLCall(glDeleteBuffers(1, &m_VBOID))
+	GLCall(glDeleteBuffers(1, &m_VBOID));
+	GLCall(glDeleteBuffers(1, &m_IBOID));
 	GLCall(glDeleteVertexArrays(1, &m_VAOID));
 }
 
@@ -141,8 +142,10 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
+	if (!m_isUpdated) { updateGPU(); }
 	GLCall(glBindVertexArray(m_VAOID));
-	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, (void*)0));
 }
 
 template <typename VertexType>
@@ -150,6 +153,9 @@ void VertexArrayObject<VertexType>::bind() const { GLCall(glBindVertexArray(m_VA
 
 template <typename VertexType>
 void VertexArrayObject<VertexType>::unbind() const { GLCall(glBindVertexArray(0)); }
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::outOfSync() { m_isUpdated = false; }
 
 //=============================================================================================================================================//
 //  Vertex.					  																												   //
@@ -186,6 +192,9 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::assignDataGPU(Primitive<VertexType>* entity)
 {
 	// This should only run if GPU and CPU is synced.
+	// BUG!!!!: This does not assign the IBO along with the Vertices.
+	// Though, this might become deprecated since updating the VAO is no longer
+	// a concept for the user using the API.
 	if (m_isUpdated)
 	{
 		unsigned index = entity->m_bufferStartIndex;
@@ -244,24 +253,21 @@ void VertexArrayObject<VertexType>::updateGPU()
 	// ----------------- //
 	if (m_entityCPU.size())
 	{
-		// Resize VBO.
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexCount * m_entityCPU[0]->m_vertices[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
 		// Resize IBO.
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), NULL, GL_DYNAMIC_DRAW));
-		// Assign buffer pointers.s
-		unsigned int verticesIndex = 0;
-		unsigned int indicesIndex = 0;
 		// Populate index data.
-		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		unsigned int indicesIndex = 0;
 		for (Primitive<VertexType>* entity : m_entityCPU)
 		{
-			GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indicesIndex * sizeof(GLuint), entity->m_indexCount * sizeof(GLuint), static_cast<const void*>(&(entity->m_indices[0]))));
+			GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indicesIndex * sizeof(GLuint), entity->m_indexCount * sizeof(GLuint), std::data(entity->m_indices)));
 			indicesIndex += entity->m_indexCount;
 		}
-		// Populate vertex data.
+		// Resize VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexCount * m_entityCPU[0]->m_vertices[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
+		// Populate vertex data.
+		unsigned int verticesIndex = 0;
 		for (Primitive<VertexType>* entity : m_entityCPU)
 		{
 			for (VertexType& vertex : entity->m_vertices)
@@ -292,7 +298,7 @@ void VertexArrayObject<VertexType>::updateGPU()
 		}
 		// Resize IBO and write data.
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), static_cast<const void*>(&m_indexCPU[0]), GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), std::data(m_indexCPU), GL_DYNAMIC_DRAW));
 	}
 
 	// The CPU and GPU data is now synced.
