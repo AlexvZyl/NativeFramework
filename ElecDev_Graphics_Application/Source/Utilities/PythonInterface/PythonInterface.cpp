@@ -320,7 +320,7 @@ void PyInterface::deQueueInput()
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 docking = temp.parameters.substr(0, temp.parameters.find(";"));
                 parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_guiHandler->userGUIP->createGUI(guiName, guiPos, docking, parameters);
+                m_guiHandler->m_userGUIP->createGUI(guiName, guiPos, docking, parameters);
                 break;
 
             /*===================================================================================================================================*/

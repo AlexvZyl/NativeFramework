@@ -127,7 +127,7 @@ bool Ribbons::topBar()
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) { this->sideBarFlag = "Draw Circuit Bucket"; }
     ImGui::SameLine();
     // Add Design engine button.
-    if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) { m_graphicsHandler->m_addWindow = true; }
+    if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) { m_guiState->circuitEditor = true; }
     ImGui::End();
     return true;
 }
