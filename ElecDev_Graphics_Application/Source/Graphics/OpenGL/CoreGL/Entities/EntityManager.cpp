@@ -3,9 +3,9 @@
 
 unsigned EntityManager::lastID = 0;
 std::vector<unsigned> EntityManager::freeIDs;
-std::vector<ManagedEntity*> EntityManager::entityLog;
+std::vector<Entity*> EntityManager::entityLog;
 
-unsigned EntityManager::generateEID(ManagedEntity* entity)
+unsigned EntityManager::generateEID(Entity* entity)
 {
 	//Check to see if there are any freed (recycled) IDs
 	if (!freeIDs.size()) {
@@ -28,7 +28,7 @@ void EntityManager::freeEID(unsigned EID)
 	else			   { freeIDs.push_back(EID); }
 }
 
-ManagedEntity* EntityManager::getEntity(unsigned EID)
+Entity* EntityManager::getEntity(unsigned EID)
 {
 	if ((EID == 0) || (EID == -1)) 
 	{

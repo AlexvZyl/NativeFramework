@@ -53,8 +53,8 @@ public:
 
 	// Constructors. 
 	Circle() = default;
-	Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent);
-	Circle(VertexArrayObject<VertexType>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent);
+	Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
+	Circle(VertexArrayObject<VertexType>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
 	// Destructor.
 	~Circle();
 };

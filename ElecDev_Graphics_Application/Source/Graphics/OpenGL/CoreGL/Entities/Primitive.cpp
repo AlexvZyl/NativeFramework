@@ -14,7 +14,7 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Primitive<VertexType>::Primitive(ManagedEntity* parent) : ManagedEntity(EntityType::PRIMATIVE, parent) {}
+Primitive<VertexType>::Primitive(Entity* parent) : Entity(EntityType::PRIMATIVE, parent) {}
 
 template<typename VertexType>
 Primitive<VertexType>::~Primitive()

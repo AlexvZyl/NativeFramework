@@ -17,7 +17,7 @@
 // Writes the text to the buffer based on the font loaded in the constructor.
 template<typename VertexType>
 Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
-					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, 
+					   VertexArrayObject<VertexType>* vao, Font& font, Entity* parent, 
 					   std::string horizontalAlignment, std::string verticalAlignment)
 	: Primitive<VertexType>(parent)
 {

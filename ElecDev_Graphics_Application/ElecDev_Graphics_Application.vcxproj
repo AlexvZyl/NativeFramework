@@ -211,7 +211,7 @@
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
@@ -334,7 +334,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />

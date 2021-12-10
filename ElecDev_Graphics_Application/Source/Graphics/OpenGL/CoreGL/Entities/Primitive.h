@@ -12,7 +12,7 @@ for a VAO to be able to render the entity to the screen.
 #include <vector>
 #include <glm.hpp>
 #include <memory>
-#include "ManagedEntity.h"
+#include "Entity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -27,7 +27,7 @@ struct GUIState;
 //=============================================================================================================================================//
 
 template<typename VertexType>
-class Primitive: public ManagedEntity
+class Primitive: public Entity
 {
 public:
 
@@ -53,7 +53,7 @@ public:
 	// Default constructor.
 	Primitive();
 	// Constructor that sets the context as well.
-	Primitive(ManagedEntity* parent);
+	Primitive(Entity* parent);
 	// Destructor.
 	~Primitive();
 

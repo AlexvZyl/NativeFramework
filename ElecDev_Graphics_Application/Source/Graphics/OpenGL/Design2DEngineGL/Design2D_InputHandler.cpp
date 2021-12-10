@@ -210,7 +210,7 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 	}
 	else {
 		m_guiState->clickedZone.background = false;
-		ManagedEntity* currentEntity = EntityManager::getEntity(eID);
+		Entity* currentEntity = EntityManager::getEntity(eID);
 		currentEntity->setContext(m_guiState);
 		while (currentEntity->m_type != EntityType::COMPONENT) {
 			currentEntity = currentEntity->m_parent;

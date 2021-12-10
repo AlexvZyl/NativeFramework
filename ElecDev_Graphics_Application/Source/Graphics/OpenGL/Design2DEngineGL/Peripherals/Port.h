@@ -1,5 +1,5 @@
 #pragma once
-#include "CoreGL/Entities/ManagedEntity.h"
+#include "CoreGL/Entities/Entity.h"
 #include <string>
 #include <memory>
 #include "glm.hpp"
@@ -26,7 +26,7 @@ enum PortType
 	PORT_INOUT
 };
 
-class Port: public ManagedEntity
+class Port: public Entity
 {
 public:
 	//port VAOs and primatives

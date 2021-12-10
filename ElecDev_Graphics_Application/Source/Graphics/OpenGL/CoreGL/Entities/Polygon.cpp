@@ -12,7 +12,7 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, ManagedEntity* parent) 
+Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, Entity* parent) 
 	: Primitive<VertexType>(parent)
 {
 	// General setup.

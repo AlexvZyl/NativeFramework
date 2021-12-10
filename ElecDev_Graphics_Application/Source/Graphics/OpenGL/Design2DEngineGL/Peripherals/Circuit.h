@@ -4,7 +4,7 @@
 //  Includes. 																																   //
 //=============================================================================================================================================//
 
-#include "Graphics/OpenGL/CoreGL/Entities/ManagedEntity.h"
+#include "Graphics/OpenGL/CoreGL/Entities/Entity.h"
 #include "Cable.h"
 #include "Component2D.h"
 
@@ -12,7 +12,7 @@
 //  Circuit Class.    																														   //
 //=============================================================================================================================================//
 
-class Circuit : public ManagedEntity
+class Circuit : public Entity
 {    
 public:
     std::vector<std::shared_ptr<Component2D>> m_components;

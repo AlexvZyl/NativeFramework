@@ -8,7 +8,7 @@
 #include "glm.hpp"
 #include <memory>
 #include <vector>
-#include "CoreGL/Entities/ManagedEntity.h"
+#include "CoreGL/Entities/Entity.h"
 #include "Port.h"
 
 //=============================================================================================================================================//
@@ -34,7 +34,7 @@ class Circuit;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Component2D: public ManagedEntity
+class Component2D: public Entity
 {
 public:
 

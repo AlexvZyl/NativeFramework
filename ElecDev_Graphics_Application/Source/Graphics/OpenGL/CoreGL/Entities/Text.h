@@ -56,7 +56,7 @@ public:
 
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
-		 VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent,
+		 VertexArrayObject<VertexType>* vao, Font& font, Entity* parent,
 		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
 	// Generates the textured quads.
 	void generateText(std::string text);
