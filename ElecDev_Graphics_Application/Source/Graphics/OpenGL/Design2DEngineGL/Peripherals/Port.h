@@ -24,6 +24,14 @@ enum PortType
 	PORT_INOUT
 };
 
+enum class PortPosition
+{
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT
+};
+
 class Port: public Entity
 {
 public:
@@ -46,6 +54,7 @@ public:
 
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
+	PortPosition m_position;
 	PortType m_type;
 	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	Port& operator = (const Port &t);
