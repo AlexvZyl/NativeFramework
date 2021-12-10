@@ -130,7 +130,8 @@ template <typename VertexType>
 VertexArrayObject<VertexType>::~VertexArrayObject()
 {
 	wipeCPU();
-	GLCall(glDeleteBuffers(1, &m_VBOID))
+	GLCall(glDeleteBuffers(1, &m_VBOID));
+	GLCall(glDeleteBuffers(1, &m_IBOID));
 	GLCall(glDeleteVertexArrays(1, &m_VAOID));
 }
 
@@ -141,6 +142,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
+	if (!m_isUpdated) { updateGPU(); }
 	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
 }
@@ -150,6 +152,9 @@ void VertexArrayObject<VertexType>::bind() const { GLCall(glBindVertexArray(m_VA
 
 template <typename VertexType>
 void VertexArrayObject<VertexType>::unbind() const { GLCall(glBindVertexArray(0)); }
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::outOfSync() { m_isUpdated = false; }
 
 //=============================================================================================================================================//
 //  Vertex.					  																												   //

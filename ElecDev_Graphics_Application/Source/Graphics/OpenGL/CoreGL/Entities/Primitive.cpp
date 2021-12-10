@@ -27,7 +27,6 @@ void Primitive<VertexType>::wipeMemory()
 { 
 	// Clear the data from the GPU.
 	m_VAO->deleteDataCPU(this);		
-	m_VAO->updateGPU();
 	// Clear the data from the CPU.
 	m_vertices.clear();
 	m_vertices.shrink_to_fit();		
@@ -47,16 +46,7 @@ template<typename VertexType>
 void Primitive<VertexType>::offsetIndices(int offset)
 {
 	for (unsigned& index : m_indices) { index += offset; }
-}
-
-//=============================================================================================================================================//
-//  Rendering.																																   //
-//=============================================================================================================================================//
-
-template<typename VertexType>
-void Primitive<VertexType>::update()
-{ 
-	m_VAO->assignDataGPU(this); 
+	m_VAO->outOfSync();
 }
 
 //=============================================================================================================================================//
@@ -68,6 +58,7 @@ void Primitive<VertexType>::translate(glm::vec3& translation)
 {
 	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
@@ -76,6 +67,7 @@ void Primitive<VertexType>::translateTo(glm::vec3& position)
 	glm::vec3 translation = position - m_trackedCenter; 
 	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
@@ -84,18 +76,19 @@ void Primitive<VertexType>::translateTo(glm::vec2& position)
 	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
 	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
 	m_trackedCenter += translation;
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
 void Primitive<VertexType>::rotate(glm::vec3& rotation)
 {
-
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
 void Primitive<VertexType>::scale(glm::vec3& scaling)
 {
-
+	m_VAO->outOfSync();
 }
 
 //=============================================================================================================================================//
@@ -107,6 +100,7 @@ void Primitive<VertexType>::setColor(glm::vec4& color)
 {
 	for (VertexType& vertex : m_vertices) { vertex.data.color = color; }
 	m_colour = color;
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
@@ -114,12 +108,14 @@ void Primitive<VertexType>::setEntityID(unsigned int eID)
 {
 	for (VertexType& vertex : m_vertices) { vertex.entityID = eID; }
 	m_entityID = eID;
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
 void Primitive<VertexType>::setLayer(float layer)
 {
 	for (VertexType& vertex : m_vertices) { vertex.data.position.z = layer; }
+	m_VAO->outOfSync();
 }
 
 template<typename VertexType>
@@ -127,6 +123,7 @@ void Primitive<VertexType>::setContext(GUIState* guiState)
 {
 	guiState->clickedZone.primative = true;
 	if (m_parent != nullptr) { m_parent->setContext(guiState); }
+	m_VAO->outOfSync();
 }
 
 //=============================================================================================================================================//

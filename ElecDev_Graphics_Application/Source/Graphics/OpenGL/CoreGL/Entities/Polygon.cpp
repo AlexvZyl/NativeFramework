@@ -38,11 +38,10 @@ Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObj
 	}
 	// Pass to VAO.
 	m_VAO->appendDataCPU(this);
-	m_VAO->updateGPU();
 }
 
 template<typename VertexType>
-Polygon2D<VertexType>::~Polygon2D(){}
+Polygon2D<VertexType>::~Polygon2D() {}
 
 //=============================================================================================================================================//
 //  Instantiations.																															   //

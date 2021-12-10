@@ -61,21 +61,17 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
-	shape->update();
 	// Component border.
 	border = std::make_shared<Polygon2D<VertexData>>(vertices, engine_linesVAO, this);
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
-	border->update();
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
-	title->update();
 	// Add some test ports. (TO BE REMOVED)
 	addPort(0, PORT_IN, "Test in");
 	addPort(1, PORT_OUT, "Test out");
-
 }
 
 Component2D::Component2D(float centreCoords[2], 
@@ -90,7 +86,6 @@ Component2D::Component2D(float centreCoords[2],
 
 Component2D::~Component2D() 
 {
-	//engine_circleVAO->updateGPU();
 }
 
 //=============================================================================================================================================//
@@ -118,9 +113,6 @@ void Component2D::moveTo(float pointerPos[2])
 	for (int i = 0; i < portsSouth.size(); i++) {
 		portsSouth[i]->moveTo(translateDestination);
 	}
-	shape->update();
-	border->update();
-	title->update();
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
@@ -133,9 +125,6 @@ void Component2D::place(float pos[2])
 	shape->setColor(shapeColour);
 	title->setColor(titleColour);
 	//port1->setColor(borderColour);
-	shape->update();
-	border->update();
-	title->update();
 	//Move to placement layer
 }
 
@@ -166,32 +155,10 @@ void Component2D::setContext(GUIState* guiState)
 	guiState->clickedZone.component = true;
 }
 
-void Component2D::update()
-{
-	shape->update();
-	border->update();
-	title->update();
-	for (int i = 0; i < portsWest.size(); i++) {
-		portsWest[i]->update();
-	}
-	for (int i = 0; i < portsEast.size(); i++) {
-		portsEast[i]->update();
-	}
-	for (int i = 0; i < portsNorth.size(); i++) {
-		portsNorth[i]->update();
-	}
-	for (int i = 0; i < portsSouth.size(); i++) {
-		portsSouth[i]->update();
-	}
-	//port1->update();
-	//port2->update();
-}
-
 void Component2D::highlight()
 {
 	borderColour = { 0.8f, 1.0f, .8f, 1.f };
 	border->setColor(borderColour);
-	border->update();
 
 	for (int i = 0; i < portsWest.size(); i++) {
 		portsWest[i]->highlight();
@@ -211,7 +178,6 @@ void Component2D::unhighlight()
 {
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
-	border->update();
 
 	for (int i = 0; i < portsWest.size(); i++) {
 		portsWest[i]->unhighlight();

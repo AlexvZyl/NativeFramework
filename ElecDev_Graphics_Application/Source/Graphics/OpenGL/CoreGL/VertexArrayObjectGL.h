@@ -68,6 +68,8 @@ public:
 	void bind() const;
 	// Unbinds the VAO.
 	void unbind() const;
+	// Sets m_isUpdated to false for when something changes externally.
+	void outOfSync();
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
