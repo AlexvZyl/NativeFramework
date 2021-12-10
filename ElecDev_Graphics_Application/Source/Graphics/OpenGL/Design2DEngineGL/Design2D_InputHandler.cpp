@@ -164,7 +164,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			//delete m_activeComponent;
 			//Remove the dummy component
 			m_activeComponent = NULL;//runs deconstructor
-			m_circleEntitiesVAO->updateGPU(); // Temporary work-around for disappearing circles.
+			//m_circleEntitiesVAO->updateGPU(); // Temporary work-around for disappearing circles.
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
@@ -174,7 +174,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 				{
 					m_circuit->m_components.erase(iterator);
 					m_activeComponent = NULL;
-					m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
+					//m_circleEntitiesVAO->updateGPU(); //Temporary work-around for disappearing circles.
 				}
 			}
 			break;
