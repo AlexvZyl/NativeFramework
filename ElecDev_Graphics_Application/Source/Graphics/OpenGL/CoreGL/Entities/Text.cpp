@@ -19,15 +19,15 @@ template<typename VertexType>
 Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
 					   VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent, 
 					   std::string horizontalAlignment, std::string verticalAlignment)
-	: Entity<VertexType>(parent)
+	: Primitive<VertexType>(parent)
 {
 	// ---------- //
 	// S E T U P  //
 	// ---------- //
 
 	m_VAO = vao;
-	m_trackedCenter = position;  // This does not track the center, but rather the cursor position.
-								 // This does not affect functionality but is illogical.
+	m_trackedCenter = position;  // This does not track the center, but rather the initial cursor position.
+								 // This does not affect functionality but the name does not make sense.
 	m_cursorStart = position;
 	m_textScale = scale;
 	m_font = &font;
@@ -69,18 +69,18 @@ void Text<VertexType>::generateText(std::string text)
 	}
 
 	// Horizontal alignment.
-	if (m_horizontalAlign == "C" || m_horizontalAlign == "c") { m_cursorStart.x = m_cursorStart.x - (m_textLength * m_textScale) / 2; }
+	if		(m_horizontalAlign == "C" || m_horizontalAlign == "c") { m_cursorStart.x = m_cursorStart.x - (m_textLength * m_textScale) / 2; }
 	else if (m_horizontalAlign == "R" || m_horizontalAlign == "r") { m_cursorStart.x = m_cursorStart.x - (m_textLength * m_textScale); }
 	else if (m_horizontalAlign == "L" || m_horizontalAlign == "l") { /* Left is the default setting. */ }
 	// Display error.
-	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_horizontalAlign << "' is not a valid horizontal alignment.\n"; return; }
+	else	{ std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_horizontalAlign << "' is not a valid horizontal alignment.\n"; return; }
 
 	// Vertical alignment.
-	if (m_verticalAlign == "C" || m_verticalAlign == "c") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale) / 2; }
+	if		(m_verticalAlign == "C" || m_verticalAlign == "c") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale) / 2; }
 	else if (m_verticalAlign == "T" || m_verticalAlign == "t") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale); }
 	else if (m_verticalAlign == "B" || m_verticalAlign == "b") { /* Bottom is the default setting. */ }
 	// Display error.
-	else { std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_verticalAlign << "' is not a valid vertical alignment.\n"; return; }
+	else	{ std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_verticalAlign << "' is not a valid vertical alignment.\n"; return; }
 
 	// ----------------- //
 	//  T E X T   B O X  //
@@ -248,7 +248,7 @@ Text<VertexType>::~Text(){}
 template<typename VertexType>
 void Text<VertexType>::updateText(std::string text) 
 {
-	Entity<VertexType>::wipeMemory();
+	Primitive<VertexType>::wipeMemory();
 	generateText(text);
 }
 

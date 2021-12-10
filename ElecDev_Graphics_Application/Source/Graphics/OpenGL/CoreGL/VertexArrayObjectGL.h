@@ -14,7 +14,7 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-class Entity;
+class Primitive;
 class Vertex;
 
 //=============================================================================================================================================//
@@ -45,9 +45,8 @@ public:
 	std::vector<VertexType> m_vertexCPU;
 	// The indeces bot the buffer.
 	std::vector<unsigned> m_indexCPU;
-
 	// Entities stored CPU side.
-	std::vector<Entity<VertexType>*> m_entityCPU;
+	std::vector<Primitive<VertexType>*> m_entityCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -93,7 +92,7 @@ public:
 	// ----------------- //
 
 	// Append data on the CPU side memory for textured vertices.
-	void appendDataCPU(Entity<VertexType>* entity);
+	void appendDataCPU(Primitive<VertexType>* entity);
 	// Assign data to the GPU side memory for textured vertices.
 	// since this funtion is going to be called in performance critical scenarios.
 	// If you use this function it will update faster, but you also lose the ability
@@ -101,9 +100,9 @@ public:
 	// Error handling is not added to this function to make it as fast as possible, so
 	// be very careful to not lose track of sizes of data, if it has been created etc.
 	// This does not check if the array is empty and create a new one if it is empty.
-	void assignDataGPU(Entity<VertexType>* entity);
+	void assignDataGPU(Primitive<VertexType>* entity);
 	// Delete the polygon from the VAO.
-	void deleteDataCPU(Entity<VertexType>* entity);
+	void deleteDataCPU(Primitive<VertexType>* entity);
 };
 
 //=============================================================================================================================================//

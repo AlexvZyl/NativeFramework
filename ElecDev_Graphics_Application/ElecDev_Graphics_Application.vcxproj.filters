@@ -76,7 +76,7 @@
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
@@ -1275,7 +1275,7 @@
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\ManagedEntity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
