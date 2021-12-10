@@ -157,10 +157,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
-			//m_activeComponent->destroy();
-			//delete m_activeComponent;
-			//Remove the dummy component
-			m_activeComponent = NULL;//runs deconstructor
+			m_activeComponent = NULL; // Runs deconstructor.
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
@@ -176,10 +173,6 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_Z:
 			saveToYAML(m_circuit, "Testing");
-			break;
-		// --------------------------------------------------------------------------------------------------------------- //
-		case GLFW_KEY_X:
-			loadFromYAML(*this, "Test.lmn", "Testing");
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_T:

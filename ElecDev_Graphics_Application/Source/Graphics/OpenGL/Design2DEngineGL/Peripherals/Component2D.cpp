@@ -84,9 +84,7 @@ Component2D::Component2D(float centreCoords[2],
 	moveTo(centreCoords);
 }
 
-Component2D::~Component2D() 
-{
-}
+Component2D::~Component2D() {}
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

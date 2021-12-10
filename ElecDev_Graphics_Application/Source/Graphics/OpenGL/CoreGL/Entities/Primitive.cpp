@@ -17,10 +17,7 @@ template<typename VertexType>
 Primitive<VertexType>::Primitive(Entity* parent) : Entity(EntityType::PRIMATIVE, parent) {}
 
 template<typename VertexType>
-Primitive<VertexType>::~Primitive()
-{
-	wipeMemory();
-}
+Primitive<VertexType>::~Primitive() { wipeMemory(); }
 
 template<typename VertexType>
 void Primitive<VertexType>::wipeMemory()
