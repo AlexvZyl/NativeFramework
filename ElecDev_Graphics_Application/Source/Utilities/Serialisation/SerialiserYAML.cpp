@@ -17,7 +17,7 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(Circuit& circuit, std::string folder)
+void saveToYAML(std::shared_ptr<Circuit> circuit, std::string folder)
 {
 	// ------------- //
 	//  F O L D E R  //
@@ -57,7 +57,7 @@ void saveToYAML(Circuit& circuit, std::string folder)
 	// End file.
 	yamlEmitter << YAML::EndMap;
 	// Store file.
-	const std::string yamlLocation = exeLoc + assetsFolder + folder + "\\" + circuit.m_label + ".lmn";
+	const std::string yamlLocation = exeLoc + assetsFolder + folder + "\\" + circuit->m_label + ".lmn";
 	std::ofstream yamlStream;
 	yamlStream.open(yamlLocation);
 	yamlStream << yamlEmitter.c_str();

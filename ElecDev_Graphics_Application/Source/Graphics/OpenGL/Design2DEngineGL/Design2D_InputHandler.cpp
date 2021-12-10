@@ -16,6 +16,7 @@ This is where the drawing enigine mouse events are handled.
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "Peripherals/Circuit.h"
 
 // Serialisation.
 #include "Utilities/Serialisation/Serialiser.h"
@@ -179,7 +180,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_Z:
-			saveToYAML(*m_circuit.get(), "Testing");
+			saveToYAML(m_circuit, "Testing");
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_X:
@@ -194,8 +195,6 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		}
 	}
 }
-
-
 
 //Helper functions
 void Design2DEngineGL::setActiveComponent(unsigned eID) {

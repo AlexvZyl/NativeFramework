@@ -8,7 +8,7 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToBIN(Circuit& circuit, std::string folder)
+void saveToBIN(std::shared_ptr<Circuit> circuit, std::string folder)
 {
 
 }

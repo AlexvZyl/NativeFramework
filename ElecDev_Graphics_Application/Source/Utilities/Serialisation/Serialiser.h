@@ -49,15 +49,17 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4 vec);
 //=============================================================================================================================================//
 
 // Serialise a circuit to a YAML file.
-void saveToYAML(Circuit& circuit, std::string folder = "");
+void saveToYAML(std::shared_ptr<Circuit> circuit, std::string folder = "");
 // Serialise a circuit to a BIN file.
-void saveToBIN(Circuit& circuit, std::string folder = "");
+void saveToBIN(std::shared_ptr<Circuit> circuit, std::string folder = "");
 // Deserialise a circuit from a YAML file.
 void loadFromYAML(Design2DEngineGL& engine, std::string file, std::string folder = "");
 // Deserialise a circuit from a BIN file.
 void loadFromBIN(Design2DEngineGL& engine, std::string file, std::string folder = "");
 // Overloads the << operator so that YAML-cpp can work with circuits.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit circuit);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit> circuit);
+// Overloads the << operator so that YAML-cpp can work with circuits.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>> circuitVector);
 
 //=============================================================================================================================================//
 //  Ports.																																	   //
