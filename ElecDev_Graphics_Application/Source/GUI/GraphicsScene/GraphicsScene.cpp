@@ -52,7 +52,7 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
 			if (window->close)
 			{
-				if (ImGui::Begin(window->windowName.c_str(), &window->close))
+				if (ImGui::Begin(window->engineGL->m_contextName.c_str(), &window->close))
 				{
 					// Using a Child allow to fill all the space of the window.
 					// It also allows customization

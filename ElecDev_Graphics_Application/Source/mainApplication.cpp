@@ -94,6 +94,13 @@ void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
     graphicsHandler->inputEvent.keyAction = action;
 }
 
+void fileDropEvent(GLFWwindow* window, int count, const char** paths) 
+{
+    graphicsHandler->fileDropEvent.eventTrigger = true;
+    graphicsHandler->fileDropEvent.totalFiles = count;
+    for (int i = 0; i < count; i++) { graphicsHandler->fileDropEvent.paths.push_back(paths[i]); }
+}
+
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
 /*=======================================================================================================================================*/
@@ -224,6 +231,7 @@ int main(int, char**)
     glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
     glfwSetKeyCallback(window, keyEvent);                       // Key press event.
+    glfwSetDropCallback(window, fileDropEvent);                 // For when a file is dopped into the app.
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.

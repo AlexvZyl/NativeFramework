@@ -29,15 +29,9 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 	else
 	{
 		// Remove leading white spaces.
-		while (engineType[0] == ' ')
-		{
-			engineType.erase(engineType.begin());
-		}
+		while (engineType[0] == ' ')					   { engineType.erase(engineType.begin());	}
 		// Remove white spaces at end.
-		while (engineType[engineType.length() - 1] == ' ')
-		{
-			engineType.pop_back();
-		}
+		while (engineType[engineType.length() - 1] == ' ') { engineType.pop_back();					}
 
 		// Check engine type.
 		if (engineType == "Base2D" || engineType == "base2D")
@@ -45,8 +39,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName;
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
 		}
@@ -55,8 +48,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName;
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
 		}
@@ -65,8 +57,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL) });
-			m_windowsDictionary[windowName]->windowName = windowName;
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
 		}

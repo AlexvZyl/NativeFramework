@@ -39,7 +39,7 @@ public:
 	// ------------------------------------------------- //
 
 	// Constructor
-	Base3DEngineGL(GUIState* guiState);
+	Base3DEngineGL(GUIState* guiState, std::string contextName);
 	// Destructor.
 	~Base3DEngineGL();
 

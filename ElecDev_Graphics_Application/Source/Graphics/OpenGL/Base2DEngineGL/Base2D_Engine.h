@@ -32,7 +32,7 @@ public:
 	// ------------------------------------------------- //
 
 	// Contructor.
-	Base2DEngineGL(GUIState* guiState);
+	Base2DEngineGL(GUIState* guiState, std::string contextName);
 	// Destructor
 	~Base2DEngineGL();
 

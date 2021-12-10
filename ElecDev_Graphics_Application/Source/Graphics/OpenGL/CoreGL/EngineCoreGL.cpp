@@ -30,8 +30,8 @@ and notify the user via the terminal interface.
 //=============================================================================================================================================//
 
 // Constructor.
-EngineCoreGL::EngineCoreGL(GUIState* guiState)
-	:m_guiState(guiState)
+EngineCoreGL::EngineCoreGL(GUIState* guiState, std::string contextName)
+	:m_guiState(guiState), m_contextName(contextName)
 {
 	// Print start message.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core starting...";

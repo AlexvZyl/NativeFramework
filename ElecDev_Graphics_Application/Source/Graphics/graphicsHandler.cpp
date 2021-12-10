@@ -8,6 +8,9 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //=============================================================================================================================================//
 
 #include "GraphicsHandler.h"
+#include <iostream>
+#include "Utilities/Serialisation/Serialiser.h"
+#include "Design2DEngineGL/Peripherals/Circuit.h"
 #include "GLFW/glfw3.h"
 
 //=============================================================================================================================================//
@@ -42,6 +45,8 @@ void GraphicsHandler::renderLoop()
 	if (inputEvent.keyEvent)		   { keyEvent(); inputEvent.keyEvent = false; }
 	// Add window event.
 	if (m_addWindow)			       { addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
+	// Check for file drop event.
+	if (fileDropEvent.eventTrigger)    { fileDropEventHandler(); }
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -169,6 +174,34 @@ void GraphicsHandler::resizeEvent(int width, int height)
 	}
 }
 
+//=============================================================================================================================================//
+//  File Drop Event.                                                                   														   //
+//=============================================================================================================================================//
+
+void GraphicsHandler::fileDropEventHandler() 
+{
+	// Loop through all of the files.
+	for (std::string path : fileDropEvent.paths)
+	{
+		// Create a new window.
+		addWindow("Generating", "Design2D");
+		Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+		// Load the circuit data.
+		loadCircuitFromYAML(path, engine);
+		// Update name.
+		engine->m_contextName = engine->m_circuit->m_label;
+		auto node = m_windowsDictionary.extract("Generating");
+		node.key() = engine->m_contextName;
+		m_windowsDictionary.insert(std::move(node));
+		m_activeWindow->windowName = engine->m_circuit->m_label;
+	}
+	// Reset event.
+	fileDropEvent.eventTrigger = false;
+	fileDropEvent.totalFiles = 0;
+	fileDropEvent.paths.clear();
+	fileDropEvent.paths.shrink_to_fit();
+}
+	
 //=============================================================================================================================================//
 //  EOF.																																	                                                                     //
 //=============================================================================================================================================//

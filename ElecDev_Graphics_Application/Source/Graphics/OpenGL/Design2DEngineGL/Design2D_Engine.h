@@ -47,7 +47,7 @@ public:
 	// ------------------------------------------------ //
 
 	// Constructor
-	Design2DEngineGL(GUIState* guiState);
+	Design2DEngineGL(GUIState* guiState, std::string contextName);
 	// Destructor.
 	~Design2DEngineGL();
 
