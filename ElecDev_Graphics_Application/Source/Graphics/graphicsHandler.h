@@ -58,21 +58,22 @@ struct RenderWindowGL
 
 	// Constructors.
 	RenderWindowGL(){};
-	RenderWindowGL(GUIState* guiState, EngineType engineType)
+	RenderWindowGL(GUIState* guiState, EngineType engineType, std::string windowName)
+		: windowName(windowName)
 	{
 		if (engineType == EngineType::Base2DEngineGL)
 		{
-			engineGL = std::make_shared<Base2DEngineGL>(guiState);
+			engineGL = std::make_shared<Base2DEngineGL>(guiState, windowName);
 			engineType = EngineType::Base2DEngineGL;
 		}
 		else if (engineType == EngineType::Design2DEngineGL)
 		{
-			engineGL = std::make_shared<Design2DEngineGL>(guiState);
+			engineGL = std::make_shared<Design2DEngineGL>(guiState, windowName);
 			engineType = EngineType::Design2DEngineGL;
 		}
 		else if (engineType == EngineType::Base3DEngineGL)
 		{
-			engineGL = std::make_shared<Base3DEngineGL>(guiState);
+			engineGL = std::make_shared<Base3DEngineGL>(guiState, windowName);
 			engineType = EngineType::Base3DEngineGL;
 		}
 		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
@@ -114,6 +115,14 @@ struct InputEvent
 	int keyAction = 0;							// Is the key pressed or released?
 };
 
+// COntains the information for when files are dopped into the app.
+struct FileDropEvent
+{
+	bool eventTrigger = false;			// Triggers with event.
+	int totalFiles = 0;					// Amount of files dropped.
+	std::vector<std::string> paths;		// Path to the files.
+};
+
 //=============================================================================================================================================//
 //  Graphis Handler.																														                                                               //
 //=============================================================================================================================================//
@@ -136,6 +145,11 @@ public:
 	InputEvent inputEvent;
 	// The window.
 	GLFWwindow* m_glfwWindow;
+	// Stores information regarding the file drop event.
+	FileDropEvent fileDropEvent;
+	// Check if a window should be added.
+	bool m_addWindow = false;
+	std::string m_newWindowTitle = "";
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -165,9 +179,9 @@ public:
 	void mouseScrollEvent();	// Handle mouse scroll events.
 	void keyEvent();			// Handle keyboard inputs.
 
-	// -------------------------- //
-	//  W I N D O W   E V E N T S //
-	// -------------------------- //
+	// ------------ //
+	//  E V E N T S //
+	// ------------ //
 
 	// Resizes the engines.
 	void resizeEvent(int width, int height);
@@ -175,8 +189,9 @@ public:
 	bool isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow);
 	// Checks if the window name supplied is in the list.
 	bool isWindowValid(std::string windowName);
-
+	// Checks if the currently active window is valid.
 	bool isActiveWindowValid();
+	void fileDropEventHandler();
 
 	// ------------- //
 	//  2 D   A P I  //

@@ -238,6 +238,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
@@ -370,6 +371,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
+    <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
@@ -919,6 +921,7 @@
     <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Utilities\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Utilities\Resources\Textures\CircuitCircle.jpg" />
     <Image Include="Source\Utilities\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Utilities\Resources\Icons\component.png" />
     <Image Include="Source\Utilities\Resources\Icons\Draw_Circuit_Buckets.png" />

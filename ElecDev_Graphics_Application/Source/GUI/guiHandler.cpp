@@ -16,6 +16,7 @@
 #include "Graphics/OpenGL/CoreGL/ErrorHandlerGL.h"
 #include "ComponentEditor/ComponentEditor.h"
 #include "PopUpMenu/PopUpMenu.h"
+#include "CircuitEditor/CircuitEditor.h"
 
 /*=======================================================================================================================================*/
 /* Constructor & Destructor.																											 */
@@ -24,29 +25,25 @@
 GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
 	:m_guiState(guiState), m_pyInterface(pyInterface)
 {
+	// Init variables.
 	m_guiState->toolsExpanded = false;
 	this->textureID = 0;
 	this->graphicsHandler = graphicsHandler;
-	this->toolbar = new Toolbar(m_guiState);
-	this->ribbons = new Ribbons(m_guiState);
-	this->userGUIP = new userGUI(m_guiState, this->graphicsHandler, m_pyInterface);
-	m_popUpMenu = new PopUpMenu(guiState);
-	m_graphicsScene = new GraphicsScene(m_guiState, graphicsHandler);
-	m_componentEditor = new ComponentEditor(m_guiState, graphicsHandler);
+
+	// Create the GUI components.
+	m_toolbar			= std::make_unique<Toolbar>(m_guiState);
+	m_ribbons			= std::make_unique<Ribbons>(m_guiState, graphicsHandler);
+	m_userGUIP			= std::make_unique<userGUI>(m_guiState, this->graphicsHandler, m_pyInterface);
+	m_popUpMenu			= std::make_unique<PopUpMenu>(guiState);
+	m_graphicsScene		= std::make_unique<GraphicsScene>(m_guiState, graphicsHandler);
+	m_componentEditor	= std::make_unique<ComponentEditor>(m_guiState, graphicsHandler);
+	m_circuitEditor		= std::make_unique<CircuitEditor>(m_guiState, graphicsHandler);
 
 	// Set the custom theme.
 	setTheme();
 };
 
-GUIHandler::~GUIHandler()
-{
-	delete toolbar;
-	delete ribbons;
-	delete userGUIP;
-	delete m_graphicsScene;
-	delete m_popUpMenu;
-	delete m_componentEditor;
-}
+GUIHandler::~GUIHandler() {}
 
 /*=======================================================================================================================================*/
 /* Rendering.																															 */
@@ -90,7 +87,7 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	// End Docking space
 	createDock(work_size);
 
-	// Add latest docking branch.
+	// Add latest docking branch before this can be used.
 	//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
 	// Push own font.
@@ -101,10 +98,12 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	// ----------------------------- //
 
 	// Render GUI components.
-	this->toolbar->renderToolbar();
-	this->ribbons->renderRibbons(&this->dock);
-	this->userGUIP->renderUI(&this->dock);
-
+	m_toolbar->renderToolbar();
+	m_ribbons->renderRibbons(&this->dock);
+	m_userGUIP->renderUI(&this->dock);
+	
+	// Circuit editor.
+	if (m_guiState->circuitEditor)		{ m_circuitEditor->render(); }
 	// Render OpenGL contexts.
 	if (m_guiState->showGraphicsWindow) { m_graphicsScene->renderGraphics(this->dock); }
 	// Render OpenGL context helper GUI's.
@@ -147,10 +146,10 @@ void GUIHandler::createDock(ImVec2 work_size)
 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 	//ImGui::DockBuilderRemoveNode(dockspace_id);
 
-	if (this->userGUIP->resetDock || this->ribbons->first[0])
+	if (m_userGUIP->resetDock || m_ribbons->first[0])
 	{
 		resetDock(dockspace_id);
-		this->ribbons->first[0] = false;
+		m_ribbons->first[0] = false;
 	}
 	else {
 		ImGuiID dock = ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
@@ -177,10 +176,10 @@ void GUIHandler::resetDock(ImGuiID dockspace_id) {
 	ImGui::DockBuilderRemoveNode(dockspace_id);
 	ImGuiID dock = ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 
-	ImGui::DockBuilderSplitNode(dock, ImGuiDir_Left, 0.1f, &this->ribbons->left, &dock);
+	ImGui::DockBuilderSplitNode(dock, ImGuiDir_Left, 0.1f, &this->m_ribbons->left, &dock);
 
-	std::list<guiHolder>::iterator it = this->userGUIP->guis.begin();
-	while (it != this->userGUIP->guis.end())
+	std::list<guiHolder>::iterator it = m_userGUIP->guis.begin();
+	while (it != m_userGUIP->guis.end())
 	{
 
 		switch (hash(it->docking.c_str()))
@@ -207,7 +206,7 @@ void GUIHandler::resetDock(ImGuiID dockspace_id) {
 	}
 	this->dock = dock;
 	this->dockSpaceID = dockspace_id;
-	this->userGUIP->resetDock = false;
+	m_userGUIP->resetDock = false;
 }
 
 /*=======================================================================================================================================*/

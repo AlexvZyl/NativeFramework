@@ -37,6 +37,7 @@ struct GUIState
 	bool startMainGraphics = true;
 	bool startDemoWindow = false;
 	bool showGraphicsWindow = true;
+	bool circuitEditor = false;
 
 	// Context menu states.
 	Context clickedZone;

@@ -19,8 +19,8 @@
 //=============================================================================================================================================//
 
 // With GLFW window.
-Base2DEngineGL::Base2DEngineGL(GUIState* guiState) 
-	: EngineCoreGL(guiState)
+Base2DEngineGL::Base2DEngineGL(GUIState* guiState, std::string contextName) 
+	: EngineCoreGL(guiState, contextName)
 {
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 

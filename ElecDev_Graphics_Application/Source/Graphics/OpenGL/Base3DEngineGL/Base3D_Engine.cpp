@@ -19,8 +19,8 @@
 //=============================================================================================================================================//
 
 // Constructor.  Init with BaseEngineGL constructor.
-Base3DEngineGL::Base3DEngineGL(GUIState* guiState) 
-	: EngineCoreGL(guiState)
+Base3DEngineGL::Base3DEngineGL(GUIState* guiState, std::string contextName) 
+	: EngineCoreGL(guiState, contextName)
 {
 	// Starting log.
 	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 3D engine starting...";

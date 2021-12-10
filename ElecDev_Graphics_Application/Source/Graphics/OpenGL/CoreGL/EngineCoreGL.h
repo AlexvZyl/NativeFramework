@@ -121,7 +121,7 @@ public:
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
-	EngineCoreGL(GUIState* guiState);
+	EngineCoreGL(GUIState* guiState, std::string contextName);
 	~EngineCoreGL();
 
 	// --------------------------------------- //
@@ -155,6 +155,8 @@ public:
 
 	float m_deltaTime = 0.0f;	// The difference between the last 2 rendred frame.
 	float m_lastFrame = 0.0f;	// The time of the previous frame.
+
+	std::string m_contextName = "";	// Name given to the context.
 
 	// --------------------- //
 	//  U S E R   I N P U T  //

@@ -94,6 +94,13 @@ void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
     graphicsHandler->inputEvent.keyAction = action;
 }
 
+void fileDropEvent(GLFWwindow* window, int count, const char** paths) 
+{
+    graphicsHandler->fileDropEvent.eventTrigger = true;
+    graphicsHandler->fileDropEvent.totalFiles = count;
+    for (int i = 0; i < count; i++) { graphicsHandler->fileDropEvent.paths.push_back(paths[i]); }
+}
+
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
 /*=======================================================================================================================================*/
@@ -136,7 +143,7 @@ int main(int, char**)
     // --------------------- //
 
     // Enable 16x MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 2);
+    glfwWindowHint(GLFW_SAMPLES, 16);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
     if (window == NULL)
@@ -224,14 +231,15 @@ int main(int, char**)
     glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
     glfwSetKeyCallback(window, keyEvent);                       // Key press event.
+    glfwSetDropCallback(window, fileDropEvent);                 // For when a file is dopped into the app.
 
     // OpenGL settings.
-    GLCall(glEnable(GL_MULTISAMPLE));                               // Enables MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));                                // Enables depth testing for the OpenGL scenes.
-    GLCall(glDepthFunc(GL_LESS));                                   // Set the function used with depth testing.
-    GLCall(glEnable(GL_BLEND));                                     // Enable blending for alpha channels.
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));      // Set blend function.  This is the standard setting.
-    GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));               // Set the color to which OpenGL clears.
+    GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
+    GLCall(glEnable(GL_DEPTH_TEST));                            // Enables depth testing for the OpenGL scenes.
+    GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
+    GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
+    GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));           // Set the color to which OpenGL clears.
 
     // Create the state machine variables.
     GUIState guiState;
@@ -272,19 +280,11 @@ int main(int, char**)
     // Reset glfw time.
     glfwSetTime(0);
 
-    // Number of open windows
-    unsigned n_windows = 0;
-
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
     {
         // Poll commands from python interface.
         pyInterface.deQueueInput();
-        if (guiState.blockDiagram) {
-            std::string windowName = "Untitled " + std::to_string(n_windows++);
-            graphicsHandler->addWindow(windowName, "Design2D");
-            guiState.blockDiagram = false;
-        }
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.

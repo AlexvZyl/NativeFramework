@@ -23,20 +23,22 @@ This is where the interactive 2D design engine is implemented.
 #include "CoreGL/VertexArrayObjectGL.h"
 // Window.
 #include <GLFW/glfw3.h>
+// Design components.
+#include "Peripherals/Circuit.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
 // Constructor.
-Design2DEngineGL::Design2DEngineGL(GUIState* guiState) 
-	: Base2DEngineGL(guiState)
+Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName) 
+	: Base2DEngineGL(guiState, contextName)
 {
 	// Starting.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine starting...";
 
 	// Default circuit (In this case handled like a default scene).
-	m_circuit = std::make_unique<Circuit>("Test", "AE");
+	m_circuit = std::make_shared<Circuit>(m_contextName, "AE");
 
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";	

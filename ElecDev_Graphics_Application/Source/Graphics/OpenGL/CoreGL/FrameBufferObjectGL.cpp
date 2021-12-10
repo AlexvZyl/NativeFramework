@@ -181,7 +181,7 @@ void FrameBufferObject::resize(int width, int height)
 unsigned int FrameBufferObject::getRenderTexture() 
 { 
 	renderFromMSAA(); 
-	blitFromMSAA();
+	//blitFromMSAA();
 	return m_renderColorTextureID; 
 }
 

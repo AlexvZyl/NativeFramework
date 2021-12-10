@@ -58,7 +58,7 @@
 // Application icon.
 #define IDI_ICON1 240			// Exe icon.
 #define ICON_PNG 239			// GLFW icon.
-#define PANDA 238
+#define CIRCUIT_CIRCLE_JPEG 238	// Circle circuit for design engine button.
 //-------------------------------------------------------------------------------------------------
 
 /*=======================================================================================================================================*/

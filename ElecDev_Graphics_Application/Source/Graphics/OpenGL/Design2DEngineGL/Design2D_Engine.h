@@ -5,13 +5,13 @@
 //=============================================================================================================================================//
 
 #include "../Base2DEngineGL/Base2D_Engine.h"
-#include "Peripherals/Circuit.h"
 
 //=============================================================================================================================================//
 //  Forward declerations																													   //
 //=============================================================================================================================================//
 
 class Component2D;
+class Circuit;
 
 template<typename VetexType>
 class Polygon2D;
@@ -36,7 +36,7 @@ public:
 	designState designerState = ENTITY_SELECT;
 	//std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
-	std::unique_ptr<Circuit> m_circuit;
+	std::shared_ptr<Circuit> m_circuit;
 	std::unique_ptr<Circle<VertexDataCircle>> p1;
 	std::unique_ptr<Circle<VertexDataCircle>> p2;
 	std::unique_ptr<Circle<VertexDataCircle>> p3;
@@ -47,7 +47,7 @@ public:
 	// ------------------------------------------------ //
 
 	// Constructor
-	Design2DEngineGL(GUIState* guiState);
+	Design2DEngineGL(GUIState* guiState, std::string contextName);
 	// Destructor.
 	~Design2DEngineGL();
 

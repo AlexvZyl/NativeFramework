@@ -17,7 +17,7 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(Circuit& circuit, std::string folder)
+void saveToYAML(std::shared_ptr<Circuit> circuit, std::string folder)
 {
 	// ------------- //
 	//  F O L D E R  //
@@ -33,13 +33,13 @@ void saveToYAML(Circuit& circuit, std::string folder)
 		if (stat(folderPath.c_str(), &info)) { _mkdir(folderPath.c_str()); }
 	}
 
-	// Begin File.
-	YAML::Emitter yamlEmitter;
-	yamlEmitter << YAML::BeginMap;
-
 	// --------- //
 	//  F I L E  //
 	// --------- //
+
+	// Begin File.
+	YAML::Emitter yamlEmitter;
+	yamlEmitter << YAML::BeginMap;
 
 	yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
 	yamlEmitter << YAML::BeginMap;
@@ -47,20 +47,8 @@ void saveToYAML(Circuit& circuit, std::string folder)
 		yamlEmitter << YAML::Key << "Type" << YAML::Value << "Circuit";
 	yamlEmitter << YAML::EndMap;
 
-	// --------------- //
-	//  C I R C U I T  //
-	// --------------- //
-
-	// Circuit data.
-	yamlEmitter << YAML::Key << "Circuit Info" << YAML::Value;
-	yamlEmitter << YAML::BeginMap;
-		yamlEmitter << YAML::Key << "Label" << YAML::Value << circuit.m_label;
-		yamlEmitter << YAML::Key << "Type" << YAML::Value << circuit.m_type;
-	yamlEmitter << YAML::EndMap;
-	// Components.
-	yamlEmitter << YAML::Key << "Components" << YAML::Value << circuit.m_components;
-	// Cables.
-	yamlEmitter << YAML::Key << "Cables" << YAML::Value << circuit.m_cables;
+	// Serialise circuit.
+	yamlEmitter << circuit;
 	
 	// --------- //
 	//  S A V E  //
@@ -69,7 +57,7 @@ void saveToYAML(Circuit& circuit, std::string folder)
 	// End file.
 	yamlEmitter << YAML::EndMap;
 	// Store file.
-	const std::string yamlLocation = exeLoc + assetsFolder + folder + "\\" + circuit.m_label + ".lmn";
+	const std::string yamlLocation = exeLoc + assetsFolder + folder + "\\" + circuit->m_label + ".lmn";
 	std::ofstream yamlStream;
 	yamlStream.open(yamlLocation);
 	yamlStream << yamlEmitter.c_str();

@@ -123,6 +123,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
+    <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1342,6 +1343,7 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\stringsource.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
+    <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1821,6 +1823,7 @@
     <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />
     <Image Include="Source\Utilities\Resources\Fonts\Arial-Bold\Arial-Bold.png" />
     <Image Include="Source\Utilities\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
+    <Image Include="Source\Utilities\Resources\Textures\CircuitCircle.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
