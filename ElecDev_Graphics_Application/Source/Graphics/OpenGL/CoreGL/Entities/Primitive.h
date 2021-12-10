@@ -89,8 +89,6 @@ public:
 	//  M E M O R Y  //
 	// ------------- //
 
-	// Updates the entity directly on the GPU.
-	virtual void update();
 	// Deletes the entity and clears the memory.
 	virtual void wipeMemory();
 	// Offsets the entities' indices to match the VAO.
