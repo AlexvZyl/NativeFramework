@@ -11,19 +11,21 @@
 //=============================================================================================================================================//
 
 class Component2D;
-class Circuit;
 
 template<typename VetexType>
 class Polygon2D;
 template<typename VetexType>
 class Circle;
+class Circuit;
+class Cable;
+class Port;
 
 //=============================================================================================================================================//
 //  Design 2D Engine class.																													   //
 //=============================================================================================================================================//
 
 // Design engine states.
-enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE};
+enum designState { COMPONENT_PLACE, ENTITY_SELECT, COMPONENT_MOVE, CABLE_PLACE};
 
 class Design2DEngineGL : public Base2DEngineGL
 {
@@ -36,6 +38,7 @@ public:
 	designState designerState = ENTITY_SELECT;
 	//std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
+	std::shared_ptr<Cable> m_activeCable;
 	std::shared_ptr<Circuit> m_circuit;
 	std::unique_ptr<Circle<VertexDataCircle>> p1;
 	std::unique_ptr<Circle<VertexDataCircle>> p2;
@@ -81,7 +84,9 @@ public:
 	virtual void keyEvent(int key, int action) override;
 
 	//Helper functions
-	virtual void setActiveComponent(unsigned eID);
+	virtual void setActiveComponent(unsigned eID); 
+	virtual void ComponentPlaceMode(float screenCoords[2]);
+	virtual Port* getPort(unsigned eID);
 };
 
 //=============================================================================================================================================//

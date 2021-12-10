@@ -7,6 +7,7 @@
 #include "Core/imgui.h"
 #include "../GUIState.h"
 #include "../Graphics/graphicsHandler.h"
+#include "CoreGL/EngineCoreGL.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -38,6 +39,12 @@ void PopUpMenu::render()
         {
             if (ImGui::MenuItem("Place component", "P"))
             {   
+                //get screen coordinates
+                float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
+                glm::vec3 WorldCoords = m_guiState->design_engine->pixelCoordsToWorldCoords(pixelCoords);
+                float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+                //place a dummy component
+                m_guiState->design_engine->ComponentPlaceMode(screenCoords);
                 close();
             }
         }
@@ -49,11 +56,15 @@ void PopUpMenu::render()
                 m_guiState->componentEditor = true;
                 close();
             }
-            if (ImGui::MenuItem("Edit Ports", "P"))
+            /*if (ImGui::MenuItem("Edit Ports", "P"))
+            {
+                close();
+            }*/
+            if (ImGui::MenuItem("Add Cable", "C"))
             {
                 close();
             }
-            if (ImGui::MenuItem("Remove component", "R"))
+            if (ImGui::MenuItem("Remove component", "DEL"))
             {
                 close();
             }

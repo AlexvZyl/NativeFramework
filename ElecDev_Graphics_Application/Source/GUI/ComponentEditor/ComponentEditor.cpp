@@ -37,7 +37,6 @@ void ComponentEditor::render()
 	ImGui::SameLine();
 	if (ImGui::InputText("##ComponentName", &activeComponent->titleString)) {
 		activeComponent->title->updateText(activeComponent->titleString);
-		activeComponent->title->update();
 	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
@@ -84,7 +83,6 @@ void ComponentEditor::render()
 					ImGui::PushItemWidth(-1);
 					if(ImGui::InputText(labelName, &port->m_label)) {
 						port->title->updateText(port->m_label);
-						port->title->update();
 					}
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();

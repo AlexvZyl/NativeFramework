@@ -90,7 +90,7 @@ void GraphicsHandler::mousePressEvent()
 			m_activeWindow->engineGL->mousePressRight(mousePos);
 			// Open menu if in scene.
 			if (isWindowValid(m_activeWindow)) 
-			{
+			{	
 				m_guiState->popUpMenu = true;
 				m_guiState->popUpPosition = {m_guiState->imguiGlobalMouseCoords};
 			}

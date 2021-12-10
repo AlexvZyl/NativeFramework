@@ -2,12 +2,13 @@
 #include "CoreGL/Entities/LineSegment.h"
 #include "CoreGL/Entities/Entity.h"
 #include "Port.h"
-#include "Circuit.h"
 /*
 #include "CoreGL/VertexArrayObjectGL.h"
 #include <glm.hpp>
 #include <vector>*/
 //#include "CoreGL/Entities/Vertex.h"
+
+class Circuit;
 
 enum class LineOrientation
 {
@@ -30,8 +31,10 @@ private:
 public:
     
     Cable(Port* startPort, VertexArrayObject<VertexData>* VAO, Circuit* parent);
+    void extendSegment(glm::vec2 nextPoint);
     void addSegment(glm::vec2 nextPoint);
     void setContext(GUIState* guiState);
+    void attach(Port* endPort);
     
     
 
