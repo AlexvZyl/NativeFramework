@@ -5,12 +5,10 @@
 #include "glm.hpp"
 #include "CoreGL/Entities/Circle.h"
 #include "CoreGL/Entities/Vertex.h"
-template<typename VertexType>
-class Text;
+#include "CoreGL/Entities/Text.h"
+#include "CoreGL/VertexArrayObjectGL.h"
 template<typename VertexType>
 class Polygon2D;
-template<typename VertexType>
-class VertexArrayObject;
 
 struct Font;
 //class VertexData;

@@ -5,6 +5,7 @@
 //#include "GUI/guiHandler.h"
 #include "ComponentEditor.h"
 #include "Design2DEngineGL/Peripherals/Component2D.h"
+#include "Design2DEngineGL/Peripherals/Port.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
 
 /*=======================================================================================================================================*/
@@ -20,6 +21,8 @@ void ComponentEditor::render()
 	//If we are not in a design engine, we should not be here.
 	//We need to implement a check for this.
 
+	//	Fetch The active component.
+	Component2D* activeComponent = m_guiState->active_component;
 	// Place editor at correct position.
 	//ImGui::SetNextWindowPos(m_guiState->popUpPosition);
 	// Editor menu.
@@ -30,9 +33,13 @@ void ComponentEditor::render()
 	ImGui::Begin("Comoponent Editor", &m_guiState->componentEditor, ImGuiWindowFlags_NoDocking);
 	//ImGui::Button("New MCC");
 	//ImGui::CollapsingHeader("Ports");
-	
-	//	Fetch The active component.
-	Component2D* activeComponent = m_guiState->active_component;
+	ImGui::Text("Component Name:");
+	ImGui::SameLine();
+	if (ImGui::InputText("##ComponentName", &activeComponent->titleString)) {
+		activeComponent->title->updateText(activeComponent->titleString);
+		activeComponent->title->update();
+	}
+
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports")) {
 		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit);
@@ -75,7 +82,10 @@ void ComponentEditor::render()
 					ImGui::TableNextColumn();
 					//Add the Name
 					ImGui::PushItemWidth(-1);
-					ImGui::InputText(labelName, &port->m_label);
+					if(ImGui::InputText(labelName, &port->m_label)) {
+						port->title->updateText(port->m_label);
+						port->title->update();
+					}
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 					//Add the type
