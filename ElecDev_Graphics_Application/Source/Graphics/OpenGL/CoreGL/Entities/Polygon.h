@@ -43,10 +43,7 @@ public:
 	// -------------------- //
 	
 	// Constructors.
-	Polygon2D();
 	Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, Entity* parent);
-	// Deconstructor
-	~Polygon2D();
 };
 
 //=============================================================================================================================================//

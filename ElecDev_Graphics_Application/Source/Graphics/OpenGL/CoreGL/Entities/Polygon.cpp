@@ -40,9 +40,6 @@ Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObj
 	m_VAO->appendDataCPU(this);
 }
 
-template<typename VertexType>
-Polygon2D<VertexType>::~Polygon2D() {}
-
 //=============================================================================================================================================//
 //  Instantiations.																															   //
 //=============================================================================================================================================//
