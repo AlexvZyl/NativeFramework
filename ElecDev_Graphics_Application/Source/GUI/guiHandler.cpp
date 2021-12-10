@@ -28,7 +28,7 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 	this->textureID = 0;
 	this->graphicsHandler = graphicsHandler;
 	this->toolbar = new Toolbar(m_guiState);
-	this->ribbons = new Ribbons(m_guiState);
+	this->ribbons = new Ribbons(m_guiState, graphicsHandler);
 	this->userGUIP = new userGUI(m_guiState, this->graphicsHandler, m_pyInterface);
 	m_popUpMenu = new PopUpMenu(guiState);
 	m_graphicsScene = new GraphicsScene(m_guiState, graphicsHandler);
@@ -90,7 +90,7 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	// End Docking space
 	createDock(work_size);
 
-	// Add latest docking branch.
+	// Add latest docking branch before this can be used.
 	//ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
 	// Push own font.

@@ -15,6 +15,12 @@
 #include "../Utilities/Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
+/* Forward declerations                                                                                                                  */
+/*=======================================================================================================================================*/
+
+class GraphicsHandler;
+
+/*=======================================================================================================================================*/
 /* Class.	                                                                                                                             */
 /*=======================================================================================================================================*/
 
@@ -66,6 +72,9 @@ public:
     int image3_width;
     int image3_height;
     GLuint image3_texture;
+	int image4_width;
+	int image4_height;
+	GLuint image4_texture;
     bool ret3;
 	std::string sideBarFlag;
 	GUIState* m_guiState;
@@ -74,12 +83,14 @@ public:
 	ImGuiID left;
 	bool first[3];
 
+	GraphicsHandler* m_graphicsHandler;
+
 	//--------------------------------------------------------------------------------------------------------------
 	//  Functions.
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	Ribbons(GUIState* guiState);
+	Ribbons(GUIState* guiState, GraphicsHandler* graphicsHandler);
 
 	// Function that handles which engine should be active.
 	void renderRibbons(ImGuiID* dock);
@@ -88,7 +99,6 @@ public:
 	bool MCC();
 	bool blockDiagram();
 	bool BeginDrawButtonDropDown(const char* label, ImVec2 buttonSize);
-	bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 };
 
 /*=======================================================================================================================================*/

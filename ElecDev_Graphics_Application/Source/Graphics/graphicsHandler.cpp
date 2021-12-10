@@ -40,6 +40,8 @@ void GraphicsHandler::renderLoop()
 	if (inputEvent.mouseMoveEvent)	   { mouseMoveEvent(); inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (inputEvent.keyEvent)		   { keyEvent(); inputEvent.keyEvent = false; }
+	// Add window event.
+	if (m_addWindow)			       { addWindow("Untitled " + std::to_string(m_windowCount), "Design2D"); m_windowCount++; m_addWindow = false; }
 	
 	// ------------------- //
 	//  R E N D E R I N G  //

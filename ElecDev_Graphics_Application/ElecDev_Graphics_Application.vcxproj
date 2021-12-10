@@ -919,6 +919,7 @@
     <Image Include="Source\Utilities\Resources\Icons\circuitImage.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Utilities\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Utilities\Resources\Textures\CircuitCircle.jpg" />
     <Image Include="Source\Utilities\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Utilities\Resources\Icons\component.png" />
     <Image Include="Source\Utilities\Resources\Icons\Draw_Circuit_Buckets.png" />

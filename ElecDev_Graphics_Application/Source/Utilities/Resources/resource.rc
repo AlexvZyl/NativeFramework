@@ -70,6 +70,7 @@ DRAW_MCC_PNG					RCDATA						"Icons\\Draw_MCC.png"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Textures.
 CIRCUIT_TREE_PNG				RCDATA						"Textures\\circuitTree.png"
+CIRCUIT_CIRCLE_JPEG				RCDATA						"Textures\\CircuitCircle.jpg"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
 ARIAL_BOLD_MSDF_PNG				RCDATA					    "Fonts\\Arial-Bold\\Arial-Bold.png"

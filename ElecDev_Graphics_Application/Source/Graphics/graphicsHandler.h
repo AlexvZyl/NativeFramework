@@ -136,6 +136,10 @@ public:
 	InputEvent inputEvent;
 	// The window.
 	GLFWwindow* m_glfwWindow;
+	// Check if a window should be added.
+	bool m_addWindow = false;
+	std::string m_newWindowTitle = "";
+	unsigned m_windowCount = 0;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //

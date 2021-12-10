@@ -226,12 +226,12 @@ int main(int, char**)
     glfwSetKeyCallback(window, keyEvent);                       // Key press event.
 
     // OpenGL settings.
-    GLCall(glEnable(GL_MULTISAMPLE));                               // Enables MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));                                // Enables depth testing for the OpenGL scenes.
-    GLCall(glDepthFunc(GL_LESS));                                   // Set the function used with depth testing.
-    GLCall(glEnable(GL_BLEND));                                     // Enable blending for alpha channels.
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));      // Set blend function.  This is the standard setting.
-    GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));               // Set the color to which OpenGL clears.
+    GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
+    GLCall(glEnable(GL_DEPTH_TEST));                            // Enables depth testing for the OpenGL scenes.
+    GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
+    GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
+    GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));           // Set the color to which OpenGL clears.
 
     // Create the state machine variables.
     GUIState guiState;
@@ -272,19 +272,11 @@ int main(int, char**)
     // Reset glfw time.
     glfwSetTime(0);
 
-    // Number of open windows
-    unsigned n_windows = 0;
-
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
     {
         // Poll commands from python interface.
         pyInterface.deQueueInput();
-        if (guiState.blockDiagram) {
-            std::string windowName = "Untitled " + std::to_string(n_windows++);
-            graphicsHandler->addWindow(windowName, "Design2D");
-            guiState.blockDiagram = false;
-        }
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
