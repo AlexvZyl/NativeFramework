@@ -9,7 +9,7 @@
 //=============================================================================================================================================//
 
 Circuit::Circuit(std::string label, std::string type)
-	: ManagedEntity(EntityType::CIRCUIT), m_label(label), m_type(type)
+	: Entity(EntityType::CIRCUIT), m_label(label), m_type(type)
 {}
 
 Circuit::~Circuit() {}

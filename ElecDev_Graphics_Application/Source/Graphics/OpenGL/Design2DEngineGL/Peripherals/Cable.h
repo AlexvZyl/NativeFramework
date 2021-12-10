@@ -1,6 +1,6 @@
 #pragma once
 #include "CoreGL/Entities/LineSegment.h"
-#include "CoreGL/Entities/ManagedEntity.h"
+#include "CoreGL/Entities/Entity.h"
 /*
 #include "CoreGL/VertexArrayObjectGL.h"
 #include <glm.hpp>
@@ -8,7 +8,7 @@
 //#include "CoreGL/Entities/Vertex.h"
 
 class Cable :
-    public ManagedEntity
+    public Entity
 {
 private:
     glm::vec2 start;

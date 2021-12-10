@@ -3,7 +3,7 @@
 //=============================================================================================================================================//
 
 #include "VertexArrayObjectGL.h"
-#include "Entities/Entity.h"
+#include "Entities/Primitive.h"
 #include "External/Misc/ConsoleColor.h"
 #include "CoreGL/Entities/Vertex.h"
 #include <algorithm> // for std::copy
@@ -171,7 +171,7 @@ void VertexArrayObject<VertexType>::appendDataCPU(std::vector<VertexType>& verti
 //=============================================================================================================================================//
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::appendDataCPU(Entity<VertexType>* entity)
+void VertexArrayObject<VertexType>::appendDataCPU(Primitive<VertexType>* entity)
 {
 	m_entityCPU.push_back(entity);
 	entity->m_bufferStartIndex = m_vertexCount;
@@ -183,7 +183,7 @@ void VertexArrayObject<VertexType>::appendDataCPU(Entity<VertexType>* entity)
 }
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::assignDataGPU(Entity<VertexType>* entity)
+void VertexArrayObject<VertexType>::assignDataGPU(Primitive<VertexType>* entity)
 {
 	// This should only run if GPU and CPU is synced.
 	if (m_isUpdated)
@@ -205,7 +205,7 @@ void VertexArrayObject<VertexType>::assignDataGPU(Entity<VertexType>* entity)
 }
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::deleteDataCPU(Entity<VertexType>* entity)
+void VertexArrayObject<VertexType>::deleteDataCPU(Primitive<VertexType>* entity)
 {
 	// Find entity that has to be deleted.
 	auto iterator = std::find(m_entityCPU.begin(), m_entityCPU.end(), entity);
@@ -255,14 +255,14 @@ void VertexArrayObject<VertexType>::updateGPU()
 		unsigned int indicesIndex = 0;
 		// Populate index data.
 		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-		for (Entity<VertexType>* entity : m_entityCPU)
+		for (Primitive<VertexType>* entity : m_entityCPU)
 		{
 			GLCall(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indicesIndex * sizeof(GLuint), entity->m_indexCount * sizeof(GLuint), static_cast<const void*>(&(entity->m_indices[0]))));
 			indicesIndex += entity->m_indexCount;
 		}
 		// Populate vertex data.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		for (Entity<VertexType>* entity : m_entityCPU)
+		for (Primitive<VertexType>* entity : m_entityCPU)
 		{
 			for (VertexType& vertex : entity->m_vertices)
 			{

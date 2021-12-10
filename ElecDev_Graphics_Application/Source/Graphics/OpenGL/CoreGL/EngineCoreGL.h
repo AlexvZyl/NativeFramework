@@ -12,7 +12,7 @@ as error handling for when a wrong function is called on a engine type.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Entities/Entity.h"	// For rendering entities in OpenGL.
+#include "Entities/Primitive.h"	// For rendering entities in OpenGL.
 #include "ErrorHandlerGL.h"		// For OpenGL error handling.
 #include <glm.hpp>				// OpenGL maths.
 #include "GUI/GUIState.h"		// The GUI states and other information.
@@ -99,7 +99,7 @@ public:
 
 	std::unique_ptr<Font> m_defaultFont;						// The default font for the rendering engine.
 
-	std::vector<Entity<VertexDataTextured>> m_textEnities;		// Vector containing the entties to be rendered.
+	std::vector<Primitive<VertexDataTextured>> m_textEnities;		// Vector containing the entties to be rendered.
 
 	// --------------------------- //
 	//  S T A T E   M A C H I N E  //

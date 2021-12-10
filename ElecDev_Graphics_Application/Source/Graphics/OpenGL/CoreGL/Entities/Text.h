@@ -6,7 +6,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Entity.h"
+#include "Primitive.h"
 #include <string>
 #include <map>
 
@@ -25,7 +25,7 @@ struct Font;
 //=============================================================================================================================================//
 
 template<typename VertexType=VertexDataTextured>
-class Text : public Entity<VertexType>
+class Text : public Primitive<VertexType>
 {
 public:
 
@@ -33,15 +33,15 @@ public:
 	//  E N T I T Y //
 	// ------------ //
 
-	using Entity<VertexType>::m_vertices;
-	using Entity<VertexType>::m_indices;
-	using Entity<VertexType>::m_vertexCount;
-	using Entity<VertexType>::m_indexCount;
-	using Entity<VertexType>::m_VAO;
-	using Entity<VertexType>::m_bufferStartIndex;
-	using Entity<VertexType>::m_trackedCenter;
-	using Entity<VertexType>::m_colour;
-	using Entity<VertexType>::m_entityID;
+	using Primitive<VertexType>::m_vertices;
+	using Primitive<VertexType>::m_indices;
+	using Primitive<VertexType>::m_vertexCount;
+	using Primitive<VertexType>::m_indexCount;
+	using Primitive<VertexType>::m_VAO;
+	using Primitive<VertexType>::m_bufferStartIndex;
+	using Primitive<VertexType>::m_trackedCenter;
+	using Primitive<VertexType>::m_colour;
+	using Primitive<VertexType>::m_entityID;
 
 	// --------- //
 	//  T E X T  //
@@ -56,10 +56,9 @@ public:
 
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
-		 VertexArrayObject<VertexType>* vao, Font& font, ManagedEntity* parent,
+		 VertexArrayObject<VertexType>* vao, Font& font, Entity* parent,
 		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
-	// Initiliser.  Used to allow the changing of the class without having
-	// to destroy it.
+	// Generates the textured quads.
 	void generateText(std::string text);
 	// Destructor.
 	~Text();

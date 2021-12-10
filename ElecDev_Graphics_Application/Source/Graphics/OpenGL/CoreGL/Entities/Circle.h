@@ -4,7 +4,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Entity.h"
+#include "Primitive.h"
 
 //=============================================================================================================================================//
 //  Forward decleration.																													   //
@@ -19,7 +19,7 @@ class VertexDataCircle;
 //=============================================================================================================================================//
 
 template <typename VertexType=VertexDataCircle>
-class Circle : public Entity<VertexType>
+class Circle : public Primitive<VertexType>
 {
 private:
 
@@ -27,15 +27,15 @@ private:
 	//  E N T I T Y //
 	// ------------ //
 
-	using Entity<VertexType>::m_vertices;
-	using Entity<VertexType>::m_indices;
-	using Entity<VertexType>::m_vertexCount;
-	using Entity<VertexType>::m_indexCount;
-	using Entity<VertexType>::m_VAO;
-	using Entity<VertexType>::m_bufferStartIndex;
-	using Entity<VertexType>::m_trackedCenter;
-	using Entity<VertexType>::m_colour;
-	using Entity<VertexType>::m_entityID;
+	using Primitive<VertexType>::m_vertices;
+	using Primitive<VertexType>::m_indices;
+	using Primitive<VertexType>::m_vertexCount;
+	using Primitive<VertexType>::m_indexCount;
+	using Primitive<VertexType>::m_VAO;
+	using Primitive<VertexType>::m_bufferStartIndex;
+	using Primitive<VertexType>::m_trackedCenter;
+	using Primitive<VertexType>::m_colour;
+	using Primitive<VertexType>::m_entityID;
 
 	// ------------- //
 	//  C I R C L E  //
@@ -53,8 +53,8 @@ public:
 
 	// Constructors. 
 	Circle() = default;
-	Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent);
-	Circle(VertexArrayObject<VertexType>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, ManagedEntity* parent);
+	Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
+	Circle(VertexArrayObject<VertexType>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
 	// Destructor.
 	~Circle();
 };

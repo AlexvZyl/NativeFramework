@@ -29,7 +29,7 @@ unsigned Component2D::componentID = 0;
 Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, 
 						 VertexArrayObject<VertexData>* linesVAO, 
 						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-						 VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent):ManagedEntity(EntityType::COMPONENT, parent)
+						 VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent):Entity(EntityType::COMPONENT, parent)
 {
 	// --------------------------- //
 	//  I N I T I A L   S E T U P  //

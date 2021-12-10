@@ -12,7 +12,8 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, ManagedEntity* parent) :Entity<VertexType>(parent)
+Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, Entity* parent) 
+	: Primitive<VertexType>(parent)
 {
 	// General setup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);

@@ -10,7 +10,7 @@
 Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
 
 Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
-	:ManagedEntity(EntityType::PORT, parent), 
+	:Entity(EntityType::PORT, parent), 
 	 bodyColour( 0.7f, 0.7f, 0.7f, 1.f ),
 	 borderColour(0.8f, 1.0f, .8f, 1.f),
 	 m_offset(offset),
