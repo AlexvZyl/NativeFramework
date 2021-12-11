@@ -123,12 +123,6 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	// Call the base engine event.
 	Base2DEngineGL::mouseScrollEvent(pixelCoords, yOffset);
 
-	/*
-	// Move the component.
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
-	m_activeComponent->moveTo(screenCoords);
-	m_activeComponent->draw();*/
 }
 
 //=============================================================================================================================================//

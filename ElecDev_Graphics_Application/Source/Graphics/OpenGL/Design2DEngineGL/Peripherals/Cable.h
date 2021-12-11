@@ -23,6 +23,8 @@ private:
     Port* m_startPort;
     Port* m_endPort;
     VertexArrayObject<VertexData>* engine_VAO;
+    float m_thickness = 0.005f;
+    glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.5f };
     //std::vector<glm::vec2> m_vertices;
     std::vector<std::shared_ptr<LineSegment>> m_lines;
     LineOrientation m_curOrientation;
@@ -32,9 +34,11 @@ public:
     
     Cable(Port* startPort, VertexArrayObject<VertexData>* VAO, Circuit* parent);
     void extendSegment(glm::vec2 nextPoint);
+    void extendPrevSegment(glm::vec2 nextPoint);
     void addSegment(glm::vec2 nextPoint);
     void setContext(GUIState* guiState);
     void attach(Port* endPort);
+    void setColour(glm::vec4 colour);
     
     
 
