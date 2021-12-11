@@ -5,12 +5,10 @@
 #include "glm.hpp"
 #include "CoreGL/Entities/Circle.h"
 #include "CoreGL/Entities/Vertex.h"
-template<typename VertexType>
-class Text;
+#include "CoreGL/Entities/Text.h"
+#include "CoreGL/VertexArrayObjectGL.h"
 template<typename VertexType>
 class Polygon2D;
-template<typename VertexType>
-class VertexArrayObject;
 
 struct Font;
 //class VertexData;
@@ -18,12 +16,21 @@ struct Font;
 //class VertexDataCircle;
 
 class Component2D;
+class Cable;
 
 enum PortType
 {
 	PORT_IN,
 	PORT_OUT,
 	PORT_INOUT
+};
+
+enum class PortPosition
+{
+	TOP,
+	BOTTOM,
+	LEFT,
+	RIGHT
 };
 
 class Port: public Entity
@@ -48,7 +55,12 @@ public:
 
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
+	PortPosition m_position;
 	PortType m_type;
+
+	std::vector<Cable*> m_cables;
+
+
 	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	Port& operator = (const Port &t);
 	//Port(const Port&) = default;
@@ -58,5 +70,6 @@ public:
 	void highlight();
 	void unhighlight();
 	void setOffset(glm::vec2 offset);
+	void attachCable(Cable* cable);
 };
 

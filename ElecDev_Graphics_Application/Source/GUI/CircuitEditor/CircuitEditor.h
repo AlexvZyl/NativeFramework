@@ -17,6 +17,8 @@ private:
 
 	GUIState* m_guiState;
 	GraphicsHandler* m_graphicsHandler;
+	unsigned m_circuitCount = 0;
+	std::string m_circuitName;
 
 public:
 

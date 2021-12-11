@@ -5,14 +5,16 @@
 #include "GUI/guiHandler.h"
 #include "CircuitEditor.h"
 #include "Graphics/graphicsHandler.h"
+#include "ImGui/misc/cpp/imgui_stdlib.h"
 
 /*=======================================================================================================================================*/
-/* Component Editor.																													 */
+/* Circuit Editor.																													 */
 /*=======================================================================================================================================*/
 
 CircuitEditor::CircuitEditor(GUIState* guiState, GraphicsHandler* graphicsHandler)
-	: m_guiState(guiState), m_graphicsHandler(graphicsHandler)
-{}
+	: m_guiState(guiState), m_graphicsHandler(graphicsHandler), m_circuitName("Untitled " + std::to_string(m_circuitCount))
+{
+}
 
 void CircuitEditor::render() 
 {
@@ -30,14 +32,14 @@ void CircuitEditor::render()
 	//  C O N T E N T S  //
 	// ----------------- //
 
-	static char circuitName[128] = "";
-	ImGui::InputText("Circuit Name", &circuitName[0], 100);
+	
+	ImGui::InputText("Circuit Name", &m_circuitName);
 	if (ImGui::Button("Create")) 
 	{ 
 		m_graphicsHandler->m_addWindow = true;
 		m_guiState->circuitEditor = false;
-		m_graphicsHandler->m_newWindowTitle = circuitName;
-		memset(circuitName, 0, sizeof(circuitName));
+		m_graphicsHandler->m_newWindowTitle = m_circuitName; 
+		m_circuitName = "Untitled " + std::to_string(++m_circuitCount);
 	}
 
 	// --------- //
