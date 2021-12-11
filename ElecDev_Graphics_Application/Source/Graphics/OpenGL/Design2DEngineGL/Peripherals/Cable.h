@@ -9,6 +9,7 @@
 //#include "CoreGL/Entities/Vertex.h"
 
 class Circuit;
+class Primative;
 
 enum class LineOrientation
 {
@@ -30,6 +31,8 @@ private:
     std::vector<std::shared_ptr<LineSegment>> m_lines;
     std::vector<std::shared_ptr<Circle<VertexDataCircle>>> m_nodes;
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
+    LineSegment* m_activeLine;
+    Circle<VertexDataCircle>* m_activeNode;
 
 
 public:
@@ -42,5 +45,9 @@ public:
     void attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour);
+    void highlight();
+    void moveActivePrimativeTo(float screenCoords[2]);
+    void setActivePrimative(Entity* primative);
+    void unhighlight();
 };
 

@@ -120,7 +120,6 @@ void Primitive<VertexType>::setContext(GUIState* guiState)
 {
 	guiState->clickedZone.primative = true;
 	if (m_parent != nullptr) { m_parent->setContext(guiState); }
-	m_VAO->outOfSync();
 }
 
 //=============================================================================================================================================//

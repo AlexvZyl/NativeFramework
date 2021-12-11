@@ -90,7 +90,7 @@ void Port::setLayer(float layer)
 
 void Port::highlight()
 {
-	borderColour = { 0.8f, 1.0f, .8f, 1.f };
+	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border.setColor(borderColour);
 }
 

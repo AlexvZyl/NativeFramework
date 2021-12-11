@@ -41,6 +41,7 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	else if (designerState == ENTITY_SELECT) {
 		m_currentEntityID = getEntityID(pixelCoords);
 		setActiveComponent(m_currentEntityID);
+		setActiveCable(m_currentEntityID);
 	}
 	else if (designerState == CABLE_PLACE) {
 		m_currentEntityID = getEntityID(pixelCoords);
@@ -140,12 +141,12 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action)
 {
+	/*
 	glm::vec3 v1(-1.f, -1.f, 0.0f);
 	glm::vec3 v2(0.f, 0.f, 0.0f);
 	glm::vec3 v3(1.f, 1.f, 0.0f);
 
 	glm::vec4 colour(1.f, 0.f, 0.f, 1.f);
-
 	// Add components.
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) 
 	{ 
@@ -164,6 +165,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1 = nullptr; }
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2 = nullptr; }
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3 = nullptr; }
+	*/
 
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
@@ -191,12 +193,22 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
-			if ((designerState = ENTITY_SELECT) && m_activeComponent) {
-				auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
-				if (iterator != m_circuit->m_components.end())
-				{
-					m_circuit->m_components.erase(iterator);
-					m_activeComponent = NULL;
+			if ((designerState = ENTITY_SELECT)) {
+				if (m_activeComponent) {
+					auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
+					if (iterator != m_circuit->m_components.end())
+					{
+						m_circuit->m_components.erase(iterator);
+						m_activeComponent = NULL;
+					}
+				}
+				else if (m_activeCable) {
+					auto iterator = std::find(m_circuit->m_cables.begin(), m_circuit->m_cables.end(), m_activeCable);
+					if (iterator != m_circuit->m_cables.end())
+					{
+						m_circuit->m_cables.erase(iterator);
+						m_activeCable = NULL;
+					}
 				}
 			}
 			break;
@@ -218,9 +230,9 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 
 	if (m_activeComponent) {
 		m_activeComponent->unhighlight();
+		m_activeComponent = NULL;
 	}
 	if ((eID == 0) || (eID == -1)) {
-			m_activeComponent = NULL;
 		m_guiState->clickedZone.background = true;
 	}
 	else {
@@ -230,7 +242,8 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 		while (currentEntity->m_type != EntityType::COMPONENT) {
 			currentEntity = currentEntity->m_parent;
 			if (currentEntity->m_parent == nullptr) {
-				break;
+				//User did not click on a component. Return.
+				return;
 			}
 		}
 
@@ -242,6 +255,35 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 				return current.get() == cur;
 			});
 		m_activeComponent->highlight();
+	}
+}
+void Design2DEngineGL::setActiveCable(unsigned eID) {
+
+	if (m_activeCable) {
+		m_activeCable->unhighlight();
+		m_activeCable = NULL;
+	}
+	if ((eID == 0) || (eID == -1)) {
+		m_guiState->clickedZone.background = true;
+	}
+	else {
+		m_guiState->clickedZone.background = false;
+		Entity* currentEntity = EntityManager::getEntity(eID);
+		currentEntity->setContext(m_guiState);
+		while (currentEntity->m_parent != nullptr) {
+			if (currentEntity->m_parent->m_type == EntityType::CABLE) {
+				//User clicked on a component. Set this cable as active, and send the primative to the component.
+				Cable* cur = dynamic_cast<Cable*>(currentEntity->m_parent);
+				//m_activeComponent = dynamic_cast<std::shared_ptr>(cur);
+				m_activeCable = *std::find_if(begin(m_circuit->m_cables), end(m_circuit->m_cables), [&](std::shared_ptr < Cable > current)
+					{
+						return current.get() == cur;
+					});
+				m_activeCable->setActivePrimative(currentEntity);
+				m_activeCable->highlight();
+			}
+			currentEntity = currentEntity->m_parent;
+		}
 	}
 }
 

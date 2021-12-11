@@ -157,4 +157,25 @@ void Cable::setColour(glm::vec4 colour)
 	}
 }
 
+void Cable::highlight()
+{
+	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f });
+}
+
+void Cable::moveActivePrimativeTo(float screenCoords[2])
+{
+	//Add code to move necessary primatives around.
+}
+
+void Cable::setActivePrimative(Entity* primative)
+{
+	m_activeLine = dynamic_cast<LineSegment*>(primative);
+	m_activeNode = dynamic_cast<Circle<VertexDataCircle>*>(primative);
+}
+
+void Cable::unhighlight()
+{
+	setColour(glm::vec4{ 0.1f, 0.1f, 0.1f, 1.0f });
+}
+
 
