@@ -90,7 +90,7 @@ struct RenderWindowGL
 
 // This struct is used to store the information on input events so that it can be handled on a
 // frame by frame basis and not every single time it occurs.
-struct InputEvent
+struct m_inputEvent
 {
 	// Mouse press event information.
 	bool mousePressEvent = false;;				// Was a mouse button pressed?
@@ -116,7 +116,7 @@ struct InputEvent
 };
 
 // Contains the information for when files are dopped into the app.
-struct FileDropEvent
+struct m_fileDropEvent
 {
 	bool eventTrigger = false;			// Triggers with event.
 	int totalFiles = 0;					// Amount of files dropped.
@@ -128,7 +128,6 @@ struct SaveEvent
 {
 	bool eventTrigger = false;
 	std::string path;
-
 };
 
 //=============================================================================================================================================//
@@ -150,11 +149,13 @@ public:
 	// State machine variable.
 	GUIState* m_guiState;
 	// Stores the information on input events.
-	InputEvent inputEvent;
+	m_inputEvent m_inputEvent;
+	// Stores information regarding a save event.
+	SaveEvent m_saveEvent;
 	// The window.
 	GLFWwindow* m_glfwWindow;
 	// Stores information regarding the file drop event.
-	FileDropEvent fileDropEvent;
+	m_fileDropEvent m_fileDropEvent;
 	// Check if a window should be added.
 	bool m_addWindow = false;
 	std::string m_newWindowTitle = "";
@@ -199,7 +200,10 @@ public:
 	bool isWindowValid(std::string windowName);
 	// Checks if the currently active window is valid.
 	bool isActiveWindowValid();
+	// Handles file drop events.
 	void fileDropEventHandler();
+	// Handles save events.
+	void saveEventHandler();
 
 	// ------------- //
 	//  2 D   A P I  //

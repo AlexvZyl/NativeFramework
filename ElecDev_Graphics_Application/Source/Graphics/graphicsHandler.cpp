@@ -36,17 +36,20 @@ void GraphicsHandler::renderLoop()
 	// ------------- //
 
 	// Resize event.
-	if (m_guiState->renderResizeEvent) { resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]); }
+	if (m_guiState->renderResizeEvent)	{ resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]); }
 	// Mouse events.
-	if (inputEvent.mousePressEvent)    { mousePressEvent(); inputEvent.mousePressEvent = false; }
-	if (inputEvent.mouseScrollEvent)   { mouseScrollEvent(); inputEvent.mouseScrollEvent = false; }
-	if (inputEvent.mouseMoveEvent)	   { mouseMoveEvent(); inputEvent.mouseMoveEvent = false; }
+	if (m_inputEvent.mousePressEvent)   { mousePressEvent(); m_inputEvent.mousePressEvent = false; }
+	if (m_inputEvent.mouseScrollEvent)  { mouseScrollEvent(); m_inputEvent.mouseScrollEvent = false; }
+	if (m_inputEvent.mouseMoveEvent)	{ mouseMoveEvent(); m_inputEvent.mouseMoveEvent = false; }
 	// Key event.
-	if (inputEvent.keyEvent)		   { keyEvent(); inputEvent.keyEvent = false; }
+	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
 	// Add window event.
-	if (m_addWindow)			       { addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
+	if (m_addWindow)					{ addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
 	// Check for file drop event.
-	if (fileDropEvent.eventTrigger)    { fileDropEventHandler(); }
+	if (m_fileDropEvent.eventTrigger)   { fileDropEventHandler(); }
+	// Check for save event.
+	if (m_saveEvent.eventTrigger)		{ saveEventHandler(); }
+
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -73,8 +76,8 @@ void GraphicsHandler::mousePressEvent()
 		float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
 
 		// Left press.
-		if (inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_LEFT && 
-			inputEvent.mousePressAction == GLFW_PRESS)
+		if (m_inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_LEFT && 
+			m_inputEvent.mousePressAction == GLFW_PRESS)
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressLeft(mousePos);
@@ -83,8 +86,8 @@ void GraphicsHandler::mousePressEvent()
 		}
 
 		// Right press.
-		else if (inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_RIGHT && 
-				 inputEvent.mousePressAction == GLFW_PRESS)
+		else if (m_inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_RIGHT && 
+				 m_inputEvent.mousePressAction == GLFW_PRESS)
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressRight(mousePos);
@@ -97,8 +100,8 @@ void GraphicsHandler::mousePressEvent()
 		}
 
 		// Middle press.
-		else if (inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_MIDDLE &&
-				 inputEvent.mousePressAction == GLFW_PRESS)
+		else if (m_inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_MIDDLE &&
+				 m_inputEvent.mousePressAction == GLFW_PRESS)
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressMiddle(mousePos);
@@ -114,9 +117,9 @@ void GraphicsHandler::mouseMoveEvent()
 		// Find cursos position.
 		float mousePos[2] = { m_activeWindow->mouseCoords[0] , 
 							  m_activeWindow->mouseCoords[1] };
-		m_activeWindow->engineGL->mouseMoveEvent(mousePos, inputEvent.mouseMoveButtonStateLeft, 
-														   inputEvent.mouseMoveButtonStateRight,
-														   inputEvent.mouseMoveButtonStateMiddle);
+		m_activeWindow->engineGL->mouseMoveEvent(mousePos, m_inputEvent.mouseMoveButtonStateLeft, 
+														   m_inputEvent.mouseMoveButtonStateRight,
+														   m_inputEvent.mouseMoveButtonStateMiddle);
 		// Update the GUI state mouse coords.
 		m_guiState->renderWindowMouseCoordinate[0] = mousePos[0];
 		m_guiState->renderWindowMouseCoordinate[1] = mousePos[1];
@@ -130,7 +133,7 @@ void GraphicsHandler::mouseScrollEvent()
 	{
 		// Find cursor position.
 		float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
-		m_activeWindow->engineGL->mouseScrollEvent(mousePos, inputEvent.mouseScrollY);
+		m_activeWindow->engineGL->mouseScrollEvent(mousePos, m_inputEvent.mouseScrollY);
 	}
 }
 
@@ -139,7 +142,7 @@ void GraphicsHandler::keyEvent()
 	// Check if window dict is empty or inactive.
 	if (m_windowsDictionary.size() && isActiveWindowValid())
 	{
-		m_activeWindow->engineGL->keyEvent(inputEvent.key, inputEvent.keyAction);
+		m_activeWindow->engineGL->keyEvent(m_inputEvent.key, m_inputEvent.keyAction);
 	}
 }
 
@@ -181,7 +184,7 @@ void GraphicsHandler::resizeEvent(int width, int height)
 void GraphicsHandler::fileDropEventHandler() 
 {
 	// Loop through all of the files.
-	for (std::string path : fileDropEvent.paths)
+	for (std::string path : m_fileDropEvent.paths)
 	{
 		// Create a new window.
 		addWindow("Generating", "Design2D");
@@ -196,10 +199,18 @@ void GraphicsHandler::fileDropEventHandler()
 		m_activeWindow->windowName = engine->m_circuit->m_label;
 	}
 	// Reset event.
-	fileDropEvent.eventTrigger = false;
-	fileDropEvent.totalFiles = 0;
-	fileDropEvent.paths.clear();
-	fileDropEvent.paths.shrink_to_fit();
+	m_fileDropEvent.eventTrigger = false;
+	m_fileDropEvent.totalFiles = 0;
+	m_fileDropEvent.paths.clear();
+	m_fileDropEvent.paths.shrink_to_fit();
+}
+
+void GraphicsHandler::saveEventHandler() 
+{
+	Design2DEngineGL* ptr = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+	saveToYAML(ptr->m_circuit, m_saveEvent.path);
+	m_saveEvent.eventTrigger = false;
+	m_saveEvent.path = "";
 }
 	
 //=============================================================================================================================================//

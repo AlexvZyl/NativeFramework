@@ -16,8 +16,8 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-PopUpMenu::PopUpMenu(GUIState* guiState)
-    : m_guiState(guiState)
+PopUpMenu::PopUpMenu(GUIState* guiState, GraphicsHandler* graphicsHandler)
+    : m_guiState(guiState), m_graphicsHandler(graphicsHandler)
 {}
 
 // Render call.
@@ -82,6 +82,8 @@ void PopUpMenu::render()
         {
             m_guiState->popUpMenu = false;
             std::string directory = selectFolder(getExecutableLocation());
+            m_graphicsHandler->m_saveEvent.eventTrigger = true;
+            m_graphicsHandler->m_saveEvent.path = directory;
         }
         ImGui::End();
     }
