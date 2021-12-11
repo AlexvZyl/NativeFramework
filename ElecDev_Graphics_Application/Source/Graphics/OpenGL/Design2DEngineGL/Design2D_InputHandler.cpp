@@ -104,6 +104,15 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 			m_activeCable->extendSegment(screenCoords);
 		}
 	}
+	else if (designerState == ENTITY_SELECT && buttonStateLeft) {
+		//Here we are dragging a component
+		if (m_activeComponent.get()) {
+			// Move the component.
+			glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+			float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+			m_activeComponent->moveTo(screenCoords);
+		}
+	}
 
 	#ifdef _DEBUG
 		m_currentEntityID = getEntityID(pixelCoords);

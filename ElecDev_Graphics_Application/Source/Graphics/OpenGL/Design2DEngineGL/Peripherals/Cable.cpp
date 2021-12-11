@@ -36,6 +36,7 @@ Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, Vertex
 	
 	//Add the first line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
+	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	//Add the second (perpendicular) line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 
@@ -56,6 +57,7 @@ void Cable::extendPrevSegment(glm::vec2 nextPoint)
 	}
 
 	m_lines.end()[-2] = std::make_shared<LineSegment>(m_lines.end()[-2]->m_start, endPt, engine_triangleVAO, this, m_thickness, m_colour);
+	m_nodes.back()->translateTo(endPt);
 }
 
 void Cable::extendSegment(glm::vec2 nextPoint)
@@ -79,6 +81,7 @@ void Cable::addSegment(glm::vec2 nextPoint)
 		m_curOrientation = LineOrientation::HORIZONTAL;
 		break;
 	}
+	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
 	m_lines.push_back(std::make_shared<LineSegment>(m_lines.back()->m_end, nextPoint, engine_triangleVAO, this, m_thickness, m_colour));
 }
 
@@ -133,7 +136,8 @@ void Cable::followPort(Port* movedPort)
 		}
 
 		m_lines[1] = std::make_shared<LineSegment>(startPt, m_lines[1]->m_end, engine_triangleVAO, this, m_thickness, m_colour);
-
+		//move the first node
+		m_nodes.front()->translateTo(startPt);
 		//move first segment
 		m_lines[0] = std::make_shared<LineSegment>(startPoint, m_lines[1]->m_start, engine_triangleVAO, this, m_thickness, m_colour);
 
@@ -146,6 +150,10 @@ void Cable::setColour(glm::vec4 colour)
 	for (int i = 0; i < m_lines.size(); i++) {
 		LineSegment* line = m_lines[i].get();
 		line->setColor(m_colour);
+	}
+	for (int i = 0; i < m_nodes.size(); i++) {
+		Circle<VertexDataCircle>* circ = m_nodes[i].get();
+		circ->setColor(m_colour);
 	}
 }
 
