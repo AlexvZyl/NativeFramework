@@ -62,44 +62,40 @@ void glfw_error_callback(int error, const char* description)
     fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
 }
 
-/*=======================================================================================================================================*/
-/* Mouse event callbacks.                                                                                                               */
-/*=======================================================================================================================================*/
-
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
-    graphicsHandler->inputEvent.mousePressEvent = true;
-    graphicsHandler->inputEvent.mousePressButton = button;
-    graphicsHandler->inputEvent.mousePressAction = action;
+    graphicsHandler->m_inputEvent.mousePressEvent = true;
+    graphicsHandler->m_inputEvent.mousePressButton = button;
+    graphicsHandler->m_inputEvent.mousePressAction = action;
 }
 
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
-    graphicsHandler->inputEvent.mouseMoveEvent = true;
-    graphicsHandler->inputEvent.mouseMoveButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    graphicsHandler->inputEvent.mouseMoveButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
-    graphicsHandler->inputEvent.mouseMoveButtonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);   
+    graphicsHandler->m_inputEvent.mouseMoveEvent = true;
+    graphicsHandler->m_inputEvent.mouseMoveButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+    graphicsHandler->m_inputEvent.mouseMoveButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+    graphicsHandler->m_inputEvent.mouseMoveButtonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);   
 }
 
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
-    graphicsHandler->inputEvent.mouseScrollEvent = true;
-    graphicsHandler->inputEvent.mouseScrollY = yoffset;
+    graphicsHandler->m_inputEvent.mouseScrollEvent = true;
+    graphicsHandler->m_inputEvent.mouseScrollY = yoffset;
 }
 
 void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    graphicsHandler->inputEvent.keyEvent = true;
-    graphicsHandler->inputEvent.key = key;
-    graphicsHandler->inputEvent.keyAction = action;
+    graphicsHandler->m_inputEvent.keyEvent = true;
+    graphicsHandler->m_inputEvent.key = key;
+    graphicsHandler->m_inputEvent.keyAction = action;
     ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
 }
 
-void fileDropEvent(GLFWwindow* window, int count, const char** paths) 
+void m_fileDropEvent(GLFWwindow* window, int count, const char** paths) 
 {
-    graphicsHandler->fileDropEvent.eventTrigger = true;
-    graphicsHandler->fileDropEvent.totalFiles = count;
-    for (int i = 0; i < count; i++) { graphicsHandler->fileDropEvent.paths.push_back(paths[i]); }
+    graphicsHandler->m_fileDropEvent.eventTrigger = true;
+    graphicsHandler->m_fileDropEvent.totalFiles = count;
+    for (int i = 0; i < count; i++) { graphicsHandler->m_fileDropEvent.paths.push_back(paths[i]); }
 }
 
 /*=======================================================================================================================================*/
@@ -232,7 +228,7 @@ int main(int, char**)
     glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
     glfwSetKeyCallback(window, keyEvent);                       // Key press event.
-    glfwSetDropCallback(window, fileDropEvent);                 // For when a file is dopped into the app.
+    glfwSetDropCallback(window, m_fileDropEvent);                 // For when a file is dopped into the app.
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.

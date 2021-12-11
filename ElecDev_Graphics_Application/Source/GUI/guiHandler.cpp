@@ -34,7 +34,7 @@ GUIHandler::GUIHandler(GUIState* guiState, GraphicsHandler* graphicsHandler, PyI
 	m_toolbar			= std::make_unique<Toolbar>(m_guiState);
 	m_ribbons			= std::make_unique<Ribbons>(m_guiState, graphicsHandler);
 	m_userGUIP			= std::make_unique<userGUI>(m_guiState, this->graphicsHandler, m_pyInterface);
-	m_popUpMenu			= std::make_unique<PopUpMenu>(guiState);
+	m_popUpMenu			= std::make_unique<PopUpMenu>(guiState, graphicsHandler);
 	m_graphicsScene		= std::make_unique<GraphicsScene>(m_guiState, graphicsHandler);
 	m_componentEditor	= std::make_unique<ComponentEditor>(m_guiState, graphicsHandler);
 	m_circuitEditor		= std::make_unique<CircuitEditor>(m_guiState, graphicsHandler);
@@ -104,11 +104,12 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	
 	// Circuit editor.
 	if (m_guiState->circuitEditor)		{ m_circuitEditor->render(); }
-	// Render OpenGL contexts.
-	if (m_guiState->showGraphicsWindow) { m_graphicsScene->renderGraphics(this->dock); }
 	// Render OpenGL context helper GUI's.
 	if (m_guiState->popUpMenu)		    { m_popUpMenu->render(); }
+	// Render the component editor.
 	if (m_guiState->componentEditor)    { m_componentEditor->render(); }
+	// Render OpenGL contexts.
+	if (m_guiState->showGraphicsWindow) { m_graphicsScene->renderGraphics(this->dock); }
 
 	// ---------------- //
 	//   C L E A N U P  //

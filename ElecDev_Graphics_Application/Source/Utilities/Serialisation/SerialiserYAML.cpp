@@ -17,22 +17,8 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(std::shared_ptr<Circuit> circuit, std::string folder)
+void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory)
 {
-	// ------------- //
-	//  F O L D E R  //
-	// ------------- //
-
-	std::string exeLoc = getExecutableLocation();
-	// Check if folder is provided.
-	if (folder.length())	
-	{
-		struct stat info;
-		std::string folderPath = exeLoc + assetsFolder + folder;
-		// If folder does not exist, create one.
-		if (stat(folderPath.c_str(), &info)) { _mkdir(folderPath.c_str()); }
-	}
-
 	// --------- //
 	//  F I L E  //
 	// --------- //
@@ -57,10 +43,11 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string folder)
 	// End file.
 	yamlEmitter << YAML::EndMap;
 	// Store file.
-	const std::string yamlLocation = exeLoc + assetsFolder + folder + "\\" + circuit->m_label + ".lmn";
 	std::ofstream yamlStream;
-	yamlStream.open(yamlLocation);
+	std::string file = directory + "\\" + circuit->m_label + ".lmn";
+	yamlStream.open(file);
 	yamlStream << yamlEmitter.c_str();
+	yamlStream.close();
 }
 
 //=============================================================================================================================================//
