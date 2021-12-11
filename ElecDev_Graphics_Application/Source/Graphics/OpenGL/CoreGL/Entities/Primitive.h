@@ -63,6 +63,7 @@ public:
 
 	// Translate the entity by the given vector.
 	virtual void translate(glm::vec3& translation);
+	virtual void translate(glm::vec2& translation);
 	// Translate the entity to the given position.
 	virtual void translateTo(glm::vec3& position);
 	//Translates the entity in the XY plane, keeping the same Z value.

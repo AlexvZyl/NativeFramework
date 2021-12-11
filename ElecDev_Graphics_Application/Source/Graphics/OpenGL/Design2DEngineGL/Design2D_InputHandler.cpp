@@ -113,6 +113,12 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 			float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 			m_activeComponent->moveTo(screenCoords);
 		}
+		if (m_activeCable.get()) {
+			// Move the component.
+			glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+			float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+			m_activeCable->moveActivePrimativeTo(screenCoords);
+		}
 	}
 
 	#ifdef _DEBUG

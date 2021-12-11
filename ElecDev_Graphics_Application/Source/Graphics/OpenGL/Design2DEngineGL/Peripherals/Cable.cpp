@@ -194,6 +194,46 @@ void Cable::highlight()
 void Cable::moveActivePrimativeTo(float screenCoords[2])
 {
 	//Add code to move necessary primatives around.
+	//Move line segment if user grabs a line
+	if (m_activeLine) {
+		//First check that we are not moving the first or last line. At the monemt this is not supported, as it requires the line segments to be added.
+		//This should be fixed in the future.
+		auto it = std::find_if(begin(m_lines), end(m_lines), [&](std::shared_ptr<LineSegment> current)
+			{
+				return current.get() == m_activeLine;
+			});
+		if (it == m_lines.begin() || it >= (m_lines.end() - 1)) {
+			//The active line is the first or last line segment. return.
+			//Could print a warning to the user here.
+			return;
+		}
+
+
+		//Get the line orientation -  We move horizontal lines vertically and we move vertical lines horizontally.
+		glm::vec2 translation = {};
+		if (m_activeLine->m_start.x == m_activeLine->m_end.x) {
+			//Vertical line
+			translation = { screenCoords[0] - m_activeLine->m_start.x, 0.f };
+		}
+		else {
+			//Horizontal line
+			translation = { 0.f, screenCoords[1] - m_activeLine->m_start.y };
+		}
+
+		//translate the line
+		m_activeLine->translate(translation);
+
+		//extend the adjacent lines
+		*std::prev(it) = std::make_shared<LineSegment>((*std::prev(it))->m_start, m_activeLine->m_start, engine_triangleVAO, this, m_thickness, m_colour);
+		*std::next(it) = std::make_shared<LineSegment>(m_activeLine->m_end, (*std::next(it))->m_end, engine_triangleVAO, this, m_thickness, m_colour);
+		
+		//Move the adjacent nodes
+		m_nodes.at(it - m_lines.begin() - 1)->translate(translation);
+		m_nodes.at(it - m_lines.begin())->translate(translation);
+	}
+	else if (m_activeNode) {
+		//handle node movement (unimplemented).
+	}
 }
 
 void Cable::setActivePrimative(Entity* primative)
