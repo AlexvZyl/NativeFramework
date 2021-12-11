@@ -92,6 +92,7 @@ void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
     graphicsHandler->inputEvent.keyEvent = true;
     graphicsHandler->inputEvent.key = key;
     graphicsHandler->inputEvent.keyAction = action;
+    ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
 }
 
 void fileDropEvent(GLFWwindow* window, int count, const char** paths) 

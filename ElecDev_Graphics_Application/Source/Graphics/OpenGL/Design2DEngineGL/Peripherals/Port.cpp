@@ -7,7 +7,8 @@
 #include "Utilities/Resources/ResourceHandler.h"
 
 //Add font for component titles
-Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
+//Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
+Font Port::titleFont = msdfLoadFont(ARIAL_BOLD_MSDF_JSON);
 
 Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
 	:Entity(EntityType::PORT, parent), 

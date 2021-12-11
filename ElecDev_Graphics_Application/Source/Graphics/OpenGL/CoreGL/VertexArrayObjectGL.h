@@ -31,7 +31,7 @@ private:
 	unsigned int m_IBOID;			// Index Buffer Object.
 	unsigned int m_vertexCount = 0;	// Pointer that shows where in the buffer data need to be written.
 	unsigned int m_indexCount = 0;	// Counting the amount of indices.
-	bool m_isUpdated = false;		// Checks if there is data CPU side that has not been updated GPU side.
+	bool m_inSync = true;			// Checks if there is data CPU side that has not been updated GPU side.
 
 public:
 
@@ -95,14 +95,6 @@ public:
 
 	// Append data on the CPU side memory for textured vertices.
 	void appendDataCPU(Primitive<VertexType>* entity);
-	// Assign data to the GPU side memory for textured vertices.
-	// since this funtion is going to be called in performance critical scenarios.
-	// If you use this function it will update faster, but you also lose the ability
-	// to read the CPU side data.
-	// Error handling is not added to this function to make it as fast as possible, so
-	// be very careful to not lose track of sizes of data, if it has been created etc.
-	// This does not check if the array is empty and create a new one if it is empty.
-	void assignDataGPU(Primitive<VertexType>* entity);
 	// Delete the polygon from the VAO.
 	void deleteDataCPU(Primitive<VertexType>* entity);
 };
