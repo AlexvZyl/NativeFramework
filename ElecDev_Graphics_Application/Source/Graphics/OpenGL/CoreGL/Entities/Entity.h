@@ -5,7 +5,8 @@ enum class EntityType
 	PRIMATIVE,
 	PORT,
 	COMPONENT,
-	CIRCUIT
+	CIRCUIT,
+	CABLE
 };
 
 

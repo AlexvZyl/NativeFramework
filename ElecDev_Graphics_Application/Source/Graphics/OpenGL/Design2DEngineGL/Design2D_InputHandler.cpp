@@ -31,8 +31,7 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
-	if (designerState == COMPONENT_PLACE)
-	{
+	if (designerState == COMPONENT_PLACE) {
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
@@ -42,6 +41,29 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	else if (designerState == ENTITY_SELECT) {
 		m_currentEntityID = getEntityID(pixelCoords);
 		setActiveComponent(m_currentEntityID);
+	}
+	else if (designerState == CABLE_PLACE) {
+		m_currentEntityID = getEntityID(pixelCoords);
+		Port* clickedPort = getPort(m_currentEntityID);
+		if (!m_activeCable.get()) {
+			if (clickedPort == nullptr) {
+				return;
+			}
+			m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circleEntitiesVAO.get(), m_circuit.get());
+
+		}
+		else {
+			if (clickedPort != nullptr) {
+				m_activeCable->attach(clickedPort);
+				m_circuit->m_cables.push_back(m_activeCable);
+				m_activeCable = nullptr;
+			}
+			else {
+				glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+				glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+				m_activeCable->addSegment(screenCoords);
+			}
+		}
 	}
 }
 
@@ -74,9 +96,17 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->moveTo(screenCoords);
 	}
-	m_currentEntityID = getEntityID(pixelCoords);
+	else if (designerState == CABLE_PLACE) {
+		m_currentEntityID = getEntityID(pixelCoords);
+		if (m_activeCable.get()) {
+			glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+			glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+			m_activeCable->extendSegment(screenCoords);
+		}
+	}
 
 	#ifdef _DEBUG
+		m_currentEntityID = getEntityID(pixelCoords);
 		std::cout << m_currentEntityID << std::endl;
 	#endif
 
@@ -93,12 +123,6 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 	// Call the base engine event.
 	Base2DEngineGL::mouseScrollEvent(pixelCoords, yOffset);
 
-	/*
-	// Move the component.
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-	float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
-	m_activeComponent->moveTo(screenCoords);
-	m_activeComponent->draw();*/
 }
 
 //=============================================================================================================================================//
@@ -140,24 +164,21 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		{
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_P:
-			if (designerState != COMPONENT_PLACE) {
-				designerState = COMPONENT_PLACE;
-				// Add a dummy component
-				if (m_activeComponent) {
-					m_activeComponent->unhighlight();
-				}
-				m_activeComponent = std::make_shared<Component2D>(screenCoords,
-																  m_triangleEntitiesVAO.get(),
-																  m_lineEntitiesVAO.get(),
-																  m_triangleTexturedEntitiesVAO.get(),
-																  m_circleEntitiesVAO.get(),
-																  m_circuit.get());
-			}
+			//Enter component placement mode.
+			ComponentPlaceMode(screenCoords);
+			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
+		case GLFW_KEY_C:
+			//enter cable placement mode.
+			designerState = CABLE_PLACE;
+			m_activeComponent = nullptr;
+			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
+			//Remove the dummy component
 			m_activeComponent = NULL; // Runs deconstructor.
+			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
@@ -199,6 +220,9 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 		currentEntity->setContext(m_guiState);
 		while (currentEntity->m_type != EntityType::COMPONENT) {
 			currentEntity = currentEntity->m_parent;
+			if (currentEntity->m_parent == nullptr) {
+				break;
+			}
 		}
 
 		//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
@@ -212,6 +236,27 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 	}
 }
 
+Port* Design2DEngineGL::getPort(unsigned eID) {
+	if ((eID == 0) || (eID == -1)) {
+		return nullptr;
+		m_guiState->clickedZone.background = true;
+	}
+	else {
+		m_guiState->clickedZone.background = false;
+		Entity* currentEntity = EntityManager::getEntity(eID);
+		currentEntity->setContext(m_guiState);
+		while (currentEntity->m_type != EntityType::PORT) {
+			currentEntity = currentEntity->m_parent;			
+			if (currentEntity->m_parent == nullptr) {
+				return nullptr;
+			}
+		}
+
+		//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
+		Port* cur = dynamic_cast<Port*>(currentEntity);
+		return cur;
+	}
+}
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

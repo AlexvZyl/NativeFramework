@@ -41,7 +41,8 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	m_circuit = std::make_shared<Circuit>(m_contextName, "AE");
 
 	// Done.
-	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";	
+	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
+	m_guiState->design_engine = this;
 }
 
 // Destructor.

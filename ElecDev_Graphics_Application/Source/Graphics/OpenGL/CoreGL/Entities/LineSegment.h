@@ -14,7 +14,11 @@ private:
     typedef boost::base_from_member<glm::vec2, 2> m_perpendicular;
 
 public:
-    LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness = 0.1f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f });
+    glm::vec2 m_start;
+    glm::vec2 m_end;
+    float m_thickness;
+
+    LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f });
 
 };
 
