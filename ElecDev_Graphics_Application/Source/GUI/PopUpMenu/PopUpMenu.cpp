@@ -7,6 +7,7 @@
 #include "Core/imgui.h"
 #include "../GUIState.h"
 #include "../Graphics/graphicsHandler.h"
+#include "Utilities/Windows/WindowsUtilities.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -29,7 +30,7 @@ void PopUpMenu::render()
                                                           ImGuiWindowFlags_NoDocking |
                                                           ImGuiWindowFlags_AlwaysAutoResize))
     {
-        // Close if not focused/
+        // Close if not focused.
         if (!ImGui::IsWindowFocused()) {
             close();
         }
@@ -57,6 +58,18 @@ void PopUpMenu::render()
             {
                 close();
             }
+        }
+        ImGui::Separator();
+        // Render the default items.
+        if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
+        {
+            //ShellExecuteA(NULL, "open", getExecutableLocation().c_str(), NULL, NULL, SW_SHOWDEFAULT);
+            m_guiState->popUpMenu = false;
+        }
+        if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
+        {
+            m_guiState->popUpMenu = false;
+            std::string directory = selectFolder(getExecutableLocation());
         }
         ImGui::End();
     }

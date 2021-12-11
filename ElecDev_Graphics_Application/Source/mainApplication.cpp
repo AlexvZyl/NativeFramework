@@ -62,10 +62,6 @@ void glfw_error_callback(int error, const char* description)
     fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
 }
 
-/*=======================================================================================================================================*/
-/* Mouse event callbacks.                                                                                                               */
-/*=======================================================================================================================================*/
-
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
     graphicsHandler->inputEvent.mousePressEvent = true;
