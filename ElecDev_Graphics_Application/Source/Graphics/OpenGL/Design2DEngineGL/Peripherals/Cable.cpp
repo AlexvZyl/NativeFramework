@@ -191,7 +191,7 @@ void Cable::highlight()
 	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f });
 }
 
-void Cable::moveActivePrimativeTo(float screenCoords[2])
+void Cable::moveActivePrimativeTo(glm::vec2 screenCoords)
 {
 	//Add code to move necessary primatives around.
 	//Move line segment if user grabs a line
@@ -203,8 +203,8 @@ void Cable::moveActivePrimativeTo(float screenCoords[2])
 				return current.get() == m_activeLine;
 			});
 		if (it == m_lines.begin() || it >= (m_lines.end() - 1)) {
-			//The active line is the first or last line segment. return.
-			//Could print a warning to the user here.
+			//The active line is the first or last line segment.
+			//Could print a warning to the user here for now. Ideally we should handle this by addin an additional segment. For now, just return.
 			return;
 		}
 

@@ -11,9 +11,6 @@ template<typename VertexType>
 class Polygon2D;
 
 struct Font;
-//class VertexData;
-//class VertexDataTextured;
-//class VertexDataCircle;
 
 class Component2D;
 class Cable;
@@ -63,8 +60,8 @@ public:
 
 	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	Port& operator = (const Port &t);
-	//Port(const Port&) = default;
 	void moveTo(glm::vec2 destination);
+	void move(glm::vec2 translation);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
 	void highlight();

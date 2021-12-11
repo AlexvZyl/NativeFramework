@@ -80,7 +80,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Co
 void deserialise(YAML::Node yamlComp, std::shared_ptr<Component2D> component) 
 {
 	// Move component.
-	float position[2] = {
+	glm::vec2 position = {
 		yamlComp["Centre"][0].as<float>(),
 		yamlComp["Centre"][1].as<float>()
 	};

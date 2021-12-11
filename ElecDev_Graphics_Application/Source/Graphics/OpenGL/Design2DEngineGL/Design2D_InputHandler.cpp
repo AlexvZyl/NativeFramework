@@ -31,9 +31,10 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+
 	if (designerState == COMPONENT_PLACE) {
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->place(screenCoords);
 		m_circuit->m_components.insert(m_circuit->m_components.end(), m_activeComponent);
 		designerState = ENTITY_SELECT;
@@ -60,8 +61,6 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 				m_activeCable = nullptr;
 			}
 			else {
-				glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-				glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 				m_activeCable->addSegment(screenCoords);
 			}
 		}
@@ -91,35 +90,32 @@ void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
 
 void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
+
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == COMPONENT_PLACE) {
 		// Move the component.
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 		m_activeComponent->moveTo(screenCoords);
 	}
 	else if (designerState == CABLE_PLACE) {
 		m_currentEntityID = getEntityID(pixelCoords);
 		if (m_activeCable.get()) {
-			glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-			glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 			m_activeCable->extendSegment(screenCoords);
 		}
 	}
 	else if (designerState == ENTITY_SELECT && buttonStateLeft) {
 		//Here we are dragging a component
+		glm::vec2 translation = screenCoords - m_lastDragPos;
 		if (m_activeComponent.get()) {
 			// Move the component.
-			glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-			float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
-			m_activeComponent->moveTo(screenCoords);
+			m_activeComponent->move(translation);
 		}
 		if (m_activeCable.get()) {
 			// Move the component.
-			glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-			float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
 			m_activeCable->moveActivePrimativeTo(screenCoords);
 		}
 	}
+	m_lastDragPos = screenCoords;
 
 	#ifdef _DEBUG
 		m_currentEntityID = getEntityID(pixelCoords);
@@ -176,7 +172,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-		float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 		switch (key) 
 		{
 		// --------------------------------------------------------------------------------------------------------------- //

@@ -46,7 +46,7 @@ public:
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour);
     void highlight();
-    void moveActivePrimativeTo(float screenCoords[2]);
+    void moveActivePrimativeTo(glm::vec2 screenCoords);
     void setActivePrimative(Entity* primative);
     void unhighlight();
 };
