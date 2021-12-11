@@ -8,6 +8,7 @@
 #include "../GUIState.h"
 #include "../Graphics/graphicsHandler.h"
 #include "Utilities/Windows/WindowsUtilities.h"
+#include "Utilities/Serialisation/Serialiser.h"
 #include "CoreGL/EngineCoreGL.h"
 
 /*=======================================================================================================================================*/

@@ -115,12 +115,20 @@ struct InputEvent
 	int keyAction = 0;							// Is the key pressed or released?
 };
 
-// COntains the information for when files are dopped into the app.
+// Contains the information for when files are dopped into the app.
 struct FileDropEvent
 {
 	bool eventTrigger = false;			// Triggers with event.
 	int totalFiles = 0;					// Amount of files dropped.
 	std::vector<std::string> paths;		// Path to the files.
+};
+
+// Event for handling saving scenes to disk.
+struct SaveEvent
+{
+	bool eventTrigger = false;
+	std::string path;
+
 };
 
 //=============================================================================================================================================//
