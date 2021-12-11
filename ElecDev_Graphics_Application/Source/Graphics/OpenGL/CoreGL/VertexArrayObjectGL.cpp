@@ -129,7 +129,6 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 template <typename VertexType>
 VertexArrayObject<VertexType>::~VertexArrayObject()
 {
-	wipeCPU();
 	GLCall(glDeleteBuffers(1, &m_VBOID));
 	GLCall(glDeleteBuffers(1, &m_IBOID));
 	GLCall(glDeleteVertexArrays(1, &m_VAOID));
@@ -142,10 +141,10 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
-	if (!m_isUpdated) { updateGPU(); }
+	if (!m_inSync) { updateGPU(); }
 	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, (void*)0));
+	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
 }
 
 template <typename VertexType>
@@ -155,7 +154,7 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::unbind() const { GLCall(glBindVertexArray(0)); }
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::outOfSync() { m_isUpdated = false; }
+void VertexArrayObject<VertexType>::outOfSync() { m_inSync = false; }
 
 //=============================================================================================================================================//
 //  Vertex.					  																												   //
@@ -169,7 +168,7 @@ void VertexArrayObject<VertexType>::appendDataCPU(std::vector<VertexType>& verti
 	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
 	m_vertexCount += vertices.size();
 	m_indexCount += indices.size();
-	m_isUpdated = false;
+	m_inSync = false;
 }
 
 //=============================================================================================================================================//
@@ -185,32 +184,7 @@ void VertexArrayObject<VertexType>::appendDataCPU(Primitive<VertexType>* entity)
 	entity->offsetIndices(m_vertexCount);
 	m_vertexCount += entity->m_vertexCount;
 	m_indexCount += entity->m_indexCount;
-	m_isUpdated = false;
-}
-
-template <typename VertexType>
-void VertexArrayObject<VertexType>::assignDataGPU(Primitive<VertexType>* entity)
-{
-	// This should only run if GPU and CPU is synced.
-	// BUG!!!!: This does not assign the IBO along with the Vertices.
-	// Though, this might become deprecated since updating the VAO is no longer
-	// a concept for the user using the API.
-	if (m_isUpdated)
-	{
-		unsigned index = entity->m_bufferStartIndex;
-		// Bind VBO.
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		// Populate with vertex data.
-		for (VertexType& vertex : entity->m_vertices)
-		{
-			// Write the data to the buffer.
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.idGL()));
-			index += 1;
-		}
-	}
-	// Otherwise assign the data by updating the GPU.
-	else { updateGPU(); }
+	m_inSync = false;
 }
 
 template <typename VertexType>
@@ -234,7 +208,7 @@ void VertexArrayObject<VertexType>::deleteDataCPU(Primitive<VertexType>* entity)
 		}
 		m_vertexCount -= entity->m_vertexCount;
 		m_indexCount -= entity->m_indexCount;
-		m_isUpdated = false;
+		m_inSync = false;
 		m_entityCPU.shrink_to_fit();
 	}
 	// Entity was not found.
@@ -302,15 +276,16 @@ void VertexArrayObject<VertexType>::updateGPU()
 	}
 
 	// The CPU and GPU data is now synced.
-	m_isUpdated = true;
+	m_inSync = true;
 }
 
 template <typename VertexType>
 void VertexArrayObject<VertexType>::wipeCPU()
 {
-	if (m_vertexCPU.size()) { m_vertexCPU.clear(); m_vertexCPU.shrink_to_fit(); }
-	if (m_entityCPU.size()) { m_entityCPU.clear(); m_entityCPU.shrink_to_fit(); }
-	m_isUpdated = false;
+	if (m_vertexCount)		{ m_vertexCPU.clear(); m_vertexCPU.shrink_to_fit(); m_vertexCount = 0;	}
+	if (m_indexCount)		{ m_indexCPU.clear();  m_indexCPU.shrink_to_fit();  m_indexCount = 0;	}
+	if (m_entityCPU.size()) { m_entityCPU.clear(); m_entityCPU.shrink_to_fit();						}
+	m_inSync = false;
 }
 
 //=============================================================================================================================================//

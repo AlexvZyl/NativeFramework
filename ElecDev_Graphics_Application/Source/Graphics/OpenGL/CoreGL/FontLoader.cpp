@@ -26,7 +26,7 @@ Font msdfLoadFont(int fontID)
 	JSON fontInfo		 = JSON::parse(jsonFile);
 
 	// Load atlas information.
-	JSON atlas = fontInfo["atlas"];
+	JSON atlas			= fontInfo["atlas"];
 	font.textureSize[0] = atlas["height"];
 	font.textureSize[1] = atlas["width"];
 	font.yOrigin		= atlas["yOrigin"];
