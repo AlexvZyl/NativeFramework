@@ -84,7 +84,8 @@ public:
 	virtual void keyEvent(int key, int action) override;
 
 	//Helper functions
-	virtual void setActiveComponent(unsigned eID); 
+	virtual void setActiveComponent(unsigned eID);
+	virtual void setActiveCable(unsigned eID);
 	virtual void ComponentPlaceMode(float screenCoords[2]);
 	virtual Port* getPort(unsigned eID);
 };
