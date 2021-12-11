@@ -207,8 +207,7 @@ void GraphicsHandler::fileDropEventHandler()
 
 void GraphicsHandler::saveEventHandler() 
 {
-	Design2DEngineGL* ptr = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
-	saveToYAML(ptr->m_circuit, m_saveEvent.path);
+	saveToYAML(m_saveEvent.engine->m_circuit, m_saveEvent.path);
 	m_saveEvent.eventTrigger = false;
 	m_saveEvent.path = "";
 }

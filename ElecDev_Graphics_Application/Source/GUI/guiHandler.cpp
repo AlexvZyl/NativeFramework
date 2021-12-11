@@ -104,11 +104,12 @@ void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
 	
 	// Circuit editor.
 	if (m_guiState->circuitEditor)		{ m_circuitEditor->render(); }
-	// Render OpenGL contexts.
-	if (m_guiState->showGraphicsWindow) { m_graphicsScene->renderGraphics(this->dock); }
 	// Render OpenGL context helper GUI's.
 	if (m_guiState->popUpMenu)		    { m_popUpMenu->render(); }
+	// Render the component editor.
 	if (m_guiState->componentEditor)    { m_componentEditor->render(); }
+	// Render OpenGL contexts.
+	if (m_guiState->showGraphicsWindow) { m_graphicsScene->renderGraphics(this->dock); }
 
 	// ---------------- //
 	//   C L E A N U P  //

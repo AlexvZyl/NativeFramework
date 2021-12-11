@@ -6,6 +6,7 @@
 
 struct GUIState;
 class GraphicsHandler;
+class Design2DEngineGL;
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -17,6 +18,8 @@ private:
 
 	GUIState* m_guiState;
 	GraphicsHandler* m_graphicsHandler;
+	Design2DEngineGL* m_engineContext;
+	bool m_contextSaved = false;
 
 public:
 
