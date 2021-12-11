@@ -57,7 +57,7 @@ void Cable::extendPrevSegment(glm::vec2 nextPoint)
 	}
 
 	m_lines.end()[-2] = std::make_shared<LineSegment>(m_lines.end()[-2]->m_start, endPt, engine_triangleVAO, this, m_thickness, m_colour);
-	m_nodes.back() = std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this);
+	m_nodes.back()->translateTo(endPt);
 }
 
 void Cable::extendSegment(glm::vec2 nextPoint)
@@ -136,7 +136,8 @@ void Cable::followPort(Port* movedPort)
 		}
 
 		m_lines[1] = std::make_shared<LineSegment>(startPt, m_lines[1]->m_end, engine_triangleVAO, this, m_thickness, m_colour);
-
+		//move the first node
+		m_nodes.front()->translateTo(startPt);
 		//move first segment
 		m_lines[0] = std::make_shared<LineSegment>(startPoint, m_lines[1]->m_start, engine_triangleVAO, this, m_thickness, m_colour);
 
