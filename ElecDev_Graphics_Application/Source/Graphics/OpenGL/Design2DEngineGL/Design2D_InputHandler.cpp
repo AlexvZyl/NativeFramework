@@ -49,7 +49,7 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 			if (clickedPort == nullptr) {
 				return;
 			}
-			m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circuit.get());
+			m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circleEntitiesVAO.get(), m_circuit.get());
 
 		}
 		else {
@@ -166,16 +166,19 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		case GLFW_KEY_P:
 			//Enter component placement mode.
 			ComponentPlaceMode(screenCoords);
+			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_C:
 			//enter cable placement mode.
 			designerState = CABLE_PLACE;
+			m_activeComponent = nullptr;
 			break;
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
 			//Remove the dummy component
 			m_activeComponent = NULL; // Runs deconstructor.
+			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:

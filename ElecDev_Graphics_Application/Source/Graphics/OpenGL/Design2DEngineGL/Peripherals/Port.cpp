@@ -5,6 +5,7 @@
 #include "GUI/GUIState.h"
 #include "CoreGL/FontLoader.h"
 #include "Utilities/Resources/ResourceHandler.h"
+#include "Cable.h"
 
 //Add font for component titles
 //Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
@@ -70,6 +71,9 @@ void Port::moveTo(glm::vec2 destination)
 	body.translateTo(centre);
 	border.translateTo(centre);
 	title->translateTo(titlePos);
+	for (Cable* cable: m_cables) {
+		cable->followPort(this);
+	}
 }
 
 Port& Port::operator=(const Port& t)
@@ -104,8 +108,15 @@ void Port::setOffset(glm::vec2 offset)
 	m_offset = offset;
 }
 
+void Port::attachCable(Cable* cable)
+{
+	m_cables.push_back(cable);
+}
+
 void Port::setContext(GUIState* guiState)
 {
 	guiState->clickedZone.port = true;
 	m_parent->setContext(guiState);
 }
+
+

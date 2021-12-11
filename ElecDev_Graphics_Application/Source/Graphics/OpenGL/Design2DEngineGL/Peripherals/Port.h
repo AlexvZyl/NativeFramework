@@ -16,6 +16,7 @@ struct Font;
 //class VertexDataCircle;
 
 class Component2D;
+class Cable;
 
 enum PortType
 {
@@ -56,6 +57,10 @@ public:
 	glm::vec2 m_offset = { 0, 0 };
 	PortPosition m_position;
 	PortType m_type;
+
+	std::vector<Cable*> m_cables;
+
+
 	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	Port& operator = (const Port &t);
 	//Port(const Port&) = default;
@@ -65,5 +70,6 @@ public:
 	void highlight();
 	void unhighlight();
 	void setOffset(glm::vec2 offset);
+	void attachCable(Cable* cable);
 };
 
