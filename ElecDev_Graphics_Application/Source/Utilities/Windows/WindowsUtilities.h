@@ -25,7 +25,10 @@ HMODULE getCurrentModule();
 //  Files & Folders.																														   //
 //=============================================================================================================================================//
 
-
+// Open a file explorer and select a folder.
+std::string selectFolder(std::string root);
+// Open a file explorer and select a file.
+std::string selectFile(std::string root);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //
