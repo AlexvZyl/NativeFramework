@@ -49,7 +49,8 @@ void GraphicsHandler::renderLoop()
 	if (m_fileDropEvent.eventTrigger)   { fileDropEventHandler(); }
 	// Check for save event.
 	if (m_saveEvent.eventTrigger)		{ saveEventHandler(); }
-
+	// Check for load event.
+	if (m_loadEvent.eventTrigger)		{ loadEventHandler(); }
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -178,7 +179,7 @@ void GraphicsHandler::resizeEvent(int width, int height)
 }
 
 //=============================================================================================================================================//
-//  File Drop Event.                                                                   														   //
+//  File events.	                                                                  														   //
 //=============================================================================================================================================//
 
 void GraphicsHandler::fileDropEventHandler() 
@@ -207,9 +208,56 @@ void GraphicsHandler::fileDropEventHandler()
 
 void GraphicsHandler::saveEventHandler() 
 {
-	saveToYAML(m_saveEvent.engine->m_circuit, m_saveEvent.path);
+	// Check if file is added to the save event.
+	std::string savePath = m_saveEvent.path;
+	if (savePath.find(".lmn")  != std::string::npos ||
+		savePath.find(".yml")  != std::string::npos ||
+		savePath.find(".yaml") != std::string::npos)
+	{
+		// Move the file onto a new string.
+		std::string file;
+		while (savePath.back() != '\\') 
+		{
+			file.push_back(savePath.back());
+			savePath.pop_back();
+		}
+		std::reverse(file.begin(), file.end());
+		saveToYAML(m_saveEvent.engine->m_circuit, savePath, file);
+	}
+	else 
+	{
+		saveToYAML(m_saveEvent.engine->m_circuit, m_saveEvent.path);
+	}
+	m_saveEvent.engine = nullptr;
 	m_saveEvent.eventTrigger = false;
 	m_saveEvent.path = "";
+}
+
+void GraphicsHandler::loadEventHandler() 
+{
+	// Move the file onto a new string.
+	std::string loadPath = m_loadEvent.path;
+	std::string file;
+	while (loadPath.back() != '\\')
+	{
+		file.push_back(loadPath.back());
+		loadPath.pop_back();
+	}
+	std::reverse(file.begin(), file.end());
+
+	// Load file.
+	addWindow("Generating", "Design2D");
+	Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+	loadFromYAML(*activeEngine, loadPath, file);
+	// Update name.
+	activeEngine->m_contextName = activeEngine->m_circuit->m_label;
+	auto node = m_windowsDictionary.extract("Generating");
+	node.key() = activeEngine->m_contextName;
+	m_windowsDictionary.insert(std::move(node));
+	m_activeWindow->windowName = activeEngine->m_circuit->m_label;
+	// Reset event.
+	m_loadEvent.eventTrigger = false;
+	m_loadEvent.path = "";
 }
 	
 //=============================================================================================================================================//

@@ -49,7 +49,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4 vec);
 //=============================================================================================================================================//
 
 // Serialise a circuit to a YAML file.
-void saveToYAML(std::shared_ptr<Circuit> circuit, std::string path);
+void saveToYAML(std::shared_ptr<Circuit> circuit, std::string path, std::string fileName = "");
 // Serialise a circuit to a BIN file.
 void saveToBIN(std::shared_ptr<Circuit> circuit, std::string folder = "");
 // Deserialise a circuit from a YAML file.

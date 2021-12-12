@@ -10,6 +10,7 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
+#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -82,15 +83,16 @@ void PopUpMenu::render()
         // Render the default items.
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
         {
-            //ShellExecuteA(NULL, "open", getExecutableLocation().c_str(), NULL, NULL, SW_SHOWDEFAULT);
+            m_graphicsHandler->m_loadEvent.eventTrigger = true;
+            m_graphicsHandler->m_loadEvent.path = selectFile();
+
             close();
         }
         if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
         {
-            std::string directory = selectFolder(getExecutableLocation());
             m_graphicsHandler->m_saveEvent.eventTrigger = true;
-            m_graphicsHandler->m_saveEvent.path = directory;
             m_graphicsHandler->m_saveEvent.engine = m_engineContext;
+            m_graphicsHandler->m_saveEvent.path = selectFile("", m_engineContext->m_circuit->m_label);
             close();
         }
         ImGui::End();
