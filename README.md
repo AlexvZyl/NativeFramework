@@ -37,17 +37,6 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ### Base 2D Engine
 
-- ✅ Structure code and setup handlers:
-    - ✅ Main app.
-    - ✅ GUI Handler.
-    - ✅ Graphics Handler (Backend Engines).
-- ✅ Setup project with dependancies:
-    - ✅ ImGUI.
-    - ✅ GLAD.
-    - ✅ GLFW.
-    - ✅ OpenGL.
-    - ✅ GLM.
-    - ✅ ImGUI Docking Branch.
 - ✅ Implement matrix mathematics.
     - ✅ Translation, rotation & scaling.
     - ✅ Viewport, Model, View and Porjection matrices.
