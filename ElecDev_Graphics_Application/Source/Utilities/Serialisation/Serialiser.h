@@ -63,7 +63,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit> circu
 // Overloads the << operator so that YAML-cpp can work with circuits.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>> circuitVector);
 // Deserialise a single circuit.
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Circuit> circuit, Design2DEngineGL& engine);
+void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine);
 
 //=============================================================================================================================================//
 //  Ports.																																	   //

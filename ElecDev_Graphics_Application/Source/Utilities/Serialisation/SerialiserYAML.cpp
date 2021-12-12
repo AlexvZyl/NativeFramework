@@ -94,7 +94,7 @@ void loadFromYAML(Design2DEngineGL& engine, std::string path)
 	// Deserialise the circuit into the engine.
 	if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
 	{
-		deserialise(yamlFile, engine.m_circuit, engine);
+		deserialise(yamlFile, engine);
 	}
 }
 

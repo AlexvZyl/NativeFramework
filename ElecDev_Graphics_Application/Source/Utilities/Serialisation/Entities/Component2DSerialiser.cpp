@@ -80,23 +80,6 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Co
 
 void deserialise(YAML::Node& yamlNode, std::shared_ptr<Component2D> component)
 {
-	// ------------------- //
-	//  C O M P O N E N T  //
-	// ------------------- //
-
-	float position[2] = {
-		yamlNode["Centre"][0].as<float>(),
-		yamlNode["Centre"][1].as<float>()
-	};
-	component->place(position);
-	component->unhighlight();
-	
-	// ----------- //
-	//  P O R T S  //
-	// ----------- //
-
-
-	
 
 }
 

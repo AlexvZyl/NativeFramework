@@ -214,26 +214,30 @@ void Component2D::unhighlight()
 	}
 }
 
-void Component2D::addPort(int side, PortType type, std::string name)
+unsigned Component2D::addPort(int side, PortType type, std::string name)
 {
 	switch(side){
 	case 0:
 		portsWest.push_back(std::make_shared<Port>(glm::vec2(-width, 0.f), type, this, name));
-		break;
+		updatePortPositions();
+		return portsWest.back()->m_entityID;
 	case 1:
 		portsEast.push_back(std::make_shared<Port>(glm::vec2(width, 0.f), type, this, name));
-		break;
+		updatePortPositions();
+		return portsEast.back()->m_entityID;
 	case 2:
 		portsNorth.push_back(std::make_shared<Port>(glm::vec2(0.f, height), type, this, name));
-		break;
+		updatePortPositions();
+		return portsNorth.back()->m_entityID;
 	case 3:
 		portsSouth.push_back(std::make_shared<Port>(glm::vec2(0.f, -height), type, this, name));
-		break;
+		updatePortPositions();
+		return portsSouth.back()->m_entityID;
 	default:
-		//If we get here, then the side value is not valid.
+		// Invalid value passed.
 		std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Cannot add a port to side " << side << " (require side < 4).";
+		return NULL;
 	}
-	updatePortPositions();
 }
 
 void Component2D::removePort(std::shared_ptr<Port> port)

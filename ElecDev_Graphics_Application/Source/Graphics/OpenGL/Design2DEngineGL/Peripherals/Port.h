@@ -7,6 +7,7 @@
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+
 template<typename VertexType>
 class Polygon2D;
 
@@ -17,17 +18,12 @@ class Cable;
 
 enum PortType
 {
-	PORT_IN,
-	PORT_OUT,
-	PORT_INOUT
+	PORT_IN, PORT_OUT, PORT_INOUT
 };
 
 enum class PortPosition
 {
-	TOP,
-	BOTTOM,
-	LEFT,
-	RIGHT
+	TOP, BOTTOM, LEFT, RIGHT
 };
 
 class Port: public Entity

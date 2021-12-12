@@ -11,7 +11,10 @@
 //  Function declerations.			     																									   //
 //=============================================================================================================================================//
 
+// Return the type of the port.
 PortType getPortType(YAML::Node node);
+// Return pointer to the port with the provided Entity ID.
+Port* findPort(std::shared_ptr<Circuit> circuit, unsigned entityID);
 
 //=============================================================================================================================================//
 //  Serialise single circuit.  																												   //
@@ -59,8 +62,11 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ci
 //  Single Circuit deserialiser.																											   //
 //=============================================================================================================================================//
 
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Circuit> circuit, Design2DEngineGL& engine)
+void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 {
+	// An ID table that hold the reference between new and old ID's.
+	std::map<unsigned, unsigned> idTable;	// Old -> New
+
 	// --------------- //
 	//  C I R C U I T  //
 	// --------------- //
@@ -76,9 +82,8 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Circuit> circuit, Design2
 	// C O M P O N E N T S  //
 	// -------------------- //
 
-	// Load all of the components.
-	YAML::Node componentList = yamlNode["Components"];
 	// Iterate through all of the components.
+	YAML::Node componentList = yamlNode["Components"];
 	for (YAML::iterator compIterator = componentList.begin(); compIterator != componentList.end(); ++compIterator)
 	{
 		YAML::Node componentNode = compIterator->second;
@@ -88,17 +93,28 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Circuit> circuit, Design2
 																			   engine.m_texturedTrianglesVAO.get(),
 																			   engine.m_circlesVAO.get(),
 																			   engine.m_circuit.get());
+		// Add component to circuit.
+		engine.m_circuit->m_components.push_back(component);
+
+		// Add entity ID to table.
+		idTable.insert({ componentNode["Entity ID"].as<unsigned>(), component->m_entityID });
+
 		// Load data into component.
-		float position[2] = {
-		yamlNode["Centre"][0].as<float>(),
-		yamlNode["Centre"][1].as<float>()
-		};
+		glm::vec2 position(
+			componentNode["Centre"][0].as<float>(),
+			componentNode["Centre"][1].as<float>()
+		);
 		component->place(position);
+		// Update title.
+		std::string compTitle = componentNode["Title"]["String"].as<std::string>();
+		component->title->updateText(compTitle);
+		component->titleString = compTitle;
 
 		// ----------- //
 		//  P O R T S  //
 		// ----------- //
-
+		
+		// Load the ports.
 		YAML::Node portList = componentNode["Ports"];
 
 		// East ports.
@@ -106,38 +122,80 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Circuit> circuit, Design2
 		for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			component->addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+			unsigned entityID = component->addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+			// Add entity ID to table.
+			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 		}
 		// West ports.
 		YAML::Node westPortList = portList["West Ports"];
 		for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			component->addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+			unsigned entityID = component->addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+			// Add entity ID to table.
+			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 		}
 		// West ports.
 		YAML::Node northPortList = portList["North Ports"];
 		for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			component->addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+			unsigned entityID = component->addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+			// Add entity ID to table.
+			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 		}
 		// South ports.
 		YAML::Node southPortList = portList["South Ports"];
 		for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			component->addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+			unsigned entityID = component->addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+			// Add entity ID to table.
+			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+
 		}
 
-		// Add component to Scene.
+		// Remove compoennt highlightes.
 		component->unhighlight();
-		engine.m_circuit->m_components.push_back(component);
 	}
 
 	// ------------- //
 	//  C A B L E S  //
 	// ------------- //
+
+	// Iterate through all of the cables.
+	YAML::Node cableList = yamlNode["Cables"];
+	for (YAML::iterator cableIterator = cableList.begin(); cableIterator != cableList.end(); ++cableIterator)
+	{
+		// load the YAML node.
+		YAML::Node cableNode = cableIterator->second;
+
+		// Load the node vector.
+		std::vector<glm::vec2> nodeVector;
+		YAML::Node nodeList = cableNode["Nodes"];
+		for (int i = 0; i < nodeList.size(); i++) 
+		{
+			// Add to node vector.
+			std::string nodeName = "Node " + std::to_string(i);
+			glm::vec2 node = { nodeList[nodeName][0].as<float>(), nodeList[nodeName][1].as<float>(),};
+			nodeVector.push_back(node);
+		}
+
+		// Find connected prorts.
+		Port* startPort = findPort(engine.m_circuit, idTable[cableNode["Start port"].as<unsigned>()]);
+		Port* endPort = findPort(engine.m_circuit, idTable[cableNode["End port"].as<unsigned>()]);
+		// Create cable.
+		std::shared_ptr<Cable> cable = std::make_shared<Cable>(
+												startPort, 
+												nodeVector,
+												endPort,
+												engine.m_triangleEntitiesVAO.get(),
+												engine.m_circleEntitiesVAO.get(),
+												engine.m_circuit.get());
+		cable->unhighlight();
+		// Add cable to circuit.
+		engine.m_circuit->m_cables.push_back(cable);
+	}
 }
 
 //=============================================================================================================================================//
@@ -150,6 +208,35 @@ PortType getPortType(YAML::Node node)
 	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PORT_INOUT; }
 }
+
+Port* findPort(std::shared_ptr<Circuit> circuit, unsigned entityID)
+{
+	// Iterate through components.
+	for (std::shared_ptr<Component2D> component : circuit->m_components) 
+	{
+		// East ports.
+		for (std::shared_ptr<Port> port : component->portsEast) 
+		{ 
+			if (port->m_entityID == entityID) { return port.get(); }
+		}
+		// West ports.
+		for (std::shared_ptr<Port> port : component->portsWest)
+		{
+			if (port->m_entityID == entityID) { return port.get(); }
+		}
+		// North ports.
+		for (std::shared_ptr<Port> port : component->portsNorth)
+		{
+			if (port->m_entityID == entityID) { return port.get(); }
+		}
+		// South ports.
+		for (std::shared_ptr<Port> port : component->portsSouth)
+		{
+			if (port->m_entityID == entityID) { return port.get(); }
+		}
+	}
+	return nullptr;
+}	
 
 //=============================================================================================================================================//
 //  EOF.				     																												   //
