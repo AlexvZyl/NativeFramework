@@ -131,6 +131,13 @@ struct SaveEvent
 	Design2DEngineGL* engine;
 };
 
+// Event for handling saving scenes to disk.
+struct LoadEvent
+{
+	bool eventTrigger = false;
+	std::string path;
+};
+
 //=============================================================================================================================================//
 //  Graphis Handler.																														                                                               //
 //=============================================================================================================================================//
@@ -153,6 +160,8 @@ public:
 	m_inputEvent m_inputEvent;
 	// Stores information regarding a save event.
 	SaveEvent m_saveEvent;
+	// Stores information regarding a load event.
+	LoadEvent m_loadEvent;
 	// The window.
 	GLFWwindow* m_glfwWindow;
 	// Stores information regarding the file drop event.
@@ -205,6 +214,8 @@ public:
 	void fileDropEventHandler();
 	// Handles save events.
 	void saveEventHandler();
+	// Handles load events.
+	void loadEventHandler();
 
 	// ------------- //
 	//  2 D   A P I  //
