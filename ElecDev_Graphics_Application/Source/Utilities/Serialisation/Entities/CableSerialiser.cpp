@@ -4,6 +4,7 @@
 
 #include "../Serialiser.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Cable.h"
+#include "CoreGL/Entities/Circle.h"
 
 //=============================================================================================================================================//
 //  Cable serialiser.     																													   //
@@ -21,7 +22,15 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable> cable)
 	emitter << YAML::Key << "End port" << cable->m_endPort->m_entityID;
 
 	// Nodes.
-	emitter << YAML::Key << "Line Segments" << YAML::Value << cable->m_lines;
+	emitter << YAML::Key << "Nodes" << YAML::Value;
+	emitter << YAML::BeginMap;
+	int nodeIndex = 0;
+	for (std::shared_ptr<Circle<>> circle : cable->m_nodes)
+	{
+		emitter << YAML::Key << "Node " + std::to_string(nodeIndex) << YAML::Value << circle->m_trackedCenter;
+		nodeIndex++;
+	}
+	emitter << YAML::EndMap;
 
 	// End cable data.
 	emitter << YAML::EndMap;
@@ -46,6 +55,15 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ca
 	emitter << YAML::EndMap;
 
 	return emitter;
+}
+
+//=============================================================================================================================================//
+//  Single Cable deserialiser.																												   //
+//=============================================================================================================================================//
+
+void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable> cable)
+{
+
 }
 
 //=============================================================================================================================================//

@@ -263,7 +263,6 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
-    <ClCompile Include="Source\Utilities\Serialisation\Entities\LineSegmentSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\PortSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />

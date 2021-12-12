@@ -71,8 +71,8 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	titleString = "Component " + std::to_string(componentID++);
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
 	// Add some test ports. (TO BE REMOVED)
-	addPort(0, PORT_IN, "Test in");
-	addPort(1, PORT_OUT, "Test out");
+	//addPort(0, PORT_IN, "Test in");
+	//addPort(1, PORT_OUT, "Test out");
 }
 
 Component2D::Component2D(float centreCoords[2], 
