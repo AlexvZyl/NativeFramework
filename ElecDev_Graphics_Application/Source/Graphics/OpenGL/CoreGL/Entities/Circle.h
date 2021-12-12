@@ -21,7 +21,7 @@ class VertexDataCircle;
 template <typename VertexType=VertexDataCircle>
 class Circle : public Primitive<VertexType>
 {
-private:
+public:
 
 	// ------------ //
 	//  E N T I T Y //
@@ -45,8 +45,6 @@ private:
 	static inline glm::vec2 local2 = {1.f, 1.f};
 	static inline glm::vec2 local3 = {1.f, -1.f};
 	static inline glm::vec2 local4 = {-1.f, -1.f};
-
-public:
 
 	float m_thickness = 0;
 	float m_fade = 0;

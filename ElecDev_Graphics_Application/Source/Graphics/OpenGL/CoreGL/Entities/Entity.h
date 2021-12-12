@@ -1,5 +1,6 @@
 #pragma once
 #include "GUI/GUIState.h"
+
 enum class EntityType
 {
 	PRIMATIVE,
@@ -9,14 +10,13 @@ enum class EntityType
 	CABLE
 };
 
-
 class Entity
 {
 private:
 
 public:
-	Entity* m_parent = nullptr;							// Parent of the managed entity
-	unsigned int m_entityID = 0;								// Saves the global entity ID.
+	Entity* m_parent = nullptr;		// Parent of the managed entity
+	unsigned int m_entityID = 0;	// Saves the global entity ID.
 	EntityType m_type;
 
 	//Entity();

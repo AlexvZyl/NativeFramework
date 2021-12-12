@@ -191,7 +191,7 @@ void GraphicsHandler::fileDropEventHandler()
 		addWindow("Generating", "Design2D");
 		Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
 		// Load the circuit data.
-		loadCircuitFromYAML(path, engine);
+		loadFromYAML(*engine, path);
 		// Update name.
 		engine->m_contextName = engine->m_circuit->m_label;
 		auto node = m_windowsDictionary.extract("Generating");
@@ -235,20 +235,10 @@ void GraphicsHandler::saveEventHandler()
 
 void GraphicsHandler::loadEventHandler() 
 {
-	// Move the file onto a new string.
-	std::string loadPath = m_loadEvent.path;
-	std::string file;
-	while (loadPath.back() != '\\')
-	{
-		file.push_back(loadPath.back());
-		loadPath.pop_back();
-	}
-	std::reverse(file.begin(), file.end());
-
 	// Load file.
 	addWindow("Generating", "Design2D");
 	Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
-	loadFromYAML(*activeEngine, loadPath, file);
+	loadFromYAML(*activeEngine, m_loadEvent.path);
 	// Update name.
 	activeEngine->m_contextName = activeEngine->m_circuit->m_label;
 	auto node = m_windowsDictionary.extract("Generating");

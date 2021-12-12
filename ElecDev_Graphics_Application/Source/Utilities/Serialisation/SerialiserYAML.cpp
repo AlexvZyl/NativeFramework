@@ -83,54 +83,19 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 }
 
 //=============================================================================================================================================//
-//  Deserialisation.																														   //
+//  Deserialisation.		  																												   //
 //=============================================================================================================================================//
 
-void loadFromYAML(Design2DEngineGL& engine, std::string directory, std::string file)
+void loadFromYAML(Design2DEngineGL& engine, std::string path)
 {
-	// Make sure directory has backslach.
-	if (directory.back() != '\\') { directory.push_back('\\'); }
-
 	// Create yaml node from file.
-	YAML::Node yamlFile = YAML::LoadFile(directory + file);
+	YAML::Node yamlFile = YAML::LoadFile(path);
 
-	// --------------- //
-	//  C I R C U I T  //
-	// --------------- //
-
-	YAML::Node circuitInfo = yamlFile["Circuit Info"];
-	engine.m_circuit.reset();
-	engine.m_circuit = std::make_unique<Circuit>(
-			circuitInfo["Label"].as<std::string>(),
-			circuitInfo["Type"].as<std::string>()
-		);
-
-	// -------------------- //
-	// C O M P O N E N T S  //
-	// -------------------- //
-
-	// Load all of the components.
-    YAML::Node componentList = yamlFile["Components"];
-	// Iterate through all of the components.
-	for (YAML::iterator comp = componentList.begin(); comp != componentList.end(); ++comp)
+	// Deserialise the circuit into the engine.
+	if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
 	{
-		// Create component.
-		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine.m_trianglesVAO.get(),
-																			   engine.m_linesVAO.get(),
-																			   engine.m_texturedTrianglesVAO.get(),
-																			   engine.m_circlesVAO.get(),
-																			   engine.m_circuit.get());
-		// Load data into component.
-		deserialise(comp->second, component);	// The second part of the iterator is the YAML Node.
-		// Push onto componenets vector.
-		engine.m_circuit->m_components.push_back(component);
+		deserialise(yamlFile, engine);
 	}
-
-	// ------------- //
-	//  C A B L E S  //
-	// ------------- //
-
-
 }
 
 

@@ -17,10 +17,10 @@ enum class LineOrientation
     VERTICAL
 };
 
-class Cable :
-    public Entity
+class Cable : public Entity
 {
-private:
+public:
+        
     Port* m_startPort;
     Port* m_endPort = nullptr;
     VertexArrayObject<VertexData>* engine_triangleVAO;

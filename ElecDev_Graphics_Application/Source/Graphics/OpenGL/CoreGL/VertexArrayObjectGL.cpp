@@ -6,7 +6,6 @@
 #include "Entities/Primitive.h"
 #include "External/Misc/ConsoleColor.h"
 #include "CoreGL/Entities/Vertex.h"
-#include <algorithm> // for std::copy
 #include "ErrorHandlerGL.h"
 #include <algorithm>
 #include <functional>
