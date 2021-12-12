@@ -36,7 +36,7 @@ Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, Vertex
 
 	//Add the first line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
-	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
+	m_nodes.push_back(std::make_shared<Circle<>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	//Add the second (perpendicular) line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 
@@ -57,11 +57,11 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ve
 
 	//Add the first line segment and first node.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, nodeList[0], engine_triangleVAO, this, m_thickness, m_colour));
-	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+	m_nodes.push_back(std::make_shared<Circle<>>(engine_circleVAO, nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
 	//Add all inter-nore line segments, and the rest of the nodes
 	for (int i = 1; i < nodeList.size(); i++) {
 		m_lines.push_back(std::make_shared<LineSegment>(nodeList[i-1], nodeList[i], engine_triangleVAO, this, m_thickness, m_colour));
-		m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
+		m_nodes.push_back(std::make_shared<Circle<>>(engine_circleVAO, nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
 	}
 	//Add final line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(nodeList.back(), m_endPort->centre, engine_triangleVAO, this, m_thickness, m_colour));

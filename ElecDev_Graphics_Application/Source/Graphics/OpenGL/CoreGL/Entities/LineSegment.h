@@ -3,6 +3,7 @@
 #include "Polygon.h"
 #include <memory>
 #include <boost/utility/base_from_member.hpp>
+
 class LineSegment :
     private boost::base_from_member< glm::vec2, 1>,
     private boost::base_from_member< glm::vec2, 2>,

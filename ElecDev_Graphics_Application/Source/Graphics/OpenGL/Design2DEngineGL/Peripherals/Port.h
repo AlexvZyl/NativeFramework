@@ -42,9 +42,9 @@ public:
 	glm::vec4 borderColour;
 	float portLayer;
 
-	Circle<VertexDataCircle> body;
-	Circle<VertexDataCircle> border;
-	std::shared_ptr<Text<VertexDataTextured>> title;
+	Circle<> body;
+	Circle<> border;
+	std::shared_ptr<Text<>> title;
 
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };

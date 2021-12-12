@@ -29,10 +29,10 @@ public:
     glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.5f };
     //std::vector<glm::vec2> m_vertices;
     std::vector<std::shared_ptr<LineSegment>> m_lines;
-    std::vector<std::shared_ptr<Circle<VertexDataCircle>>> m_nodes;
+    std::vector<std::shared_ptr<Circle<>>> m_nodes;
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
     LineSegment* m_activeLine = nullptr;
-    Circle<VertexDataCircle>* m_activeNode = nullptr;
+    Circle<>* m_activeNode = nullptr;
 
 
 public:

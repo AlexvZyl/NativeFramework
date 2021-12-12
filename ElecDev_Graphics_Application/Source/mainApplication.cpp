@@ -67,6 +67,7 @@ void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
     graphicsHandler->m_inputEvent.mousePressEvent = true;
     graphicsHandler->m_inputEvent.mousePressButton = button;
     graphicsHandler->m_inputEvent.mousePressAction = action;
+    ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 }
 
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
@@ -81,6 +82,7 @@ void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
     graphicsHandler->m_inputEvent.mouseScrollEvent = true;
     graphicsHandler->m_inputEvent.mouseScrollY = yoffset;
+    ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 }
 
 void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
