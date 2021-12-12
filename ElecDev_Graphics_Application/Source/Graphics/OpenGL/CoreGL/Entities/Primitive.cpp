@@ -59,6 +59,15 @@ void Primitive<VertexType>::translate(glm::vec3& translation)
 }
 
 template<typename VertexType>
+void Primitive<VertexType>::translate(glm::vec2& translation)
+{
+	glm::vec3 translation3{ translation, 0.f };
+	for (VertexType& vertex : m_vertices) { vertex.data.position += translation3; }
+	m_trackedCenter += translation3;
+	m_VAO->outOfSync();
+}
+
+template<typename VertexType>
 void Primitive<VertexType>::translateTo(glm::vec3& position)
 { 
 	glm::vec3 translation = position - m_trackedCenter; 

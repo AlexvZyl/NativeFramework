@@ -19,5 +19,6 @@ public:
     float m_thickness;
 
     LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f });
+    void translate(glm::vec2& translation) override;
 };
 

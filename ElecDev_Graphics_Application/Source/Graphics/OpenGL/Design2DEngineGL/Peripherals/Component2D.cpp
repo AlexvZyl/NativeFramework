@@ -75,7 +75,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	addPort(1, PORT_OUT, "Test out");
 }
 
-Component2D::Component2D(float centreCoords[2], 
+Component2D::Component2D(glm::vec2 centreCoords, 
 						 VertexArrayObject<VertexData>* trianglesVAO, 
 						 VertexArrayObject<VertexData>* linesVAO, 
 						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
@@ -91,7 +91,7 @@ Component2D::~Component2D() {}
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-void Component2D::moveTo(float pointerPos[2])
+void Component2D::moveTo(glm::vec2 pointerPos)
 {
 	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
 	shape->translateTo(translateDestination);
@@ -115,7 +115,29 @@ void Component2D::moveTo(float pointerPos[2])
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
-void Component2D::place(float pos[2])
+void Component2D::move(glm::vec2 translation)
+{
+	shape->translate(translation);
+	border->translate(translation);
+	title->translate(translation);
+	//port1->moveTo(portDest);
+	//port2->moveTo(port2Dest);
+	for (int i = 0; i < portsWest.size(); i++) {
+		portsWest[i]->move(translation);
+	}
+	for (int i = 0; i < portsEast.size(); i++) {
+		portsEast[i]->move(translation);
+	}
+	for (int i = 0; i < portsNorth.size(); i++) {
+		portsNorth[i]->move(translation);
+	}
+	for (int i = 0; i < portsSouth.size(); i++) {
+		portsSouth[i]->move(translation);
+	}
+	centre += translation;
+}
+
+void Component2D::place(glm::vec2 pos)
 {	//ensure the component is at the desired position
 	moveTo(pos);
 	setLayer(0.0f);

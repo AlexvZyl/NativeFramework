@@ -98,7 +98,7 @@ public:
 				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
 
 	//Creates a generic component centred at the specified coordinates
-	Component2D(float centreCoords[2], 
+	Component2D(glm::vec2 centreCoords, 
 				VertexArrayObject<VertexData>* trianglesVAO,	
 				VertexArrayObject<VertexData>* linesVAO, 
 				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
@@ -107,9 +107,11 @@ public:
 	//Deconstructor
 	~Component2D();
 	//Move the component to a new positioned centred at the given coordinates
-	void moveTo(float pointerPos[2]);
+	void moveTo(glm::vec2 pointerPos);
+	//Move the component by the  given vector
+	void move(glm::vec2 translation);
 	//Place the component.
-	void place(float pos[2]);
+	void place(glm::vec2 pos);
 	//Move the component to a new layer.
 	void setLayer(float layer);
 	//set the clickedZone.component flag in the GUIState.

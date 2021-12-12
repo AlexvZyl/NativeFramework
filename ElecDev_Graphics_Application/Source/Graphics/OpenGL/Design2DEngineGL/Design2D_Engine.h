@@ -43,6 +43,7 @@ public:
 	std::unique_ptr<Circle<VertexDataCircle>> p1;
 	std::unique_ptr<Circle<VertexDataCircle>> p2;
 	std::unique_ptr<Circle<VertexDataCircle>> p3;
+	glm::vec2 m_lastDragPos = {0.f, 0.f};
 	unsigned int m_currentEntityID = 0;
 
 	// ------------------------------------------------ //
@@ -86,7 +87,7 @@ public:
 	//Helper functions
 	virtual void setActiveComponent(unsigned eID);
 	virtual void setActiveCable(unsigned eID);
-	virtual void ComponentPlaceMode(float screenCoords[2]);
+	virtual void ComponentPlaceMode(glm::vec2 screenCoords);
 	virtual Port* getPort(unsigned eID);
 };
 

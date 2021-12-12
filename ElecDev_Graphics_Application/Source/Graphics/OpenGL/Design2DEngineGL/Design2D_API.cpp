@@ -2,7 +2,7 @@
 #include "Peripherals/Component2D.h"
 
 
-void Design2DEngineGL::ComponentPlaceMode(float screenCoords[2]) {
+void Design2DEngineGL::ComponentPlaceMode(glm::vec2 screenCoords) {
 	if (designerState != COMPONENT_PLACE) {
 		designerState = COMPONENT_PLACE;
 		// Add a dummy component

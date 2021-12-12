@@ -76,6 +76,19 @@ void Port::moveTo(glm::vec2 destination)
 	}
 }
 
+void Port::move(glm::vec2 translation)
+{	
+	//update the port centre
+	centre += translation;
+	//move each primative
+	body.translate(translation);
+	border.translate(translation);
+	title->translate(translation);
+	for (Cable* cable : m_cables) {
+		cable->followPort(this);
+	}
+}
+
 Port& Port::operator=(const Port& t)
 {
 	return *this;
@@ -111,6 +124,16 @@ void Port::setOffset(glm::vec2 offset)
 void Port::attachCable(Cable* cable)
 {
 	m_cables.push_back(cable);
+}
+
+void Port::detachCable(Cable* cable)
+{
+	//find the cable in the internal list.
+	auto cableIt = std::find(m_cables.begin(), m_cables.end(), cable);
+	//remove the cable if found in the list.
+	if (cableIt != m_cables.end()) {
+		m_cables.erase(cableIt);
+	}
 }
 
 void Port::setContext(GUIState* guiState)
