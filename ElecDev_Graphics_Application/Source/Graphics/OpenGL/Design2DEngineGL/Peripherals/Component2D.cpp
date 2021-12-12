@@ -70,9 +70,9 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
-	// Add some test ports. (TO BE REMOVED)
-	//addPort(0, PORT_IN, "Test in");
-	//addPort(1, PORT_OUT, "Test out");
+	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). It is a bit of a pain setting up ports every time we test.
+	addPort(0, PORT_IN, "Test in");
+	addPort(1, PORT_OUT, "Test out");
 }
 
 Component2D::Component2D(glm::vec2 centreCoords, 
@@ -98,8 +98,6 @@ void Component2D::moveTo(glm::vec2 pointerPos)
 	border->translateTo(translateDestination);
 	glm::vec2 titleDest = translateDestination + titleOffset;
 	title->translateTo(titleDest);
-	//port1->moveTo(portDest);
-	//port2->moveTo(port2Dest);
 	for (int i = 0; i < portsWest.size(); i++) {
 		portsWest[i]->moveTo(translateDestination);
 	}
