@@ -73,6 +73,7 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). It is a bit of a pain setting up ports every time we test.
 	addPort(0, PORT_IN, "Test in");
 	addPort(1, PORT_OUT, "Test out");
+
 }
 
 Component2D::Component2D(glm::vec2 centreCoords, 
