@@ -33,13 +33,13 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	//infer the port position from the offset, and set the title
 	if (m_offset.y > 0.099) {//top
 		m_position = PortPosition::TOP;
-		titleOffset = glm::vec2{ 0.f, -0.012f-titleSize };
+		titleOffset = glm::vec2{ 0.f, -0.012f -titleSize/4};
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = std::make_shared<Text<VertexDataTextured>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
+		title = std::make_shared<Text<VertexDataTextured>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "T");
 	}	
 	else if (m_offset.y < -0.099) {//bottom
 		m_position = PortPosition::BOTTOM;
-		titleOffset = glm::vec2{ 0.f, 0.012f };
+		titleOffset = glm::vec2{ 0.f, 0.012f + titleSize/4 };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = std::make_shared<Text<VertexDataTextured>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
 	}
