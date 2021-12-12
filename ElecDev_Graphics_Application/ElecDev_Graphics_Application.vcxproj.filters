@@ -124,6 +124,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Entities\LineSegmentSerialiser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">

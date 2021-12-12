@@ -23,6 +23,7 @@ class Design2DEngineGL;
 class Port;
 class Component2D;
 class Cable;
+class LineSegment;
 
 // Enums.
 enum PortType;
@@ -93,6 +94,15 @@ void deserialise(YAML::Node yamlComp, std::shared_ptr<Component2D> component);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable> cable);
 // Serialise a Cable vector.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Cable>> cableVector);
+
+//=============================================================================================================================================//
+//  Line Segments.																														       //
+//=============================================================================================================================================//
+
+// Serialise a single LineSegment.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<LineSegment> lineSegment);
+// Serialise a LineSegment vector.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<LineSegment>> lineSegmentVector);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

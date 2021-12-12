@@ -17,10 +17,10 @@ enum class LineOrientation
     VERTICAL
 };
 
-class Cable :
-    public Entity
+class Cable : public Entity
 {
-private:
+public:
+        
     Port* m_startPort;
     Port* m_endPort = nullptr;
     VertexArrayObject<VertexData>* engine_triangleVAO;
@@ -33,9 +33,6 @@ private:
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
     LineSegment* m_activeLine;
     Circle<VertexDataCircle>* m_activeNode;
-
-
-public:
     
     Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
     void extendSegment(glm::vec2 nextPoint);

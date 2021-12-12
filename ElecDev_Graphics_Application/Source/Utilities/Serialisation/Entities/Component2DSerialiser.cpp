@@ -17,6 +17,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> c
 
 	// Component data.
 	emitter << YAML::Key << "Centre" << YAML::Value << comp->centre;
+	emitter << YAML::Key << "Entity ID" << YAML::Value << comp->m_entityID;
 	emitter << YAML::Key << "Component Layer" << YAML::Value << comp->componentLayer;
 	emitter << YAML::Key << "Border layer offset" << YAML::Value << comp->borderLayerOffset;
 	emitter << YAML::Key << "Layer offset" << YAML::Value << comp->portLayerOffset;

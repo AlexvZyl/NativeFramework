@@ -17,6 +17,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Port> port)
 
 	// Port data.
 	emitter << YAML::Key << "Label" << YAML::Value << port->m_label;
+	emitter << YAML::Key << "Entity ID" << YAML::Value << port->m_entityID;
 	emitter << YAML::Key << "Centre" << YAML::Value << port->centre;
 	emitter << YAML::Key << "Layer" << YAML::Value << port->portLayer;
 	emitter << YAML::Key << "Offset" << YAML::Value << port->m_offset;
