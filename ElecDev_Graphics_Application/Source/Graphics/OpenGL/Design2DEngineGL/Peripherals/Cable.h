@@ -31,13 +31,17 @@ private:
     std::vector<std::shared_ptr<LineSegment>> m_lines;
     std::vector<std::shared_ptr<Circle<VertexDataCircle>>> m_nodes;
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
-    LineSegment* m_activeLine;
-    Circle<VertexDataCircle>* m_activeNode;
+    LineSegment* m_activeLine = nullptr;
+    Circle<VertexDataCircle>* m_activeNode = nullptr;
 
 
 public:
     
+    //Create a new cable attached to the start port.
     Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+    //Create a new cable from one port to another that gots through each node in the node list
+    Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+    ~Cable();
     void extendSegment(glm::vec2 nextPoint);
     void extendPrevSegment(glm::vec2 nextPoint);
     void addSegment(glm::vec2 nextPoint);

@@ -3,7 +3,7 @@
 #include "Circuit.h"
 
 
-Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent):Entity(EntityType::CABLE, parent)
+Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent) :Entity(EntityType::CABLE, parent)
 {
 	//Keep the VAO and start port
 	engine_triangleVAO = triangleVAO;
@@ -33,13 +33,50 @@ Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, Vertex
 		//endPt += glm::vec2(initial_length, 0.f);
 		break;
 	}
-	
+
 	//Add the first line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	//Add the second (perpendicular) line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 
+}
+
+Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent) :Entity(EntityType::CABLE, parent)
+{
+	//Keep the VAO and start port
+	engine_triangleVAO = triangleVAO;
+	engine_circleVAO = circleVAO;
+	m_startPort = startPort;
+	m_endPort = endPort;
+
+	//Attach the ports
+	m_startPort->attachCable(this);
+	m_endPort->attachCable(this);
+
+
+	//Add the first line segment and first node.
+	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, nodeList[0], engine_triangleVAO, this, m_thickness, m_colour));
+	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+	//Add all inter-nore line segments, and the rest of the nodes
+	for (int i = 1; i < nodeList.size(); i++) {
+		m_lines.push_back(std::make_shared<LineSegment>(nodeList[i-1], nodeList[i], engine_triangleVAO, this, m_thickness, m_colour));
+		m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
+	}
+	//Add final line segment.
+	m_lines.push_back(std::make_shared<LineSegment>(nodeList.back(), m_endPort->centre, engine_triangleVAO, this, m_thickness, m_colour));
+
+}
+
+Cable::~Cable()
+{
+	//remove the cable from the start and end ports.
+	if (m_startPort) {
+		m_startPort->detachCable(this);
+	}
+	if (m_endPort) {
+		m_endPort->detachCable(this);
+	}
 }
 
 void Cable::extendPrevSegment(glm::vec2 nextPoint)

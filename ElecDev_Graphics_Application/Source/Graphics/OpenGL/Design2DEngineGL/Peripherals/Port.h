@@ -68,5 +68,6 @@ public:
 	void unhighlight();
 	void setOffset(glm::vec2 offset);
 	void attachCable(Cable* cable);
+	void detachCable(Cable* cable);
 };
 

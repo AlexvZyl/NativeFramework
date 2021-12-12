@@ -126,6 +126,16 @@ void Port::attachCable(Cable* cable)
 	m_cables.push_back(cable);
 }
 
+void Port::detachCable(Cable* cable)
+{
+	//find the cable in the internal list.
+	auto cableIt = std::find(m_cables.begin(), m_cables.end(), cable);
+	//remove the cable if found in the list.
+	if (cableIt != m_cables.end()) {
+		m_cables.erase(cableIt);
+	}
+}
+
 void Port::setContext(GUIState* guiState)
 {
 	guiState->clickedZone.port = true;
