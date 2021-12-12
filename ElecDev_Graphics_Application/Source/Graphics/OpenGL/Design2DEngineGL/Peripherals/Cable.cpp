@@ -93,8 +93,37 @@ void Cable::setContext(GUIState* guiState)
 
 void Cable::attach(Port* endPort)
 {
+	//keep pointer to end port
 	m_endPort = endPort;
-	extendSegment(m_endPort->centre);
+
+	//test to see ensure the cable enters perpendicular to the component edge
+	LineOrientation portOrientation;
+	switch (endPort->m_position) {
+	case PortPosition::TOP:
+		portOrientation = LineOrientation::VERTICAL;
+		//endPt += glm::vec2(0.f, initial_length);
+		break;
+	case PortPosition::BOTTOM:
+		portOrientation = LineOrientation::VERTICAL;
+		//endPt += glm::vec2(0.f, -initial_length);
+		break;
+	case PortPosition::LEFT:
+		portOrientation = LineOrientation::HORIZONTAL;
+		//endPt += glm::vec2(-initial_length, 0.f);
+		break;
+	case PortPosition::RIGHT:
+		portOrientation = LineOrientation::HORIZONTAL;
+		//endPt += glm::vec2(initial_length, 0.f);
+		break;
+	}
+	if (portOrientation == m_curOrientation) {
+		//Line is not perpendicular, so we need to add a segment
+		addSegment(m_endPort->centre);
+	}
+	else {
+		//Line is already perpendicular, so we can extend to the port.
+		extendSegment(m_endPort->centre);
+	}
 	endPort->attachCable(this);
 	setColour(glm::vec4{ 0.1f, 0.1f, 0.1f, 1.0f });
 }
@@ -155,6 +184,27 @@ void Cable::setColour(glm::vec4 colour)
 		Circle<VertexDataCircle>* circ = m_nodes[i].get();
 		circ->setColor(m_colour);
 	}
+}
+
+void Cable::highlight()
+{
+	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f });
+}
+
+void Cable::moveActivePrimativeTo(float screenCoords[2])
+{
+	//Add code to move necessary primatives around.
+}
+
+void Cable::setActivePrimative(Entity* primative)
+{
+	m_activeLine = dynamic_cast<LineSegment*>(primative);
+	m_activeNode = dynamic_cast<Circle<VertexDataCircle>*>(primative);
+}
+
+void Cable::unhighlight()
+{
+	setColour(glm::vec4{ 0.1f, 0.1f, 0.1f, 1.0f });
 }
 
 
