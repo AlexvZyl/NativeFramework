@@ -52,7 +52,7 @@ void PopUpMenu::render()
                 //get screen coordinates
                 float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
                 glm::vec3 WorldCoords = m_guiState->design_engine->pixelCoordsToWorldCoords(pixelCoords);
-                float screenCoords[2] = { WorldCoords[0], WorldCoords[1] };
+                glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
                 //place a dummy component
                 m_guiState->design_engine->ComponentPlaceMode(screenCoords);
                 close();

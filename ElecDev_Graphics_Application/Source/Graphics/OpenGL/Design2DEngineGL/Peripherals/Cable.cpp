@@ -3,7 +3,7 @@
 #include "Circuit.h"
 
 
-Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent):Entity(EntityType::CABLE, parent)
+Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent) :Entity(EntityType::CABLE, parent)
 {
 	//Keep the VAO and start port
 	engine_triangleVAO = triangleVAO;
@@ -33,13 +33,50 @@ Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, Vertex
 		//endPt += glm::vec2(initial_length, 0.f);
 		break;
 	}
-	
+
 	//Add the first line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	//Add the second (perpendicular) line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 
+}
+
+Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent) :Entity(EntityType::CABLE, parent)
+{
+	//Keep the VAO and start port
+	engine_triangleVAO = triangleVAO;
+	engine_circleVAO = circleVAO;
+	m_startPort = startPort;
+	m_endPort = endPort;
+
+	//Attach the ports
+	m_startPort->attachCable(this);
+	m_endPort->attachCable(this);
+
+
+	//Add the first line segment and first node.
+	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, nodeList[0], engine_triangleVAO, this, m_thickness, m_colour));
+	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+	//Add all inter-nore line segments, and the rest of the nodes
+	for (int i = 1; i < nodeList.size(); i++) {
+		m_lines.push_back(std::make_shared<LineSegment>(nodeList[i-1], nodeList[i], engine_triangleVAO, this, m_thickness, m_colour));
+		m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
+	}
+	//Add final line segment.
+	m_lines.push_back(std::make_shared<LineSegment>(nodeList.back(), m_endPort->centre, engine_triangleVAO, this, m_thickness, m_colour));
+
+}
+
+Cable::~Cable()
+{
+	//remove the cable from the start and end ports.
+	if (m_startPort) {
+		m_startPort->detachCable(this);
+	}
+	if (m_endPort) {
+		m_endPort->detachCable(this);
+	}
 }
 
 void Cable::extendPrevSegment(glm::vec2 nextPoint)
@@ -191,9 +228,49 @@ void Cable::highlight()
 	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f });
 }
 
-void Cable::moveActivePrimativeTo(float screenCoords[2])
+void Cable::moveActivePrimativeTo(glm::vec2 screenCoords)
 {
 	//Add code to move necessary primatives around.
+	//Move line segment if user grabs a line
+	if (m_activeLine) {
+		//First check that we are not moving the first or last line. At the monemt this is not supported, as it requires the line segments to be added.
+		//This should be fixed in the future.
+		auto it = std::find_if(begin(m_lines), end(m_lines), [&](std::shared_ptr<LineSegment> current)
+			{
+				return current.get() == m_activeLine;
+			});
+		if (it == m_lines.begin() || it >= (m_lines.end() - 1)) {
+			//The active line is the first or last line segment.
+			//Could print a warning to the user here for now. Ideally we should handle this by addin an additional segment. For now, just return.
+			return;
+		}
+
+
+		//Get the line orientation -  We move horizontal lines vertically and we move vertical lines horizontally.
+		glm::vec2 translation = {};
+		if (m_activeLine->m_start.x == m_activeLine->m_end.x) {
+			//Vertical line
+			translation = { screenCoords[0] - m_activeLine->m_start.x, 0.f };
+		}
+		else {
+			//Horizontal line
+			translation = { 0.f, screenCoords[1] - m_activeLine->m_start.y };
+		}
+
+		//translate the line
+		m_activeLine->translate(translation);
+
+		//extend the adjacent lines
+		*std::prev(it) = std::make_shared<LineSegment>((*std::prev(it))->m_start, m_activeLine->m_start, engine_triangleVAO, this, m_thickness, m_colour);
+		*std::next(it) = std::make_shared<LineSegment>(m_activeLine->m_end, (*std::next(it))->m_end, engine_triangleVAO, this, m_thickness, m_colour);
+		
+		//Move the adjacent nodes
+		m_nodes.at(it - m_lines.begin() - 1)->translate(translation);
+		m_nodes.at(it - m_lines.begin())->translate(translation);
+	}
+	else if (m_activeNode) {
+		//handle node movement (unimplemented).
+	}
 }
 
 void Cable::setActivePrimative(Entity* primative)
