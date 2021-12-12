@@ -320,7 +320,7 @@ int main(int, char**)
     // ImGUI cleanup.
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    //ImGui::DestroyContext();
 
     // Close application.
     glfwDestroyWindow(window);
