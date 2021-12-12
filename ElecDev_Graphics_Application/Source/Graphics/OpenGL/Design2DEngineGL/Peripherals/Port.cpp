@@ -41,7 +41,7 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, 0.012f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = std::make_shared<Text<VertexDataTextured>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "T");
+		title = std::make_shared<Text<VertexDataTextured>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
 	}
 	else if (m_offset.x > 0.099) {//right
 		m_position = PortPosition::RIGHT;

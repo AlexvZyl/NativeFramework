@@ -8,6 +8,12 @@
 #include "../GUIState.h"
 
 /*=======================================================================================================================================*/
+/* Forward declarations                                                                                                                  */
+/*=======================================================================================================================================*/
+
+class GraphicsHandler;
+
+/*=======================================================================================================================================*/
 /* Class.                                                                                                                                */
 /*=======================================================================================================================================*/
 
@@ -15,7 +21,9 @@
 
 class Toolbar
 {
-    
+private:
+    GraphicsHandler* m_graphicsHandler;
+
 public:
 
     bool show_app_main_menu_bar;
@@ -52,7 +60,7 @@ public:
 
     GUIState* m_guiState;
 
-    Toolbar(GUIState* states);
+    Toolbar(GUIState* states, GraphicsHandler* graphicsHandler);
 
 	// Function that handles which engine should be active.
 	void renderToolbar();

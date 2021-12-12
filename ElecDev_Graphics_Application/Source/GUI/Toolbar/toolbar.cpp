@@ -8,14 +8,16 @@
 #include <cmath>
 #include <cfenv>
 #include "toolbar.h"
+#include "Utilities/Windows/WindowsUtilities.h"
+#include "Graphics/graphicsHandler.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(GUIState* guiState)
-    : m_guiState(guiState)
+Toolbar::Toolbar(GUIState* guiState, GraphicsHandler* graphicsHandler)
+    : m_guiState(guiState), m_graphicsHandler(graphicsHandler)
 {
     this->my_tool_active = true;
     this->show_app_main_menu_bar = false;
@@ -61,8 +63,11 @@ void Toolbar::renderToolbar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+            if (ImGui::MenuItem("Open..", "Ctrl+O")) 
+            {
+                m_graphicsHandler->m_loadEvent.eventTrigger = true;
+                m_graphicsHandler->m_loadEvent.path = selectFile();
+            }
             if (ImGui::MenuItem("Close", "Ctrl+W")) { m_guiState->globalQuit = true; }
             ImGui::EndMenu();
         }
