@@ -6,6 +6,7 @@
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
+#include "CoreGL/Entities/EntityManager.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //
@@ -182,8 +183,8 @@ void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 		}
 
 		// Find connected prorts.
-		Port* startPort = findPort(engine.m_circuit, idTable[cableNode["Start port"].as<unsigned>()]);
-		Port* endPort = findPort(engine.m_circuit, idTable[cableNode["End port"].as<unsigned>()]);
+		Port* startPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["Start port"].as<unsigned>()]));
+		Port* endPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["End port"].as<unsigned>()]));
 		// Create cable.
 		std::shared_ptr<Cable> cable = std::make_shared<Cable>(
 												startPort, 
@@ -208,35 +209,6 @@ PortType getPortType(YAML::Node node)
 	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PORT_INOUT; }
 }
-
-Port* findPort(std::shared_ptr<Circuit> circuit, unsigned entityID)
-{
-	// Iterate through components.
-	for (std::shared_ptr<Component2D> component : circuit->m_components) 
-	{
-		// East ports.
-		for (std::shared_ptr<Port> port : component->portsEast) 
-		{ 
-			if (port->m_entityID == entityID) { return port.get(); }
-		}
-		// West ports.
-		for (std::shared_ptr<Port> port : component->portsWest)
-		{
-			if (port->m_entityID == entityID) { return port.get(); }
-		}
-		// North ports.
-		for (std::shared_ptr<Port> port : component->portsNorth)
-		{
-			if (port->m_entityID == entityID) { return port.get(); }
-		}
-		// South ports.
-		for (std::shared_ptr<Port> port : component->portsSouth)
-		{
-			if (port->m_entityID == entityID) { return port.get(); }
-		}
-	}
-	return nullptr;
-}	
 
 //=============================================================================================================================================//
 //  EOF.				     																												   //
