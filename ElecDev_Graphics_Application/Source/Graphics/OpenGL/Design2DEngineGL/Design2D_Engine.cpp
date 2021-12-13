@@ -12,7 +12,7 @@ This is where the interactive 2D design engine is implemented.
 #include <iostream>
 #include <External/Misc/ConsoleColor.h>
 // Resource loading.
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 // Entities.
 #include "Peripherals/Component2D.h"
 // OpenGL core elements.

@@ -15,7 +15,7 @@
 #include <glad/glad.h>
 // Resources.
 #include <Misc/stb_image.h>
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 // Console coloring.
 #include "External/Misc/ConsoleColor.h"
 // Gui states.

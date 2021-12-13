@@ -6,7 +6,7 @@
 //  Class include.
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "../Utilities/Resources/ResourceHandler.h"
+#include "../Resources/ResourceHandler.h"
 #include "ShaderHandlerGL.h"
 // OpenGL.
 #include "ErrorHandlerGL.h"

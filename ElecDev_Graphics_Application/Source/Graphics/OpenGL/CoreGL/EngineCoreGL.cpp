@@ -13,7 +13,7 @@ and notify the user via the terminal interface.
 // Class include.
 #include "EngineCoreGL.h"
 #include "VertexArrayObjectGL.h"
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "GLFW/glfw3.h"
 #include "ShaderHandlerGL.h"
@@ -78,8 +78,8 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState, std::string contextName)
 	// ----------------------------------------- //
 
 	// Load font from resource.
-	//m_defaultFont = std::make_unique<Font>(msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON, ROBOTO_MEDIUM_MSDF_PNG));
-	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_BOLD_MSDF_JSON, ARIAL_BOLD_MSDF_PNG));
+	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_NORMAL_JSON, ARIAL_NORMAL_PNG));
+	//m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_BOLD_MSDF_JSON, ARIAL_BOLD_MSDF_PNG));
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };		// 0 = No texture, 1 = Font atlas, 2+ = Any other textures.

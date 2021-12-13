@@ -12,7 +12,7 @@
 #include "../GUIState.h"
 
 // Resource loading.
-#include "../Utilities/Resources/ResourceHandler.h"
+#include "../Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Forward declerations                                                                                                                  */

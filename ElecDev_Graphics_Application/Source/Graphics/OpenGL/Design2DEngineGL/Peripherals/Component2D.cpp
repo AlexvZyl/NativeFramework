@@ -8,7 +8,7 @@
 #include "CoreGL/VertexArrayObjectGL.h"
 #include "CoreGL/FontLoader.h"
 #include "CoreGL/Entities/Text.h"
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
@@ -19,8 +19,8 @@
 //=============================================================================================================================================//
 
 //Add font for component titles
-//Font Component2D::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
-Font Component2D::titleFont = msdfLoadFont(ARIAL_BOLD_MSDF_JSON);
+Font Component2D::titleFont = msdfLoadFont(ARIAL_NORMAL_JSON);
+//Font Component2D::titleFont = msdfLoadFont(ARIAL_BOLD_MSDF_JSON);
 unsigned Component2D::componentID = 0;
 
 //=============================================================================================================================================//
