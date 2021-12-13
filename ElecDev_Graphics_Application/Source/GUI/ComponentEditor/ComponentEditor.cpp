@@ -36,7 +36,7 @@ void ComponentEditor::render()
 	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
 	//FIX ME!! The wondow size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2 {450.f, 400}, ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2 {465.f, 400}, ImGuiCond_Once);
 	ImGui::Begin("Comoponent Editor", &m_guiState->componentEditor, ImGuiWindowFlags_NoDocking);
 	//ImGui::Button("New MCC");
 	//ImGui::CollapsingHeader("Ports");
