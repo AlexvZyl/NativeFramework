@@ -76,7 +76,7 @@ void PopUpMenu::render()
             }
             if (ImGui::MenuItem("Remove component", "DEL"))
             {
-                m_guiState->design_engine->deleteComponent(m_guiState->design_engine->m_activeComponent);
+                m_guiState->design_engine->deleteActiveComponent();
                 close();
             }
         }

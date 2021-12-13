@@ -43,20 +43,12 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	/*/
-	vertices2.insert(vertices2.end(), glm::vec3(centre.x - width/2, centre.y - height/2, 0.0f));
-	vertices2.insert(vertices2.end(), glm::vec3(centre.x + width/2, centre.y - height/2, 0.0f));
-	vertices2.insert(vertices2.end(), glm::vec3(centre.x + width/2, centre.y + height/2, 0.0f));
-	vertices2.insert(vertices2.end(), glm::vec3(centre.x - width/2, centre.y + height/2, 0.0f));
-	*/
-
 	engine_trianglesVAO = trianglesVAO;
 	engine_linesVAO = linesVAO;
 	engine_texturedTrianglesVAO = texturedTrianglesVAO;
 	engine_circleVAO = circleVAO;
-	shapeColour = { 0.5f, 0.5f, 0.9f, 0.5f };
-	titleColour = { 0.3f, 0.3f, 0.9f, 0.5f };
-	borderColour = { 0.8f, 1.0f, .8f, 1.f };
+	
+	
 
 	// Main shape.
 	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO, this);
@@ -73,6 +65,8 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). It is a bit of a pain setting up ports every time we test.
 	addPort(0, PORT_IN, "Test in");
 	addPort(1, PORT_OUT, "Test out");
+
+	highlight();
 
 }
 
@@ -119,8 +113,6 @@ void Component2D::move(glm::vec2 translation)
 	shape->translate(translation);
 	border->translate(translation);
 	title->translate(translation);
-	//port1->moveTo(portDest);
-	//port2->moveTo(port2Dest);
 	for (int i = 0; i < portsWest.size(); i++) {
 		portsWest[i]->move(translation);
 	}
@@ -144,7 +136,6 @@ void Component2D::place(glm::vec2 pos)
 	titleColour = { 0.f, 0.f, 1.f, 1.0f };
 	shape->setColor(shapeColour);
 	title->setColor(titleColour);
-	//port1->setColor(borderColour);
 	//Move to placement layer
 }
 
@@ -153,8 +144,6 @@ void Component2D::setLayer(float layer)
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
-	//port1->setLayer(layer + portLayerOffset);
-	//port2->setLayer(layer + portLayerOffset);
 	for (int i = 0; i < portsWest.size(); i++) {
 		portsWest[i]->setLayer(layer + portLayerOffset);
 	}

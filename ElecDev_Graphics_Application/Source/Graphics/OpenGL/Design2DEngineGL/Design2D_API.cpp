@@ -19,26 +19,27 @@ void Design2DEngineGL::ComponentPlaceMode(glm::vec2 screenCoords) {
 	}
 }
 
-void Design2DEngineGL::deleteComponent(std::shared_ptr<Component2D> component)
+void Design2DEngineGL::deleteActiveComponent()
 {
-	if (component) {
+	if (m_activeComponent) {
 		auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
 		if (iterator != m_circuit->m_components.end())
 		{
 			m_circuit->m_components.erase(iterator);
-			m_activeComponent = NULL;
+			m_activeComponent = nullptr;
+			m_guiState->active_component = nullptr;
 		}
 	}
 }
 
-void Design2DEngineGL::deleteCable(std::shared_ptr<Cable> cable)
+void Design2DEngineGL::deleteActiveCable()
 {
-	if (cable) {
+	if (m_activeCable) {
 		auto iterator = std::find(m_circuit->m_cables.begin(), m_circuit->m_cables.end(), m_activeCable);
 		if (iterator != m_circuit->m_cables.end())
 		{
 			m_circuit->m_cables.erase(iterator);
-			m_activeCable = NULL;
+			m_activeCable = nullptr;
 		}
 	}
 }

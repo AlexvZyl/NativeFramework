@@ -90,8 +90,8 @@ public:
 	virtual void setActiveComponent(unsigned eID);
 	virtual void setActiveCable(unsigned eID);
 	virtual void ComponentPlaceMode(glm::vec2 screenCoords);
-	virtual void deleteComponent(std::shared_ptr<Component2D> component);
-	virtual void deleteCable(std::shared_ptr<Cable> cable);
+	virtual void deleteActiveComponent();
+	virtual void deleteActiveCable();
 	virtual Port* getPort(unsigned eID);
 };
 
