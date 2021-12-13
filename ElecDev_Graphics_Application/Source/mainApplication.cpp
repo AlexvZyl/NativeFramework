@@ -64,15 +64,33 @@ void glfw_error_callback(int error, const char* description)
 
 void mousePressEvent(GLFWwindow* window, int button, int action, int mods)
 {
-    graphicsHandler->m_inputEvent.mousePressEvent = true;
-    graphicsHandler->m_inputEvent.mousePressButton = button;
-    graphicsHandler->m_inputEvent.mousePressAction = action;
+    // Mouse press events.
+    if (action == GLFW_PRESS) 
+    {
+        graphicsHandler->m_inputEvent.mousePressEvent = true;
+        // Button states.
+        if      (button == GLFW_MOUSE_BUTTON_LEFT  ) { graphicsHandler->m_inputEvent.mousePressLeftEvent = true;    }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT ) { graphicsHandler->m_inputEvent.mousePressRightEvent = true;   }
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { graphicsHandler->m_inputEvent.mousePressMiddleEvent = true;  }
+    }
+    // Mouse release events.
+    else if (action == GLFW_RELEASE)
+    {
+        graphicsHandler->m_inputEvent.mouseReleaseEvent = true;
+        // Button states.
+        if      (button == GLFW_MOUSE_BUTTON_LEFT  ) { graphicsHandler->m_inputEvent.mouseReleaseLeftEvent = true;  }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT ) { graphicsHandler->m_inputEvent.mouseReleaseRightEvent = true; }
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { graphicsHandler->m_inputEvent.mouseReleaseMiddleEvent = true;}
+    }
+    // ImGui mouse callback.
     ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 }
 
 void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
+    // Set move state.
     graphicsHandler->m_inputEvent.mouseMoveEvent = true;
+    // Set button state on move event.
     graphicsHandler->m_inputEvent.mouseMoveButtonStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     graphicsHandler->m_inputEvent.mouseMoveButtonStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
     graphicsHandler->m_inputEvent.mouseMoveButtonStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);   
@@ -80,16 +98,20 @@ void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 
 void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
 {
+    // Set scroll event information.
     graphicsHandler->m_inputEvent.mouseScrollEvent = true;
     graphicsHandler->m_inputEvent.mouseScrollY = yoffset;
+    // ImGui scroll callback.
     ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 }
 
 void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    // Set key event information.
     graphicsHandler->m_inputEvent.keyEvent = true;
     graphicsHandler->m_inputEvent.key = key;
     graphicsHandler->m_inputEvent.keyAction = action;
+    // ImGui key callback.
     ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
 }
 
@@ -259,9 +281,9 @@ int main(int, char**)
     /*===================================================================================================================================*/
 
     // Thread reading inputs from pipeline.
-    std::thread t1(&PyInterface::readingIn, &pyInterface);
+    //std::thread t1(&PyInterface::readingIn, &pyInterface);
     // Thread writing to the pipeline.
-    std::thread t2(&PyInterface::readingOut, &pyInterface);
+    //std::thread t2(&PyInterface::readingOut, &pyInterface);
 
     // Set waiting for events.
     bool wait = false;
