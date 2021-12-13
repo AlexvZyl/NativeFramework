@@ -97,6 +97,10 @@ void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 		// Add component to circuit.
 		engine.m_circuit->m_components.push_back(component);
 
+		// Remove the default ports.
+		component->removePort(component->portsEast[0]);
+		component->removePort(component->portsWest[0]);
+
 		// Add entity ID to table.
 		idTable.insert({ componentNode["Entity ID"].as<unsigned>(), component->m_entityID });
 
