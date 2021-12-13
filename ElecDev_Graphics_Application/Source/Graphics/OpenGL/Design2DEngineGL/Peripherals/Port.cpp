@@ -14,7 +14,7 @@ Font Port::titleFont = msdfLoadFont(ARIAL_NORMAL_JSON);
 Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
 	:Entity(EntityType::PORT, parent), 
 	 bodyColour( 0.7f, 0.7f, 0.7f, 1.f ),
-	 borderColour(0.8f, 1.0f, .8f, 1.f),
+	 borderColour(0.f, 0.f, 0.f, 1.f),
 	 m_offset(offset),
 	 centre(parent->centre + offset),
 	 body(parent->engine_circleVAO, centre, 0.01f, bodyColour, 1.0f, 0.0f, this),
@@ -59,6 +59,8 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	body.setColor(bodyColour);
 	border.setColor(borderColour);
 	setLayer(portLayer);
+
+	highlight();
 }
 
 Port::~Port()
