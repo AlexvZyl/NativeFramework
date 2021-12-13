@@ -41,16 +41,14 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	}
 	else if (designerState == ENTITY_SELECT) {
 		m_currentEntityID = getEntityID(pixelCoords);	
-		//
+
+		setActiveComponent(m_currentEntityID);
+		setActiveCable(m_currentEntityID);
 		Port* clickedPort = getPort(m_currentEntityID);
 			if (clickedPort != nullptr) {
 				m_activeCable = nullptr;
 				designerState = CABLE_PLACE;
 				m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circleEntitiesVAO.get(), m_circuit.get());
-			}
-			else {
-				setActiveComponent(m_currentEntityID);
-				setActiveCable(m_currentEntityID);
 			}
 	}
 	else if (designerState == CABLE_PLACE) {
