@@ -24,6 +24,9 @@ private:
 
 public:
 
+	std::string m_windowContext;
+	bool m_contextSaved = false;
+
 	// Constructor.
 	ComponentEditor(GUIState* guiState, GraphicsHandler* graphicsHandler);
 	// Render call.

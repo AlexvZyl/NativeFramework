@@ -211,6 +211,9 @@ void GraphicsHandler::fileDropEventHandler()
 
 void GraphicsHandler::saveEventHandler() 
 {
+	// Find engine.
+	Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine].get());
+
 	// Check if file is added to the save event.
 	std::string savePath = m_saveEvent.path;
 	if (savePath.find(".lmn")  != std::string::npos ||
@@ -225,32 +228,35 @@ void GraphicsHandler::saveEventHandler()
 			savePath.pop_back();
 		}
 		std::reverse(file.begin(), file.end());
-		saveToYAML(m_saveEvent.engine->m_circuit, savePath, file);
+		saveToYAML(saveEngine->m_circuit, savePath, file);
 	}
 	else 
 	{
-		saveToYAML(m_saveEvent.engine->m_circuit, m_saveEvent.path);
+		saveToYAML(saveEngine->m_circuit, m_saveEvent.path);
 	}
-	m_saveEvent.engine = nullptr;
+	m_saveEvent.saveEngine = "";
 	m_saveEvent.eventTrigger = false;
 	m_saveEvent.path = "";
 }
 
 void GraphicsHandler::loadEventHandler() 
 {
-	// Load file.
-	addWindow("Generating", "Design2D");
-	Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
-	loadFromYAML(*activeEngine, m_loadEvent.path);
-	// Update name.
-	activeEngine->m_contextName = activeEngine->m_circuit->m_label;
-	auto node = m_windowsDictionary.extract("Generating");
-	node.key() = activeEngine->m_contextName;
-	m_windowsDictionary.insert(std::move(node));
-	m_activeWindow->windowName = activeEngine->m_circuit->m_label;
+	// Check if operation did not fail.
+	if (m_loadEvent.path != "OPERATION_CANCELLED" && m_loadEvent.path != "FOLDER_EMPTY") 
+	{ 
+		// Load file.
+		addWindow("Generating", "Design2D");
+		Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+		loadFromYAML(*activeEngine, m_loadEvent.path);
+		// Update name.
+		activeEngine->m_contextName = activeEngine->m_circuit->m_label;
+		auto node = m_windowsDictionary.extract("Generating");
+		node.key() = activeEngine->m_contextName;
+		m_windowsDictionary.insert(std::move(node));
+		m_activeWindow->windowName = activeEngine->m_circuit->m_label;
+	}
 	// Reset event.
-	m_loadEvent.eventTrigger = false;
-	m_loadEvent.path = "";
+	m_loadEvent.reset();
 }
 	
 //=============================================================================================================================================//

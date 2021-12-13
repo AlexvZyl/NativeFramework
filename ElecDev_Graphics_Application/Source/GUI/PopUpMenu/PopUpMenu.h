@@ -4,6 +4,12 @@
 /* Includes.																															 */
 /*=======================================================================================================================================*/
 
+#include <string>
+
+/*=======================================================================================================================================*/
+/* Forward decleraTions.																											     */
+/*=======================================================================================================================================*/
+
 struct GUIState;
 class GraphicsHandler;
 class Design2DEngineGL;
@@ -18,7 +24,7 @@ private:
 
 	GUIState* m_guiState;
 	GraphicsHandler* m_graphicsHandler;
-	Design2DEngineGL* m_engineContext;
+	std::string m_windowContext;
 	bool m_contextSaved = false;
 
 public:

@@ -31,28 +31,29 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	else {
 		m_label = label;
 	}
+	float textMargin = 0.015;
 	//infer the port position from the offset, and set the title
 	if (m_offset.y > 0.099) {//top
 		m_position = PortPosition::TOP;
-		titleOffset = glm::vec2{ 0.f, -0.012f };
+		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "T");
 	}	
 	else if (m_offset.y < -0.099) {//bottom
 		m_position = PortPosition::BOTTOM;
-		titleOffset = glm::vec2{ 0.f, 0.012f };
+		titleOffset = glm::vec2{ 0.f, textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "U");
 	}
 	else if (m_offset.x > 0.099) {//right
 		m_position = PortPosition::RIGHT;
-		titleOffset = glm::vec2{ -0.012f, 0.0f };
+		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "R", "C");
 	}
 	else if (m_offset.x < -0.099) {//left
 		m_position = PortPosition::LEFT;
-		titleOffset = glm::vec2{ 0.012f, 0.0f };
+		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "L", "C");
 	}
@@ -65,7 +66,7 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 
 Port::~Port()
 {
-	//If a port is removed, we need to find and destroy any linked cables
+	// If a port is removed, we need to find and destroy any linked cables
 	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
 	for (Cable* cable : m_cables) {
 		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr < Cable > current)

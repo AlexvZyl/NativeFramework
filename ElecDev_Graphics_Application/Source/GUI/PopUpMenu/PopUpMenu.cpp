@@ -6,7 +6,7 @@
 #include <iostream>
 #include "Core/imgui.h"
 #include "../GUIState.h"
-#include "../Graphics/graphicsHandler.h"
+#include "Graphics/graphicsHandler.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
@@ -24,13 +24,6 @@ PopUpMenu::PopUpMenu(GUIState* guiState, GraphicsHandler* graphicsHandler)
 // Render call.
 void PopUpMenu::render()
 {
-    if (!m_contextSaved) 
-    { 
-        // Save context.
-        m_engineContext = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_activeWindow->engineGL.get()); 
-        m_contextSaved = true;
-    }
-
     // Place at mouse position.
     ImGui::SetNextWindowPos(m_guiState->popUpPosition);
 
@@ -40,8 +33,19 @@ void PopUpMenu::render()
                                                           ImGuiWindowFlags_NoDocking |
                                                           ImGuiWindowFlags_AlwaysAutoResize))
     {
+        if (!m_contextSaved)
+        {
+            // Save context.
+            m_windowContext = m_graphicsHandler->m_activeWindow->windowName;
+            m_contextSaved = true;
+        }
+
+        // Set active window.
+        m_graphicsHandler->m_activeWindow = m_graphicsHandler->m_windowsDictionary[m_windowContext];
+
         // Close if not focused.
-        if (!ImGui::IsWindowFocused()) { close(); }
+        if (!ImGui::IsWindowFocused()) 
+        { close(); }
 
         // Render menu items.
         if (m_guiState->clickedZone.background) 
@@ -53,7 +57,8 @@ void PopUpMenu::render()
                 glm::vec3 WorldCoords = m_guiState->design_engine->pixelCoordsToWorldCoords(pixelCoords);
                 glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
                 //place a dummy component
-                m_guiState->design_engine->ComponentPlaceMode(screenCoords);
+                Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_windowsDictionary[m_windowContext]->engineGL.get());
+                activeEngine->ComponentPlaceMode(screenCoords);
                 close();
             }
         }
@@ -94,14 +99,18 @@ void PopUpMenu::render()
         if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
         {
             m_graphicsHandler->m_saveEvent.eventTrigger = true;
-            m_graphicsHandler->m_saveEvent.engine = m_engineContext;
-            m_graphicsHandler->m_saveEvent.path = selectFile("", m_engineContext->m_circuit->m_label);
+            m_graphicsHandler->m_saveEvent.saveEngine = m_windowContext;
+            Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_activeWindow->engineGL.get());
+            m_graphicsHandler->m_saveEvent.path = selectFile("", activeEngine->m_circuit->m_label);
             close();
         }
         ImGui::End();
     }
     // On component close.
-    else { m_contextSaved = false; }
+    if(!m_guiState->popUpMenu)
+    { 
+        close();
+    }
 }
 
 void PopUpMenu::close()

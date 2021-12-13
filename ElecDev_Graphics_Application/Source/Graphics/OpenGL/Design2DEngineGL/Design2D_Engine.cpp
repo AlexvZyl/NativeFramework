@@ -48,11 +48,7 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 // Destructor.
 Design2DEngineGL::~Design2DEngineGL()
 {
-	// Delete components.
-	m_circuit->m_components.empty();
-	m_circuit->m_components.shrink_to_fit();
-	m_circuit->m_cables.empty();
-	m_circuit->m_cables.shrink_to_fit();
+
 }
 
 //=============================================================================================================================================//
