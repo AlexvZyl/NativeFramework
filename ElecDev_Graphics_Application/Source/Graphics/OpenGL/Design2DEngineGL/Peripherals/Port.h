@@ -40,10 +40,12 @@ public:
 	static unsigned portID;
 	glm::vec4 bodyColour;
 	glm::vec4 borderColour;
+	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
 	float portLayer;
 
 	Circle<VertexDataCircle> body;
 	Circle<VertexDataCircle> border;
+	Circle<VertexDataCircle> attachmentIndicator;
 	std::shared_ptr<Text<VertexDataTextured>> title;
 
 	std::string m_label;
@@ -55,6 +57,7 @@ public:
 
 
 	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
+	~Port();
 	Port& operator = (const Port &t);
 	void moveTo(glm::vec2 destination);
 	void move(glm::vec2 translation);
@@ -65,5 +68,7 @@ public:
 	void setOffset(glm::vec2 offset);
 	void attachCable(Cable* cable);
 	void detachCable(Cable* cable);
+	void showAttachIndicator();
+	void hideAttachIndicator();
 };
 
