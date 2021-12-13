@@ -57,8 +57,11 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		m_currentEntityID = getEntityID(pixelCoords);
 		Port* clickedPort = getPort(m_currentEntityID);
 		if (clickedPort != nullptr) {
-			m_activeCable->attach(clickedPort);
-			m_circuit->m_cables.push_back(m_activeCable);
+			//Only add the cable if the end port is different to the start port.
+			if (clickedPort != m_activeCable->m_startPort) {
+				m_activeCable->attach(clickedPort);
+				m_circuit->m_cables.push_back(m_activeCable);
+			}
 			m_activeCable = nullptr;
 			designerState = ENTITY_SELECT;
 		}
@@ -214,8 +217,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT)) {
-				deleteComponent(m_activeComponent);
-				deleteCable(m_activeCable);
+				deleteActiveComponent();
+				deleteActiveCable();
 			}
 			break;
 		}

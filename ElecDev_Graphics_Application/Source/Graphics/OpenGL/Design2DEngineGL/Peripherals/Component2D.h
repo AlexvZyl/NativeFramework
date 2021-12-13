@@ -58,13 +58,13 @@ public:
 	std::vector<glm::vec3> vertices2;
 
 	//colour attributes
-	glm::vec4 shapeColour;
-	glm::vec4 borderColour;
+	glm::vec4 shapeColour = { 0.5f, 0.5f, 0.9f, 0.5f };
+	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
 
 	//title
 	static Font titleFont;
 	glm::vec2 titleOffset = glm::vec2(0.f, -0.15f);
-	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
+	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	std::string titleString;
 	float titleSize = 0.035f;
 

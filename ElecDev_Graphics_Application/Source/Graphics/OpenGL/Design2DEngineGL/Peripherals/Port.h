@@ -34,7 +34,7 @@ public:
 	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
 	glm::vec2 titleOffset;
 	static Font titleFont;
-	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 1.f, 1.f);
+	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	float titleSize = 0.02f;
 	glm::vec2 centre;
 	static unsigned portID;
