@@ -49,8 +49,9 @@
 #define CIRCUIT_TREE_PNG 246
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
-#define ROBOTO_MEDIUM_MSDF_PNG 245
-#define ROBOTO_MEDIUM_MSDF_JSON 244
+#define ARIAL_NORMAL_PNG 245
+#define ARIAL_NORMAL_JSON 244
+#define ARIAL_NORMAL_TTF 220
 #define ROBOTO_REGULAR_TTF 243
 #define ARIAL_BOLD_MSDF_PNG 237
 #define ARIAL_BOLD_MSDF_JSON 236

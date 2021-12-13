@@ -3,7 +3,7 @@
 /*=======================================================================================================================================*/
 
 #include "GuiHandler.h"
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Set Themes.																															 */
@@ -113,8 +113,8 @@ void GUIHandler::setTheme()
 	// ------------------------- //
 
 	ImGuiIO& io = ImGui::GetIO();
-	void* fontPtr = getFontResourceMemoryLocation(ROBOTO_REGULAR_TTF);
-	unsigned fontSize = getFontResourceSize(ROBOTO_REGULAR_TTF);
+	void* fontPtr = getFontResourceMemoryLocation(ARIAL_NORMAL_TTF);
+	unsigned fontSize = getFontResourceSize(ARIAL_NORMAL_TTF);
 	m_fontRobotoMedium = io.Fonts->AddFontFromMemoryTTF(fontPtr, fontSize, 16.f);
 }
 

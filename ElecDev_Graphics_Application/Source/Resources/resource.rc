@@ -75,9 +75,9 @@ CIRCUIT_CIRCLE_JPEG				RCDATA						"Textures\\CircuitCircle.jpg"
 // OpenGL Fonts. 
 ARIAL_BOLD_MSDF_PNG				RCDATA					    "Fonts\\Arial-Bold\\Arial-Bold.png"
 ARIAL_BOLD_MSDF_JSON			TEXTFILE				    "Fonts\\Arial-Bold\\Arial-Bold.json"
-ROBOTO_MEDIUM_MSDF_PNG			RCDATA						"Fonts\\Roboto-Medium\\Roboto-Medium.png"
-ROBOTO_MEDIUM_MSDF_JSON			TEXTFILE					"Fonts\\Roboto-Medium\\Roboto-Medium.json"
-ROBOTO_REGULAR_TTF				FONT						"Fonts\\Roboto-Medium\\Roboto-Regular.ttf"
+ARIAL_NORMAL_PNG 				RCDATA						"Fonts\\Arial-Normal-2048\\Arial-Normal-2048.png"
+ARIAL_NORMAL_JSON				TEXTFILE					"Fonts\\Arial-Normal-2048\\Arial-Normal-2048.json"
+ARIAL_NORMAL_TTF 				FONT						"Fonts\\Arial-Normal-2048\\Arial-Normal.ttf"
 //-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources

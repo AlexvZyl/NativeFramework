@@ -4,7 +4,7 @@
 
 // Class include.
 #include <glad/glad.h>
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 #include "External/Misc/ConsoleColor.h"
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/ErrorHandlerGL.h"
