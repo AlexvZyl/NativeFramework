@@ -70,6 +70,9 @@ void GraphicsHandler::renderLoop()
 
 void GraphicsHandler::mousePressEvent()
 {
+	// Reset press event.
+	m_inputEvent.mousePressEvent = false;
+
 	// Check if window dict is empty or inactive.
 	if (m_windowsDictionary.size() && isActiveWindowValid())
 	{
@@ -77,8 +80,7 @@ void GraphicsHandler::mousePressEvent()
 		float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
 
 		// Left press.
-		if (m_inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_LEFT && 
-			m_inputEvent.mousePressAction == GLFW_PRESS)
+		if (m_inputEvent.mousePressLeftEvent)
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressLeft(mousePos);
@@ -87,8 +89,7 @@ void GraphicsHandler::mousePressEvent()
 		}
 
 		// Right press.
-		else if (m_inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_RIGHT && 
-				 m_inputEvent.mousePressAction == GLFW_PRESS)
+		if (m_inputEvent.mousePressRightEvent)
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressRight(mousePos);
@@ -101,13 +102,15 @@ void GraphicsHandler::mousePressEvent()
 		}
 
 		// Middle press.
-		else if (m_inputEvent.mousePressButton == GLFW_MOUSE_BUTTON_MIDDLE &&
-				 m_inputEvent.mousePressAction == GLFW_PRESS)
+		if (m_inputEvent.mousePressMiddleEvent)
 		{
 			// Call active engine.
 			m_activeWindow->engineGL->mousePressMiddle(mousePos);
 		}
 	}
+
+	// Reset the press data.
+	m_inputEvent.resetMousePress();
 }
 
 void GraphicsHandler::mouseMoveEvent()

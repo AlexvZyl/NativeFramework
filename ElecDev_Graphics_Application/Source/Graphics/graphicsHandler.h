@@ -92,31 +92,53 @@ struct RenderWindowGL
 // frame by frame basis and not every single time it occurs.
 struct m_inputEvent
 {
-	// Mouse press event information.
-	bool mousePressEvent = false;;				// Was a mouse button pressed?
-	//glm::vec2 mousePressPixels = { 0.f, 0.f };	// Pixel coords of mouse press.
-	int mousePressButton = 0;					// The mouse button that was pressed.
-	int mousePressAction = 0;					// Was it pressed or released?
+	// Mouse press events.
+	bool mousePressEvent			= false;		// Sets upon any press event.
+	bool mousePressLeftEvent		= false;		// Mouse press left.
+	bool mousePressRightEvent		= false;		// Mouse press right.
+	bool mousePressMiddleEvent		= false;		// Mouse press middle.
+	// Mouse release events.
+	bool mouseReleaseEvent			= false;		// Sets upon any release event.
+	bool mouseReleaseLeftEvent		= false;		// Mouse release left.
+	bool mouseReleaseRightEvent		= false;		// Mouse release right.
+	bool mouseReleaseMiddleEvent	= false;		// Mouse release middle.
 
 	// Mouse move event.
-	bool mouseMoveEvent = false;				// Did a mouse move event occur?
-	//glm::vec2 mouseMovePixels = { 0.f, 0.f };	// Position of the mouse.
-	int mouseMoveButtonStateLeft = 0;			// Left mouse pressed or released.
-	int mouseMoveButtonStateRight = 0;			// Righ mouse pressed or released.
-	int mouseMoveButtonStateMiddle = 0;			// Middle mouse pressed or released.
+	bool mouseMoveEvent				= false;		// Did a mouse move event occur?
+	int mouseMoveButtonStateLeft	= 0;			// Left mouse pressed or released.
+	int mouseMoveButtonStateRight	= 0;			// Righ mouse pressed or released.
+	int mouseMoveButtonStateMiddle	= 0;			// Middle mouse pressed or released.
 
 	// Mouse scroll event.
-	bool mouseScrollEvent = false;				// Did a scroll event occur?
-	float mouseScrollY = 0;						// Amount of scrolling.
+	bool mouseScrollEvent			= false;		// Did a scroll event occur?
+	float mouseScrollY				= 0;			// Amount of scrolling.
 
 	// Key event.
-	bool keyEvent = false;						// Did a key event occur?
-	int key = 0;								// The key that triggered the event.
-	int keyAction = 0;							// Is the key pressed or released?
+	bool keyEvent					= false;		// Did a key event occur?
+	int key							= 0;			// The key that triggered the event.
+	int keyAction					= 0;			// Is the key pressed or released?
+
+	// Reset the mouse press data.
+	void resetMousePress() 
+	{
+		mousePressEvent		  = false;
+		mousePressLeftEvent   = false;
+		mousePressRightEvent  = false;
+		mousePressMiddleEvent = false;
+	}
+
+	// Reset the mouse release data.
+	void resetMouseRelease()
+	{
+		mouseReleaseEvent		= false;
+		mouseReleaseLeftEvent	= false;
+		mouseReleaseRightEvent	= false;
+		mouseReleaseMiddleEvent = false;
+	}
 };
 
 // Contains the information for when files are dopped into the app.
-struct m_fileDropEvent
+struct FileDropEvent
 {
 	bool eventTrigger = false;			// Triggers with event.
 	int totalFiles = 0;					// Amount of files dropped.
@@ -165,7 +187,7 @@ public:
 	// The window.
 	GLFWwindow* m_glfwWindow;
 	// Stores information regarding the file drop event.
-	m_fileDropEvent m_fileDropEvent;
+	FileDropEvent m_fileDropEvent;
 	// Check if a window should be added.
 	bool m_addWindow = false;
 	std::string m_newWindowTitle = "";

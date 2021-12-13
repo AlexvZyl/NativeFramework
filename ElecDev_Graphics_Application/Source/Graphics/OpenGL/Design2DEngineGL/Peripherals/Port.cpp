@@ -4,13 +4,12 @@
 #include "CoreGL/Entities/Text.h"
 #include "GUI/GUIState.h"
 #include "CoreGL/FontLoader.h"
-#include "Utilities/Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 #include "Cable.h"
 #include "Circuit.h"
 
 //Add font for component titles
-//Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
-Font Port::titleFont = msdfLoadFont(ARIAL_BOLD_MSDF_JSON);
+Font Port::titleFont = msdfLoadFont(ARIAL_NORMAL_JSON);
 
 Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
 	:Entity(EntityType::PORT, parent), 
