@@ -45,6 +45,7 @@ public:
 
 	Circle<> body;
 	Circle<> border;
+	Circle<> attachmentIndicator;
 	std::shared_ptr<Text<>> title;
 
 	std::string m_label;
