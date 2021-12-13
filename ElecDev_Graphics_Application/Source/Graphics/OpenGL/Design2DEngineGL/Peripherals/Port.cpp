@@ -58,9 +58,8 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "L", "C");
 	}
 	body.setColor(bodyColour);
-	body.setLayer(portLayer);
 	border.setColor(borderColour);
-	border.setLayer(portLayer);
+	setLayer(portLayer);
 }
 
 Port::~Port()
@@ -154,8 +153,10 @@ void Port::detachCable(Cable* cable)
 	if (cableIt != m_cables.end()) {
 		m_cables.erase(cableIt);
 	}
-	indicatorColour = { 0.5f, 0.5f, 0.5f, 0.f };
-	attachmentIndicator.setColor(indicatorColour);
+	if (m_cables.empty()) {
+		indicatorColour = { 0.5f, 0.5f, 0.5f, 0.f };
+		attachmentIndicator.setColor(indicatorColour);
+	}
 }
 
 void Port::showAttachIndicator()

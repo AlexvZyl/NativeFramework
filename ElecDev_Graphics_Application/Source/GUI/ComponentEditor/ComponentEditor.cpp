@@ -24,6 +24,12 @@ void ComponentEditor::render()
 
 	//	Fetch The active component.
 	Component2D* activeComponent = m_guiState->active_component;
+
+	//check that the active component exists. Close if not.
+	if (!activeComponent) {
+		m_guiState->componentEditor = false;
+		return;
+	}
 	// Place editor at correct position.
 	//ImGui::SetNextWindowPos(m_guiState->popUpPosition);
 	// Editor menu.
