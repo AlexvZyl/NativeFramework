@@ -75,8 +75,6 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	// Update current entity ID.
 	m_currentEntityID = getEntityID(pixelCoords);
 	setActiveComponent(m_currentEntityID);
-	// Pass the active component to the GUI state for editing.
-	m_guiState->active_component = m_activeComponent.get();
 }
 
 void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
@@ -254,6 +252,9 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 				return current.get() == cur;
 			});
 		m_activeComponent->highlight();
+
+		// Pass the active component to the GUI state for editing.
+		m_guiState->active_component = m_activeComponent.get();
 	}
 }
 void Design2DEngineGL::setActiveCable(unsigned eID) {
