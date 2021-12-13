@@ -18,8 +18,9 @@ ComponentEditor::ComponentEditor(GUIState* guiState, GraphicsHandler* graphicsHa
 
 void ComponentEditor::render() 
 {
-	//If we are not in a design engine, we should not be here.
-	//We need to implement a check for this.
+
+	// If we are not in a design engine, we should not be here.
+	// We need to implement a check for this.
 
 	//	Fetch The active component.
 	Component2D* activeComponent = m_guiState->active_component;

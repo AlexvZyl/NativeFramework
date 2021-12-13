@@ -78,6 +78,7 @@ void Text<VertexType>::generateText(std::string text)
 	// Vertical alignment.
 	if		(m_verticalAlign == "C" || m_verticalAlign == "c") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale) / 2; }
 	else if (m_verticalAlign == "T" || m_verticalAlign == "t") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale); }
+	else if (m_verticalAlign == "U" || m_verticalAlign == "u") { m_cursorStart.y = m_cursorStart.y - ((m_font->descender				   ) * m_textScale); }
 	else if (m_verticalAlign == "B" || m_verticalAlign == "b") { /* Bottom is the default setting. */ }
 	// Display error.
 	else	{ std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_verticalAlign << "' is not a valid vertical alignment.\n"; return; }
