@@ -270,7 +270,24 @@ void Cable::moveActivePrimativeTo(glm::vec2 screenCoords)
 		m_nodes.at(it - m_lines.begin())->translate(translation);
 	}
 	else if (m_activeNode) {
-		//handle node movement (unimplemented).
+		//handle node movement
+
+		//This is the same as dragging the two adjacent line segments.
+
+		//get an iterator to the node
+		auto it = std::find_if(begin(m_nodes), end(m_nodes), [&](std::shared_ptr<Circle<>> current)
+			{
+				return current.get() == m_activeNode;
+			});
+
+		//translate the adjacent lines
+		m_activeLine = m_lines.at(it - m_nodes.begin()).get();
+		moveActivePrimativeTo(screenCoords);
+		m_activeLine = m_lines.at(it - m_nodes.begin()+1).get();
+		moveActivePrimativeTo(screenCoords);
+		m_activeLine = nullptr;
+
+
 	}
 }
 
