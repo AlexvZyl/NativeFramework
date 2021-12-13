@@ -21,10 +21,9 @@ public:
 
 	//Entity();
 	Entity(EntityType type, Entity* parent = nullptr);
+	~Entity();
 
 	// Set the Context of this entity, and parents.
 	virtual void setContext(GUIState* guiState);
-	// Sets the entty ID of the entity.
-	virtual void setEntityID(unsigned int eID);
 };
 

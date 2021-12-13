@@ -214,7 +214,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
-			if ((designerState = ENTITY_SELECT)) {
+			if ((designerState == ENTITY_SELECT)) {
 				deleteActiveComponent();
 				deleteActiveCable();
 			}

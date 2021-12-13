@@ -23,9 +23,15 @@ unsigned EntityManager::generateEID(Entity* entity)
 void EntityManager::freeEID(unsigned EID)
 {	
 	// To free the last EID, we can simply decrement LastID
-	if (EID == lastID) { lastID--; }
+	if (EID == lastID) { 
+		lastID--; 
+		entityLog.pop_back();
+	}
 	// Remember to recycle this ID.
-	else			   { freeIDs.push_back(EID); }
+	else			   { 
+		freeIDs.push_back(EID); 
+		//Consider invalidating pointers to deleted entities in the log here.
+	}
 }
 
 Entity* EntityManager::getEntity(unsigned EID)
