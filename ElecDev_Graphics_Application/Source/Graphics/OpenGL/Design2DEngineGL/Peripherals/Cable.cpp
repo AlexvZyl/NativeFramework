@@ -49,6 +49,7 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ve
 	engine_circleVAO = circleVAO;
 	m_startPort = startPort;
 	m_endPort = endPort;
+	m_colour = { 0.4f, 0.4f, 0.5f, 1.0f };
 
 	//Attach the ports
 	m_startPort->attachCable(this);
@@ -161,8 +162,8 @@ void Cable::attach(Port* endPort)
 		//Line is already perpendicular, so we can extend to the port.
 		extendSegment(m_endPort->centre);
 	}
+	setColour(glm::vec4{ 0.4f, 0.4f, 0.5f, 1.0f });
 	endPort->attachCable(this);
-	setColour(glm::vec4{ 0.1f, 0.1f, 0.1f, 1.0f });
 }
 
 void Cable::followPort(Port* movedPort)

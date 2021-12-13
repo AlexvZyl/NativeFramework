@@ -141,7 +141,7 @@ void Port::setOffset(glm::vec2 offset)
 void Port::attachCable(Cable* cable)
 {
 	m_cables.push_back(cable);
-	indicatorColour = {0.f, 0.f, 0.f, 1.f};
+	indicatorColour = { 0.f, 0.f, 0.f, 1.0f };
 	attachmentIndicator.setColor(indicatorColour);
 }
 
