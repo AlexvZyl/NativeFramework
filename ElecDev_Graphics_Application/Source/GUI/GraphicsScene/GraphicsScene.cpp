@@ -117,7 +117,10 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 			}
 			// Add window to remove.
 			else 
-			{ toRemove.push_back(name.c_str()); }
+			{ 
+				toRemove.push_back(name.c_str()); 
+				m_guiState->componentEditor = false;
+			}
 		}
 		// Remove windows that have been closed.
 		for (auto remove : toRemove) { graphicsHandler->removeWindow(remove); }

@@ -63,8 +63,8 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	titleString = "Component " + std::to_string(componentID++);
 	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). It is a bit of a pain setting up ports every time we test.
-	addPort(0, PORT_IN, "Test in");
-	addPort(1, PORT_OUT, "Test out");
+	addPort(0, PORT_IN, "LX1");
+	addPort(1, PORT_OUT, "RX1");
 
 	highlight();
 

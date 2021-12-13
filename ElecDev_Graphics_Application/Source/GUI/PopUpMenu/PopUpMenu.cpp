@@ -41,9 +41,8 @@ void PopUpMenu::render()
                                                           ImGuiWindowFlags_AlwaysAutoResize))
     {
         // Close if not focused.
-        if (!ImGui::IsWindowFocused()) {
-            close();
-        }
+        if (!ImGui::IsWindowFocused()) { close(); }
+
         // Render menu items.
         if (m_guiState->clickedZone.background) 
         {
@@ -81,12 +80,15 @@ void PopUpMenu::render()
             }
         }
         ImGui::Separator();
-        // Render the default items.
+
+        // --------------- //
+        //  D E F A U L T  //
+        // --------------- //
+
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
         {
             m_graphicsHandler->m_loadEvent.eventTrigger = true;
             m_graphicsHandler->m_loadEvent.path = selectFile();
-
             close();
         }
         if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
@@ -98,6 +100,7 @@ void PopUpMenu::render()
         }
         ImGui::End();
     }
+    // On component close.
     else { m_contextSaved = false; }
 }
 
