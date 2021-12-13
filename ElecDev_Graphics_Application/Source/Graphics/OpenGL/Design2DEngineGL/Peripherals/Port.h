@@ -43,10 +43,9 @@ public:
 	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
 	float portLayer;
 
-	Circle<VertexDataCircle> body;
-	Circle<VertexDataCircle> border;
-	Circle<VertexDataCircle> attachmentIndicator;
-	std::shared_ptr<Text<VertexDataTextured>> title;
+	Circle<> body;
+	Circle<> border;
+	std::shared_ptr<Text<>> title;
 
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
