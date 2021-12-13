@@ -77,8 +77,10 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 					// ----------- //
 
 					// Set the active engineGL.
-					if (window->isFocused && window->isHovered)
-					{ graphicsHandler->m_activeWindow = graphicsHandler->m_windowsDictionary[name]; }
+					if (window->isHovered)
+					{ 
+						graphicsHandler->m_activeWindow = graphicsHandler->m_windowsDictionary[name]; 
+					}
 					// If the window is not focused.
 					else
 					{

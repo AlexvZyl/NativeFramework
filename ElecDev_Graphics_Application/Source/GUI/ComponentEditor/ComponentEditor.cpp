@@ -18,13 +18,18 @@ ComponentEditor::ComponentEditor(GUIState* guiState, GraphicsHandler* graphicsHa
 
 void ComponentEditor::render() 
 {
+	// Save the editor context.
+	if (!m_contextSaved) 
+	{
+		m_windowContext = m_graphicsHandler->m_activeWindow->windowName;
+		m_contextSaved = true;
+	}
 
 	// If we are not in a design engine, we should not be here.
 	// We need to implement a check for this.
 
 	//	Fetch The active component.
 	Component2D* activeComponent = m_guiState->active_component;
-
 	//check that the active component exists. Close if not.
 	if (!activeComponent) 
 	{
@@ -40,6 +45,7 @@ void ComponentEditor::render()
 	//FIX ME!! The wondow size should be set dynamically
 	ImGui::SetNextWindowSize(ImVec2 {465.f, 400}, ImGuiCond_Once);
 	ImGui::Begin("Comoponent Editor", &m_guiState->componentEditor, ImGuiWindowFlags_NoDocking);
+
 	//ImGui::Button("New MCC");
 	//ImGui::CollapsingHeader("Ports");
 	ImGui::Text("Component Name:");
@@ -144,8 +150,10 @@ void ComponentEditor::render()
 				}
 			}
 			ImGui::EndTable();
-			if (!addingPort) {
-				if (ImGui::Button("New Port")) {
+			if (!addingPort) 
+			{
+				if (ImGui::Button("New Port")) 
+				{
 					addingPort = true;
 				}
 			}

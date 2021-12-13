@@ -17,14 +17,15 @@ private:
 
 	GUIState* m_guiState;
 	GraphicsHandler* m_graphicsHandler;
-	std::string m_windowContext;
-	bool m_contextSaved;
 	bool addingPort = false;
 	std::string newName = "Untitled";
 	int newType = 2;
 	int newPos = 0;
 
 public:
+
+	std::string m_windowContext;
+	bool m_contextSaved = false;
 
 	// Constructor.
 	ComponentEditor(GUIState* guiState, GraphicsHandler* graphicsHandler);

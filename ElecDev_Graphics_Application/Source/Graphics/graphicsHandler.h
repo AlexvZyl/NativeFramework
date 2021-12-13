@@ -150,7 +150,7 @@ struct SaveEvent
 {
 	bool eventTrigger = false;
 	std::string path;
-	Design2DEngineGL* engine;
+	std::string saveEngine;
 };
 
 // Event for handling saving scenes to disk.

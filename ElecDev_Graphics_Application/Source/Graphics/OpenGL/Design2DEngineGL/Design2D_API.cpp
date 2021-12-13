@@ -3,11 +3,14 @@
 #include "Peripherals/Circuit.h"
 
 
-void Design2DEngineGL::ComponentPlaceMode(glm::vec2 screenCoords) {
-	if (designerState != COMPONENT_PLACE) {
+void Design2DEngineGL::ComponentPlaceMode(glm::vec2 screenCoords) 
+{
+	if (designerState != COMPONENT_PLACE) 
+	{
 		designerState = COMPONENT_PLACE;
 		// Add a dummy component
-		if (m_activeComponent) {
+		if (m_activeComponent) 
+		{
 			m_activeComponent->unhighlight();
 		}
 		m_activeComponent = std::make_shared<Component2D>(screenCoords,

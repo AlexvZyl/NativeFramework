@@ -211,6 +211,9 @@ void GraphicsHandler::fileDropEventHandler()
 
 void GraphicsHandler::saveEventHandler() 
 {
+	// Find engine.
+	Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine].get());
+
 	// Check if file is added to the save event.
 	std::string savePath = m_saveEvent.path;
 	if (savePath.find(".lmn")  != std::string::npos ||
@@ -225,13 +228,13 @@ void GraphicsHandler::saveEventHandler()
 			savePath.pop_back();
 		}
 		std::reverse(file.begin(), file.end());
-		saveToYAML(m_saveEvent.engine->m_circuit, savePath, file);
+		saveToYAML(saveEngine->m_circuit, savePath, file);
 	}
 	else 
 	{
-		saveToYAML(m_saveEvent.engine->m_circuit, m_saveEvent.path);
+		saveToYAML(saveEngine->m_circuit, m_saveEvent.path);
 	}
-	m_saveEvent.engine = nullptr;
+	m_saveEvent.saveEngine = "";
 	m_saveEvent.eventTrigger = false;
 	m_saveEvent.path = "";
 }
@@ -254,7 +257,6 @@ void GraphicsHandler::loadEventHandler()
 	}
 	// Reset event.
 	m_loadEvent.reset();
-	
 }
 	
 //=============================================================================================================================================//
