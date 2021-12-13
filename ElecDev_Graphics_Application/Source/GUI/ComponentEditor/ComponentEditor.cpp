@@ -26,10 +26,12 @@ void ComponentEditor::render()
 	Component2D* activeComponent = m_guiState->active_component;
 
 	//check that the active component exists. Close if not.
-	if (!activeComponent) {
+	if (!activeComponent) 
+	{
 		m_guiState->componentEditor = false;
 		return;
 	}
+
 	// Place editor at correct position.
 	//ImGui::SetNextWindowPos(m_guiState->popUpPosition);
 	// Editor menu.
@@ -50,6 +52,9 @@ void ComponentEditor::render()
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports")) 
 	{
+		// Set the active window.
+		m_graphicsHandler->m_activeWindow = m_graphicsHandler->m_windowsDictionary[m_windowContext];
+
 		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit);
 		//ImGui::SetColumnWidth(1, 20.f);
 

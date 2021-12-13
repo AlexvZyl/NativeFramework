@@ -6,7 +6,7 @@
 #include <iostream>
 #include "Core/imgui.h"
 #include "../GUIState.h"
-#include "../Graphics/graphicsHandler.h"
+#include "Graphics/graphicsHandler.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"

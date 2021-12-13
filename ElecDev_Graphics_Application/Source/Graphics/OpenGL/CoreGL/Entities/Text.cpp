@@ -45,6 +45,9 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 template<typename VertexType>
 void Text<VertexType>::generateText(std::string text)
 {
+	// Return if text is empty.
+	if (!text.size()) { return; }
+
 	m_cursorStart = m_trackedCenter;
 	m_textLength = 0;
 
@@ -69,19 +72,49 @@ void Text<VertexType>::generateText(std::string text)
 	}
 
 	// Horizontal alignment.
-	if		(m_horizontalAlign == "C" || m_horizontalAlign == "c") { m_cursorStart.x = m_cursorStart.x - (m_textLength * m_textScale) / 2; }
-	else if (m_horizontalAlign == "R" || m_horizontalAlign == "r") { m_cursorStart.x = m_cursorStart.x - (m_textLength * m_textScale); }
-	else if (m_horizontalAlign == "L" || m_horizontalAlign == "l") { /* Left is the default setting. */ }
+	if (m_horizontalAlign == "C" || m_horizontalAlign == "c") 
+	{ 
+		m_cursorStart.x = m_cursorStart.x - (m_textLength / 2) * m_textScale; 
+	}
+	else if (m_horizontalAlign == "R" || m_horizontalAlign == "r") 
+	{ 
+		Character endChar = m_font->characterDictionary.at(text[text.size()-1]);
+		float offset = endChar.xAdvance - endChar.xPlaneBounds[1];
+		m_cursorStart.x = m_cursorStart.x - (m_textLength - offset) * m_textScale;
+	}
+	else if (m_horizontalAlign == "L" || m_horizontalAlign == "l") 
+	{ 
+		Character initialChar = m_font->characterDictionary.at(text[0]);
+		m_cursorStart.x = m_cursorStart.x - (initialChar.xPlaneBounds[0]) * m_textScale;
+	}
 	// Display error.
-	else	{ std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_horizontalAlign << "' is not a valid horizontal alignment.\n"; return; }
+	else	
+	{ 
+		std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_horizontalAlign << "' is not a valid horizontal alignment.\n"; return; 
+	}
 
 	// Vertical alignment.
-	if		(m_verticalAlign == "C" || m_verticalAlign == "c") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale) / 2; }
-	else if (m_verticalAlign == "T" || m_verticalAlign == "t") { m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale); }
-	else if (m_verticalAlign == "U" || m_verticalAlign == "u") { m_cursorStart.y = m_cursorStart.y - ((m_font->descender				   ) * m_textScale); }
-	else if (m_verticalAlign == "B" || m_verticalAlign == "b") { /* Bottom is the default setting. */ }
+	if (m_verticalAlign == "C" || m_verticalAlign == "c") 
+	{
+		m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale) / 2; 
+	}
+	else if (m_verticalAlign == "T" || m_verticalAlign == "t") 
+	{
+		m_cursorStart.y = m_cursorStart.y - ((m_font->ascender + m_font->descender) * m_textScale); 
+	}
+	else if (m_verticalAlign == "U" || m_verticalAlign == "u") 
+	{
+		m_cursorStart.y = m_cursorStart.y - ((m_font->descender) * m_textScale); 
+	}
+	else if (m_verticalAlign == "B" || m_verticalAlign == "b") 
+	{
+		/* Bottom is the default setting. */ 
+	}
 	// Display error.
-	else	{ std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_verticalAlign << "' is not a valid vertical alignment.\n"; return; }
+	else	
+	{
+		std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_verticalAlign << "' is not a valid vertical alignment.\n"; return; 
+	}
 
 	// ----------------- //
 	//  T E X T   B O X  //

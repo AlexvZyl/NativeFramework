@@ -17,6 +17,8 @@ private:
 
 	GUIState* m_guiState;
 	GraphicsHandler* m_graphicsHandler;
+	std::string m_windowContext;
+	bool m_contextSaved;
 	bool addingPort = false;
 	std::string newName = "Untitled";
 	int newType = 2;

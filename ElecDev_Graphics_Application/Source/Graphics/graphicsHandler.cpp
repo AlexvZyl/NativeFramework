@@ -238,19 +238,23 @@ void GraphicsHandler::saveEventHandler()
 
 void GraphicsHandler::loadEventHandler() 
 {
-	// Load file.
-	addWindow("Generating", "Design2D");
-	Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
-	loadFromYAML(*activeEngine, m_loadEvent.path);
-	// Update name.
-	activeEngine->m_contextName = activeEngine->m_circuit->m_label;
-	auto node = m_windowsDictionary.extract("Generating");
-	node.key() = activeEngine->m_contextName;
-	m_windowsDictionary.insert(std::move(node));
-	m_activeWindow->windowName = activeEngine->m_circuit->m_label;
+	// Check if operation did not fail.
+	if (m_loadEvent.path != "OPERATION_CANCELLED" && m_loadEvent.path != "FOLDER_EMPTY") 
+	{ 
+		// Load file.
+		addWindow("Generating", "Design2D");
+		Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+		loadFromYAML(*activeEngine, m_loadEvent.path);
+		// Update name.
+		activeEngine->m_contextName = activeEngine->m_circuit->m_label;
+		auto node = m_windowsDictionary.extract("Generating");
+		node.key() = activeEngine->m_contextName;
+		m_windowsDictionary.insert(std::move(node));
+		m_activeWindow->windowName = activeEngine->m_circuit->m_label;
+	}
 	// Reset event.
-	m_loadEvent.eventTrigger = false;
-	m_loadEvent.path = "";
+	m_loadEvent.reset();
+	
 }
 	
 //=============================================================================================================================================//
