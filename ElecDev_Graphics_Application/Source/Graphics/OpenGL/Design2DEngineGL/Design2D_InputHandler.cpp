@@ -40,29 +40,30 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		designerState = ENTITY_SELECT;
 	}
 	else if (designerState == ENTITY_SELECT) {
-		m_currentEntityID = getEntityID(pixelCoords);
-		setActiveComponent(m_currentEntityID);
-		setActiveCable(m_currentEntityID);
+		m_currentEntityID = getEntityID(pixelCoords);	
+		//
+		Port* clickedPort = getPort(m_currentEntityID);
+			if (clickedPort != nullptr) {
+				m_activeCable = nullptr;
+				designerState = CABLE_PLACE;
+				m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circleEntitiesVAO.get(), m_circuit.get());
+			}
+			else {
+				setActiveComponent(m_currentEntityID);
+				setActiveCable(m_currentEntityID);
+			}
 	}
 	else if (designerState == CABLE_PLACE) {
 		m_currentEntityID = getEntityID(pixelCoords);
 		Port* clickedPort = getPort(m_currentEntityID);
-		if (!m_activeCable.get()) {
-			if (clickedPort == nullptr) {
-				return;
-			}
-			m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circleEntitiesVAO.get(), m_circuit.get());
-
+		if (clickedPort != nullptr) {
+			m_activeCable->attach(clickedPort);
+			m_circuit->m_cables.push_back(m_activeCable);
+			m_activeCable = nullptr;
+			designerState = ENTITY_SELECT;
 		}
 		else {
-			if (clickedPort != nullptr) {
-				m_activeCable->attach(clickedPort);
-				m_circuit->m_cables.push_back(m_activeCable);
-				m_activeCable = nullptr;
-			}
-			else {
-				m_activeCable->addSegment(screenCoords);
-			}
+			m_activeCable->addSegment(screenCoords);
 		}
 	}
 }
@@ -74,8 +75,6 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	// Update current entity ID.
 	m_currentEntityID = getEntityID(pixelCoords);
 	setActiveComponent(m_currentEntityID);
-	// Pass the active component to the GUI state for editing.
-	m_guiState->active_component = m_activeComponent.get();
 }
 
 void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
@@ -97,22 +96,41 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 		// Move the component.
 		m_activeComponent->moveTo(screenCoords);
 	}
-	else if (designerState == CABLE_PLACE) {
-		m_currentEntityID = getEntityID(pixelCoords);
-		if (m_activeCable.get()) {
-			m_activeCable->extendSegment(screenCoords);
+	else {
+
+		//Port hover indicator
+		m_hoveredID = getEntityID(pixelCoords);
+		auto lastHoveredPort = m_hoveredPort;
+		m_hoveredPort = getPort(m_hoveredID);
+		if (m_hoveredPort != lastHoveredPort) {
+			if (m_hoveredPort) {
+				m_hoveredPort->showAttachIndicator();
+			}
+			else if (lastHoveredPort) {
+				lastHoveredPort->hideAttachIndicator();
+			}
 		}
-	}
-	else if (designerState == ENTITY_SELECT && buttonStateLeft) {
-		//Here we are dragging a component
-		glm::vec2 translation = screenCoords - m_lastDragPos;
-		if (m_activeComponent.get()) {
-			// Move the component.
-			m_activeComponent->move(translation);
+
+		if (designerState == CABLE_PLACE) {
+			m_currentEntityID = getEntityID(pixelCoords);
+			if (m_activeCable.get()) {
+				m_activeCable->extendSegment(screenCoords);
+			}
 		}
-		if (m_activeCable.get()) {
-			// Move the component.
-			m_activeCable->moveActivePrimativeTo(screenCoords);
+		else if (designerState == ENTITY_SELECT) {
+			if (buttonStateLeft) {
+				//User is dragging a component.
+				glm::vec2 translation = screenCoords - m_lastDragPos;
+				if (m_activeComponent.get()) {
+					// Move the component.
+					m_activeComponent->move(translation);
+				}
+				if (m_activeCable.get()) {
+					// Move the component.
+					m_activeCable->moveActivePrimativeTo(screenCoords);
+				}
+			}
+
 		}
 	}
 	m_lastDragPos = screenCoords;
@@ -182,11 +200,11 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
-		case GLFW_KEY_C:
+		/*case GLFW_KEY_C:
 			//enter cable placement mode.
 			designerState = CABLE_PLACE;
 			m_activeComponent = nullptr;
-			break;
+			break;*/
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
 			//Remove the dummy component
@@ -196,22 +214,8 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_DELETE:
 			if ((designerState = ENTITY_SELECT)) {
-				if (m_activeComponent) {
-					auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
-					if (iterator != m_circuit->m_components.end())
-					{
-						m_circuit->m_components.erase(iterator);
-						m_activeComponent = NULL;
-					}
-				}
-				else if (m_activeCable) {
-					auto iterator = std::find(m_circuit->m_cables.begin(), m_circuit->m_cables.end(), m_activeCable);
-					if (iterator != m_circuit->m_cables.end())
-					{
-						m_circuit->m_cables.erase(iterator);
-						m_activeCable = NULL;
-					}
-				}
+				deleteComponent(m_activeComponent);
+				deleteCable(m_activeCable);
 			}
 			break;
 		}
@@ -248,6 +252,9 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 				return current.get() == cur;
 			});
 		m_activeComponent->highlight();
+
+		// Pass the active component to the GUI state for editing.
+		m_guiState->active_component = m_activeComponent.get();
 	}
 }
 void Design2DEngineGL::setActiveCable(unsigned eID) {
@@ -288,7 +295,6 @@ Port* Design2DEngineGL::getPort(unsigned eID) {
 	else {
 		m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
-		currentEntity->setContext(m_guiState);
 		while (currentEntity->m_type != EntityType::PORT) {
 			currentEntity = currentEntity->m_parent;			
 			if (currentEntity->m_parent == nullptr) {

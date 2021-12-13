@@ -6,6 +6,7 @@
 #include "CoreGL/FontLoader.h"
 #include "Utilities/Resources/ResourceHandler.h"
 #include "Cable.h"
+#include "Circuit.h"
 
 //Add font for component titles
 //Font Port::titleFont = msdfLoadFont(ROBOTO_MEDIUM_MSDF_JSON);
@@ -19,6 +20,7 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	 centre(parent->centre + offset),
 	 body(parent->engine_circleVAO, centre, 0.01f, bodyColour, 1.0f, 0.0f, this),
 	 border(parent->engine_circleVAO, centre, 0.011f, borderColour, 1.0f, 0.01f, this),
+	 attachmentIndicator(parent->engine_circleVAO, centre, 0.005f, indicatorColour, 1.0f, 0.01f, this),
 	 m_type(type)
 {
 	engine_circleVAO = parent->engine_circleVAO;
@@ -57,9 +59,22 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	}
 	body.setColor(bodyColour);
 	body.setLayer(portLayer);
-	//new (&border) Circle(engine_circleVAO, centre3, 0.011f, borderColour, 1.0f, 0.0f, this);
 	border.setColor(borderColour);
 	border.setLayer(portLayer);
+}
+
+Port::~Port()
+{
+	//If a port is removed, we need to find and destroy any linked cables
+	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
+	for (Cable* cable : m_cables) {
+		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr < Cable > current)
+			{
+				return current.get() == cable;
+			});
+
+		cableList.erase(toRemove);
+	}
 }
 
 void Port::moveTo(glm::vec2 destination)
@@ -70,6 +85,7 @@ void Port::moveTo(glm::vec2 destination)
 	//move each primative
 	body.translateTo(centre);
 	border.translateTo(centre);
+	attachmentIndicator.translateTo(centre);
 	title->translateTo(titlePos);
 	for (Cable* cable: m_cables) {
 		cable->followPort(this);
@@ -83,6 +99,7 @@ void Port::move(glm::vec2 translation)
 	//move each primative
 	body.translate(translation);
 	border.translate(translation);
+	attachmentIndicator.translate(translation);
 	title->translate(translation);
 	for (Cable* cable : m_cables) {
 		cable->followPort(this);
@@ -98,6 +115,7 @@ void Port::setLayer(float layer)
 {
 	body.setLayer(layer);
 	border.setLayer(layer);
+	attachmentIndicator.setLayer(layer + 0.001f);
 	title->setLayer(layer);
 }
 
@@ -124,6 +142,8 @@ void Port::setOffset(glm::vec2 offset)
 void Port::attachCable(Cable* cable)
 {
 	m_cables.push_back(cable);
+	indicatorColour = {0.f, 0.f, 0.f, 1.f};
+	attachmentIndicator.setColor(indicatorColour);
 }
 
 void Port::detachCable(Cable* cable)
@@ -133,6 +153,24 @@ void Port::detachCable(Cable* cable)
 	//remove the cable if found in the list.
 	if (cableIt != m_cables.end()) {
 		m_cables.erase(cableIt);
+	}
+	indicatorColour = { 0.5f, 0.5f, 0.5f, 0.f };
+	attachmentIndicator.setColor(indicatorColour);
+}
+
+void Port::showAttachIndicator()
+{
+	if (m_cables.empty()) {
+		indicatorColour.a = 1.f;
+		attachmentIndicator.setColor(indicatorColour);
+	}
+}
+
+void Port::hideAttachIndicator()
+{
+	if (m_cables.empty()) {
+		indicatorColour.a = 0.f;
+		attachmentIndicator.setColor(indicatorColour);
 	}
 }
 
