@@ -45,6 +45,8 @@ public:
 	std::unique_ptr<Circle<VertexDataCircle>> p3;
 	glm::vec2 m_lastDragPos = {0.f, 0.f};
 	unsigned int m_currentEntityID = 0;
+	Port* m_hoveredPort = nullptr;
+	unsigned m_hoveredID;
 
 	// ------------------------------------------------ //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R //
@@ -88,6 +90,8 @@ public:
 	virtual void setActiveComponent(unsigned eID);
 	virtual void setActiveCable(unsigned eID);
 	virtual void ComponentPlaceMode(glm::vec2 screenCoords);
+	virtual void deleteComponent(std::shared_ptr<Component2D> component);
+	virtual void deleteCable(std::shared_ptr<Cable> cable);
 	virtual Port* getPort(unsigned eID);
 };
 
