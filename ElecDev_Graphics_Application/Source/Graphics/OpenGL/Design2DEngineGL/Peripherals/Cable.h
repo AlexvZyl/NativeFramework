@@ -26,7 +26,7 @@ public:
     VertexArrayObject<VertexData>* engine_triangleVAO;
     VertexArrayObject<VertexDataCircle>* engine_circleVAO;
     float m_thickness = 0.005f;
-    glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.5f };
+    glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.2f };
     //std::vector<glm::vec2> m_vertices;
     std::vector<std::shared_ptr<LineSegment>> m_lines;
     std::vector<std::shared_ptr<Circle<>>> m_nodes;
