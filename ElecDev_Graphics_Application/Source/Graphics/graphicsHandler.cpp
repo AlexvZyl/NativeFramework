@@ -224,7 +224,7 @@ void GraphicsHandler::saveEventHandler()
 
 	// Check if file is added to the save event.
 	std::string savePath = m_saveEvent.path;
-	if (savePath.find(".lmn")  != std::string::npos ||
+	if (savePath.find(".lmct")  != std::string::npos ||
 		savePath.find(".yml")  != std::string::npos ||
 		savePath.find(".yaml") != std::string::npos)
 	{

@@ -26,7 +26,7 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 		// Remove extensions from the file name.
 		if		(filename.find(".yml") != std::string::npos)	{ filename.erase(filename.length() - 4, 4); }
 		else if (filename.find(".yaml") != std::string::npos)	{ filename.erase(filename.length() - 5, 5); }
-		else if (filename.find(".lmn") != std::string::npos)	{ filename.erase(filename.length() - 4, 4); }
+		else if (filename.find(".lmct") != std::string::npos)	{ filename.erase(filename.length() - 4, 4); }
 		// Change circuit name to the file name.
 		labelTemp = circuit->m_label;	
 		circuit->m_label = filename;
@@ -63,11 +63,11 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 	// Check if filename was supplied.
 	if (!filename.length()) 
 	{ 
-		file = directory + circuit->m_label + ".lmn"; 
+		file = directory + circuit->m_label + ".lmct"; 
 	}
 	else 
 	{
-		std::string ext = ".lmn";
+		std::string ext = ".lmct";
 		filename.insert(filename.end(), ext.begin(), ext.end());
 		// Set file name;
 		file = directory + filename;

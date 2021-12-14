@@ -107,7 +107,7 @@ std::string selectFile(std::string root, std::string defaultFile)
     // Set the dialog options.
     COMDLG_FILTERSPEC fileSpec[] =
     {
-        { L"Lumen File", L"*.yml; *.yaml; *.lmn;" }
+        { L"Lumen File", L"*.yml; *.yaml; *.lmct; *.lmcp;" }
     };
     hResult = dialog->SetFileTypes(1, fileSpec);
     hResult = dialog->SetOptions(FOS_STRICTFILETYPES);
@@ -143,12 +143,12 @@ std::string selectFile(std::string root, std::string defaultFile)
 
     // Get return file as string.
     std::string returnFile = std::string(resultW.begin(), resultW.end());
-    // If the file does not have an extension, add a .lmn extension.
-    if (returnFile.find(".lmn")  == std::string::npos &&
+    // If the file does not have an extension, add a .lmct extension.
+    if (returnFile.find(".lmct")  == std::string::npos &&
         returnFile.find(".yml")  == std::string::npos &&
         returnFile.find(".yaml") == std::string::npos)
     {
-        std::string extension = ".lmn";
+        std::string extension = ".lmct";
         returnFile.insert(returnFile.end(), extension.begin(), extension.end());
     }
 
