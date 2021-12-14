@@ -231,7 +231,7 @@ public:
 	// ------------ //
 
 	// Resizes the engines.
-	void resizeEvent(int width, int height);
+	void resizeEvent();
 	// Checks if the window name supplied is in the list.
 	bool isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow);
 	// Checks if the window name supplied is in the list.
