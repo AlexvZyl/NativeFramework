@@ -299,7 +299,7 @@ void Cable::setActivePrimative(Entity* primative)
 
 void Cable::unhighlight()
 {
-	setColour(glm::vec4{ 0.1f, 0.1f, 0.1f, 1.0f });
+	setColour(glm::vec4{ 0.4f, 0.4f, 0.5f, 1.0f });
 }
 
 
