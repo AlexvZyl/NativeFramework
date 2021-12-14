@@ -12,6 +12,8 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Design2DEngineGL/Peripherals/Circuit.h"
 #include "GLFW/glfw3.h"
+#include "CoreGL/EngineCoreGL.h"
+#include "Resources/ResourceHandler.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -19,7 +21,8 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 
 // With GLFW window.
 GraphicsHandler::GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow) : 
-	m_guiState(guiState), m_glfwWindow(glfwWindow) {};
+	m_guiState(guiState), m_glfwWindow(glfwWindow) 
+{};
 
 // Destructor.
 GraphicsHandler::~GraphicsHandler(){};
@@ -35,6 +38,12 @@ void GraphicsHandler::renderLoop()
 	//  E V E N T S  //
 	// ------------- //
 
+	// Check for file drop event.
+	if (m_fileDropEvent.eventTrigger)   { fileDropEventHandler(); }
+	// Check for save event.
+	if (m_saveEvent.eventTrigger)		{ saveEventHandler(); }
+	// Check for load event.
+	if (m_loadEvent.eventTrigger)		{ loadEventHandler(); }
 	// Resize event.
 	if (m_guiState->renderResizeEvent)	{ resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]); }
 	// Mouse events.
@@ -45,12 +54,6 @@ void GraphicsHandler::renderLoop()
 	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
 	// Add window event.
 	if (m_addWindow)					{ addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
-	// Check for file drop event.
-	if (m_fileDropEvent.eventTrigger)   { fileDropEventHandler(); }
-	// Check for save event.
-	if (m_saveEvent.eventTrigger)		{ saveEventHandler(); }
-	// Check for load event.
-	if (m_loadEvent.eventTrigger)		{ loadEventHandler(); }
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -154,15 +157,15 @@ void GraphicsHandler::keyEvent()
 //  Window.                                                                   																   //
 //=============================================================================================================================================//
 
-bool GraphicsHandler::isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow)
-{
-	if (renderWindow != NULL) { return m_windowsDictionary.find(renderWindow->windowName) != m_windowsDictionary.end(); }
-	else { return false; }
-}
-
 bool GraphicsHandler::isWindowValid(std::string windowName) { return m_windowsDictionary.find(windowName) != m_windowsDictionary.end(); }
 
 bool GraphicsHandler::isActiveWindowValid() { return isWindowValid(m_activeWindow); }
+
+bool GraphicsHandler::isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow)
+{
+	if (renderWindow != NULL) { return m_windowsDictionary.find(renderWindow->windowName) != m_windowsDictionary.end(); }
+	else					  { return false; }
+}
 
 void GraphicsHandler::resizeEvent(int width, int height)
 {
@@ -179,6 +182,8 @@ void GraphicsHandler::resizeEvent(int width, int height)
 			}
 		}
 	}
+	// Reset boolean.
+	m_guiState->renderResizeEvent = false;
 }
 
 //=============================================================================================================================================//
@@ -201,18 +206,21 @@ void GraphicsHandler::fileDropEventHandler()
 		node.key() = engine->m_contextName;
 		m_windowsDictionary.insert(std::move(node));
 		m_activeWindow->windowName = engine->m_circuit->m_label;
+		m_activeWindow->resizeEvent = true;
 	}
 	// Reset event.
 	m_fileDropEvent.eventTrigger = false;
 	m_fileDropEvent.totalFiles = 0;
 	m_fileDropEvent.paths.clear();
 	m_fileDropEvent.paths.shrink_to_fit();
+	// Set resize.
+	m_guiState->renderResizeEvent = true;
 }
 
 void GraphicsHandler::saveEventHandler() 
 {
 	// Find engine.
-	Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine].get());
+	Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
 
 	// Check if file is added to the save event.
 	std::string savePath = m_saveEvent.path;
