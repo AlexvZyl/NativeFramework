@@ -74,7 +74,10 @@ Port::~Port()
 				return current.get() == cable;
 			});
 
-		cableList.erase(toRemove);
+		//check that the cable is in the list
+		if (toRemove != cableList.end()) {
+			cableList.erase(toRemove);
+		}
 	}
 }
 

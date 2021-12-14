@@ -36,13 +36,9 @@ public:
 	// ------------------ //
 
 	designState designerState = ENTITY_SELECT;
-	//std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
 	std::shared_ptr<Circuit> m_circuit;
-	std::unique_ptr<Circle<VertexDataCircle>> p1;
-	std::unique_ptr<Circle<VertexDataCircle>> p2;
-	std::unique_ptr<Circle<VertexDataCircle>> p3;
 	glm::vec2 m_lastDragPos = {0.f, 0.f};
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;

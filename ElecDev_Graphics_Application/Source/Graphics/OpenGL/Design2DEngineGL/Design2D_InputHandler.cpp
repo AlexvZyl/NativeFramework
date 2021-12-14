@@ -162,32 +162,6 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action)
 {
-	/*
-	glm::vec3 v1(-1.f, -1.f, 0.0f);
-	glm::vec3 v2(0.f, 0.f, 0.0f);
-	glm::vec3 v3(1.f, 1.f, 0.0f);
-
-	glm::vec4 colour(1.f, 0.f, 0.f, 1.f);
-	// Add components.
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) 
-	{ 
-		p1 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v1, 0.25, colour, 0.2f, 0.01f, nullptr);
-	}
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) 
-	{ 
-		p2 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v2, 0.25, colour, 0.2f, 0.01f, nullptr);
-	}
-	if (key == GLFW_KEY_E && action == GLFW_PRESS) 
-	{
-		p3 = std::make_unique<Circle<VertexDataCircle>>(m_circleEntitiesVAO.get(), v3, 0.25, colour, 0.2f, 0.01f, nullptr);
-	}
-
-	// Remove components.
-	if (key == GLFW_KEY_A && action == GLFW_PRESS) { p1 = nullptr; }
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) { p2 = nullptr; }
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) { p3 = nullptr; }
-	*/
-
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
@@ -201,15 +175,10 @@ void Design2DEngineGL::keyEvent(int key, int action)
 			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
-		/*case GLFW_KEY_C:
-			//enter cable placement mode.
-			designerState = CABLE_PLACE;
-			m_activeComponent = nullptr;
-			break;*/
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
 			//Remove the dummy component
-			m_activeComponent = NULL; // Runs deconstructor.
+			m_activeComponent = nullptr;
 			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
