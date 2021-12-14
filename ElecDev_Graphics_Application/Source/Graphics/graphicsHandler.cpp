@@ -195,6 +195,14 @@ void GraphicsHandler::fileDropEventHandler()
 	// Loop through all of the files.
 	for (std::string path : m_fileDropEvent.paths)
 	{
+		// Check if the file is valid.
+		if (path.find(".lmct") == std::string::npos &&
+			path.find(".yml") == std::string::npos &&
+			path.find(".yaml") == std::string::npos)
+		{
+			continue;
+		}
+
 		// Create a new window.
 		addWindow("Generating", "Design2D");
 		Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
