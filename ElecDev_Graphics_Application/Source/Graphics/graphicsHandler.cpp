@@ -38,22 +38,22 @@ void GraphicsHandler::renderLoop()
 	//  E V E N T S  //
 	// ------------- //
 
+	// Resize event.
+	if (m_guiState->renderResizeEvent)	{ resizeEvent(); }
 	// Check for file drop event.
 	if (m_fileDropEvent.eventTrigger)   { fileDropEventHandler(); }
 	// Check for save event.
 	if (m_saveEvent.eventTrigger)		{ saveEventHandler(); }
 	// Check for load event.
 	if (m_loadEvent.eventTrigger)		{ loadEventHandler(); }
-	// Resize event.
-	if (m_guiState->renderResizeEvent)	{ resizeEvent((int)m_guiState->renderWindowSize[0], (int)m_guiState->renderWindowSize[1]); }
+	// Add window event.
+	if (m_addWindow)					{ addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
 	// Mouse events.
 	if (m_inputEvent.mousePressEvent)   { mousePressEvent(); m_inputEvent.mousePressEvent = false; }
 	if (m_inputEvent.mouseScrollEvent)  { mouseScrollEvent(); m_inputEvent.mouseScrollEvent = false; }
 	if (m_inputEvent.mouseMoveEvent)	{ mouseMoveEvent(); m_inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
-	// Add window event.
-	if (m_addWindow)					{ addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -167,7 +167,7 @@ bool GraphicsHandler::isWindowValid(std::shared_ptr<RenderWindowGL> renderWindow
 	else					  { return false; }
 }
 
-void GraphicsHandler::resizeEvent(int width, int height)
+void GraphicsHandler::resizeEvent()
 {
 	// Check if the dict is not empty.	
 	if (m_windowsDictionary.size())
@@ -202,7 +202,6 @@ void GraphicsHandler::fileDropEventHandler()
 		{
 			continue;
 		}
-
 		// Create a new window.
 		addWindow("Generating", "Design2D");
 		Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
@@ -270,8 +269,10 @@ void GraphicsHandler::loadEventHandler()
 		node.key() = activeEngine->m_contextName;
 		m_windowsDictionary.insert(std::move(node));
 		m_activeWindow->windowName = activeEngine->m_circuit->m_label;
+		m_activeWindow->resizeEvent = true;
 	}
 	// Reset event.
+	m_guiState->renderResizeEvent = true;
 	m_loadEvent.reset();
 }
 	
