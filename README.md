@@ -25,11 +25,9 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ***IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!*
 
----
+### Long Term
 
-### Long Term Dreams
-
-- ⬜ VERY long term: Port to Vulkan, [https://www.vulkan.org/].
+Port to Vulkan, [https://www.vulkan.org/].
 
 ---
 
