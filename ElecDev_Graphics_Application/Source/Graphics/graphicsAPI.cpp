@@ -67,6 +67,8 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			std::cout << red << "\n[INTERFACE] [ERROR] : " << white << " '" << engineType << "' is not a valid engine type.\n";
 		}
 	}
+	m_activeWindow->resizeEvent = true;
+	m_guiState->renderResizeEvent = true;
 }
 
 // Remove an window from the dict.
