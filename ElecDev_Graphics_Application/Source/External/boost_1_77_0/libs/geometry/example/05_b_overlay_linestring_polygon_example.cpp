@@ -93,7 +93,8 @@ int main(void)
         std::cout << action << " polygon at " << bg::dsv(turn.point) << std::endl;
 #if defined(HAVE_SVG)
         svg.map(turn.point, "fill:rgb(255,128,0);stroke:rgb(0,0,100);stroke-width:1");
-        svg.text(turn.point, action, "fill:rgb(0,0,0);font-family:Arial;font-size:10px");
+        svg.text(turn.point, action, "fill:rgb(0,0,0);
+            -family:Arial;font-size:10px");
 #endif
     }
 

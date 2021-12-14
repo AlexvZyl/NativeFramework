@@ -31,13 +31,11 @@
 // Measure time.
 #include <chrono>
 
-#include "CoreGL/FontLoader.h"
-
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
 /*=======================================================================================================================================*/
 
-// This removes the console that keeps opening with the app if it is not in debug mode.
+// Removes the console in release mode.
 #ifdef	_DEBUG
 #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
 #else
@@ -115,7 +113,7 @@ void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
     ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
 }
 
-void m_fileDropEvent(GLFWwindow* window, int count, const char** paths) 
+void fileDropEvent(GLFWwindow* window, int count, const char** paths) 
 {
     graphicsHandler->m_fileDropEvent.eventTrigger = true;
     graphicsHandler->m_fileDropEvent.totalFiles = count;
@@ -252,7 +250,7 @@ int main(int, char**)
     glfwSetCursorPosCallback(window, mouseMoveEvent);           // Mouse move event.
     glfwSetScrollCallback(window, mouseScrollEvent);            // Mouse scroll event.
     glfwSetKeyCallback(window, keyEvent);                       // Key press event.
-    glfwSetDropCallback(window, m_fileDropEvent);                 // For when a file is dopped into the app.
+    glfwSetDropCallback(window, fileDropEvent);                 // For when a file is dopped into the app.
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
@@ -309,7 +307,7 @@ int main(int, char**)
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
-        else { glfwPollEvents(); }        // App runs continuously.
+        else      { glfwPollEvents(); }   // App runs continuously.
      
         // Frametime calculations.
         currTime = glfwGetTime();

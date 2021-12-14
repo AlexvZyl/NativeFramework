@@ -64,12 +64,14 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 					ImVec2 temp = ImGui::GetIO().MousePos;
 					window->mouseCoords[0] = temp.x - ImGui::GetWindowPos().x;
 					window->mouseCoords[1] = temp.y - ImGui::GetWindowPos().y;
-					if (ImGui::GetWindowSize().x != window->viewportDimentions[0] || ImGui::GetWindowSize().y != window->viewportDimentions[1])
+
+					// Check for resize event.
+					ImVec2 windowSize = ImGui::GetWindowSize();
+					if (windowSize.x != window->viewportDimentions[0] || windowSize.y != window->viewportDimentions[1])
 					{
 						window->resizeEvent = true;
-						ImVec2 temp = ImGui::GetWindowSize();
-						window->viewportDimentions[0] = temp[0];
-						window->viewportDimentions[1] = temp[1];
+						window->viewportDimentions[0] = windowSize[0];
+						window->viewportDimentions[1] = windowSize[1];
 					}
 
 					// ----------- //
