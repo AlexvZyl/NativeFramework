@@ -28,14 +28,22 @@ Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObj
 	// Assign the indices based on the VAO type.
 	if (m_VAO->m_bufferType == GL_TRIANGLES)
 	{
-		m_indices = { 0,1,2,2,3,0 };
-		m_indexCount = 6;
+		for (int i = 2; i < m_vertexCount; i++) {
+			m_indices.push_back(0);
+			m_indices.push_back(i-1);
+			m_indices.push_back(i);
+		}
 	}
 	else if (m_VAO->m_bufferType == GL_LINES)
 	{
-		m_indices = { 0,1,1,2,2,3,3,0 };
-		m_indexCount = 8;
+		for (int i = 1; i < m_vertexCount; i++) {
+			m_indices.push_back(i -1);
+			m_indices.push_back(i);
+		}
+		m_indices.push_back(0);
+		m_indices.push_back(m_vertexCount-1);
 	}
+	m_indexCount = m_indices.size();
 	// Pass to VAO.
 	m_VAO->appendDataCPU(this);
 }

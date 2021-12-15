@@ -163,7 +163,6 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 
 void Design2DEngineGL::keyEvent(int key, int action)
 {
-
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
@@ -177,16 +176,10 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		//	m_activeCable = nullptr;
 		//	break;
 		// --------------------------------------------------------------------------------------------------------------- //
-		/*case GLFW_KEY_C:
-			//enter cable placement mode.
-			designerState = CABLE_PLACE;
-			m_activeComponent = nullptr;
-			break;*/
-		// --------------------------------------------------------------------------------------------------------------- //
 		case GLFW_KEY_ESCAPE:
 			designerState = ENTITY_SELECT;
 			//Remove the dummy component
-			m_activeComponent = NULL; // Runs deconstructor.
+			m_activeComponent = nullptr;
 			m_activeCable = nullptr;
 			break;
 		// --------------------------------------------------------------------------------------------------------------- //
