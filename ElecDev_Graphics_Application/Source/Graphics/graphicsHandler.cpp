@@ -14,6 +14,7 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 #include "GLFW/glfw3.h"
 #include "CoreGL/EngineCoreGL.h"
 #include "Resources/ResourceHandler.h"
+#include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -197,7 +198,7 @@ void GraphicsHandler::fileDropEventHandler()
 	{
 		// Check if the file is valid.
 		if (path.find(".lmct") == std::string::npos &&
-			path.find(".yml") == std::string::npos &&
+			path.find(".yml")  == std::string::npos &&
 			path.find(".yaml") == std::string::npos)
 		{
 			continue;
@@ -215,6 +216,7 @@ void GraphicsHandler::fileDropEventHandler()
 		m_activeWindow->windowName = engine->m_circuit->m_label;
 		m_activeWindow->resizeEvent = true;
 	}
+	m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
 	// Reset event.
 	m_fileDropEvent.eventTrigger = false;
 	m_fileDropEvent.totalFiles = 0;
