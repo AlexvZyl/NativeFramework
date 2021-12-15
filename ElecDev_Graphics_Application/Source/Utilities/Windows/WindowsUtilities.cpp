@@ -89,7 +89,7 @@ std::string selectFolder(std::string root)
     return std::string(resultW.begin(), resultW.end());
 }
 
-std::string selectFile(std::string root, std::string defaultFile) 
+std::string selectFile(std::string root, std::string defaultFile, std::string buttonLabel) 
 {
     // Default location.
     if (root.length()) { root = getExecutableLocation(); }
@@ -125,6 +125,13 @@ std::string selectFile(std::string root, std::string defaultFile)
     // Set the default file as the current circuit file.
     std::wstring defaultFileW = std::wstring(defaultFile.begin(), defaultFile.end());
     dialog->SetFileName((LPCWSTR)defaultFileW.c_str());
+
+    // Set the button label
+    if (buttonLabel.size())
+    {
+        std::wstring buttonLabelW = std::wstring(buttonLabel.begin(), buttonLabel.end());
+        hResult = dialog->SetOkButtonLabel((LPCWSTR)buttonLabelW.c_str());
+    }
 
     // Display.
     hResult = dialog->Show(GetConsoleWindow());
