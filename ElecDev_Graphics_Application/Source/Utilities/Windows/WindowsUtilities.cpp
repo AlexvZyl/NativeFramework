@@ -89,10 +89,8 @@ std::string selectFolder(std::string root)
     return std::string(resultW.begin(), resultW.end());
 }
 
-std::string selectFile(std::string root, std::string defaultFile) 
+std::string selectFile(std::string root, std::string defaultFile, std::string buttonLabel) 
 {
-    // Default location.
-    if (root.length()) { root = getExecutableLocation(); }
 
     // Stores the results of the windows calls.
     HRESULT hResult;
@@ -112,19 +110,33 @@ std::string selectFile(std::string root, std::string defaultFile)
     hResult = dialog->SetFileTypes(1, fileSpec);
     hResult = dialog->SetOptions(FOS_STRICTFILETYPES);
 
-    // Set target folder at the .exe location.
-    // This default location changes as the user uses the explorer (TBC).
-    std::wstring exeLocationW = std::wstring(root.begin(), root.end());
-    PIDLIST_ABSOLUTE targetFolderID;
-    hResult = SHILCreateFromPath(exeLocationW.c_str(), &targetFolderID, NULL);
-    IShellItem* defaultFolder;
-    hResult = SHCreateShellItem(0, 0, targetFolderID, &defaultFolder);
-    hResult = dialog->SetDefaultFolder(defaultFolder);
-    hResult = defaultFolder->Release();
+    // Default root is at the exe location.
+    if (!root.length()) { root = getExecutableLocation(); }
+    // User specified root.
+    else
+    {
+        std::wstring exeLocationW = std::wstring(root.begin(), root.end());
+        PIDLIST_ABSOLUTE targetFolderID;
+        hResult = SHILCreateFromPath(exeLocationW.c_str(), &targetFolderID, NULL);
+        IShellItem* defaultFolder;
+        hResult = SHCreateShellItem(0, 0, targetFolderID, &defaultFolder);
+        hResult = dialog->SetDefaultFolder(defaultFolder);
+        hResult = defaultFolder->Release();
+    }
 
-    // Set the default file as the current circuit file.
-    std::wstring defaultFileW = std::wstring(defaultFile.begin(), defaultFile.end());
-    dialog->SetFileName((LPCWSTR)defaultFileW.c_str());
+    // Set the default file.
+    if (defaultFile.size())
+    {
+        std::wstring defaultFileW = std::wstring(defaultFile.begin(), defaultFile.end());
+        dialog->SetFileName((LPCWSTR)defaultFileW.c_str());
+    }
+
+    // Set the button label.
+    if (buttonLabel.size())
+    {
+        std::wstring buttonLabelW = std::wstring(buttonLabel.begin(), buttonLabel.end());
+        hResult = dialog->SetOkButtonLabel((LPCWSTR)buttonLabelW.c_str());
+    }
 
     // Display.
     hResult = dialog->Show(GetConsoleWindow());
