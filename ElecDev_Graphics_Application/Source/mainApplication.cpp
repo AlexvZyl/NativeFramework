@@ -284,7 +284,7 @@ int main(int, char**)
     //std::thread t2(&PyInterface::readingOut, &pyInterface);
 
     // Set waiting for events.
-    bool wait = false;
+    bool wait = true;
 
     // FPS cap settings.
     double fps = 60;
