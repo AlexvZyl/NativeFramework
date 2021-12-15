@@ -228,32 +228,38 @@ void GraphicsHandler::fileDropEventHandler()
 
 void GraphicsHandler::saveEventHandler() 
 {
-	// Find engine.
-	Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
+	// Check if operation did not fail.
+	if (m_loadEvent.path != "OPERATION_CANCELLED" && m_loadEvent.path != "FOLDER_EMPTY")
+	{
 
-	// Check if file is added to the save event.
-	std::string savePath = m_saveEvent.path;
-	if (savePath.find(".lmct")  != std::string::npos ||
-		savePath.find(".yml")  != std::string::npos ||
-		savePath.find(".yaml") != std::string::npos)
-	{
-		// Move the file onto a new string.
-		std::string file;
-		while (savePath.back() != '\\') 
+		// Find engine.
+		Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
+
+		// Check if file is added to the save event.
+		std::string savePath = m_saveEvent.path;
+		if (savePath.find(".lmct") != std::string::npos ||
+			savePath.find(".yml") != std::string::npos ||
+			savePath.find(".yaml") != std::string::npos)
 		{
-			file.push_back(savePath.back());
-			savePath.pop_back();
+			// Move the file onto a new string.
+			std::string file;
+			while (savePath.back() != '\\')
+			{
+				file.push_back(savePath.back());
+				savePath.pop_back();
+			}
+			std::reverse(file.begin(), file.end());
+			saveToYAML(saveEngine->m_circuit, savePath, file);
 		}
-		std::reverse(file.begin(), file.end());
-		saveToYAML(saveEngine->m_circuit, savePath, file);
-	}
-	else 
-	{
-		saveToYAML(saveEngine->m_circuit, m_saveEvent.path);
+		else
+		{
+			saveToYAML(saveEngine->m_circuit, m_saveEvent.path);
+		}
 	}
 	m_saveEvent.saveEngine = "";
 	m_saveEvent.eventTrigger = false;
 	m_saveEvent.path = "";
+
 }
 
 void GraphicsHandler::loadEventHandler() 

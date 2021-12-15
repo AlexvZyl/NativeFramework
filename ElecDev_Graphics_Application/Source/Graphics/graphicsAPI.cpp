@@ -51,6 +51,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
+			m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
 		{
