@@ -9,7 +9,6 @@ BufferLayout is used to setup the VAO.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "GLAD/glad.h"
 #include <vector>
 #include "GLM/glm.hpp"
 

@@ -7,6 +7,7 @@
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "IOIndicator.h"
 
 template<typename VertexType>
 class Polygon2D;
@@ -15,16 +16,6 @@ struct Font;
 
 class Component2D;
 class Cable;
-
-enum PortType
-{
-	PORT_IN, PORT_OUT, PORT_INOUT
-};
-
-enum class PortPosition
-{
-	TOP, BOTTOM, LEFT, RIGHT
-};
 
 class Port: public Entity
 {
@@ -43,15 +34,16 @@ public:
 	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
 	float portLayer;
 
-	Circle<> body;
-	Circle<> border;
-	Circle<> attachmentIndicator;
-	std::shared_ptr<Text<>> title;
-
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
 	PortPosition m_position;
 	PortType m_type;
+
+	Circle<> body;
+	Circle<> border;
+	Circle<> attachmentIndicator;
+	//IOIndicator attachmentIndicator;
+	std::shared_ptr<Text<>> title;
 
 	std::vector<Cable*> m_cables;
 

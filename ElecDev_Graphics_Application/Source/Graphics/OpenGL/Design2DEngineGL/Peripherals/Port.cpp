@@ -20,6 +20,7 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	 body(parent->engine_circleVAO, centre, 0.01f, bodyColour, 1.0f, 0.0f, this),
 	 border(parent->engine_circleVAO, centre, 0.011f, borderColour, 1.0f, 0.01f, this),
 	 attachmentIndicator(parent->engine_circleVAO, centre, 0.005f, indicatorColour, 1.0f, 0.01f, this),
+	 //attachmentIndicator(m_type, m_position, parent->engine_trianglesVAO, this),
 	 m_type(type)
 {
 	engine_circleVAO = parent->engine_circleVAO;
@@ -59,6 +60,7 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	}
 	body.setColor(bodyColour);
 	border.setColor(borderColour);
+	//attachmentIndicator.setType(m_type, m_position);
 	setLayer(portLayer);
 
 	highlight();
@@ -117,6 +119,7 @@ Port& Port::operator=(const Port& t)
 
 void Port::setLayer(float layer)
 {
+	portLayer = layer;
 	body.setLayer(layer);
 	border.setLayer(layer);
 	attachmentIndicator.setLayer(layer + 0.001f);
