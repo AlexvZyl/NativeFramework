@@ -42,6 +42,15 @@ void Renderer::renderScene(Scene* scene)
 //  Shaders.																																	//
 //==============================================================================================================================================//
 
+void Renderer::compileShaders() 
+{
+	compileBackgroundShader2D();
+	compileBackgroundShader3D();
+	compileBasicShader();
+	compileTextureShader();
+	compileCircleShader();
+}
+
 Shader* Renderer::compileBackgroundShader2D() 
 {
 	m_backgroundShader2D = std::make_unique<Shader>(BACKGROUND_SHADER_2D);
