@@ -2,29 +2,26 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "ErrorHandlerGL.h"
-#include "glad/glad.h"
-#include "Texture.h"
-#include "Resources/ResourceHandler.h"
+#include "Camera.h"
 
 //==============================================================================================================================================//
-//  Includes.																																	//
+//  Functions.																																	//
 //==============================================================================================================================================//
 
-Texture::Texture(int resourceID) 
+Camera::Camera(CameraType cameraType) 
+	: m_type(cameraType)
+{}
+
+void Camera::updateCamera() 
 {
-	m_GLID = loadBitmapToGL(loadImageFromResource(resourceID));
-	m_textureType = GL_TEXTURE_2D;
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix; 
 }
 
-void Texture::setMipmapLevel(float LOD) 
-{
-	// Enable mipmapping.
-	GLCall(glBindTexture(m_textureType, m_GLID));
-	GLCall(glGenerateMipmap(m_textureType));
-	GLCall(glTexParameteri(m_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-	GLCall(glTexParameterf(m_textureType, GL_TEXTURE_LOD_BIAS, LOD));
-}
+//==============================================================================================================================================//
+//  Controls.																																	//
+//==============================================================================================================================================//
+
+
 
 //==============================================================================================================================================//
 //  EOF.																																		//

@@ -89,9 +89,8 @@ std::string selectFolder(std::string root)
     return std::string(resultW.begin(), resultW.end());
 }
 
-std::string selectFile(std::string root, std::string defaultFile, std::string buttonLabel) 
+std::string selectFile(std::string title, std::string root, std::string defaultFile, std::string buttonLabel) 
 {
-
     // Stores the results of the windows calls.
     HRESULT hResult;
 
@@ -99,8 +98,11 @@ std::string selectFile(std::string root, std::string defaultFile, std::string bu
     IFileDialog* dialog = NULL;
     hResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
     hResult = CoCreateInstance(__uuidof(FileOpenDialog), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&dialog));
-    wchar_t title[] = L"Lumen File Selector";
-    hResult = dialog->SetTitle((LPCWSTR)title);
+    std::wstring titleW;
+    if (!title.size()) { titleW = L"Lumen File Selector"; }
+    else               { titleW = std::wstring(title.begin(), title.end()); }
+    
+    hResult = dialog->SetTitle((LPCWSTR)titleW.c_str());
 
     // Set the dialog options.
     COMDLG_FILTERSPEC fileSpec[] =

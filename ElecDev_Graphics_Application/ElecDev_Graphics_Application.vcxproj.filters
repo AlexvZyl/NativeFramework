@@ -124,6 +124,9 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Renderer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Camera.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1342,6 +1345,9 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Renderer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Scene.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

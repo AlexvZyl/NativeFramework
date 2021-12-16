@@ -49,7 +49,7 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 	// Serialise circuit.
 	yamlEmitter << circuit;
 
-	// Restore circuit label name.
+	// Restore current (in Lumen) circuit name.
 	if (filename.length()) { circuit->m_label = labelTemp; }
 	
 	// --------- //
@@ -60,11 +60,12 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 	if (directory.back() != '\\') { directory.push_back('\\'); }
 	
 	std::string file;
-	// Check if filename was supplied.
+	// If filename was not supplied, create from circuit.
 	if (!filename.length()) 
 	{ 
 		file = directory + circuit->m_label + ".lmct"; 
 	}
+	// Use supplied filename.
 	else 
 	{
 		std::string ext = ".lmct";
@@ -73,9 +74,9 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 		file = directory + filename;
 	}
 
-	// End file.
+	// End YAML.
 	yamlEmitter << YAML::EndMap;
-	// Store file.
+	// Save file.
 	std::ofstream yamlStream;
 	yamlStream.open(file);
 	yamlStream << yamlEmitter.c_str();

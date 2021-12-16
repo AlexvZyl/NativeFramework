@@ -34,6 +34,7 @@ GraphicsHandler::~GraphicsHandler(){};
 
 // [MAIN LOOP] Function that handles which engine should be active and is placed into the OpenGL loop.
 void GraphicsHandler::renderLoop()
+// Application::handleEvents();
 {
 	// ------------- //
 	//  E V E N T S  //
@@ -55,17 +56,7 @@ void GraphicsHandler::renderLoop()
 	if (m_inputEvent.mouseMoveEvent)	{ mouseMoveEvent(); m_inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
-	
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
 
-	// Check if there are windows to render.
-	if (m_windowsDictionary.size())
-	{
-		// Render each OpenGL context.
-		for (auto& [name, window] : m_windowsDictionary) { window->engineGL->renderLoop(); }
-	}
 };
 
 //=============================================================================================================================================//
@@ -231,7 +222,6 @@ void GraphicsHandler::saveEventHandler()
 	// Check if operation did not fail.
 	if (m_loadEvent.path != "OPERATION_CANCELLED" && m_loadEvent.path != "FOLDER_EMPTY")
 	{
-
 		// Find engine.
 		Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
 

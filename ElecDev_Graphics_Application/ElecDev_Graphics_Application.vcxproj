@@ -204,6 +204,9 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\singledocparser.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Camera.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Renderer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Scene.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
@@ -329,6 +332,9 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\stringsource.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Camera.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Scene.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Renderer.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
