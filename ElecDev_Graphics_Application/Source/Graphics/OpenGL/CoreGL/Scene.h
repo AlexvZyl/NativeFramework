@@ -57,7 +57,7 @@ private:
 	glm::vec2 m_viewport;
 	// Data required to construct a scene in OpenGL.
 	std::unique_ptr<Camera> m_camera;
-	std::map<unsigned, std::unique_ptr<Primitive>> m_primitives;
+	std::map<unsigned, std::unique_ptr<Primitive<VertexData>>> m_primitives;
 	std::map<unsigned, std::unique_ptr<Texture>> m_textures;
 	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;
 	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;

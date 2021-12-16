@@ -2,6 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Texture.h"
 #include "Renderer.h"
 #include "Scene.h"
 #include "Camera.h"
@@ -11,6 +12,18 @@
 #include "VertexArrayObjectGL.h"
 #include "ShaderHandlerGL.h"
 #include "Resources/ResourceHandler.h"
+#include "Entities/Vertex.h"
+
+//==============================================================================================================================================//
+//  Static Inisialisation.																														//
+//==============================================================================================================================================//
+
+std::unique_ptr<Shader> Renderer::m_backgroundShader2D = nullptr;
+std::unique_ptr<Shader> Renderer::m_backgroundShader3D = nullptr;
+std::unique_ptr<Shader> Renderer::m_basicShader = nullptr;
+std::unique_ptr<Shader> Renderer::m_textureShader = nullptr;
+std::unique_ptr<Shader> Renderer::m_circleShader = nullptr;
+Scene* Renderer::m_scene = nullptr;
 
 //==============================================================================================================================================//
 //  Scene.																																		//
@@ -44,41 +57,11 @@ void Renderer::renderScene(Scene* scene)
 
 void Renderer::compileShaders() 
 {
-	compileBackgroundShader2D();
-	compileBackgroundShader3D();
-	compileBasicShader();
-	compileTextureShader();
-	compileCircleShader();
-}
-
-Shader* Renderer::compileBackgroundShader2D() 
-{
 	m_backgroundShader2D = std::make_unique<Shader>(BACKGROUND_SHADER_2D);
-	return m_backgroundShader2D.get();
-}
-
-Shader* Renderer::compileBackgroundShader3D()
-{
 	m_backgroundShader3D = std::make_unique<Shader>(BACKGROUND_SHADER_3D);
-	return m_backgroundShader3D.get();
-}
-
-Shader* Renderer::compileBasicShader()
-{
 	m_basicShader = std::make_unique<Shader>(BASIC_SHADER);
-	return m_basicShader.get();
-}
-
-Shader* Renderer::compileTextureShader()
-{
 	m_textureShader = std::make_unique<Shader>(BASIC_SHADER);
-	return m_textureShader.get();
-}
-
-Shader* Renderer::compileCircleShader()
-{
 	m_circleShader = std::make_unique<Shader>(BASIC_SHADER);
-	return m_circleShader.get();
 }
 	
 //==============================================================================================================================================//
@@ -196,30 +179,35 @@ void Renderer::render3DScene(Scene* scene)
 //  Primitives.																																	//
 //==============================================================================================================================================//
 
-Polygon2D* Renderer::addPolygon2D() 
-{
+//void Renderer::removePrimitive(unsigned entityID) 
+//{
+//	m_scene->m_primitives.erase(entityID);
+//}
 
-}
-
-Polygon2DTextured* Renderer::addPolygon2DTextured() 
-{
-
-}
-
-Circle2D* Renderer::addCircle2D() 
-{
-
-}
-
-LineSegment2D* Renderer::addLineSegment2D() 
-{
-
-}
-
-Text2D* Renderer::addText2D() 
-{
-
-}
+//Polygon2D* Renderer::addPolygon2D() 
+//{
+//
+//}
+//
+//Polygon2DTextured* Renderer::addPolygon2DTextured() 
+//{
+//
+//}
+//
+//Circle2D* Renderer::addCircle2D() 
+//{
+//
+//}
+//
+//LineSegment2D* Renderer::addLineSegment2D() 
+//{
+//
+//}
+//
+//Text2D* Renderer::addText2D() 
+//{
+//
+//}
 
 //==============================================================================================================================================//
 //  Primitives.																																	//

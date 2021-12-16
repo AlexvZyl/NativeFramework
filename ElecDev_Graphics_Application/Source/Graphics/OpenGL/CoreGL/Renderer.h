@@ -12,9 +12,10 @@
 
 template <typename VertexType>
 class Primitive;
+template <typename VertexType>
+class Polygon2D;
 
 class Scene;
-class Polygon2D;
 class Polygon2DTextured;
 class Circle2D;
 class LineSegment2D;
@@ -47,18 +48,23 @@ public:
 	//  2 D   P R I M I T I V E S  //
 	// --------------------------- //
 
-	static Polygon2D* addPolygon2D();
+	/*static Polygon2D* addPolygon2D();
 	static Polygon2DTextured* addPolygon2DTextured();
 	static Circle2D* addCircle2D();
 	static LineSegment2D* addLineSegment2D();
-	static Text2D* addText2D();
-	static Texture* generateTexture(unsigned resourceID);
-	static Texture* getTexture(unsigned resourceID);
+	static Text2D* addText2D();*/
+	
 
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
 	// --------------------------- //
 
+	// ----------------- //
+	//  T E X T U R E S  //
+	// ----------------- //
+
+	static Texture* generateTexture(unsigned resourceID);
+	static Texture* getTexture(unsigned resourceID);
 
 	
 	// Remove a primitive from the entity ID.
@@ -85,17 +91,6 @@ private:
 	// --------------- //
 	//  S H A D E R S  //
 	// --------------- //
-
-	// Statically compile the shader.
-	static Shader* compileBackgroundShader2D();
-	// Statically compile the shader.
-	static Shader* compileBackgroundShader3D();
-	// Statically compile the shader.
-	static Shader* compileBasicShader();
-	// Statically compile the shader.
-	static Shader* compileTextureShader();
-	// Statically compile the shader.
-	static Shader* compileCircleShader();
 
 	// Shaders.
 	static std::unique_ptr<Shader> m_backgroundShader2D;

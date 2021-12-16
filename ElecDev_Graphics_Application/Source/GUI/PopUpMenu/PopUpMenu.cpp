@@ -93,7 +93,7 @@ void PopUpMenu::render()
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
         {
             m_graphicsHandler->m_loadEvent.eventTrigger = true;
-            m_graphicsHandler->m_loadEvent.path = selectFile();
+            m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");
             close();
         }
         if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
@@ -101,7 +101,7 @@ void PopUpMenu::render()
             m_graphicsHandler->m_saveEvent.eventTrigger = true;
             m_graphicsHandler->m_saveEvent.saveEngine = m_windowContext;
             Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_activeWindow->engineGL.get());
-            m_graphicsHandler->m_saveEvent.path = selectFile("", activeEngine->m_circuit->m_label, "Save");
+            m_graphicsHandler->m_saveEvent.path = selectFile("Lumen Save Circuit", "", activeEngine->m_circuit->m_label, "Save");
             close();
         }
         ImGui::End();
