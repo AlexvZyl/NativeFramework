@@ -26,6 +26,7 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class Circuit;
+class Scene;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -36,15 +37,13 @@ class Component2D: public Entity
 public:
 
 	//shape and edge data
-	std::shared_ptr<Polygon2D> shape;
-	std::shared_ptr<Polygon2D> border;
-	std::shared_ptr<Text> title;
+	Polygon2D* shape;
+	Polygon2D* border;
+	Text* title;
 	//std::shared_ptr<Port> port1;
 	//std::shared_ptr<Port> port2;
-	VertexArrayObject<VertexData>* engine_trianglesVAO;
-	VertexArrayObject<VertexData>* engine_linesVAO;
-	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
-	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
+	
+	Scene* m_scene;
 
 	static unsigned componentID;
 
@@ -86,20 +85,12 @@ public:
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
 	glm::vec2 centre;
-
 	
 	//Creates a generic component centred at (0, 0)
-	Component2D(VertexArrayObject<VertexData>* trianglesVAO,
-			    VertexArrayObject<VertexData>* linesVAO, 
-				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO, 
-				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+	Component2D(Scene* scene, Circuit* parent);
 
 	//Creates a generic component centred at the specified coordinates
-	Component2D(glm::vec2 centreCoords, 
-				VertexArrayObject<VertexData>* trianglesVAO,	
-				VertexArrayObject<VertexData>* linesVAO, 
-				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+	Component2D(glm::vec2 centreCoords, Scene* scene, Circuit* parent);
 
 	//Deconstructor
 	~Component2D();

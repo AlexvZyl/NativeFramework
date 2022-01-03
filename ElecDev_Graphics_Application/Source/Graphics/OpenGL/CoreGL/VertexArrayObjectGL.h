@@ -34,7 +34,7 @@ private:
 	unsigned int m_vertexCount = 0;	// Pointer that shows where in the buffer data need to be written.
 	unsigned int m_indexCount = 0;	// Counting the amount of indices.
 	bool m_synced = true;			// Checks if there is data CPU side that has not been updated GPU side.
-	bool m_sized = true;			// Checks if the data has to be resized 
+	bool m_sized = true;			// Checks if the buffers have to be resized 
 
 public:
 
@@ -46,7 +46,7 @@ public:
 
 	// Vertices stores CPU side.
 	std::vector<VertexType> m_vertexCPU;
-	// The indeces bot the buffer.
+	// The indices for the buffer.
 	std::vector<unsigned> m_indexCPU;
 
 	// ------------------------------------------------- //
@@ -81,10 +81,11 @@ public:
 	void resizeGPU();
 	// Updates the data on the GPU.
 	void syncGPU();
-	// This function deletes the data on the CPU side for when only the GPU is being updated and
-	// the CPU side data is no longer required.
-	// Be careful when calling this function!
+	// This function deletes the data on the CPU side and keeps the GPU side data.
+	// This is useful when no more changes are going to be made and RAM should be reduced.
 	void wipeCPU();
+	// Wipes all of the data GPU side but keeps the CPU data.
+	void wipeGPU();
 	// Wipes all of the data (CPU and GPU).
 	void wipe();
 

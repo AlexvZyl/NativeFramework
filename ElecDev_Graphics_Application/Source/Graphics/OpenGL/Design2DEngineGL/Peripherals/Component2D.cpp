@@ -13,6 +13,8 @@
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "Circuit.h"
+#include "CoreGL/Scene.h"
+#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -27,10 +29,9 @@ unsigned Component2D::componentID = 0;
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO, 
-						 VertexArrayObject<VertexData>* linesVAO, 
-						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-						 VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent):Entity(EntityType::COMPONENT, parent)
+Component2D::Component2D(Scene* scene, Circuit* parent)
+	: Entity(EntityType::COMPONENT, parent),
+	 m_scene(scene)
 {
 	// --------------------------- //
 	//  I N I T I A L   S E T U P  //
@@ -43,25 +44,21 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
-	engine_trianglesVAO = trianglesVAO;
-	engine_linesVAO = linesVAO;
-	engine_texturedTrianglesVAO = texturedTrianglesVAO;
-	engine_circleVAO = circleVAO;
-	
-	
+	// Context.
+	Renderer::bindScene(m_scene);
 
 	// Main shape.
-	shape = std::make_shared<Polygon2D>(vertices, engine_trianglesVAO, this);
+	shape = Renderer::addPolygon2D(vertices, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
 	// Component border.
-	border = std::make_shared<Polygon2D>(vertices, engine_linesVAO, this);
+	border = Renderer::addPolygon2D(vertices, this); // This has to be a clear polygon.
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = std::make_shared<Text>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
+	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, this, "C", "B");
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
 	addPort(0, PORT_IN, "LX1");
@@ -71,12 +68,8 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 
 }
 
-Component2D::Component2D(glm::vec2 centreCoords, 
-						 VertexArrayObject<VertexData>* trianglesVAO, 
-						 VertexArrayObject<VertexData>* linesVAO, 
-						 VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-						 VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent)
-	: Component2D(trianglesVAO, linesVAO, texturedTrianglesVAO, circleVAO, parent)
+Component2D::Component2D(glm::vec2 centreCoords, Scene* scene, Circuit* parent)
+	: Component2D(scene, parent)
 {
 	moveTo(centreCoords);
 }

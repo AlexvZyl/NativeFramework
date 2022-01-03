@@ -139,8 +139,8 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
 	// Update data.
-	if		(!m_sized)  { resizeGPU(); }
-	else if (!m_synced) { syncGPU();   }
+	if		(!m_sized )	resizeGPU();
+	else if (!m_synced) syncGPU();  
 	// Render.
 	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
@@ -168,9 +168,9 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<VertexType>& ve
 													 unsigned* vertexPos, unsigned* indexPos)
 {
 	if(vertexPos) *vertexPos = m_vertexCount;
-	if(indexPos) *indexPos = m_indexCount;
+	if(indexPos)  *indexPos  = m_indexCount;
 	m_vertexCPU.insert(m_vertexCPU.end(), vertices.begin(), vertices.end());
-	for (unsigned& ind : indices) { ind += m_vertexCount; }
+	for (unsigned& ind : indices) ind += m_vertexCount; 
 	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
 	m_vertexCount += vertices.size();
 	m_indexCount += indices.size();
@@ -184,7 +184,7 @@ void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigne
 	m_indexCPU.erase(m_indexCPU.begin() + indexPos, m_indexCPU.begin() + indexPos + indexCount);
 	m_vertexCount -= vertexCount;
 	m_indexCount -= indexCount;
-	for (int i = indexPos; i < m_indexCount; i++) { m_indexCPU[i] -= vertexCount; }
+	for (int i = indexPos; i < m_indexCount; i++) m_indexCPU[i] -= vertexCount; 
 	resize();
 }
 
@@ -202,11 +202,21 @@ void VertexArrayObject<VertexType>::wipeCPU()
 }
 
 template <typename VertexType>
+void VertexArrayObject<VertexType>::wipeGPU() 
+{
+	// Wipe VBO.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW));
+	// Wipe IBO.
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW));
+}
+	
+template <typename VertexType>
 void VertexArrayObject<VertexType>::wipe() 
 {
 	wipeCPU();
-	m_synced = false;
-	m_sized = false;
+	wipeGPU();
 }
 
 //=============================================================================================================================================//
