@@ -11,6 +11,7 @@ It is going to be used to render to an ImGUI widget.
 //=============================================================================================================================================//
 
 #include <memory>
+#include "GLM/glm.hpp"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -18,6 +19,7 @@ It is going to be used to render to an ImGUI widget.
 
 template<typename VertexType>
 class VertexArrayObject;
+
 class VertexDataTextured;
 class Shader;
 
@@ -40,8 +42,6 @@ private:
 	unsigned int m_msaaDepthStencilBufferID;	// Depth/Stencil buffer.
 	unsigned int m_msaaEntityIDTextureID;		// Texture containing the entity ID's.
 
-	// Saves the FBO size.
-	int m_viewport[2] = { 500, 500 };
 	// The multisampling level (how many samples per pixel?).
 	int m_MSAA = 1;
 
@@ -52,6 +52,9 @@ private:
 	std::unique_ptr<Shader> m_shader;
 
 public:
+
+	// Saves the FBO size.
+	glm::vec2 m_viewport = { 500, 500 };
 
 	// Constructors.
 	FrameBufferObject();

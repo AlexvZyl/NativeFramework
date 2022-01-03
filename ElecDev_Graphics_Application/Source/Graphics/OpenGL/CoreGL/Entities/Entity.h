@@ -3,7 +3,7 @@
 
 enum class EntityType
 {
-	PRIMATIVE,
+	PRIMITIVE,
 	PORT,
 	COMPONENT,
 	CIRCUIT,

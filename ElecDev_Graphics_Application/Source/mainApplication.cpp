@@ -30,7 +30,7 @@
 #include <GLFW/glfw3.h>
 // Measure time.
 #include <chrono>
-
+// Include the renderer for initialisartion.
 #include "CoreGL/Renderer.h"
 
 /*=======================================================================================================================================*/
@@ -261,6 +261,9 @@ int main(int, char**)
     GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
     GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));           // Set the color to which OpenGL clears.
+    
+    // Initialise the renderer.
+    Renderer::initialise();
 
     // Create the state machine variables.
     GUIState guiState;
@@ -280,8 +283,6 @@ int main(int, char**)
     /* Render pipeline.                                                                                                                  */
     /*===================================================================================================================================*/
 
-    // Compile the shaders.
-    Renderer::compileShaders();
 
     // Thread reading inputs from pipeline.
     //std::thread t1(&PyInterface::readingIn, &pyInterface);

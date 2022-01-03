@@ -46,6 +46,10 @@ void Text::generateText(std::string text)
 	// Return if text is empty.
 	if (!text.size()) { return; }
 
+	// Variables to use.
+	std::vector<VertexDataTextured> vertices;
+	std::vector<unsigned> indices;
+
 	m_cursorStart = m_trackedCenter;
 	m_textLength = 0;
 
@@ -156,9 +160,9 @@ void Text::generateText(std::string text)
 	// -----------------------
 
 	// Insert vertices.
-	m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 });
+	vertices.insert(vertices.end(), { v1,v2,v3,v4 });
 	// Insert indices.
-	m_indices.insert(m_indices.end(),
+	indices.insert(indices.end(),
 		{
 			0 + m_vertexCount,
 			1 + m_vertexCount,
@@ -249,9 +253,9 @@ void Text::generateText(std::string text)
 		VertexDataTextured v4(pos4, m_colour, tex4, 1, m_entityID);
 		// -----------------------
 		// Insert vertices.
-		m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 });
+		vertices.insert(vertices.end(), { v1,v2,v3,v4 });
 		// Insert indices.
-		m_indices.insert(m_indices.end(),
+		indices.insert(indices.end(),
 			{
 				0 + m_vertexCount,
 				1 + m_vertexCount,
@@ -267,7 +271,7 @@ void Text::generateText(std::string text)
 		// -----------------------
 	}
 	// Write data to VAO.
-	m_VAO->appendDataCPU(this);
+	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
 }
 
 //=============================================================================================================================================//

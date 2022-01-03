@@ -8,6 +8,9 @@
 #include <memory>
 #include <map>
 #include "External/GLM/glm.hpp"
+#include <any>
+#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/Texture.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -19,12 +22,12 @@ template <typename VertexType>
 class Primitive;
 
 class Camera;
-class FrameBufferObject;
 class Texture;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class Event;
+class Entity;
 
 enum class CameraType;
 
@@ -51,19 +54,22 @@ private:
 	glm::mat4* getViewMatrix();
 	// Upadate the matrices of the camera.
 	void updateCamera();
-	// Resize the scene.
-	void onResizeEvent(float width, float height);
+	// Get the viewport dimensions.
+	glm::vec2* getViewportDimensions();
 
-	glm::vec2 m_viewport;
 	// Data required to construct a scene in OpenGL.
 	std::unique_ptr<Camera> m_camera;
-	std::map<unsigned, std::unique_ptr<Primitive<VertexData>>> m_primitives;
+	// Map containing all of the different primitives.
+	std::map<unsigned, std::unique_ptr<Entity>> m_primitives;
+	// Map containing all of the textures used in the scene.
 	std::map<unsigned, std::unique_ptr<Texture>> m_textures;
+	// VAO's.
 	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;
 	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;
 	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_backgroundVAO;
+	// FBO.
 	std::unique_ptr<FrameBufferObject> m_FBO;
 };
 

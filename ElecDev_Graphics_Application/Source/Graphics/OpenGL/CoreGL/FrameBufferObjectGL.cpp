@@ -73,7 +73,8 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	m_shader->bind();
 	m_shader->setInt("msaaSamples", m_MSAA);
 	m_shader->setSamplerMSAA("msaaTexture", &msaaTextureID, 1);
-	m_shader->setIntArray("textureSize", m_viewport, 2);
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 // Create the FBO attachments.
@@ -175,7 +176,8 @@ void FrameBufferObject::resize(int width, int height)
 	m_viewport[1] = height;
 	// Change texture size variable in  shader.
 	m_shader->bind();
-	m_shader->setIntArray("textureSize", m_viewport, 2);
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 unsigned int FrameBufferObject::getRenderTexture() 

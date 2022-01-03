@@ -16,6 +16,11 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 #include "Resources/ResourceHandler.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
 
+// Testing 
+#include "CoreGL/Scene.h"
+#include "CoreGL/Renderer.h"
+#include "CoreGL/Camera.h"
+
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
@@ -23,7 +28,23 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 // With GLFW window.
 GraphicsHandler::GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow) : 
 	m_guiState(guiState), m_glfwWindow(glfwWindow) 
-{};
+{
+	std::vector verts =
+	{
+		glm::vec3(0,1,0),
+		glm::vec3(1,2,0),
+		glm::vec3(2,3,0),
+		glm::vec3(3,1,0)
+	};
+	glm::vec4 colour(0, 0, 0, 1);
+	glm::vec2 center(0, 0);
+		
+	Scene scene(CameraType::Standard2D, 900, 900);
+	Renderer::bindScene(&scene);
+	Polygon2D* poly = Renderer::addPolygon2D(verts, NULL);
+	Circle* circle = Renderer::addCircle2D(center, 2, colour, 1, 2, NULL);
+	Renderer::renderScene();
+};
 
 // Destructor.
 GraphicsHandler::~GraphicsHandler(){};

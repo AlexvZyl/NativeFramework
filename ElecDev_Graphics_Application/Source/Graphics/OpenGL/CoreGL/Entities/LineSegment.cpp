@@ -22,5 +22,5 @@ void LineSegment::translate(glm::vec2& translation)
 	m_trackedCenter += translation3;
 	m_start += translation;
 	m_end += translation;
-	m_VAO->outOfSync();
+	m_VAO->sync();
 }

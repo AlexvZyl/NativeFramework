@@ -30,24 +30,6 @@ class Text : public Primitive<VertexDataTextured>
 {
 public:
 
-	// ------------ //
-	//  E N T I T Y //
-	// ------------ //
-
-	using Primitive<VertexDataTextured>::m_vertices;
-	using Primitive<VertexDataTextured>::m_indices;
-	using Primitive<VertexDataTextured>::m_vertexCount;
-	using Primitive<VertexDataTextured>::m_indexCount;
-	using Primitive<VertexDataTextured>::m_VAO;
-	using Primitive<VertexDataTextured>::m_bufferStartIndex;
-	using Primitive<VertexDataTextured>::m_trackedCenter;
-	using Primitive<VertexDataTextured>::m_colour;
-	using Primitive<VertexDataTextured>::m_entityID;
-
-	// --------- //
-	//  T E X T  //
-	// --------- //
-
 	float m_textScale = 1;
 	Font* m_font;
 	std::string m_verticalAlign;

@@ -19,24 +19,29 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
+	std::vector<VertexData> vertexVector;
+	std::vector<unsigned> indices;
 
 	// Create the vertices.
 	for (glm::vec3 vertex : vertices)
-		m_vertices.push_back(VertexData(vertex, m_colour, m_entityID));
+	{
+		vertexVector.push_back(VertexData(vertex, m_colour, m_entityID));
+	}
 
 	// Assign the indices based on the VAO type.
 	if (m_VAO->m_bufferType == GL_TRIANGLES)
 	{
-		m_indices = { 0,1,2,2,3,0 };
+		indices = { 0,1,2,2,3,0 };
 		m_indexCount = 6;
 	}
 	else if (m_VAO->m_bufferType == GL_LINES)
 	{
-		m_indices = { 0,1,1,2,2,3,3,0 };
+		indices = { 0,1,1,2,2,3,3,0 };
 		m_indexCount = 8;
 	}
+
 	// Pass to VAO.
-	m_VAO->appendDataCPU(this);
+	m_VAO->appendVertexData(vertexVector, indices, &m_vertexBufferPos, &m_indexBufferPos);
 }
 
 //=============================================================================================================================================//

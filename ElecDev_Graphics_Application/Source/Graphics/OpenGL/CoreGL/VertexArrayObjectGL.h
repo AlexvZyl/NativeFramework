@@ -31,7 +31,8 @@ private:
 	unsigned int m_IBOID;			// Index Buffer Object.
 	unsigned int m_vertexCount = 0;	// Pointer that shows where in the buffer data need to be written.
 	unsigned int m_indexCount = 0;	// Counting the amount of indices.
-	bool m_inSync = true;			// Checks if there is data CPU side that has not been updated GPU side.
+	bool m_synced = true;			// Checks if there is data CPU side that has not been updated GPU side.
+	bool m_sized = true;			// Checks if the data has to be resized 
 
 public:
 
@@ -45,15 +46,12 @@ public:
 	std::vector<VertexType> m_vertexCPU;
 	// The indeces bot the buffer.
 	std::vector<unsigned> m_indexCPU;
-	// Entities stored CPU side.
-	std::vector<Primitive<VertexType>*> m_entityCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
 	// Constructor.
-	VertexArrayObject();
 	VertexArrayObject(GLenum type);
 	// Destructor.
 	~VertexArrayObject();
@@ -68,8 +66,10 @@ public:
 	void bind() const;
 	// Unbinds the VAO.
 	void unbind() const;
-	// Sets m_isUpdated to false for when something changes externally.
-	void outOfSync();
+	// Sets the buffers to be updated.
+	void sync();
+	// Sets the buffers to be resized.
+	void resize();
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
@@ -79,24 +79,23 @@ public:
 	// the CPU side data is no longer required.
 	// Be careful when calling this function!
 	void wipeCPU();
-	// Sends the CPU data to the GPU.
-	void updateGPU();
+	// Resizes the buffers on the GPU.
+	void resizeGPU();
+	// Updates the data on the GPU.
+	void syncGPU();
 
-	// ----------------- //
-	//  V E R T I C E S  //
-	// ----------------- //
+	// --------- //
+	//  D A T A  //
+	// --------- //
 
-	// Append data on the CPU side memory for untextured vertices.
-	void appendDataCPU(std::vector<VertexType>& vertices, std::vector<unsigned> indices);
+	// Append the vertex data to the buffer.
+	// It returns the position of the vertex data in the vector.
+	void appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
+						  unsigned* vertexPos, unsigned* indexPos);
 
-	// ----------------- //
-	//  E N T I T I E S  //
-	// ----------------- //
-
-	// Append data on the CPU side memory for textured vertices.
-	void appendDataCPU(Primitive<VertexType>* entity);
-	// Delete the polygon from the VAO.
-	void deleteDataCPU(Primitive<VertexType>* entity);
+	// Removes vertex data from the VBO.
+	void deleteVertexData(unsigned vertexPos, unsigned vertexCount, 
+						  unsigned indexPos , unsigned indexCount);
 };
 
 //=============================================================================================================================================//
