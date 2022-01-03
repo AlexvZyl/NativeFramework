@@ -18,7 +18,8 @@ LineSegment::LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<Verte
 void LineSegment::translate(glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
-	for (VertexData& vertex : m_vertices) { vertex.data.position += translation3; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position += translation3;
 	m_trackedCenter += translation3;
 	m_start += translation;
 	m_end += translation;

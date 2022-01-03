@@ -10,12 +10,6 @@ Entity::Entity(EntityType type, Entity* parent)
 	m_type = type;
 }
 
-Entity::~Entity()
-{
-	EntityManager::freeEID(m_entityID);
-}
+Entity::~Entity() { EntityManager::freeEID(m_entityID); }
 
-
-void Entity::setContext(GUIState* guiState)
-{
-}
+void Entity::setContext(GUIState* guiState) {}

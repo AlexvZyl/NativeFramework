@@ -11,6 +11,7 @@
 #include <functional>
 #include <chrono>
 #include <iostream>
+#include "CoreGL/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -166,8 +167,8 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
 													 unsigned* vertexPos, unsigned* indexPos)
 {
-	vertexPos = m_vertexCount;
-	indexPos = m_indexCount;
+	if(vertexPos) *vertexPos = m_vertexCount;
+	if(indexPos) *indexPos = m_indexCount;
 	m_vertexCPU.insert(m_vertexCPU.end(), vertices.begin(), vertices.end());
 	for (unsigned& ind : indices) { ind += m_vertexCount; }
 	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
@@ -179,8 +180,8 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<VertexType>& ve
 template <typename VertexType>
 void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigned vertexCount, unsigned indexPos, unsigned indexCount)
 {
-	m_vertexCPU.erase(vertexPos, vertexPos + vertexCount);
-	m_indexCPU.erase(indexPos, indexPos + indexCount);
+	m_vertexCPU.erase(m_vertexCPU.begin() + vertexPos, m_vertexCPU.begin() + vertexPos + vertexCount);
+	m_indexCPU.erase(m_indexCPU.begin() + indexPos, m_indexCPU.begin() + indexPos + indexCount);
 	m_vertexCount -= vertexCount;
 	m_indexCount -= indexCount;
 	for (int i = indexPos; i < m_indexCount; i++) { m_indexCPU[i] -= vertexCount; }
@@ -198,7 +199,12 @@ void VertexArrayObject<VertexType>::wipeCPU()
 	m_indexCPU.clear();
 	m_indexCPU.shrink_to_fit();
 	m_indexCount = 0;
-	// Set flag.
+}
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::wipe() 
+{
+	wipeCPU();
 	m_synced = false;
 	m_sized = false;
 }

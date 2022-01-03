@@ -17,6 +17,8 @@ template<typename VertexType>
 class Primitive;
 class Vertex;
 
+class Entity;
+
 //=============================================================================================================================================//
 //  Class.																																	   //
 //=============================================================================================================================================//
@@ -75,14 +77,16 @@ public:
 	//  M E M O R Y   M A N A G E M E N T  //
 	// ----------------------------------- //
 
-	// This function deletes the data on the CPU side for when only the GPU is being updated and
-	// the CPU side data is no longer required.
-	// Be careful when calling this function!
-	void wipeCPU();
 	// Resizes the buffers on the GPU.
 	void resizeGPU();
 	// Updates the data on the GPU.
 	void syncGPU();
+	// This function deletes the data on the CPU side for when only the GPU is being updated and
+	// the CPU side data is no longer required.
+	// Be careful when calling this function!
+	void wipeCPU();
+	// Wipes all of the data (CPU and GPU).
+	void wipe();
 
 	// --------- //
 	//  D A T A  //
@@ -91,11 +95,10 @@ public:
 	// Append the vertex data to the buffer.
 	// It returns the position of the vertex data in the vector.
 	void appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
-						  unsigned* vertexPos, unsigned* indexPos);
-
+						  unsigned* vertexPos = nullptr, unsigned* indexPos = nullptr);
 	// Removes vertex data from the VBO.
-	void deleteVertexData(unsigned vertexPos, unsigned vertexCount, 
-						  unsigned indexPos , unsigned indexCount);
+	void deleteVertexData(unsigned vertexPos, unsigned vertexCount,
+						  unsigned indexPos, unsigned indexCount);
 };
 
 //=============================================================================================================================================//

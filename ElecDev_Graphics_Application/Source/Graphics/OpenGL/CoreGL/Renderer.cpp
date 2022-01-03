@@ -73,6 +73,8 @@ void Renderer::renderScene(Scene* scene)
 
 void Renderer::render2DScene(Scene* scene)
 {
+	// Remember to update the projection matrices of the shaders.
+
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
@@ -96,7 +98,7 @@ void Renderer::render2DScene(Scene* scene)
 
 	// Draw background.
 	m_shaders["BackgroundShader2D"]->bind();
-	//scene->m_backgroundVAO->render();
+	scene->m_backgroundVAO->render();
 
 	// Draw basic primitives.
 	m_shaders["BasicShader"]->bind();
@@ -126,6 +128,8 @@ void Renderer::render2DScene(Scene* scene)
 
 void Renderer::render3DScene(Scene* scene)
 {
+	// Remember to update the projection matrices of the shaders.
+
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //

@@ -63,8 +63,8 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 		VertexDataTextured( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1),
 	};
 	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
-	m_renderVAO->appendDataCPU(vertices, indices);
-	m_renderVAO->updateGPU();
+	m_renderVAO->appendVertexData(vertices, indices);
+	m_renderVAO->resize();
 
 	// Generate the shader.
 	m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);

@@ -36,41 +36,6 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState, std::string contextName)
 	// Print start message.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core starting...";
 
-	// ----------------------------------------- //
-	//  C R E A T E   B A S I C   S H A D E R S  //
-	// ----------------------------------------- //
-
-	// Compile the shaders, using the resources embedded in the exe.
-	m_basicShader = std::make_unique<Shader>(BASIC_SHADER);
-	m_textureShader = std::make_unique<Shader>(TEXTURE_SHADER);
-	m_circleShader = std::make_unique<Shader>(CIRCLE_SHADER);
-
-	// Set default values for the shaders.  The background shader does not require
-	// this setup, since it does not work with the MVP matrices.
-	glm::mat4 identity = glm::mat4(1.0f);
-	m_basicShader->bind();
-	m_basicShader->setMat4("projectionMatrix", &identity);
-	m_basicShader->setMat4("viewMatrix", &identity);
-	m_textureShader->bind();
-	m_textureShader->setMat4("projectionMatrix", &identity);
-	m_textureShader->setMat4("viewMatrix", &identity);
-	m_circleShader->bind();
-	m_circleShader->setMat4("projectionMatrix", &identity);
-	m_circleShader->setMat4("viewMatrix", &identity);
-
-	// ------------------------------------- //
-	//  C R E A T E   B A S I C   V A O ' S  //
-	// ------------------------------------- //
-
-	m_linesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
-	m_trianglesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_texturedTrianglesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	m_circlesVAO = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_lineEntitiesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
-	m_triangleEntitiesVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_triangleTexturedEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	m_circleEntitiesVAO = std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
-	m_frameBuffer = std::make_unique<FrameBufferObject>((int)m_imGuiViewportDimensions[0], (int)m_imGuiViewportDimensions[1], 16);
 	createDefaultBackground();
 
 	// ----------------------------------------- //
@@ -79,7 +44,6 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState, std::string contextName)
 
 	// Load font from resource.
 	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_NORMAL_JSON, ARIAL_NORMAL_PNG));
-	//m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_BOLD_MSDF_JSON, ARIAL_BOLD_MSDF_PNG));
 	m_textureShader->bind();
 	GLCall(auto loc = glGetUniformLocation(m_textureShader->m_rendererID, "f_textures"));
 	int samplers[3] = { 0, 1, 2 };		// 0 = No texture, 1 = Font atlas, 2+ = Any other textures.
@@ -153,15 +117,10 @@ unsigned int EngineCoreGL::getEntityID(float pixelCoords[2])
 void EngineCoreGL::updateGPU()
 {
 	// Primitives.
-	m_linesVAO->updateGPU();
-	m_trianglesVAO->updateGPU();
-	m_texturedTrianglesVAO->updateGPU();
-	m_circlesVAO->updateGPU();
-	// Entities.
-	m_lineEntitiesVAO->updateGPU();
-	m_triangleEntitiesVAO->updateGPU();
-	m_triangleTexturedEntitiesVAO->updateGPU();
-	m_circleEntitiesVAO->updateGPU();
+	m_linesVAO->resize();
+	m_trianglesVAO->resize();
+	m_texturedTrianglesVAO->resize();
+	m_circlesVAO->resize();
 }
 
 void EngineCoreGL::createDefaultBackground()
@@ -199,8 +158,9 @@ void EngineCoreGL::createDefaultBackground()
 		VertexData(pos4, bgColor1, -1)	//  Bottom right.
 	};
 	// Create background.
-	m_backgroundVAO->appendDataCPU(vertices, { 0,1,2,2,3,0 });
-	m_backgroundVAO->updateGPU();
+	std::vector<unsigned> indices({ 0,1,2,2,3,0 });
+	m_backgroundVAO->appendVertexData(vertices, indices);
+	m_backgroundVAO->resize();
 }
 
 float EngineCoreGL::deltaTime()
@@ -221,26 +181,6 @@ void EngineCoreGL::mousePressRight(float pixelCoords[2]) { functionNotImplemente
 void EngineCoreGL::mousePressMiddle(float pixelCoords[2]) { functionNotImplementedError(__FUNCTION__); }
 void EngineCoreGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle) { functionNotImplementedError(__FUNCTION__); }
 void EngineCoreGL::keyEvent(int key, int action) { functionNotImplementedError(__FUNCTION__); }
-
-//=============================================================================================================================================//
-//  2D API.																																	   //
-//=============================================================================================================================================//
-
-void EngineCoreGL::drawLine(float position1[2], float position2[2], float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawQuadClear(float position[2], float width, float height, float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawQuadFilled(float position[2], float width, float height, float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawCircleClear(float position[2], float radius, float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawCircleFilled(float position[2], float radius, float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawText(std::string text, float coords[2], float color[4], float scale, std::string align) { functionNotImplementedError(__FUNCTION__); }
-
-//=============================================================================================================================================//
-//  3D API.																																	   //
-//=============================================================================================================================================//
-
-void EngineCoreGL::drawQuadFilled3D(float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float color[4]) { functionNotImplementedError(__FUNCTION__); }
-void EngineCoreGL::drawCuboidFilled(float vertex1[3], float vertex2[3], float vertex3[3], float vertex4[3], float depth, float color[4]) { functionNotImplementedError(__FUNCTION__); }
 
 //=============================================================================================================================================//
 //  Viewport.																																   //

@@ -22,11 +22,11 @@ Primitive<VertexType>::~Primitive() { wipeMemory(); }
 template<typename VertexType>
 void Primitive<VertexType>::wipeMemory()
 { 
-	// Clear the data from the GPU.
-	m_VAO->deleteDataCPU(this);	
-
-	m_indecesStartIndex = 0;
-	m_bufferStartIndex = 0;
+	// Clear data.
+	m_VAO->deleteVertexData(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
+	// Clear metadata.
+	m_vertexBufferPos = 0;
+	m_indexBufferPos = 0;
 	m_vertexCount = 0;
 	m_indexCount = 0;
 }
@@ -38,7 +38,8 @@ void Primitive<VertexType>::wipeMemory()
 template<typename VertexType>
 void Primitive<VertexType>::translate(glm::vec3& translation)
 {
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position += translation;
 	m_trackedCenter += translation;
 	m_VAO->sync();
 }
@@ -47,7 +48,8 @@ template<typename VertexType>
 void Primitive<VertexType>::translate(glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation3; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position += translation3;
 	m_trackedCenter += translation3;
 	m_VAO->sync();
 }
@@ -56,7 +58,8 @@ template<typename VertexType>
 void Primitive<VertexType>::translateTo(glm::vec3& position)
 { 
 	glm::vec3 translation = position - m_trackedCenter; 
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position += translation;
 	m_trackedCenter += translation;
 	m_VAO->sync();
 }
@@ -65,7 +68,8 @@ template<typename VertexType>
 void Primitive<VertexType>::translateTo(glm::vec2& position)
 {
 	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
-	for (VertexType& vertex : m_vertices) { vertex.data.position += translation; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position += translation;
 	m_trackedCenter += translation;
 	m_VAO->sync();
 }
@@ -89,7 +93,8 @@ void Primitive<VertexType>::scale(glm::vec3& scaling)
 template<typename VertexType>
 void Primitive<VertexType>::setColor(glm::vec4& color)
 {
-	for (VertexType& vertex : m_vertices) { vertex.data.color = color; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.color = color;
 	m_colour = color;
 	m_VAO->sync();
 }
@@ -97,7 +102,8 @@ void Primitive<VertexType>::setColor(glm::vec4& color)
 template<typename VertexType>
 void Primitive<VertexType>::setEntityID(unsigned int eID)
 {
-	for (VertexType& vertex : m_vertices) { vertex.entityID = eID; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].entityID = eID;
 	m_entityID = eID;
 	m_VAO->sync();
 }
@@ -105,7 +111,8 @@ void Primitive<VertexType>::setEntityID(unsigned int eID)
 template<typename VertexType>
 void Primitive<VertexType>::setLayer(float layer)
 {
-	for (VertexType& vertex : m_vertices) { vertex.data.position.z = layer; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position.z = layer;
 	m_VAO->sync();
 }
 
@@ -113,7 +120,7 @@ template<typename VertexType>
 void Primitive<VertexType>::setContext(GUIState* guiState)
 {
 	guiState->clickedZone.primative = true;
-	if (m_parent != nullptr) { m_parent->setContext(guiState); }
+	if (m_parent) m_parent->setContext(guiState);
 }
 
 //=============================================================================================================================================//

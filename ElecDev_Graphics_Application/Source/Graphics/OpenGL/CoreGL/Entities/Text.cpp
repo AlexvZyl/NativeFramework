@@ -286,18 +286,22 @@ void Text::updateText(std::string text)
 
 void Text::setBoxColour(glm::vec4 colour) 
 { 
-	for (int i = 0; i < 4; i++) { *m_vertices[i].color = colour; }
+	for (int i = 0; i < 4; i++) 
+		m_VAO->m_vertexCPU[i].data.color = colour; 
 }
 
 void Text::setColor(glm::vec4& color) 
 {
-	for (int i = 4; i < m_vertices.size(); i++) { *m_vertices[i].color = color; }
+	for (int i = 4; i < m_vertexCount; i++) 
+		m_VAO->m_vertexCPU[i].data.color = color;
 }
 
 void Text::setLayer(float layer)
 {
-	for (int i = 0; i < 4; i++) { m_vertices[i].position->z = layer - 0.001; }
-	for (int i = 4; i < m_vertices.size(); i++) { m_vertices[i].position->z = layer; }
+	for (int i = 0; i < 4; i++) 
+		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
+	for (int i = 4; i < m_vertexCount; i++) 
+		m_VAO->m_vertexCPU[i].data.position.z = layer;
 }
 
 //=============================================================================================================================================//
