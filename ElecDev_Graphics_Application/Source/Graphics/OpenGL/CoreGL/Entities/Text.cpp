@@ -15,11 +15,10 @@
 //=============================================================================================================================================//
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-template<typename VertexType>
-Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
-					   VertexArrayObject<VertexType>* vao, Font& font, Entity* parent, 
+Text::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
+					   VertexArrayObject<VertexDataTextured>* vao, Font& font, Entity* parent,
 					   std::string horizontalAlignment, std::string verticalAlignment)
-	: Primitive<VertexType>(parent)
+	: Primitive<VertexDataTextured>(parent)
 {
 	// ---------- //
 	// S E T U P  //
@@ -42,8 +41,7 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 	generateText(text);
 }
 
-template<typename VertexType>
-void Text<VertexType>::generateText(std::string text)
+void Text::generateText(std::string text)
 {
 	// Return if text is empty.
 	if (!text.size()) { return; }
@@ -272,45 +270,31 @@ void Text<VertexType>::generateText(std::string text)
 	m_VAO->appendDataCPU(this);
 }
 
-template<typename VertexType>
-Text<VertexType>::~Text(){}
-
 //=============================================================================================================================================//
 //  Text manipulation.																													       //
 //=============================================================================================================================================//
 
-template<typename VertexType>
-void Text<VertexType>::updateText(std::string text) 
+void Text::updateText(std::string text) 
 {
-	Primitive<VertexType>::wipeMemory();
+	Primitive<VertexDataTextured>::wipeMemory();
 	generateText(text);
 }
 
-template <typename VertexType>
-void Text<VertexType>::setBoxColour(glm::vec4 colour) 
+void Text::setBoxColour(glm::vec4 colour) 
 { 
 	for (int i = 0; i < 4; i++) { *m_vertices[i].color = colour; }
 }
 
-template <typename VertexType>
-void Text<VertexType>::setColor(glm::vec4& color) 
+void Text::setColor(glm::vec4& color) 
 {
 	for (int i = 4; i < m_vertices.size(); i++) { *m_vertices[i].color = color; }
 }
 
-template <typename VertexType>
-void Text<VertexType>::setLayer(float layer)
+void Text::setLayer(float layer)
 {
 	for (int i = 0; i < 4; i++) { m_vertices[i].position->z = layer - 0.001; }
 	for (int i = 4; i < m_vertices.size(); i++) { m_vertices[i].position->z = layer; }
 }
-
-//=============================================================================================================================================//
-//  Instantiations.																															   //
-//=============================================================================================================================================//
-
-template class Text<>;
-template class Text<VertexDataTextured>;
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

@@ -12,8 +12,6 @@
 
 template <typename VertexType>
 class Primitive;
-template <typename VertexType>
-class Polygon2D;
 
 class Scene;
 class Polygon2DTextured;
@@ -22,6 +20,7 @@ class LineSegment2D;
 class Text2D;
 class Texture;
 class Shader;
+class Polygon2D;
 
 //==============================================================================================================================================//
 //  Renderer Class.																																//
@@ -48,13 +47,12 @@ public:
 	//  2 D   P R I M I T I V E S  //
 	// --------------------------- //
 
-	/*static Polygon2D* addPolygon2D();
-	static Polygon2DTextured* addPolygon2DTextured();
+	static Polygon2D* addPolygon2D();
+	//static Polygon2DTextured* addPolygon2DTextured();
 	static Circle2D* addCircle2D();
 	static LineSegment2D* addLineSegment2D();
-	static Text2D* addText2D();*/
+	static Text2D* addText2D();
 	
-
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
 	// --------------------------- //

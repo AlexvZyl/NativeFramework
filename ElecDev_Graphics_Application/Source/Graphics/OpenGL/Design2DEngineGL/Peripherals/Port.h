@@ -8,11 +8,9 @@
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/VertexArrayObjectGL.h"
 
-template<typename VertexType>
-class Polygon2D;
-
 struct Font;
 
+class Polygon2D;
 class Component2D;
 class Cable;
 
@@ -43,10 +41,10 @@ public:
 	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
 	float portLayer;
 
-	Circle<> body;
-	Circle<> border;
-	Circle<> attachmentIndicator;
-	std::shared_ptr<Text<>> title;
+	Circle body;
+	Circle border;
+	Circle attachmentIndicator;
+	std::shared_ptr<Text> title;
 
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };

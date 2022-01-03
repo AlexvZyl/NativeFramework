@@ -2,7 +2,6 @@
 #include "GUI/GUIState.h"
 #include "Circuit.h"
 
-
 Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent) :Entity(EntityType::CABLE, parent)
 {
 	//Keep the VAO and start port
@@ -36,7 +35,7 @@ Cable::Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, Vertex
 
 	//Add the first line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
-	m_nodes.push_back(std::make_shared<Circle<>>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
+	m_nodes.push_back(std::make_shared<Circle>(engine_circleVAO, endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	//Add the second (perpendicular) line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, endPt, engine_triangleVAO, this, m_thickness, m_colour));
 
@@ -58,11 +57,11 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ve
 
 	//Add the first line segment and first node.
 	m_lines.push_back(std::make_shared<LineSegment>(m_startPort->centre, nodeList[0], engine_triangleVAO, this, m_thickness, m_colour));
-	m_nodes.push_back(std::make_shared<Circle<>>(engine_circleVAO, nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+	m_nodes.push_back(std::make_shared<Circle>(engine_circleVAO, nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
 	//Add all inter-nore line segments, and the rest of the nodes
 	for (int i = 1; i < nodeList.size(); i++) {
 		m_lines.push_back(std::make_shared<LineSegment>(nodeList[i-1], nodeList[i], engine_triangleVAO, this, m_thickness, m_colour));
-		m_nodes.push_back(std::make_shared<Circle<>>(engine_circleVAO, nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
+		m_nodes.push_back(std::make_shared<Circle>(engine_circleVAO, nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
 	}
 	//Add final line segment.
 	m_lines.push_back(std::make_shared<LineSegment>(nodeList.back(), m_endPort->centre, engine_triangleVAO, this, m_thickness, m_colour));
@@ -119,7 +118,7 @@ void Cable::addSegment(glm::vec2 nextPoint)
 		m_curOrientation = LineOrientation::HORIZONTAL;
 		break;
 	}
-	m_nodes.push_back(std::make_shared<Circle<VertexDataCircle>>(engine_circleVAO, m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
+	m_nodes.push_back(std::make_shared<Circle>(engine_circleVAO, m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
 	m_lines.push_back(std::make_shared<LineSegment>(m_lines.back()->m_end, nextPoint, engine_triangleVAO, this, m_thickness, m_colour));
 }
 
@@ -219,7 +218,7 @@ void Cable::setColour(glm::vec4 colour)
 		line->setColor(m_colour);
 	}
 	for (int i = 0; i < m_nodes.size(); i++) {
-		Circle<VertexDataCircle>* circ = m_nodes[i].get();
+		Circle* circ = m_nodes[i].get();
 		circ->setColor(m_colour);
 	}
 }
@@ -229,7 +228,7 @@ void Cable::highlight()
 	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f });
 }
 
-void Cable::moveActivePrimativeTo(glm::vec2 screenCoords)
+void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 {
 	//Add code to move necessary primatives around.
 	//Move line segment if user grabs a line
@@ -275,26 +274,26 @@ void Cable::moveActivePrimativeTo(glm::vec2 screenCoords)
 		//This is the same as dragging the two adjacent line segments.
 
 		//get an iterator to the node
-		auto it = std::find_if(begin(m_nodes), end(m_nodes), [&](std::shared_ptr<Circle<>> current)
+		auto it = std::find_if(begin(m_nodes), end(m_nodes), [&](std::shared_ptr<Circle> current)
 			{
 				return current.get() == m_activeNode;
 			});
 
 		//translate the adjacent lines
 		m_activeLine = m_lines.at(it - m_nodes.begin()).get();
-		moveActivePrimativeTo(screenCoords);
+		moveActivePrimitiveTo(screenCoords);
 		m_activeLine = m_lines.at(it - m_nodes.begin()+1).get();
-		moveActivePrimativeTo(screenCoords);
+		moveActivePrimitiveTo(screenCoords);
 		m_activeLine = nullptr;
 
 
 	}
 }
 
-void Cable::setActivePrimative(Entity* primative)
+void Cable::setActivePrimitive(Entity* primative)
 {
 	m_activeLine = dynamic_cast<LineSegment*>(primative);
-	m_activeNode = dynamic_cast<Circle<VertexDataCircle>*>(primative);
+	m_activeNode = dynamic_cast<Circle*>(primative);
 }
 
 void Cable::unhighlight()

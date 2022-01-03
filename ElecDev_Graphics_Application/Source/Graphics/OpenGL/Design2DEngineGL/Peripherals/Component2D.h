@@ -16,14 +16,11 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-class Text;
-template<typename VertexType>
-class Polygon2D;
-template<typename VertexType>
-class Circle;
-template<typename VertexType>
 class VertexArrayObject;
 
+class Circle;
+class Text;
+class Polygon2D;
 struct Font;
 class VertexData;
 class VertexDataTextured;
@@ -39,9 +36,9 @@ class Component2D: public Entity
 public:
 
 	//shape and edge data
-	std::shared_ptr<Polygon2D<VertexData>> shape;
-	std::shared_ptr<Polygon2D<VertexData>> border;
-	std::shared_ptr<Text<>> title;
+	std::shared_ptr<Polygon2D> shape;
+	std::shared_ptr<Polygon2D> border;
+	std::shared_ptr<Text> title;
 	//std::shared_ptr<Port> port1;
 	//std::shared_ptr<Port> port2;
 	VertexArrayObject<VertexData>* engine_trianglesVAO;

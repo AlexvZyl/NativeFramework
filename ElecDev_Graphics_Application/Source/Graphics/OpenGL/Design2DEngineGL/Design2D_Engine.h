@@ -10,12 +10,9 @@
 //  Forward declerations																													   //
 //=============================================================================================================================================//
 
-class Component2D;
-
-template<typename VetexType>
-class Polygon2D;
-template<typename VetexType>
 class Circle;
+class Polygon2D;
+class Component2D;
 class Circuit;
 class Cable;
 class Port;
@@ -40,9 +37,9 @@ public:
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
 	std::shared_ptr<Circuit> m_circuit;
-	std::unique_ptr<Circle<VertexDataCircle>> p1;
-	std::unique_ptr<Circle<VertexDataCircle>> p2;
-	std::unique_ptr<Circle<VertexDataCircle>> p3;
+	std::unique_ptr<Circle> p1;
+	std::unique_ptr<Circle> p2;
+	std::unique_ptr<Circle> p3;
 	glm::vec2 m_lastDragPos = {0.f, 0.f};
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;

@@ -51,18 +51,19 @@ Component2D::Component2D(VertexArrayObject<VertexData>* trianglesVAO,
 	
 
 	// Main shape.
-	shape = std::make_shared<Polygon2D<VertexData>>(vertices, engine_trianglesVAO, this);
+	shape = std::make_shared<Polygon2D>(vertices, engine_trianglesVAO, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
 	// Component border.
-	border = std::make_shared<Polygon2D<VertexData>>(vertices, engine_linesVAO, this);
+	border = std::make_shared<Polygon2D>(vertices, engine_linesVAO, this);
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = std::make_shared<Text<VertexDataTextured>>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
-	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). It is a bit of a pain setting up ports every time we test.
+	title = std::make_shared<Text>(titleString, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "B");
+	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
+	// It is a bit of a pain setting up ports every time we test.
 	addPort(0, PORT_IN, "LX1");
 	addPort(1, PORT_OUT, "RX1");
 

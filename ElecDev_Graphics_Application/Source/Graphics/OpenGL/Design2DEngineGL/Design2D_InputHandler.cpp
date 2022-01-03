@@ -129,7 +129,7 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 				}
 				if (m_activeCable.get()) {
 					// Move the component.
-					m_activeCable->moveActivePrimativeTo(screenCoords);
+					m_activeCable->moveActivePrimitiveTo(screenCoords);
 				}
 			}
 
@@ -263,7 +263,7 @@ void Design2DEngineGL::setActiveCable(unsigned eID) {
 					{
 						return current.get() == cur;
 					});
-				m_activeCable->setActivePrimative(currentEntity);
+				m_activeCable->setActivePrimitive(currentEntity);
 				m_activeCable->highlight();
 			}
 			currentEntity = currentEntity->m_parent;

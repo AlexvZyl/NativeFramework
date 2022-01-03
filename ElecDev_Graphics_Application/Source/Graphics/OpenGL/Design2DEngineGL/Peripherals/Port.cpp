@@ -37,25 +37,25 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 		m_position = PortPosition::TOP;
 		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "T");
+		title = std::make_shared<Text>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "T");
 	}	
 	else if (m_offset.y < -0.099) {//bottom
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "U");
+		title = std::make_shared<Text>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "C", "U");
 	}
 	else if (m_offset.x > 0.099) {//right
 		m_position = PortPosition::RIGHT;
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "R", "C");
+		title = std::make_shared<Text>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "R", "C");
 	}
 	else if (m_offset.x < -0.099) {//left
 		m_position = PortPosition::LEFT;
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = std::make_shared<Text<>>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "L", "C");
+		title = std::make_shared<Text>(m_label, titlePos, titleColour, titleSize, engine_texturedTrianglesVAO, titleFont, this, "L", "C");
 	}
 	body.setColor(bodyColour);
 	border.setColor(borderColour);

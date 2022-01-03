@@ -11,9 +11,8 @@
 //  Constructor & Destructor.																										       	   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
-Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexType>* VAO, Entity* parent) 
-	: Primitive<VertexType>(parent)
+Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent) 
+	: Primitive<VertexData>(parent)
 {
 	// General setup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
@@ -39,12 +38,6 @@ Polygon2D<VertexType>::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObj
 	// Pass to VAO.
 	m_VAO->appendDataCPU(this);
 }
-
-//=============================================================================================================================================//
-//  Instantiations.																															   //
-//=============================================================================================================================================//
-
-template class Polygon2D<VertexData>;
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

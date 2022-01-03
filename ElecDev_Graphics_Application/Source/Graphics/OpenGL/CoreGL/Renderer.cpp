@@ -184,30 +184,30 @@ void Renderer::render3DScene(Scene* scene)
 //	m_scene->m_primitives.erase(entityID);
 //}
 
-//Polygon2D* Renderer::addPolygon2D() 
-//{
-//
-//}
-//
+Polygon2D* Renderer::addPolygon2D() 
+{
+
+}
+
 //Polygon2DTextured* Renderer::addPolygon2DTextured() 
 //{
 //
 //}
-//
-//Circle2D* Renderer::addCircle2D() 
-//{
-//
-//}
-//
-//LineSegment2D* Renderer::addLineSegment2D() 
-//{
-//
-//}
-//
-//Text2D* Renderer::addText2D() 
-//{
-//
-//}
+
+Circle2D* Renderer::addCircle2D() 
+{
+
+}
+
+LineSegment2D* Renderer::addLineSegment2D() 
+{
+
+}
+
+Text2D* Renderer::addText2D() 
+{
+
+}
 
 //==============================================================================================================================================//
 //  Primitives.																																	//
