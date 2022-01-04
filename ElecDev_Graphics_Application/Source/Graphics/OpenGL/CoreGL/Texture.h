@@ -22,6 +22,8 @@ public:
 
 private:
 
+	friend class Renderer;
+
 	unsigned m_GLID;
 	unsigned m_textureType;
 };

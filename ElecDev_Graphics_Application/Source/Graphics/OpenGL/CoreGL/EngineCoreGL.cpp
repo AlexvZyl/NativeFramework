@@ -26,6 +26,8 @@ and notify the user via the terminal interface.
 //#include "Fonts.h"
 #include "FontLoader.h"
 #include <memory>
+#include "CoreGL/Camera.h"
+#include "CoreGL/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -37,8 +39,6 @@ EngineCoreGL::EngineCoreGL(GUIState* guiState, std::string contextName)
 {
 	// Start.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core starting...";
-
-	
 
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Engine core done.\n";
@@ -65,11 +65,9 @@ void EngineCoreGL::drawDemo(unsigned int loopCount) { functionNotImplementedErro
 
 void EngineCoreGL::renderLoop() { Renderer::renderScene(m_scene.get()); }
 
-unsigned int EngineCoreGL::getRenderTexture() { return m_scene->getRenderTexture(); }
+unsigned EngineCoreGL::getRenderTexture() { return m_scene->getRenderTexture(); }
 
-unsigned int EngineCoreGL::getEntityID(glm::vec2& pixelCoords) { m_scene->getEntityID(pixelCoords); }
-
-
+unsigned EngineCoreGL::getEntityID(glm::vec2& pixelCoords) { return m_scene->getEntityID(pixelCoords); }
 
 float EngineCoreGL::deltaTime()
 {
@@ -94,7 +92,10 @@ void EngineCoreGL::keyEvent(int key, int action) { functionNotImplementedError(_
 //  Viewport.																																   //
 //=============================================================================================================================================//
 
-void EngineCoreGL::resizeEvent(float with, float height) { functionNotImplementedError(__FUNCTION__); }
+void EngineCoreGL::resizeEvent(float width, float height) 
+{ 
+	m_scene->resize(width, height);
+}
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

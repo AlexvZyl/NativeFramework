@@ -54,7 +54,7 @@ void PopUpMenu::render()
             {   
                 //get screen coordinates
                 float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
-                glm::vec3 WorldCoords = m_guiState->design_engine->pixelCoordsToWorldCoords(pixelCoords);
+                glm::vec3 WorldCoords = m_guiState->design_engine->m_scene->pixelCoordsToWorldCoords(pixelCoords);
                 glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
                 //place a dummy component
                 Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_windowsDictionary[m_windowContext]->engineGL.get());

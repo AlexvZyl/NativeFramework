@@ -226,6 +226,14 @@ void VertexArrayObject<VertexType>::wipe()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::resizeGPU()
 {
+	// Check if empty.
+	if (!m_vertexCount)
+	{
+		m_sized = true;
+		m_synced = true;
+		return;
+	}
+
 	// Reset the buffer pointer.
 	unsigned int index = 0;
 	// Resize VBO.
@@ -251,6 +259,13 @@ void VertexArrayObject<VertexType>::resizeGPU()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::syncGPU()
 {
+	// Check if empty.
+	if (!m_vertexCount)
+	{
+		m_synced = true;
+		return;
+	}
+
 	// Reset the buffer pointer.
 	unsigned int index = 0;
 	// Write the data to the buffers.

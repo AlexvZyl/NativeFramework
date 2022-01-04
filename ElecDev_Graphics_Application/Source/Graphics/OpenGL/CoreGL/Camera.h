@@ -37,11 +37,14 @@ public:
 	void onEvent(Event& event);
 	// Set the size of the viewport.
 	void setViewport(int width, int height);
+	// Resize the camera.
+	void resize(int width, int height);
 
 private:
 
 	friend class Renderer;
 	friend class Scene;
+	friend class Shader;
 
 	CameraType m_type;
 
@@ -84,6 +87,8 @@ private:
 	glm::mat4 m_scalingMatrixBase = glm::mat4(1.0f);			// Stores base matrix for camera scaling.
 	glm::mat4 m_translationMatrixBase = glm::mat4(1.0f);		// Stores base matrix for camera translation.
 	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);			// Stores base matrix for camera rotation.
+
+	float m_projectionValues[6];								// Stores the valaues that is used to calculate the projection matrix.
 };
 
 //==============================================================================================================================================//

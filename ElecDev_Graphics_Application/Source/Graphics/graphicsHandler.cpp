@@ -28,23 +28,7 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 // With GLFW window.
 GraphicsHandler::GraphicsHandler(GUIState* guiState, GLFWwindow* glfwWindow) : 
 	m_guiState(guiState), m_glfwWindow(glfwWindow) 
-{
-	std::vector verts =
-	{
-		glm::vec3(0,1,0),
-		glm::vec3(1,2,0),
-		glm::vec3(2,3,0),
-		glm::vec3(3,1,0)
-	};
-	glm::vec4 colour(0, 0, 0, 1);
-	glm::vec2 center(0, 0);
-		
-	Scene scene(CameraType::Standard2D, 900, 900);
-	Renderer::bindScene(&scene);
-	Polygon2D* poly = Renderer::addPolygon2D(verts, NULL);
-	Circle* circle = Renderer::addCircle2D(center, 2, colour, 1, 2, NULL);
-	Renderer::renderScene();
-};
+{};
 
 // Destructor.
 GraphicsHandler::~GraphicsHandler(){};
@@ -77,6 +61,17 @@ void GraphicsHandler::renderLoop()
 	if (m_inputEvent.mouseMoveEvent)	{ mouseMoveEvent(); m_inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
+
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
+
+	// Check if there are windows to render.
+	if (m_windowsDictionary.size())
+	{
+		// Render each OpenGL context.
+		for (auto& [name, window] : m_windowsDictionary) { window->engineGL->renderLoop(); }
+	}
 
 };
 

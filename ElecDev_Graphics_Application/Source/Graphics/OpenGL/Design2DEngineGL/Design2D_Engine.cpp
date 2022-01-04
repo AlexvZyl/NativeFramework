@@ -26,12 +26,15 @@ This is where the interactive 2D design engine is implemented.
 // Design components.
 #include "Peripherals/Circuit.h"
 
+// For Testing.
+#include "CoreGL/Renderer.h"
+
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
 // Constructor.
-Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName) 
+Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	: Base2DEngineGL(guiState, contextName)
 {
 	// Starting.
@@ -40,45 +43,37 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	// Default circuit (In this case handled like a default scene).
 	m_circuit = std::make_shared<Circuit>(m_contextName, "AE");
 
+	//// Testing.
+	//glm::vec2 ctr2(0, 0);
+	//glm::vec2 ctr2a(1, 0);
+	//glm::vec2 ctr2b(0, 1);
+	//glm::vec3 ctr3(-2,0,0);
+	//std::vector<glm::vec3> verts = {
+	//	glm::vec3(0,0,0),
+	//	glm::vec3(0,1,0),
+	//	glm::vec3(1,1,0),
+	//	glm::vec3(1,0,0)
+	//};
+	//glm::vec4 black(0,0,0,1);
+	//Renderer::bindScene(m_scene.get());
+	//Polygon2D* poly = Renderer::addPolygon2D(verts, nullptr);
+	//poly->setColor(black);
+	//Circle* circle = Renderer::addCircle2D(ctr2, 1, black, 0.1, 0.005, nullptr);
+	//Renderer::addCircle2D(ctr2a, 1, black, 0.1, 1, nullptr);
+	//Renderer::addCircle2D(ctr2b, 1, black, 0.5, 0.005, nullptr);
+	//Text* text = Renderer::addText2D("Hello World!", ctr3, black, 1);
+	//Renderer::removePrimitive(text);
+
+	m_guiState->design_engine = this;
+
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
-	m_guiState->design_engine = this;
 }
 
 // Destructor.
 Design2DEngineGL::~Design2DEngineGL()
 {
 
-}
-
-//=============================================================================================================================================//
-//  Rendering.																																   //
-//=============================================================================================================================================//
-
-void Design2DEngineGL::renderLoop()
-{
-	// Call the base engine rendering loop.
-	Base2DEngineGL::renderLoop();
-
-	// ----------- //
-	//  S E T U P  //
-	// ----------- //
-
-	// Render to the FBO.
-	m_frameBuffer->bind();
-
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
-
-	
-
-	// --------------- //
-	//  C L E A N U P  //
-	// --------------- //
-
-	// Stop rendering to the FBO.
-	m_frameBuffer->unbind();
 }
 
 //=============================================================================================================================================//

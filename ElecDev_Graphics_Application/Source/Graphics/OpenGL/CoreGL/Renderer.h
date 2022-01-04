@@ -26,6 +26,9 @@ class Texture;
 class Shader;
 class Polygon2D;
 class Entity;
+class VertexData;
+class VertexDataTextured;
+class VertexDataCircle;
 
 struct Font;
 
@@ -43,8 +46,6 @@ public:
 
 	// Set up the renderer.
 	static void initialise();
-	// Statically compile all of the shaders.
-	static void compileShaders();
 
 	// ------------- //
 	//  S C E N E S  //
@@ -63,16 +64,27 @@ public:
 	//  2 D   P R I M I T I V E S  //
 	// --------------------------- //
 
-	// Polygons.
-	static Polygon2D* addPolygon2D(std::vector<glm::vec3> vertices, Entity* parent);
-	//static Polygon2DTextured* addPolygon2DTextured();
+	// Add a filled 2D polygon.
+	static Polygon2D* addPolygon2D(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
+	// Add a clear 2D polygon.
+	static Polygon2D* addPolygon2DClear(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
 	// Circles.
-	static Circle* addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
-	static Circle* addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
+	static Circle* addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent = nullptr);
+	static Circle* addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent = nullptr);
 	// Lines.
-	static LineSegment* addLineSegment2D(glm::vec2 start, glm::vec2 end, Entity* parent, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f });
+	static LineSegment* addLineSegment2D(glm::vec2 start, glm::vec2 end, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Text.
-	static Text* addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, Entity* parent, std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
+	static Text* addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, std::string horizontalAlignment = "L", std::string verticalAlignment = "B", Entity* parent = nullptr);
+
+	// Remove the primitive from the scene.
+	static void removePrimitive(Primitive<VertexData>* primitive);
+	// Remove the primitive from the scene.
+	static void removePrimitive(Primitive<VertexDataTextured>* primitive);
+	// Remove the primitive from the scene.
+	static void removePrimitive(Primitive<VertexDataCircle>* primitive);
+
+	// Use the font provided.
+	static void useFont(Font* font);
 	
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
@@ -88,13 +100,20 @@ public:
 	// If a texture has not been generated, generate a new one.
 	static Texture* getTexture(unsigned resourceID);
 	
-	// Remove a primitive from the entity ID.
-	static void removePrimitive(unsigned entityID);
-	// Return a pointer to the primtive given the entity ID.
-	//Primitive* getPrimitive(unsigned entityID);
+	
 
 private:
 
+	// ------------------- //
+	//  U T I L I T I E S  //
+	// ------------------- //
+
+	// Statically compile all of the shaders.
+	static void compileShaders();
+	// Load the default font to the renderer.
+	static void loadDefaultFont();
+	// Load the current scenes textures to OpenGL.
+	static void loadTextures(Scene* scene);
 	// Prevent instances from being created.
 	Renderer() {}
 

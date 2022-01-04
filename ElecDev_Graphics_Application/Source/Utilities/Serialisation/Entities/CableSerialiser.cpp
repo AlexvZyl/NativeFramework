@@ -25,7 +25,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable> cable)
 	emitter << YAML::Key << "Nodes" << YAML::Value;
 	emitter << YAML::BeginMap;
 	int nodeIndex = 0;
-	for (std::shared_ptr<Circle> circle : cable->m_nodes)
+	for (Circle* circle : cable->m_nodes)
 	{
 		emitter << YAML::Key << "Node " + std::to_string(nodeIndex) << YAML::Value << circle->m_trackedCenter;
 		nodeIndex++;

@@ -62,7 +62,7 @@ Component2D::Component2D(Scene* scene, Circuit* parent)
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, this, "C", "B");
+	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
 	addPort(0, PORT_IN, "LX1");
@@ -204,19 +204,19 @@ unsigned Component2D::addPort(int side, PortType type, std::string name)
 {
 	switch(side){
 	case 0:
-		portsWest.push_back(std::make_shared<Port>(glm::vec2(-width, 0.f), type, this, name));
+		portsWest.push_back(std::make_shared<Port>(m_scene, glm::vec2(-width, 0.f), type, this, name));
 		updatePortPositions();
 		return portsWest.back()->m_entityID;
 	case 1:
-		portsEast.push_back(std::make_shared<Port>(glm::vec2(width, 0.f), type, this, name));
+		portsEast.push_back(std::make_shared<Port>(m_scene, glm::vec2(width, 0.f), type, this, name));
 		updatePortPositions();
 		return portsEast.back()->m_entityID;
 	case 2:
-		portsNorth.push_back(std::make_shared<Port>(glm::vec2(0.f, height), type, this, name));
+		portsNorth.push_back(std::make_shared<Port>(m_scene, glm::vec2(0.f, height), type, this, name));
 		updatePortPositions();
 		return portsNorth.back()->m_entityID;
 	case 3:
-		portsSouth.push_back(std::make_shared<Port>(glm::vec2(0.f, -height), type, this, name));
+		portsSouth.push_back(std::make_shared<Port>(m_scene, glm::vec2(0.f, -height), type, this, name));
 		updatePortPositions();
 		return portsSouth.back()->m_entityID;
 	default:

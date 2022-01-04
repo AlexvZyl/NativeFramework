@@ -306,13 +306,6 @@ void PyInterface::deQueueInput()
                 m_graphicsHandler->autoCenter(mccName);
                 break;
 
-                // Load CPU buffers to GPU.
-            case hash("UpdateDrawing"):
-                mccName = temp.parameters.substr(0, temp.parameters.find(";"));
-                temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_graphicsHandler->updateBuffers(mccName);
-                break;
-
             case hash("addGUI"):
                 guiName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);

@@ -180,7 +180,7 @@ void FrameBufferObject::resize(int width, int height)
 	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
-unsigned int FrameBufferObject::getRenderTexture() 
+unsigned FrameBufferObject::getRenderTexture() 
 { 
 	renderFromMSAA(); 
 	//blitFromMSAA();

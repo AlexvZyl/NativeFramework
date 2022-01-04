@@ -229,7 +229,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
@@ -368,7 +367,6 @@
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\type.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />

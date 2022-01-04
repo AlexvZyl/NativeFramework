@@ -26,23 +26,23 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Port> port)
 	// Border.
 	emitter << YAML::Key << "Border" << YAML::Value;
 	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Thickness" << YAML::Value << port->border.m_thickness;
-		emitter << YAML::Key << "Fade" << YAML::Value << port->border.m_fade;
+		emitter << YAML::Key << "Thickness" << YAML::Value << port->border->m_thickness;
+		emitter << YAML::Key << "Fade" << YAML::Value << port->border->m_fade;
 		emitter << YAML::Key << "Colour" << YAML::Value << port->borderColour;
 	emitter << YAML::EndMap;
 
 	// Body.
 	emitter << YAML::Key << "Body" << YAML::Value;
 	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Thickness" << YAML::Value << port->body.m_thickness;
-		emitter << YAML::Key << "Fade" << YAML::Value << port->body.m_fade;
+		emitter << YAML::Key << "Thickness" << YAML::Value << port->body->m_thickness;
+		emitter << YAML::Key << "Fade" << YAML::Value << port->body->m_fade;
 		emitter << YAML::Key << "Colour" << YAML::Value << port->bodyColour;
 	emitter << YAML::EndMap;
 
 	// Title.
 	emitter << YAML::Key << "Title" << YAML::Value;
 	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Font" << YAML::Value << port->titleFont.name;
+		//emitter << YAML::Key << "Font" << YAML::Value << port->titleFont.name;
 		emitter << YAML::Key << "Size" << YAML::Value << port->titleSize;
 		emitter << YAML::Key << "Offset" << YAML::Value << port->titleOffset;
 		emitter << YAML::Key << "Colour" << YAML::Value << port->titleColour;

@@ -261,8 +261,6 @@ public:
 	void drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, std::string align);
 	// Scales and centers the drawing in the window.
 	void autoCenter(std::string windowName);
-	// Loads the CPU data to the GPU.
-	void updateBuffers(std::string windowName);
 
 	// ------------- //
 	//  3 D   A P I  //

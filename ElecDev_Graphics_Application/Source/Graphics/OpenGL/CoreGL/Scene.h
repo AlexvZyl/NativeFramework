@@ -11,6 +11,8 @@
 #include <any>
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/Texture.h"
+#include "CoreGL/Entities/Entity.h"
+#include <variant>
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -27,7 +29,6 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class Event;
-class Entity;
 
 enum class CameraType;
 
@@ -57,15 +58,20 @@ public:
 	glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 	// Returns the ID of the entity at the coordinates.
 	unsigned getEntityID(glm::vec2& pixelCoords);
+	// Resizes the scene based on a viewport change.
+	void resize(int width, int heigth);
 
 private:
 
 	// Friends.
 	friend class Renderer;
+	friend class Shader;
 
-	// Background methods.
+	// Creates the default background based on the camera type.
 	void createDefaultBackground();
+	// Creates a default 2D background.
 	void create2DBackground();
+	// Creates a default 3D background.
 	void create3DBackground();
 
 	// Return the view matrix of the scene camera.
@@ -74,8 +80,6 @@ private:
 	glm::mat4* getProjectionMatrix();
 	// Upadate the matrices of the camera.
 	void updateCamera();
-
-	void resize();
 
 	// Data required to construct a scene in OpenGL.
 	std::unique_ptr<Camera> m_camera;

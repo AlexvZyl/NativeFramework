@@ -7,6 +7,7 @@ This is where the drawing enigine mouse events are handled.
 //=============================================================================================================================================//
 
 #include "Design2D_Engine.h"
+#include "CoreGL/Scene.h"
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
@@ -17,7 +18,6 @@ This is where the drawing enigine mouse events are handled.
 #include <iostream>
 #include "CoreGL/VertexArrayObjectGL.h"
 #include "Peripherals/Circuit.h"
-
 // Serialisation.
 #include "Utilities/Serialisation/Serialiser.h"
 #include "CoreGL/Entities/Text.h"
@@ -31,41 +31,48 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressLeft(pixelCoords);
 
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-	if (designerState == COMPONENT_PLACE) {
+	if (designerState == COMPONENT_PLACE) 
+	{
 		m_activeComponent->place(screenCoords);
 		m_circuit->m_components.insert(m_circuit->m_components.end(), m_activeComponent);
 		designerState = ENTITY_SELECT;
 	}
-	else if (designerState == ENTITY_SELECT) {
-		m_currentEntityID = getEntityID(pixelCoords);	
+
+	else if (designerState == ENTITY_SELECT) 
+	{
+		glm::vec2 coords = { pixelCoords[0], pixelCoords[1] };
+		m_currentEntityID = getEntityID(coords);
 
 		setActiveComponent(m_currentEntityID);
 		setActiveCable(m_currentEntityID);
 		Port* clickedPort = getPort(m_currentEntityID);
-			if (clickedPort != nullptr) {
+			if (clickedPort != nullptr) 
+			{
 				m_activeCable = nullptr;
 				designerState = CABLE_PLACE;
-				m_activeCable = std::make_shared<Cable>(clickedPort, m_triangleEntitiesVAO.get(), m_circleEntitiesVAO.get(), m_circuit.get());
+				m_activeCable = std::make_shared<Cable>(m_scene.get(), clickedPort, m_circuit.get());
 			}
 	}
-	else if (designerState == CABLE_PLACE) {
-		m_currentEntityID = getEntityID(pixelCoords);
+	else if (designerState == CABLE_PLACE) 
+	{
+		glm::vec2 coords = { pixelCoords[0], pixelCoords[1] };
+		m_currentEntityID = getEntityID(coords);
 		Port* clickedPort = getPort(m_currentEntityID);
-		if (clickedPort != nullptr) {
+		if (clickedPort != nullptr) 
+		{
 			//Only add the cable if the end port is different to the start port.
-			if (clickedPort != m_activeCable->m_startPort) {
+			if (clickedPort != m_activeCable->m_startPort) 
+			{
 				m_activeCable->attach(clickedPort);
 				m_circuit->m_cables.push_back(m_activeCable);
 			}
 			m_activeCable = nullptr;
 			designerState = ENTITY_SELECT;
 		}
-		else {
-			m_activeCable->addSegment(screenCoords);
-		}
+		else m_activeCable->addSegment(screenCoords);
 	}
 }
 
@@ -74,7 +81,8 @@ void Design2DEngineGL::mousePressRight(float pixelCoords[2])
 	// Call base engine event.
 	Base2DEngineGL::mousePressRight(pixelCoords);
 	// Update current entity ID.
-	m_currentEntityID = getEntityID(pixelCoords);
+	glm::vec2 coords = { pixelCoords[0], pixelCoords[1] };
+	m_currentEntityID = getEntityID(coords);
 	setActiveComponent(m_currentEntityID);
 }
 
@@ -90,47 +98,41 @@ void Design2DEngineGL::mousePressMiddle(float pixelCoords[2])
 
 void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 {
+	glm::vec2 coords = { pixelCoords[0], pixelCoords[1] };
 
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == COMPONENT_PLACE) 
 	{
 		// Move the component.
 		m_activeComponent->moveTo(screenCoords);
 	}
-	else {
-
-		//Port hover indicator
-		m_hoveredID = getEntityID(pixelCoords);
+	else 
+	{
+		// Port hover indicator.
+		
+		m_hoveredID = getEntityID(coords);
 		auto lastHoveredPort = m_hoveredPort;
 		m_hoveredPort = getPort(m_hoveredID);
-		if (m_hoveredPort != lastHoveredPort) {
-			if (m_hoveredPort) {
-				m_hoveredPort->showAttachIndicator();
-			}
-			else if (lastHoveredPort) {
-				lastHoveredPort->hideAttachIndicator();
-			}
+		if (m_hoveredPort != lastHoveredPort) 
+		{
+			if      (m_hoveredPort)   m_hoveredPort->showAttachIndicator();
+			else if (lastHoveredPort) lastHoveredPort->hideAttachIndicator();
 		}
 
-		if (designerState == CABLE_PLACE) {
-			m_currentEntityID = getEntityID(pixelCoords);
-			if (m_activeCable.get()) {
-				m_activeCable->extendSegment(screenCoords);
-			}
+		if (designerState == CABLE_PLACE)
+		{
+			m_currentEntityID = getEntityID(coords);
+			if (m_activeCable.get()) m_activeCable->extendSegment(screenCoords);
 		}
-		else if (designerState == ENTITY_SELECT) {
-			if (buttonStateLeft) {
+		else if (designerState == ENTITY_SELECT) 
+		{
+			if (buttonStateLeft) 
+			{
 				//User is dragging a component.
 				glm::vec2 translation = screenCoords - m_lastDragPos;
-				if (m_activeComponent.get()) {
-					// Move the component.
-					m_activeComponent->move(translation);
-				}
-				if (m_activeCable.get()) {
-					// Move the component.
-					m_activeCable->moveActivePrimitiveTo(screenCoords);
-				}
+				if (m_activeComponent.get()) m_activeComponent->move(translation);
+				if (m_activeCable.get())     m_activeCable->moveActivePrimitiveTo(screenCoords);
 			}
 
 		}
@@ -138,7 +140,7 @@ void Design2DEngineGL::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft,
 	m_lastDragPos = screenCoords;
 
 	#ifdef _DEBUG
-		m_currentEntityID = getEntityID(pixelCoords);
+		m_currentEntityID = getEntityID(coords);
 		std::cout << m_currentEntityID << std::endl;
 	#endif
 
@@ -166,7 +168,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 
 	if (action == GLFW_PRESS) {
 		float pixelCoords[] = { m_guiState->renderWindowMouseCoordinate.x, m_guiState->renderWindowMouseCoordinate.y };
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 		switch (key) 
 		{
@@ -243,7 +245,8 @@ void Design2DEngineGL::setActiveComponent(unsigned eID) {
 }
 void Design2DEngineGL::setActiveCable(unsigned eID) {
 
-	if (m_activeCable) {
+	if (m_activeCable) 
+	{
 		m_activeCable->unhighlight();
 		m_activeCable = NULL;
 	}
@@ -291,7 +294,7 @@ Port* Design2DEngineGL::getPort(unsigned eID)
 			}
 		}
 
-		//This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
+		// This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.
 		Port* cur = dynamic_cast<Port*>(currentEntity);
 		return cur;
 	}

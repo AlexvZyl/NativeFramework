@@ -54,13 +54,6 @@ public:
 	// Destructor.
 	~Design2DEngineGL();
 
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
-
-	// Rendering loop.
-	virtual void renderLoop() override;
-
 	// ------- //
 	//  A P I  //
 	// ------- //

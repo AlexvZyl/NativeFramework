@@ -13,18 +13,14 @@ void Design2DEngineGL::ComponentPlaceMode(glm::vec2 screenCoords)
 		{
 			m_activeComponent->unhighlight();
 		}
-		m_activeComponent = std::make_shared<Component2D>(screenCoords,
-			m_triangleEntitiesVAO.get(),
-			m_lineEntitiesVAO.get(),
-			m_triangleTexturedEntitiesVAO.get(),
-			m_circleEntitiesVAO.get(),
-			m_circuit.get());
+		m_activeComponent = std::make_shared<Component2D>(screenCoords, m_scene.get(), m_circuit.get());
 	}
 }
 
 void Design2DEngineGL::deleteActiveComponent()
 {
-	if (m_activeComponent) {
+	if (m_activeComponent) 
+	{
 		auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
 		if (iterator != m_circuit->m_components.end())
 		{
@@ -37,7 +33,8 @@ void Design2DEngineGL::deleteActiveComponent()
 
 void Design2DEngineGL::deleteActiveCable()
 {
-	if (m_activeCable) {
+	if (m_activeCable) 
+	{
 		auto iterator = std::find(m_circuit->m_cables.begin(), m_circuit->m_cables.end(), m_activeCable);
 		if (iterator != m_circuit->m_cables.end())
 		{

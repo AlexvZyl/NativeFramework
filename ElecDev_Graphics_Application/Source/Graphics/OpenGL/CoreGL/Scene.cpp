@@ -33,21 +33,45 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 //  Methods.																																	//
 //==============================================================================================================================================//
 
-glm::mat4* Scene::getViewMatrix() { return &m_camera->m_viewMatrix; }
+glm::mat4* Scene::getViewMatrix() 
+{ 
+	return &m_camera->m_viewMatrix; 
+}
 
-glm::mat4* Scene::getProjectionMatrix() { return &m_camera->m_projectionMatrix; }
+glm::mat4* Scene::getProjectionMatrix() 
+{ 
+	return &m_camera->m_projectionMatrix; 
+}
 
-void Scene::updateCamera() { m_camera->updateCamera(); }
+void Scene::updateCamera() 
+{ 
+	m_camera->updateCamera(); 
+}
 
-glm::vec2 Scene::getViewport() { return glm::vec2(m_camera->m_viewportVec.x, m_camera->m_viewportVec.y); }
+glm::vec2 Scene::getViewport() 
+{ 
+	return glm::vec2(m_camera->m_viewportVec[2], m_camera->m_viewportVec[3]);
+}
 
-void Scene::setViewport(int width, int height) { m_camera->setViewport(width, height); }
+void Scene::setViewport(int width, int height) 
+{ 
+	m_camera->setViewport(width, height); 
+}
 
-unsigned Scene::getRenderTexture() { return m_FBO->getRenderTexture(); }
+unsigned Scene::getRenderTexture() 
+{ 
+	return m_FBO->getRenderTexture(); 
+}
 
-glm::vec3 Scene::pixelCoordsToWorldCoords(float pixelCoords[2])  { return m_camera->pixelCoordsToWorldCoords(pixelCoords);  }
+glm::vec3 Scene::pixelCoordsToWorldCoords(float pixelCoords[2])  
+{ 
+	return m_camera->pixelCoordsToWorldCoords(pixelCoords);  
+}
 
-glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2]) { return m_camera->pixelCoordsToCameraCoords(pixelCoords); }
+glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2]) 
+{ 
+	return m_camera->pixelCoordsToCameraCoords(pixelCoords); 
+}
 
 unsigned Scene::getEntityID(glm::vec2& pixelCoords) 
 {
@@ -115,42 +139,8 @@ void Scene::create3DBackground()
 
 void Scene::resize(int width, int height) 
 {
-	m_camera->setViewport(width, height);
+	m_camera->resize(width, height);
 	m_FBO->resize(width, height);
-
-	// Calculate the value of the scaling.
-	float scalingFactor[2] = { (float)width / (float)m_imGuiViewportDimensions[0], (float)height / (float)m_imGuiViewportDimensions[1] };
-	m_imGuiViewportDimensions[0] = (float)width;
-	m_imGuiViewportDimensions[1] = (float)height;
-
-	// Scale projection values.
-	m_projectionValues[0] *= scalingFactor[0];
-	m_projectionValues[1] *= scalingFactor[0];
-	m_projectionValues[2] *= scalingFactor[1];
-	m_projectionValues[3] *= scalingFactor[1];
-
-	// Scale with the y scaling.
-	m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
-	// Update base matrix.
-	m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
-
-	// Create new projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
-
-	// Apply changes to shaders.
-	m_basicShader->bind();
-	m_basicShader->setMat4("projectionMatrix", &m_projectionMatrix);
-	m_textureShader->bind();
-	m_textureShader->setMat4("projectionMatrix", &m_projectionMatrix);
-	m_circleShader->bind();
-	m_circleShader->setMat4("projectionMatrix", &m_projectionMatrix);
-
-	// Resize FBO attachments.
-	m_frameBuffer->resize(width, height);
-
-	// Change viewport dimmensions.
-	m_imGuiViewportDimensions[0] = (float)width;
-	m_imGuiViewportDimensions[1] = (float)height;
 }
 
 //==============================================================================================================================================//

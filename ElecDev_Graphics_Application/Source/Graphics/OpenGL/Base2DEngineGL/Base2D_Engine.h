@@ -42,8 +42,6 @@ public:
 
 	// Testing texture.
 	unsigned int m_texture=0;
-	// Callback that handles the resizing event.
-	virtual void resizeEvent(float width, float height) override;
 
 	// ------------ //
 	//  2D   A P I  //

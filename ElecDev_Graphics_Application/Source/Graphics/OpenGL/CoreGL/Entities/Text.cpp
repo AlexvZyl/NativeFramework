@@ -280,7 +280,7 @@ void Text::generateText(std::string text)
 
 void Text::updateText(std::string text) 
 {
-	Primitive<VertexDataTextured>::wipeMemory();
+	wipeGPU();
 	generateText(text);
 }
 

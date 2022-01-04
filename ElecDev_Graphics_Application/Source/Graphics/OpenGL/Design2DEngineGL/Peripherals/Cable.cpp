@@ -49,11 +49,11 @@ Cable::Cable(Scene* scene, Port* startPort, Circuit* parent)
 	// Context.
 	Renderer::bindScene(m_scene);
 	// First line.
-	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, this, m_thickness, m_colour));
+	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
 	// First node.
 	m_nodes.push_back(Renderer::addCircle2D(endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	// Add the second (perpendicular) line segment.
-	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, this, m_thickness, m_colour));
+	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
 }
 
 Cable::Cable(Scene* scene, Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent) 
@@ -71,15 +71,15 @@ Cable::Cable(Scene* scene, Port* startPort, std::vector<glm::vec2> nodeList, Por
 	Renderer::bindScene(m_scene);
 
 	// Add the first line segment and first node.
-	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], this, m_thickness, m_colour));
+	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
 	m_nodes.push_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
 	// Add all inter-node line segments, and the rest of the nodes.
 	for (int i = 1; i < nodeList.size(); i++) {
-		m_lines.push_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], this, m_thickness, m_colour));
+		m_lines.push_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
 		m_nodes.push_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
 	}
 	//Add final line segment.
-	m_lines.push_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, this, m_thickness, m_colour));
+	m_lines.push_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
 }
 
 Cable::~Cable()
@@ -108,7 +108,7 @@ void Cable::extendPrevSegment(glm::vec2 nextPoint)
 		break;
 	}
 	Renderer::bindScene(m_scene);
-	m_lines.end()[-2] = Renderer::addLineSegment2D(m_lines.end()[-2]->m_start, endPt, this, m_thickness, m_colour);
+	m_lines.end()[-2] = Renderer::addLineSegment2D(m_lines.end()[-2]->m_start, endPt, m_thickness, m_colour, this);
 	m_nodes.back()->translateTo(endPt);
 }
 
@@ -117,7 +117,7 @@ void Cable::extendSegment(glm::vec2 nextPoint)
 	// Extend the pevious segment. 
 	extendPrevSegment(nextPoint);
 	Renderer::bindScene(m_scene);
-	m_lines.back() = Renderer::addLineSegment2D(m_lines.end()[-2]->m_end, nextPoint, this, m_thickness, m_colour);
+	m_lines.back() = Renderer::addLineSegment2D(m_lines.end()[-2]->m_end, nextPoint, m_thickness, m_colour, this);
 }
 
 void Cable::addSegment(glm::vec2 nextPoint)
@@ -137,7 +137,7 @@ void Cable::addSegment(glm::vec2 nextPoint)
 	}
 	Renderer::bindScene(m_scene);
 	m_nodes.push_back(Renderer::addCircle2D(m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
-	m_lines.push_back(Renderer::addLineSegment2D(m_lines.back()->m_end, nextPoint, this, m_thickness, m_colour));
+	m_lines.push_back(Renderer::addLineSegment2D(m_lines.back()->m_end, nextPoint, m_thickness, m_colour, this));
 }
 
 
@@ -223,11 +223,11 @@ void Cable::followPort(Port* movedPort)
 		}
 
 		Renderer::bindScene(m_scene);
-		m_lines[1] = Renderer::addLineSegment2D(startPt, m_lines[1]->m_end, this, m_thickness, m_colour);
+		m_lines[1] = Renderer::addLineSegment2D(startPt, m_lines[1]->m_end, m_thickness, m_colour, this);
 		// Move the first node.
 		m_nodes.front()->translateTo(startPt);
 		// Move first segment.
-		m_lines[0] = Renderer::addLineSegment2D(startPoint, m_lines[1]->m_start, this, m_thickness, m_colour);
+		m_lines[0] = Renderer::addLineSegment2D(startPoint, m_lines[1]->m_start, m_thickness, m_colour, this);
 	}
 }
 
@@ -288,8 +288,8 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 
 		// Extend the adjacent lines.
 		Renderer::bindScene(m_scene);
-		*std::prev(it) = Renderer::addLineSegment2D((*std::prev(it))->m_start, m_activeLine->m_start, this, m_thickness, m_colour);
-		*std::next(it) = Renderer::addLineSegment2D(m_activeLine->m_end, (*std::next(it))->m_end, this, m_thickness, m_colour);
+		*std::prev(it) = Renderer::addLineSegment2D((*std::prev(it))->m_start, m_activeLine->m_start, m_thickness, m_colour, this);
+		*std::next(it) = Renderer::addLineSegment2D(m_activeLine->m_end, (*std::next(it))->m_end, m_thickness, m_colour, this);
 		
 		//Move the adjacent nodes
 		m_nodes.at(it - m_lines.begin() - 1)->translate(translation);

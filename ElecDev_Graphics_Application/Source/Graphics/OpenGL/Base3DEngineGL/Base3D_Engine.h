@@ -26,13 +26,6 @@ class Camera;
 class Base3DEngineGL : public EngineCoreGL
 {
 public:
-
-	// ------------------- //
-	//  V A R I A B L E S  //
-	// ------------------- //
-	
-	// 3D scene camera.
-	std::shared_ptr<Camera> m_camera;
 		
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -42,13 +35,6 @@ public:
 	Base3DEngineGL(GUIState* guiState, std::string contextName);
 	// Destructor.
 	~Base3DEngineGL();
-
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
-
-	// Rendering loop.
-	virtual void renderLoop();
 
 	// ------- //
 	//  A P I  //
