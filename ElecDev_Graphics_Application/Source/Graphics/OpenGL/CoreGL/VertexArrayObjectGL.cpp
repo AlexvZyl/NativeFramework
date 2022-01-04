@@ -222,12 +222,29 @@ void VertexArrayObject<VertexType>::wipe()
 	wipeGPU();
 }
 
+//=============================================================================================================================================//
+//  Primitives buffer.					  																									   //
+//=============================================================================================================================================//
+
 template <typename VertexType>
-void VertexArrayObject<VertexType>::addPrimitive(PrimitivePtr* primitive) 
+void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive)
 {
 	primitive->m_primitiveBufferPos = m_primitives.size();
 	m_primitives.push_back(primitive);
 }	
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexCount, int indexCount)
+{
+	m_primitives.erase(m_primitives.begin() + primitiveIndex);
+	for (int i = primitiveIndex; i < m_primitives.size(); i++)
+	{
+		PrimitivePtr* primitive = m_primitives[i];
+		primitive->m_indexBufferPos -= indexCount;
+		primitive->m_vertexBufferPos -= vertexCount;
+		primitive->m_primitiveBufferPos -= 1;
+	}
+}
 
 //=============================================================================================================================================//
 //  GPU management.																															   //

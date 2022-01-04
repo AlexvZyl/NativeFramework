@@ -61,18 +61,6 @@ void GraphicsHandler::renderLoop()
 	if (m_inputEvent.mouseMoveEvent)	{ mouseMoveEvent(); m_inputEvent.mouseMoveEvent = false; }
 	// Key event.
 	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
-
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
-
-	// Check if there are windows to render.
-	if (m_windowsDictionary.size())
-	{
-		// Render each OpenGL context.
-		for (auto& [name, window] : m_windowsDictionary) { window->engineGL->renderLoop(); }
-	}
-
 };
 
 //=============================================================================================================================================//

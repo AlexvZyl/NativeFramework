@@ -35,7 +35,8 @@ public:
 	std::string m_verticalAlign;
 	std::string m_horizontalAlign;
 	float m_textLength = 0;
-	glm::vec3 m_cursorStart = {0.f, 0.f, 0.f};
+	glm::vec3 m_cursorStart = { 0.f, 0.f, 0.f };
+	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
 
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,

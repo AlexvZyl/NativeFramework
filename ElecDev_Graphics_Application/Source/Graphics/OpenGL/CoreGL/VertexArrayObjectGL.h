@@ -109,7 +109,9 @@ public:
 	void deleteVertexData(unsigned vertexPos, unsigned vertexCount,
 						  unsigned indexPos, unsigned indexCount);
 	// Adds a pointer of the primitive to the VAO.
-	void addPrimitive(PrimitivePtr* primitive);
+	void pushPrimitive(PrimitivePtr* primitive);
+	// Remove the primitive from the VAO.
+	void popPrimitive(int primitiveIndex, int vertexCount, int indexCount);
 };
 
 //=============================================================================================================================================//

@@ -55,9 +55,6 @@ public:
 	static void remove(Primitive<VertexDataTextured>* primitive);
 	// Remove the primitive from the scene.
 	static void remove(Primitive<VertexDataCircle>* primitive);
-	// Adjust the buffer metadata for the primitives in the scene.
-	// primitivePos is the index of the primitive that has been removed.
-	static void popPrimitive(VertexArrayObjectPtr* vao, int primitiveIndex, int vertexCount, int indexCount);
 	// Return the currently bound scene.
 	static Scene* getScene();
 

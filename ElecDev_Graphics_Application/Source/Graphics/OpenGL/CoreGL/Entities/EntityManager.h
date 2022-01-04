@@ -21,4 +21,6 @@ public:
 	static void freeEID(unsigned EID);
 	static Entity* getEntity(unsigned EID);
 	static unsigned getLastID();
+
+	// Add a getNextID() function for the renderer.  The renderer ID assigning is currently bugged.
 };

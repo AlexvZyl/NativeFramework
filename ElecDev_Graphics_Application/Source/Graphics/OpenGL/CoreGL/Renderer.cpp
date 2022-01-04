@@ -264,18 +264,6 @@ void Renderer::remove(Primitive<VertexDataCircle>* primitive)
 	m_scene->m_primitives.erase(primitive->m_entityID);
 }
 
-void Renderer::popPrimitive(VertexArrayObjectPtr* vao, int primitiveIndex, int vertexCount, int indexCount)
-{
-	vao->m_primitives.erase(vao->m_primitives.begin() + primitiveIndex);
-	for (int i = primitiveIndex; i < vao->m_primitives.size(); i++)
-	{
-		PrimitivePtr* primitive = vao->m_primitives[i];
-		primitive->m_indexBufferPos -= indexCount;
-		primitive->m_vertexBufferPos -= vertexCount;
-		primitive->m_primitiveBufferPos -= 1;
-	}
-}
-
 //==============================================================================================================================================//
 //  Adding 2D Primitives.																														//
 //==============================================================================================================================================//
