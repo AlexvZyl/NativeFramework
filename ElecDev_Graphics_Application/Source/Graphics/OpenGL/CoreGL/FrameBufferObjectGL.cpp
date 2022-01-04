@@ -205,7 +205,7 @@ void FrameBufferObject::clearRender()
 	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); // Clear color attachment.
 }
 
-unsigned int FrameBufferObject::getEntityID(float pixelCoords[2]) 
+unsigned int FrameBufferObject::getEntityID(glm::vec2& pixelCoords) 
 {
 	int entityID = -1; 
 	// Resolve the MSAA and copy to the render FBO.
@@ -217,7 +217,7 @@ unsigned int FrameBufferObject::getEntityID(float pixelCoords[2])
 	// Read the pixel value.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
 	GLCall(glReadBuffer(GL_COLOR_ATTACHMENT1));
-	GLCall(glReadPixels((int)pixelCoords[0], (int)pixelCoords[1], 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
+	GLCall(glReadPixels((int)pixelCoords.x, (int)pixelCoords.y, 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
 	// Enable draw buffers.
 	GLenum drawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
 	GLCall(glNamedFramebufferDrawBuffers(m_msaaFrameBufferID, 2, drawBuffers));

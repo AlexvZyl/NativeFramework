@@ -40,7 +40,7 @@ public:
 	unsigned int m_vertexCount = 0;					// Counts the amount of vertices.
 	unsigned int m_indexCount = 0;					// Counts the amount of indices.
 	unsigned int m_vertexBufferPos = 0 ;			// The start position of the entity in the VAO.
-	unsigned int m_indexBufferPos = 0;			// The position in the indeces buffer.
+	unsigned int m_indexBufferPos = 0;				// The position in the indeces buffer.
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
@@ -88,8 +88,8 @@ public:
 	//  M E M O R Y  //
 	// ------------- //
 
-	// Deletes the entity and clears the memory.
-	virtual void wipeMemory();
+	// Deletes the primitive from the GPU but keeps it in the GPU.
+	virtual void wipeGPU();
 
 };
 

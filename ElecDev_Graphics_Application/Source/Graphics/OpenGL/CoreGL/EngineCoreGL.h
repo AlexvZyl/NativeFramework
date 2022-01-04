@@ -16,6 +16,7 @@ as error handling for when a wrong function is called on a engine type.
 #include <glm.hpp>				// OpenGL maths.
 #include "GUI/GUIState.h"		// The GUI states and other information.
 #include <string>
+#include <memory>
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -54,8 +55,6 @@ public:
 	//  V I E W P O R T  //
 	// ----------------- //
 
-	float m_imGuiViewportDimensions[2] = { 500, 500 };			// Stores the dimensions of the viewport that the OpenGL context gets drawn to.  
-
 	// Resizes the viewport, projection matrix and FBO.
 	virtual void resizeEvent(float width, float height);
 
@@ -71,17 +70,14 @@ public:
 	// --------------------------------------- //
 
 	// Main loop where the rendering happens.
-	virtual void renderLoop();
-	// Updates the buffers on the GPU with the data stored CPU side.  Required 
-	// to call to update the elements that are displayed to the screen.
-	virtual void updateGPU();
+	void renderLoop();
 	// Autocenters the current scene.
 	virtual void autoCenter();
 	// Draws elements to the screen.  Used for debugging and benchmarking.
 	// Should also be implemented to showcase the capabilities of the engine.
 	virtual void drawDemo(unsigned int loopCount);
 	// Returns the FBO texture ID that can be rendered.
-	virtual unsigned int getRenderTexture();
+	unsigned int getRenderTexture();
 	// Creates the default background for the engines.
 	void createDefaultBackground();
 	// Calculates the delta time and returns it.	
@@ -89,11 +85,7 @@ public:
 	// regardless of the framerate.
 	float deltaTime();
 	// Returns the ID of the entity in the pixel coords.
-	unsigned int getEntityID(float pixelCoords[2]);
-	// Calculate the world coordinates from the pixel coordinates.
-	virtual glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
-	// Calculate the camera coordinates from the pixel coordinates.
-	virtual glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
+	unsigned int getEntityID(glm::vec2& pixelCoords);
 
 	float m_deltaTime = 0.0f;	// The difference between the last 2 rendred frame.
 	float m_lastFrame = 0.0f;	// The time of the previous frame.

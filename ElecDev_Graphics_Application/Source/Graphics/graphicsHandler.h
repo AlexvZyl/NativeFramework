@@ -18,6 +18,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
 #include "OpenGL/Base3DEngineGL/Base3D_Engine.h"
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
+#include "CoreGL/Scene.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.			    											                                                           //
@@ -76,8 +77,8 @@ struct RenderWindowGL
 			engineGL = std::make_shared<Base3DEngineGL>(guiState, windowName);
 			engineType = EngineType::Base3DEngineGL;
 		}
-		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
-		viewportDimentions[1] = engineGL->m_imGuiViewportDimensions[1];
+		viewportDimentions[0] = engineGL->m_scene->getViewport().x;
+		viewportDimentions[1] = engineGL->m_scene->getViewport().y;
 	}
 
 	// Destructor.

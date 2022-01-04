@@ -1,4 +1,9 @@
 #pragma once
+
+//==============================================================================================================================================//
+//  Includes.																																	//
+//==============================================================================================================================================//
+
 #include "CoreGL/Entities/Entity.h"
 #include <string>
 #include <memory>
@@ -8,11 +13,20 @@
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/VertexArrayObjectGL.h"
 
+//==============================================================================================================================================//
+//  Forward declerations.																														//
+//==============================================================================================================================================//
+
 struct Font;
 
 class Polygon2D;
 class Component2D;
 class Cable;
+class Scene;
+
+//==============================================================================================================================================//
+//  Data.																																		//
+//==============================================================================================================================================//
 
 enum PortType
 {
@@ -24,12 +38,14 @@ enum class PortPosition
 	TOP, BOTTOM, LEFT, RIGHT
 };
 
+//==============================================================================================================================================//
+//  Port class.																																	//
+//==============================================================================================================================================//
+
 class Port: public Entity
 {
 public:
-	//port VAOs and primatives
-	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
-	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
+	
 	glm::vec2 titleOffset;
 	static Font titleFont;
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
@@ -41,10 +57,12 @@ public:
 	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
 	float portLayer;
 
-	Circle body;
-	Circle border;
-	Circle attachmentIndicator;
-	std::shared_ptr<Text> title;
+	Scene* m_scene;
+
+	Circle* body;
+	Circle* border;
+	Circle* attachmentIndicator;
+	Text* title;
 
 	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
@@ -54,7 +72,7 @@ public:
 	std::vector<Cable*> m_cables;
 
 
-	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
+	Port(Scene* scene, glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	~Port();
 	Port& operator = (const Port &t);
 	void moveTo(glm::vec2 destination);
@@ -70,3 +88,6 @@ public:
 	void hideAttachIndicator();
 };
 
+//==============================================================================================================================================//
+//  EOF.																																		//
+//==============================================================================================================================================//

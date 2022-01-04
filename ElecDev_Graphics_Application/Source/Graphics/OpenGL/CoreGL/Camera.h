@@ -30,13 +30,13 @@ class Camera
 public:
 
 	// Constructor.
-	Camera(CameraType cameraType);
-
+	Camera(CameraType cameraType, int width, int height);
 	// Updates the camera view matrix.
 	void updateCamera();
-
 	// Handles the passed event.
 	void onEvent(Event& event);
+	// Set the size of the viewport.
+	void setViewport(int width, int height);
 
 private:
 
@@ -49,7 +49,16 @@ private:
 	//  C O N T R O L S  //
 	// ----------------- //
 
-	
+
+
+	// ----------------------- //
+	//  C O O R D I N A T E S  //
+	// ----------------------- //
+
+	// Calculate the world coordinates from the pixel coordinates.
+	virtual glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
+	// Calculate the camera coordinates from the pixel coordinates.
+	virtual glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 
 	// ----------------- //
 	//  M A T R I C E S  //
@@ -62,7 +71,7 @@ private:
 																// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
 	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);				// The matrix that handles the clipping plane (which part of the world is
 																// going to be visible to the screen?)
-	glm::mat4 m_viewportMatrix = glm::mat4(1.0f);				// The matrix that handles the viewport transform.  Converts screen pixel
+	glm::vec4 m_viewportVec = glm::vec4(1.0f);					// The vector that handles the viewport transform.  Converts screen pixel
 																// coordinates to the OpenGL uniform coordinate system.
 
 	// View matrix components.

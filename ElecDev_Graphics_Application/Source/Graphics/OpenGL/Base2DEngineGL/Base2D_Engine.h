@@ -42,11 +42,6 @@ public:
 
 	// Testing texture.
 	unsigned int m_texture=0;
-	// Rendering loop.
-	virtual void renderLoop() override;
-	// Get the ID to the FBO rendered texture.
-	virtual unsigned int getRenderTexture() override;
-	virtual void updateGPU() override;
 	// Callback that handles the resizing event.
 	virtual void resizeEvent(float width, float height) override;
 
@@ -54,14 +49,14 @@ public:
 	//  2D   A P I  //
 	// ------------ //
 
-	virtual void drawLine(float position1[2], float position2[2], float color[4]) override;
-	virtual void drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]) override;
-	virtual void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]) override;
-	virtual void drawQuadClear(float position[2], float width, float height, float color[4]) override;
-	virtual void drawQuadFilled(float position[2], float width, float height, float color[4]) override;
-	virtual void drawCircleClear(float position[2], float radius, float color[4]) override;
-	virtual void drawCircleFilled(float position[2], float radius, float color[4]) override;
-	virtual void drawText(std::string text, float coords[2], float color[4], float scale, std::string align) override;
+	virtual void drawLine(float position1[2], float position2[2], float color[4]);
+	virtual void drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4]);
+	virtual void drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4]);
+	virtual void drawQuadClear(float position[2], float width, float height, float color[4]);
+	virtual void drawQuadFilled(float position[2], float width, float height, float color[4]);
+	virtual void drawCircleClear(float position[2], float radius, float color[4]);
+	virtual void drawCircleFilled(float position[2], float radius, float color[4]);
+	virtual void drawText(std::string text, float coords[2], float color[4], float scale, std::string align);
 	virtual void drawDemo(unsigned int loopCount) override;
 	virtual void autoCenter() override;
 

@@ -33,9 +33,9 @@ Component2D::Component2D(Scene* scene, Circuit* parent)
 	: Entity(EntityType::COMPONENT, parent),
 	 m_scene(scene)
 {
-	// --------------------------- //
-	//  I N I T I A L   S E T U P  //
-	// --------------------------- //
+	// ----------- //
+	//  S E T U P  //
+	// ----------- //
 
 	// Create vertices.
 	centre = glm::vec2(0.0f, 0.0f);
@@ -46,6 +46,10 @@ Component2D::Component2D(Scene* scene, Circuit* parent)
 
 	// Context.
 	Renderer::bindScene(m_scene);
+
+	// --------------------- //
+	//  P R I M I T I V E S  //
+	// --------------------- //
 
 	// Main shape.
 	shape = Renderer::addPolygon2D(vertices, this);

@@ -82,8 +82,8 @@ void Renderer::render2DScene(Scene* scene)
 	// Enable blending.
 	GLCall(glEnable(GL_BLEND));
 	// Set glViewport for the ImGUI context.
-	glm::vec2* viewport = scene->getViewportDimensions();
-	GLCall(glViewport(0, 0, (GLsizei)viewport->x, (GLsizei)viewport->y));
+	glm::vec2 viewport = scene->getViewport();
+	GLCall(glViewport(0, 0, (GLsizei)viewport.x, (GLsizei)viewport.y));
 
 	// Update camera.
 	scene->updateCamera();
@@ -103,17 +103,20 @@ void Renderer::render2DScene(Scene* scene)
 	// Draw basic primitives.
 	m_shaders["BasicShader"]->bind();
 	m_shaders["BasicShader"]->setMat4("viewMatrix", m_scene->getViewMatrix());
+	m_shaders["BasicShader"]->setMat4("projectionMatrix", m_scene->getProjectionMatrix());
 	scene->m_linesVAO->render();
 	scene->m_trianglesVAO->render();
 
 	// Draw textured primitives.
 	m_shaders["TextureShader"]->bind();
 	m_shaders["TextureShader"]->setMat4("viewMatrix", m_scene->getViewMatrix());
+	m_shaders["TextureShader"]->setMat4("projectionMatrix", m_scene->getProjectionMatrix());
 	scene->m_texturedTrianglesVAO->render();
 
 	// Draw Circles.
 	m_shaders["CircleShader"]->bind();
 	m_shaders["CircleShader"]->setMat4("viewMatrix", m_scene->getViewMatrix());
+	m_shaders["CircleShader"]->setMat4("projectionMatrix", m_scene->getProjectionMatrix());
 	scene->m_circlesVAO->render();
 
 	// --------------- //
@@ -137,8 +140,8 @@ void Renderer::render3DScene(Scene* scene)
 	// Enable blending.
 	GLCall(glEnable(GL_BLEND));
 	// Set glViewport for the ImGUI context.
-	glm::vec2* viewport = scene->getViewportDimensions();
-	GLCall(glViewport(0, 0, (GLsizei)viewport->x, (GLsizei)viewport->y));
+	glm::vec2 viewport = scene->getViewport();
+	GLCall(glViewport(0, 0, (GLsizei)viewport.x, (GLsizei)viewport.y));
 
 	// Update camera.
 	scene->updateCamera();
@@ -153,7 +156,6 @@ void Renderer::render3DScene(Scene* scene)
 
 	// Draw background.
 	m_shaders["BackgroundShader3D"]->bind();
-	// Prevent background from clipping the scene.
 	GLCall(glDepthFunc(GL_EQUAL));
 	scene->m_backgroundVAO->render();
 	GLCall(glDepthFunc(GL_LESS));
@@ -161,17 +163,20 @@ void Renderer::render3DScene(Scene* scene)
 	// Draw basic primitives.
 	m_shaders["BasicShader"]->bind();
 	m_shaders["BasicShader"]->setMat4("viewMatrix", m_scene->getViewMatrix());
+	m_shaders["BasicShader"]->setMat4("projectionMatrix", m_scene->getProjectionMatrix());
 	scene->m_linesVAO->render();
 	scene->m_trianglesVAO->render();
 
 	// Draw textured primitives.
 	m_shaders["TextureShader"]->bind();
 	m_shaders["TextureShader"]->setMat4("viewMatrix", m_scene->getViewMatrix());
+	m_shaders["TextureShader"]->setMat4("projectionMatrix", m_scene->getProjectionMatrix());
 	scene->m_texturedTrianglesVAO->render();
 
 	// Draw Circles.
 	m_shaders["CircleShader"]->bind();
 	m_shaders["CircleShader"]->setMat4("viewMatrix", m_scene->getViewMatrix());
+	m_shaders["CircleShader"]->setMat4("projectionMatrix", m_scene->getProjectionMatrix());
 	scene->m_circlesVAO->render();
 
 	// --------------- //

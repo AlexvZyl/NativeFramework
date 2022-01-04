@@ -26,7 +26,7 @@ void Base2DEngineGL::drawLine(float position1[2], float position2[2], float colo
 		VertexData(position2[0], position2[1], 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
 	std::vector<unsigned> indices({ 0,1 });
-	m_linesVAO->appendVertexData(vertices, indices);
+	//m_linesVAO->appendVertexData(vertices, indices);
 }
 
 void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], float position3[2], float color[4])
@@ -38,7 +38,7 @@ void Base2DEngineGL::drawTriangleClear(float position1[2], float position2[2], f
 		VertexData(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
 	std::vector<unsigned> indices({ 0, 1, 1, 2, 2, 0 });
-	m_linesVAO->appendVertexData(vertices, indices);
+	//m_linesVAO->appendVertexData(vertices, indices);
 }
 
 void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], float position3[2], float color[4])
@@ -50,7 +50,7 @@ void Base2DEngineGL::drawTriangleFilled(float position1[2], float position2[2], 
 		VertexData(position3[0], position3[1], 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
 	std::vector<unsigned> indices({ 0,1,2 });
-	m_trianglesVAO->appendVertexData(vertices, indices);
+	//m_trianglesVAO->appendVertexData(vertices, indices);
 }
 
 // Draw a clear quad.
@@ -65,7 +65,7 @@ void Base2DEngineGL::drawQuadClear(float position[2], float width, float height,
 		VertexData(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
 	std::vector<unsigned> indices({ 0,1,1,2,2,3,3,0 });
-	m_linesVAO->appendVertexData(vertices, indices);
+	//m_linesVAO->appendVertexData(vertices, indices);
 }
 
 // Draw a filled quad.
@@ -80,7 +80,7 @@ void Base2DEngineGL::drawQuadFilled(float position[2], float width, float height
 		VertexData(position[0] - width, position[1] + height, 0.0f, color[0], color[1], color[2], color[3], 0)
 	};
 	std::vector<unsigned> indices({ 0,1,2,2,3,0 });
-	m_trianglesVAO->appendVertexData(vertices, indices);
+	//m_trianglesVAO->appendVertexData(vertices, indices);
 }
 
 // Draws a clear circle.
@@ -103,7 +103,7 @@ void Base2DEngineGL::drawCircleClear(float coords[2], float radius, float color[
 		VertexDataCircle(pos4, local4, colorGLM, 0.1f, 0.005f, 0)
 	};
 	std::vector<unsigned> indices({ 0,1,2,2,3,0 });
-	m_circlesVAO->appendVertexData(vertices, indices);
+	//m_circlesVAO->appendVertexData(vertices, indices);
 }
 
 // Draws a filled circle.
@@ -126,46 +126,46 @@ void Base2DEngineGL::drawCircleFilled(float coords[2], float radius, float color
 		VertexDataCircle(pos4, local4, colorGLM, 1.f, 0.005f, 0)
 	};
 	std::vector<unsigned> indices({ 0,1,2,2,3,0 });
-	m_circlesVAO->appendVertexData(vertices, indices);
+	//m_circlesVAO->appendVertexData(vertices, indices);
 }
 
 // Adds text to the VBO object.
 void Base2DEngineGL::drawText(std::string text, float coords[2], float color[4], float scale, std::string align)
 {
-	// Convert color to GLM.
-	glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
-	// Calculate the length & height of the string.
-	float length = 0;
-	float height = m_defaultFont->characterDictionary[text[0]].height;
-	for (char c : text) { length += m_defaultFont->characterDictionary[c].xAdvance; }
-	// Center the text.
-	if (align == "C" || align == "c")
-	{
-		// Place the coords in the center of the text.
-		coords[0] = coords[0] - (length * scale) / 2;
-		// Place on top of coordinate.
-		coords[1] = coords[1] + height * scale;
-	}
-	// Right allign the text.
-	else if (align == "R" || align == "r")
-	{
-		// Align text to right.
-		coords[0] = coords[0] - length * scale;
-		// Place on top of coordinate.
-		coords[1] = coords[1] + height * scale;
-	}
-	// Left allign the text.
-	else if (align == "L" || align == "l")
-	{
-		// Place on top of the coordinate.
-		coords[1] = coords[1] + height * scale;
-	}
-	// Display error.
-	else
-	{
-		std::cout << "[INTERFACE] [ERROR]: '" << align << "' is not a valid alignment.\n\n";
-		return;
-	}
+	//// Convert color to GLM.
+	//glm::vec4 colorGLM(color[0], color[1], color[2], color[3]);
+	//// Calculate the length & height of the string.
+	//float length = 0;
+	//float height = m_defaultFont->characterDictionary[text[0]].height;
+	//for (char c : text) { length += m_defaultFont->characterDictionary[c].xAdvance; }
+	//// Center the text.
+	//if (align == "C" || align == "c")
+	//{
+	//	// Place the coords in the center of the text.
+	//	coords[0] = coords[0] - (length * scale) / 2;
+	//	// Place on top of coordinate.
+	//	coords[1] = coords[1] + height * scale;
+	//}
+	//// Right allign the text.
+	//else if (align == "R" || align == "r")
+	//{
+	//	// Align text to right.
+	//	coords[0] = coords[0] - length * scale;
+	//	// Place on top of coordinate.
+	//	coords[1] = coords[1] + height * scale;
+	//}
+	//// Left allign the text.
+	//else if (align == "L" || align == "l")
+	//{
+	//	// Place on top of the coordinate.
+	//	coords[1] = coords[1] + height * scale;
+	//}
+	//// Display error.
+	//else
+	//{
+	//	std::cout << "[INTERFACE] [ERROR]: '" << align << "' is not a valid alignment.\n\n";
+	//	return;
+	//}
 	//// Write text to CPU side buffer.
 	//glm::vec3 texPos(coords[0], coords[1], 0.0f);
 	//m_textEnities =
@@ -212,7 +212,7 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 				VertexDataTextured(0.75f + i, 1.25f + k, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 2.0f, 0)
 			};;
 			std::vector<unsigned> indices({ 0,1,2,2,3,0 });
-			m_texturedTrianglesVAO->appendVertexData(vertices, indices);
+			//m_texturedTrianglesVAO->appendVertexData(vertices, indices);
 			float pos[2] = { 0.5f + i, 0.5f + k };
 			std::string text = "Testing font!";
 			float colorText[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
@@ -220,20 +220,6 @@ void Base2DEngineGL::drawDemo(unsigned int loopCount)
 			drawText(text, pos, colorText, 1.0f, "C");
 		}
 	}
-	updateGPU();
-}
-
-//=============================================================================================================================================//
-//  Buffer.																																	   //
-//=============================================================================================================================================//
-
-// Writes the CPU side buffers to the GPU.
-void Base2DEngineGL::updateGPU()
-{
-	m_linesVAO->resize();
-	m_trianglesVAO->resize();
-	m_texturedTrianglesVAO->resize();
-	m_circlesVAO->resize();
 }
 
 //=============================================================================================================================================//

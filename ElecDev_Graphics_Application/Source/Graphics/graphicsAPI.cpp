@@ -13,6 +13,7 @@ API for the graphics of the application.
 // General
 #include <stdio.h>
 #include <External/Misc/ConsoleColor.h>
+#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Window Handling.																														   //
@@ -105,21 +106,6 @@ void GraphicsHandler::autoCenter(std::string windowName)
 	else { windowError(windowName); }
 }
 
-// Centers the Drawing around (0,0) and scales it to fit into the window.
-void GraphicsHandler::updateBuffers(std::string windowName)
-{
-	// Check if window exists.
-	if (isWindowValid(windowName))
-	{
-		try {
-			// Render the demo drawing.
-			m_windowsDictionary[windowName]->engineGL->updateGPU();
-		}
-		catch (const std::exception& e) { parametersError(e); }
-	}
-	else { windowError(windowName); }
-}
-
 //=============================================================================================================================================//
 // 2D Rendering.																															   //
 //=============================================================================================================================================//
@@ -132,8 +118,8 @@ void GraphicsHandler::drawLine(std::string windowName, float position1[2], float
 	if (isWindowValid(windowName))
 	{
 		try {
-			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawLine(position1, position2, color);
+			Renderer::bindScene(m_windowsDictionary[windowName]->engineGL->m_scene.get());
+			Renderer::addLineSegment2D(glm::vec2(position1[0], position1[1]), glm::vec2(position2[0], position2[1]), NULL);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -148,7 +134,7 @@ void GraphicsHandler::drawTriangleClear(std::string windowName, float position1[
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawTriangleClear(position1, position2, position3, color);
+			//m_windowsDictionary[windowName]->engineGL->drawTriangleClear(position1, position2, position3, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -163,7 +149,7 @@ void GraphicsHandler::drawTriangleFilled(std::string windowName, float position1
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawTriangleFilled(position1, position2, position3, color);
+			//m_windowsDictionary[windowName]->engineGL->drawTriangleFilled(position1, position2, position3, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -178,7 +164,7 @@ void GraphicsHandler::drawQuadClear(std::string windowName, float position[2], f
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawQuadClear(position, width, height, color);
+			//m_windowsDictionary[windowName]->engineGL->drawQuadClear(position, width, height, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -193,7 +179,7 @@ void GraphicsHandler::drawQuadFilled(std::string windowName, float position[2], 
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawQuadFilled(position, width, height, color);
+			//m_windowsDictionary[windowName]->engineGL->drawQuadFilled(position, width, height, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -208,7 +194,7 @@ void GraphicsHandler::drawCircleClear(std::string windowName, float coords[2], f
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawCircleClear(coords, radius, color);
+			//m_windowsDictionary[windowName]->engineGL->drawCircleClear(coords, radius, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -223,7 +209,7 @@ void GraphicsHandler::drawCircleFilled(std::string windowName, float coords[2], 
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawCircleFilled(coords, radius, color);
+			//m_windowsDictionary[windowName]->engineGL->drawCircleFilled(coords, radius, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -261,7 +247,7 @@ void GraphicsHandler::drawText(std::string windowName, std::string text, float c
 			}
 
 			// Render the text.
-			m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale, align);
+			//m_windowsDictionary[windowName]->engineGL->drawText(text, coords, color, scale, align);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -294,7 +280,7 @@ void GraphicsHandler::drawQuadFilled3D(std::string windowName, float vertex1[3],
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawQuadFilled3D(vertex1, vertex2, vertex3, vertex4, color);
+			//m_windowsDictionary[windowName]->engineGL->drawQuadFilled3D(vertex1, vertex2, vertex3, vertex4, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}
@@ -308,7 +294,7 @@ void GraphicsHandler::drawCuboidFilled(std::string windowName, float vertex1[3],
 	{
 		try {
 			// Call BaseEngine function.
-			m_windowsDictionary[windowName]->engineGL->drawCuboidFilled(vertex1, vertex2, vertex3, vertex4, depth, color);
+			//m_windowsDictionary[windowName]->engineGL->drawCuboidFilled(vertex1, vertex2, vertex3, vertex4, depth, color);
 		}
 		catch (const std::exception& e) { parametersError(e); }
 	}

@@ -88,7 +88,7 @@ public:
 	// Clears the render attachment of the FBO.
 	void clearRender();
 	// Return the ID of the entity at the pixel coordinates.
-	unsigned int getEntityID(float pixelCoords[2]);
+	unsigned int getEntityID(glm::vec2& pixelCoords);
 
 };
 

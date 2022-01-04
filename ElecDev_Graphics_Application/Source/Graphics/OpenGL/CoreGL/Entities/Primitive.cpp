@@ -17,18 +17,19 @@ template<typename VertexType>
 Primitive<VertexType>::Primitive(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}
 
 template<typename VertexType>
-Primitive<VertexType>::~Primitive() { wipeMemory(); }
+Primitive<VertexType>::~Primitive() 
+{ 
+	wipeGPU(); 
+}
 
 template<typename VertexType>
-void Primitive<VertexType>::wipeMemory()
+void Primitive<VertexType>::wipeGPU()
 { 
 	// Clear data.
 	m_VAO->deleteVertexData(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
 	// Clear metadata.
-	m_vertexBufferPos = 0;
-	m_indexBufferPos = 0;
-	m_vertexCount = 0;
-	m_indexCount = 0;
+	m_vertexBufferPos = NULL;
+	m_indexBufferPos = NULL;
 }
 
 //=============================================================================================================================================//
