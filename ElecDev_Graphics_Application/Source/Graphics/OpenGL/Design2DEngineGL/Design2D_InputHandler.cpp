@@ -49,12 +49,12 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		setActiveComponent(m_currentEntityID);
 		setActiveCable(m_currentEntityID);
 		Port* clickedPort = getPort(m_currentEntityID);
-			if (clickedPort != nullptr) 
-			{
-				m_activeCable = nullptr;
-				designerState = CABLE_PLACE;
-				m_activeCable = std::make_shared<Cable>(m_scene.get(), clickedPort, m_circuit.get());
-			}
+		if (clickedPort != nullptr) 
+		{
+			m_activeCable = nullptr;
+			designerState = CABLE_PLACE;
+			m_activeCable = std::make_shared<Cable>(m_scene.get(), clickedPort, m_circuit.get());
+		}
 	}
 	else if (designerState == CABLE_PLACE) 
 	{
@@ -156,7 +156,6 @@ void Design2DEngineGL::mouseScrollEvent(float pixelCoords[2], float yOffset)
 {
 	// Call the base engine event.
 	Base2DEngineGL::mouseScrollEvent(pixelCoords, yOffset);
-
 }
 
 //=============================================================================================================================================//
@@ -175,7 +174,7 @@ void Design2DEngineGL::keyEvent(int key, int action)
 		// --------------------------------------------------------------------------------------------------------------- //
 		//case GLFW_KEY_P:
 		//	//Enter component placement mode.
-		//	ComponentPlaceMode(screenCoords);
+			//ComponentPlaceMode(screenCoords);
 		//	m_activeCable = nullptr;
 		//	break;
 		// --------------------------------------------------------------------------------------------------------------- //

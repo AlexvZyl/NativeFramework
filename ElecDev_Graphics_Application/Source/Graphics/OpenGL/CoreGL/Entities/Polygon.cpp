@@ -42,6 +42,7 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 
 	// Pass to VAO.
 	m_VAO->appendVertexData(vertexVector, indices, &m_vertexBufferPos, &m_indexBufferPos);
+	m_VAO->addPrimitive(this);
 }
 
 //=============================================================================================================================================//

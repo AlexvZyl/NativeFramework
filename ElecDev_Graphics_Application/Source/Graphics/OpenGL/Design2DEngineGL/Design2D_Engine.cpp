@@ -21,6 +21,7 @@ This is where the interactive 2D design engine is implemented.
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/ShaderHandlerGL.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Entities/Primitive.h"
 // Window.
 #include <GLFW/glfw3.h>
 // Design components.
@@ -42,27 +43,6 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 
 	// Default circuit (In this case handled like a default scene).
 	m_circuit = std::make_shared<Circuit>(m_contextName, "AE");
-
-	//// Testing.
-	//glm::vec2 ctr2(0, 0);
-	//glm::vec2 ctr2a(1, 0);
-	//glm::vec2 ctr2b(0, 1);
-	//glm::vec3 ctr3(-2,0,0);
-	//std::vector<glm::vec3> verts = {
-	//	glm::vec3(0,0,0),
-	//	glm::vec3(0,1,0),
-	//	glm::vec3(1,1,0),
-	//	glm::vec3(1,0,0)
-	//};
-	//glm::vec4 black(0,0,0,1);
-	//Renderer::bindScene(m_scene.get());
-	//Polygon2D* poly = Renderer::addPolygon2D(verts, nullptr);
-	//poly->setColor(black);
-	//Circle* circle = Renderer::addCircle2D(ctr2, 1, black, 0.1, 0.005, nullptr);
-	//Renderer::addCircle2D(ctr2a, 1, black, 0.1, 1, nullptr);
-	//Renderer::addCircle2D(ctr2b, 1, black, 0.5, 0.005, nullptr);
-	//Text* text = Renderer::addText2D("Hello World!", ctr3, black, 1);
-	//Renderer::removePrimitive(text);
 
 	m_guiState->design_engine = this;
 
@@ -89,3 +69,4 @@ void Design2DEngineGL::resizeEvent(float width, float height)
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//
+

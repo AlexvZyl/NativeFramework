@@ -10,9 +10,9 @@
 #include "External/GLM/glm.hpp"
 #include <any>
 #include "CoreGL/FrameBufferObjectGL.h"
-#include "CoreGL/Texture.h"
-#include "CoreGL/Entities/Entity.h"
 #include <variant>
+#include "CoreGL/Texture.h"
+#include "CoreGL/Entities/Primitive.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -20,11 +20,8 @@
 
 template <typename VertexType>
 class VertexArrayObject;
-template <typename VertexType>
-class Primitive;
 
 class Camera;
-class Texture;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
@@ -61,6 +58,10 @@ public:
 	// Resizes the scene based on a viewport change.
 	void resize(int width, int heigth);
 
+	// Map containing all of the different primitives.
+	std::map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
+	// Vector containing all of 
+
 private:
 
 	// Friends.
@@ -81,10 +82,8 @@ private:
 	// Upadate the matrices of the camera.
 	void updateCamera();
 
-	// Data required to construct a scene in OpenGL.
+	// The camera.
 	std::unique_ptr<Camera> m_camera;
-	// Map containing all of the different primitives.
-	std::map<unsigned, std::unique_ptr<Entity>> m_primitives;
 	// Map containing all of the textures used in the scene.
 	std::map<unsigned, std::unique_ptr<Texture>> m_textures;
 	// VAO's.

@@ -56,7 +56,7 @@ Component2D::Component2D(Scene* scene, Circuit* parent)
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
 	// Component border.
-	border = Renderer::addPolygon2D(vertices, this); // This has to be a clear polygon.
+	border = Renderer::addPolygon2DClear(vertices, this);
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.

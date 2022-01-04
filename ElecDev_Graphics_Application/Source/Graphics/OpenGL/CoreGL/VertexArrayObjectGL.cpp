@@ -12,6 +12,7 @@
 #include <chrono>
 #include <iostream>
 #include "CoreGL/Entities/Entity.h"
+#include "CoreGL/Entities/Primitive.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -167,8 +168,9 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
 													 unsigned* vertexPos, unsigned* indexPos)
 {
-	if(vertexPos) *vertexPos = m_vertexCount;
-	if(indexPos)  *indexPos  = m_indexCount;
+	if (!vertices.size()) return;
+	if (vertexPos)        *vertexPos = m_vertexCount;
+	if (indexPos)         *indexPos  = m_indexCount;
 	m_vertexCPU.insert(m_vertexCPU.end(), vertices.begin(), vertices.end());
 	for (unsigned& ind : indices) ind += m_vertexCount; 
 	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
@@ -180,6 +182,7 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<VertexType>& ve
 template <typename VertexType>
 void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigned vertexCount, unsigned indexPos, unsigned indexCount)
 {
+	if (!m_vertexCount) return;
 	m_vertexCPU.erase(m_vertexCPU.begin() + vertexPos, m_vertexCPU.begin() + vertexPos + vertexCount);
 	m_indexCPU.erase(m_indexCPU.begin() + indexPos, m_indexCPU.begin() + indexPos + indexCount);
 	m_vertexCount -= vertexCount;
@@ -219,6 +222,13 @@ void VertexArrayObject<VertexType>::wipe()
 	wipeGPU();
 }
 
+template <typename VertexType>
+void VertexArrayObject<VertexType>::addPrimitive(PrimitivePtr* primitive) 
+{
+	primitive->m_primitiveBufferPos = m_primitives.size();
+	m_primitives.push_back(primitive);
+}	
+
 //=============================================================================================================================================//
 //  GPU management.																															   //
 //=============================================================================================================================================//
@@ -234,13 +244,13 @@ void VertexArrayObject<VertexType>::resizeGPU()
 		return;
 	}
 
-	// Reset the buffer pointer.
+	// Set the buffer pointer.
 	unsigned int index = 0;
 	// Resize VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
 	// Write the data to the buffers.
-	for (VertexType& vertex : m_vertexCPU)  // This for loop should be removed and all of the data should be loaded in on call.
+	for (VertexType& vertex : m_vertexCPU) 
 	{
 		// VBO.
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
@@ -249,7 +259,7 @@ void VertexArrayObject<VertexType>::resizeGPU()
 	}
 	// Resize IBO and write data.
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), std::data(m_indexCPU), GL_DYNAMIC_DRAW));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), m_indexCPU.data(), GL_DYNAMIC_DRAW));
 
 	// Update flags.
 	m_synced = true;
@@ -266,19 +276,17 @@ void VertexArrayObject<VertexType>::syncGPU()
 		return;
 	}
 
-	// Reset the buffer pointer.
+	// Set the buffer pointer.
 	unsigned int index = 0;
 	// Write the data to the buffers.
-	for (VertexType& vertex : m_vertexCPU)  // This for loop should be removed and all of the data should be loaded in on call.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+	for (VertexType& vertex : m_vertexCPU) 
 	{
 		// VBO.
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.idGL()));
 		index += 1;
 	}
-	// Resize IBO and write data.
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), std::data(m_indexCPU), GL_DYNAMIC_DRAW));
 
 	// Update flags.
 	m_synced = true;

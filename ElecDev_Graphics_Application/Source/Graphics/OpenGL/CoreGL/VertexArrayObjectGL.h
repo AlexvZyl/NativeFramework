@@ -10,11 +10,29 @@
 #include <memory>
 
 //=============================================================================================================================================//
-//  Class.																																	   //
+//  Forward declerations.																													   //
+//=============================================================================================================================================//
+
+class PrimitivePtr;
+
+//=============================================================================================================================================//
+//  VAO Pointer.																															   //
+//=============================================================================================================================================//
+
+class VertexArrayObjectPtr 
+{ 
+public:
+	std::vector<PrimitivePtr*> m_primitives; // Pointers to all of the primitives that have vertices in the VAO.		
+
+private:
+};
+
+//=============================================================================================================================================//
+//  VAO Class.																																   //
 //=============================================================================================================================================//
 
 template <class VertexType>
-class VertexArrayObject
+class VertexArrayObject : public VertexArrayObjectPtr
 {
 private:
 
@@ -25,7 +43,7 @@ private:
 	unsigned int m_indexCount = 0;	// Counting the amount of indices.
 	bool m_synced = true;			// Checks if there is data CPU side that has not been updated GPU side.
 	bool m_sized = true;			// Checks if the buffers have to be resized 
-
+	
 public:
 
 	GLenum m_bufferType = 0;		// Data type used in this VAO.	
@@ -90,6 +108,8 @@ public:
 	// Removes vertex data from the VBO.
 	void deleteVertexData(unsigned vertexPos, unsigned vertexCount,
 						  unsigned indexPos, unsigned indexCount);
+	// Adds a pointer of the primitive to the VAO.
+	void addPrimitive(PrimitivePtr* primitive);
 };
 
 //=============================================================================================================================================//

@@ -29,6 +29,7 @@ class Entity;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
+class VertexArrayObjectPtr;
 
 struct Font;
 
@@ -46,6 +47,19 @@ public:
 
 	// Set up the renderer.
 	static void initialise();
+	// Use the font provided.
+	static void useFont(Font* font);
+	// Remove the primitive from the scene.
+	static void remove(Primitive<VertexData>* primitive);
+	// Remove the primitive from the scene.
+	static void remove(Primitive<VertexDataTextured>* primitive);
+	// Remove the primitive from the scene.
+	static void remove(Primitive<VertexDataCircle>* primitive);
+	// Adjust the buffer metadata for the primitives in the scene.
+	// primitivePos is the index of the primitive that has been removed.
+	static void popPrimitive(VertexArrayObjectPtr* vao, int primitiveIndex, int vertexCount, int indexCount);
+	// Return the currently bound scene.
+	static Scene* getScene();
 
 	// ------------- //
 	//  S C E N E S  //
@@ -68,27 +82,20 @@ public:
 	static Polygon2D* addPolygon2D(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
 	static Polygon2D* addPolygon2DClear(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
-	// Circles.
+	// Add a circle.
 	static Circle* addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent = nullptr);
+	// Add a circle.
 	static Circle* addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent = nullptr);
-	// Lines.
+	// Add a singular line segment.
 	static LineSegment* addLineSegment2D(glm::vec2 start, glm::vec2 end, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
-	// Text.
+	// Add a 2D text string.
 	static Text* addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, std::string horizontalAlignment = "L", std::string verticalAlignment = "B", Entity* parent = nullptr);
-
-	// Remove the primitive from the scene.
-	static void removePrimitive(Primitive<VertexData>* primitive);
-	// Remove the primitive from the scene.
-	static void removePrimitive(Primitive<VertexDataTextured>* primitive);
-	// Remove the primitive from the scene.
-	static void removePrimitive(Primitive<VertexDataCircle>* primitive);
-
-	// Use the font provided.
-	static void useFont(Font* font);
 	
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
 	// --------------------------- //
+
+
 
 	// ----------------- //
 	//  T E X T U R E S  //
@@ -100,8 +107,6 @@ public:
 	// If a texture has not been generated, generate a new one.
 	static Texture* getTexture(unsigned resourceID);
 	
-	
-
 private:
 
 	// ------------------- //

@@ -9,6 +9,7 @@
 #include "CoreGL/Camera.h"
 #include "CoreGL/Entities/Entity.h"
 #include "CoreGL/Texture.h"
+#include "CoreGL/Entities/Primitive.h"
 
 //==============================================================================================================================================//
 //  Constructor & Destructor.																													//

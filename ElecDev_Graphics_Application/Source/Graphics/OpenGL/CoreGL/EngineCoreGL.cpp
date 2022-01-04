@@ -28,6 +28,7 @@ and notify the user via the terminal interface.
 #include <memory>
 #include "CoreGL/Camera.h"
 #include "CoreGL/Entities/Entity.h"
+#include "CoreGL/Entities/Primitive.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

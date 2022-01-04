@@ -9,6 +9,8 @@
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/FontLoader.h"
 #include "External/Misc/ConsoleColor.h"
+#include "CoreGL/Renderer.h"
+#include "CoreGL/Scene.h"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
@@ -44,7 +46,13 @@ Text::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 void Text::generateText(std::string text)
 {
 	// Return if text is empty.
-	if (!text.size()) { return; }
+	if (!text.size()) 
+	{ 
+		m_vertexBufferPos = m_VAO->m_vertexCPU.size();
+		m_indexBufferPos = m_VAO->m_indexCPU.size();
+		m_VAO->addPrimitive(this);
+		return; 
+	}
 
 	// Variables to use.
 	std::vector<VertexDataTextured> vertices;
@@ -272,6 +280,7 @@ void Text::generateText(std::string text)
 	}
 	// Write data to VAO.
 	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
+	m_VAO->addPrimitive(this);
 }
 
 //=============================================================================================================================================//
@@ -286,22 +295,25 @@ void Text::updateText(std::string text)
 
 void Text::setBoxColour(glm::vec4 colour) 
 { 
-	for (int i = 0; i < 4; i++) 
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++) 
 		m_VAO->m_vertexCPU[i].data.color = colour; 
+	m_VAO->sync();
 }
 
 void Text::setColor(glm::vec4& color) 
 {
-	for (int i = 4; i < m_vertexCount; i++) 
+	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.color = color;
+	m_VAO->sync();
 }
 
 void Text::setLayer(float layer)
 {
-	for (int i = 0; i < 4; i++) 
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++)
 		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
-	for (int i = 4; i < m_vertexCount; i++) 
+	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.position.z = layer;
+	m_VAO->sync();
 }
 
 //=============================================================================================================================================//

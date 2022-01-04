@@ -22,6 +22,7 @@
 #include "CoreGL/Entities/Primitive.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/ErrorHandlerGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -53,6 +54,11 @@ void Renderer::compileShaders()
 	m_shaders.insert({ "BasicShader"        , std::make_unique<Shader>(BASIC_SHADER)		 });
 	m_shaders.insert({ "TextureShader"      , std::make_unique<Shader>(TEXTURE_SHADER)		 });
 	m_shaders.insert({ "CircleShader"       , std::make_unique<Shader>(CIRCLE_SHADER)		 });
+}
+
+Scene* Renderer::getScene() 
+{
+	return Renderer::m_scene;
 }
 
 //==============================================================================================================================================//
@@ -240,22 +246,34 @@ void Renderer::loadTextures(Scene* scene)
 //  Removing 2D Primitives.																														//
 //==============================================================================================================================================//
 
-void Renderer::removePrimitive(Primitive<VertexData>* primitive)
+void Renderer::remove(Primitive<VertexData>* primitive)
 {
 	primitive->wipeGPU();
 	m_scene->m_primitives.erase(primitive->m_entityID);
 }
 
-void Renderer::removePrimitive(Primitive<VertexDataTextured>* primitive)
+void Renderer::remove(Primitive<VertexDataTextured>* primitive)
 {
 	primitive->wipeGPU();
 	m_scene->m_primitives.erase(primitive->m_entityID);
 }
 
-void Renderer::removePrimitive(Primitive<VertexDataCircle>* primitive)
+void Renderer::remove(Primitive<VertexDataCircle>* primitive)
 {
 	primitive->wipeGPU();
 	m_scene->m_primitives.erase(primitive->m_entityID);
+}
+
+void Renderer::popPrimitive(VertexArrayObjectPtr* vao, int primitiveIndex, int vertexCount, int indexCount)
+{
+	vao->m_primitives.erase(vao->m_primitives.begin() + primitiveIndex);
+	for (int i = primitiveIndex; i < vao->m_primitives.size(); i++)
+	{
+		PrimitivePtr* primitive = vao->m_primitives[i];
+		primitive->m_indexBufferPos -= indexCount;
+		primitive->m_vertexBufferPos -= vertexCount;
+		primitive->m_primitiveBufferPos -= 1;
+	}
 }
 
 //==============================================================================================================================================//
@@ -295,12 +313,11 @@ LineSegment* Renderer::addLineSegment2D(glm::vec2 start, glm::vec2 end, float th
 Text* Renderer::addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, std::string horizontalAlignment, std::string verticalAlignment, Entity* parent)
 {
 	m_scene->m_primitives.insert({EntityManager::getLastID() + 1, std::make_unique<Text>(text, position, color, scale,
-																					 m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
-																					 parent, horizontalAlignment, verticalAlignment)});
+																						 m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
+																						 parent, horizontalAlignment, verticalAlignment)});
 	return reinterpret_cast<Text*>(m_scene->m_primitives[EntityManager::getLastID()].get());
 }
 
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//
-

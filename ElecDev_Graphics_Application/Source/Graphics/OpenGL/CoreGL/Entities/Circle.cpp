@@ -38,6 +38,7 @@ Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec3 center, float
 	m_indexCount = 6;
 	// Add to VAO.
 	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
+	m_VAO->addPrimitive(this);
 }
 
 Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)

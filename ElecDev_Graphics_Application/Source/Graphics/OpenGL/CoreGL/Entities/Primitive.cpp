@@ -8,13 +8,14 @@
 #include <vector>
 #include <glm.hpp>
 #include "../GUI/GUIState.h"
+#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Constructor and Deconstructor.																											   //
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Primitive<VertexType>::Primitive(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}
+Primitive<VertexType>::Primitive(Entity* parent) : PrimitivePtr(parent) {}
 
 template<typename VertexType>
 Primitive<VertexType>::~Primitive() 
@@ -25,11 +26,15 @@ Primitive<VertexType>::~Primitive()
 template<typename VertexType>
 void Primitive<VertexType>::wipeGPU()
 { 
+	// Clear from the VAO buffer.
+	Renderer::popPrimitive(m_VAO, m_primitiveBufferPos, m_vertexCount, m_indexCount);
 	// Clear data.
 	m_VAO->deleteVertexData(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
 	// Clear metadata.
 	m_vertexBufferPos = NULL;
 	m_indexBufferPos = NULL;
+	m_vertexCount = 0;
+	m_indexCount = 0;
 }
 
 //=============================================================================================================================================//
