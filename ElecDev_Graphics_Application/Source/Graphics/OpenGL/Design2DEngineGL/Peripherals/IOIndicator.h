@@ -2,17 +2,13 @@
 #include "CoreGL/Entities/Entity.h"
 #include "CoreGL/Entities/Primitive.h"
 
+enum class PortType;
+enum class PortPosition;
+
 class Port;
 
-enum PortType
-{
-    PORT_IN, PORT_OUT, PORT_INOUT
-};
-
-enum class PortPosition
-{
-    TOP, BOTTOM, LEFT, RIGHT
-};
+template<typename VertexType>
+class VertexArrayObject;
 
 class IOIndicator :
     public Primitive<VertexData>

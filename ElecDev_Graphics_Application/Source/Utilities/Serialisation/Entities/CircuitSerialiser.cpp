@@ -206,9 +206,9 @@ void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 
 PortType getPortType(YAML::Node node) 
 {
-	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PORT_IN; }
-	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PORT_OUT; }
-	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PORT_INOUT; }
+	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PortType::PORT_IN; }
+	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PortType::PORT_OUT; }
+	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
 }
 
 //=============================================================================================================================================//

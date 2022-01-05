@@ -33,22 +33,22 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 	{
 		for (int i = 2; i < m_vertexCount; i++) 
     {
-			m_indices.push_back(0);
-			m_indices.push_back(i-1);
-			m_indices.push_back(i);
+			indices.push_back(0);
+			indices.push_back(i-1);
+			indices.push_back(i);
 		}
 	}
 	else if (m_VAO->m_bufferType == GL_LINES)
 	{
 		for (int i = 1; i < m_vertexCount; i++) 
     {
-			m_indices.push_back(i -1);
-			m_indices.push_back(i);
+			indices.push_back(i -1);
+			indices.push_back(i);
 		}
-		m_indices.push_back(0);
-		m_indices.push_back(m_vertexCount-1);
+		indices.push_back(0);
+		indices.push_back(m_vertexCount-1);
 	}
-	m_indexCount = m_indices.size();
+	m_indexCount = indices.size();
     
 	// Pass to VAO.
 	m_VAO->appendVertexData(vertexVector, indices, &m_vertexBufferPos, &m_indexBufferPos);

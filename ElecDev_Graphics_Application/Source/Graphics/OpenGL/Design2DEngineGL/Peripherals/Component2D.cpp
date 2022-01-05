@@ -61,8 +61,8 @@ Component2D::Component2D(Circuit* parent)
 	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
-	addPort(0, PORT_IN, "LX1");
-	addPort(1, PORT_OUT, "RX1");
+	addPort(0, PortType::PORT_IN, "LX1");
+	addPort(1, PortType::PORT_OUT, "RX1");
 
 	highlight();
 

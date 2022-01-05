@@ -12,7 +12,6 @@
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/VertexArrayObjectGL.h"
-#include "IOIndicator.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -25,11 +24,13 @@ class Component2D;
 class Cable;
 class Scene;
 
+class IOIndicator;
+
 //==============================================================================================================================================//
 //  Data.																																		//
 //==============================================================================================================================================//
 
-enum PortType
+enum class PortType
 {
 	PORT_IN, PORT_OUT, PORT_INOUT
 };
@@ -68,14 +69,7 @@ public:
 	PortPosition m_position;
 	PortType m_type;
 
-	Circle<> body;
-	Circle<> border;
-	Circle<> attachmentIndicator;
-	//IOIndicator attachmentIndicator;
-	std::shared_ptr<Text<>> title;
-
 	std::vector<Cable*> m_cables;
-
 
 	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	~Port();
