@@ -254,19 +254,16 @@ void Renderer::loadTextures(Scene* scene)
 
 void Renderer::remove(Primitive<VertexData>* primitive)
 {
-	primitive->wipeGPU();
 	m_scene->m_primitives.erase(primitive->m_entityID);
 }
 
 void Renderer::remove(Primitive<VertexDataTextured>* primitive)
 {
-	primitive->wipeGPU();
 	m_scene->m_primitives.erase(primitive->m_entityID);
 }
 
 void Renderer::remove(Primitive<VertexDataCircle>* primitive)
 {
-	primitive->wipeGPU();
 	m_scene->m_primitives.erase(primitive->m_entityID);
 }
 
