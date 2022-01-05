@@ -63,8 +63,8 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 		VertexDataTextured( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1),
 	};
 	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
-	m_renderVAO->appendDataCPU(vertices, indices);
-	m_renderVAO->updateGPU();
+	m_renderVAO->appendVertexData(vertices, indices);
+	m_renderVAO->resize();
 
 	// Generate the shader.
 	m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
@@ -73,7 +73,8 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	m_shader->bind();
 	m_shader->setInt("msaaSamples", m_MSAA);
 	m_shader->setSamplerMSAA("msaaTexture", &msaaTextureID, 1);
-	m_shader->setIntArray("textureSize", m_viewport, 2);
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 // Create the FBO attachments.
@@ -175,21 +176,31 @@ void FrameBufferObject::resize(int width, int height)
 	m_viewport[1] = height;
 	// Change texture size variable in  shader.
 	m_shader->bind();
-	m_shader->setIntArray("textureSize", m_viewport, 2);
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
-unsigned int FrameBufferObject::getRenderTexture() 
+unsigned FrameBufferObject::getRenderTexture() 
 { 
 	renderFromMSAA(); 
 	//blitFromMSAA();
 	return m_renderColorTextureID; 
 }
 
-void FrameBufferObject::bind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID)); }
+void FrameBufferObject::bind() 
+{ 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
+}
 
-void FrameBufferObject::bindRender() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID)); }
+void FrameBufferObject::bindRender() 
+{ 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID)); 
+}
 												   
-void FrameBufferObject::unbind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
+void FrameBufferObject::unbind() 
+{ 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); 
+}
 
 void FrameBufferObject::clear()	  
 { 
@@ -203,7 +214,7 @@ void FrameBufferObject::clearRender()
 	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); // Clear color attachment.
 }
 
-unsigned int FrameBufferObject::getEntityID(float pixelCoords[2]) 
+unsigned int FrameBufferObject::getEntityID(glm::vec2& pixelCoords) 
 {
 	int entityID = -1; 
 	// Resolve the MSAA and copy to the render FBO.
@@ -215,7 +226,7 @@ unsigned int FrameBufferObject::getEntityID(float pixelCoords[2])
 	// Read the pixel value.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));
 	GLCall(glReadBuffer(GL_COLOR_ATTACHMENT1));
-	GLCall(glReadPixels((int)pixelCoords[0], (int)pixelCoords[1], 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
+	GLCall(glReadPixels((int)pixelCoords.x, (int)pixelCoords.y, 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
 	// Enable draw buffers.
 	GLenum drawBuffers[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
 	GLCall(glNamedFramebufferDrawBuffers(m_msaaFrameBufferID, 2, drawBuffers));

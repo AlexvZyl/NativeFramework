@@ -20,14 +20,31 @@ for a VAO to be able to render the entity to the screen.
 
 template<typename VertexType>
 class VertexArrayObject;
+
 struct GUIState;
 
 //=============================================================================================================================================//
-//  Class.																																	   //
+//  Primitive Pointer.																														   //
+//=============================================================================================================================================//
+
+class PrimitivePtr : public Entity
+{
+public:
+	unsigned m_vertexCount = 0;			// Counts the amount of vertices.
+	unsigned m_indexCount = 0;			// Counts the amount of indices.
+	unsigned m_vertexBufferPos = 0;		// The start position of the entity in the VAO.
+	unsigned m_indexBufferPos = 0;		// The position in the indeces buffer.
+	unsigned m_primitiveBufferPos = 0;	// The primitive position in the VAO buffer.
+
+	PrimitivePtr(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}
+};
+
+//=============================================================================================================================================//
+//  Primitive Class.																														   //
 //=============================================================================================================================================//
 
 template<typename VertexType>
-class Primitive: public Entity
+class Primitive: public PrimitivePtr
 {
 public:
 
@@ -36,12 +53,6 @@ public:
 	// ------------------- //
 
 	VertexArrayObject<VertexType>* m_VAO;			// Pointer to the VAO that the entity is drawn to.
-	std::vector<VertexType> m_vertices;				// The untextured vertex data used for the entity.
-	std::vector<unsigned int> m_indices;			// The index buffer used to draw the entity.
-	unsigned int m_vertexCount = 0;					// Counts the amount of vertices.
-	unsigned int m_indexCount = 0;					// Counts the amount of indices.
-	unsigned int m_bufferStartIndex = 0 ;			// The start position of the entity in the VAO.
-	unsigned int m_indecesStartIndex = 0;			// The position in the indeces buffer.
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
@@ -50,8 +61,6 @@ public:
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
-	// Default constructor.
-	Primitive();
 	// Constructor that sets the context as well.
 	Primitive(Entity* parent);
 	// Destructor.
@@ -63,6 +72,7 @@ public:
 
 	// Translate the entity by the given vector.
 	virtual void translate(glm::vec3& translation);
+	// Translate the entity by the given vector.
 	virtual void translate(glm::vec2& translation);
 	// Translate the entity to the given position.
 	virtual void translateTo(glm::vec3& position);
@@ -90,10 +100,9 @@ public:
 	//  M E M O R Y  //
 	// ------------- //
 
-	// Deletes the entity and clears the memory.
-	virtual void wipeMemory();
-	// Offsets the entities' indices to match the VAO.
-	virtual void offsetIndices(int offset);
+	// Deletes the primitive from the GPU but keeps it in the CPU.
+	virtual void wipeGPU();
+
 };
 
 //=============================================================================================================================================//

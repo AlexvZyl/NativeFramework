@@ -18,6 +18,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
 #include "OpenGL/Base3DEngineGL/Base3D_Engine.h"
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
+#include "CoreGL/Scene.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.			    											                                                           //
@@ -76,8 +77,8 @@ struct RenderWindowGL
 			engineGL = std::make_shared<Base3DEngineGL>(guiState, windowName);
 			engineType = EngineType::Base3DEngineGL;
 		}
-		viewportDimentions[0] = engineGL->m_imGuiViewportDimensions[0];
-		viewportDimentions[1] = engineGL->m_imGuiViewportDimensions[1];
+		viewportDimentions[0] = engineGL->m_scene->getViewport().x;
+		viewportDimentions[1] = engineGL->m_scene->getViewport().y;
 	}
 
 	// Destructor.
@@ -260,8 +261,6 @@ public:
 	void drawText(std::string windowName, std::string text, float coords[2], float color[4], float scale, std::string align);
 	// Scales and centers the drawing in the window.
 	void autoCenter(std::string windowName);
-	// Loads the CPU data to the GPU.
-	void updateBuffers(std::string windowName);
 
 	// ------------- //
 	//  3 D   A P I  //

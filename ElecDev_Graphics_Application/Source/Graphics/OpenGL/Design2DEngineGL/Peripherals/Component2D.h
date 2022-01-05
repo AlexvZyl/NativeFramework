@@ -16,19 +16,17 @@
 //=============================================================================================================================================//
 
 template<typename VertexType>
-class Text;
-template<typename VertexType>
-class Polygon2D;
-template<typename VertexType>
-class Circle;
-template<typename VertexType>
 class VertexArrayObject;
 
+class Circle;
+class Text;
+class Polygon2D;
 struct Font;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class Circuit;
+class Scene;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -38,26 +36,20 @@ class Component2D: public Entity
 {
 public:
 
-	//shape and edge data
-	std::shared_ptr<Polygon2D<VertexData>> shape;
-	std::shared_ptr<Polygon2D<VertexData>> border;
-	std::shared_ptr<Text<>> title;
-	//std::shared_ptr<Port> port1;
-	//std::shared_ptr<Port> port2;
-	VertexArrayObject<VertexData>* engine_trianglesVAO;
-	VertexArrayObject<VertexData>* engine_linesVAO;
-	VertexArrayObject<VertexDataTextured>* engine_texturedTrianglesVAO;
-	VertexArrayObject<VertexDataCircle>* engine_circleVAO;
+	// Shape and edge data.
+	Polygon2D* shape;
+	Polygon2D* border;
+	Text* title;
 
 	static unsigned componentID;
 
-	//component shape attributes
+	// Component shape attributes.
 	float height = 0.1f;
 	float width = 0.1f;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> vertices2;
 
-	//colour attributes
+	// Colour attributes.
 	glm::vec4 shapeColour = { 0.5f, 0.5f, 0.9f, 0.5f };
 	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
 
@@ -75,7 +67,7 @@ public:
 	unsigned n_ports_west = 0;
 	glm::vec2 portOffset;
 
-	//interaction attributes
+	// Interaction attributes.
 	bool selected = true;
 
 	std::vector<std::shared_ptr<Port>> portsNorth;
@@ -89,22 +81,13 @@ public:
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
 	glm::vec2 centre;
-
 	
-	//Creates a generic component centred at (0, 0)
-	Component2D(VertexArrayObject<VertexData>* trianglesVAO,
-			    VertexArrayObject<VertexData>* linesVAO, 
-				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO, 
-				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+	// Creates a generic component centred at (0, 0).
+	Component2D(Circuit* parent);
+	// Creates a generic component centred at the specified coordinates.
+	Component2D(glm::vec2 centreCoords, Circuit* parent);
 
-	//Creates a generic component centred at the specified coordinates
-	Component2D(glm::vec2 centreCoords, 
-				VertexArrayObject<VertexData>* trianglesVAO,	
-				VertexArrayObject<VertexData>* linesVAO, 
-				VertexArrayObject<VertexDataTextured>* texturedTrianglesVAO,
-				VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
-
-	//Deconstructor
+	// Deconstructor.s
 	~Component2D();
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(glm::vec2 pointerPos);

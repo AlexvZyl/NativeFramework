@@ -11,15 +11,13 @@
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
-Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent) 
-	: Primitive<VertexType>(parent)
+Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
+	: Primitive<VertexDataCircle>(parent)
 {
 	// Assign variables.
 	m_VAO = vao;
 	m_trackedCenter = center;
 	m_colour = color;
-	//m_entityID = EntityManager::generateEID();
 	m_thickness = thickness;
 	m_fade = fade;
 	// Create position variables.
@@ -28,33 +26,25 @@ Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec3 center,
 	glm::vec3 pos3(center.x + radius, center.y - radius, center.z);
 	glm::vec3 pos4(center.x - radius, center.y - radius, center.z);
 	// Create vertices.
-	m_vertices =
+	std::vector<VertexDataCircle> vertices =
 	{
 		VertexDataCircle(pos1, local1, m_colour, m_thickness, m_fade, m_entityID),
 		VertexDataCircle(pos2, local2, m_colour, m_thickness, m_fade, m_entityID),
 		VertexDataCircle(pos3, local3, m_colour, m_thickness, m_fade, m_entityID),
 		VertexDataCircle(pos4, local4, m_colour, m_thickness, m_fade, m_entityID)
 	};
+	std::vector<unsigned> indices = {0,1,2,2,3,0};
 	m_vertexCount = 4;
-	m_indices = {0,1,2,2,3,0};
 	m_indexCount = 6;
 	// Add to VAO.
-	m_VAO->appendDataCPU(this);
+	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
+	m_VAO->pushPrimitive(this);
 }
 
-template<typename VertexType>
-Circle<VertexType>::Circle(VertexArrayObject<VertexType>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
+Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
 	: Circle( vao, glm::vec3(center, 0.f), radius, color, thickness, fade, parent)
 {}
 
-template<typename VertexType>
-Circle<VertexType>::~Circle() {}
-
-//=============================================================================================================================================//
-//  Instantiations.																															   //
-//=============================================================================================================================================//
-
-template class Circle<VertexDataCircle>;
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

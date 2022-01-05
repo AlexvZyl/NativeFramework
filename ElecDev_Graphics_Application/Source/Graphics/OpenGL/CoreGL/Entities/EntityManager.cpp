@@ -51,3 +51,5 @@ Entity* EntityManager::getEntity(unsigned EID)
 		return nullptr;
 	}
 }
+
+unsigned EntityManager::getLastID() { return lastID; }

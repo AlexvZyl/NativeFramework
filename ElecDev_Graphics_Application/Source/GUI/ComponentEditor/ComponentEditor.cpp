@@ -7,6 +7,7 @@
 #include "Design2DEngineGL/Peripherals/Component2D.h"
 #include "Design2DEngineGL/Peripherals/Port.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
+#include "CoreGL/Renderer.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -106,7 +107,10 @@ void ComponentEditor::render()
 
 					// Name.
 					ImGui::PushItemWidth(185.f);
-					if(ImGui::InputText(labelName, &port->m_label)) { port->title->updateText(port->m_label); }
+					if(ImGui::InputText(labelName, &port->m_label)) 
+					{ 
+						port->title->updateText(port->m_label); 
+					}
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
@@ -143,7 +147,8 @@ void ComponentEditor::render()
 				ImGui::PopItemWidth();
 				ImGui::TableNextColumn();
 				//Add a "Confirm" button
-				if (ImGui::Button("Confirm")) {
+				if (ImGui::Button("Confirm")) 
+				{
 					//Add the port to the component.
 					activeComponent->addPort(newPos, (PortType) newType, newName);
 					addingPort = false;

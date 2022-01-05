@@ -10,32 +10,45 @@
 #include <memory>
 
 //=============================================================================================================================================//
-//  Forward decleration.																													   //
+//  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
-class Primitive;
-class Vertex;
+class PrimitivePtr;
 
 //=============================================================================================================================================//
-//  Class.																																	   //
+//  VAO Pointer.																															   //
+//=============================================================================================================================================//
+
+class VertexArrayObjectPtr 
+{ 
+public:
+	std::vector<PrimitivePtr*> m_primitives; // Pointers to all of the primitives that have vertices in the VAO.	
+	GLenum m_bufferType = 0;				 // Data type used in this VAO.	
+
+	// Constructor.
+	VertexArrayObjectPtr(GLenum type) : m_bufferType(type) {}
+	
+private:
+	template <class VertexType>
+	friend class VertexArrayObject;
+
+	unsigned int m_VAOID = 0;				 // Vertex Array Object.
+	unsigned int m_VBOID = 0;				 // Vertex Buffer Objext.	
+	unsigned int m_IBOID = 0;				 // Index Buffer Object.
+	unsigned int m_vertexCount = 0;			 // Pointer that shows where in the buffer data need to be written.
+	unsigned int m_indexCount = 0;			 // Counting the amount of indices.
+	bool m_synced = true;					 // Checks if there is data CPU side that has not been updated GPU side.
+	bool m_sized = true;					 // Checks if the buffers have to be resized 
+};
+
+//=============================================================================================================================================//
+//  VAO Class.																																   //
 //=============================================================================================================================================//
 
 template <class VertexType>
-class VertexArrayObject
-{
-private:
-
-	unsigned int m_VAOID;			// Vertex Array Object.
-	unsigned int m_VBOID;			// Vertex Buffer Objext.	
-	unsigned int m_IBOID;			// Index Buffer Object.
-	unsigned int m_vertexCount = 0;	// Pointer that shows where in the buffer data need to be written.
-	unsigned int m_indexCount = 0;	// Counting the amount of indices.
-	bool m_inSync = true;			// Checks if there is data CPU side that has not been updated GPU side.
-
+class VertexArrayObject : public VertexArrayObjectPtr
+{	
 public:
-
-	GLenum m_bufferType = 0;		// Data type used in this VAO.	
 
 	// --------- //
 	//  D A T A  //
@@ -43,17 +56,14 @@ public:
 
 	// Vertices stores CPU side.
 	std::vector<VertexType> m_vertexCPU;
-	// The indeces bot the buffer.
+	// The indices for the buffer.
 	std::vector<unsigned> m_indexCPU;
-	// Entities stored CPU side.
-	std::vector<Primitive<VertexType>*> m_entityCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
 	// ------------------------------------------------- //
 
 	// Constructor.
-	VertexArrayObject();
 	VertexArrayObject(GLenum type);
 	// Destructor.
 	~VertexArrayObject();
@@ -68,35 +78,42 @@ public:
 	void bind() const;
 	// Unbinds the VAO.
 	void unbind() const;
-	// Sets m_isUpdated to false for when something changes externally.
-	void outOfSync();
+	// Sets the buffers to be updated.
+	void sync();
+	// Sets the buffers to be resized.
+	void resize();
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
 	// ----------------------------------- //
 
-	// This function deletes the data on the CPU side for when only the GPU is being updated and
-	// the CPU side data is no longer required.
-	// Be careful when calling this function!
+	// Resizes the buffers on the GPU.
+	void resizeGPU();
+	// Updates the data on the GPU.
+	void syncGPU();
+	// This function deletes the data on the CPU side and keeps the GPU side data.
+	// This is useful when no more changes are going to be made and RAM should be reduced.
 	void wipeCPU();
-	// Sends the CPU data to the GPU.
-	void updateGPU();
+	// Wipes all of the data GPU side but keeps the CPU data.
+	void wipeGPU();
+	// Wipes all of the data (CPU and GPU).
+	void wipe();
 
-	// ----------------- //
-	//  V E R T I C E S  //
-	// ----------------- //
+	// --------- //
+	//  D A T A  //
+	// --------- //
 
-	// Append data on the CPU side memory for untextured vertices.
-	void appendDataCPU(std::vector<VertexType>& vertices, std::vector<unsigned> indices);
-
-	// ----------------- //
-	//  E N T I T I E S  //
-	// ----------------- //
-
-	// Append data on the CPU side memory for textured vertices.
-	void appendDataCPU(Primitive<VertexType>* entity);
-	// Delete the polygon from the VAO.
-	void deleteDataCPU(Primitive<VertexType>* entity);
+	// Append the vertex data to the buffer.
+	// It returns the position of the vertex data in the vector.
+	void appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
+						  unsigned* vertexPos = nullptr, unsigned* indexPos = nullptr);
+	// Removes vertex data from the VBO.
+	void deleteVertexData(unsigned vertexPos, unsigned vertexCount,
+						  unsigned indexPos, unsigned indexCount);
+	// Adds a pointer of the primitive to the VAO.
+	void pushPrimitive(PrimitivePtr* primitive);
+	// Remove the primitive from the VAO.
+	void popPrimitive(int primitiveIndex, int vertexCount, int indexCount);
 };
 
 //=============================================================================================================================================//

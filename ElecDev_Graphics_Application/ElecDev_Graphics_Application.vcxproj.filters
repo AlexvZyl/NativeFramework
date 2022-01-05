@@ -52,7 +52,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
@@ -124,6 +123,9 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Renderer.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Camera.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Scene.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1236,7 +1238,6 @@
     <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Peripherals\CameraGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
@@ -1343,6 +1344,9 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Renderer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Scene.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Camera.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
   </ItemGroup>
   <ItemGroup>

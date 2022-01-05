@@ -1,4 +1,9 @@
 #pragma once
+
+//==============================================================================================================================================//
+//  Includes.  																																    //
+//==============================================================================================================================================//
+
 #include "CoreGL/Entities/LineSegment.h"
 #include "CoreGL/Entities/Entity.h"
 #include "Port.h"
@@ -8,8 +13,15 @@
 #include <vector>*/
 //#include "CoreGL/Entities/Vertex.h"
 
+//==============================================================================================================================================//
+//  Forward declerations.  																													    //
+//==============================================================================================================================================//
+
 class Circuit;
-class Primative;
+
+//==============================================================================================================================================//
+//  Data.  																																        //
+//==============================================================================================================================================//
 
 enum class LineOrientation
 {
@@ -17,30 +29,32 @@ enum class LineOrientation
     VERTICAL
 };
 
+//==============================================================================================================================================//
+//  Cable class.  																																//
+//==============================================================================================================================================//
+
 class Cable : public Entity
 {
 public:
         
     Port* m_startPort;
     Port* m_endPort = nullptr;
-    VertexArrayObject<VertexData>* engine_triangleVAO;
-    VertexArrayObject<VertexDataCircle>* engine_circleVAO;
+
     float m_thickness = 0.005f;
     glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.2f };
     //std::vector<glm::vec2> m_vertices;
-    std::vector<std::shared_ptr<LineSegment>> m_lines;
-    std::vector<std::shared_ptr<Circle<>>> m_nodes;
+    std::vector<LineSegment*> m_lines;
+    std::vector<Circle*> m_nodes;
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
     LineSegment* m_activeLine = nullptr;
-    Circle<>* m_activeNode = nullptr;
-
+    Circle* m_activeNode = nullptr;
 
 public:
     
     //Create a new cable attached to the start port.
-    Cable(Port* startPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+    Cable(Port* startPort, Circuit* parent);
     //Create a new cable from one port to another that gots through each node in the node list
-    Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, VertexArrayObject<VertexData>* triangleVAO, VertexArrayObject<VertexDataCircle>* circleVAO, Circuit* parent);
+    Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent);
     ~Cable();
     void extendSegment(glm::vec2 nextPoint);
     void extendPrevSegment(glm::vec2 nextPoint);
@@ -50,8 +64,11 @@ public:
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour);
     void highlight();
-    void moveActivePrimativeTo(glm::vec2 screenCoords);
-    void setActivePrimative(Entity* primative);
+    void moveActivePrimitiveTo(glm::vec2 screenCoords);
+    void setActivePrimitive(Entity* primitive);
     void unhighlight();
 };
 
+//==============================================================================================================================================//
+//  EOF.  																																        //
+//==============================================================================================================================================//

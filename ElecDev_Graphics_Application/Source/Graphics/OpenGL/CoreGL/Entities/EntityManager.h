@@ -6,7 +6,7 @@ class EntityManager
 {
 private:
 
-	//Store the last ID used
+	// Store the last ID used
 	static unsigned lastID;
 	//Vector to store any IDs that have been freed before reuse
 	static std::vector<unsigned> freeIDs;
@@ -20,4 +20,7 @@ public:
 	//free a specified EID to be reused
 	static void freeEID(unsigned EID);
 	static Entity* getEntity(unsigned EID);
+	static unsigned getLastID();
+
+	// Add a getNextID() function for the renderer.  The renderer ID assigning is currently bugged.
 };

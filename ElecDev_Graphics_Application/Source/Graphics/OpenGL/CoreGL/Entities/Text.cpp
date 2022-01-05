@@ -9,17 +9,18 @@
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/FontLoader.h"
 #include "External/Misc/ConsoleColor.h"
+#include "CoreGL/Renderer.h"
+#include "CoreGL/Scene.h"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
 //=============================================================================================================================================//
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-template<typename VertexType>
-Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
-					   VertexArrayObject<VertexType>* vao, Font& font, Entity* parent, 
+Text::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
+					   VertexArrayObject<VertexDataTextured>* vao, Font& font, Entity* parent,
 					   std::string horizontalAlignment, std::string verticalAlignment)
-	: Primitive<VertexType>(parent)
+	: Primitive<VertexDataTextured>(parent)
 {
 	// ---------- //
 	// S E T U P  //
@@ -42,11 +43,21 @@ Text<VertexType>::Text(std::string text, glm::vec3& position, glm::vec4& color, 
 	generateText(text);
 }
 
-template<typename VertexType>
-void Text<VertexType>::generateText(std::string text)
+void Text::generateText(std::string text)
 {
 	// Return if text is empty.
-	if (!text.size()) { return; }
+	// Push primitive so that the VAO still keeps track of it.
+	if (!text.size()) 
+	{ 
+		m_vertexBufferPos = m_VAO->m_vertexCPU.size();
+		m_indexBufferPos = m_VAO->m_indexCPU.size();
+		m_VAO->pushPrimitive(this);
+		return; 
+	}
+
+	// Variables to use.
+	std::vector<VertexDataTextured> vertices;
+	std::vector<unsigned> indices;
 
 	m_cursorStart = m_trackedCenter;
 	m_textLength = 0;
@@ -132,35 +143,34 @@ void Text<VertexType>::generateText(std::string text)
 	// Will also be rendered just behind the text so
 	// that it does not interfere with the text when 
 	// made visible.
-	glm::vec4 boxColour(0.f, 0.f, 0.f, 0.f);
 	float boxZPos = m_cursorStart.z - 0.001;
 
 	// -----------------------
 	// Vertex 1.
 	glm::vec3 pos1(m_cursorStart.x, m_cursorStart.y + m_font->descender * m_textScale, boxZPos);
 	glm::vec2 tex1(0.f, 0.f);
-	VertexDataTextured v1(pos1, boxColour, tex1, 0, m_entityID);
+	VertexDataTextured v1(pos1, m_boxColor, tex1, 0, m_entityID);
 	// -----------------------
 	// Vertex2.
 	glm::vec3 pos2(m_cursorStart.x, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos);
 	glm::vec2 tex2(0.f, 1.f);
-	VertexDataTextured v2(pos2, boxColour, tex2, 0, m_entityID);
+	VertexDataTextured v2(pos2, m_boxColor, tex2, 0, m_entityID);
 	// -----------------------
 	// Vertex 3.
 	glm::vec3 pos3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos);
 	glm::vec2 tex3(1.f, 1.f);
-	VertexDataTextured v3(pos3, boxColour, tex3, 0, m_entityID);
+	VertexDataTextured v3(pos3, m_boxColor, tex3, 0, m_entityID);
 	// -----------------------
 	// Vertex 4.
 	glm::vec3 pos4(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos);
 	glm::vec2 tex4(0.f, 1.f);
-	VertexDataTextured v4(pos4, boxColour, tex4, 0, m_entityID);
+	VertexDataTextured v4(pos4, m_boxColor, tex4, 0, m_entityID);
 	// -----------------------
 
 	// Insert vertices.
-	m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 });
+	vertices.insert(vertices.end(), { v1,v2,v3,v4 });
 	// Insert indices.
-	m_indices.insert(m_indices.end(),
+	indices.insert(indices.end(),
 		{
 			0 + m_vertexCount,
 			1 + m_vertexCount,
@@ -251,9 +261,9 @@ void Text<VertexType>::generateText(std::string text)
 		VertexDataTextured v4(pos4, m_colour, tex4, 1, m_entityID);
 		// -----------------------
 		// Insert vertices.
-		m_vertices.insert(m_vertices.end(), { v1,v2,v3,v4 });
+		vertices.insert(vertices.end(), { v1,v2,v3,v4 });
 		// Insert indices.
-		m_indices.insert(m_indices.end(),
+		indices.insert(indices.end(),
 			{
 				0 + m_vertexCount,
 				1 + m_vertexCount,
@@ -269,48 +279,44 @@ void Text<VertexType>::generateText(std::string text)
 		// -----------------------
 	}
 	// Write data to VAO.
-	m_VAO->appendDataCPU(this);
+	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
+	m_VAO->pushPrimitive(this);
 }
-
-template<typename VertexType>
-Text<VertexType>::~Text(){}
 
 //=============================================================================================================================================//
 //  Text manipulation.																													       //
 //=============================================================================================================================================//
 
-template<typename VertexType>
-void Text<VertexType>::updateText(std::string text) 
+void Text::updateText(std::string text) 
 {
-	Primitive<VertexType>::wipeMemory();
+	wipeGPU();
 	generateText(text);
 }
 
-template <typename VertexType>
-void Text<VertexType>::setBoxColour(glm::vec4 colour) 
+void Text::setBoxColour(glm::vec4 colour) 
 { 
-	for (int i = 0; i < 4; i++) { *m_vertices[i].color = colour; }
+	m_boxColor = colour;
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++) 
+		m_VAO->m_vertexCPU[i].data.color = colour; 
+	m_VAO->sync();
 }
 
-template <typename VertexType>
-void Text<VertexType>::setColor(glm::vec4& color) 
+void Text::setColor(glm::vec4& color) 
 {
-	for (int i = 4; i < m_vertices.size(); i++) { *m_vertices[i].color = color; }
+	m_colour = color;
+	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.color = color;
+	m_VAO->sync();
 }
 
-template <typename VertexType>
-void Text<VertexType>::setLayer(float layer)
+void Text::setLayer(float layer)
 {
-	for (int i = 0; i < 4; i++) { m_vertices[i].position->z = layer - 0.001; }
-	for (int i = 4; i < m_vertices.size(); i++) { m_vertices[i].position->z = layer; }
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++)
+		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
+	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position.z = layer;
+	m_VAO->sync();
 }
-
-//=============================================================================================================================================//
-//  Instantiations.																															   //
-//=============================================================================================================================================//
-
-template class Text<>;
-template class Text<VertexDataTextured>;
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

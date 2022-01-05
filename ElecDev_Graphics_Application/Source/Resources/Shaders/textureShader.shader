@@ -40,7 +40,7 @@ const float edge = 0.2;
 
 uniform float screenPxRange;
 
-uniform sampler2D f_textures[4];
+uniform sampler2D f_textures[32];
 
 // Utility function for MSDF rendering.
 float median(float r, float g, float b) {

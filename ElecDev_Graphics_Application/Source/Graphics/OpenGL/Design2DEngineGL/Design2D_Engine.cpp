@@ -21,17 +21,21 @@ This is where the interactive 2D design engine is implemented.
 #include "CoreGL/FrameBufferObjectGL.h"
 #include "CoreGL/ShaderHandlerGL.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Entities/Primitive.h"
 // Window.
 #include <GLFW/glfw3.h>
 // Design components.
 #include "Peripherals/Circuit.h"
+
+// For Testing.
+#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
 // Constructor.
-Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName) 
+Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	: Base2DEngineGL(guiState, contextName)
 {
 	// Starting.
@@ -40,45 +44,16 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	// Default circuit (In this case handled like a default scene).
 	m_circuit = std::make_shared<Circuit>(m_contextName, "AE");
 
+	m_guiState->design_engine = this;
+
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
-	m_guiState->design_engine = this;
 }
 
 // Destructor.
 Design2DEngineGL::~Design2DEngineGL()
 {
 
-}
-
-//=============================================================================================================================================//
-//  Rendering.																																   //
-//=============================================================================================================================================//
-
-void Design2DEngineGL::renderLoop()
-{
-	// Call the base engine rendering loop.
-	Base2DEngineGL::renderLoop();
-
-	// ----------- //
-	//  S E T U P  //
-	// ----------- //
-
-	// Render to the FBO.
-	m_frameBuffer->bind();
-
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
-
-	
-
-	// --------------- //
-	//  C L E A N U P  //
-	// --------------- //
-
-	// Stop rendering to the FBO.
-	m_frameBuffer->unbind();
 }
 
 //=============================================================================================================================================//
@@ -94,3 +69,4 @@ void Design2DEngineGL::resizeEvent(float width, float height)
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//
+

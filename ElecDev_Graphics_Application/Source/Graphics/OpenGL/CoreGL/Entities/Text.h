@@ -16,52 +16,34 @@
 
 template<typename VertexType>
 class VertexArrayObject;
+
 class VertexDataTextured;
+
 struct Character;
 struct Font;
 
-//=============================================================================================================================================//
-//  Class.																																	   //
-//=============================================================================================================================================//
+//==============================================================================================================================================//
+//  Class.																																	    //
+//==============================================================================================================================================//
 
-template<typename VertexType=VertexDataTextured>
-class Text : public Primitive<VertexType>
+class Text : public Primitive<VertexDataTextured>
 {
 public:
-
-	// ------------ //
-	//  E N T I T Y //
-	// ------------ //
-
-	using Primitive<VertexType>::m_vertices;
-	using Primitive<VertexType>::m_indices;
-	using Primitive<VertexType>::m_vertexCount;
-	using Primitive<VertexType>::m_indexCount;
-	using Primitive<VertexType>::m_VAO;
-	using Primitive<VertexType>::m_bufferStartIndex;
-	using Primitive<VertexType>::m_trackedCenter;
-	using Primitive<VertexType>::m_colour;
-	using Primitive<VertexType>::m_entityID;
-
-	// --------- //
-	//  T E X T  //
-	// --------- //
 
 	float m_textScale = 1;
 	Font* m_font;
 	std::string m_verticalAlign;
 	std::string m_horizontalAlign;
 	float m_textLength = 0;
-	glm::vec3 m_cursorStart = {0.f, 0.f, 0.f};
+	glm::vec3 m_cursorStart = { 0.f, 0.f, 0.f };
+	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
 
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
-		 VertexArrayObject<VertexType>* vao, Font& font, Entity* parent,
+		 VertexArrayObject<VertexDataTextured>* vao, Font& font, Entity* parent,
 		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
 	// Generates the textured quads.
 	void generateText(std::string text);
-	// Destructor.
-	~Text();
 
 	// Updates the text of the text entity.
 	void updateText(std::string text);
