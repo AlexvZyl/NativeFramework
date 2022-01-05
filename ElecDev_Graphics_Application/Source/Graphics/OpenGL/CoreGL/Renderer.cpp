@@ -65,9 +65,15 @@ Scene* Renderer::getScene()
 //  Scene.																																		//
 //==============================================================================================================================================//
 
-void Renderer::bindScene(Scene* scene) { m_scene = scene; }
+void Renderer::bindScene(Scene* scene) 
+{ 
+	m_scene = scene; 
+}
 
-void Renderer::unbindScene() { m_scene = nullptr; }
+void Renderer::unbindScene() 
+{ 
+	m_scene = nullptr; 
+}
 
 void Renderer::renderScene() 
 {
@@ -101,8 +107,8 @@ void Renderer::render2DScene(Scene* scene)
 	scene->updateCamera();
 
 	// Render to frame buffer.
-	scene->m_FBO->bind();
-	scene->m_FBO->clear();
+	scene->bindFBO();
+	scene->clearFBO();
 
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -137,7 +143,7 @@ void Renderer::render2DScene(Scene* scene)
 	// --------------- //
 
 	// Stop rendering to the current FBO.
-	scene->m_FBO->unbind();
+	scene->unbindFBO();
 	// Disable blending.
 	GLCall(glDisable(GL_BLEND));
 }
@@ -160,8 +166,8 @@ void Renderer::render3DScene(Scene* scene)
 	scene->updateCamera();
 
 	// Render to frame buffer.
-	scene->m_FBO->bind();
-	scene->m_FBO->clear();
+	scene->bindFBO();
+	scene->clearFBO();
 
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -198,7 +204,7 @@ void Renderer::render3DScene(Scene* scene)
 	// --------------- //
 
 	// Stop rendering to the current FBO.
-	scene->m_FBO->unbind();
+	scene->unbindFBO();
 	// Disable blending.
 	GLCall(glDisable(GL_BLEND));
 }

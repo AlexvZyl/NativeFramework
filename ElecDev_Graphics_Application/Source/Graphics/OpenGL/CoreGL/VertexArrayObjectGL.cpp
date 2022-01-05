@@ -20,7 +20,7 @@
 
 template <typename VertexType>
 VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
-	: m_bufferType(type)
+	: VertexArrayObjectPtr(type)
 {
 	// Generate the VAO.
 	GLCall(glGenVertexArrays(1, &m_VAOID));

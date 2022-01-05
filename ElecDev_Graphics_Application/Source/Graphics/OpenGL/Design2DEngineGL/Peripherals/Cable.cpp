@@ -12,15 +12,15 @@
 //  Constructor & Destructor.  																													//
 //==============================================================================================================================================//
 
-Cable::Cable(Scene* scene, Port* startPort, Circuit* parent) 
+Cable::Cable(Port* startPort, Circuit* parent) 
 	: Entity(EntityType::CABLE, parent)
 {
-	//Keep the VAO and start port
+	// Keep the VAO and start port.
 	m_startPort = startPort;
 
 	startPort->attachCable(this);
 
-	//get the initial points and orientation of the first segment
+	// Get the initial points and orientation of the first segment.
 	glm::vec2 endPt = m_startPort->centre;
 	float initial_length = 0.01f;
 	switch (startPort->m_position) {
@@ -46,8 +46,6 @@ Cable::Cable(Scene* scene, Port* startPort, Circuit* parent)
 	//  P R I M I T I V E S  //
 	// --------------------- //
 
-	// Context.
-	Renderer::bindScene(m_scene);
 	// First line.
 	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
 	// First node.
@@ -56,7 +54,7 @@ Cable::Cable(Scene* scene, Port* startPort, Circuit* parent)
 	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
 }
 
-Cable::Cable(Scene* scene, Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent) 
+Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent) 
 	: Entity(EntityType::CABLE, parent)
 {
 	m_startPort = startPort;
@@ -66,9 +64,6 @@ Cable::Cable(Scene* scene, Port* startPort, std::vector<glm::vec2> nodeList, Por
 	// Attach the ports
 	m_startPort->attachCable(this);
 	m_endPort->attachCable(this);
-
-	// Context.
-	Renderer::bindScene(m_scene);
 
 	// Add the first line segment and first node.
 	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
@@ -107,7 +102,6 @@ void Cable::extendPrevSegment(glm::vec2 nextPoint)
 		endPt.y = nextPoint.y;
 		break;
 	}
-	Renderer::bindScene(m_scene);
 	m_lines.end()[-2] = Renderer::addLineSegment2D(m_lines.end()[-2]->m_start, endPt, m_thickness, m_colour, this);
 	m_nodes.back()->translateTo(endPt);
 }
@@ -116,7 +110,6 @@ void Cable::extendSegment(glm::vec2 nextPoint)
 {
 	// Extend the pevious segment. 
 	extendPrevSegment(nextPoint);
-	Renderer::bindScene(m_scene);
 	m_lines.back() = Renderer::addLineSegment2D(m_lines.end()[-2]->m_end, nextPoint, m_thickness, m_colour, this);
 }
 
@@ -135,7 +128,6 @@ void Cable::addSegment(glm::vec2 nextPoint)
 		m_curOrientation = LineOrientation::HORIZONTAL;
 		break;
 	}
-	Renderer::bindScene(m_scene);
 	m_nodes.push_back(Renderer::addCircle2D(m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
 	m_lines.push_back(Renderer::addLineSegment2D(m_lines.back()->m_end, nextPoint, m_thickness, m_colour, this));
 }
@@ -222,7 +214,6 @@ void Cable::followPort(Port* movedPort)
 			break;
 		}
 
-		Renderer::bindScene(m_scene);
 		m_lines[1] = Renderer::addLineSegment2D(startPt, m_lines[1]->m_end, m_thickness, m_colour, this);
 		// Move the first node.
 		m_nodes.front()->translateTo(startPt);
@@ -287,7 +278,6 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 		m_activeLine->translate(translation);
 
 		// Extend the adjacent lines.
-		Renderer::bindScene(m_scene);
 		*std::prev(it) = Renderer::addLineSegment2D((*std::prev(it))->m_start, m_activeLine->m_start, m_thickness, m_colour, this);
 		*std::next(it) = Renderer::addLineSegment2D(m_activeLine->m_end, (*std::next(it))->m_end, m_thickness, m_colour, this);
 		

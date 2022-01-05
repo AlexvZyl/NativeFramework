@@ -21,6 +21,7 @@ This is where the drawing enigine mouse events are handled.
 // Serialisation.
 #include "Utilities/Serialisation/Serialiser.h"
 #include "CoreGL/Entities/Text.h"
+#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Press event.																															   //
@@ -53,7 +54,8 @@ void Design2DEngineGL::mousePressLeft(float pixelCoords[2])
 		{
 			m_activeCable = nullptr;
 			designerState = CABLE_PLACE;
-			m_activeCable = std::make_shared<Cable>(m_scene.get(), clickedPort, m_circuit.get());
+			Renderer::bindScene(m_scene.get());
+			m_activeCable = std::make_shared<Cable>(clickedPort, m_circuit.get());
 		}
 	}
 	else if (designerState == CABLE_PLACE) 

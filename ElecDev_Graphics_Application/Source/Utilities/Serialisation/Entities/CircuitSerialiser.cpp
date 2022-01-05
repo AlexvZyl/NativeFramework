@@ -7,6 +7,7 @@
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
 #include "CoreGL/Entities/EntityManager.h"
+#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //
@@ -65,6 +66,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ci
 
 void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 {
+	// Context.
+	Renderer::bindScene(engine.m_scene.get());
+
 	// An ID table that hold the reference between new and old ID's.
 	std::map<unsigned, unsigned> idTable;	// Old -> New
 
@@ -89,7 +93,7 @@ void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 	{
 		YAML::Node componentNode = compIterator->second;
 		// Create component.
-		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine.m_scene.get(), engine.m_circuit.get());
+		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine.m_circuit.get());
 		// Add component to circuit.
 		engine.m_circuit->m_components.push_back(component);
 
@@ -186,8 +190,7 @@ void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
 		Port* startPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["Start port"].as<unsigned>()]));
 		Port* endPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["End port"].as<unsigned>()]));
 		// Create cable.
-		std::shared_ptr<Cable> cable = std::make_shared<Cable>(engine.m_scene.get(),
-															   startPort, 
+		std::shared_ptr<Cable> cable = std::make_shared<Cable>(startPort,
 															   nodeVector,
 															   endPort,
 															   engine.m_circuit.get());

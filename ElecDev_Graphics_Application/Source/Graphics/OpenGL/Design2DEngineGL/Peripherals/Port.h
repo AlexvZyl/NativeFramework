@@ -57,8 +57,6 @@ public:
 	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
 	float portLayer;
 
-	Scene* m_scene;
-
 	Circle* body;
 	Circle* border;
 	Circle* attachmentIndicator;
@@ -72,7 +70,7 @@ public:
 	std::vector<Cable*> m_cables;
 
 
-	Port(Scene* scene, glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
+	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
 	~Port();
 	Port& operator = (const Port &t);
 	void moveTo(glm::vec2 destination);

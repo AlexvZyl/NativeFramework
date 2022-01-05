@@ -31,7 +31,7 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 }
 
 //==============================================================================================================================================//
-//  Methods.																																	//
+//  Camera Methods.																																//
 //==============================================================================================================================================//
 
 glm::mat4* Scene::getViewMatrix() 
@@ -59,10 +59,40 @@ void Scene::setViewport(int width, int height)
 	m_camera->setViewport(width, height); 
 }
 
+//==============================================================================================================================================//
+//  FBO Methods.																															    //	
+//==============================================================================================================================================//
+
+void Scene::bindFBO() 
+{	
+	m_FBO->bind();
+}
+
+void Scene:: clearFBO()
+{
+	m_FBO->clear();
+}
+
+void Scene::unbindFBO() 
+{
+	m_FBO->unbind();
+}
+
 unsigned Scene::getRenderTexture() 
 { 
 	return m_FBO->getRenderTexture(); 
 }
+
+unsigned Scene::getEntityID(glm::vec2& pixelCoords)
+{
+	// Adjust the pixel coords.
+	glm::vec2 pixelCoordsTemp = { pixelCoords[0], m_camera->m_viewportVec[3] - pixelCoords[1] };
+	return m_FBO->getEntityID(pixelCoordsTemp);
+}
+
+//==============================================================================================================================================//
+//  Coordinates.																															    //
+//==============================================================================================================================================//
 
 glm::vec3 Scene::pixelCoordsToWorldCoords(float pixelCoords[2])  
 { 
@@ -73,14 +103,6 @@ glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2])
 { 
 	return m_camera->pixelCoordsToCameraCoords(pixelCoords); 
 }
-
-unsigned Scene::getEntityID(glm::vec2& pixelCoords) 
-{
-	// Adjust the pixel coords.
-	glm::vec2 pixelCoordsTemp = { pixelCoords[0], m_camera->m_viewportVec[3] - pixelCoords[1]};
-	return m_FBO->getEntityID(pixelCoordsTemp);
-}
-
 
 //==============================================================================================================================================//
 //  Backgrounds.																																	//
@@ -131,7 +153,7 @@ void Scene::create2DBackground()
 
 void Scene::create3DBackground() 
 {
-	
+	// Implement skybox.
 }
 
 //==============================================================================================================================================//

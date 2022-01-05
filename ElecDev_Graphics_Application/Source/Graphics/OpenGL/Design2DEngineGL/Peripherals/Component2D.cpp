@@ -29,9 +29,8 @@ unsigned Component2D::componentID = 0;
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-Component2D::Component2D(Scene* scene, Circuit* parent)
-	: Entity(EntityType::COMPONENT, parent),
-	 m_scene(scene)
+Component2D::Component2D(Circuit* parent)
+	: Entity(EntityType::COMPONENT, parent)
 {
 	// ----------- //
 	//  S E T U P  //
@@ -43,9 +42,6 @@ Component2D::Component2D(Scene* scene, Circuit* parent)
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y - height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
 	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
-
-	// Context.
-	Renderer::bindScene(m_scene);
 
 	// --------------------- //
 	//  P R I M I T I V E S  //
@@ -72,8 +68,8 @@ Component2D::Component2D(Scene* scene, Circuit* parent)
 
 }
 
-Component2D::Component2D(glm::vec2 centreCoords, Scene* scene, Circuit* parent)
-	: Component2D(scene, parent)
+Component2D::Component2D(glm::vec2 centreCoords, Circuit* parent)
+	: Component2D(parent)
 {
 	moveTo(centreCoords);
 }
@@ -204,19 +200,19 @@ unsigned Component2D::addPort(int side, PortType type, std::string name)
 {
 	switch(side){
 	case 0:
-		portsWest.push_back(std::make_shared<Port>(m_scene, glm::vec2(-width, 0.f), type, this, name));
+		portsWest.push_back(std::make_shared<Port>(glm::vec2(-width, 0.f), type, this, name));
 		updatePortPositions();
 		return portsWest.back()->m_entityID;
 	case 1:
-		portsEast.push_back(std::make_shared<Port>(m_scene, glm::vec2(width, 0.f), type, this, name));
+		portsEast.push_back(std::make_shared<Port>(glm::vec2(width, 0.f), type, this, name));
 		updatePortPositions();
 		return portsEast.back()->m_entityID;
 	case 2:
-		portsNorth.push_back(std::make_shared<Port>(m_scene, glm::vec2(0.f, height), type, this, name));
+		portsNorth.push_back(std::make_shared<Port>(glm::vec2(0.f, height), type, this, name));
 		updatePortPositions();
 		return portsNorth.back()->m_entityID;
 	case 3:
-		portsSouth.push_back(std::make_shared<Port>(m_scene, glm::vec2(0.f, -height), type, this, name));
+		portsSouth.push_back(std::make_shared<Port>(glm::vec2(0.f, -height), type, this, name));
 		updatePortPositions();
 		return portsSouth.back()->m_entityID;
 	default:

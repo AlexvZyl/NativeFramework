@@ -187,11 +187,20 @@ unsigned FrameBufferObject::getRenderTexture()
 	return m_renderColorTextureID; 
 }
 
-void FrameBufferObject::bind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID)); }
+void FrameBufferObject::bind() 
+{ 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
+}
 
-void FrameBufferObject::bindRender() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID)); }
+void FrameBufferObject::bindRender() 
+{ 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID)); 
+}
 												   
-void FrameBufferObject::unbind() { GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
+void FrameBufferObject::unbind() 
+{ 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0)); 
+}
 
 void FrameBufferObject::clear()	  
 { 

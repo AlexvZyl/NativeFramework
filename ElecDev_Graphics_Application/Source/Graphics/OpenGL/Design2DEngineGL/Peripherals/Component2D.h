@@ -36,24 +36,20 @@ class Component2D: public Entity
 {
 public:
 
-	//shape and edge data
+	// Shape and edge data.
 	Polygon2D* shape;
 	Polygon2D* border;
 	Text* title;
-	//std::shared_ptr<Port> port1;
-	//std::shared_ptr<Port> port2;
-	
-	Scene* m_scene;
 
 	static unsigned componentID;
 
-	//component shape attributes
+	// Component shape attributes.
 	float height = 0.1f;
 	float width = 0.1f;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> vertices2;
 
-	//colour attributes
+	// Colour attributes.
 	glm::vec4 shapeColour = { 0.5f, 0.5f, 0.9f, 0.5f };
 	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
 
@@ -71,7 +67,7 @@ public:
 	unsigned n_ports_west = 0;
 	glm::vec2 portOffset;
 
-	//interaction attributes
+	// Interaction attributes.
 	bool selected = true;
 
 	std::vector<std::shared_ptr<Port>> portsNorth;
@@ -86,13 +82,12 @@ public:
 	float portLayerOffset = 0.02f;
 	glm::vec2 centre;
 	
-	//Creates a generic component centred at (0, 0)
-	Component2D(Scene* scene, Circuit* parent);
+	// Creates a generic component centred at (0, 0).
+	Component2D(Circuit* parent);
+	// Creates a generic component centred at the specified coordinates.
+	Component2D(glm::vec2 centreCoords, Circuit* parent);
 
-	//Creates a generic component centred at the specified coordinates
-	Component2D(glm::vec2 centreCoords, Scene* scene, Circuit* parent);
-
-	//Deconstructor
+	// Deconstructor.s
 	~Component2D();
 	//Move the component to a new positioned centred at the given coordinates
 	void moveTo(glm::vec2 pointerPos);

@@ -38,7 +38,7 @@ class Scene
 public:
 
 	// Constructor.
-	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 8);
+	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 16);
 	// Set the MSAA samples.
 	void setMSAA(unsigned samples);
 	// Pass events on to the camera.
@@ -60,7 +60,6 @@ public:
 
 	// Map containing all of the different primitives.
 	std::map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
-	// Vector containing all of 
 
 private:
 
@@ -74,6 +73,13 @@ private:
 	void create2DBackground();
 	// Creates a default 3D background.
 	void create3DBackground();
+
+	// Binds the FBO.
+	void bindFBO();
+	// Clears the FBO.
+	void clearFBO();
+	// Unbinds the FBO.
+	void unbindFBO();
 
 	// Return the view matrix of the scene camera.
 	glm::mat4* getViewMatrix();

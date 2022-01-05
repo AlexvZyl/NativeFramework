@@ -18,7 +18,6 @@
 //==============================================================================================================================================//
 
 class Circuit;
-class Scene;
 
 //==============================================================================================================================================//
 //  Data.  																																        //
@@ -49,15 +48,13 @@ public:
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
     LineSegment* m_activeLine = nullptr;
     Circle* m_activeNode = nullptr;
-    Scene* m_scene;
-
 
 public:
     
     //Create a new cable attached to the start port.
-    Cable(Scene* scene, Port* startPort, Circuit* parent);
+    Cable(Port* startPort, Circuit* parent);
     //Create a new cable from one port to another that gots through each node in the node list
-    Cable(Scene* scene, Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent);
+    Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent);
     ~Cable();
     void extendSegment(glm::vec2 nextPoint);
     void extendPrevSegment(glm::vec2 nextPoint);

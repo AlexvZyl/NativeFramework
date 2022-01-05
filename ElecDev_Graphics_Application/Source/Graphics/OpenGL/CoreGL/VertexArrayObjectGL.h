@@ -22,9 +22,23 @@ class PrimitivePtr;
 class VertexArrayObjectPtr 
 { 
 public:
-	std::vector<PrimitivePtr*> m_primitives; // Pointers to all of the primitives that have vertices in the VAO.		
+	std::vector<PrimitivePtr*> m_primitives; // Pointers to all of the primitives that have vertices in the VAO.	
+	GLenum m_bufferType = 0;				 // Data type used in this VAO.	
 
+	// Constructor.
+	VertexArrayObjectPtr(GLenum type) : m_bufferType(type) {}
+	
 private:
+	template <class VertexType>
+	friend class VertexArrayObject;
+
+	unsigned int m_VAOID = 0;				 // Vertex Array Object.
+	unsigned int m_VBOID = 0;				 // Vertex Buffer Objext.	
+	unsigned int m_IBOID = 0;				 // Index Buffer Object.
+	unsigned int m_vertexCount = 0;			 // Pointer that shows where in the buffer data need to be written.
+	unsigned int m_indexCount = 0;			 // Counting the amount of indices.
+	bool m_synced = true;					 // Checks if there is data CPU side that has not been updated GPU side.
+	bool m_sized = true;					 // Checks if the buffers have to be resized 
 };
 
 //=============================================================================================================================================//
@@ -33,20 +47,8 @@ private:
 
 template <class VertexType>
 class VertexArrayObject : public VertexArrayObjectPtr
-{
-private:
-
-	unsigned int m_VAOID;			// Vertex Array Object.
-	unsigned int m_VBOID;			// Vertex Buffer Objext.	
-	unsigned int m_IBOID;			// Index Buffer Object.
-	unsigned int m_vertexCount = 0;	// Pointer that shows where in the buffer data need to be written.
-	unsigned int m_indexCount = 0;	// Counting the amount of indices.
-	bool m_synced = true;			// Checks if there is data CPU side that has not been updated GPU side.
-	bool m_sized = true;			// Checks if the buffers have to be resized 
-	
+{	
 public:
-
-	GLenum m_bufferType = 0;		// Data type used in this VAO.	
 
 	// --------- //
 	//  D A T A  //

@@ -18,18 +18,14 @@
 //  Methods.																																	//
 //==============================================================================================================================================//
 
-Port::Port(Scene* scene, glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
+Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
 	: Entity(EntityType::PORT, parent), 
 	  bodyColour( 0.7f, 0.7f, 0.7f, 1.f ),
 	  borderColour(0.f, 0.f, 0.f, 1.f),
 	  m_offset(offset),
 	  centre(parent->centre + offset),
-	  m_type(type),
-	  m_scene(scene)
+	  m_type(type)
 {
-	// Context.
-	Renderer::bindScene(m_scene);
-
 	// --------------------- //
 	//  P R I M I T I V E S  //
 	// --------------------- //
@@ -82,7 +78,8 @@ Port::~Port()
 {
 	// If a port is removed, we need to find and destroy any linked cables
 	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
-	for (Cable* cable : m_cables) {
+	for (Cable* cable : m_cables) 
+	{
 		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr < Cable > current)
 			{
 				return current.get() == cable;

@@ -26,9 +26,9 @@ Primitive<VertexType>::~Primitive()
 template<typename VertexType>
 void Primitive<VertexType>::wipeGPU()
 { 
-	// Clear from the VAO buffer.
+	// Clear from the VAO primitive buffer.
 	m_VAO->popPrimitive(m_primitiveBufferPos, m_vertexCount, m_indexCount);
-	// Clear data.
+	// Clear vertex and index data.
 	m_VAO->deleteVertexData(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
 	// Clear metadata.
 	m_vertexBufferPos = NULL;
