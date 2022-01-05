@@ -33,7 +33,6 @@ public:
 	// ------------------ //
 
 	designState designerState = ENTITY_SELECT;
-	//std::vector<std::shared_ptr<Component2D>> m_components;
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
 	std::shared_ptr<Circuit> m_circuit;

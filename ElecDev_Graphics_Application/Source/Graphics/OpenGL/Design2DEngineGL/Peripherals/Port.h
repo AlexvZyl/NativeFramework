@@ -12,6 +12,7 @@
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "IOIndicator.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -66,6 +67,12 @@ public:
 	glm::vec2 m_offset = { 0, 0 };
 	PortPosition m_position;
 	PortType m_type;
+
+	Circle<> body;
+	Circle<> border;
+	Circle<> attachmentIndicator;
+	//IOIndicator attachmentIndicator;
+	std::shared_ptr<Text<>> title;
 
 	std::vector<Cable*> m_cables;
 

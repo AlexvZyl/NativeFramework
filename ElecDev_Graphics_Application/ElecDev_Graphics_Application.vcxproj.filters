@@ -126,6 +126,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Renderer.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Scene.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1346,6 +1347,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Renderer.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Scene.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Camera.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

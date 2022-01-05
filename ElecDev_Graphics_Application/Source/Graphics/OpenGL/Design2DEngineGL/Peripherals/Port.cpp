@@ -85,7 +85,10 @@ Port::~Port()
 				return current.get() == cable;
 			});
 
-		cableList.erase(toRemove);
+		//check that the cable is in the list
+		if (toRemove != cableList.end()) {
+			cableList.erase(toRemove);
+		}
 	}
 }
 
@@ -125,6 +128,7 @@ Port& Port::operator=(const Port& t)
 
 void Port::setLayer(float layer)
 {
+  portLayer = layer;
 	body->setLayer(layer);
 	border->setLayer(layer);
 	attachmentIndicator->setLayer(layer + 0.001f);
