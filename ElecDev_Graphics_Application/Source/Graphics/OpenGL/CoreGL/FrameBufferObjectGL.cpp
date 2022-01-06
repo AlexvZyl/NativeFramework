@@ -13,6 +13,12 @@
 #include "CoreGL/ShaderHandlerGL.h"
 
 //=============================================================================================================================================//
+//  Static inits.																															   //
+//=============================================================================================================================================//
+
+std::unique_ptr<Shader> FrameBufferObject::m_shader;
+
+//=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
@@ -55,19 +61,14 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 
 	// Create the quad.
 	m_renderVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	std::vector<VertexDataTextured> vertices =
-	{
-		VertexDataTextured(-1.f, -1.f,  0.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,   2.f,  1),
-		VertexDataTextured(-1.f,  1.f,  0.f,   0.f, 1.f, 0.f, 1.f,   0.f, 1.f,   2.f,  1),
-		VertexDataTextured( 1.f,  1.f,  0.f,   0.f, 0.f, 1.f, 1.f,   1.f, 1.f,   2.f,  1),
-		VertexDataTextured( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1),
-	};
+	std::vector<std::unique_ptr<VertexDataTextured>> vertices;
+	vertices.reserve(4);
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(-1.f, -1.f,  0.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(-1.f,  1.f,  0.f,   0.f, 1.f, 0.f, 1.f,   0.f, 1.f,   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>( 1.f,  1.f,  0.f,   0.f, 0.f, 1.f, 1.f,   1.f, 1.f,   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1));
 	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
 	m_renderVAO->appendVertexData(vertices, indices);
-	m_renderVAO->resize();
-
-	// Generate the shader.
-	m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
 	unsigned texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
 	int msaaTextureID = 2;	// Reserved for FBO redering.
 	m_shader->bind();
@@ -174,14 +175,15 @@ void FrameBufferObject::resize(int width, int height)
 	// Save the dimenions.
 	m_viewport[0] = width;
 	m_viewport[1] = height;
-	// Change texture size variable in  shader.
-	m_shader->bind();
-	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
-	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 unsigned FrameBufferObject::getRenderTexture() 
 { 
+	// Change texture size variable in  shader.
+	m_shader->bind();
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
+	// Anti-Aliasing pass.
 	renderFromMSAA(); 
 	//blitFromMSAA();
 	return m_renderColorTextureID; 

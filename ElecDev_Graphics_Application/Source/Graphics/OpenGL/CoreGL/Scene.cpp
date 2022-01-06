@@ -139,13 +139,12 @@ void Scene::create2DBackground()
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99);
 	glm::vec3 pos4(1.0f, -1.0f, 0.99);
 	// Create and append the vertices.
-	std::vector<VertexData> vertices =
-	{
-		VertexData(pos1, bgColor2, -1),	//  Top right.
-		VertexData(pos2, bgColor1, -1),	//  Top left.
-		VertexData(pos3, bgColor1, -1),	//  Bottom left.
-		VertexData(pos4, bgColor1, -1)	//  Bottom right.
-	};
+	std::vector<std::unique_ptr<VertexData>> vertices;
+	vertices.reserve(4);
+	vertices.emplace_back(std::make_unique<VertexData>(pos1, bgColor2, -1)); //  Top right.
+	vertices.emplace_back(std::make_unique<VertexData>(pos2, bgColor1, -1)); //  Top left.
+	vertices.emplace_back(std::make_unique<VertexData>(pos3, bgColor1, -1)); //  Bottom left.
+	vertices.emplace_back(std::make_unique<VertexData>(pos4, bgColor1, -1)); //  Bottom right.
 	// Create background.
 	std::vector<unsigned> indices({ 0,1,2,2,3,0 });
 	m_backgroundVAO->appendVertexData(vertices, indices);

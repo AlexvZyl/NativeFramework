@@ -7,11 +7,6 @@
 #include "CoreGL/Entities/LineSegment.h"
 #include "CoreGL/Entities/Entity.h"
 #include "Port.h"
-/*
-#include "CoreGL/VertexArrayObjectGL.h"
-#include <glm.hpp>
-#include <vector>*/
-//#include "CoreGL/Entities/Vertex.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.  																													    //

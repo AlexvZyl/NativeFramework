@@ -2,15 +2,14 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "VertexArrayObjectGL.h"
-#include "Entities/Primitive.h"
-#include "External/Misc/ConsoleColor.h"
-#include "CoreGL/Entities/Vertex.h"
-#include "ErrorHandlerGL.h"
 #include <algorithm>
 #include <functional>
 #include <chrono>
 #include <iostream>
+#include "External/Misc/ConsoleColor.h"
+#include "CoreGL/ErrorHandlerGL.h"
+#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Entity.h"
 #include "CoreGL/Entities/Primitive.h"
 
@@ -127,6 +126,7 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 template <typename VertexType>
 VertexArrayObject<VertexType>::~VertexArrayObject()
 {
+	// Clear GPU memory.
 	GLCall(glDeleteBuffers(1, &m_VBOID));
 	GLCall(glDeleteBuffers(1, &m_IBOID));
 	GLCall(glDeleteVertexArrays(1, &m_VAOID));
@@ -140,8 +140,8 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
 	// Update data.
-	if		(!m_sized )	resizeGPU();
-	else if (!m_synced) syncGPU();  
+	if		(!m_sized )	resizeBuffer();
+	else if (!m_synced) syncBuffer();  
 	// Render.
 	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
@@ -149,47 +149,170 @@ void VertexArrayObject<VertexType>::render()
 }
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::bind() const { GLCall(glBindVertexArray(m_VAOID)); }
+void VertexArrayObject<VertexType>::bind() const 
+{ 
+	GLCall(glBindVertexArray(m_VAOID)); 
+}
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::unbind() const { GLCall(glBindVertexArray(0)); }
+void VertexArrayObject<VertexType>::unbind() const 
+{ 
+	GLCall(glBindVertexArray(0)); 
+}
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::sync() { m_synced = false; }
+void VertexArrayObject<VertexType>::sync(PrimitivePtr* primitive)
+{ 
+	m_synced = false; 
+	m_primitivesToSync.push_back(primitive);
+}
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::resize() { m_sized = false; }
+void VertexArrayObject<VertexType>::resize() 
+{ 
+	m_sized = false; 
+}
 
 //=============================================================================================================================================//
 //  Buffer data.					  																										   //
 //=============================================================================================================================================//
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
+void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr<VertexType>>& vertices, std::vector<unsigned>& indices,
 													 unsigned* vertexPos, unsigned* indexPos)
 {
-	if (!vertices.size()) return;
-	if (vertexPos)        *vertexPos = m_vertexCount;
-	if (indexPos)         *indexPos  = m_indexCount;
-	m_vertexCPU.insert(m_vertexCPU.end(), vertices.begin(), vertices.end());
-	for (unsigned& ind : indices) ind += m_vertexCount; 
-	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
+	// Ensure vertices is not empty.
+	if (!vertices.size())  return;
+	// Store data buffer positions.
+	if (vertexPos) *vertexPos = m_vertexCount;
+	if (indexPos)  *indexPos  = m_indexCount;
+	// Add vertices.
+	m_vertexCPU.reserve(m_vertexCount + vertices.size());
+	for (std::unique_ptr<VertexType>& vertex : vertices) 
+	{ 
+		// Will insert be faster?
+		m_vertexCPU.push_back(std::move(vertex)); 
+	}  
+	// Add indices.
+	m_indexCPU.reserve(m_indexCount + indices.size());
+	for (unsigned& ind : indices)
+	{
+		// First offset the index.
+		ind += m_vertexCount;
+		m_indexCPU.push_back(std::move(ind));
+	}
+	// Increment counts.
 	m_vertexCount += vertices.size();
 	m_indexCount += indices.size();
+	// Set the VAO to be resized.
 	resize();
 }
 
 template <typename VertexType>
 void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigned vertexCount, unsigned indexPos, unsigned indexCount)
 {
+	// Check if no data is to be deleted.
 	if (!m_vertexCount) return;
+	// Remove data from VAO.
 	m_vertexCPU.erase(m_vertexCPU.begin() + vertexPos, m_vertexCPU.begin() + vertexPos + vertexCount);
+	m_vertexCPU.shrink_to_fit();
 	m_indexCPU.erase(m_indexCPU.begin() + indexPos, m_indexCPU.begin() + indexPos + indexCount);
+	m_indexCPU.shrink_to_fit();
+	// Decrement counts.
 	m_vertexCount -= vertexCount;
 	m_indexCount -= indexCount;
+	// Offset indices placed after deleted indices.
 	for (int i = indexPos; i < m_indexCount; i++) m_indexCPU[i] -= vertexCount; 
+	// Set the VAO to be resized.
 	resize();
 }
+
+//=============================================================================================================================================//
+//  Primitives buffer.					  																									   //
+//=============================================================================================================================================//
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive)
+{
+	// Store primitive position in VAO.
+	primitive->m_primitiveBufferPos = m_primitives.size();
+	// Add primitive.
+	m_primitives.push_back(primitive);
+	// Reserve data for the sync vector.
+	m_primitivesToSync.reserve(m_primitives.size());
+}	
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexCount, int indexCount)
+{
+	// Remove primitive from the VAO vector.
+	m_primitives.erase(m_primitives.begin() + primitiveIndex);
+	m_primitives.shrink_to_fit();
+	// Change metadata of primitives that sit after the popped primitive.
+	for (int i = primitiveIndex; i < m_primitives.size(); i++)
+	{
+		PrimitivePtr* primitive = m_primitives[i];
+		primitive->m_indexBufferPos -= indexCount;
+		primitive->m_vertexBufferPos -= vertexCount;
+		primitive->m_primitiveBufferPos -= 1;
+	}
+	// Reserve data for the sync vector.
+	m_primitivesToSync.reserve(m_primitives.size());
+}
+
+//=============================================================================================================================================//
+//  GPU management.																															   //
+//=============================================================================================================================================//
+
+template <typename VertexType>
+void VertexArrayObject<VertexType>::resizeBuffer()
+{
+	// Resize VBO.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0]->getTotalSize(), NULL, GL_DYNAMIC_DRAW));
+	// Write the data to the VBO.
+	unsigned int index = 0;
+	for (std::unique_ptr<VertexType>& vertex : m_vertexCPU)  // There has to be a way to change this to one draw call.
+	{
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->dataGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->idGL()));
+		index += 1;
+	}
+	// Resize IBO and write data.
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), m_indexCPU.data(), GL_DYNAMIC_DRAW));
+	// Update flags.
+	m_synced = true;
+	m_sized = true;
+	// All primitives have been synced.
+	m_primitivesToSync.clear();
+}
+
+// Could there be a situation where a removed primitive is set to be synced?
+template <typename VertexType>
+void VertexArrayObject<VertexType>::syncBuffer()
+{
+	// Write changed primitives to VBO.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+	for (PrimitivePtr*& primitive : m_primitivesToSync) 
+	{
+		// Sync the primitive vertices.
+		for (int index = primitive->m_vertexBufferPos; index < primitive->m_vertexCount + primitive->m_vertexBufferPos; index++)
+		{
+			std::unique_ptr<VertexType>& vertex = m_vertexCPU[index];
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->dataGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->idGL()));
+		}
+	}
+	// Update flags.
+	m_synced = true;
+	// Primitives have been synced.
+	m_primitivesToSync.clear();
+}
+
+//=============================================================================================================================================//
+//  Wiping.					  																										           //
+//=============================================================================================================================================//
 
 template <typename VertexType>
 void VertexArrayObject<VertexType>::wipeCPU()
@@ -202,10 +325,15 @@ void VertexArrayObject<VertexType>::wipeCPU()
 	m_indexCPU.clear();
 	m_indexCPU.shrink_to_fit();
 	m_indexCount = 0;
+	// Clear primitives.
+	m_primitives.clear();
+	m_primitives.shrink_to_fit();
+	m_primitivesToSync.clear();
+	m_primitivesToSync.shrink_to_fit();
 }
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::wipeGPU() 
+void VertexArrayObject<VertexType>::wipeGPU()
 {
 	// Wipe VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
@@ -214,99 +342,12 @@ void VertexArrayObject<VertexType>::wipeGPU()
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW));
 }
-	
+
 template <typename VertexType>
-void VertexArrayObject<VertexType>::wipe() 
+void VertexArrayObject<VertexType>::wipe()
 {
 	wipeCPU();
 	wipeGPU();
-}
-
-//=============================================================================================================================================//
-//  Primitives buffer.					  																									   //
-//=============================================================================================================================================//
-
-template <typename VertexType>
-void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive)
-{
-	primitive->m_primitiveBufferPos = m_primitives.size();
-	m_primitives.push_back(primitive);
-}	
-
-template <typename VertexType>
-void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexCount, int indexCount)
-{
-	m_primitives.erase(m_primitives.begin() + primitiveIndex);
-	for (int i = primitiveIndex; i < m_primitives.size(); i++)
-	{
-		PrimitivePtr* primitive = m_primitives[i];
-		primitive->m_indexBufferPos -= indexCount;
-		primitive->m_vertexBufferPos -= vertexCount;
-		primitive->m_primitiveBufferPos -= 1;
-	}
-}
-
-//=============================================================================================================================================//
-//  GPU management.																															   //
-//=============================================================================================================================================//
-
-template <typename VertexType>
-void VertexArrayObject<VertexType>::resizeGPU()
-{
-	// Check if empty.
-	if (!m_vertexCount)
-	{
-		m_sized = true;
-		m_synced = true;
-		return;
-	}
-
-	// Set the buffer pointer.
-	unsigned int index = 0;
-	// Resize VBO.
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0].getTotalSize(), NULL, GL_DYNAMIC_DRAW));
-	// Write the data to the buffers.
-	for (VertexType& vertex : m_vertexCPU) 
-	{
-		// VBO.
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.idGL()));
-		index += 1;
-	}
-	// Resize IBO and write data.
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), m_indexCPU.data(), GL_DYNAMIC_DRAW));
-
-	// Update flags.
-	m_synced = true;
-	m_sized = true;
-}
-
-template <typename VertexType>
-void VertexArrayObject<VertexType>::syncGPU()
-{
-	// Check if empty.
-	if (!m_vertexCount)
-	{
-		m_synced = true;
-		return;
-	}
-
-	// Set the buffer pointer.
-	unsigned int index = 0;
-	// Write the data to the buffers.
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-	for (VertexType& vertex : m_vertexCPU) 
-	{
-		// VBO.
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.idGL()));
-		index += 1;
-	}
-
-	// Update flags.
-	m_synced = true;
 }
 
 //=============================================================================================================================================//

@@ -11,8 +11,8 @@ for a VAO to be able to render the entity to the screen.
 
 #include <vector>
 #include <memory>
-#include "Entity.h"
-#include "Vertex.h"
+#include "External/GLM/glm.hpp"
+#include "CoreGL/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -33,7 +33,7 @@ public:
 	unsigned m_vertexCount = 0;			// Counts the amount of vertices.
 	unsigned m_indexCount = 0;			// Counts the amount of indices.
 	unsigned m_vertexBufferPos = 0;		// The start position of the entity in the VAO.
-	unsigned m_indexBufferPos = 0;		// The position in the indeces buffer.
+	unsigned m_indexBufferPos = 0;		// The position in the indices buffer.
 	unsigned m_primitiveBufferPos = 0;	// The primitive position in the VAO buffer.
 
 	PrimitivePtr(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}

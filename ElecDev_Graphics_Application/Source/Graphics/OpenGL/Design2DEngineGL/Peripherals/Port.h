@@ -4,10 +4,10 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "CoreGL/Entities/Entity.h"
 #include <string>
 #include <memory>
-#include "glm.hpp"
+#include "External/GLM/glm.hpp"
+#include "CoreGL/Entities/Entity.h"
 #include "CoreGL/Entities/Circle.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Text.h"
@@ -17,14 +17,13 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-struct Font;
-
 class Polygon2D;
 class Component2D;
 class Cable;
 class Scene;
-
 class IOIndicator;
+
+struct Font;
 
 //==============================================================================================================================================//
 //  Data.																																		//

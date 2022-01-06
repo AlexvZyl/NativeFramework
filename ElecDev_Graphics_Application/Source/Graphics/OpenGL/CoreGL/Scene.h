@@ -24,7 +24,7 @@ class VertexArrayObject;
 class Camera;
 class VertexData;
 class VertexDataTextured;
-class VertexDataCircle;
+class VertexDataCircle; 
 class Event;
 
 enum class CameraType;
@@ -41,7 +41,7 @@ public:
 	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 16);
 	// Set the MSAA samples.
 	void setMSAA(unsigned samples);
-	// Pass events on to the camera.
+	// Handle events.
 	void onEvent(Event& event);
 	// Returns the rendered texture.
 	unsigned getRenderTexture();
@@ -58,10 +58,10 @@ public:
 	// Resizes the scene based on a viewport change.
 	void resize(int width, int heigth);
 
+private:
+
 	// Map containing all of the different primitives.
 	std::map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
-
-private:
 
 	// Friends.
 	friend class Renderer;
