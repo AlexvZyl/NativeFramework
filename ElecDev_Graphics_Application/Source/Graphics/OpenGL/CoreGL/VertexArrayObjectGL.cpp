@@ -188,7 +188,7 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr
 	if (indexPos)  *indexPos  = m_indexCount;
 	// Add vertices.
 	m_vertexCPU.reserve(m_vertexCount + vertices.size());
-	for (std::unique_ptr<VertexType>& vertex : vertices) { m_vertexCPU.push_back(std::move(vertex)); }
+	for (std::unique_ptr<VertexType>& vertex : vertices) { m_vertexCPU.push_back(std::move(vertex)); }  //  Will insert be faster?
 	// Offset indices and add it to the VAO.
 	for (unsigned& ind : indices) ind += m_vertexCount; 
 	m_indexCPU.reserve(m_indexCount + indices.size());
