@@ -26,13 +26,12 @@ Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec3 center, float
 	glm::vec3 pos3(center.x + radius, center.y - radius, center.z);
 	glm::vec3 pos4(center.x - radius, center.y - radius, center.z);
 	// Create vertices.
-	std::vector<VertexDataCircle> vertices =
-	{
-		VertexDataCircle(pos1, local1, m_colour, m_thickness, m_fade, m_entityID),
-		VertexDataCircle(pos2, local2, m_colour, m_thickness, m_fade, m_entityID),
-		VertexDataCircle(pos3, local3, m_colour, m_thickness, m_fade, m_entityID),
-		VertexDataCircle(pos4, local4, m_colour, m_thickness, m_fade, m_entityID)
-	};
+	std::vector<std::unique_ptr<VertexDataCircle>> vertices;
+	vertices.reserve(4);
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos1, local1, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos2, local2, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos3, local3, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos4, local4, m_colour, m_thickness, m_fade, m_entityID));
 	std::vector<unsigned> indices = {0,1,2,2,3,0};
 	m_vertexCount = 4;
 	m_indexCount = 6;

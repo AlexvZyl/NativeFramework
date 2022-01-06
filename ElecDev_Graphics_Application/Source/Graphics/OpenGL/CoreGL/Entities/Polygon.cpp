@@ -19,13 +19,13 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
-	std::vector<VertexData> vertexVector;
+	std::vector<std::unique_ptr<VertexData>> vertexVector;
 	std::vector<unsigned> indices;
 
 	// Create the vertices.
 	for (glm::vec3 vertex : vertices)
 	{
-		vertexVector.push_back(VertexData(vertex, m_colour, m_entityID));
+		vertexVector.push_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
 	}
 
 	// Assign the indices based on the VAO type.

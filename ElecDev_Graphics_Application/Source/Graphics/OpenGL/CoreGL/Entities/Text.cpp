@@ -45,6 +45,9 @@ Text::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 
 void Text::generateText(std::string text)
 {
+	// Init.
+	m_cursorStart = m_trackedCenter;
+
 	// Return if text is empty.
 	// Push primitive so that the VAO still keeps track of it.
 	if (!text.size()) 
@@ -55,19 +58,20 @@ void Text::generateText(std::string text)
 		return; 
 	}
 
-	// Variables to use.
-	std::vector<VertexDataTextured> vertices;
+	// Create variables and reserve memory.
+	std::vector<std::unique_ptr<VertexDataTextured>> vertices;
 	std::vector<unsigned> indices;
-
-	m_cursorStart = m_trackedCenter;
-	m_textLength = 0;
+	int charCount = text.length();
+	indices.reserve((charCount + 1) * 6);	// Add one to the char count for
+	vertices.reserve((charCount + 1) * 4);	// the text box.
 
 	// ------------------- //
 	//  A L I G N M E N T  //
 	// ------------------- //
 
 	// Calculate the string length with kerning.
-	for (int i = 0; i < (int)text.length(); i++)
+	m_textLength = 0;
+	for (int i = 0; i < charCount; i++)
 	{
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
@@ -149,27 +153,23 @@ void Text::generateText(std::string text)
 	// Vertex 1.
 	glm::vec3 pos1(m_cursorStart.x, m_cursorStart.y + m_font->descender * m_textScale, boxZPos);
 	glm::vec2 tex1(0.f, 0.f);
-	VertexDataTextured v1(pos1, m_boxColor, tex1, 0, m_entityID);
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos1, m_boxColor, tex1, 0, m_entityID));
 	// -----------------------
 	// Vertex2.
 	glm::vec3 pos2(m_cursorStart.x, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos);
 	glm::vec2 tex2(0.f, 1.f);
-	VertexDataTextured v2(pos2, m_boxColor, tex2, 0, m_entityID);
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos2, m_boxColor, tex2, 0, m_entityID));
 	// -----------------------
 	// Vertex 3.
 	glm::vec3 pos3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos);
 	glm::vec2 tex3(1.f, 1.f);
-	VertexDataTextured v3(pos3, m_boxColor, tex3, 0, m_entityID);
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos3, m_boxColor, tex3, 0, m_entityID));
 	// -----------------------
 	// Vertex 4.
 	glm::vec3 pos4(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos);
 	glm::vec2 tex4(0.f, 1.f);
-	VertexDataTextured v4(pos4, m_boxColor, tex4, 0, m_entityID);
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos4, m_boxColor, tex4, 0, m_entityID));
 	// -----------------------
-
-	// Insert vertices.
-	vertices.insert(vertices.end(), { v1,v2,v3,v4 });
-	// Insert indices.
 	indices.insert(indices.end(),
 		{
 			0 + m_vertexCount,
@@ -179,6 +179,7 @@ void Text::generateText(std::string text)
 			3 + m_vertexCount,
 			0 + m_vertexCount
 		});
+	// Increment counts.
 	m_vertexCount += 4;
 	m_indexCount += 6;
 	// -----------------------
@@ -201,9 +202,9 @@ void Text::generateText(std::string text)
 	// can implement a system that binds the required font texture atlas
 	// as needed before the draw calls.
 
-	float totalAdvance = 0;
 	// Generate a quad for each character.
-	for (int i = 0; i < (int)text.length(); i++)
+	float totalAdvance = 0;
+	for (int i = 0; i < charCount; i++)
 	{
 		// -----------------------
 		// Load character.
@@ -228,7 +229,7 @@ void Text::generateText(std::string text)
 			m_cursorStart.z
 		);
 		glm::vec2 tex1(c.xTextureCoords[0], c.yTextureCoords[0]);
-		VertexDataTextured v1(pos1, m_colour, tex1, 1, m_entityID);
+		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos1, m_colour, tex1, 1, m_entityID));
 		// -----------------------
 		// Vertex2.
 		glm::vec3 pos2
@@ -238,7 +239,7 @@ void Text::generateText(std::string text)
 			m_cursorStart.z
 		);
 		glm::vec2 tex2(c.xTextureCoords[0], c.yTextureCoords[1]);
-		VertexDataTextured v2(pos2, m_colour, tex2, 1, m_entityID);
+		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos2, m_colour, tex2, 1, m_entityID));
 		// -----------------------
 		// Vertex 3.
 		glm::vec3 pos3
@@ -248,7 +249,7 @@ void Text::generateText(std::string text)
 			m_cursorStart.z
 		);
 		glm::vec2 tex3(c.xTextureCoords[1], c.yTextureCoords[1]);
-		VertexDataTextured v3(pos3, m_colour, tex3, 1, m_entityID);
+		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos3, m_colour, tex3, 1, m_entityID));
 		// -----------------------
 		// Vertex 4.
 		glm::vec3 pos4
@@ -258,10 +259,8 @@ void Text::generateText(std::string text)
 			m_cursorStart.z
 		);
 		glm::vec2 tex4(c.xTextureCoords[1], c.yTextureCoords[0]);
-		VertexDataTextured v4(pos4, m_colour, tex4, 1, m_entityID);
+		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos4, m_colour, tex4, 1, m_entityID));
 		// -----------------------
-		// Insert vertices.
-		vertices.insert(vertices.end(), { v1,v2,v3,v4 });
 		// Insert indices.
 		indices.insert(indices.end(),
 			{
@@ -272,12 +271,14 @@ void Text::generateText(std::string text)
 				3 + m_vertexCount,
 				0 + m_vertexCount
 			});
-		m_vertexCount += 4;
-		m_indexCount += 6;
 		// Move cursor for next character.
 		totalAdvance += c.xAdvance + kerning;
+		// Increment counts.
+		m_vertexCount += 4;
+		m_indexCount += 6;
 		// -----------------------
 	}
+
 	// Write data to VAO.
 	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
 	m_VAO->pushPrimitive(this);

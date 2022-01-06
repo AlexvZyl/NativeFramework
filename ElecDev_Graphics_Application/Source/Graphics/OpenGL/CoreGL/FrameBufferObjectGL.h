@@ -49,7 +49,7 @@ private:
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_renderVAO;
 
 	// Shader to render the scene with.
-	std::unique_ptr<Shader> m_shader;
+	static std::unique_ptr<Shader> m_shader;
 
 public:
 

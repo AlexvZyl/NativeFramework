@@ -88,7 +88,7 @@ public:
 
 	// Append the vertex data to the buffer.
 	// It returns the position of the vertex data in the vector.
-	void appendVertexData(std::vector<VertexType>& vertices, std::vector<unsigned>& indices,
+	void appendVertexData(std::vector<std::unique_ptr<VertexType>>& vertices, std::vector<unsigned>& indices,
 						  unsigned* vertexPos = nullptr, unsigned* indexPos = nullptr);
 	// Removes vertex data from the VBO.
 	void deleteVertexData(unsigned vertexPos, unsigned vertexCount,

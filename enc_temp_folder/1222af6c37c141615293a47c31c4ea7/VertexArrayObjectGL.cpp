@@ -184,14 +184,14 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr
 	// Ensure vertices is not empty.
 	if (!vertices.size())  return;
 	// Store data buffer positions.
-	if (vertexPos) *vertexPos = m_vertexCount;
-	if (indexPos)  *indexPos  = m_indexCount;
+	if (vertexPos)        *vertexPos = m_vertexCount;
+	if (indexPos)         *indexPos  = m_indexCount;
 	// Add vertices.
 	m_vertexCPU.reserve(m_vertexCount + vertices.size());
 	for (std::unique_ptr<VertexType>& vertex : vertices) { m_vertexCPU.push_back(std::move(vertex)); }
 	// Offset indices and add it to the VAO.
-	for (unsigned& ind : indices) ind += m_vertexCount; 
 	m_indexCPU.reserve(m_indexCount + indices.size());
+	for (unsigned& ind : indices) ind += m_vertexCount; 
 	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
 	// Increment counts.
 	m_vertexCount += vertices.size();

@@ -16,14 +16,14 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	std::vector<VertexData> vertexVector;
+	std::vector<std::unique_ptr<VertexData>> vertexVector;
 	std::vector<glm::vec3> vertices;
 	vertices.push_back(glm::vec3(0.f, 0.008f, 0.9f));
 	vertices.push_back(glm::vec3(0.f, -0.008f, 0.9f));
 	vertices.push_back(glm::vec3(0.008f, 0.f, 0.9f));
 	vertices.push_back(glm::vec3(-0.008f, 0.f, 0.9f));
 	for (glm::vec3 vertex : vertices)
-		vertexVector.push_back(VertexData(vertex, m_colour, m_entityID));
+		vertexVector.push_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
 	m_vertexCount = vertexVector.size();
 
 	// --------------- //
@@ -79,14 +79,14 @@ void IOIndicator::setType(PortType type, PortPosition position)
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	std::vector<VertexData> vertexVector;
+	std::vector<std::unique_ptr<VertexData>> vertexVector;
 	std::vector<glm::vec3> vertices;
 	vertices.push_back(glm::vec3(0.f, 0.008f, 0.9f));
 	vertices.push_back(glm::vec3(0.f, -0.008f, 0.9f));
 	vertices.push_back(glm::vec3(0.008f, 0.f, 0.9f));
 	vertices.push_back(glm::vec3(-0.008f, 0.f, 0.9f));
 	for (glm::vec3 vertex : vertices)
-		vertexVector.push_back(VertexData(vertex, m_colour, m_entityID));
+		vertexVector.push_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
 	m_vertexCount = vertexVector.size();
 
 	// --------------- //
