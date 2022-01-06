@@ -19,9 +19,9 @@ void LineSegment::translate(glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.position += translation3;
+		m_VAO->m_vertexCPU[i]->data.position += translation3;
 	m_trackedCenter += translation3;
 	m_start += translation;
 	m_end += translation;
-	m_VAO->sync();
+	m_VAO->sync(this);
 }

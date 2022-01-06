@@ -297,25 +297,25 @@ void Text::setBoxColour(glm::vec4 colour)
 { 
 	m_boxColor = colour;
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++) 
-		m_VAO->m_vertexCPU[i].data.color = colour; 
-	m_VAO->sync();
+		m_VAO->m_vertexCPU[i]->data.color = colour;
+	m_VAO->sync(this);
 }
 
 void Text::setColor(glm::vec4& color) 
 {
 	m_colour = color;
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.color = color;
-	m_VAO->sync();
+		m_VAO->m_vertexCPU[i]->data.color = color;
+	m_VAO->sync(this);
 }
 
 void Text::setLayer(float layer)
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++)
-		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
+		m_VAO->m_vertexCPU[i]->data.position.z = layer - 0.001;
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.position.z = layer;
-	m_VAO->sync();
+		m_VAO->m_vertexCPU[i]->data.position.z = layer;
+	m_VAO->sync(this);
 }
 
 //=============================================================================================================================================//

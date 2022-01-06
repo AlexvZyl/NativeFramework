@@ -29,7 +29,7 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 	}
 
 	// Assign the indices based on the VAO type.
-	if (m_VAO->m_bufferType == GL_TRIANGLES)
+	if (m_VAO->getBufferType() == GL_TRIANGLES)
 	{
 		for (int i = 2; i < m_vertexCount; i++) 
     {
@@ -38,7 +38,7 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 			indices.push_back(i);
 		}
 	}
-	else if (m_VAO->m_bufferType == GL_LINES)
+	else if (m_VAO->getBufferType() == GL_LINES)
 	{
 		for (int i = 1; i < m_vertexCount; i++) 
     {

@@ -80,9 +80,9 @@ public:
 	// Add a clear 2D polygon.
 	static Polygon2D* addPolygon2DClear(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
 	// Add a circle.
-	static Circle* addCircle2D(glm::vec3& center, float radius, glm::vec4& color = {0.f, 0.f, 0.f, 1.f}, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
+	static Circle* addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a circle.
-	static Circle* addCircle2D(glm::vec2& center, float radius, glm::vec4& color = {0.f, 0.f, 0.f, 1.f}, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
+	static Circle* addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a singular line segment.
 	static LineSegment* addLineSegment2D(glm::vec2 start, glm::vec2 end, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Add a 2D text string.
