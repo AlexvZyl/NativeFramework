@@ -55,8 +55,6 @@ public:
 	static void remove(Primitive<VertexDataTextured>* primitive);
 	// Remove the primitive from the scene.
 	static void remove(Primitive<VertexDataCircle>* primitive);
-	// Return the currently bound scene.
-	static Scene* getScene();
 
 	// ------------- //
 	//  S C E N E S  //
@@ -64,6 +62,8 @@ public:
 
 	// Bind a new scene.
 	static void bindScene(Scene* scene);
+	// Return the currently bound scene.
+	static Scene* getScene();
 	// Render the currently bound scene.
 	static void renderScene();
 	// Render the specified scene.

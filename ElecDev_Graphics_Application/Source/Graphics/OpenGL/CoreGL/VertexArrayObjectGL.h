@@ -22,16 +22,18 @@ class PrimitivePtr;
 class VertexArrayObjectPtr 
 { 
 public:
-	std::vector<PrimitivePtr*> m_primitives; // Pointers to all of the primitives that have vertices in the VAO.	
-	GLenum m_bufferType = 0;				 // Data type used in this VAO.	
 
 	// Constructor.
 	VertexArrayObjectPtr(GLenum type) : m_bufferType(type) {}
+	// Get the type of the VAO.
+	GLenum getBufferType() return m_bufferType; 
 	
 private:
 	template <class VertexType>
 	friend class VertexArrayObject;
 
+	GLenum m_bufferType = 0;				 // Data type used in this VAO.	
+	std::vector<PrimitivePtr*> m_primitives; // Pointers to all of the primitives that have vertices in the VAO.	
 	unsigned int m_VAOID = 0;				 // Vertex Array Object.
 	unsigned int m_VBOID = 0;				 // Vertex Buffer Objext.	
 	unsigned int m_IBOID = 0;				 // Index Buffer Object.
@@ -49,15 +51,6 @@ template <class VertexType>
 class VertexArrayObject : public VertexArrayObjectPtr
 {	
 public:
-
-	// --------- //
-	//  D A T A  //
-	// --------- //
-
-	// Vertices stores CPU side.
-	std::vector<VertexType> m_vertexCPU;
-	// The indices for the buffer.
-	std::vector<unsigned> m_indexCPU;
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -114,6 +107,13 @@ public:
 	void pushPrimitive(PrimitivePtr* primitive);
 	// Remove the primitive from the VAO.
 	void popPrimitive(int primitiveIndex, int vertexCount, int indexCount);
+
+private:
+
+	// Vertices stores CPU side.
+	std::vector<VertexType> m_vertexCPU;
+	// The indices for the buffer.
+	std::vector<unsigned> m_indexCPU;
 };
 
 //=============================================================================================================================================//
