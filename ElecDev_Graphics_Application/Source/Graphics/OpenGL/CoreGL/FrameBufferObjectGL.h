@@ -29,28 +29,6 @@ class Shader;
 
 class FrameBufferObject 
 {
-private:
-
-	// FBO that will be rendered.
-	unsigned int m_renderFrameBufferID;			// FBO ID.
-	unsigned int m_renderColorTextureID;		// Texture ID.	
-	unsigned int m_renderEntityIDTextureID;		// Texture containing the entity ID's.
-
-	// MSAA FBO.
-	unsigned int m_msaaFrameBufferID;			// FBO ID.
-	unsigned int m_msaaColorTextureID;			// Texture ID.	
-	unsigned int m_msaaDepthStencilBufferID;	// Depth/Stencil buffer.
-	unsigned int m_msaaEntityIDTextureID;		// Texture containing the entity ID's.
-
-	// The multisampling level (how many samples per pixel?).
-	int m_MSAA = 1;
-
-	// VAO that will render the quad to the render texture.
-	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_renderVAO;
-
-	// Shader to render the scene with.
-	static std::unique_ptr<Shader> m_shader;
-
 public:
 
 	// Saves the FBO size.
@@ -90,6 +68,30 @@ public:
 	// Return the ID of the entity at the pixel coordinates.
 	unsigned int getEntityID(glm::vec2& pixelCoords);
 
+private:
+
+	// Friends.
+	friend class Renderer;
+
+	// FBO that will be rendered.
+	unsigned int m_renderFrameBufferID;			// FBO ID.
+	unsigned int m_renderColorTextureID;		// Texture ID.	
+	unsigned int m_renderEntityIDTextureID;		// Texture containing the entity ID's.
+
+	// MSAA FBO.
+	unsigned int m_msaaFrameBufferID;			// FBO ID.
+	unsigned int m_msaaColorTextureID;			// Texture ID.	
+	unsigned int m_msaaDepthStencilBufferID;	// Depth/Stencil buffer.
+	unsigned int m_msaaEntityIDTextureID;		// Texture containing the entity ID's.
+
+	// The multisampling level (how many samples per pixel?).
+	int m_MSAA = 1;
+
+	// VAO that will render the quad to the render texture.
+	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_renderVAO;
+
+	// Shader to render the scene with.
+	static std::unique_ptr<Shader> m_shader;
 };
 
 //=============================================================================================================================================//

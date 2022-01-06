@@ -69,9 +69,6 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	vertices.emplace_back(std::make_unique<VertexDataTextured>( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1));
 	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
 	m_renderVAO->appendVertexData(vertices, indices);
-
-	// Generate the shader.
-	FrameBufferObject::m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
 	unsigned texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
 	int msaaTextureID = 2;	// Reserved for FBO redering.
 	m_shader->bind();

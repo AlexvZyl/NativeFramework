@@ -2,27 +2,24 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Texture.h"
-#include "Renderer.h"
-#include "Scene.h"
-#include "Camera.h"
 #include "glad/glad.h"
-#include "ErrorHandlerGL.h"
-#include "FrameBufferObjectGL.h"
-#include "VertexArrayObjectGL.h"
-#include "ShaderHandlerGL.h"
 #include "Resources/ResourceHandler.h"
-#include "Entities/Vertex.h"
-#include "Entities/Polygon.h"
-#include "Entities/EntityManager.h"
-#include "Entities/Circle.h"
-#include "Entities/LineSegment.h"
-#include "Entities/Text.h"
-#include "FontLoader.h"
+#include "CoreGL/ShaderHandlerGL.h"
+#include "CoreGL/Texture.h"
+#include "CoreGL/Renderer.h"
+#include "CoreGL/Camera.h"
+#include "CoreGL/Scene.h"
+#include "CoreGL/Entities/Polygon.h"
+#include "CoreGL/Entities/EntityManager.h"
+#include "CoreGL/Entities/Circle.h"
+#include "CoreGL/Entities/LineSegment.h"
+#include "CoreGL/Entities/Text.h"
 #include "CoreGL/Entities/Primitive.h"
 #include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/FontLoader.h"
 #include "CoreGL/ErrorHandlerGL.h"
 #include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/FrameBufferObjectGL.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -49,11 +46,14 @@ void Renderer::loadDefaultFont()
 
 void Renderer::compileShaders()
 {
+	// Renderer shaders.
 	m_shaders.insert({ "BackgroundShader2D" , std::make_unique<Shader>(BACKGROUND_SHADER_2D) });
 	m_shaders.insert({ "BackgroundShader3D" , std::make_unique<Shader>(BACKGROUND_SHADER_3D) });
 	m_shaders.insert({ "BasicShader"        , std::make_unique<Shader>(BASIC_SHADER)		 });
 	m_shaders.insert({ "TextureShader"      , std::make_unique<Shader>(TEXTURE_SHADER)		 });
 	m_shaders.insert({ "CircleShader"       , std::make_unique<Shader>(CIRCLE_SHADER)		 });
+	// FBO shader.
+	FrameBufferObject::m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
 }
 
 Scene* Renderer::getScene() 
