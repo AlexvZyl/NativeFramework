@@ -68,8 +68,10 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	// Add the first line segment and first node.
 	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
 	m_nodes.push_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+
 	// Add all inter-node line segments, and the rest of the nodes.
-	for (int i = 1; i < nodeList.size(); i++) {
+	for (int i = 1; i < nodeList.size(); i++) 
+	{
 		m_lines.push_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
 		m_nodes.push_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
 	}
@@ -140,10 +142,10 @@ void Cable::setContext(GUIState* guiState)
 
 void Cable::attach(Port* endPort)
 {
-	//keep pointer to end port
+	// Keep pointer to end port.
 	m_endPort = endPort;
 
-	//test to see ensure the cable enters perpendicular to the component edge
+	// Test to see ensure the cable enters perpendicular to the component edge.
 	LineOrientation portOrientation;
 	switch (endPort->m_position) {
 	case PortPosition::TOP:

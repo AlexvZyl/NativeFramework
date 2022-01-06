@@ -30,33 +30,33 @@ class Text : public Primitive<VertexDataTextured>
 {
 public:
 
-	float m_textScale = 1;
-	Font* m_font;
-	std::string m_verticalAlign;
-	std::string m_horizontalAlign;
-	float m_textLength = 0;
-	glm::vec3 m_cursorStart = { 0.f, 0.f, 0.f };
-	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
-
 	// Constructor.
 	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 		 VertexArrayObject<VertexDataTextured>* vao, Font& font, Entity* parent,
 		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
-	// Generates the textured quads.
-	void generateText(std::string text);
-
 	// Updates the text of the text entity.
 	void updateText(std::string text);
 	// Sets the text box colour.
 	void setBoxColour(glm::vec4 colour);
 	// Sets the text colour only.
-	// Has to be overridden from the parent class since the
-	// parent class will change the text box colour as well.
 	virtual void setColor(glm::vec4& color) override;
 	// Sets the later of the text entity.
-	// This has to be overridden so that the box and text can be 
-	// set seperately.
+	// Currently the text box layer is automatically set to be right behind the text.
 	virtual void setLayer(float layer) override;
+
+private:
+
+	// Data.
+	glm::vec3 m_cursorStart = { 0.f, 0.f, 0.f };
+	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
+	Font* m_font = nullptr;
+	float m_textScale = 1;
+	std::string m_verticalAlign = "L";
+	std::string m_horizontalAlign = "B";
+	float m_textLength = 0;
+
+	// Generates the textured quads.
+	void generateText(std::string text);
 };
 
 //=============================================================================================================================================//

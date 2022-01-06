@@ -2,11 +2,12 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "Primitive.h"
 #include <vector>
 #include "../GUI/GUIState.h"
+#include "CoreGL/Entities/Primitive.h"
+#include "CoreGL/VertexArrayObjectGL.h"
 #include "CoreGL/Renderer.h"
+#include "CoreGL/Entities/Vertex.h"
 
 //=============================================================================================================================================//
 //  Constructor and Deconstructor.																											   //

@@ -65,26 +65,26 @@ void Text::generateText(std::string text)
 	indices.reserve((charCount + 1) * 6);	// Add one to the char count for
 	vertices.reserve((charCount + 1) * 4);	// the text box.
 
-	// ------------------- //
-	//  A L I G N M E N T  //
-	// ------------------- //
-
-	// Calculate the string length with kerning.
+	// Calculate the string length with kerning. 
+	// (Kerning does not apply to the first character)
 	m_textLength = 0;
-	for (int i = 0; i < charCount; i++)
+	m_textLength += m_font->characterDictionary[text[0]].xAdvance;  
+	for (int i = 1; i < charCount; i++)
 	{
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
-		if (i != 0)  // Kerning does not apply to the first character.
-		{
-			unsigned currCharacter = m_font->characterDictionary.at(text[i]).id;
-			unsigned prevCharacter = m_font->characterDictionary.at(text[i - 1]).id;
-			std::pair kerningPair = std::pair(prevCharacter, currCharacter);
-			if (m_font->kerningDictionary.count(kerningPair))	// Check if kerning exists for current pair.
-				kerning = m_font->kerningDictionary.at(kerningPair);
-		}
+		unsigned currCharacter = m_font->characterDictionary.at(text[i]).id;
+		unsigned prevCharacter = m_font->characterDictionary.at(text[i - 1]).id;
+		std::pair kerningPair = std::pair(prevCharacter, currCharacter);
+		if (m_font->kerningDictionary.count(kerningPair))	// Check if kerning exists for current pair.  OPTIMIZE!
+			kerning = m_font->kerningDictionary.at(kerningPair);
+		// Add character length to total.
 		m_textLength += m_font->characterDictionary[text[i]].xAdvance + kerning;
 	}
+
+	// ------------------- //
+	//  A L I G N M E N T  //
+	// ------------------- //
 
 	// Horizontal alignment.
 	if (m_horizontalAlign == "C" || m_horizontalAlign == "c") 
@@ -93,7 +93,7 @@ void Text::generateText(std::string text)
 	}
 	else if (m_horizontalAlign == "R" || m_horizontalAlign == "r") 
 	{ 
-		Character endChar = m_font->characterDictionary.at(text[text.size()-1]);
+		Character endChar = m_font->characterDictionary.at(text[charCount-1]);
 		float offset = endChar.xAdvance - endChar.xPlaneBounds[1];
 		m_cursorStart.x = m_cursorStart.x - (m_textLength - offset) * m_textScale;
 	}
@@ -123,7 +123,7 @@ void Text::generateText(std::string text)
 	}
 	else if (m_verticalAlign == "B" || m_verticalAlign == "b") 
 	{
-		/* Bottom is the default setting. */ 
+		// Bottom is the default setting.
 	}
 	// Display error.
 	else	
@@ -211,7 +211,7 @@ void Text::generateText(std::string text)
 		Character c = m_font->characterDictionary.at(text[i]);
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
-		if (i != 0)  // Kerning does not apply to the first character.
+		if (i)  // Kerning does not apply to the first character.
 		{
 			unsigned currCharacter = m_font->characterDictionary.at(text[i]).id;
 			unsigned prevCharacter = m_font->characterDictionary.at(text[i - 1]).id;

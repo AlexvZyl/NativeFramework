@@ -8,8 +8,8 @@
 #include "glm.hpp"
 #include <memory>
 #include <vector>
-#include "CoreGL/Entities/Entity.h"
 #include "Port.h"
+#include "CoreGL/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //

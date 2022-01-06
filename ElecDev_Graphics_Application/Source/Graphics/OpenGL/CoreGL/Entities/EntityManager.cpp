@@ -1,18 +1,32 @@
+//==============================================================================================================================================//
+//  Includes.																																	//
+//==============================================================================================================================================//
+
 #include "EntityManager.h"
 #include <iostream>
+
+//==============================================================================================================================================//
+//  Static inits.																																//
+//==============================================================================================================================================//
 
 unsigned EntityManager::lastID = 0;
 std::vector<unsigned> EntityManager::freeIDs;
 std::vector<Entity*> EntityManager::entityLog;
 
+//==============================================================================================================================================//
+//  Methods.																																	//
+//==============================================================================================================================================//
+
 unsigned EntityManager::generateEID(Entity* entity)
 {
-	//Check to see if there are any freed (recycled) IDs
-	if (!freeIDs.size()) {
+	// Check to see if there are any freed (recycled) ID's.
+	if (!freeIDs.size()) 
+	{
 		entityLog.push_back(entity);
 		return ++lastID;
 	}
-	else {//recycle IDs
+	else  // Recycle ID's.
+	{
 		unsigned freeID = freeIDs.back();
 		freeIDs.pop_back();
 		entityLog[freeID - 1] = entity;
@@ -23,14 +37,16 @@ unsigned EntityManager::generateEID(Entity* entity)
 void EntityManager::freeEID(unsigned EID)
 {	
 	// To free the last EID, we can simply decrement LastID
-	if (EID == lastID) { 
+	if (EID == lastID) 
+	{ 
 		lastID--; 
 		entityLog.pop_back();
 	}
 	// Remember to recycle this ID.
-	else			   { 
+	else			   
+	{ 
 		freeIDs.push_back(EID); 
-		//Consider invalidating pointers to deleted entities in the log here.
+		// Consider invalidating pointers to deleted entities in the log here.
 	}
 }
 
@@ -52,4 +68,12 @@ Entity* EntityManager::getEntity(unsigned EID)
 	}
 }
 
-unsigned EntityManager::getLastID() { return lastID; }
+unsigned EntityManager::getLastID() 
+{ 
+	return lastID; 
+}
+
+//==============================================================================================================================================//
+//  EOF.																																		//
+//==============================================================================================================================================//
+

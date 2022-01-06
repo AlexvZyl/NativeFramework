@@ -188,11 +188,19 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr
 	if (indexPos)  *indexPos  = m_indexCount;
 	// Add vertices.
 	m_vertexCPU.reserve(m_vertexCount + vertices.size());
-	for (std::unique_ptr<VertexType>& vertex : vertices) { m_vertexCPU.push_back(std::move(vertex)); }  //  Will insert be faster?
-	// Offset indices and add it to the VAO.
-	for (unsigned& ind : indices) ind += m_vertexCount; 
+	for (std::unique_ptr<VertexType>& vertex : vertices) 
+	{ 
+		// Will insert be faster?
+		m_vertexCPU.push_back(std::move(vertex)); 
+	}  
+	// Add indices.
 	m_indexCPU.reserve(m_indexCount + indices.size());
-	m_indexCPU.insert(m_indexCPU.end(), indices.begin(), indices.end());
+	for (unsigned& ind : indices)
+	{
+		// First offset the index.
+		ind += m_vertexCount;
+		m_indexCPU.push_back(std::move(ind));
+	}
 	// Increment counts.
 	m_vertexCount += vertices.size();
 	m_indexCount += indices.size();
@@ -203,15 +211,17 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr
 template <typename VertexType>
 void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigned vertexCount, unsigned indexPos, unsigned indexCount)
 {
-	// Check if no data is to be delted.
+	// Check if no data is to be deleted.
 	if (!m_vertexCount) return;
 	// Remove data from VAO.
 	m_vertexCPU.erase(m_vertexCPU.begin() + vertexPos, m_vertexCPU.begin() + vertexPos + vertexCount);
+	m_vertexCPU.shrink_to_fit();
 	m_indexCPU.erase(m_indexCPU.begin() + indexPos, m_indexCPU.begin() + indexPos + indexCount);
+	m_indexCPU.shrink_to_fit();
 	// Decrement counts.
 	m_vertexCount -= vertexCount;
 	m_indexCount -= indexCount;
-	// Offset indices placed after deleted incides.
+	// Offset indices placed after deleted indices.
 	for (int i = indexPos; i < m_indexCount; i++) m_indexCPU[i] -= vertexCount; 
 	// Set the VAO to be resized.
 	resize();
@@ -228,6 +238,8 @@ void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive)
 	primitive->m_primitiveBufferPos = m_primitives.size();
 	// Add primitive.
 	m_primitives.push_back(primitive);
+	// Reserve data for the sync vector.
+	m_primitivesToSync.reserve(m_primitives.size());
 }	
 
 template <typename VertexType>
@@ -235,6 +247,7 @@ void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexC
 {
 	// Remove primitive from the VAO vector.
 	m_primitives.erase(m_primitives.begin() + primitiveIndex);
+	m_primitives.shrink_to_fit();
 	// Change metadata of primitives that sit after the popped primitive.
 	for (int i = primitiveIndex; i < m_primitives.size(); i++)
 	{
@@ -243,6 +256,8 @@ void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexC
 		primitive->m_vertexBufferPos -= vertexCount;
 		primitive->m_primitiveBufferPos -= 1;
 	}
+	// Reserve data for the sync vector.
+	m_primitivesToSync.reserve(m_primitives.size());
 }
 
 //=============================================================================================================================================//
@@ -279,14 +294,14 @@ void VertexArrayObject<VertexType>::syncBuffer()
 {
 	// Write changed primitives to VBO.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-	for (PrimitivePtr* primitive : m_primitivesToSync) 
+	for (PrimitivePtr*& primitive : m_primitivesToSync) 
 	{
-		// Primitive vertices.
-		for (int i = primitive->m_vertexBufferPos; i < primitive->m_vertexCount + primitive->m_vertexBufferPos; i++)
+		// Sync the primitive vertices.
+		for (int index = primitive->m_vertexBufferPos; index < primitive->m_vertexCount + primitive->m_vertexBufferPos; index++)
 		{
-			std::unique_ptr<VertexType>& vertex = m_vertexCPU[i];
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, i * vertex->getTotalSize(), vertex->getDataSize(), vertex->dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, i * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->idGL()));
+			std::unique_ptr<VertexType>& vertex = m_vertexCPU[index];
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->dataGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->idGL()));
 		}
 	}
 	// Update flags.
@@ -304,13 +319,17 @@ void VertexArrayObject<VertexType>::wipeCPU()
 {
 	// Clear vertex data.
 	m_vertexCPU.clear();
+	m_vertexCPU.shrink_to_fit();
 	m_vertexCount = 0;
 	// Clear index data.
 	m_indexCPU.clear();
+	m_indexCPU.shrink_to_fit();
 	m_indexCount = 0;
 	// Clear primitives.
 	m_primitives.clear();
+	m_primitives.shrink_to_fit();
 	m_primitivesToSync.clear();
+	m_primitivesToSync.shrink_to_fit();
 }
 
 template <typename VertexType>
