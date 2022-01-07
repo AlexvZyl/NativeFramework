@@ -23,7 +23,8 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	// Get the initial points and orientation of the first segment.
 	glm::vec2 endPt = m_startPort->centre;
 	float initial_length = 0.01f;
-	switch (startPort->m_position) {
+	switch (startPort->m_position) 
+	{
 	case PortPosition::TOP:
 		m_curOrientation = LineOrientation::VERTICAL;
 		//endPt += glm::vec2(0.f, initial_length);
@@ -47,11 +48,11 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	// --------------------- //
 
 	// First line.
-	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
+	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
 	// First node.
-	m_nodes.push_back(Renderer::addCircle2D(endPt, m_thickness, m_colour, 1.f, 0.f, this));
+	m_nodes.emplace_back(Renderer::addCircle2D(endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	// Add the second (perpendicular) line segment.
-	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
+	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, endPt, m_thickness, m_colour, this));
 }
 
 Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent) 
@@ -66,17 +67,17 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	m_endPort->attachCable(this);
 
 	// Add the first line segment and first node.
-	m_lines.push_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
-	m_nodes.push_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
+	m_nodes.emplace_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
 
 	// Add all inter-node line segments, and the rest of the nodes.
 	for (int i = 1; i < nodeList.size(); i++) 
 	{
-		m_lines.push_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
-		m_nodes.push_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
+		m_lines.emplace_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
+		m_nodes.emplace_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
 	}
 	//Add final line segment.
-	m_lines.push_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
+	m_lines.emplace_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
 }
 
 Cable::~Cable()
@@ -130,8 +131,8 @@ void Cable::addSegment(glm::vec2 nextPoint)
 		m_curOrientation = LineOrientation::HORIZONTAL;
 		break;
 	}
-	m_nodes.push_back(Renderer::addCircle2D(m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
-	m_lines.push_back(Renderer::addLineSegment2D(m_lines.back()->m_end, nextPoint, m_thickness, m_colour, this));
+	m_nodes.emplace_back(Renderer::addCircle2D(m_lines.back()->m_end, m_thickness, m_colour, 1.f, 0.f, this));
+	m_lines.emplace_back(Renderer::addLineSegment2D(m_lines.back()->m_end, nextPoint, m_thickness, m_colour, this));
 }
 
 
