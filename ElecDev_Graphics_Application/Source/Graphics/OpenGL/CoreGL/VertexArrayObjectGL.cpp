@@ -29,98 +29,12 @@ VertexArrayObject<VertexType>::VertexArrayObject(GLenum type)
 	GLCall(glGenBuffers(1, &m_IBOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 
-	// ----------------- //
-	//  V E R T I C E S  //
-	// ----------------- //
+	// Generate a VBO for the VAO.
+	GLCall(glGenBuffers(1, &m_VBOID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 
-	if (typeid(VertexType) == typeid(VertexData))
-	{
-		int vertexSize = sizeof(*VertexData::position) + sizeof(*VertexData::color) + sizeof(VertexData::entityID);
-		int colOffset = sizeof(*VertexData::position);
-		int idOffset = sizeof(*VertexData::position) + sizeof(*VertexData::color);
-		// Generate a VBO for the VAO.
-		GLCall(glGenBuffers(1, &m_VBOID));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		// Position.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 0));
-		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)0));
-		// color.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
-		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)colOffset));
-		// Entity ID.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
-		GLCall(glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, vertexSize, (const void*)idOffset));
-	}
-
-	// ----------------------------------- //
-	//  V E R T I C E S   T E X T U R E D  //
-	// ----------------------------------- //
-
-	else if (typeid(VertexType) == typeid(VertexDataTextured))
-	{
-		int vertexSize = sizeof(*VertexDataTextured::position) + sizeof(*VertexDataTextured::color) + sizeof(*VertexDataTextured::textureCoords) +
-						 sizeof(*VertexDataTextured::textureID) + sizeof(VertexDataTextured::entityID);
-		int offset = 0;
-		// Generate.
-		GLCall(glGenBuffers(1, &m_VBOID));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		// Position.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 0));
-		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataTextured::position);
-		// Bind Vertex color attribute.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
-		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataTextured::color);
-		// Bind texture position attribute
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
-		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataTextured::textureCoords);
-		// Bind texture ID attribute
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
-		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataTextured::textureID);
-		// Entity ID.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
-		GLCall(glVertexAttribIPointer(4, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
-	}
-
-	// --------------------------------- //
-	//  V E R T I C E S   C I R C L E S  //
-	// --------------------------------- //
-
-	else if (typeid(VertexType) == typeid(VertexDataCircle))
-	{
-		int vertexSize = sizeof(*VertexDataCircle::position) + sizeof(*VertexDataCircle::color) + sizeof(*VertexDataCircle::fade) +
-						 sizeof(*VertexDataCircle::thickness) + sizeof(VertexDataCircle::entityID) + sizeof(*VertexDataCircle::localCoords);
-		int offset = 0;
-		// Generate.
-		GLCall(glGenBuffers(1, &m_VBOID));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		// Position.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 0));
-		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataCircle::position);
-		// Bind Vertex color attribute.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 1));
-		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataCircle::color);
-		// Local coordinates.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 2));
-		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataCircle::localCoords);
-		// Circle thickness.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 3));
-		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataCircle::thickness);
-		// Circle fade.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 4));
-		GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-		offset += sizeof(*VertexDataCircle::fade);
-		// Entity ID.
-		GLCall(glEnableVertexArrayAttrib(m_VAOID, 5));
-		GLCall(glVertexAttribIPointer(5, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
-	}
+	// Enable vertex attributes.
+	VertexType::initVertexAttributes(m_VAOID);
 }
 
 template <typename VertexType>
@@ -274,8 +188,8 @@ void VertexArrayObject<VertexType>::resizeBuffer()
 	unsigned int index = 0;
 	for (std::unique_ptr<VertexType>& vertex : m_vertexCPU)  // There has to be a way to change this to one draw call.
 	{
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->dataGL()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->idGL()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->getData()));
+		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->getID()));
 		index += 1;
 	}
 	// Resize IBO and write data.
@@ -300,8 +214,8 @@ void VertexArrayObject<VertexType>::syncBuffer()
 		for (int index = primitive->m_vertexBufferPos; index < primitive->m_vertexCount + primitive->m_vertexBufferPos; index++)
 		{
 			std::unique_ptr<VertexType>& vertex = m_vertexCPU[index];
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->dataGL()));
-			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->idGL()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->getData()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->getID()));
 		}
 	}
 	// Update flags.
