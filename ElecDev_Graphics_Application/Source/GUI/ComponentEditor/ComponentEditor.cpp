@@ -7,7 +7,7 @@
 #include "Design2DEngineGL/Peripherals/Component2D.h"
 #include "Design2DEngineGL/Peripherals/Port.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
-#include "CoreGL/Renderer.h"
+#include "CoreGL/RendererGL.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */

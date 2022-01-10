@@ -5,9 +5,9 @@
 // The base 2D engine.
 #include "Base3D_Engine.h"
 #include "Resources/ResourceHandler.h"
-#include "CoreGL/FrameBufferObjectGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "CoreGL/ShaderHandlerGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
+#include "CoreGL/ShaderGL.h"
 #include <iostream>
 #include "Misc/ConsoleColor.h"
 #include "GLM/glm.hpp"

@@ -13,7 +13,7 @@ API for the graphics of the application.
 // General
 #include <stdio.h>
 #include <External/Misc/ConsoleColor.h>
-#include "CoreGL/Renderer.h"
+#include "CoreGL/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Window Handling.																														   //

@@ -36,7 +36,7 @@ public:
 	// Constructor.
 	Entity(EntityType type, Entity* parent = nullptr);
 	// Destructor.
-	~Entity();
+	virtual ~Entity();
 
 	// Set the Context of this entity, and parents.
 	virtual void setContext(GUIState* guiState);

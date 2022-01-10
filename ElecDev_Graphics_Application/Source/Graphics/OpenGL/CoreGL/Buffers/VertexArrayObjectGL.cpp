@@ -8,7 +8,7 @@
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "CoreGL/ErrorHandlerGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Entity.h"
 #include "CoreGL/Entities/Primitive.h"
@@ -53,11 +53,11 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
+	GLCall(glBindVertexArray(m_VAOID));
 	// Update data.
 	if		(!m_sized )	resizeBuffer();
 	else if (!m_synced) syncBuffer();  
 	// Render.
-	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
 }
@@ -181,20 +181,34 @@ void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexC
 template <typename VertexType>
 void VertexArrayObject<VertexType>::resizeBuffer()
 {
-	// Resize VBO.
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0]->getTotalSize(), NULL, GL_DYNAMIC_DRAW));
-	// Write the data to the VBO.
-	unsigned int index = 0;
-	for (std::unique_ptr<VertexType>& vertex : m_vertexCPU)  // There has to be a way to change this to one draw call.
+	// If no vertices, clear buffers.
+	if (!m_vertexCPU.size())
 	{
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->getData()));
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->getID()));
-		index += 1;
+		// Resize VBO.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW));
+		// Resize IBO and write data.
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW));
 	}
-	// Resize IBO and write data.
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), m_indexCPU.data(), GL_DYNAMIC_DRAW));
+	// Assign data with resize.
+	else
+	{
+		// Resize VBO.
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0]->getTotalSize(), NULL, GL_DYNAMIC_DRAW));
+		// Write the data to the VBO.
+		unsigned int index = 0;
+		for (std::unique_ptr<VertexType>& vertex : m_vertexCPU)  // There has to be a way to change this to one draw call.
+		{
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->getData()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->getID()));
+			index += 1;
+		}
+		// Resize IBO and write data.
+		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * sizeof(GLuint), m_indexCPU.data(), GL_DYNAMIC_DRAW));
+	}
 	// Update flags.
 	m_synced = true;
 	m_sized = true;

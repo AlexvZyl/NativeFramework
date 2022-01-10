@@ -1,7 +1,7 @@
 #include "Design2D_Engine.h"
 #include "Peripherals/Component2D.h"
 #include "Peripherals/Circuit.h"
-#include "CoreGL/Renderer.h"
+#include "CoreGL/RendererGL.h"
 
 void Design2DEngineGL::ComponentPlaceMode(glm::vec2 screenCoords) 
 {

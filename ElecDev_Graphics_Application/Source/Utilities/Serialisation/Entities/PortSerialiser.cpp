@@ -4,7 +4,7 @@
 
 #include "../Serialiser.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/FontLoaderGL.h"
 
 //=============================================================================================================================================//
 //  Single port.		     																												   //

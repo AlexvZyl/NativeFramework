@@ -73,6 +73,21 @@ unsigned EntityManager::getLastID()
 	return lastID; 
 }
 
+unsigned EntityManager::peakNextID() 
+{
+	// Check to see if there are any freed (recycled) ID's.
+	if (!freeIDs.size())
+	{
+		return lastID+1;
+	}
+	// Latest free ID.
+	else  
+	{
+		return freeIDs.back();
+	}
+}
+
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

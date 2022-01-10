@@ -18,7 +18,7 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 #include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
 #include "OpenGL/Base3DEngineGL/Base3D_Engine.h"
 #include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
-#include "CoreGL/Scene.h"
+#include "CoreGL/SceneGL.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.			    											                                                           //

@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
@@ -205,15 +206,15 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\singledocparser.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Camera.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Renderer.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Scene.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\CameraGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\SceneGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextureGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
@@ -221,8 +222,8 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoader.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Fonts.h" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoaderGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontsGL.h" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
@@ -232,9 +233,9 @@
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\FrameBufferObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_InputHandler.cpp" />
@@ -273,6 +274,7 @@
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\binary.h" />
@@ -333,13 +335,13 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\stringsource.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Camera.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Scene.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Renderer.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\SceneGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\RendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextureGL.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
@@ -371,10 +373,10 @@
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoader.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\FrameBufferObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoaderGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
@@ -908,12 +910,12 @@
     <None Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.json" />
     <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
-    <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
-    <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
-    <None Include="Source\Resources\Shaders\basicShader.shader" />
-    <None Include="Source\Resources\Shaders\circleShader.shader" />
-    <None Include="Source\Resources\Shaders\staticTextureShader.shader" />
-    <None Include="Source\Resources\Shaders\textureShader.shader" />
+    <None Include="Source\Resources\Shaders\GLSL\backgroundShader2D.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\backgroundShader3D.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\basicShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\circleShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\staticTextureShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\textureShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Icons\circuitIcon.ico" />

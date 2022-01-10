@@ -7,7 +7,7 @@ This is where the drawing enigine mouse events are handled.
 //=============================================================================================================================================//
 
 #include "Design2D_Engine.h"
-#include "CoreGL/Scene.h"
+#include "CoreGL/SceneGL.h"
 // Entities.
 #include "Peripherals/Component2D.h"
 #include "CoreGL/Entities/Polygon.h"
@@ -16,12 +16,12 @@ This is where the drawing enigine mouse events are handled.
 #include "CoreGL/Entities/EntityManager.h"
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "Peripherals/Circuit.h"
 // Serialisation.
 #include "Utilities/Serialisation/Serialiser.h"
 #include "CoreGL/Entities/Text.h"
-#include "CoreGL/Renderer.h"
+#include "CoreGL/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Press event.																															   //

@@ -10,7 +10,7 @@ This is where the drawing enigine mouse events are handled.
 #include "GLFW/glfw3.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include <iostream>
-#include "CoreGL/Scene.h"
+#include "CoreGL/SceneGL.h"
 
 //=============================================================================================================================================//
 //  Mouse Presses.																															   //

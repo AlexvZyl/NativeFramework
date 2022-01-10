@@ -11,7 +11,7 @@
 #include "CoreGL/Entities/Circle.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Text.h"
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//

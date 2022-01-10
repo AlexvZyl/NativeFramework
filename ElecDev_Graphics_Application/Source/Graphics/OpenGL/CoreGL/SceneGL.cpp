@@ -2,13 +2,13 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "CoreGL/FrameBufferObjectGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Vertex.h"
-#include "CoreGL/Scene.h"
-#include "CoreGL/Camera.h"
+#include "CoreGL/SceneGL.h"
+#include "CoreGL/CameraGL.h"
 #include "CoreGL/Entities/Entity.h"
-#include "CoreGL/Texture.h"
+#include "CoreGL/TextureGL.h"
 #include "CoreGL/Entities/Primitive.h"
 
 //==============================================================================================================================================//
@@ -49,9 +49,9 @@ void Scene::updateCamera()
 	m_camera->updateCamera(); 
 }
 
-glm::vec2 Scene::getViewport() 
+glm::vec4& Scene::getViewport() 
 { 
-	return glm::vec2(m_camera->m_viewportVec[2], m_camera->m_viewportVec[3]);
+	return m_camera->m_viewportVec;
 }
 
 void Scene::setViewport(int width, int height) 

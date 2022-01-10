@@ -6,15 +6,15 @@
 #include "../../Resources/ResourceHandler.h"
 // Class include.
 #include "Base2D_Engine.h"
-#include "CoreGL/FrameBufferObjectGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "CoreGL/ShaderHandlerGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
+#include "CoreGL/ShaderGL.h"
+#include "CoreGL/FontsGL.h"
+#include "CoreGL/SceneGL.h"
+#include "CoreGL/CameraGL.h"
 #include <iostream>
 #include "Misc/ConsoleColor.h"
 #include "glm/gtc/matrix_transform.hpp"
-#include "CoreGL/Fonts.h"
-#include "CoreGL/Scene.h"
-#include "CoreGL/Camera.h"
 
 //=============================================================================================================================================//
 //  Costructor & Destructor.																												   //

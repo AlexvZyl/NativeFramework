@@ -31,7 +31,7 @@
 // Measure time.
 #include <chrono>
 // Include the renderer for initialisartion.
-#include "CoreGL/Renderer.h"
+#include "CoreGL/RendererGL.h"
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */

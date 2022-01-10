@@ -4,7 +4,7 @@
 
 #include "Base3D_Engine.h"
 #include <GLFW/glfw3.h>
-#include "CoreGL/Scene.h"
+#include "CoreGL/SceneGL.h"
 
 //=============================================================================================================================================//
 //  Mouse presses.																															   //

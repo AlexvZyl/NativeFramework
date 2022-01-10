@@ -56,12 +56,12 @@ IDI_ICON1						ICON		                "Icons\\circuitIcon128.ico"
 ICON_PNG						RCDATA						"Icons\\circuitImage.png"
 //-------------------------------------------------------------------------------------------------
 // Shaders.
-BASIC_SHADER					TEXTFILE					"Shaders\\basicShader.shader"
-BACKGROUND_SHADER_2D			TEXTFILE					"Shaders\\backgroundShader2D.shader"
-BACKGROUND_SHADER_3D			TEXTFILE					"Shaders\\backgroundShader3D.shader"
-TEXTURE_SHADER					TEXTFILE					"Shaders\\textureShader.shader"
-STATIC_TEXTURE_SHADER			TEXTFILE					"Shaders\\staticTextureShader.shader"
-CIRCLE_SHADER					TEXTFILE					"Shaders\\circleShader.shader"
+BASIC_SHADER					TEXTFILE					"Shaders\\GLSL\\basicShader.glsl"
+BACKGROUND_SHADER_2D			TEXTFILE					"Shaders\\GLSL\\backgroundShader2D.glsl"
+BACKGROUND_SHADER_3D			TEXTFILE					"Shaders\\GLSL\\backgroundShader3D.glsl"
+TEXTURE_SHADER					TEXTFILE					"Shaders\\GLSL\\textureShader.glsl"
+STATIC_TEXTURE_SHADER			TEXTFILE					"Shaders\\GLSL\\staticTextureShader.glsl"
+CIRCLE_SHADER					TEXTFILE					"Shaders\\GLSL\\circleShader.glsl"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 COMPONENT_PNG					RCDATA						"Icons\\component.png"

@@ -7,12 +7,12 @@
 #include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/Entities/Text.h"
 #include "GUI/GUIState.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/FontLoaderGL.h"
 #include "Resources/ResourceHandler.h"
 #include "Cable.h"
 #include "Circuit.h"
-#include "CoreGL/Scene.h"
-#include "CoreGL/Renderer.h"
+#include "CoreGL/SceneGL.h"
+#include "CoreGL/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -86,10 +86,17 @@ Port::~Port()
 			});
 
 		//check that the cable is in the list
-		if (toRemove != cableList.end()) {
+		if (toRemove != cableList.end()) 
+		{
 			cableList.erase(toRemove);
 		}
 	}
+
+	// Remove the renderer primitives.
+	Renderer::remove(body);
+	Renderer::remove(border);
+	Renderer::remove(attachmentIndicator);
+	Renderer::remove(title);
 }
 
 void Port::moveTo(glm::vec2 destination)

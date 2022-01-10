@@ -1,20 +1,20 @@
-//=============================================================================================================================================//
+//============================================================================================================================================//
 // Includes.																																   //
 //=============================================================================================================================================//
 
 #include "Component2D.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/Polygon.h"
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
+#include "CoreGL/FontLoaderGL.h"
 #include "CoreGL/Entities/Text.h"
 #include "Resources/ResourceHandler.h"
 #include "CoreGL/Entities/Circle.h"
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "Circuit.h"
-#include "CoreGL/Scene.h"
-#include "CoreGL/Renderer.h"
+#include "CoreGL/SceneGL.h"
+#include "CoreGL/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -48,6 +48,7 @@ Component2D::Component2D(Circuit* parent)
 	// --------------------- //
 
 	// Main shape.
+	Scene* scene = Renderer::getScene();
 	shape = Renderer::addPolygon2D(vertices, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
@@ -74,7 +75,13 @@ Component2D::Component2D(glm::vec2 centreCoords, Circuit* parent)
 	moveTo(centreCoords);
 }
 
-Component2D::~Component2D() {}
+Component2D::~Component2D() 
+{
+	// Remove the renderer primitives.
+	Renderer::remove(shape);
+	Renderer::remove(border);
+	Renderer::remove(title);
+}
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

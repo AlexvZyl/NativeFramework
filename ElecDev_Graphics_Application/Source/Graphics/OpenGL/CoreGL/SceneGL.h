@@ -9,9 +9,9 @@
 #include <map>
 #include "External/GLM/glm.hpp"
 #include <any>
-#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
 #include <variant>
-#include "CoreGL/Texture.h"
+#include "CoreGL/TextureGL.h"
 #include "CoreGL/Entities/Primitive.h"
 
 //==============================================================================================================================================//
@@ -48,7 +48,7 @@ public:
 	// Set the viewport dimensions.
 	void setViewport(int width, int height);
 	// Returns the viewport dimensions.
-	glm::vec2 getViewport();
+	glm::vec4& getViewport();
 	// Calculate the world coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
 	// Calculate the camera coordinates from the pixel coordinates.

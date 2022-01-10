@@ -30,6 +30,7 @@ struct GUIState;
 class PrimitivePtr : public Entity
 {
 public:
+
 	unsigned m_vertexCount = 0;			// Counts the amount of vertices.
 	unsigned m_indexCount = 0;			// Counts the amount of indices.
 	unsigned m_vertexBufferPos = 0;		// The start position of the entity in the VAO.
@@ -37,6 +38,8 @@ public:
 	unsigned m_primitiveBufferPos = 0;	// The primitive position in the VAO buffer.
 
 	PrimitivePtr(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}
+
+	virtual ~PrimitivePtr() = default;
 };
 
 //=============================================================================================================================================//

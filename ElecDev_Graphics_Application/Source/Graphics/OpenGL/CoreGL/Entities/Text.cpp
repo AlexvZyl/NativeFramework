@@ -2,15 +2,15 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "EntityManager.h"
 # include<iostream>
 #include "CoreGL/Entities/Text.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/FontLoaderGL.h"
 #include "External/Misc/ConsoleColor.h"
-#include "CoreGL/Renderer.h"
-#include "CoreGL/Scene.h"
+#include "CoreGL/RendererGL.h"
+#include "CoreGL/SceneGL.h"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //

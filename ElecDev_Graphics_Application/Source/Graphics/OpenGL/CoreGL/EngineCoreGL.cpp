@@ -11,24 +11,23 @@ and notify the user via the terminal interface.
 //=============================================================================================================================================//
 
 // Class include.
-#include "EngineCoreGL.h"
-#include "VertexArrayObjectGL.h"
-#include "Resources/ResourceHandler.h"
-#include "CoreGL/FrameBufferObjectGL.h"
-#include "GLFW/glfw3.h"
-#include "ShaderHandlerGL.h"
 #include <iostream>
-#include "Misc/ConsoleColor.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "CoreGL/Entities/Vertex.h"
-#include "CoreGL/Renderer.h"
-#include "CoreGL/Scene.h"
-//#include "Fonts.h"
-#include "FontLoader.h"
 #include <memory>
-#include "CoreGL/Camera.h"
+#include "Resources/ResourceHandler.h"
+#include "CoreGL/EngineCoreGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
+#include "CoreGL/ShaderGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
+#include "CoreGL/Entities/Vertex.h"
+#include "CoreGL/RendererGL.h"
+#include "CoreGL/SceneGL.h"
+#include "CoreGL/FontLoaderGL.h"
+#include "CoreGL/CameraGL.h"
 #include "CoreGL/Entities/Entity.h"
 #include "CoreGL/Entities/Primitive.h"
+#include "External/GLM/gtc/matrix_transform.hpp"
+#include "External/GLFW/Includes/GLFW/glfw3.h"
+#include "External/Misc/ConsoleColor.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
