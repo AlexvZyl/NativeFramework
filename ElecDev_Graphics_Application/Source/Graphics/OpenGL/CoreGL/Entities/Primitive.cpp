@@ -5,8 +5,8 @@
 #include <vector>
 #include "../GUI/GUIState.h"
 #include "CoreGL/Entities/Primitive.h"
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "CoreGL/Renderer.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
+#include "CoreGL/RendererGL.h"
 #include "CoreGL/Entities/Vertex.h"
 
 //=============================================================================================================================================//
@@ -44,7 +44,9 @@ template<typename VertexType>
 void Primitive<VertexType>::translate(glm::vec3& translation)
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
 		m_VAO->m_vertexCPU[i]->data.position += translation;
+	}
 	m_trackedCenter += translation;
 	m_VAO->sync(this);
 }

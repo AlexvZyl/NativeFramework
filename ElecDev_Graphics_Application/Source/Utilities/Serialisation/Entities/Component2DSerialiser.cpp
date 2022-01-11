@@ -4,7 +4,7 @@
 
 #include "../Serialiser.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Component2D.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/FontLoaderGL.h"
 
 //=============================================================================================================================================//
 //  Component 2D serialiser.   																												   //

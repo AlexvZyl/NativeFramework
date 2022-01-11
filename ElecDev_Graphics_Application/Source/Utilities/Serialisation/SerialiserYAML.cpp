@@ -7,7 +7,7 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/FontLoaderGL.h"
 #include <sys/stat.h>
 #include <iostream>
 #include <direct.h>

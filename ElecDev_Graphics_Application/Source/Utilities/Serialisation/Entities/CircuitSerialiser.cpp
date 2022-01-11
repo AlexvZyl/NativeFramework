@@ -6,8 +6,8 @@
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
+#include "CoreGL/RendererGL.h"
 #include "CoreGL/Entities/EntityManager.h"
-#include "CoreGL/Renderer.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //

@@ -6,11 +6,11 @@
 #include <glad/glad.h>
 #include "Resources/ResourceHandler.h"
 #include "External/Misc/ConsoleColor.h"
-#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
 #include "CoreGL/ErrorHandlerGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Vertex.h"
-#include "CoreGL/ShaderHandlerGL.h"
+#include "CoreGL/ShaderGL.h"
 
 //=============================================================================================================================================//
 //  Static inits.																															   //

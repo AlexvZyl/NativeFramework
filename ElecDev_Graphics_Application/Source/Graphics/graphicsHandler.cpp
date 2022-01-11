@@ -7,19 +7,19 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "GraphicsHandler.h"
+#include "CoreGL/EngineCoreGL.h"
 #include <iostream>
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Design2DEngineGL/Peripherals/Circuit.h"
 #include "GLFW/glfw3.h"
-#include "CoreGL/EngineCoreGL.h"
 #include "Resources/ResourceHandler.h"
 #include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
+#include "GraphicsHandler.h"
 
 // Testing 
-#include "CoreGL/Scene.h"
-#include "CoreGL/Renderer.h"
-#include "CoreGL/Camera.h"
+#include "CoreGL/SceneGL.h"
+#include "CoreGL/RendererGL.h"
+#include "CoreGL/CameraGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

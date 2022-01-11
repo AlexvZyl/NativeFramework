@@ -18,9 +18,9 @@ This is where the interactive 2D design engine is implemented.
 // OpenGL core elements.
 #include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/Entities/Circle.h"
-#include "CoreGL/FrameBufferObjectGL.h"
-#include "CoreGL/ShaderHandlerGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
+#include "CoreGL/ShaderGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Primitive.h"
 // Window.
 #include <GLFW/glfw3.h>
@@ -28,7 +28,7 @@ This is where the interactive 2D design engine is implemented.
 #include "Peripherals/Circuit.h"
 
 // For Testing.
-#include "CoreGL/Renderer.h"
+#include "CoreGL/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -45,6 +45,10 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	m_circuit = std::make_shared<Circuit>(m_contextName, "AE");
 
 	m_guiState->design_engine = this;
+
+	Renderer::bindScene(m_scene.get());
+	LineSegment* line =  Renderer::addLineSegment2D(glm::vec2(0,0), glm::vec2(1,1), 0.05);
+	line->setLayer(0);
 
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";

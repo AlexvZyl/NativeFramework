@@ -5,8 +5,8 @@
 #include "Cable.h"
 #include "GUI/GUIState.h"
 #include "Circuit.h"
-#include "CoreGL/Renderer.h"
-#include "CoreGL/Scene.h"
+#include "CoreGL/RendererGL.h"
+#include "CoreGL/SceneGL.h"
 
 //==============================================================================================================================================//
 //  Constructor & Destructor.  																													//
@@ -85,6 +85,14 @@ Cable::~Cable()
 	// Remove the cable from the start and end ports.
 	if (m_startPort) m_startPort->detachCable(this);
 	if (m_endPort)   m_endPort->detachCable(this); 
+
+	// Remove the renderer primitives.
+	for (Circle* circle : m_nodes) Renderer::remove(circle);
+	m_nodes.clear();
+	m_nodes.shrink_to_fit();
+	for (LineSegment* lineSegment : m_lines) Renderer::remove(lineSegment);
+	m_lines.clear();
+	m_lines.shrink_to_fit();
 }
 
 //==============================================================================================================================================//
@@ -105,6 +113,7 @@ void Cable::extendPrevSegment(glm::vec2 nextPoint)
 		endPt.y = nextPoint.y;
 		break;
 	}
+	Renderer::remove(m_lines.end()[-2]);
 	m_lines.end()[-2] = Renderer::addLineSegment2D(m_lines.end()[-2]->m_start, endPt, m_thickness, m_colour, this);
 	m_nodes.back()->translateTo(endPt);
 }
@@ -113,6 +122,7 @@ void Cable::extendSegment(glm::vec2 nextPoint)
 {
 	// Extend the pevious segment. 
 	extendPrevSegment(nextPoint);
+	Renderer::remove(m_lines.back());
 	m_lines.back() = Renderer::addLineSegment2D(m_lines.end()[-2]->m_end, nextPoint, m_thickness, m_colour, this);
 }
 

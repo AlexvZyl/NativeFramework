@@ -2,14 +2,10 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-// Header.
-#include "FontLoader.h"
-// Used for dictionary.
 #include <map>
-// Resources
 #include "Resources/ResourceHandler.h"
-// JSON parsing.
 #include "External/JSON/json.hpp"
+#include "CoreGL/FontLoaderGL.h"
 
 //=============================================================================================================================================//
 //  MSDFGen font loading.																													   //

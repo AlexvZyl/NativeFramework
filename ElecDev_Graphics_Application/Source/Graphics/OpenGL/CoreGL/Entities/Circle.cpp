@@ -5,7 +5,7 @@
 #include "CoreGL/Entities/Circle.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "CoreGL/Entities/EntityManager.h"
-#include "CoreGL/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

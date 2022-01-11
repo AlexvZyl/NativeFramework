@@ -9,7 +9,7 @@ This header file contains all of the fonts that is used in the application and c
 //=============================================================================================================================================//
 
 //#include "Resources/ResourceHandler.h"
-#include "FontLoader.h"
+#include "FontLoaderGL.h"
 
 //=============================================================================================================================================//
 //  Fonts.																																	   //

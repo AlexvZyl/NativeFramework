@@ -116,6 +116,17 @@ private:
 	static void loadDefaultFont();
 	// Load the current scenes textures to OpenGL.
 	static void loadTextures(Scene* scene);
+	// Enables the OpenGL attribute.
+	static void enable(unsigned attribute);
+	// Disables the OpenGL attribute.
+	static void disable(unsigned attribute);
+	// Sets the OpenGL depth function.
+	static void setDepthFunc(unsigned function);
+	// Set the OpenGL viewport.  Assumes it starts from (0,0).
+	static void setViewport(glm::vec2& viewport);
+	// Sets the OpenGL viewport.  Does not assume a start from (0,0).
+	static void setViewport(glm::vec4& viewport);
+
 	// Prevent instances from being created.
 	Renderer() {}
 

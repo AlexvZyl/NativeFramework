@@ -54,17 +54,17 @@
     <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\FrameBufferObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\ImGuiThemes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoader.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoaderGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Fonts.h" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontsGL.h" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
@@ -77,7 +77,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Texture.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextureGL.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
@@ -123,10 +123,11 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Renderer.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Camera.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Scene.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\CameraGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\SceneGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1240,10 +1241,10 @@
     <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FrameBufferObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderHandlerGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoader.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\VertexArrayObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\FrameBufferObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoaderGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\detail\impl.h" />
@@ -1276,7 +1277,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Texture.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextureGL.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
@@ -1344,10 +1345,11 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Renderer.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Scene.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Camera.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\RendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\SceneGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1364,7 +1366,7 @@
     <None Include="Source\External\glm\gtx\associated_min_max.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\basicShader.shader">
+    <None Include="Source\Resources\Shaders\GLSL\basicShader.glsl">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\bit.inl">
@@ -1682,7 +1684,7 @@
     <None Include="Source\External\glm\gtx\texture.inl">
       <Filter>Source</Filter>
     </None>
-    <None Include="Source\Resources\Shaders\textureShader.shader">
+    <None Include="Source\Resources\Shaders\GLSL\textureShader.glsl">
       <Filter>Source</Filter>
     </None>
     <None Include="Source\External\glm\gtx\transform.inl">
@@ -1786,13 +1788,13 @@
     </None>
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
     <None Include="Source\GUI\GUIColors.md" />
-    <None Include="Source\Resources\Shaders\backgroundShader2D.shader" />
-    <None Include="Source\Resources\Shaders\backgroundShader3D.shader" />
-    <None Include="Source\Resources\Shaders\circleShader.shader" />
+    <None Include="Source\Resources\Shaders\GLSL\backgroundShader2D.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\backgroundShader3D.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\circleShader.glsl" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
     <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
-    <None Include="Source\Resources\Shaders\staticTextureShader.shader" />
+    <None Include="Source\Resources\Shaders\GLSL\staticTextureShader.glsl" />
     <None Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.json" />
   </ItemGroup>
   <ItemGroup>

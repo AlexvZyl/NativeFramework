@@ -4,11 +4,11 @@
 
 #include "glad/glad.h"
 #include "Resources/ResourceHandler.h"
-#include "CoreGL/ShaderHandlerGL.h"
-#include "CoreGL/Texture.h"
-#include "CoreGL/Renderer.h"
-#include "CoreGL/Camera.h"
-#include "CoreGL/Scene.h"
+#include "CoreGL/ShaderGL.h"
+#include "CoreGL/TextureGL.h"
+#include "CoreGL/RendererGL.h"
+#include "CoreGL/CameraGL.h"
+#include "CoreGL/SceneGL.h"
 #include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/Entities/EntityManager.h"
 #include "CoreGL/Entities/Circle.h"
@@ -16,10 +16,10 @@
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/Entities/Primitive.h"
 #include "CoreGL/Entities/Vertex.h"
-#include "CoreGL/FontLoader.h"
+#include "CoreGL/FontLoaderGL.h"
 #include "CoreGL/ErrorHandlerGL.h"
-#include "CoreGL/VertexArrayObjectGL.h"
-#include "CoreGL/FrameBufferObjectGL.h"
+#include "CoreGL/Buffers/VertexArrayObjectGL.h"
+#include "CoreGL/Buffers/FrameBufferObjectGL.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -28,38 +28,6 @@
 std::map<std::string, std::unique_ptr<Shader>> Renderer::m_shaders;
 Scene* Renderer::m_scene = nullptr;
 std::unique_ptr<Font> Renderer::m_defaultFont = nullptr;
-
-//==============================================================================================================================================//
-//  Utilities.																																	//
-//==============================================================================================================================================//
-
-void Renderer::initialise() 
-{
-	Renderer::compileShaders();
-	Renderer::loadDefaultFont();
-}
-
-void Renderer::loadDefaultFont() 
-{
-	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_NORMAL_JSON, ARIAL_NORMAL_PNG));
-}
-
-void Renderer::compileShaders()
-{
-	// Renderer shaders.
-	m_shaders.insert({ "BackgroundShader2D" , std::make_unique<Shader>(BACKGROUND_SHADER_2D) });
-	m_shaders.insert({ "BackgroundShader3D" , std::make_unique<Shader>(BACKGROUND_SHADER_3D) });
-	m_shaders.insert({ "BasicShader"        , std::make_unique<Shader>(BASIC_SHADER)		 });
-	m_shaders.insert({ "TextureShader"      , std::make_unique<Shader>(TEXTURE_SHADER)		 });
-	m_shaders.insert({ "CircleShader"       , std::make_unique<Shader>(CIRCLE_SHADER)		 });
-	// FBO shader.
-	FrameBufferObject::m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
-}
-
-Scene* Renderer::getScene() 
-{
-	return Renderer::m_scene;
-}
 
 //==============================================================================================================================================//
 //  Scene.																																		//
@@ -73,6 +41,11 @@ void Renderer::bindScene(Scene* scene)
 void Renderer::unbindScene() 
 { 
 	m_scene = nullptr; 
+}
+
+Scene* Renderer::getScene()
+{
+	return m_scene;
 }
 
 void Renderer::renderScene() 
@@ -98,10 +71,9 @@ void Renderer::render2DScene(Scene* scene)
 	// ----------- //
 
 	// Enable blending.
-	GLCall(glEnable(GL_BLEND));
+	enable(GL_BLEND);
 	// Set glViewport for the ImGUI context.
-	glm::vec2 viewport = scene->getViewport();
-	GLCall(glViewport(0, 0, (GLsizei)viewport.x, (GLsizei)viewport.y));
+	setViewport(scene->getViewport());
 
 	// Update camera.
 	scene->updateCamera();
@@ -129,7 +101,7 @@ void Renderer::render2DScene(Scene* scene)
 	m_shaders["TextureShader"]->bind();
 	m_shaders["TextureShader"]->setMat4("viewMatrix", scene->getViewMatrix());
 	m_shaders["TextureShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
-	Renderer::loadTextures(scene);
+	loadTextures(scene);
 	scene->m_texturedTrianglesVAO->render();
 
 	// Draw Circles.
@@ -145,22 +117,19 @@ void Renderer::render2DScene(Scene* scene)
 	// Stop rendering to the current FBO.
 	scene->unbindFBO();
 	// Disable blending.
-	GLCall(glDisable(GL_BLEND));
+	disable(GL_BLEND);
 }
 
 void Renderer::render3DScene(Scene* scene)
 {
-	// Remember to update the projection matrices of the shaders.
-
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
 
 	// Enable blending.
-	GLCall(glEnable(GL_BLEND));
+	enable(GL_BLEND);
 	// Set glViewport for the ImGUI context.
-	glm::vec2 viewport = scene->getViewport();
-	GLCall(glViewport(0, 0, (GLsizei)viewport.x, (GLsizei)viewport.y));
+	setViewport(scene->getViewport());
 
 	// Update camera.
 	scene->updateCamera();
@@ -175,9 +144,9 @@ void Renderer::render3DScene(Scene* scene)
 
 	// Draw background.
 	m_shaders["BackgroundShader3D"]->bind();
-	GLCall(glDepthFunc(GL_EQUAL));
+	setDepthFunc(GL_EQUAL);
 	scene->m_backgroundVAO->render();
-	GLCall(glDepthFunc(GL_LESS));
+	setDepthFunc(GL_LESS);
 
 	// Draw basic primitives.
 	m_shaders["BasicShader"]->bind();
@@ -190,7 +159,7 @@ void Renderer::render3DScene(Scene* scene)
 	m_shaders["TextureShader"]->bind();
 	m_shaders["TextureShader"]->setMat4("viewMatrix", scene->getViewMatrix());
 	m_shaders["TextureShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
-	Renderer::loadTextures(scene);
+	loadTextures(scene);
 	scene->m_texturedTrianglesVAO->render();
 
 	// Draw Circles.
@@ -206,7 +175,7 @@ void Renderer::render3DScene(Scene* scene)
 	// Stop rendering to the current FBO.
 	scene->unbindFBO();
 	// Disable blending.
-	GLCall(glDisable(GL_BLEND));
+	disable(GL_BLEND);
 }
 //==============================================================================================================================================//
 //  Textures.																																	//
@@ -252,6 +221,11 @@ void Renderer::loadTextures(Scene* scene)
 //  Removing 2D Primitives.																														//
 //==============================================================================================================================================//
 
+// "primitive->~Primitive();" has to be called because the vector that it is being erased from is a
+// PrimitivePtr, not a primitive.  This means that the PrimitivePtr destructor is being called (and 
+// since it does not have a destructor the Entity destructor is being called).  We have to find a way
+// make this work more elegantly.
+
 void Renderer::remove(Primitive<VertexData>* primitive)
 {
 	m_scene->m_primitives.erase(primitive->m_entityID);
@@ -273,40 +247,102 @@ void Renderer::remove(Primitive<VertexDataCircle>* primitive)
 
 Polygon2D* Renderer::addPolygon2D(std::vector<glm::vec3> vertices, Entity* parent)
 {
-	m_scene->m_primitives.insert({ EntityManager::getLastID() + 1, std::make_unique<Polygon2D>(vertices, m_scene->m_trianglesVAO.get(), parent) });
-	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[EntityManager::getLastID()].get());
+	unsigned id = EntityManager::peakNextID();
+	m_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, m_scene->m_trianglesVAO.get(), parent)});
+	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[id].get());
 }
 
 Polygon2D* Renderer::addPolygon2DClear(std::vector<glm::vec3> vertices, Entity* parent)
 {
-	m_scene->m_primitives.insert({ EntityManager::getLastID() + 1, std::make_unique<Polygon2D>(vertices, m_scene->m_linesVAO.get(), parent) });
-	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[EntityManager::getLastID()].get());
+	unsigned id = EntityManager::peakNextID();
+	m_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, m_scene->m_linesVAO.get(), parent) });
+	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[id].get());
 }
 
 Circle* Renderer::addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent) 
 {
-	m_scene->m_primitives.insert({ EntityManager::getLastID() + 1, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent)});
-	return dynamic_cast<Circle*>(m_scene->m_primitives[EntityManager::getLastID()].get());
+	unsigned id = EntityManager::peakNextID();
+	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent)});
+	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
 }
 
 Circle* Renderer::addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
 {
-	m_scene->m_primitives.insert({ EntityManager::getLastID() + 1, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent)});
-	return dynamic_cast<Circle*>(m_scene->m_primitives[EntityManager::getLastID()].get());
+	unsigned id = EntityManager::peakNextID();
+	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent) });
+	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
 }
 
 LineSegment* Renderer::addLineSegment2D(glm::vec2 start, glm::vec2 end, float thickness, glm::vec4 colour, Entity* parent)
 {
-	m_scene->m_primitives.insert({ EntityManager::getLastID() + 1, std::make_unique<LineSegment>(start, end, m_scene->m_trianglesVAO.get(), parent, thickness, colour)});
-	return dynamic_cast<LineSegment*>(m_scene->m_primitives[EntityManager::getLastID()].get());
+	unsigned id = EntityManager::peakNextID();
+	m_scene->m_primitives.insert({ id, std::make_unique<LineSegment>(start, end, m_scene->m_trianglesVAO.get(), parent, thickness, colour) });
+	return dynamic_cast<LineSegment*>(m_scene->m_primitives[id].get());
 }
 
 Text* Renderer::addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, std::string horizontalAlignment, std::string verticalAlignment, Entity* parent)
 {
-	m_scene->m_primitives.insert({EntityManager::getLastID() + 1, std::make_unique<Text>(text, position, color, scale,
-																						 m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
-																						 parent, horizontalAlignment, verticalAlignment)});
-	return dynamic_cast<Text*>(m_scene->m_primitives[EntityManager::getLastID()].get());
+	unsigned id = EntityManager::peakNextID();
+	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
+															  m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
+															  parent, horizontalAlignment, verticalAlignment)});
+	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
+}
+
+//==============================================================================================================================================//
+//  Setup.																																		//
+//==============================================================================================================================================//
+
+void Renderer::initialise()
+{
+	Renderer::compileShaders();
+	Renderer::loadDefaultFont();
+}
+
+void Renderer::loadDefaultFont()
+{
+	m_defaultFont = std::make_unique<Font>(msdfLoadFont(ARIAL_NORMAL_JSON, ARIAL_NORMAL_PNG));
+}
+
+void Renderer::compileShaders()
+{
+	// Renderer shaders.
+	m_shaders.insert({ "BackgroundShader2D" , std::make_unique<Shader>(BACKGROUND_SHADER_2D) });
+	m_shaders.insert({ "BackgroundShader3D" , std::make_unique<Shader>(BACKGROUND_SHADER_3D) });
+	m_shaders.insert({ "BasicShader"        , std::make_unique<Shader>(BASIC_SHADER) });
+	m_shaders.insert({ "TextureShader"      , std::make_unique<Shader>(TEXTURE_SHADER) });
+	m_shaders.insert({ "CircleShader"       , std::make_unique<Shader>(CIRCLE_SHADER) });
+	// FBO shader.
+	FrameBufferObject::m_shader = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
+}
+
+//==============================================================================================================================================//
+//  Utilities.																																	//
+//==============================================================================================================================================//
+
+void Renderer::enable(unsigned attribute)
+{
+	GLCall(glEnable(attribute));
+}
+
+void Renderer::disable(unsigned attribute)
+{
+	GLCall(glDisable(attribute));
+}
+
+void Renderer::setDepthFunc(unsigned function) 
+{
+	GLCall(glDepthFunc(function));
+}
+
+void Renderer::setViewport(glm::vec2& viewport)
+{
+	GLCall(glViewport(0, 0, (int)viewport[0], (int)viewport[1]));
+}
+
+void Renderer::setViewport(glm::vec4& viewport)
+{
+	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
 }
 
 //==============================================================================================================================================//

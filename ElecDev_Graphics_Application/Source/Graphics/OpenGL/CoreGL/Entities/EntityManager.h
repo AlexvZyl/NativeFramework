@@ -30,7 +30,7 @@ public:
 	// Returns the last ID assigned.
 	static unsigned getLastID();
 	// Returns the ID that is going to be assigned next.
-	// TODO: unsigned peakNextID();
+	static unsigned peakNextID();
 
 private:
 
