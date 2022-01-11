@@ -182,7 +182,7 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::resizeBuffer()
 {
 	// If no vertices, clear buffers.
-	if (!m_vertexCPU.size())
+	if (!m_vertexCount)
 	{
 		// Resize VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
