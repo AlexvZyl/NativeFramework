@@ -50,13 +50,13 @@ Scene* Renderer::getScene()
 
 void Renderer::renderScene() 
 {
-	if		(m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
+	if	(m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
 }
 
 void Renderer::renderScene(Scene* scene)
 {
-	if		(scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
+	if	(scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
 }
 	
@@ -72,13 +72,13 @@ void Renderer::render2DScene(Scene* scene)
 
 	// Enable blending.
 	enable(GL_BLEND);
-	// Set glViewport for the ImGUI context.
+	// Set vewport for the ImGUI context.
 	setViewport(scene->getViewport());
 
 	// Update camera.
 	scene->updateCamera();
 
-	// Render to frame buffer.
+	// Render to framebffer.
 	scene->bindFBO();
 	scene->clearFBO();
 
@@ -128,13 +128,13 @@ void Renderer::render3DScene(Scene* scene)
 
 	// Enable blending.
 	enable(GL_BLEND);
-	// Set glViewport for the ImGUI context.
+	// Set viewport for the ImGUI context.
 	setViewport(scene->getViewport());
 
 	// Update camera.
 	scene->updateCamera();
 
-	// Render to frame buffer.
+	// Render to framebuffer.
 	scene->bindFBO();
 	scene->clearFBO();
 
@@ -177,6 +177,7 @@ void Renderer::render3DScene(Scene* scene)
 	// Disable blending.
 	disable(GL_BLEND);
 }
+
 //==============================================================================================================================================//
 //  Textures.																																	//
 //==============================================================================================================================================//
@@ -220,11 +221,6 @@ void Renderer::loadTextures(Scene* scene)
 //==============================================================================================================================================//
 //  Removing 2D Primitives.																														//
 //==============================================================================================================================================//
-
-// "primitive->~Primitive();" has to be called because the vector that it is being erased from is a
-// PrimitivePtr, not a primitive.  This means that the PrimitivePtr destructor is being called (and 
-// since it does not have a destructor the Entity destructor is being called).  We have to find a way
-// make this work more elegantly.
 
 void Renderer::remove(Primitive<VertexData>* primitive)
 {
@@ -284,8 +280,8 @@ Text* Renderer::addText2D(std::string text, glm::vec3& position, glm::vec4& colo
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
-															  m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
-															  parent, horizontalAlignment, verticalAlignment)});
+				       				  m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
+				       				  parent, horizontalAlignment, verticalAlignment)});
 	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
 }
 
