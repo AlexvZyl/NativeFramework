@@ -281,11 +281,12 @@ Port* Design2DEngineGL::getPort(unsigned eID)
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		while (currentEntity->m_type != EntityType::PORT) 
 		{
-			currentEntity = currentEntity->m_parent;			
-			if (currentEntity->m_parent == nullptr) 
-			{
-				return nullptr;
-			}
+			currentEntity = currentEntity->m_parent;
+
+			// Return if current entity is NULL.
+			if (!currentEntity) return nullptr;
+			// Return if entity has no parent.
+			if (!currentEntity->m_parent) return nullptr;
 		}
 
 		// This cast remains valid provided all entities on screen are decendents of components. If not, this needs to change.

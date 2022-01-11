@@ -47,8 +47,10 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 	m_guiState->design_engine = this;
 
 	Renderer::bindScene(m_scene.get());
-	LineSegment* line =  Renderer::addLineSegment2D(glm::vec2(0,0), glm::vec2(1,1), 0.05);
-	line->setLayer(0);
+	LineSegment* line =  Renderer::addLineSegment2D(glm::vec2(0,0), glm::vec2(1,1), 1.f);
+	glm::vec2 ctr(0.f, 0.f);
+	glm::vec4 black(0.f, 0.f, 0.f, 1.f);
+	Circle* circle = Renderer::addCircle2D(ctr, 0.2, black);
 
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";

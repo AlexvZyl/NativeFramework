@@ -50,13 +50,13 @@ Scene* Renderer::getScene()
 
 void Renderer::renderScene() 
 {
-	if	(m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
+	if	    (m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
 }
 
 void Renderer::renderScene(Scene* scene)
 {
-	if	(scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
+	if	    (scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
 }
 	
@@ -280,8 +280,8 @@ Text* Renderer::addText2D(std::string text, glm::vec3& position, glm::vec4& colo
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
-				       				  m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
-				       				  parent, horizontalAlignment, verticalAlignment)});
+				       			   m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
+				       			   parent, horizontalAlignment, verticalAlignment)});
 	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
 }
 
