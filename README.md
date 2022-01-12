@@ -26,6 +26,10 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ***IMPORTANT**: Do NOT use Legacy OpenGL, only use Modern OpenGL!*
 
+### Dear ImGUI
+
+* From the GitHub repo: "Suggestion: once in a while, add #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS in your imconfig.h file to make sure you are not using to-be-obsoleted symbols."
+
 ### Long Term
 
 Port to Vulkan, [https://www.vulkan.org/].
