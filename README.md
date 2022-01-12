@@ -28,7 +28,8 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ### Dear ImGUI
 
-* From the GitHub repo: "Suggestion: once in a while, add #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS in your imconfig.h file to make sure you are not using to-be-obsoleted symbols."
+* From the GitHub repo : "Suggestion: once in a while, add #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS in your imconfig.h file to make sure you are not using to-be-obsoleted symbols."
+* We have gradients! : [https://github.com/ocornut/imgui/issues/4722].
 
 ### Long Term
 
