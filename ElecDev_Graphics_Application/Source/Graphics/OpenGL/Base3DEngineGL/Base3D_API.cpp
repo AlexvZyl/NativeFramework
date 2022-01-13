@@ -4,7 +4,7 @@
 
 #include "CoreGL/Entities/Vertex.h"
 #include "Base3D_Engine.h"
-#include "../CoreGL/VertexArrayObjectGL.h"
+#include "../CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "Misc/ConsoleColor.h"
 #include <iostream>
 
