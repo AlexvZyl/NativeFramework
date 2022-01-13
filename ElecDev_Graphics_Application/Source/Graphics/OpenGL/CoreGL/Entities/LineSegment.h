@@ -13,9 +13,9 @@
 //  LineSegment Class.																															//
 //==============================================================================================================================================//
 
-class LineSegment : public Polygon2D,
-                    private boost::base_from_member< glm::vec2, 1>,
-                    private boost::base_from_member< glm::vec2, 2>
+class LineSegment : private boost::base_from_member< glm::vec2, 1>,
+                    private boost::base_from_member< glm::vec2, 2>,
+                    public Polygon2D
 {
 private:
 
