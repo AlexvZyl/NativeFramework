@@ -10,19 +10,34 @@
 //  Event overloaded function.																													//
 //==============================================================================================================================================//
 
-bool operator==(uint64_t id, EventType eventType) return id & eventType;
+bool operator==(uint64_t id, EventType eventType) 
+{ 
+	return id & eventType; 
+}
 
 //==============================================================================================================================================//
 //  Event Class.																																//
 //==============================================================================================================================================//
 
-void Event::handled() m_handled = true;
+void Event::handled() 
+{ 
+	m_handled = true; 
+}
 
-bool Event::isHandled() return m_handled; 
+bool Event::isHandled() 
+{ 
+	return m_handled; 
+}
 
-uint64_t Event::getID() return m_eventID;
+uint64_t Event::getID() 
+{ 
+	return m_eventID; 
+}
 
-Event::Event(uint64_t eventID) m_eventID = eventID;
+Event::Event(uint64_t eventID) 
+{ 
+	m_eventID = eventID; 
+}
 
 //==============================================================================================================================================//
 //  Mouse events.																																//
@@ -32,7 +47,10 @@ Event::Event(uint64_t eventID) m_eventID = eventID;
 //  M O U S E   B A S E  //
 // --------------------- //
 
-glm::vec2& MouseEvent::getPositionGLFW() return m_mousePositionGLFW;
+glm::vec2& MouseEvent::getPositionGLFW()
+{
+	return m_mousePositionGLFW;
+}
 
 MouseEvent::MouseEvent(glm::vec2& positionPixels, uint64_t eventID)
 	: Event(eventID), m_mousePositionGLFW(positionPixels)
@@ -70,7 +88,10 @@ KeyEvent::KeyEvent(int key, uint64_t eventID)
 	: Event(eventID), m_key(key) 
 {}
 
-int KeyEvent::getKey() return m_key;
+int KeyEvent::getKey()
+{
+	return m_key;
+}
 
 //==============================================================================================================================================//
 //  Window events.																																//
@@ -80,7 +101,10 @@ WindowResizeEvent::WindowResizeEvent(glm::vec2& windowSize, uint64_t eventID)
 	: Event(eventID), m_windowSize(windowSize)
 {}
 
-glm::vec2& WindowResizeEvent::getWindowSize()  return m_windowSize;
+glm::vec2& WindowResizeEvent::getWindowSize()
+{
+	return m_windowSize;
+}
 
 //==============================================================================================================================================//
 //  Serialisation events.																														//
@@ -97,7 +121,10 @@ FileDropEvent::FileDropEvent(std::vector<std::string>& path)
 }
 
 // Get the dropped file.
-std::vector<std::string>* FileDropEvent::getPaths() return filePaths.get();
+std::vector<std::string>* FileDropEvent::getPaths()
+{
+	return filePaths.get();
+}
 
 //==============================================================================================================================================//
 //  Event Log.																																	//
