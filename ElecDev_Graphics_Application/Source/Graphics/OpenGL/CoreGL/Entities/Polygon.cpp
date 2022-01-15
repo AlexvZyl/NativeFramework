@@ -15,7 +15,7 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
-	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
+	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);  //  Is this correct?
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;

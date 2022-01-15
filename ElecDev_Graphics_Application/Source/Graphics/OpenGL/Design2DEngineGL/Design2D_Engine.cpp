@@ -48,9 +48,28 @@ Design2DEngineGL::Design2DEngineGL(GUIState* guiState, std::string contextName)
 
 	Renderer::bindScene(m_scene.get());
 	LineSegment* line =  Renderer::addLineSegment2D(glm::vec2(0,0), glm::vec2(1,1), 1.f);
+	line->setLayer(0.5f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
+	Renderer::addLineSegment2D(glm::vec2(0, 0), glm::vec2(1, 1), 1.f);
 	glm::vec2 ctr(0.f, 0.f);
 	glm::vec4 black(0.f, 0.f, 0.f, 1.f);
 	Circle* circle = Renderer::addCircle2D(ctr, 0.2, black);
+
+	std::vector<glm::vec3> verts =
+	{
+		glm::vec3(-0.5f, -0.5f, 0.f),
+		glm::vec3(-0.5f, -1.f, 0.f),
+		glm::vec3(-1.f, -1.f, 0.f),
+		glm::vec3(-1.f, -0.5f, 0.f)
+	};
+	Polygon2D* poly = Renderer::addPolygon2D(verts);
+	poly->setLayer(0.5f);
+
 
 	// Done.
 	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Design 2D engine done.";
@@ -75,4 +94,5 @@ void Design2DEngineGL::resizeEvent(float width, float height)
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//
+
 

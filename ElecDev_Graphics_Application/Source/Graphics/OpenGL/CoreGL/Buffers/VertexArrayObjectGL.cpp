@@ -53,11 +53,12 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
-	GLCall(glBindVertexArray(m_VAOID));
 	// Update data.
 	if		(!m_sized )	resizeBuffer();
 	else if (!m_synced) syncBuffer();  
+	if      (!m_vertexCount) return;
 	// Render.
+	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
 }
