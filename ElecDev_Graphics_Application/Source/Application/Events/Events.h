@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <memory>
+#include <vector>
 #include "GLFW/glfw3.h"
 #include "External/GLM/glm.hpp"
 #include "ImGUI/Implementations/imgui_impl_glfw.h"
@@ -112,7 +113,7 @@ class MouseEvent : public Event
 public:
 
 	// Returns the position of the mouse event in pixels.
-	glm::vec2& getPositionPixels() 
+	glm::vec2& getPositionGLFW() 
 	{
 		return m_mousePositionGLFW;
 	}
@@ -274,15 +275,28 @@ class FolderDropEvent : public Event
 //  Event states.																																//
 //==============================================================================================================================================//
 
-struct EventLog
+class EventLog
 {
+
+public:
+
+	// Constructor.
+	EventLog() 
+	{
+		// To prevent unnecesary copying of data.
+		keyPressEvents.reserve(10);
+		keyReleaseEvents.reserve(10);
+	}
+
 	// Mouse events.
-	std::unique_ptr<MouseButtonEvent> mouseButtonEvent = nullptr;
-	std::unique_ptr<MouseMoveEvent>   mouseMoveEvent = nullptr;
+	std::unique_ptr<MouseButtonEvent> mousePressEvent = nullptr;
+	std::unique_ptr<MouseButtonEvent> mouseReleaseEvent = nullptr;
+	std::unique_ptr<MouseMoveEvent> mouseMoveEvent = nullptr;
 	std::unique_ptr<MouseScrollEvent> mouseScrollEvent = nullptr;
 	
 	// Key events.
-	std::unique_ptr<KeyEvent> keyEvent = nullptr;
+	std::vector<std::unique_ptr<KeyEvent>> keyPressEvents;
+	std::vector<std::unique_ptr<KeyEvent>> keyReleaseEvents;
 
 	// Window events.
 	std::unique_ptr<WindowResizeEvent> windowResizeEvent = nullptr;
@@ -294,7 +308,6 @@ struct EventLog
 	// Add event to the log.
 	void log(Event& event)
 	{
-
 		switch (event.getID()) 
 		{
 			// Mouse events.
@@ -305,18 +318,18 @@ struct EventLog
 				mouseScrollEvent	= std::make_unique<MouseScrollEvent>(dynamic_cast<MouseScrollEvent&>(event));
 				break;
 			case EventType::MousePress:
-				mouseButtonEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));
+				mousePressEvent		= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));
 				break;
 			case EventType::MouseRelease:
-				mouseButtonEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));
+				mouseReleaseEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));
 				break;
 
 			// Key events.
 			case EventType::KeyPress:
-				keyEvent			= std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event));
+				keyPressEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)));
 				break;
 			case EventType::KeyRelease:
-				keyEvent			= std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event));
+				keyReleaseEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)));
 				break;
 
 			// Window events.
@@ -332,6 +345,24 @@ struct EventLog
 				folderDropEvent		= std::make_unique<FolderDropEvent>(dynamic_cast<FolderDropEvent&>(event));
 				break;	
 		}
+	}
+
+	// Clears all of the events from the event log.
+	void clear() 
+	{
+		// Mouse events.
+		mousePressEvent = nullptr;
+		mouseReleaseEvent = nullptr;
+		mouseMoveEvent = nullptr;
+		mouseScrollEvent = nullptr;
+		// Key events.
+		keyPressEvents.clear();
+		keyReleaseEvents.clear();
+		// Window events.
+		windowResizeEvent = nullptr;
+		// Serialisation events.
+		fileDropEvent = nullptr;
+		folderDropEvent = nullptr;
 	}
 };
 

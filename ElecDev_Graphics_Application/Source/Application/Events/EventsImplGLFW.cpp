@@ -49,8 +49,8 @@ GLFWwindow* initGLFW()
 	glfwWindowHint(GLFW_SAMPLES, 8);
 	// Create GLFW window.
 	GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
-	if (window == NULL)
-		return nullptr;
+	if (window == NULL) return nullptr;
+	// Set renderer context.
 	glfwMakeContextCurrent(window);
 	// VSync.  If set to 0 it is disabled.
 	glfwSwapInterval(0);
