@@ -292,125 +292,52 @@ struct EventLog
 	std::unique_ptr<FolderDropEvent> folderDropEvent = nullptr;
 
 	// Add event to the log.
-	void onEvent(Event& event)
+	void log(Event& event)
 	{
-		// Mouse events.
-		if		(event.getID() == EventType::MouseMove)		{ mouseMoveEvent	= std::make_unique<MouseMoveEvent>(dynamic_cast<MouseMoveEvent&>(event)); }
-		else if (event.getID() == EventType::MouseScroll)	{ mouseScrollEvent	= std::make_unique<MouseScrollEvent>(dynamic_cast<MouseScrollEvent&>(event)); }
-		else if	(event.getID() == EventType::MousePress)	{ mouseButtonEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event)); }
-		else if	(event.getID() == EventType::MouseRelease)	{ mouseButtonEvent  = std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event)); }
 
-		// Key events.
-		else if (event.getID() == EventType::KeyPress)		{ keyEvent			= std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)); }
-		else if (event.getID() == EventType::KeyRelease)	{ keyEvent			= std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)); }
+		switch (event.getID()) 
+		{
+			// Mouse events.
+			case EventType::MouseMove:
+				mouseMoveEvent		= std::make_unique<MouseMoveEvent>(dynamic_cast<MouseMoveEvent&>(event));
+				break;
+			case EventType::MouseScroll:
+				mouseScrollEvent	= std::make_unique<MouseScrollEvent>(dynamic_cast<MouseScrollEvent&>(event));
+				break;
+			case EventType::MousePress:
+				mouseButtonEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));
+				break;
+			case EventType::MouseRelease:
+				mouseButtonEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));
+				break;
 
-		// Window events.
-		else if (event.getID() == EventType::WindowResize)	{ windowResizeEvent = std::make_unique<WindowResizeEvent>(dynamic_cast<WindowResizeEvent&>(event)); }
+			// Key events.
+			case EventType::KeyPress:
+				keyEvent			= std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event));
+				break;
+			case EventType::KeyRelease:
+				keyEvent			= std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event));
+				break;
 
-		// Serialisation events.
-		else if (event.getID() == EventType::FileDrop)		{ fileDropEvent		= std::make_unique<FileDropEvent>(dynamic_cast<FileDropEvent&>(event)); }
-		else if (event.getID() == EventType::FolderDrop)	{ folderDropEvent	= std::make_unique<FolderDropEvent>(dynamic_cast<FolderDropEvent&>(event)); }
+			// Window events.
+			case EventType::WindowResize:
+				windowResizeEvent	= std::make_unique<WindowResizeEvent>(dynamic_cast<WindowResizeEvent&>(event));
+				break;
+
+			// Serialisation events.
+			case EventType::FileDrop:
+				fileDropEvent		= std::make_unique<FileDropEvent>(dynamic_cast<FileDropEvent&>(event));
+				break;
+			case EventType::FolderDrop:
+				folderDropEvent		= std::make_unique<FolderDropEvent>(dynamic_cast<FolderDropEvent&>(event));
+				break;	
+		}
 	}
 };
 
 // State used throughout the application.
 // Has to be global so that GLFW can use it for callbacks.
 EventLog eventLog;
-
-//==============================================================================================================================================//
-//  GLFW.																																		//
-//==============================================================================================================================================//
-
-void mouseButtonEvent(GLFWwindow* window, int button, int action, int mods)
-{
-	// Create the event ID.
-	uint64_t eventID = 0;
-
-	// Event type.
-	if		(action == GLFW_PRESS)				 { eventID |= EventType::MousePress; }
-	else if (action == GLFW_RELEASE)			 { eventID |= EventType::MouseRelease; }
-
-	// Button states.
-	if		(button == GLFW_MOUSE_BUTTON_LEFT)   { eventID |= EventType::MouseButtonLeft; }
-	else if (button == GLFW_MOUSE_BUTTON_RIGHT)  { eventID |= EventType::MouseButtonRight; }
-	else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { eventID |= EventType::MouseButtonMiddle; }
-
-	// Get the cursos position.
-	glm::vec2 cursorPos;
-	glfwGetCursorPos(window, (double*) &cursorPos.x, (double*) & cursorPos.y);
-
-	// Log event.
-	MouseButtonEvent event(cursorPos, eventID);
-	eventLog.onEvent(event);
-
-	// ImGui mouse callback.
-	ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
-}
-
-void mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
-{
-	// Event ID.
-	uint64_t eventID = EventType::MouseMove;
-	
-	// Set button states.
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType::MouseButtonLeft; }
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType::MouseButtonRight; }
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType::MouseButtonMiddle; }
-
-	// Get the cursos position.
-	glm::vec2 cursorPos;
-	glfwGetCursorPos(window, (double*)&cursorPos.x, (double*)&cursorPos.y);
-
-	// Log event.
-	MouseMoveEvent event(cursorPos, eventID);
-	eventLog.onEvent(event);
-}
-
-void mouseScrollEvent(GLFWwindow* window, double xoffset, double yoffset)
-{
-	// Event ID.
-	uint64_t eventID = EventType::MouseScroll;
-
-	// Set button states.
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType::MouseButtonLeft; }
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType::MouseButtonRight; }
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType::MouseButtonMiddle; }
-
-	// Get the cursos position.
-	glm::vec2 cursorPos;
-	glfwGetCursorPos(window, (double*)&cursorPos.x, (double*)&cursorPos.y);
-
-	// Log event.
-	MouseScrollEvent event(cursorPos, yoffset, eventID);
-	eventLog.onEvent(event);
-
-	// ImGui scroll callback.
-	ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
-}
-
-void keyEvent(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	// Event ID.
-	uint64_t eventID = 0;
-
-	// Event type.
-	if	    (action == GLFW_PRESS)   { eventID |= EventType::KeyPress; }
-	else if (action == GLFW_RELEASE) { eventID |= EventType::KeyRelease; }
-
-	// Log event.
-	KeyEvent event(key, eventID);
-	eventLog.onEvent(event);
-
-	// ImGui key callback.
-	ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-}
-
-void fileDropEvent(GLFWwindow* window, int count, const char** paths)
-{
-	/*graphicsHandler->m_fileDropEvent.eventTrigger = true;
-	graphicsHandler->m_fileDropEvent.totalFiles = count;
-	for (int i = 0; i < count; i++) { graphicsHandler->m_fileDropEvent.paths.push_back(paths[i]); }*/
-}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

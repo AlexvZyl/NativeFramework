@@ -7,12 +7,12 @@ Engine API.
 //=============================================================================================================================================//
 
 #include "Base2D_Engine.h"
-#include "../CoreGL/VertexArrayObjectGL.h"
+#include "../CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Entities/Vertex.h"
 #include "../CoreGL/Entities/Text.h"
 #include <iostream>
 #include "Misc/ConsoleColor.h"
-#include "CoreGL/Fonts.h"
+#include "CoreGL/FontsGL.h"
 
 //=============================================================================================================================================//
 //  Rendering.																																   //

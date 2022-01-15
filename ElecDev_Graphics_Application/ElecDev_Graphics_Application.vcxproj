@@ -173,6 +173,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\Application.cpp" />
+    <ClCompile Include="Source\Application\Events\EventsImplGLFW.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
@@ -274,6 +276,9 @@
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Application\Events\Events.h" />
+    <ClInclude Include="Source\Application\Application.h" />
+    <ClInclude Include="Source\Application\Events\EventsImplGLFW.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\anchor.h" />

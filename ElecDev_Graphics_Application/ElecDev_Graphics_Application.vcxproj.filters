@@ -128,6 +128,8 @@
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\SceneGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.cpp" />
+    <ClCompile Include="Source\Application\Application.cpp" />
+    <ClCompile Include="Source\Application\Events\EventsImplGLFW.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1350,6 +1352,9 @@
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.h" />
+    <ClInclude Include="Source\Application\Events\Events.h" />
+    <ClInclude Include="Source\Application\Application.h" />
+    <ClInclude Include="Source\Application\Events\EventsImplGLFW.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
