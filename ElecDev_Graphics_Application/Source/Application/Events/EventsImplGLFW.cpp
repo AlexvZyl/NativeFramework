@@ -58,9 +58,9 @@ void glfwMouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType::MouseButtonRight; }
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType::MouseButtonMiddle; }
 
-	// Get the cursos position.
+    // Get the cursos position.
     double cursorX, cursorY;
-	glfwGetCursorPos(window, &cursorX, &cursorY);
+    glfwGetCursorPos(window, &cursorX, &cursorY);
     glm::vec2 cursorPos = {cursorX, cursorY};
 
 	// Log event.
