@@ -34,8 +34,6 @@ enum EventType
 
 	// Serialisation events.
 	FileDrop			=	1 << 10,
-	FolderDrop			=	1 << 11
-
 };
 
 // Check if an ID contains a specific type.
@@ -67,7 +65,6 @@ private:
 	friend class KeyEvent;
 	friend class WindowResizeEvent;
 	friend class FileDropEvent;
-	friend class FolderDropEvent;
 
 	// Constructor that sets the ID of the event.
 	Event(uint64_t eventID);
@@ -195,6 +192,9 @@ public:
 	// Constructor.
 	WindowResizeEvent(glm::vec2& windowSize, uint64_t eventID = EventType::WindowResize);
 
+	// Get the resized window size.
+	glm::vec2& getWindowSize();
+
 private:
 
 	// The new size of the window.
@@ -203,40 +203,25 @@ private:
 };
 
 //==============================================================================================================================================//
-//  Serialisation events.																														//
+//  File drop event.																															//
 //==============================================================================================================================================//
-
-// ------------------- //
-//  F I L E   D R O P  //
-// ------------------- //
 
 class FileDropEvent : public Event
 {
 public:
 
 	// Constructor.
-	FileDropEvent(std::string path);
+	FileDropEvent(std::vector<std::string>& paths);
 
-	// Get the dropped file.
-	std::string& getFile();
+	// Get the dropped files.
+	std::vector<std::string>* getPaths();
 
 private:
 
-	// The path to the dropped file.
-	std::string filePath;
+	// The path to the dropped files.
+	std::unique_ptr<std::vector<std::string>> filePaths;
 		
 };
-
-// ----------------------- //
-//  F O L D E R   D R O P  //
-// ----------------------- //
-
-class FolderDropEvent : public Event
-{
-
-
-};
-
 
 //==============================================================================================================================================//
 //  Event Log.																																	//
@@ -271,7 +256,6 @@ public:
 
 	// Serialisation events.
 	std::unique_ptr<FileDropEvent> fileDropEvent = nullptr;
-	std::unique_ptr<FolderDropEvent> folderDropEvent = nullptr;
 };
 
 // State used throughout the application.

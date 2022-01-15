@@ -110,6 +110,11 @@ WindowResizeEvent::WindowResizeEvent(glm::vec2& windowSize, uint64_t eventID)
 	m_windowSize = windowSize;
 }
 
+glm::vec2& WindowResizeEvent::getWindowSize() 
+{
+	return m_windowSize;
+}
+
 //==============================================================================================================================================//
 //  Serialisation events.																														//
 //==============================================================================================================================================//
@@ -118,26 +123,20 @@ WindowResizeEvent::WindowResizeEvent(glm::vec2& windowSize, uint64_t eventID)
 //  F I L E   D R O P  //
 // ------------------- //
 
-FileDropEvent::FileDropEvent(std::string path)
+FileDropEvent::FileDropEvent(std::vector<std::string>& path)
 	: Event(EventType::FileDrop)
 {
-	filePath = path;
+	filePaths = std::make_unique<std::vector<std::string>>(path);
 }
 
 // Get the dropped file.
-std::string& FileDropEvent::getFile()
+std::vector<std::string>* FileDropEvent::getPaths()
 {
-	return filePath;
+	return filePaths.get();
 }
 
-// ----------------------- //
-//  F O L D E R   D R O P  //
-// ----------------------- //
-
-
-
 //==============================================================================================================================================//
-//  Event Log.																																//
+//  Event Log.																																	//
 //==============================================================================================================================================//
 
 EventLog::EventLog()
@@ -147,6 +146,10 @@ EventLog::EventLog()
 	keyReleaseEvents.reserve(10);
 }
 
+// Here the mouse move event has to be checked first, becuase if a button is
+// pressed during the move event it is logged in the ID.  If it is then first 
+// checked for being a button event it will miss the fact that it should be 
+// a move event.
 void EventLog::log(Event& event)
 {
 	// Mouse events.
@@ -164,7 +167,6 @@ void EventLog::log(Event& event)
 
 	// Serialisation events.
 	else if (event.getID() == EventType::FileDrop)		{ fileDropEvent		= std::make_unique<FileDropEvent>(dynamic_cast<FileDropEvent&>(event)); }
-	else if (event.getID() == EventType::FolderDrop)	{ folderDropEvent	= std::make_unique<FolderDropEvent>(dynamic_cast<FolderDropEvent&>(event)); }
 }
 
 void EventLog::clear()
@@ -181,7 +183,6 @@ void EventLog::clear()
 	windowResizeEvent = nullptr;
 	// Serialisation events.
 	fileDropEvent = nullptr;
-	folderDropEvent = nullptr;
 }
 
 //==============================================================================================================================================//
