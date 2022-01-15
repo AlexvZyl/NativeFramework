@@ -10,6 +10,7 @@
 // ImGUI (GUI software). 
 #include "Core/imgui.h"
 #include "Implementations/imgui_impl_opengl3.h"
+#include "ImGUI/Implementations/imgui_impl_glfw.h"
 // GLAD (OpenGL loader).
 #include <glad/glad.h>
 // Resources.
@@ -57,66 +58,12 @@ std::unique_ptr<GUIHandler> guiHandler;
 
 int main(int, char**)
 {
-    // ------------- //
-    //  W I N D O W  //
-    // ------------- //
+    // ----------- //
+    //  S E T U P  //
+    // ----------- //
 
-    // Init GLFW.
-    GLFWwindow* window = initGLFW();
-
-    // --------------------------- //
-    //  O P E N G L   L O A D E R  //
-    // --------------------------- //
-
-    #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-        bool err = gl3wInit() != 0;
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-        bool err = glewInit() != GLEW_OK;
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-        bool err = gladLoadGL() == 0;
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
-        bool err = gladLoadGL(glfwGetProcAddress) == 0; // glad2 recommend using the windowing library loader instead of the (optionally) bundled one.
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
-        bool err = false;
-        glbinding::Binding::initialize();
-    #elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
-        bool err = false;
-        glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)glfwGetProcAddress(name); });
-    #else
-        bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-    #endif
-
-    // OpenGL loader error handler.
-    if (err)
-    {
-        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white,   " Failed to initialize OpenGL loader!\n");
-        return 1;
-    }
-
-    // Print OpenGL version.
-    std::cout << blue << "\n[OPENGL] [INFO] : " << white << " Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
-
-    // ----------------------------------------- //
-    //  I M G U I   &   O P E N G L   S E T U P  // 
-    // ----------------------------------------- //
-
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.IniFilename = NULL;                                    // Disable imgui ini file.
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable keyboard controls.
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-
-    // When viewports are enabled we tweak WindowRounding/WindowBg 
-    // so platform windows can look identical to regular ones.
-    ImGuiStyle& style = ImGui::GetStyle();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        style.WindowRounding = 0.0f;
-        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-    }
+    // Init window (GLFW, ImGUI, OpenGL context).
+    GLFWwindow* window = initWindow();
 
     // OpenGL settings.
     GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
@@ -143,10 +90,9 @@ int main(int, char**)
     // Create GUI handler object.
     guiHandler = std::make_unique<GUIHandler>(&guiState, graphicsHandler.get(), &pyInterface);
 
-    /*===================================================================================================================================*/
-    /* Render pipeline.                                                                                                                  */
-    /*===================================================================================================================================*/
-
+    // ------------------------------- //
+    //  R E N D E R   P I P E L I N E  //
+    // ------------------------------- //
 
     // Thread reading inputs from pipeline.
     //std::thread t1(&PyInterface::readingIn, &pyInterface);
@@ -168,6 +114,8 @@ int main(int, char**)
 
     // Reset glfw time.
     glfwSetTime(0);
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)

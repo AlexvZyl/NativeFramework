@@ -47,20 +47,12 @@ void GraphicsHandler::renderLoop()
 
 	// Resize event.
 	if (m_guiState->renderResizeEvent)	{ resizeEvent(); }
-	// Check for file drop event.
-	if (m_fileDropEvent.eventTrigger)   { fileDropEventHandler(); }
 	// Check for save event.
 	if (m_saveEvent.eventTrigger)		{ saveEventHandler(); }
 	// Check for load event.
 	if (m_loadEvent.eventTrigger)		{ loadEventHandler(); }
 	// Add window event.
 	if (m_addWindow)					{ addWindow(m_newWindowTitle, "Design2D"); m_addWindow = false; }
-	// Mouse events.
-	if (m_inputEvent.mousePressEvent)   { mousePressEvent(); m_inputEvent.mousePressEvent = false; }
-	if (m_inputEvent.mouseScrollEvent)  { mouseScrollEvent(); m_inputEvent.mouseScrollEvent = false; }
-	if (m_inputEvent.mouseMoveEvent)	{ mouseMoveEvent(); m_inputEvent.mouseMoveEvent = false; }
-	// Key event.
-	if (m_inputEvent.keyEvent)			{ keyEvent(); m_inputEvent.keyEvent = false; }
 };
 
 //=============================================================================================================================================//
@@ -69,84 +61,84 @@ void GraphicsHandler::renderLoop()
 
 void GraphicsHandler::mousePressEvent()
 {
-	// Reset press event.
-	m_inputEvent.mousePressEvent = false;
+	//// Reset press event.
+	//m_inputEvent.mousePressEvent = false;
 
-	// Check if window dict is empty or inactive.
-	if (m_windowsDictionary.size() && isActiveWindowValid())
-	{
-		// Find cursos position from ImGui.
-		float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
+	//// Check if window dict is empty or inactive.
+	//if (m_windowsDictionary.size() && isActiveWindowValid())
+	//{
+	//	// Find cursos position from ImGui.
+	//	float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
 
-		// Left press.
-		if (m_inputEvent.mousePressLeftEvent)
-		{
-			// Call active engine.
-			m_activeWindow->engineGL->mousePressLeft(mousePos);
-			// Close popup menu.
-			m_guiState->popUpMenu = false;
-		}
+	//	// Left press.
+	//	if (m_inputEvent.mousePressLeftEvent)
+	//	{
+	//		// Call active engine.
+	//		m_activeWindow->engineGL->mousePressLeft(mousePos);
+	//		// Close popup menu.
+	//		m_guiState->popUpMenu = false;
+	//	}
 
-		// Right press.
-		if (m_inputEvent.mousePressRightEvent)
-		{
-			// Call active engine.
-			m_activeWindow->engineGL->mousePressRight(mousePos);
-			// Open menu if in scene.
-			if (isWindowValid(m_activeWindow)) 
-			{	
-				m_guiState->popUpMenu = true;
-				m_guiState->popUpPosition = {m_guiState->imguiGlobalMouseCoords};
-			}
-		}
+	//	// Right press.
+	//	if (m_inputEvent.mousePressRightEvent)
+	//	{
+	//		// Call active engine.
+	//		m_activeWindow->engineGL->mousePressRight(mousePos);
+	//		// Open menu if in scene.
+	//		if (isWindowValid(m_activeWindow)) 
+	//		{	
+	//			m_guiState->popUpMenu = true;
+	//			m_guiState->popUpPosition = {m_guiState->imguiGlobalMouseCoords};
+	//		}
+	//	}
 
-		// Middle press.
-		if (m_inputEvent.mousePressMiddleEvent)
-		{
-			// Call active engine.
-			m_activeWindow->engineGL->mousePressMiddle(mousePos);
-		}
-	}
+	//	// Middle press.
+	//	if (m_inputEvent.mousePressMiddleEvent)
+	//	{
+	//		// Call active engine.
+	//		m_activeWindow->engineGL->mousePressMiddle(mousePos);
+	//	}
+	//}
 
-	// Reset the press data.
-	m_inputEvent.resetMousePress();
+	//// Reset the press data.
+	//m_inputEvent.resetMousePress();
 }
 
 void GraphicsHandler::mouseMoveEvent()
 {
-	// Check if window dict is empty or inactive.
-	if (m_windowsDictionary.size() && isActiveWindowValid())
-	{
-		// Find cursos position.
-		float mousePos[2] = { m_activeWindow->mouseCoords[0] , 
-							  m_activeWindow->mouseCoords[1] };
-		m_activeWindow->engineGL->mouseMoveEvent(mousePos, m_inputEvent.mouseMoveButtonStateLeft, 
-														   m_inputEvent.mouseMoveButtonStateRight,
-														   m_inputEvent.mouseMoveButtonStateMiddle);
-		// Update the GUI state mouse coords.
-		m_guiState->renderWindowMouseCoordinate[0] = mousePos[0];
-		m_guiState->renderWindowMouseCoordinate[1] = mousePos[1];
-	}
+	//// Check if window dict is empty or inactive.
+	//if (m_windowsDictionary.size() && isActiveWindowValid())
+	//{
+	//	// Find cursos position.
+	//	float mousePos[2] = { m_activeWindow->mouseCoords[0] , 
+	//						  m_activeWindow->mouseCoords[1] };
+	//	m_activeWindow->engineGL->mouseMoveEvent(mousePos, m_inputEvent.mouseMoveButtonStateLeft, 
+	//													   m_inputEvent.mouseMoveButtonStateRight,
+	//													   m_inputEvent.mouseMoveButtonStateMiddle);
+	//	// Update the GUI state mouse coords.
+	//	m_guiState->renderWindowMouseCoordinate[0] = mousePos[0];
+	//	m_guiState->renderWindowMouseCoordinate[1] = mousePos[1];
+	//}
 }
 
 void GraphicsHandler::mouseScrollEvent()
 {
-	// Check if window dict is empty or inactive.
-	if (m_windowsDictionary.size() && isActiveWindowValid())
-	{
-		// Find cursor position.
-		float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
-		m_activeWindow->engineGL->mouseScrollEvent(mousePos, m_inputEvent.mouseScrollY);
-	}
+	//// Check if window dict is empty or inactive.
+	//if (m_windowsDictionary.size() && isActiveWindowValid())
+	//{
+	//	// Find cursor position.
+	//	float mousePos[2] = { m_activeWindow->mouseCoords[0] , m_activeWindow->mouseCoords[1] };
+	//	m_activeWindow->engineGL->mouseScrollEvent(mousePos, m_inputEvent.mouseScrollY);
+	//}
 }
 
 void GraphicsHandler::keyEvent()
 {
-	// Check if window dict is empty or inactive.
-	if (m_windowsDictionary.size() && isActiveWindowValid())
-	{
-		m_activeWindow->engineGL->keyEvent(m_inputEvent.key, m_inputEvent.keyAction);
-	}
+	//// Check if window dict is empty or inactive.
+	//if (m_windowsDictionary.size() && isActiveWindowValid())
+	//{
+	//	m_activeWindow->engineGL->keyEvent(m_inputEvent.key, m_inputEvent.keyAction);
+	//}
 }
 
 //=============================================================================================================================================//
@@ -188,37 +180,37 @@ void GraphicsHandler::resizeEvent()
 
 void GraphicsHandler::fileDropEventHandler() 
 {
-	// Loop through all of the files.
-	for (std::string path : m_fileDropEvent.paths)
-	{
-		// Check if the file is valid.
-		if (path.find(".lmct") == std::string::npos &&
-			path.find(".yml")  == std::string::npos &&
-			path.find(".yaml") == std::string::npos)
-		{
-			continue;
-		}
-		// Create a new window.
-		addWindow("Generating", "Design2D");
-		Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
-		// Load the circuit data.
-		loadFromYAML(*engine, path);
-		// Update name.
-		engine->m_contextName = engine->m_circuit->m_label;
-		auto node = m_windowsDictionary.extract("Generating");
-		node.key() = engine->m_contextName;
-		m_windowsDictionary.insert(std::move(node));
-		m_activeWindow->windowName = engine->m_circuit->m_label;
-		m_activeWindow->resizeEvent = true;
-	}
-	m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
-	// Reset event.
-	m_fileDropEvent.eventTrigger = false;
-	m_fileDropEvent.totalFiles = 0;
-	m_fileDropEvent.paths.clear();
-	m_fileDropEvent.paths.shrink_to_fit();
-	// Set resize.
-	m_guiState->renderResizeEvent = true;
+	//// Loop through all of the files.
+	//for (std::string path : m_fileDropEvent.paths)
+	//{
+	//	// Check if the file is valid.
+	//	if (path.find(".lmct") == std::string::npos &&
+	//		path.find(".yml")  == std::string::npos &&
+	//		path.find(".yaml") == std::string::npos)
+	//	{
+	//		continue;
+	//	}
+	//	// Create a new window.
+	//	addWindow("Generating", "Design2D");
+	//	Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+	//	// Load the circuit data.
+	//	loadFromYAML(*engine, path);
+	//	// Update name.
+	//	engine->m_contextName = engine->m_circuit->m_label;
+	//	auto node = m_windowsDictionary.extract("Generating");
+	//	node.key() = engine->m_contextName;
+	//	m_windowsDictionary.insert(std::move(node));
+	//	m_activeWindow->windowName = engine->m_circuit->m_label;
+	//	m_activeWindow->resizeEvent = true;
+	//}
+	//m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+	//// Reset event.
+	//m_fileDropEvent.eventTrigger = false;
+	//m_fileDropEvent.totalFiles = 0;
+	//m_fileDropEvent.paths.clear();
+	//m_fileDropEvent.paths.shrink_to_fit();
+	//// Set resize.
+	//m_guiState->renderResizeEvent = true;
 }
 
 void GraphicsHandler::saveEventHandler() 
