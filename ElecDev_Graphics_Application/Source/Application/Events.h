@@ -5,9 +5,9 @@
 //==============================================================================================================================================//
 
 #include <stdint.h>
-#include "External/GLM/glm.hpp"
 #include <memory>
 #include "GLFW/glfw3.h"
+#include "External/GLM/glm.hpp"
 #include "ImGUI/Implementations/imgui_impl_glfw.h"
 
 //==============================================================================================================================================//
@@ -74,9 +74,12 @@ public:
 private:
 
 	// Classes that can use 'Event'.
+	// We do not want the user to be able to create 'Event' objects.
 	friend class MouseEvent;
 	friend class KeyEvent;
 	friend class WindowResizeEvent;
+	friend class FileDropEvent;
+	friend class FolderDropEvent;
 
 	// Constructor that sets the ID of the event.
 	Event(uint64_t eventID) 
@@ -117,6 +120,7 @@ public:
 private:
 
 	// Classes that can use 'MouseEvent'.
+	// We do not want the user to be able to create 'MouseEvent' objects.
 	friend class MouseButtonEvent;
 	friend class MouseMoveEvent;
 	friend class MouseScrollEvent;
@@ -287,7 +291,7 @@ struct EventLog
 	std::unique_ptr<FileDropEvent> fileDropEvent = nullptr;
 	std::unique_ptr<FolderDropEvent> folderDropEvent = nullptr;
 
-	// Add event to the state.
+	// Add event to the log.
 	void onEvent(Event& event)
 	{
 		// Mouse events.
@@ -310,6 +314,7 @@ struct EventLog
 };
 
 // State used throughout the application.
+// Has to be global so that GLFW can use it for callbacks.
 EventLog eventLog;
 
 //==============================================================================================================================================//

@@ -78,8 +78,6 @@ public:
 	virtual void drawDemo(unsigned int loopCount);
 	// Returns the FBO texture ID that can be rendered.
 	unsigned int getRenderTexture();
-	// Creates the default background for the engines.
-	void createDefaultBackground();
 	// Calculates the delta time and returns it.	
 	// This is used to ensure constant movement and sensitivity
 	// regardless of the framerate.
