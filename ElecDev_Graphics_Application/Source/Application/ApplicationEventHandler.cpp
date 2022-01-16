@@ -17,16 +17,16 @@ void Application::handleEvents()
 	for (std::unique_ptr<KeyEvent>& event : eventLog.keyReleaseEvents)	{ handleKeyReleaseEvent(event);	}
 
 	// Mouse events.
-	if (eventLog.mouseMoveEvent)			{ handleMouseMoveEvent(eventLog.mouseMoveEvent);		}
-	if (eventLog.mouseScrollEvent)			{ handleMouseScrollEvent(eventLog.mouseScrollEvent);	}
-	if (eventLog.mousePressEvent)			{ handleMousePressEvent(eventLog.mousePressEvent);		}
-	if (eventLog.mouseReleaseEvent)			{ handleMouseReleaseEvent(eventLog.mouseReleaseEvent);	}
+	if (eventLog.mouseMoveEvent)		{ handleMouseMoveEvent(eventLog.mouseMoveEvent);		}
+	if (eventLog.mouseScrollEvent)		{ handleMouseScrollEvent(eventLog.mouseScrollEvent);	}
+	if (eventLog.mousePressEvent)		{ handleMousePressEvent(eventLog.mousePressEvent);		}
+	if (eventLog.mouseReleaseEvent)		{ handleMouseReleaseEvent(eventLog.mouseReleaseEvent);	}
 
 	// Window events.
-	if (eventLog.windowResizeEvent)			{ handleWindowResizeEvent(eventLog.windowResizeEvent);	}
+	if (eventLog.windowResizeEvent)		{ handleWindowResizeEvent(eventLog.windowResizeEvent);	}
 
 	// Serialisation events.
-	if (eventLog.fileDropEvent)				{ handleFileDropEvent(eventLog.fileDropEvent);			}
+	if (eventLog.fileDropEvent)			{ handleFileDropEvent(eventLog.fileDropEvent);			}
 
 	// All events have been handled.
 	eventLog.clear();

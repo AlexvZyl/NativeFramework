@@ -114,16 +114,16 @@ glm::vec2& WindowResizeEvent::getWindowSize()
 //  F I L E   D R O P  //
 // ------------------- //
 
-FileDropEvent::FileDropEvent(std::vector<std::string>& path)
+FileDropEvent::FileDropEvent(std::vector<std::string>& paths)
 	: Event(EventType::FileDrop)
 {
-	filePaths = std::make_unique<std::vector<std::string>>(path);
+	filePaths = std::make_unique<std::vector<std::string>>(std::move(paths));
 }
 
 // Get the dropped file.
-std::vector<std::string>* FileDropEvent::getPaths()
+std::vector<std::string>& FileDropEvent::getPaths()
 {
-	return filePaths.get();
+	return *filePaths.get();
 }
 
 //==============================================================================================================================================//
@@ -147,20 +147,20 @@ void EventLog::log(Event& event)
 	uint64_t eventID = event.getID();
 
 	// Mouse events.
-	if		( eventID == EventType::MouseMove	)	{ mouseMoveEvent	= std::make_unique<MouseMoveEvent>(dynamic_cast<MouseMoveEvent&>(event));		}
-	else if ( eventID == EventType::MouseScroll	)	{ mouseScrollEvent	= std::make_unique<MouseScrollEvent>(dynamic_cast<MouseScrollEvent&>(event));	}
-	else if ( eventID == EventType::MousePress	)	{ mousePressEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));	}
-	else if ( eventID == EventType::MouseRelease)	{ mouseReleaseEvent = std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));	}
+	if		( eventID == EventType::MouseMove	)	{ mouseMoveEvent	= std::make_unique<MouseMoveEvent>(std::move(dynamic_cast<MouseMoveEvent&>(event)));		}
+	else if ( eventID == EventType::MouseScroll	)	{ mouseScrollEvent	= std::make_unique<MouseScrollEvent>(std::move(dynamic_cast<MouseScrollEvent&>(event)));	}
+	else if ( eventID == EventType::MousePress	)	{ mousePressEvent	= std::make_unique<MouseButtonEvent>(std::move(dynamic_cast<MouseButtonEvent&>(event)));	}
+	else if ( eventID == EventType::MouseRelease)	{ mouseReleaseEvent = std::make_unique<MouseButtonEvent>(std::move(dynamic_cast<MouseButtonEvent&>(event)));	}
 
 	// Key events.
-	else if ( eventID == EventType::KeyPress	)	{ keyPressEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)));			}
-	else if ( eventID == EventType::KeyRelease	)	{ keyReleaseEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)));		}
+	else if ( eventID == EventType::KeyPress	)	{ keyPressEvents.emplace_back(std::make_unique<KeyEvent>(std::move(dynamic_cast<KeyEvent&>(event))));			}
+	else if ( eventID == EventType::KeyRelease	)	{ keyReleaseEvents.emplace_back(std::make_unique<KeyEvent>(std::move(dynamic_cast<KeyEvent&>(event))));			}
 
 	// Window events.
-	else if ( eventID == EventType::WindowResize)	{ windowResizeEvent	= std::make_unique<WindowResizeEvent>(dynamic_cast<WindowResizeEvent&>(event)); }
+	else if ( eventID == EventType::WindowResize)	{ windowResizeEvent	= std::make_unique<WindowResizeEvent>(std::move(dynamic_cast<WindowResizeEvent&>(event)));	}
 
 	// Serialisation events.
-	else if ( eventID == EventType::FileDrop	)	{ fileDropEvent		= std::make_unique<FileDropEvent>(dynamic_cast<FileDropEvent&>(event));			}
+	else if (eventID == EventType::FileDrop		)	{ fileDropEvent		= std::make_unique<FileDropEvent>(std::move(dynamic_cast<FileDropEvent&>(event)));			}
 }
 
 void EventLog::clear()

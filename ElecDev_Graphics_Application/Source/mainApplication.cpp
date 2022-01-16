@@ -63,7 +63,7 @@ int main(int, char**)
     std::unique_ptr<PyInterface> pyInterface;
 
     // Create GUI handler object.
-    std::unique_ptr<GUIHandler> guiHandler = std::make_unique<GUIHandler>(&guiState, &graphicsHandler, &pyInterface);
+    std::unique_ptr<GUIHandler> guiHandler = std::make_unique<GUIHandler>(&guiState, graphicsHandler.get(), pyInterface.get());
     pyInterface = std::make_unique<PyInterface>(graphicsHandler.get(), guiHandler.get(), &guiState);
     // --------------------------------------------------------------------------------------------------------------//
 

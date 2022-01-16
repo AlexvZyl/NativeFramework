@@ -118,7 +118,7 @@ void glfwFileDropEvent(GLFWwindow* window, int count, const char** paths)
     filePaths.reserve(count);
 	for (int i = 0; i < count; i++) 
     { 
-        filePaths.push_back(paths[i]); 
+        filePaths.emplace_back(std::string(paths[i])); 
     }
 
     // Log the event.

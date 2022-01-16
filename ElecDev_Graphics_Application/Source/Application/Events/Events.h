@@ -214,7 +214,7 @@ public:
 	FileDropEvent(std::vector<std::string>& paths);
 
 	// Get the dropped files.
-	std::vector<std::string>* getPaths();
+	std::vector<std::string>& getPaths();
 
 private:
 
