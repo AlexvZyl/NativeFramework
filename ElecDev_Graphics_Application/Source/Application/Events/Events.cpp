@@ -143,21 +143,24 @@ EventLog::EventLog()
 // a move event.
 void EventLog::log(Event& event)
 {
+	// Get the event ID.
+	uint64_t eventID = event.getID();
+
 	// Mouse events.
-	if		(event.getID() == EventType::MouseMove)		{ mouseMoveEvent	= std::make_unique<MouseMoveEvent>(dynamic_cast<MouseMoveEvent&>(event)); }
-	else if (event.getID() == EventType::MouseScroll)	{ mouseScrollEvent	= std::make_unique<MouseScrollEvent>(dynamic_cast<MouseScrollEvent&>(event)); }
-	else if (event.getID() == EventType::MousePress)	{ mousePressEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event)); }
-	else if (event.getID() == EventType::MouseRelease)	{ mouseReleaseEvent = std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event)); }
+	if		( eventID == EventType::MouseMove	)	{ mouseMoveEvent	= std::make_unique<MouseMoveEvent>(dynamic_cast<MouseMoveEvent&>(event));		}
+	else if ( eventID == EventType::MouseScroll	)	{ mouseScrollEvent	= std::make_unique<MouseScrollEvent>(dynamic_cast<MouseScrollEvent&>(event));	}
+	else if ( eventID == EventType::MousePress	)	{ mousePressEvent	= std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));	}
+	else if ( eventID == EventType::MouseRelease)	{ mouseReleaseEvent = std::make_unique<MouseButtonEvent>(dynamic_cast<MouseButtonEvent&>(event));	}
 
 	// Key events.
-	else if (event.getID() == EventType::KeyPress)		{ keyPressEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event))); }
-	else if (event.getID() == EventType::KeyRelease)	{ keyReleaseEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event))); }
+	else if ( eventID == EventType::KeyPress	)	{ keyPressEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)));			}
+	else if ( eventID == EventType::KeyRelease	)	{ keyReleaseEvents.emplace_back(std::make_unique<KeyEvent>(dynamic_cast<KeyEvent&>(event)));		}
 
 	// Window events.
-	else if (event.getID() == EventType::WindowResize)	{ windowResizeEvent	= std::make_unique<WindowResizeEvent>(dynamic_cast<WindowResizeEvent&>(event)); }
+	else if ( eventID == EventType::WindowResize)	{ windowResizeEvent	= std::make_unique<WindowResizeEvent>(dynamic_cast<WindowResizeEvent&>(event)); }
 
 	// Serialisation events.
-	else if (event.getID() == EventType::FileDrop)		{ fileDropEvent		= std::make_unique<FileDropEvent>(dynamic_cast<FileDropEvent&>(event)); }
+	else if ( eventID == EventType::FileDrop	)	{ fileDropEvent		= std::make_unique<FileDropEvent>(dynamic_cast<FileDropEvent&>(event));			}
 }
 
 void EventLog::clear()

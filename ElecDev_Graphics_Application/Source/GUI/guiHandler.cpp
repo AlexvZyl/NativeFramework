@@ -50,11 +50,13 @@ GUIHandler::~GUIHandler() {}
 /*=======================================================================================================================================*/
 
 // [MAIN LOOP] Render the GUI to the screen.
-void GUIHandler::renderGui(ImGuiIO& io, GLFWwindow* window)
+void GUIHandler::renderGui(GLFWwindow* window)
 {
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Update mouse position.
 	m_guiState->imguiGlobalMouseCoords = ImGui::GetMousePos();

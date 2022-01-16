@@ -2,55 +2,37 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-// General.
+#include <thread>
+#include <chrono>
 #include <stdio.h>
 #include <vector>
 #include <iostream>
 #include <string>
-// ImGUI (GUI software). 
-#include "Core/imgui.h"
-#include "Implementations/imgui_impl_opengl3.h"
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
-// GLAD (OpenGL loader).
-#include <glad/glad.h>
-// Resources.
-#include <Misc/stb_image.h>
-#include "Resources/ResourceHandler.h"
-// Console coloring.
+#include "External/Misc/stb_image.h"
 #include "External/Misc/ConsoleColor.h"
-// Gui states.
+#include "glad/glad.h"
+#include "ImGUI/Core/imgui.h"
+#include "ImGUI/Implementations/imgui_impl_opengl3.h"
+#include "ImGUI/Implementations/imgui_impl_glfw.h"
 #include "GUI/GUIState.h"
-// General.
-#include <thread>
-// Handlers.
-#include "Graphics/GraphicsHandler.h"
 #include "GUI/GuiHandler.h"
+#include "Graphics/GraphicsHandler.h"
 #include "Utilities/PythonInterface/PythonInterface.h"
-// Include GLFW (window) after OpenGL definition.
 #include "Application/Events/EventsImplGLFW.h"
-// Measure time.
-#include <chrono>
-// Include the renderer for initialisartion.
+#include "Application/Application.h"
 #include "CoreGL/RendererGL.h"
+#include "Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
 /*=======================================================================================================================================*/
 
-// Removes the console in release mode.
-#ifdef	_DEBUG
-#pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
+// Removes the console in release mode (Windows).
+#ifdef _DEBUG
+    #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
 #else
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #endif
-
-/*=======================================================================================================================================*/
-/* Handler declerations.					                                                                                              /
-/*=======================================================================================================================================*/
-
-// Defined here, assigned in the main function where it has access to the window.
-std::unique_ptr<GraphicsHandler> graphicsHandler;
-std::unique_ptr<GUIHandler> guiHandler;
 
 /*=======================================================================================================================================*/
 /* Main                                                                                                                                  */
@@ -64,31 +46,29 @@ int main(int, char**)
 
     // Init window (GLFW, ImGUI, OpenGL context).
     GLFWwindow* window = initWindow();
-
-    // OpenGL settings.
-    GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
-    GLCall(glEnable(GL_DEPTH_TEST));                            // Enables depth testing for the OpenGL scenes.
-    GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
-    GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
-    GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));           // Set the color to which OpenGL clears.
     
     // Initialise the renderer.
     Renderer::initialise();
+
+    // --------------------------------------------------------------------------------------------------------------//
+    // Everything in this section is going to be replaced by the 'Application' class.
 
     // Create the state machine variables.
     GUIState guiState;
 
     // Create graphics handler object.
-    // For now a global variable is used to be able to have mouse callbacks with a method.
-    // The callbacks cannot be used with a method, so it has to call a normal function.
-    graphicsHandler = std::make_unique<GraphicsHandler>(&guiState, window);
+    std::unique_ptr<GraphicsHandler> graphicsHandler = std::make_unique<GraphicsHandler>(&guiState, window);
 
     // Create a python interfacing object.
-    PyInterface pyInterface(graphicsHandler.get(), guiHandler.get(), &guiState);
+    std::unique_ptr<PyInterface> pyInterface;
 
     // Create GUI handler object.
-    guiHandler = std::make_unique<GUIHandler>(&guiState, graphicsHandler.get(), &pyInterface);
+    std::unique_ptr<GUIHandler> guiHandler = std::make_unique<GUIHandler>(&guiState, &graphicsHandler, &pyInterface);
+    pyInterface = std::make_unique<PyInterface>(graphicsHandler.get(), guiHandler.get(), &guiState);
+    // --------------------------------------------------------------------------------------------------------------//
+
+    // Create Application instance.
+    Application application(window, graphicsHandler.get(), guiHandler.get());
 
     // ------------------------------- //
     //  R E N D E R   P I P E L I N E  //
@@ -115,13 +95,11 @@ int main(int, char**)
     // Reset glfw time.
     glfwSetTime(0);
 
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-
     // [MAIN LOOP].
     while (!glfwWindowShouldClose(window) && !guiState.globalQuit)
     {
         // Poll commands from python interface.
-        pyInterface.deQueueInput();
+        pyInterface->deQueueInput();
 
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
@@ -141,11 +119,11 @@ int main(int, char**)
             // Clear buffers for OpenGL.
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-            // Handle graphics (Rendering to FBO's that are displayed by ImGUI).
-            graphicsHandler->renderLoop();
+            // Handle the events.
+            application.handleEvents();
 
-            // Render ImGUI to screen.
-            guiHandler->renderGui(io, window);
+            // Render the frame to the screen.
+            application.renderFrame();
             
             // Swap the OpenGL buffers.
             glfwSwapBuffers(window);
@@ -155,7 +133,9 @@ int main(int, char**)
         }
     }
 
-    /*===================================================================================================================================*/
+    // --------------- //
+    //  C L E A N U P  //
+    // --------------- //
 
     // ImGUI cleanup.
     ImGui_ImplOpenGL3_Shutdown();

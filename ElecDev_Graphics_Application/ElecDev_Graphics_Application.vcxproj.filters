@@ -131,6 +131,7 @@
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\Events\EventsImplGLFW.cpp" />
     <ClCompile Include="Source\Application\Events\Events.cpp" />
+    <ClCompile Include="Source\Application\ApplicationEventHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">

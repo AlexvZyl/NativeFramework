@@ -9,6 +9,8 @@
 #include "CoreGL/RendererGL.h"
 #include "CoreGL/CameraGL.h"
 #include "CoreGL/SceneGL.h"
+#include "CoreGL/FontLoaderGL.h"
+#include "CoreGL/ErrorHandlerGL.h"
 #include "CoreGL/Entities/Polygon.h"
 #include "CoreGL/Entities/EntityManager.h"
 #include "CoreGL/Entities/Circle.h"
@@ -16,8 +18,6 @@
 #include "CoreGL/Entities/Text.h"
 #include "CoreGL/Entities/Primitive.h"
 #include "CoreGL/Entities/Vertex.h"
-#include "CoreGL/FontLoaderGL.h"
-#include "CoreGL/ErrorHandlerGL.h"
 #include "CoreGL/Buffers/VertexArrayObjectGL.h"
 #include "CoreGL/Buffers/FrameBufferObjectGL.h"
 
@@ -291,7 +291,17 @@ Text* Renderer::addText2D(std::string text, glm::vec3& position, glm::vec4& colo
 
 void Renderer::initialise()
 {
+	// OpenGL settings.
+	GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
+	GLCall(glEnable(GL_DEPTH_TEST));                            // Enables depth testing for the OpenGL scenes.
+	GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
+	GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
+	GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));           // Set the color to which OpenGL clears.
+
+	// Compiles the shaders used by the renderer and the FBO.
 	Renderer::compileShaders();
+	// Loads the default font to be used by the renderer.
 	Renderer::loadDefaultFont();
 }
 

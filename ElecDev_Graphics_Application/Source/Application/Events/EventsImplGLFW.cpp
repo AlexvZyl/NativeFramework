@@ -110,9 +110,20 @@ void glfwKeyEvent(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void glfwFileDropEvent(GLFWwindow* window, int count, const char** paths)
 {
-	/*graphicsHandler->m_fileDropEvent.eventTrigger = true;
-	graphicsHandler->m_fileDropEvent.totalFiles = count;
-	for (int i = 0; i < count; i++) { graphicsHandler->m_fileDropEvent.paths.push_back(paths[i]); }*/
+	// Event ID.
+    uint64_t eventID = EventType::FileDrop;
+
+    // Load the files.
+    std::vector<std::string> filePaths;
+    filePaths.reserve(count);
+	for (int i = 0; i < count; i++) 
+    { 
+        filePaths.push_back(paths[i]); 
+    }
+
+    // Log the event.
+    FileDropEvent event(filePaths);
+    eventLog.log(event);
 }
 
 //==============================================================================================================================================//
@@ -150,8 +161,8 @@ GLFWwindow* initWindow()
     const char* glsl_version = "#version 460";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
-    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only.
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only.
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only.
 #endif
 
     // --------------------- //

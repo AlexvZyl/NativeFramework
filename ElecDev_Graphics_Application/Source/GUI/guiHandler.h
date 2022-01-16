@@ -77,7 +77,7 @@ public:
 	// Destructor.
 	~GUIHandler();
 	// Function that handles which engine should be active.
-	void renderGui(ImGuiIO& io, GLFWwindow* window);
+	void renderGui(GLFWwindow* window);
 	// Set custom theme.
 	void setTheme();
 	void createDock(ImVec2 work_size);

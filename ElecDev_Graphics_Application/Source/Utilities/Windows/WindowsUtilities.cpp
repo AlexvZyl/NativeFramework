@@ -16,7 +16,7 @@ std::string getExecutableLocation()
     char pathWindows[100];
     GetModuleFileNameA(getCurrentModule(), pathWindows, 100);
     std::string path = pathWindows;
-    path.erase(path.length()-4, 4);                     // Remove .exe
+    path.erase(path.length()-4, 4);                     // Remove '.exe'.
     while (path.back() != '\\') { path.pop_back(); }    // Remove exe name.
     return path;
 }
