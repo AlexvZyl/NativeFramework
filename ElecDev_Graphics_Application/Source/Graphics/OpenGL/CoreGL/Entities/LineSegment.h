@@ -34,6 +34,8 @@ public:
                 float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f });
     // Translate by the given vector.
     void translate(glm::vec2& translation) override;
+    void setStart(glm::vec2 start);
+    void setEnd(glm::vec2 end);
 };
 
 //==============================================================================================================================================//
