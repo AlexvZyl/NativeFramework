@@ -126,11 +126,11 @@ int main(int, char**)
             // Render the frame to the screen.
             application.renderFrame();
             
-            // Swap the OpenGL buffers.
-            glfwSwapBuffers(window);
-
             // Force push OpenGL commands to the GPU.
             GLCall(glFinish());
+            
+            // Swap the OpenGL buffers.
+            glfwSwapBuffers(window);
         }
     }
 
