@@ -20,7 +20,8 @@
 #include "Utilities/PythonInterface/PythonInterface.h"
 #include "Application/Events/EventsImplGLFW.h"
 #include "Application/Application.h"
-#include "CoreGL/RendererGL.h"
+#include "OpenGL/RendererGL.h"
+#include "OpenGL/ErrorHandlerGL.h"
 #include "Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/

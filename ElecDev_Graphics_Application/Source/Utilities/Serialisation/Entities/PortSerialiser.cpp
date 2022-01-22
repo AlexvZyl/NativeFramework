@@ -3,8 +3,8 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
-#include "CoreGL/FontLoaderGL.h"
+#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "OpenGL/FontLoaderGL.h"
 
 //=============================================================================================================================================//
 //  Single port.		     																												   //

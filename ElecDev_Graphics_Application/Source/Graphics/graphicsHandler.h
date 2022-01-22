@@ -9,16 +9,14 @@ This is so that the main loop that will containt both ImGUI calls and pure OpenG
 //  Includes.																																                                                                   //
 //=============================================================================================================================================//
 
-//  General.
 #include <string>
 #include <variant>
 #include <map>
-// OpenGL engines.
-#include "OpenGL/CoreGL/EngineCoreGL.h"
-#include "OpenGL/Base2DEngineGL/Base2D_Engine.h"
-#include "OpenGL/Base3DEngineGL/Base3D_Engine.h"
-#include "OpenGL/Design2DEngineGL/Design2D_Engine.h"
-#include "CoreGL/SceneGL.h"
+#include "OpenGL/SceneGL.h"
+#include "Engines/Core/EngineCore.h"
+#include "Engines/Base2DEngine/Base2D_Engine.h"
+#include "Engines/Base3DEngine/Base3D_Engine.h"
+#include "Engines/Design2DEngine/Design2D_Engine.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.			    											                                                           //
@@ -33,7 +31,7 @@ struct GLFWwindow;
 // Type that holds the different engines available.
 enum class EngineType
 {
-	None = -1, Base2DEngineGL = 0, Design2DEngineGL = 1, Base3DEngineGL = 2
+	None = -1, Base2DEngine = 0, Design2DEngine = 1, Base3DEngine = 2
 };
 
 // Data type that holds the window that is to be drawn, as well as information regarding the window.
@@ -43,7 +41,7 @@ struct RenderWindowGL
 	// The rendering engine.
 	// This is a pointer to the base engine.  With the use of virtual functions and dynamic casting
 	// it will be able to point to subclasses as well.
-	std::shared_ptr<EngineCoreGL> engineGL;
+	std::shared_ptr<EngineCore> engineGL;
 	EngineType engineType = EngineType::None;
 
 	// Data from ImGUI.
@@ -62,20 +60,20 @@ struct RenderWindowGL
 	RenderWindowGL(GUIState* guiState, EngineType engineType, std::string windowName)
 		: windowName(windowName)
 	{
-		if (engineType == EngineType::Base2DEngineGL)
+		if (engineType == EngineType::Base2DEngine)
 		{
-			engineGL = std::make_shared<Base2DEngineGL>(guiState, windowName);
-			engineType = EngineType::Base2DEngineGL;
+			engineGL = std::make_shared<Base2DEngine>(guiState, windowName);
+			engineType = EngineType::Base2DEngine;
 		}
-		else if (engineType == EngineType::Design2DEngineGL)
+		else if (engineType == EngineType::Design2DEngine)
 		{
-			engineGL = std::make_shared<Design2DEngineGL>(guiState, windowName);
-			engineType = EngineType::Design2DEngineGL;
+			engineGL = std::make_shared<Design2DEngine>(guiState, windowName);
+			engineType = EngineType::Design2DEngine;
 		}
-		else if (engineType == EngineType::Base3DEngineGL)
+		else if (engineType == EngineType::Base3DEngine)
 		{
-			engineGL = std::make_shared<Base3DEngineGL>(guiState, windowName);
-			engineType = EngineType::Base3DEngineGL;
+			engineGL = std::make_shared<Base3DEngine>(guiState, windowName);
+			engineType = EngineType::Base3DEngine;
 		}
 		viewportDimentions[0] = engineGL->m_scene->getViewport().x;
 		viewportDimentions[1] = engineGL->m_scene->getViewport().y;

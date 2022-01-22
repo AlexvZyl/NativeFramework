@@ -12,7 +12,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
 #include "GUIState.h"
-#include "GLFW/glfw3.h"
 
 /*=======================================================================================================================================*/
 /* Forward Declerations.                                                                                                                 */
@@ -29,6 +28,8 @@ class GraphicsScene;
 class ComponentEditor;
 class PopUpMenu;
 class CircuitEditor;
+
+struct GLFWwindow;
 
 /*=======================================================================================================================================*/
 /* Class.																																 */

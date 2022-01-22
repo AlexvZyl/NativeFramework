@@ -13,10 +13,11 @@
 #include "../GUI/GUIState.h"
 #include "UserGUI/userGUI.h"
 #include "GuiHandler.h"
-#include "Graphics/OpenGL/CoreGL/ErrorHandlerGL.h"
+#include "OpenGL/ErrorHandlerGL.h"
 #include "ComponentEditor/ComponentEditor.h"
 #include "PopUpMenu/PopUpMenu.h"
 #include "CircuitEditor/CircuitEditor.h"
+#include "External/GLFW/Includes/GLFW/glfw3.h"
 
 /*=======================================================================================================================================*/
 /* Constructor & Destructor.																											 */

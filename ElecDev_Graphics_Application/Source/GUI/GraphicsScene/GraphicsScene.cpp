@@ -82,7 +82,7 @@ void GraphicsScene::renderGraphics(ImGuiID dock)
 					if (window->isHovered)
 					{ 
 						graphicsHandler->m_activeWindow = graphicsHandler->m_windowsDictionary[name];
-						m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(graphicsHandler->m_activeWindow->engineGL.get());
+						m_guiState->design_engine = reinterpret_cast<Design2DEngine*>(graphicsHandler->m_activeWindow->engineGL.get());
 					}
 					// If the window is not focused.
 					else

@@ -13,7 +13,7 @@ API for the graphics of the application.
 // General
 #include <stdio.h>
 #include <External/Misc/ConsoleColor.h>
-#include "CoreGL/RendererGL.h"
+#include "OpenGL/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Window Handling.																														   //
@@ -40,7 +40,7 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base2DEngineGL, windowName) });
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base2DEngine, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
 		}
@@ -49,17 +49,17 @@ void GraphicsHandler::addWindow(std::string windowName, std::string engineType)
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngineGL, windowName) });
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Design2DEngine, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
-			m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+			m_guiState->design_engine = reinterpret_cast<Design2DEngine*>(m_activeWindow->engineGL.get());
 		}
 		else if (engineType == "Base3D" || engineType == "base3D")
 		{
 			// Destroy ImGUI to allow drawing in other contexts.
 			ImGui_ImplOpenGL3_DestroyDeviceObjects();
 			// Add window to dictionary.
-			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base3DEngineGL, windowName) });
+			m_windowsDictionary.insert({ windowName, std::make_shared<RenderWindowGL>(m_guiState, EngineType::Base3DEngine, windowName) });
 			// Set active window.
 			m_activeWindow = m_windowsDictionary[windowName];
 		}

@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -158,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\OpenGL;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\glm;$(SolutionDir)ElecDev_Graphics_Application\Source\External;$(SolutionDir)ElecDev_Graphics_Application\Source\Helper;$(SolutionDir)ElecDev_Graphics_Application\Source\External\ImGUI\Core;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Source;$(SolutionDir)ElecDev_Graphics_Application\Source\External\FreeType\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -177,8 +177,8 @@
     <ClCompile Include="Source\Application\ApplicationEventHandler.cpp" />
     <ClCompile Include="Source\Application\Events\Events.cpp" />
     <ClCompile Include="Source\Application\Events\EventsImplGLFW.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\PrimitiveVertexArrayGL.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
@@ -210,42 +210,43 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\singledocparser.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\stream.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\CameraGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\RendererGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\SceneGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\CameraGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Circuit.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\LineSegment.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\TextureGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontLoaderGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\FontsGL.h" />
+    <ClCompile Include="Source\Graphics\OpenGL\TextureGL.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Port.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\Entity.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\Circle.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\EntityManager.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\Polygon.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\Primitive.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\Vertex.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\FontLoaderGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\FontsGL.h" />
     <ClCompile Include="Source\Graphics\GraphicsAPI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_InputHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_InputHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\FrameBufferObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\ShaderGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Buffers\VertexArrayObjectGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_API.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_InputHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.cpp" />
+    <ClCompile Include="Source\Engines\Base2DEngine\Base2D_API.cpp" />
+    <ClCompile Include="Source\Engines\Base2DEngine\Base2D_Engine.cpp" />
+    <ClCompile Include="Source\Engines\Base2DEngine\Base2D_InputHandler.cpp" />
+    <ClCompile Include="Source\Engines\Base3DEngine\Base3D_API.cpp" />
+    <ClCompile Include="Source\Engines\Base3DEngine\Base3D_Engine.cpp" />
+    <ClCompile Include="Source\Engines\Base3DEngine\Base3D_InputHandler.cpp" />
+    <ClCompile Include="Source\Engines\Core\EngineCore.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\ErrorHandlerGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\ShaderGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Design2D_API.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Design2D_Engine.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Design2D_InputHandler.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\External\glm\detail\glm.cpp" />
+    <ClCompile Include="Source\Graphics\Vulkan\README.md" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
@@ -267,7 +268,7 @@
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\MainApplication.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\userGUI.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Entities\Text.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
@@ -281,8 +282,8 @@
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\Application\Events\EventsImplGLFW.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\PrimitiveVertexArrayGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\IOIndicator.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveVertexArrayGL.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\binary.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\anchordict.h" />
@@ -342,21 +343,21 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\stringsource.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\CameraGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\SceneGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\RendererGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Circuit.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\LineSegment.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Cable.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\TextureGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\CameraGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\RendererGL.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Circuit.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\LineSegment.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Cable.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\TextureGL.h" />
     <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Port.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Entity.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Circle.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\EntityManager.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Polygon.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Primitive.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Vertex.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Port.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\Entity.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\Circle.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\EntityManager.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\Polygon.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\Primitive.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\Vertex.h" />
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\contrib\graphbuilder.h" />
@@ -376,16 +377,16 @@
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\parse.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\ptr.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\node\type.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Base2DEngineGL\Base2D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Base3DEngineGL\Base3D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\EngineCoreGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ErrorHandlerGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\FrameBufferObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\ShaderGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\FontLoaderGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Buffers\VertexArrayObjectGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Design2D_Engine.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Design2DEngineGL\Peripherals\Component2D.h" />
+    <ClInclude Include="Source\Engines\Base2DEngine\Base2D_Engine.h" />
+    <ClInclude Include="Source\Engines\Base3DEngine\Base3D_Engine.h" />
+    <ClInclude Include="Source\Engines\Core\EngineCore.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\ErrorHandlerGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\ShaderGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\FontLoaderGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\Design2D_Engine.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Component2D.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
@@ -762,7 +763,7 @@
     <ClInclude Include="Source\GUI\Toolbar\toolbar.h" />
     <ClInclude Include="Source\GUI\GUIState.h" />
     <ClInclude Include="Source\GUI\UserGUI\userGUI.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\CoreGL\Entities\Text.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Entities\Text.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
   </ItemGroup>
@@ -911,6 +912,7 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
+    <None Include="Source\Graphics\OpenGL\README.md" />
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />

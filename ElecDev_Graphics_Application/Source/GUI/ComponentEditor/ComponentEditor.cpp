@@ -4,10 +4,10 @@
 #pragma once
 //#include "GUI/guiHandler.h"
 #include "ComponentEditor.h"
-#include "Design2DEngineGL/Peripherals/Component2D.h"
-#include "Design2DEngineGL/Peripherals/Port.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
-#include "CoreGL/RendererGL.h"
+#include "OpenGL/RendererGL.h"
+#include "Engines/Design2DEngine/Peripherals/Component2D.h"
+#include "Engines/Design2DEngine/Peripherals/Port.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */

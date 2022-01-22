@@ -13,7 +13,7 @@
 #pragma comment(lib, "Shlwapi.lib")
 
 // OpenGL error handler.
-#include <Graphics/OpenGL/CoreGL/ErrorHandlerGL.h>
+#include "OpenGL/ErrorHandlerGL.h"
 
 #include "Utilities/Windows/WindowsUtilities.h"
 

@@ -2439,7 +2439,7 @@ static int find_extensionsGL(void) {
 	return 1;
 }
 
-static void find_coreGL(void) {
+static void find_OpenGL(void) {
 
     /* Thank you @elmindreda
      * https://github.com/elmindreda/greg/blob/master/templates/greg.c.in#L176
@@ -2505,7 +2505,7 @@ int gladLoadGLLoader(GLADloadproc load) {
 	glGetString = (PFNGLGETSTRINGPROC)load("glGetString");
 	if(glGetString == NULL) return 0;
 	if(glGetString(GL_VERSION) == NULL) return 0;
-	find_coreGL();
+	find_OpenGL();
 	load_GL_VERSION_1_0(load);
 	load_GL_VERSION_1_1(load);
 	load_GL_VERSION_1_2(load);

@@ -5,9 +5,9 @@
 #include "Serialiser.h"
 #include <Windows.h>
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
-#include "CoreGL/FontLoaderGL.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/Design2DEngine/Design2D_Engine.h"
+#include "OpenGL/FontLoaderGL.h"
 #include <sys/stat.h>
 #include <iostream>
 #include <direct.h>
@@ -87,7 +87,7 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 //  Deserialisation.		  																												   //
 //=============================================================================================================================================//
 
-void loadFromYAML(Design2DEngineGL& engine, std::string path)
+void loadFromYAML(Design2DEngine& engine, std::string path)
 {
 	// Create yaml node from file.
 	YAML::Node yamlFile = YAML::LoadFile(path);

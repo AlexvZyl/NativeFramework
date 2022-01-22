@@ -9,7 +9,7 @@
 #include "ImGUI/Implementations/imgui_impl_glfw.h"
 #include "ImGUI/Implementations/imgui_impl_opengl3.h"
 #include "Resources/ResourceHandler.h"
-#include "CoreGL/ErrorHandlerGL.h"
+#include "OpenGL/ErrorHandlerGL.h"
 
 //==============================================================================================================================================//
 //  GLFW events.																														        //

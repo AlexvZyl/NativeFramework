@@ -3,8 +3,8 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Cable.h"
-#include "CoreGL/Entities/Circle.h"
+#include "Engines/Design2DEngine/Peripherals/Cable.h"
+#include "OpenGL/Entities/Circle.h"
 
 //=============================================================================================================================================//
 //  Cable serialiser.     																													   //

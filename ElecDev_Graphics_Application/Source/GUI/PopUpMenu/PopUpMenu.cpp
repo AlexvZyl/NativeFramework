@@ -9,8 +9,8 @@
 #include "Graphics/graphicsHandler.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
+#include "Engines/Design2DEngine/Design2D_Engine.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -57,7 +57,7 @@ void PopUpMenu::render()
                 glm::vec3 WorldCoords = m_guiState->design_engine->m_scene->pixelCoordsToWorldCoords(pixelCoords);
                 glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
                 //place a dummy component
-                Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_windowsDictionary[m_windowContext]->engineGL.get());
+                Design2DEngine* activeEngine = reinterpret_cast<Design2DEngine*>(m_graphicsHandler->m_windowsDictionary[m_windowContext]->engineGL.get());
                 activeEngine->ComponentPlaceMode(screenCoords);
                 close();
             }
@@ -100,7 +100,7 @@ void PopUpMenu::render()
         {
             m_graphicsHandler->m_saveEvent.eventTrigger = true;
             m_graphicsHandler->m_saveEvent.saveEngine = m_windowContext;
-            Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_activeWindow->engineGL.get());
+            Design2DEngine* activeEngine = reinterpret_cast<Design2DEngine*>(m_graphicsHandler->m_activeWindow->engineGL.get());
             m_graphicsHandler->m_saveEvent.path = selectFile("Lumen Save Circuit", "", activeEngine->m_circuit->m_label, "Save");
             close();
         }

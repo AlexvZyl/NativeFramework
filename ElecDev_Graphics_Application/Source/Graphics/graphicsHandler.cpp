@@ -7,19 +7,14 @@ This is so that the main loop that will contain both ImGUI calls and pure OpenGL
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "CoreGL/EngineCoreGL.h"
 #include <iostream>
 #include "Utilities/Serialisation/Serialiser.h"
-#include "Design2DEngineGL/Peripherals/Circuit.h"
-#include "GLFW/glfw3.h"
 #include "Resources/ResourceHandler.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
 #include "GraphicsHandler.h"
-
-// Testing 
-#include "CoreGL/SceneGL.h"
-#include "CoreGL/RendererGL.h"
-#include "CoreGL/CameraGL.h"
+#include "Engines/Core/EngineCore.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/Design2DEngine/Design2D_Engine.h"
+#include "GLFW/glfw3.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -192,7 +187,7 @@ void GraphicsHandler::fileDropEventHandler()
 	//	}
 	//	// Create a new window.
 	//	addWindow("Generating", "Design2D");
-	//	Design2DEngineGL* engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+	//	Design2DEngine* engine = reinterpret_cast<Design2DEngine*>(m_activeWindow->engineGL.get());
 	//	// Load the circuit data.
 	//	loadFromYAML(*engine, path);
 	//	// Update name.
@@ -203,7 +198,7 @@ void GraphicsHandler::fileDropEventHandler()
 	//	m_activeWindow->windowName = engine->m_circuit->m_label;
 	//	m_activeWindow->resizeEvent = true;
 	//}
-	//m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+	//m_guiState->design_engine = reinterpret_cast<Design2DEngine*>(m_activeWindow->engineGL.get());
 	//// Reset event.
 	//m_fileDropEvent.eventTrigger = false;
 	//m_fileDropEvent.totalFiles = 0;
@@ -219,7 +214,7 @@ void GraphicsHandler::saveEventHandler()
 	if (m_loadEvent.path != "OPERATION_CANCELLED" && m_loadEvent.path != "FOLDER_EMPTY")
 	{
 		// Find engine.
-		Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
+		Design2DEngine* saveEngine = reinterpret_cast<Design2DEngine*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
 
 		// Check if file is added to the save event.
 		std::string savePath = m_saveEvent.path;
@@ -255,7 +250,7 @@ void GraphicsHandler::loadEventHandler()
 	{ 
 		// Load file.
 		addWindow("Generating", "Design2D");
-		Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_activeWindow->engineGL.get());
+		Design2DEngine* activeEngine = reinterpret_cast<Design2DEngine*>(m_activeWindow->engineGL.get());
 		loadFromYAML(*activeEngine, m_loadEvent.path);
 		// Update name.
 		activeEngine->m_contextName = activeEngine->m_circuit->m_label;

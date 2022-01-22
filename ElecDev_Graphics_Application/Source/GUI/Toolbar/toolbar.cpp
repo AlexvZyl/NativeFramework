@@ -3,13 +3,13 @@
 /*=======================================================================================================================================*/
 
 #include <Core/imgui.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
 #include <cfenv>
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Graphics/graphicsHandler.h"
+#include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */

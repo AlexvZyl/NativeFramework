@@ -4,7 +4,8 @@
 /*=======================================================================================================================================*/
 
 #include "Graphics/graphicsHandler.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Component2D.h"
+#include "Engines/Design2DEngine/Peripherals/Component2D.h"
+
 struct GUIState;
 
 /*=======================================================================================================================================*/
