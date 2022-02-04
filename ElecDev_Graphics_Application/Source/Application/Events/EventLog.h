@@ -1,28 +1,46 @@
+#pragma once
+
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Application.h"
-#include "Graphics/graphicsHandler.h"
-#include "GUI/guiHandler.h"
-#include "Events/Events.h"
-#include "GLFW/glfw3.h"
+#include "Events.h"
+#include <memory>
 
 //==============================================================================================================================================//
-//  Application class.																															//
+//  Event Log.																																	//
 //==============================================================================================================================================//
 
-Application::Application(GLFWwindow* window, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) 
-	: m_window(window), m_graphicsHandler(graphicsHandler), m_guiHandler(guiHandler)
+// This is used to log the events as they happen per frame.
+class EventLog
 {
-	glfwInitCallbacks();
-}
 
-void Application::renderFrame()
-{
-	// Render.
-	m_guiHandler->renderGui(m_window);
-}
+public:
+
+	// Constructor.
+	EventLog();
+
+	// Log an event.
+	void log(Event& event);
+
+	// Clears all of the events from the event log.
+	void clear();
+
+private:
+
+	// Only the application needs to have access to dispatch 
+	// the specific events.
+	friend class Application;
+
+	// Store all of the events that occurred.
+	std::vector<std::unique_ptr<Event>> events;
+
+	// Keep mouse move and scroll events seperate so that multiple
+	// events that basically do the same thing do not get handled
+	// more than once.
+	std::unique_ptr<MouseMoveEvent> mouseMove;
+	std::unique_ptr<MouseScrollEvent> mouseScroll;
+};
 
 //==============================================================================================================================================//
 //  EOF.																																		//

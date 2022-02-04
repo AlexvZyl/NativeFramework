@@ -2,26 +2,42 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Application.h"
-#include "Graphics/graphicsHandler.h"
-#include "GUI/guiHandler.h"
-#include "Events/Events.h"
-#include "GLFW/glfw3.h"
+#include "EventLog.h"
 
 //==============================================================================================================================================//
-//  Application class.																															//
+//  Event Log.																																	//
 //==============================================================================================================================================//
 
-Application::Application(GLFWwindow* window, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler) 
-	: m_window(window), m_graphicsHandler(graphicsHandler), m_guiHandler(guiHandler)
+EventLog::EventLog()
 {
-	glfwInitCallbacks();
+	events.reserve(20);
 }
 
-void Application::renderFrame()
+void EventLog::log(Event& event)
 {
-	// Render.
-	m_guiHandler->renderGui(m_window);
+	uint64_t eventID = event.getID();
+
+	// Specific mouse events.
+	if (eventID == EventType::MouseMove)
+	{
+		mouseMove = std::make_unique<MouseMoveEvent>(std::move(dynamic_cast<MouseMoveEvent&>(event)));
+	}
+	else if (eventID == EventType::MouseScroll)
+	{
+		mouseScroll = std::make_unique<MouseScrollEvent>(std::move(dynamic_cast<MouseScrollEvent&>(event)));
+	}
+	// General events.
+	else
+	{
+		events.emplace_back(std::make_unique<Event>(std::move(event)));
+	}
+}
+
+void EventLog::clear()
+{
+	mouseMove = nullptr;
+	mouseScroll = nullptr;
+	events.clear();
 }
 
 //==============================================================================================================================================//

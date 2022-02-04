@@ -34,7 +34,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MainApplication.cpp">
+    <ClCompile Include="Source\Lumen.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI\Ribbons\ribbons.cpp">
@@ -127,12 +127,13 @@
     <ClCompile Include="Source\Graphics\OpenGL\CameraGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Buffers\PrimitiveVertexArrayGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\PrimitivesVertexArrayGL.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
-    <ClCompile Include="Source\Application\Events\EventsImplGLFW.cpp" />
+    <ClCompile Include="Source\Application\Window\GLFWImplementation.cpp" />
     <ClCompile Include="Source\Application\Events\Events.cpp" />
-    <ClCompile Include="Source\Application\ApplicationEventHandler.cpp" />
+    <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Graphics\Vulkan\README.md" />
+    <ClCompile Include="Source\Application\Events\EventLog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1354,10 +1355,11 @@
     <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\CameraGL.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveVertexArrayGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitivesVertexArrayGL.h" />
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
-    <ClInclude Include="Source\Application\Events\EventsImplGLFW.h" />
+    <ClInclude Include="Source\Application\Window\GLFWImplementation.h" />
+    <ClInclude Include="Source\Application\Events\EventLog.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

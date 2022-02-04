@@ -18,11 +18,11 @@
 #include "GUI/GuiHandler.h"
 #include "Graphics/GraphicsHandler.h"
 #include "Utilities/PythonInterface/PythonInterface.h"
-#include "Application/Events/EventsImplGLFW.h"
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "Resources/ResourceHandler.h"
+#include "External/GLFW/Includes/GLFW/glfw3.h"
 
 /*=======================================================================================================================================*/
 /* Compiler settings.                                                                                                                    */
@@ -46,11 +46,8 @@ int main(int, char**)
     // ----------- //
 
     // Init window (GLFW, ImGUI, OpenGL context).
-    GLFWwindow* window = initWindow();
+    GLFWwindow* window = Application::glfwInit();
     
-    // Initialise the renderer.
-    Renderer::initialise();
-
     // --------------------------------------------------------------------------------------------------------------//
     // Everything in this section is going to be replaced by the 'Application' class.
 
@@ -70,6 +67,9 @@ int main(int, char**)
 
     // Create Application instance.
     Application application(window, graphicsHandler.get(), guiHandler.get());
+
+    // Initialise the renderer.
+    Renderer::initialise();
 
     // ------------------------------- //
     //  R E N D E R   P I P E L I N E  //
@@ -121,7 +121,7 @@ int main(int, char**)
             GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
             // Handle the events.
-            application.handleEvents();
+            application.dispatchEvents();
 
             // Render the frame to the screen.
             application.renderFrame();

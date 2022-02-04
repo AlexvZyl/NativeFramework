@@ -20,15 +20,14 @@ class Shader
 {
 private:
 
-    // Caching uniform variables.
-    std::unordered_map<std::string, int> m_uniformLocationCache;
+    
 
 public:
 
     // Shader renderer ID.
     unsigned int m_rendererID;
 
-    // Contrustors.
+    // Contructors.
     Shader();
     Shader(unsigned int shaderID);
     // Destructor.
@@ -53,6 +52,9 @@ public:
     void setSamplerMSAA(const std::string& name, int* textureID, unsigned count);
 
 private:
+
+    // Caching uniform variables.
+    std::unordered_map<std::string, int> m_uniformLocationCache;
 
     // Used to get the shader matrix locations.
     int getUniformLocation(const std::string& name);

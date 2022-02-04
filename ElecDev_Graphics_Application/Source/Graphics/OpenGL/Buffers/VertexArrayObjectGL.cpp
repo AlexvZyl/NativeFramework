@@ -54,8 +54,8 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
 	// Update data.
-	if		(!m_sized )	resizeBuffer();
-	else if (!m_synced) syncBuffer();  
+	if		(!m_sized )		 resizeBuffer();
+	else if (!m_synced)		 syncBuffer();  
 	if      (!m_vertexCount) return;
 	// Render.
 	GLCall(glBindVertexArray(m_VAOID));
@@ -96,26 +96,27 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr<VertexType>>& vertices, std::vector<unsigned>& indices,
 													 unsigned* vertexPos, unsigned* indexPos)
 {
-	// Ensure vertices is not empty.
 	if (!vertices.size())  return;
-	// Store data buffer positions.
-	if (vertexPos) *vertexPos = m_vertexCount;
-	if (indexPos)  *indexPos  = m_indexCount;
+	if (vertexPos)		  *vertexPos = m_vertexCount;
+	if (indexPos)		  *indexPos  = m_indexCount;
+
 	// Add vertices.
 	m_vertexCPU.reserve(m_vertexCount + vertices.size());
 	for (std::unique_ptr<VertexType>& vertex : vertices) 
 	{ 
 		// Will insert be faster?
-		m_vertexCPU.push_back(std::move(vertex)); 
+		m_vertexCPU.emplace_back(std::move(vertex)); 
 	}  
+
 	// Add indices.
 	m_indexCPU.reserve(m_indexCount + indices.size());
 	for (unsigned& ind : indices)
 	{
 		// First offset the index.
 		ind += m_vertexCount;
-		m_indexCPU.push_back(std::move(ind));
+		m_indexCPU.push_back(ind);
 	}
+
 	// Increment counts.
 	m_vertexCount += vertices.size();
 	m_indexCount += indices.size();
@@ -126,18 +127,21 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr
 template <typename VertexType>
 void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigned vertexCount, unsigned indexPos, unsigned indexCount)
 {
-	// Check if no data is to be deleted.
 	if (!m_vertexCount) return;
+
 	// Remove data from VAO.
 	m_vertexCPU.erase(m_vertexCPU.begin() + vertexPos, m_vertexCPU.begin() + vertexPos + vertexCount);
 	m_vertexCPU.shrink_to_fit();
 	m_indexCPU.erase(m_indexCPU.begin() + indexPos, m_indexCPU.begin() + indexPos + indexCount);
 	m_indexCPU.shrink_to_fit();
+
 	// Decrement counts.
 	m_vertexCount -= vertexCount;
 	m_indexCount -= indexCount;
+
 	// Offset indices placed after deleted indices.
 	for (int i = indexPos; i < m_indexCount; i++) m_indexCPU[i] -= vertexCount; 
+
 	// Set the VAO to be resized.
 	resize();
 }
@@ -149,12 +153,12 @@ void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigne
 template <typename VertexType>
 void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive)
 {
-	// Store primitive position in VAO.
+	// Store primitive position.
 	primitive->m_primitiveBufferPos = m_primitives.size();
 	// Add primitive.
 	m_primitives.push_back(primitive);
 	// Reserve data for the sync vector.
-	m_primitivesToSync.reserve(m_primitives.size());
+	m_primitivesToSync.reserve(m_primitives.size());  // This is not the best solution.
 }	
 
 template <typename VertexType>
@@ -172,7 +176,7 @@ void VertexArrayObject<VertexType>::popPrimitive(int primitiveIndex, int vertexC
 		primitive->m_primitiveBufferPos -= 1;
 	}
 	// Reserve data for the sync vector.
-	m_primitivesToSync.reserve(m_primitives.size());
+	m_primitivesToSync.reserve(m_primitives.size());  // This is not the best solution.
 }
 
 //=============================================================================================================================================//
@@ -197,11 +201,12 @@ void VertexArrayObject<VertexType>::resizeBuffer()
 	{
 		// Resize VBO.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		GLCall(glBufferData(GL_ARRAY_BUFFER, (m_vertexCount)*m_vertexCPU[0]->getTotalSize(), NULL, GL_DYNAMIC_DRAW));
+		GLCall(glBufferData(GL_ARRAY_BUFFER, m_vertexCount * m_vertexCPU[0]->getTotalSize(), NULL, GL_DYNAMIC_DRAW));  // VS does not like this.
 		// Write the data to the VBO.
 		unsigned int index = 0;
-		for (std::unique_ptr<VertexType>& vertex : m_vertexCPU)  // There has to be a way to change this to one draw call.
-		{
+		for (std::unique_ptr<VertexType>& vertex : m_vertexCPU)  
+		{	
+			// There has to be a way to change this to one draw call...
 			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize(), vertex->getDataSize(), vertex->getData()));
 			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex->getTotalSize() + vertex->getIDOffset(), vertex->getIDSize(), vertex->getID()));
 			index += 1;
