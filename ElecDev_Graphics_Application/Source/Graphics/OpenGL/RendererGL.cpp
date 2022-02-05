@@ -52,12 +52,18 @@ void Renderer::renderScene()
 {
 	if	    (m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
+
+	// TODO!
+	m_scene->m_FBO->renderFromMSAA();
 }
 
 void Renderer::renderScene(Scene* scene)
 {
 	if	    (scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
+
+	// TODO!
+	scene->m_FBO->renderFromMSAA();
 }
 	
 //==============================================================================================================================================//
@@ -325,6 +331,16 @@ void Renderer::compileShaders()
 //==============================================================================================================================================//
 //  Utilities.																																	//
 //==============================================================================================================================================//
+
+void Renderer::clear() 
+{
+	GLCall(glClear(GL_COLOR_BUFFER_BIT));
+}
+
+void Renderer::finish() 
+{
+	GLCall(glFinish());
+}
 
 void Renderer::enable(unsigned attribute)
 {

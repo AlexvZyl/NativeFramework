@@ -4,7 +4,8 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Events/Events.h"
+#include "Application/Events/EventLog.h"
+#include "Application/Events/Events.h"
 #include <vector>
 
 //==============================================================================================================================================//
@@ -14,6 +15,9 @@
 class GraphicsHandler;
 class GUIHandler;
 class EventLog;
+class LayerStack;
+class Layer;
+class ImFont;
 
 struct GLFWwindow;
 
@@ -27,14 +31,14 @@ class Application
 public:
 
 	// Constructor.
-	Application(GLFWwindow* window, GraphicsHandler* graphicsHandler, GUIHandler* guiHandler);
+	Application(GLFWwindow* window);
 
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
 
 	// Renders the next frame.
-	void renderFrame();
+	void onRender();
 
 	// ------------- //
 	//  E V E N T S  //
@@ -45,6 +49,7 @@ public:
 	// Handle events specifically for the Application layer.
 	void onEvent(Event& event);
 	// Log the event in the event log.
+	template <typename EventType>
 	void logEvent(Event& event);
 
 	// ----------------------- //
@@ -52,18 +57,31 @@ public:
 	// ----------------------- //
 
 	// Sets up the GLFW window and OpenGL context.
-	static GLFWwindow* glfwInit();
+	static GLFWwindow* glfwInitWindow();
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
 
 private:
 
-	// These are to be replavced by the application.
-	GraphicsHandler* m_graphicsHandler;
-	GUIHandler* m_guiHandler;
-
 	// The window containing the application.
 	GLFWwindow* m_window;
+
+	// ------------- //
+	//  L A Y E R S  //
+	// ------------- //
+	
+	// The layers in the application.
+	std::unique_ptr<LayerStack> m_layerStack;
+	// The layer that has the most recent interaction.
+	Layer* m_focusedLayer = nullptr;
+	// The layer that the mouse is hovering over.
+	Layer* m_hoveredLayer = nullptr;
+	// Handle when the hovered layer changes.
+	void onHoveredLayerChange(Layer* newLayer);
+	// Handle when the focused layer changes.
+	void onFocusedLayerChange(Layer* newLayer);
+	// Find the layer that is being hovered.
+	Layer* findhoveredLayer();
 
 	// ------------- //
 	//  E V E N T S  //
@@ -75,8 +93,32 @@ private:
 	void onWindowResizeEvent(WindowResizeEvent& event);
 	// Handle serialisation events.
 	void onFileDropEvent(FileDropEvent& event);
+	
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
+
+	// Initialise the frame for rendering.
+	void onRenderInit();
+	// Cleanup after the frame has been rendered.
+	void onRenderCleanup();
+	// Set the ImGUI theme.
+	void setGuiTheme();
+	// The default font used.
+	ImFont* m_defaultFont = nullptr;
 
 };
+
+
+//==============================================================================================================================================//
+//  Templates.																																	//
+//==============================================================================================================================================//
+
+template <typename EventType>
+void Application::logEvent(Event& event)
+{
+	m_eventLog->log<EventType>(event);
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

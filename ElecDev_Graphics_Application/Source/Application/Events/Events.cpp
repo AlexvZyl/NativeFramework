@@ -2,9 +2,9 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Events.h"
-#include "GLFW/glfw3.h"
 #include "ImGUI/Implementations/imgui_impl_glfw.h"
+#include "GLFW/glfw3.h"
+#include "Events.h"
 
 //==============================================================================================================================================//
 //  Event overloaded functions.																													//
@@ -24,14 +24,14 @@ bool operator!=(uint64_t id, EventType eventType)
 //  Event Class.																																//
 //==============================================================================================================================================//
 
-void Event::handled() 
+void Event::consume()
 { 
-	m_handled = true; 
+	m_consumed = true; 
 }
 
-bool Event::isHandled() 
+bool Event::isConsumed() 
 { 
-	return m_handled; 
+	return m_consumed; 
 }
 
 uint64_t Event::getID() 
@@ -74,7 +74,7 @@ MouseButtonEvent::MouseButtonEvent(glm::vec2& mousePositionPixels, uint64_t ID)
 // --------------------- //
 
 MouseMoveEvent::MouseMoveEvent(glm::vec2& mousePositionPixels, uint64_t ID)
-	: MouseEvent(mousePositionPixels, ID | EventType::MouseMove)
+	: MouseEvent(mousePositionPixels, ID | EventType_MouseMove)
 {}
 
 // ------------------------- //
@@ -82,7 +82,7 @@ MouseMoveEvent::MouseMoveEvent(glm::vec2& mousePositionPixels, uint64_t ID)
 // ------------------------- //
 
 MouseScrollEvent::MouseScrollEvent(glm::vec2 mousePositionPixels, float yOffset, uint64_t ID)
-	: MouseEvent(mousePositionPixels, ID | EventType::MouseScroll), m_yOffset(yOffset) 
+	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), m_yOffset(yOffset) 
 {}
 
 float MouseScrollEvent::getYOffset() 
@@ -107,8 +107,8 @@ int KeyEvent::getKey()
 //  Window events.																																//
 //==============================================================================================================================================//
 
-WindowResizeEvent::WindowResizeEvent(glm::vec2& windowSize)
-	: Event(EventType::WindowResize), m_windowSize(windowSize)
+WindowResizeEvent::WindowResizeEvent(glm::vec2& windowSize, uint64_t ID)
+	: Event(ID | EventType_WindowResize), m_windowSize(windowSize)
 {}
 
 glm::vec2& WindowResizeEvent::getWindowSize()
@@ -125,7 +125,7 @@ glm::vec2& WindowResizeEvent::getWindowSize()
 // ------------------- //
 
 FileDropEvent::FileDropEvent(std::vector<std::string>& paths)
-	: Event(EventType::FileDrop)
+	: Event(EventType_FileDrop | EventType_Application)
 {
 	filePaths = std::make_unique<std::vector<std::string>>(std::move(paths));
 }
@@ -135,6 +135,14 @@ std::vector<std::string>& FileDropEvent::getPaths()
 {
 	return *filePaths.get();
 }
+
+//==============================================================================================================================================//
+//  Engine Specific Events.																														//
+//==============================================================================================================================================//
+
+LayerEvent::LayerEvent(uint64_t ID)
+	: Event(ID)
+{}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

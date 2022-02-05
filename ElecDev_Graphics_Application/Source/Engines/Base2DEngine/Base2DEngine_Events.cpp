@@ -2,28 +2,35 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Entity.h"
-#include "EntityManager.h"
+#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
-//  Methods.																																	//
+//  Mouse events.																																//
 //==============================================================================================================================================//
 
-Entity::Entity(EntityType type, Entity* parent)
+void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {
-	m_entityID = EntityManager::generateEID(this);
-	m_parent = parent;
-	m_type = type;
+
 }
 
-Entity::~Entity() 
-{ 
-	EntityManager::freeEID(m_entityID); 
+void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
+{
+
 }
 
-void Entity::setContext() 
+void Base2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 {
-	
+
+}
+
+//==============================================================================================================================================//
+//  Key Events.																																	//
+//==============================================================================================================================================//
+
+void Base2DEngine::onKeyEvent(KeyEvent& event) 
+{
+
 }
 
 //==============================================================================================================================================//

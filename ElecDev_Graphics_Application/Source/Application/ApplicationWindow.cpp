@@ -32,11 +32,18 @@ void Application::glfwInitCallbacks()
     {
         // Create the event ID. 
         uint64_t eventID = 0;
-        if      (action == GLFW_PRESS)               { eventID |= EventType::MousePress;        }
-        else if (action == GLFW_RELEASE)             { eventID |= EventType::MouseRelease;      }
-        if      (button == GLFW_MOUSE_BUTTON_LEFT)   { eventID |= EventType::MouseButtonLeft;   }
-        else if (button == GLFW_MOUSE_BUTTON_RIGHT)  { eventID |= EventType::MouseButtonRight;  }
-        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { eventID |= EventType::MouseButtonMiddle; }
+        if      (action == GLFW_PRESS)               { eventID |= EventType_MousePress;        }
+        else if (action == GLFW_RELEASE)             { eventID |= EventType_MouseRelease;      }
+        if      (button == GLFW_MOUSE_BUTTON_LEFT)   { eventID |= EventType_MouseButtonLeft;   }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT)  { eventID |= EventType_MouseButtonRight;  }
+        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { eventID |= EventType_MouseButtonMiddle; }
+        // Key states.
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
         // Get the cursor position.
         double cursorX, cursorY;
@@ -46,7 +53,10 @@ void Application::glfwInitCallbacks()
         // Log event.
         MouseButtonEvent event(cursorPos, eventID);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent(event);
+        app->logEvent<MouseButtonEvent>(event);
+
+        // Pass event to ImGUI.
+        ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
     });
 
     // --------------------- //
@@ -56,10 +66,18 @@ void Application::glfwInitCallbacks()
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
     {
         // Event ID.
-        uint64_t eventID = EventType::MouseMove;
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType::MouseButtonLeft;   }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType::MouseButtonRight;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType::MouseButtonMiddle; }
+        uint64_t eventID = EventType_MouseMove;
+        // Mouse button states.
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+        // Key states.
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
         // Get the cursor position.
         double cursorX, cursorY;
@@ -69,7 +87,7 @@ void Application::glfwInitCallbacks()
         // Log event.
         MouseMoveEvent event(cursorPos, eventID);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent(event);
+        app->logEvent<MouseMoveEvent>(event);    
     });
 
     // ------------------------- //
@@ -79,10 +97,18 @@ void Application::glfwInitCallbacks()
     glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset)
     {
         // Event ID.
-        uint64_t eventID = EventType::MouseScroll;
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType::MouseButtonLeft;   }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType::MouseButtonRight;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType::MouseButtonMiddle; }
+        uint64_t eventID = EventType_MouseScroll;
+        // Mouse button states.
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+        // Key states.
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
         // Get the cursor position.
         double cursorX, cursorY;
@@ -92,7 +118,10 @@ void Application::glfwInitCallbacks()
         // Log event.
         MouseScrollEvent event(cursorPos, yoffset, eventID);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent(event);
+        app->logEvent<MouseScrollEvent>(event);
+
+        // Pass event to ImGUI.
+        ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
     });
 
     // ------- //
@@ -103,17 +132,28 @@ void Application::glfwInitCallbacks()
     {
         // Event ID.
         uint64_t eventID = 0;
-        if      (action == GLFW_PRESS)   { eventID |= EventType::KeyPress;   }
-        else if (action == GLFW_RELEASE) { eventID |= EventType::KeyRelease; }
-        if      (action == GLFW_REPEAT)  { eventID |= EventType::KeyRepeat;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType::MouseButtonLeft;   }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType::MouseButtonRight;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType::MouseButtonMiddle; }
+        if      (action == GLFW_PRESS)   { eventID |= EventType_KeyPress;   }
+        else if (action == GLFW_RELEASE) { eventID |= EventType_KeyRelease; }
+        if      (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
+        // Mouse button states.
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+        // Key states.
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
         // Log event.
         KeyEvent event(key, eventID);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent(event);
+        app->logEvent<KeyEvent>(event);
+
+        // Pass event to ImGUI.
+        ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
     });
     
     // --------- //
@@ -130,7 +170,7 @@ void Application::glfwInitCallbacks()
         // Log the event.
         FileDropEvent event(filePaths);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent(event);
+        app->logEvent<FileDropEvent>(event);
     });
 
     // --------------------- //
@@ -141,9 +181,9 @@ void Application::glfwInitCallbacks()
     {
         // Create and log event.
         glm::vec2 size(width, height);
-        WindowResizeEvent event(size);
+        WindowResizeEvent event(size, EventType_Application | EventType_WindowResize);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent(event);
+        app->logEvent<WindowResizeEvent>(event);
     });
 }
 
@@ -151,7 +191,7 @@ void Application::glfwInitCallbacks()
 //  Init.																																	    //
 //==============================================================================================================================================//
 
-GLFWwindow* Application::glfwInit() 
+GLFWwindow* Application::glfwInitWindow() 
 {
     // Setup window.
     glfwSetErrorCallback([](int error, const char* description)

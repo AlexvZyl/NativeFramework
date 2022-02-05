@@ -1,8 +1,9 @@
 
-#include "Design2D_Engine.h"
+#include "Design2DEngine.h"
 #include "Peripherals/Component2D.h"
 #include "Peripherals/Circuit.h"
 #include "OpenGL/RendererGL.h"
+#include "OpenGL/SceneGL.h"
 
 void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords) 
 {
@@ -29,7 +30,7 @@ void Design2DEngine::deleteActiveComponent()
 			Renderer::bindScene(m_scene.get());
 			m_circuit->m_components.erase(iterator);
 			m_activeComponent = nullptr;
-			m_guiState->active_component = nullptr;
+			//m_guiState->active_component = nullptr;
 		}
 	}
 }

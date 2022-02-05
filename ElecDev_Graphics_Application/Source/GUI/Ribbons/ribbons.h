@@ -9,10 +9,9 @@
 #include <glad/glad.h>
 #include <Core/imgui.h>
 #include <string>
-#include "../GUIState.h"
 
 // Resource loading.
-#include "../Resources/ResourceHandler.h"
+#include "Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Forward declerations                                                                                                                  */
@@ -77,7 +76,6 @@ public:
 	GLuint image4_texture;
     bool ret3;
 	std::string sideBarFlag;
-	GUIState* m_guiState;
 	ImVec2 MCCPos;
 	ImGuiID* dock;
 	ImGuiID left;
@@ -90,7 +88,7 @@ public:
 	//--------------------------------------------------------------------------------------------------------------
 
 	// Constructor.
-	Ribbons(GUIState* guiState, GraphicsHandler* graphicsHandler);
+	Ribbons();
 
 	// Function that handles which engine should be active.
 	void renderRibbons(ImGuiID* dock);

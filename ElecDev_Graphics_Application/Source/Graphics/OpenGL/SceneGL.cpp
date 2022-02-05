@@ -10,6 +10,7 @@
 #include "OpenGL/Entities/Entity.h"
 #include "OpenGL/TextureGL.h"
 #include "OpenGL/Entities/Primitive.h"
+#include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
 //  Constructor & Destructor.																													//
@@ -163,6 +164,11 @@ void Scene::resize(int width, int height)
 {
 	m_camera->resize(width, height);
 	m_FBO->resize(width, height);
+}
+
+void Scene::onEvent(Event& event) 
+{
+
 }
 
 //==============================================================================================================================================//

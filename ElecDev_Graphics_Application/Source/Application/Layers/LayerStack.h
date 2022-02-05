@@ -1,66 +1,50 @@
-#pragma once
-
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Events.h"
+#include <vector>
 #include <memory>
+#include "Application/Layers/Layer.h"
 
 //==============================================================================================================================================//
-//  Event Log.																																	//
+//  Layer Stack.																																//
 //==============================================================================================================================================//
 
-// This is used to log the events as they happen per frame.
-class EventLog
+class LayerStack 
 {
-
 public:
 
 	// Constructor.
-	EventLog();
+	LayerStack() = default;
 
-	// Log an event.
-	template <typename EventType>
-	void log(Event& event);
+	// Add a layer to the front of the stack.
+	template <typename LayerType>
+	void pushLayerToFront(Layer& layer);
 
-	// Clears all of the events from the event log.
-	void clear();
+	// Pop the layer in front of the stack.
+	void popTopLayer();
+
+	// Pop the specified layer.
+	void popLayer(Layer& layer);
+
+	// Get the layers in the stack.
+	std::vector<std::unique_ptr<Layer>>& getLayers();
 
 private:
 
-	// Only the application needs to have access to dispatch 
-	// the specific events.
-	friend class Application;
+	// Vector containing all of the layers.
+	std::vector<std::unique_ptr<Layer>> m_layers;
 
-	// Store all of the events that occurred.
-	std::vector<std::unique_ptr<Event>> events;
-
-	// Keep mouse move and scroll events seperate so that multiple
-	// events that basically do the same thing do not get handled
-	// more than once.
-	std::unique_ptr<MouseMoveEvent> mouseMove = nullptr;
-	std::unique_ptr<MouseScrollEvent> mouseScroll = nullptr;
 };
 
 //==============================================================================================================================================//
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-template <typename EventType>
-void EventLog::log(Event& event)
+template <typename LayerType>
+void LayerStack::pushLayerToFront(Layer& layer)
 {
-	// Mouse move.
-	if (typeid(EventType) == typeid(MouseMoveEvent))
-		mouseMove = std::make_unique<MouseMoveEvent>(std::move(dynamic_cast<MouseMoveEvent&>(event)));
-
-	// Mouse scroll.
-	else if (typeid(EventType) == typeid(MouseScrollEvent))
-		mouseScroll = std::make_unique<MouseScrollEvent>(std::move(dynamic_cast<MouseScrollEvent&>(event)));
-
-	// General events.
-	else 
-		events.emplace_back(std::make_unique<EventType>(std::move(dynamic_cast<EventType&>(event))));
+	m_layers.emplace_back(std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))));
 }
 
 //==============================================================================================================================================//

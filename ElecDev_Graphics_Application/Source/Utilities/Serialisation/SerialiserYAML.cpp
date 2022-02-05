@@ -6,7 +6,7 @@
 #include <Windows.h>
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Design2D_Engine.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
 #include "OpenGL/FontLoaderGL.h"
 #include <sys/stat.h>
 #include <iostream>

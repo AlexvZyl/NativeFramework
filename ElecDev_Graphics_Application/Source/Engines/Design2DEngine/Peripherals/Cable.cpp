@@ -3,7 +3,6 @@
 //==============================================================================================================================================//
 
 #include "Cable.h"
-#include "GUI/GUIState.h"
 #include "Circuit.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/SceneGL.h"
@@ -148,7 +147,7 @@ void Cable::addSegment(glm::vec2 nextPoint)
 
 void Cable::setContext(GUIState* guiState)
 {
-	guiState->clickedZone.component = true;
+	//guiState->clickedZone.component = true;
 }
 
 void Cable::attach(Port* endPort)

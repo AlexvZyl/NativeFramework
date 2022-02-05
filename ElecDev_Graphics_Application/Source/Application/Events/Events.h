@@ -14,49 +14,45 @@
 //  Event types.																																//
 //==============================================================================================================================================//
 
-enum EventLayer 
-{
-	None				=	1 << 0,
-	Undetermined		=	1 << 1,
-	App					=	1 << 2,
-	GUI					=	1 << 3,
-	Engine				=	1 << 4
-};
-
 enum EventType
 {
+	// Layer specific identifiers.
+	EventType_Error				=	1 << 0,
+	EventType_Application		=	1 << 1,
+
 	// Mouse events.
-	MousePress			=	1 << 0,
-	MouseRelease		=	1 << 1,
-	MouseScroll			=	1 << 2,
-	MouseMove			=	1 << 3,
+	EventType_MousePress		=	1 << 2,
+	EventType_MouseRelease		=	1 << 3,
+	EventType_MouseScroll		=	1 << 4,
+	EventType_MouseMove			=	1 << 5,
 	// Mouse button states.
-	MouseButtonLeft		=	1 << 4,
-	MouseButtonRight	=	1 << 5,
-	MouseButtonMiddle	=	1 << 6,
+	EventType_MouseButtonLeft	=	1 << 6,
+	EventType_MouseButtonRight	=	1 << 7,
+	EventType_MouseButtonMiddle	=	1 << 8,
 
 	// Key events.
-	KeyPress			=	1 << 7,
-	KeyRelease			=	1 << 8,
-	KeyRepeat			=	1 << 9,
+	EventType_KeyPress			=	1 << 9,
+	EventType_KeyRelease		=	1 << 10,
+	EventType_KeyRepeat			=	1 << 11,
+	// Key states.
+	EventType_LeftCtrl			=	1 << 12,
+	EventType_RightCtrl			=	1 << 13,
+	EventType_LeftShift			=	1 << 14,
+	EventType_RightShift		=	1 << 15,
+	EventType_LeftAlt			=	1 << 16,
+	EventType_RightAlt			=	1 << 17,
 
 	// Window events.
-	WindowResize		=	1 << 10,
+	EventType_WindowResize		=	1 << 18,
 
 	// Application specific events.
-	FileDrop			=	1 << 11,
+	EventType_FileDrop			=	1 << 19,
 
-	// Engine specific events.
-	Focus				=	1 << 12,
-	Defocus				=	1 << 13,
-	Hover				=	1 << 14,
-	Dehover				=	1 << 15,
-
-	// GUI specific events.
-	// These are currently handled by ImGUI.
-	// Could be a good idea to make Lumen
-	// handle them.
-
+	// Layer events.
+	EventType_Focus				=	1 << 20,
+	EventType_Defocus			=	1 << 21,
+	EventType_Hover				=	1 << 22,
+	EventType_Dehover			=	1 << 23,
 };
 
 // Check if an ID contains a specific type.
@@ -74,9 +70,9 @@ class Event
 public:
 
 	// Called when the event has been handled.
-	void handled();
+	void consume();
 	// Checks if the event has been handled.
-	bool isHandled();
+	bool isConsumed();
 	// Gets the ID of the event.
 	uint64_t getID();
 	// Destructor (for polymorphic type).
@@ -94,7 +90,7 @@ private:
 	// ID describing the event.
 	uint64_t m_eventID;
 	// Has the event been handled?
-	bool m_handled = false;
+	bool m_consumed = false;
 };
 
 //==============================================================================================================================================//
@@ -116,7 +112,7 @@ public:
 protected:
 
 	// Constructor that sets the mouse position.
-	// This is a protected type to ensure that an 
+	// This is a protected type to ensure that a
 	// 'MouseEvent' object is not created.
 	MouseEvent(glm::vec2& positionPixels, uint64_t ID);
 
@@ -206,7 +202,7 @@ class WindowResizeEvent : public Event
 public:
 
 	// Constructor.
-	WindowResizeEvent(glm::vec2& windowSize);
+	WindowResizeEvent(glm::vec2& windowSize, uint64_t ID);
 
 	// Get the resized window size.
 	glm::vec2& getWindowSize();
@@ -243,7 +239,14 @@ private:
 //  Engine Specific Events.																														//
 //==============================================================================================================================================//
 
+class LayerEvent : public Event
+{
 
+public:
+
+	// Constructor.
+	LayerEvent(uint64_t ID);
+};
 
 //==============================================================================================================================================//
 //  EOF.																																		//

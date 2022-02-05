@@ -18,10 +18,6 @@
 
 class Shader
 {
-private:
-
-    
-
 public:
 
     // Shader renderer ID.

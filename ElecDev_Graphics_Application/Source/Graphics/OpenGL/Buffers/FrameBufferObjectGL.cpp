@@ -175,17 +175,14 @@ void FrameBufferObject::resize(int width, int height)
 	// Save the dimenions.
 	m_viewport[0] = width;
 	m_viewport[1] = height;
-}
-
-unsigned FrameBufferObject::getRenderTexture() 
-{ 
 	// Change texture size variable in  shader.
 	m_shader->bind();
 	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
 	m_shader->setIntArray("textureSize", viewport, 2);
-	// Anti-Aliasing pass.
-	renderFromMSAA(); 
-	//blitFromMSAA();
+}
+
+unsigned FrameBufferObject::getRenderTexture() 
+{ 
 	return m_renderColorTextureID; 
 }
 

@@ -1,33 +1,36 @@
+#pragma once
+
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include <iostream>
-#include "Engines/Base2DEngine/Base2D_Engine.h"
-#include "Engines/Core/EngineCore.h"
-#include "Misc/ConsoleColor.h"
-#include "OpenGL/SceneGL.h"
-#include "OpenGL/CameraGL.h"
+#include "Engines/EngineCore/EngineCore.h"
 
 //=============================================================================================================================================//
-//  Costructor & Destructor.																												   //
+//  Base 2D Engine Class.																													   //
 //=============================================================================================================================================//
 
-// With GLFW window.
-Base2DEngine::Base2DEngine(GUIState* guiState, std::string contextName) 
-	: EngineCore(guiState, contextName)
+class Base2DEngine : public EngineCore
 {
-	// Start.
-	std::cout << blue << "[OPENGL] [INFO] : " << white << "Base 2D engine starting...";
 
-	// Create scene.
-	m_scene = std::make_unique<Scene>(CameraType::Standard2D, 500, 500);
+public:
 
-	// Done.
-	std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Base 2D engine done.";
+	// Contructor.
+	Base2DEngine();
 
+	// ------------- //
+	//  E V E N T S  //
+	// ------------- //
+
+	// Mouse events.
+	void onMouseButtonEvent(MouseButtonEvent& event) override;
+	void onMouseMoveEvent(MouseMoveEvent& event) override;
+	void onMouseScrollEvent(MouseScrollEvent& event) override;
+
+	// Key events.
+	void onKeyEvent(KeyEvent& event) override;
 };
 
 //=============================================================================================================================================//
-// EOF.																																		   //
+//  EOF.																																	   //
 //=============================================================================================================================================//

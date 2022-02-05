@@ -4,8 +4,6 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-// State control.
-#include "../GUIState.h"
 
 /*=======================================================================================================================================*/
 /* Forward declarations                                                                                                                  */
@@ -58,9 +56,8 @@ public:
     bool unsaved_document;
     bool my_tool_active;
 
-    GUIState* m_guiState;
 
-    Toolbar(GUIState* states, GraphicsHandler* graphicsHandler);
+    Toolbar();
 
 	// Function that handles which engine should be active.
 	void renderToolbar();

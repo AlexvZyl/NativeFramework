@@ -8,7 +8,6 @@
 #include <cfenv>
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Graphics/graphicsHandler.h"
 #include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
@@ -16,8 +15,7 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(GUIState* guiState, GraphicsHandler* graphicsHandler)
-    : m_guiState(guiState), m_graphicsHandler(graphicsHandler)
+Toolbar::Toolbar()
 {
     this->my_tool_active = true;
     this->show_app_main_menu_bar = false;

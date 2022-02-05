@@ -55,6 +55,10 @@ public:
 	static void remove(Primitive<VertexDataTextured>* primitive);
 	// Remove the primitive from the scene.
 	static void remove(Primitive<VertexDataCircle>* primitive);
+	// Clear the rendering context.
+	static void clear();
+	// Push command to the GPU.
+	static void finish();
 
 	// ------------- //
 	//  S C E N E S  //
@@ -105,6 +109,8 @@ public:
 	static Texture* getTexture(unsigned resourceID);
 	
 private:
+
+	friend class Application;
 
 	// ------------------- //
 	//  U T I L I T I E S  //

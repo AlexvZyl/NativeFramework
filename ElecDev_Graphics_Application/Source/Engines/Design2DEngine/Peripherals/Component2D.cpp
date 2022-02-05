@@ -162,7 +162,7 @@ void Component2D::setLayer(float layer)
 
 void Component2D::setContext(GUIState* guiState)
 {
-	guiState->clickedZone.component = true;
+	//guiState->clickedZone.component = true;
 }
 
 void Component2D::highlight()

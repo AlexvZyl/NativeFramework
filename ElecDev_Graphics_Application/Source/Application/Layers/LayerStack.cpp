@@ -2,29 +2,44 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Entity.h"
-#include "EntityManager.h"
+#include <integer.hpp>
+#include <iostream>
+#include "External/Misc/ConsoleColor.h"
+#include "Application/Layers/LayerStack.h"
+#include "Application/Layers/Layer.h"
 
 //==============================================================================================================================================//
-//  Methods.																																	//
+//  Layer management.																															//
 //==============================================================================================================================================//
 
-Entity::Entity(EntityType type, Entity* parent)
+void LayerStack::popTopLayer()
 {
-	m_entityID = EntityManager::generateEID(this);
-	m_parent = parent;
-	m_type = type;
+	m_layers.pop_back();
 }
 
-Entity::~Entity() 
-{ 
-	EntityManager::freeEID(m_entityID); 
+void LayerStack::popLayer(Layer& layer)
+{
+	//// Find layer.
+	//auto it = std::find(m_layers.begin(), m_layers.end(), std::make_unique<Layer>(layer));
+
+	//// If layer is found, erase.
+	//if (it != m_layers.end())
+	//{
+	//	int index = it - m_layers.begin();
+	//	m_layers.erase(m_layers.begin() + index);
+	//}
+	//// Log warning.
+	//else
+	//{
+	//	std::cout << yellow << "\n[LAYERS] [WARN]: " << white << "Tried to remove a layer that is not on the stack.\n";
+	//}
 }
 
-void Entity::setContext() 
+std::vector<std::unique_ptr<Layer>>& LayerStack::getLayers()
 {
-	
+	return m_layers;
 }
+
 
 //==============================================================================================================================================//
 //  EOF.																																		//

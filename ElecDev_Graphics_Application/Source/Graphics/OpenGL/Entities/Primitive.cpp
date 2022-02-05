@@ -3,7 +3,6 @@
 //=============================================================================================================================================//
 
 #include <vector>
-#include "../GUI/GUIState.h"
 #include "OpenGL/Entities/Primitive.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/RendererGL.h"
@@ -126,8 +125,8 @@ void Primitive<VertexType>::setLayer(float layer)
 template<typename VertexType>
 void Primitive<VertexType>::setContext(GUIState* guiState)
 {
-	guiState->clickedZone.primative = true;
-	if (m_parent) m_parent->setContext(guiState);
+	//guiState->clickedZone.primative = true;
+	if (m_parent) m_parent->setContext();
 }
 
 //=============================================================================================================================================//

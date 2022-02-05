@@ -14,15 +14,12 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
 
-#include "Graphics/graphicsHandler.h"
-
 /*=======================================================================================================================================*/
 /* Declarations                                                                                                                          */
 /*=======================================================================================================================================*/
 
 // Constructor.
-Ribbons::Ribbons(GUIState* guiState, GraphicsHandler* graphicsHandler)
-    : m_guiState(guiState), m_graphicsHandler(graphicsHandler)
+Ribbons::Ribbons()
 {
     this->show_app_main_menu_bar = false;
     this->show_app_documents = false;

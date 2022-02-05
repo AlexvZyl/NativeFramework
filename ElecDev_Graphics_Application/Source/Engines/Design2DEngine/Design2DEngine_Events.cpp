@@ -2,28 +2,35 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Entity.h"
-#include "EntityManager.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
-//  Methods.																																	//
+//  Mouse events.																																//
 //==============================================================================================================================================//
 
-Entity::Entity(EntityType type, Entity* parent)
+void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {
-	m_entityID = EntityManager::generateEID(this);
-	m_parent = parent;
-	m_type = type;
+
 }
 
-Entity::~Entity() 
-{ 
-	EntityManager::freeEID(m_entityID); 
+void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
+{
+
 }
 
-void Entity::setContext() 
+void Design2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 {
-	
+
+}
+
+//==============================================================================================================================================//
+//  Key Events.																																	//
+//==============================================================================================================================================//
+
+void Design2DEngine::onKeyEvent(KeyEvent& event)
+{
+
 }
 
 //==============================================================================================================================================//

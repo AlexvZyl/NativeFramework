@@ -6,7 +6,6 @@
 #include "Component2D.h"
 #include "OpenGL/Entities/Polygon.h"
 #include "OpenGL/Entities/Text.h"
-#include "GUI/GUIState.h"
 #include "OpenGL/FontLoaderGL.h"
 #include "Resources/ResourceHandler.h"
 #include "Cable.h"
@@ -201,8 +200,8 @@ void Port::hideAttachIndicator()
 
 void Port::setContext(GUIState* guiState)
 {
-	guiState->clickedZone.port = true;
-	m_parent->setContext(guiState);
+	//guiState->clickedZone.port = true;
+	m_parent->setContext();
 }
 
 //==============================================================================================================================================//

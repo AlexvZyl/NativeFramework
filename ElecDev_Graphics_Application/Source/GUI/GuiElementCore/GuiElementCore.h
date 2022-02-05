@@ -1,43 +1,59 @@
+#pragma once
+
 //==============================================================================================================================================//
-//  Includes.																																	//
+//  Includes..																																	//
 //==============================================================================================================================================//
 
-#include "GraphicsScene.h"
+#include <string>
 #include "External/ImGUI/Core/imgui.h"
 
 //==============================================================================================================================================//
-//  Constructor.																																//
+//  Forward declerations.																														//
 //==============================================================================================================================================//
 
-// Constructor.
-GraphicsScene::GraphicsScene(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
-{}
+class Event;
+class WindowResizeEvent;
 
 //==============================================================================================================================================//
-//  Rendering.																																	//
+//  GUI Core Element.																															//
 //==============================================================================================================================================//
 
-void GraphicsScene::begin() 
+class GuiElementCore 
 {
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
-	m_size = ImGui::GetWindowSize();
-}
+public:
 
-void GraphicsScene::renderBody() 
-{
-	ImGui::Image(m_textureID, m_size, ImVec2(0, 1), ImVec2(1, 0));
-}
+	// Pass event to element.
+	virtual void onEvent(Event& event);
 
-void GraphicsScene::end() 
-{
-	ImGui::End();
-}
+protected:
 
-void GraphicsScene::setTextureID(unsigned textureID) 
-{
-	m_textureID = (void*)textureID;
-}
+	friend class GuiLayer;
+	friend class EngineLayer;
+
+	// Resize event.
+	virtual void onWindowResizeEvent(WindowResizeEvent& event);
+
+	// Constructor.
+	GuiElementCore(std::string name, int windowFlags);
+
+	// Is the window open?
+	bool m_isOpen = true;
+	// The window name.
+	std::string m_name;
+	// The ImGUI flags describing the window.
+	int m_imguiWindowFlags = 0;
+
+	// Start the ImGUI widget.
+	virtual void begin();
+	// Render the ImGUI widget.
+	virtual void renderBody();
+	// End the ImGUI widget.
+	virtual void end();
+
+	// The size of the gui component.
+	ImVec2 m_size;
+
+};
 
 //==============================================================================================================================================//
 //  EOF.																																		//

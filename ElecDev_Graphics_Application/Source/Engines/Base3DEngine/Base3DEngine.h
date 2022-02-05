@@ -10,13 +10,17 @@ Some modifications will have to be applied to the matrices and the mouse handlin
 //=============================================================================================================================================//
 
 // The base 2D engine.
-#include "Engines/Core/EngineCore.h"
+#include "Engines/EngineCore/EngineCore.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
 class Camera;
+class MouseButtonEvent;
+class MouseMoveEvent;
+class MouseScrollEvent;
+class KeyEvent;
 
 //=============================================================================================================================================//
 //  Base 3D Engine Class.																													   //
@@ -26,40 +30,21 @@ class Camera;
 class Base3DEngine : public EngineCore
 {
 public:
-		
-	// ------------------------------------------------- //
-	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
-	// ------------------------------------------------- //
 
 	// Constructor
-	Base3DEngine(GUIState* guiState, std::string contextName);
+	Base3DEngine();
 
-	// ------- //
-	//  A P I  //
-	// ------- //
+	// ------------- //
+	//  E V E N T S  //
+	// ------------- //
 
-	virtual void drawQuadFilled3D(float position1[3], float position2[3], float position3[3], float position4[3], float color[4]);
-	virtual void drawCuboidFilled(float position1[3], float position2[3], float position3[3], float position4[3], float depth, float color[4]);
-	virtual void drawDemo(unsigned int loopCount);
-	virtual void autoCenter();
+	// Mouse events.
+	inline void onMouseButtonEvent(MouseButtonEvent& event) {};
+	inline void onMouseMoveEvent(MouseMoveEvent& event) {};
+	inline void onMouseScrollEvent(MouseScrollEvent& event) {};
 
-	// --------------------------- //
-	//  W I N D O W   E V E N T S  //
-	// --------------------------- //
-
-	virtual void resizeEvent(float width, float height);
-
-	// ----------------------- //
-	//  U S E R   I N P U T S  //
-	// ----------------------- //
-
-	// Handling mouse events.
-	virtual void mousePressLeft(float pixelCoords[2]);
-	virtual void mousePressRight(float pixelCoords[2]);
-	virtual void mousePressMiddle(float pixelCoords[2]);
-	virtual void mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle);
-	virtual void mouseScrollEvent(float pixelCoords[2], float yOffset);
-	virtual void keyEvent(int key, int action);
+	// Key events.
+	inline void onKeyEvent(KeyEvent& event) {};
 };
 
 //=============================================================================================================================================//

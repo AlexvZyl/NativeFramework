@@ -5,11 +5,9 @@
 #include "PopUpMenu.h"
 #include <iostream>
 #include "Core/imgui.h"
-#include "../GUIState.h"
-#include "Graphics/graphicsHandler.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
-#include "Engines/Design2DEngine/Design2D_Engine.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 
 /*=======================================================================================================================================*/
