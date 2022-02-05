@@ -50,7 +50,12 @@ void Layer::setDockingState(bool state)
 void Layer::onDockingStateChange(bool newState) 
 {
 	// If docked, get the dock ID.
-	if (newState) m_dockID = ImGui::GetWindowDockID();
+	if (newState)
+	{
+		m_dockID = ImGui::GetWindowDockID();
+		//std::cout << m_layerName << ": Docked with ID " << m_dockID << "\n";
+	}
+	//else std::cout << m_layerName << ": Undocked with prev ID " << m_dockID << ".\n";
 
 	// The layer should be moved (in the stack) based on where it has been docked/undocked.
 }
@@ -62,27 +67,34 @@ uint64_t Layer::getID()
 
 void Layer::updateLayerData()
 {
-	// See if the layer has resized.
 	detectResize();
-
-	// Border.
-	ImVec2 windowPos = ImGui::GetWindowPos();
-	ImVec2 borderMax = { windowPos.x + m_layerSize.x, windowPos.y + m_layerSize.y };
-	setBorder(windowPos, borderMax);
-
-	// Docking.
+	detectMove();
 	setDockingState(ImGui::IsWindowDocked());
 }
 
 void Layer::detectResize() 
 {
 	ImVec2 currentSize = ImGui::GetWindowSize();
+	// Check for resize.
 	if (currentSize.x != m_layerSize.x || currentSize.y != m_layerSize.y)
 	{
 		glm::vec2 eventSize = { currentSize.x, currentSize.y };
 		WindowResizeEvent event(eventSize, 0);
 		onEvent(event);
 		m_layerSize = currentSize;
+	}
+}
+
+void Layer::detectMove() 
+{
+	ImVec2 currentPos = ImGui::GetWindowPos();
+	// Check for move.
+	if (currentPos.x != m_layerPosition.x || currentPos.y != m_layerPosition.y)
+	{
+		// Update the layer border.
+		m_layerPosition = currentPos;
+		ImVec2 borderMax = { m_layerPosition.x + m_layerSize.x, m_layerPosition.y + m_layerSize.y };
+		setBorder(m_layerPosition, borderMax);
 	}
 }
 
@@ -112,21 +124,14 @@ GuiElementCore* GuiLayer::getGuiElement()
 void GuiLayer::onEvent(Event& event)
 {
 	m_guiElement->onEvent(event); 
-	std::cout << m_guiElement->m_name << ": " << event.getID() << "\n";
+	//std::cout << m_guiElement->m_name << ": " << event.getID() << "\n";
 }
 
 void GuiLayer::onRender() 
 {
-	// Setup.
 	m_guiElement->begin();
-
-	// Update the layer data.
 	updateLayerData();
-
-	// Render the ImGUI window.
 	m_guiElement->renderBody();
-
-	// Cleanup.
 	m_guiElement->end(); 
 }
 
@@ -156,8 +161,8 @@ EngineLayer::EngineLayer(uint64_t ID, std::string layerName, int imguiWindowFlag
 
 	Renderer::bindScene(m_engine->m_scene.get());
 	glm::vec2 center(0.f, 0.f);
-	glm::vec4 black(1.f, 0.f, 1.f, 1.f);
-	Renderer::addCircle2D(center, 0.5, black);
+	glm::vec4 pink(1.f, 0.f, 1.f, 1.f);
+	Renderer::addCircle2D(center, 0.5, pink);
 }
 
 EngineCore* EngineLayer::getEngine() 
@@ -173,24 +178,16 @@ GuiElementCore* EngineLayer::getGuiElement()
 void EngineLayer::onEvent(Event& event) 
 {
 	m_engine->onEvent(event);
-	std::cout << m_guiElement->m_name << ": " << event.getID() << "\n";
+	m_guiElement->onEvent(event);
+	//std::cout << m_guiElement->m_name << ": " << event.getID() << "\n";
 }
 
 void EngineLayer::onRender() 
 {
-	// Setup.
 	m_guiElement->begin();
-
-	// Update the layer data.
 	updateLayerData();
-
-	// Render the engine scene.
 	m_engine->onRender();
-
-	// Render the ImGUI window.
 	m_guiElement->renderBody();
-
-	// Cleanup.
 	m_guiElement->end();
 }
 

@@ -36,11 +36,11 @@ Application::Application(GLFWwindow* window)
 	m_eventLog = std::make_unique<EventLog>();
 
 	// Testing layers.
-	GuiLayer guiLayer(LayerType_ComponentEditor, "Window");
+	GuiLayer guiLayer(LayerType_ComponentEditor, "First");
 	m_layerStack->pushLayerToFront<GuiLayer>(guiLayer);
-	GuiLayer guiLayer2(LayerType_ComponentEditor, "Testing");
+	GuiLayer guiLayer2(LayerType_ComponentEditor, "Second");
 	m_layerStack->pushLayerToFront<GuiLayer>(guiLayer2);
-	EngineLayer guiLayer4(LayerType_Base2DEngine, "Engine");
+	EngineLayer guiLayer4(LayerType_Base2DEngine, "Third");
 	m_layerStack->pushLayerToFront<EngineLayer>(guiLayer4);
 
 	// ImGui Inits.

@@ -75,8 +75,11 @@ protected:
 	// Set if the layer is docked.
 	void setDockingState(bool state);
 
-	// Check if the element has been resized.
+	// Check if the layer has been resized.
 	virtual void detectResize();
+
+	// Check if the layer has been moved.
+	virtual void detectMove();
 
 	// Set the layer border for the layer.
 	void setBorder(ImVec2& min, ImVec2& max);
@@ -97,6 +100,8 @@ protected:
 	ImVec2 m_borderMax = { 0.f, 0.f };
 	// The size of the layer.
 	ImVec2 m_layerSize = { 0.f, 0.f };
+	// The position of the layer.
+	ImVec2 m_layerPosition = { 0.f, 0.f };
 	// Is the layer docked?
 	bool m_docked = false;
 	// The ImGui dock ID related to the window.

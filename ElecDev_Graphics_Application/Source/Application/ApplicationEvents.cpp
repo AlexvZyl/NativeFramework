@@ -20,7 +20,7 @@ void Application::dispatchEvents()
 	// If current hovered layer is no longer being hovered.
 	else if (!m_hoveredLayer->isMouseHovering()) onHoveredLayerChange(findhoveredLayer());
 
-	// Handle the events.
+	// Dispatch the events.
 	for (std::unique_ptr<Event>& event : m_eventLog->events)
 	{
 		uint64_t eventID = event->getID();
