@@ -4,6 +4,7 @@
 
 #include "GraphicsScene.h"
 #include "External/ImGUI/Core/imgui.h"
+#include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
 //  Constructor.																																//
@@ -20,7 +21,7 @@ GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 
 void GraphicsScene::renderBody() 
 {
-	ImGui::Image(m_textureID, m_size, ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image(m_textureID, m_textureSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 
 void GraphicsScene::setTextureID(unsigned textureID) 
@@ -32,7 +33,14 @@ void GraphicsScene::setTextureID(unsigned textureID)
 //  Events.																																		//
 //==============================================================================================================================================//
 
-
+void GraphicsScene::onWindowResizeEvent(WindowResizeEvent& event)
+{
+	glm::vec2 windowSize = event.getWindowResize();
+	m_size = { windowSize.x, windowSize.y };
+	ImGuiStyle& style = ImGui::GetStyle();
+	float titlebarHeight = (style.FramePadding.y * 2 + ImGui::GetFontSize() ) * 1.1;
+	m_textureSize = {windowSize.x, windowSize.y - titlebarHeight};
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

@@ -2,6 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include <iostream>
 #include <memory>
 #include "Application/Application.h"
 #include "Application/Events/Events.h"
@@ -11,6 +12,7 @@
 #include "External/ImGUI/Core/imgui.h"
 #include "External/ImGUI/Implementations/imgui_impl_glfw.h"
 #include "External/ImGUI/Implementations/imgui_impl_opengl3.h"
+#include "External/Misc/ConsoleColor.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/RendererGL.h"
 #include "Resources/ResourceHandler.h"
@@ -49,6 +51,31 @@ Application::Application(GLFWwindow* window)
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	setGuiTheme();
+}
+
+void Application::shutdown() 
+{
+	// ImGUI cleanup.
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	//ImGui::DestroyContext();  // This causes an exception.
+
+	// Close application.
+	glfwDestroyWindow(m_window);
+	glfwTerminate();
+
+	// Log termination.
+	std::cout << blue << "\n\n[LUMEN] [INFO] : " << white << "Program terminated." << std::endl;
+}
+
+bool Application::shouldWindowClose()
+{
+	return m_shouldWindowClose;
+}
+
+void Application::closeWindow() 
+{
+	m_shouldWindowClose = true;
 }
 
 //==============================================================================================================================================//
@@ -109,6 +136,11 @@ void Application::onRenderCleanup()
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
+}
+
+void Application::swapBuffers() 
+{
+	glfwSwapBuffers(m_window);
 }
 
 //==============================================================================================================================================//

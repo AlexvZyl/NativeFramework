@@ -2,23 +2,8 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-#include <thread>
 #include <chrono>
-#include <stdio.h>
-#include <vector>
-#include <iostream>
-#include <string>
-#include "External/Misc/stb_image.h"
-#include "External/Misc/ConsoleColor.h"
-#include "glad/glad.h"
-#include "ImGUI/Core/imgui.h"
-#include "ImGUI/Implementations/imgui_impl_opengl3.h"
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
 #include "OpenGL/RendererGL.h"
-#include "OpenGL/ErrorHandlerGL.h"
-#include "Resources/ResourceHandler.h"
-#include "Application/Events/EventLog.h"
-#include "Application/Layers/LayerStack.h"
 #include "Application/Application.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 
@@ -43,7 +28,7 @@ int main(int, char**)
     //  S E T U P  //
     // ----------- //
 
-    // Init window (GLFW, ImGUI, OpenGL context).
+    // Init the window.
     GLFWwindow* window = Application::glfwInitWindow();
 
     // Initialise the renderer.
@@ -66,14 +51,11 @@ int main(int, char**)
     double currTime = 0;
     double prevTime = 0;
 
-    // Input message.
-    std::cout << green << "\n[LUMEN] [INPUT] : " << white;
-
     // Reset glfw time.
     glfwSetTime(0);
 
     // [MAIN LOOP].
-    while (!glfwWindowShouldClose(window))
+    while (!application.shouldWindowClose())
     {
         // Event checking.
         if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
@@ -103,7 +85,7 @@ int main(int, char**)
             Renderer::finish();
             
             // Swap the OpenGL buffers.
-            glfwSwapBuffers(window);
+            application.swapBuffers();
         }
     }
 
@@ -111,18 +93,7 @@ int main(int, char**)
     //  C L E A N U P  //
     // --------------- //
 
-    // ImGUI cleanup.
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    //ImGui::DestroyContext();
-
-    // Close application.
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    exit(0);
-
-    // Log termination.
-    std::cout << blue << "\n\n[LUMEN] [INFO] : " << white << "Program terminated." << std::endl;
+    application.shutdown();
     return 0;
 }
 

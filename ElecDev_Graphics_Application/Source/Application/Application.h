@@ -6,6 +6,7 @@
 
 #include "Application/Events/EventLog.h"
 #include "Application/Events/Events.h"
+#include "Application/Layers/LayerStack.h"
 #include <vector>
 
 //==============================================================================================================================================//
@@ -15,7 +16,6 @@
 class GraphicsHandler;
 class GUIHandler;
 class EventLog;
-class LayerStack;
 class Layer;
 class ImFont;
 
@@ -39,6 +39,8 @@ public:
 
 	// Renders the next frame.
 	void onRender();
+	// Swap the window buffers.
+	void swapBuffers();
 
 	// ------------- //
 	//  E V E N T S  //
@@ -51,6 +53,10 @@ public:
 	// Log the event in the event log.
 	template <typename EventType>
 	void logEvent(Event& event);
+	// Should the app close?
+	bool shouldWindowClose();
+	// Close the app.
+	void closeWindow();
 
 	// ----------------------- //
 	//  G L F W   W I N D O W  //
@@ -58,6 +64,8 @@ public:
 
 	// Sets up the GLFW window and OpenGL context.
 	static GLFWwindow* glfwInitWindow();
+	void shutdown();
+
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
 
@@ -93,6 +101,8 @@ private:
 	void onWindowResizeEvent(WindowResizeEvent& event);
 	// Handle serialisation events.
 	void onFileDropEvent(FileDropEvent& event);
+	// Should the app close?
+	bool m_shouldWindowClose = false;
 	
 	// ------------------- //
 	//  R E N D E R I N G  //

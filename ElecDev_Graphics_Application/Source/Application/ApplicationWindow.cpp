@@ -185,6 +185,17 @@ void Application::glfwInitCallbacks()
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
         app->logEvent<WindowResizeEvent>(event);
     });
+
+    // ----------- //
+    //  C L O S E  //
+    // ----------- //
+
+    glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) 
+    {
+        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+        app->closeWindow();
+    });
+
 }
 
 //==============================================================================================================================================//

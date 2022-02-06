@@ -58,8 +58,8 @@ GuiElementCore* EngineLayer::getGuiElement()
 
 void EngineLayer::onEvent(Event& event)
 {
-	m_engine->onEvent(event);
 	m_graphicsWindow->onEvent(event);
+	m_engine->onEvent(event);
 	std::cout << m_graphicsWindow->m_name << ": " << event.getID() << "\n";
 }
 
