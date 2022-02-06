@@ -1,38 +1,49 @@
+#pragma once
+
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GraphicsScene.h"
-#include "External/ImGUI/Core/imgui.h"
+#include "Layer.h"
+#include <string>
 
 //==============================================================================================================================================//
-//  Constructor.																																//
+//  Forward declerations.																														//
 //==============================================================================================================================================//
 
-// Constructor.
-GraphicsScene::GraphicsScene(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
-{}
+class GuiElementCore;
+class Event;
 
 //==============================================================================================================================================//
-//  Rendering.																																	//
+//  GUI Layer.																																	//
 //==============================================================================================================================================//
 
-void GraphicsScene::renderBody() 
+class BasicGuiLayer : public Layer
 {
-	ImGui::Image(m_textureID, m_size, ImVec2(0, 1), ImVec2(1, 0));
-}
+public:
 
-void GraphicsScene::setTextureID(unsigned textureID) 
-{
-	m_textureID = (void*)textureID;
-}
+	// Create a GUI layer based on the ID.
+	BasicGuiLayer(LayerType guiElement, std::string layerName, int imguiWindowFLags = 0);
 
-//==============================================================================================================================================//
-//  Events.																																		//
-//==============================================================================================================================================//
+	// Get the gui element in the layer.
+	GuiElementCore* getGuiElement();
 
+	// Pass an event to the layer.
+	virtual void onEvent(Event& event) override;
 
+	// Render the specific layer.
+	virtual void onRender() override;
+
+protected:
+
+	// The GUI element that belongs to this layer.
+	// The basic layer only has on Gui element.
+	std::unique_ptr<GuiElementCore> m_guiElement = nullptr;
+
+	// The imguiWindow flags related to the layer's ImGUI windows.
+	int m_imguiWindowflags = 0;
+
+};
 
 //==============================================================================================================================================//
 //  EOF.																																		//

@@ -202,15 +202,20 @@ class WindowResizeEvent : public Event
 public:
 
 	// Constructor.
-	WindowResizeEvent(glm::vec2& windowSize, uint64_t ID);
+	WindowResizeEvent(glm::vec2& windowResize, uint64_t ID, bool isScale = false);
 
 	// Get the resized window size.
-	glm::vec2& getWindowSize();
+	glm::vec2& getWindowResize();
+
+	bool isScale();
 
 private:
 
 	// The new size of the window.
-	glm::vec2 m_windowSize = { 0.f, 0.f };
+	glm::vec2 m_windowResize = { 0.f, 0.f };
+
+	// Is the resize value given in scale?
+	bool m_isScale;
 
 };
 

@@ -134,7 +134,7 @@ void Application::glfwInitCallbacks()
         uint64_t eventID = 0;
         if      (action == GLFW_PRESS)   { eventID |= EventType_KeyPress;   }
         else if (action == GLFW_RELEASE) { eventID |= EventType_KeyRelease; }
-        if      (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
+        else if (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
         // Mouse button states.
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }

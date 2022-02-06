@@ -12,12 +12,12 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/TextureGL.h"
 #include "OpenGL/Entities/Primitive.h"
+#include "OpenGL/CameraGL.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
 //==============================================================================================================================================//
 
-class Camera;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle; 

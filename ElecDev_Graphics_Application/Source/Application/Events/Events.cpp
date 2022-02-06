@@ -107,13 +107,18 @@ int KeyEvent::getKey()
 //  Window events.																																//
 //==============================================================================================================================================//
 
-WindowResizeEvent::WindowResizeEvent(glm::vec2& windowSize, uint64_t ID)
-	: Event(ID | EventType_WindowResize), m_windowSize(windowSize)
+WindowResizeEvent::WindowResizeEvent(glm::vec2& windowResize, uint64_t ID, bool isScale)
+	: Event(ID | EventType_WindowResize), m_windowResize(windowResize), m_isScale(isScale)
 {}
 
-glm::vec2& WindowResizeEvent::getWindowSize()
+glm::vec2& WindowResizeEvent::getWindowResize()
 {
-	return m_windowSize;
+	return m_windowResize;
+}
+
+bool WindowResizeEvent::isScale() 
+{
+	return m_isScale;
 }
 
 //==============================================================================================================================================//

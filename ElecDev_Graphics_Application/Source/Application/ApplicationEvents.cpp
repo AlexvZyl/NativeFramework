@@ -43,17 +43,11 @@ void Application::dispatchEvents()
 		if (m_focusedLayer) m_focusedLayer->onEvent(*event.get());
 	}
 
-	// Specific mouse events.
-	// Should we pass these to the focused and hovered layer?
-	if (m_eventLog->mouseMove)
+	// These mouse events are kept seperately to prevent handling events more than once.
+	if (m_hoveredLayer)
 	{
-		if (m_focusedLayer) m_focusedLayer->onEvent(*m_eventLog->mouseMove.get());
-		if (m_hoveredLayer) m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
-	}
-	if (m_eventLog->mouseScroll)
-	{
-		if (m_focusedLayer) m_focusedLayer->onEvent(*m_eventLog->mouseScroll.get());
-		if (m_hoveredLayer) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
+		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 
 	// All events have been handled.
@@ -75,15 +69,25 @@ Layer* Application::findhoveredLayer()
 	return nullptr;
 }
 
+//==============================================================================================================================================//
+//  Layer events.																																//
+//==============================================================================================================================================//
+
 void Application::onHoveredLayerChange(Layer* newLayer)
 {
 	// Create a dehover event.
-	LayerEvent dehoverEvent(EventType_Dehover);
-	if(m_hoveredLayer) m_hoveredLayer->onEvent(dehoverEvent);
+	if (m_hoveredLayer)
+	{
+		LayerEvent dehoverEvent(EventType_Dehover);
+		m_hoveredLayer->onEvent(dehoverEvent);
+	}
 
 	// Create a hover event.
-	LayerEvent hoverEvent(EventType_Hover);
-	if(newLayer) newLayer->onEvent(hoverEvent);
+	if (newLayer)
+	{
+		LayerEvent hoverEvent(EventType_Hover);
+		newLayer->onEvent(hoverEvent);
+	}
 
 	// Set the new hovered layer.
 	m_hoveredLayer = newLayer;
@@ -92,19 +96,30 @@ void Application::onHoveredLayerChange(Layer* newLayer)
 void Application::onFocusedLayerChange(Layer* newLayer)
 {
 	// Create a defocus event.
-	LayerEvent defocusEvent(EventType_Defocus);
-	if(m_focusedLayer) m_focusedLayer->onEvent(defocusEvent);
+	if (m_focusedLayer)
+	{
+		LayerEvent defocusEvent(EventType_Defocus);
+		m_focusedLayer->onEvent(defocusEvent);
+	}
 
 	// Create a focus event.
-	LayerEvent focusEvent(EventType_Focus);
-	if(newLayer) newLayer->onEvent(focusEvent);
+	if (newLayer)
+	{
+		LayerEvent focusEvent(EventType_Focus);
+		newLayer->onEvent(focusEvent);
+		ImGui::SetWindowFocus(newLayer->getLayerName().c_str());
+	}
+	else 
+	{
+		ImGui::SetWindowFocus(NULL);
+	}
 
 	// Assign new focused layer.
 	m_focusedLayer = newLayer;
 }
 
 //==============================================================================================================================================//
-//  On Events.																																	//
+//  Application events.																															//
 //==============================================================================================================================================//
 
 void Application::onEvent(Event& event)

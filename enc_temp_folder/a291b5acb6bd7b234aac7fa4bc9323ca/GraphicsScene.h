@@ -18,19 +18,17 @@ public:
 	GraphicsScene(std::string name, int windowFlags);
 
 	// Rendering functions.
+	virtual void begin() override;
 	virtual void renderBody() override;
+	virtual void end() override;
 
 	// Set the texture ID that is to be rendered.
 	void setTextureID(unsigned textureID);
 
 private:
 
-	// Events.
-	virtual void onWindowResizeEvent(WindowResizeEvent& event) override;
-
 	// Pointer to the graphics texture.
 	void* m_textureID = nullptr;
-	ImVec2 m_textureSize;
 };
 
 //==============================================================================================================================================//

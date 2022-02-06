@@ -118,6 +118,8 @@
     <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
+    <ClCompile Include="Source\Application\Layers\BasicGuiLayer.cpp" />
+    <ClCompile Include="Source\Application\Layers\EngineLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1327,6 +1329,8 @@
     <ClInclude Include="Source\Application\Layers\LayerStack.h" />
     <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
+    <ClInclude Include="Source\Application\Layers\BasicGuiLayer.h" />
+    <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

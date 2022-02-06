@@ -27,14 +27,15 @@ public:
 
 protected:
 
-	friend class GuiLayer;
+	friend class Layer;
+	friend class BasicGuiLayer;
 	friend class EngineLayer;
-
-	// Resize event.
-	virtual void onWindowResizeEvent(WindowResizeEvent& event);
 
 	// Constructor.
 	GuiElementCore(std::string name, int windowFlags);
+
+	// Resize event.
+	virtual void onWindowResizeEvent(WindowResizeEvent& event);
 
 	// Is the window open?
 	bool m_isOpen = true;

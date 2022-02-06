@@ -45,7 +45,7 @@ void GuiElementCore::onEvent(Event& event)
 	// It uses the ImGUI GLFW implementation code.  This means that 
 	// we do not need to pass any inputs to the GUI element.
 
-	event.consume();
+	// The gui window should not consume the event.
 }
 
 //==============================================================================================================================================//
@@ -54,7 +54,7 @@ void GuiElementCore::onEvent(Event& event)
 
 void GuiElementCore::onWindowResizeEvent(WindowResizeEvent& event) 
 {
-	glm::vec2 windowSize = event.getWindowSize();
+	glm::vec2 windowSize = event.getWindowResize();
 	m_size = { windowSize.x, windowSize.y };
 }
 

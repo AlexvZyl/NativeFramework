@@ -50,7 +50,7 @@ void EngineCore::onEvent(Event& event)
 
 void EngineCore::onWindowResizeEvent(WindowResizeEvent& event)
 {
-	glm::vec2 eventSize = event.getWindowSize();
+	glm::vec2 eventSize = event.getWindowResize();
 	m_scene->resize((int)eventSize.x, (int)eventSize.y);
 }
 
