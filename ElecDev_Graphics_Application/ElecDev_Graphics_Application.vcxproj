@@ -244,7 +244,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ShaderGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_API.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Utilities.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />

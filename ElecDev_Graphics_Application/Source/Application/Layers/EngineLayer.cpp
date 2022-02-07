@@ -20,7 +20,7 @@
 //==============================================================================================================================================//
 
 EngineLayer::EngineLayer(LayerType engineType, std::string layerName, int imguiWindowFlags)
-	: Layer(engineType | LayerType_Engine, layerName), m_imguiWindowflags(imguiWindowFlags)
+	: Layer(engineType | LayerType_GraphicsScene | LayerType_Engine | LayerType_GUI, layerName), m_imguiWindowflags(imguiWindowFlags)
 {
 	// Create the engine component.
 	if	    (engineType == LayerType_Base2DEngine  ) m_engine = std::make_unique<Base2DEngine>();
@@ -36,9 +36,8 @@ EngineLayer::EngineLayer(LayerType engineType, std::string layerName, int imguiW
 	}
 
 	// Create an ImGui window to render the engine to.
-	m_imguiWindowflags |= ImGuiWindowFlags_NoScrollbar;
 	m_graphicsWindow = std::make_unique<GraphicsScene>(m_layerName, m_imguiWindowflags);
-	m_graphicsWindow->setTextureID(m_engine->getRenderTexture());
+	m_graphicsWindow->setEngine(m_engine.get());
 
 	Renderer::bindScene(m_engine->m_scene.get());
 	glm::vec2 center(0.f, 0.f);
@@ -56,13 +55,6 @@ GuiElementCore* EngineLayer::getGuiElement()
 	return m_graphicsWindow.get();
 }
 
-void EngineLayer::onEvent(Event& event)
-{
-	m_graphicsWindow->onEvent(event);
-	m_engine->onEvent(event);
-	std::cout << m_graphicsWindow->m_name << ": " << event.getID() << "\n";
-}
-
 void EngineLayer::onRender()
 {
 	m_graphicsWindow->begin();
@@ -70,6 +62,17 @@ void EngineLayer::onRender()
 	m_engine->onRender();
 	m_graphicsWindow->renderBody();
 	m_graphicsWindow->end();
+}
+
+//==============================================================================================================================================//
+//  Events.																																		//
+//==============================================================================================================================================//
+
+void EngineLayer::onEvent(Event& event)
+{
+	m_graphicsWindow->onEvent(event);
+	m_engine->onEvent(event);
+	std::cout << m_graphicsWindow->m_name << ": " << event.getID() << "\n";
 }
 
 //==============================================================================================================================================//

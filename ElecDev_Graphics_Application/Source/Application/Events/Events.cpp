@@ -52,13 +52,13 @@ Event::Event(uint64_t ID)
 //  M O U S E   B A S E  //
 // --------------------- //
 
-glm::vec2& MouseEvent::getPositionGLFW()
+glm::vec2& MouseEvent::getPosition()
 {
-	return m_mousePositionGLFW;
+	return m_mousePosition;
 }
 
 MouseEvent::MouseEvent(glm::vec2& positionPixels, uint64_t ID)
-	: Event(ID), m_mousePositionGLFW(positionPixels)
+	: Event(ID), m_mousePosition(positionPixels)
 {}
 
 // ------------------------- //
@@ -94,8 +94,8 @@ float MouseScrollEvent::getYOffset()
 //  Key Events.																																    //
 //==============================================================================================================================================//
 
-KeyEvent::KeyEvent(int key, uint64_t ID)
-	: Event(ID), m_key(key) 
+KeyEvent::KeyEvent(int key, uint64_t ID, glm::vec2& mousePos)
+	: Event(ID), m_key(key), m_mousePosition(mousePos)
 {}
 
 int KeyEvent::getKey()
@@ -103,20 +103,25 @@ int KeyEvent::getKey()
 	return m_key;
 }
 
+glm::vec2& KeyEvent::getMousePosition() 
+{
+	return m_mousePosition;
+}
+
 //==============================================================================================================================================//
 //  Window events.																																//
 //==============================================================================================================================================//
 
-WindowResizeEvent::WindowResizeEvent(glm::vec2& windowResize, uint64_t ID, bool isScale)
-	: Event(ID | EventType_WindowResize), m_windowResize(windowResize), m_isScale(isScale)
+WindowEvent::WindowEvent(glm::vec2& windowResize, uint64_t ID, bool isScale)
+	: Event(ID), m_windowData(windowResize), m_isScale(isScale)
 {}
 
-glm::vec2& WindowResizeEvent::getWindowResize()
+glm::vec2& WindowEvent::getWindowData()
 {
-	return m_windowResize;
+	return m_windowData;
 }
 
-bool WindowResizeEvent::isScale() 
+bool WindowEvent::isScale()
 {
 	return m_isScale;
 }

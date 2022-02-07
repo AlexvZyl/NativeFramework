@@ -42,7 +42,7 @@ int main(int, char**)
     // ------------------------------------- //
 
     // Set waiting for events.
-    bool wait = false;
+    bool wait = true;
 
     // FPS cap settings.
     double fps = 60;

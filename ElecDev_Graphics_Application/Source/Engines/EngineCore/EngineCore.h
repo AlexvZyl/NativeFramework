@@ -17,7 +17,7 @@ class MouseButtonEvent;
 class MouseMoveEvent;
 class MouseScrollEvent;
 class KeyEvent;
-class WindowResizeEvent;
+class WindowEvent;
 class LayerEvent;
 class Scene;
 
@@ -90,7 +90,7 @@ public:
 	inline virtual void onKeyEvent(KeyEvent& event) = 0;
 
 	// Window events.
-	virtual void onWindowResizeEvent(WindowResizeEvent& event);
+	virtual void onWindowResizeEvent(WindowEvent& event);
 
 	// Layer events.
 	virtual void onFocusEvent(LayerEvent& event);

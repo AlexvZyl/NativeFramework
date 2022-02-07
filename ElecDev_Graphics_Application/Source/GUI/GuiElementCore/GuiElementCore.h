@@ -12,7 +12,12 @@
 //==============================================================================================================================================//
 
 class Event;
-class WindowResizeEvent;
+class WindowEvent;
+class MouseButtonEvent;
+class MouseMoveEvent;
+class MouseScrollEvent;
+class KeyEvent;
+class LayerEvent;
 
 //==============================================================================================================================================//
 //  GUI Core Element.																															//
@@ -34,15 +39,9 @@ protected:
 	// Constructor.
 	GuiElementCore(std::string name, int windowFlags);
 
-	// Resize event.
-	virtual void onWindowResizeEvent(WindowResizeEvent& event);
-
-	// Is the window open?
-	bool m_isOpen = true;
-	// The window name.
-	std::string m_name;
-	// The ImGUI flags describing the window.
-	int m_imguiWindowFlags = 0;
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
 
 	// Start the ImGUI widget.
 	virtual void begin();
@@ -51,9 +50,41 @@ protected:
 	// End the ImGUI widget.
 	virtual void end();
 
-	// The size of the gui component.
-	ImVec2 m_size;
+	// --------- //
+	//  D A T A  //
+	// --------- //
 
+	// Is the window open?
+	bool m_isOpen = true;
+	// The window name.
+	std::string m_name;
+	// The ImGUI flags describing the window.
+	int m_imguiWindowFlags = 0;
+
+	// The size of the gui component.
+	ImVec2 m_contentRegionSize = { 0.f, 0.f };
+	ImVec2 m_contentRegionPosition = { 0.f, 0.f };
+
+	// ------------- //
+	//  E V E N T S  //
+	// ------------- //
+
+	// Mouse events.
+	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) {};
+	inline virtual void onMouseMoveEvent(MouseMoveEvent& event) {};
+	inline virtual void onMouseScrollEvent(MouseScrollEvent& event) {};
+
+	// Key events.
+	inline virtual void onKeyEvent(KeyEvent& event) {};
+
+	// Window events.
+	virtual void onWindowResizeEvent(WindowEvent& event);
+
+	// Layer events.
+	inline virtual void onFocusEvent(LayerEvent& event) {};
+	inline virtual void onDefocusEvent(LayerEvent& event) {};
+	inline virtual void onHoverEvent(LayerEvent& event) {};
+	inline virtual void onDehoverEvent(LayerEvent& event) {};
 };
 
 //==============================================================================================================================================//

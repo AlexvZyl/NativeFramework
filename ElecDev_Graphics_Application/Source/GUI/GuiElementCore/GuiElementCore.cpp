@@ -33,29 +33,43 @@ void GuiElementCore::end()
 //  On Event.																																	//
 //==============================================================================================================================================//
 
-void GuiElementCore::onEvent(Event& event) 
+void GuiElementCore::onEvent(Event& event)
 {
+	// Check if already consumed.
 	if (event.isConsumed()) return;
 
 	uint64_t eventID = event.getID();
 
-	if (eventID == EventType_WindowResize) onWindowResizeEvent(dynamic_cast<WindowResizeEvent&>(event));
+	// Mouse events.
+	if		(eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
+	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
+	else if (eventID == EventType_MousePress)	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 
-	// Currently GUI events are handles in the GLFW callback init.
-	// It uses the ImGUI GLFW implementation code.  This means that 
-	// we do not need to pass any inputs to the GUI element.
+	// Key events.
+	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 
-	// The gui window should not consume the event.
+	// Window events.
+	else if (eventID == EventType_WindowResize) { onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+
+	// Layer events.
+	else if (eventID == EventType_Focus)		{ onFocusEvent(dynamic_cast<LayerEvent&>(event)); }
+	else if (eventID == EventType_Defocus)		{ onDefocusEvent(dynamic_cast<LayerEvent&>(event)); }
+	else if (eventID == EventType_Hover)		{ onHoverEvent(dynamic_cast<LayerEvent&>(event)); }
+	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event)); }
+
+	// Gui should not consume the event.
 }
 
 //==============================================================================================================================================//
 //  Window Events.																																//
 //==============================================================================================================================================//
 
-void GuiElementCore::onWindowResizeEvent(WindowResizeEvent& event) 
+void GuiElementCore::onWindowResizeEvent(WindowEvent& event)
 {
-	glm::vec2 windowSize = event.getWindowResize();
-	m_size = { windowSize.x, windowSize.y };
+	glm::vec2 windowSize = event.getWindowData();
+	m_contentRegionSize = { windowSize.x, windowSize.y };
 }
 
 //==============================================================================================================================================//

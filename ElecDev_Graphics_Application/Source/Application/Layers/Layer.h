@@ -57,6 +57,9 @@ public:
 	// Render the specific layer.
 	virtual void onRender() = 0;
 
+	// Checks if the layer is docked.
+	bool isDocked();
+
 	// Get the layer ID.
 	uint64_t getLayerID();
 	// Get the ImGui dock ID.
@@ -83,6 +86,9 @@ protected:
 	// This will change where the layer sits
 	// in the stack.
 	void onDockingStateChange(bool newState);
+
+	// Update the border max based on the layer position and size.
+	void updateBorderMax();
 
 	// Update the data related to the layer.
 	// This function has to be called after a ImGui element has begun.

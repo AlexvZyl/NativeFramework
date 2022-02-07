@@ -44,7 +44,7 @@ Application::Application(GLFWwindow* window)
 	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer);
 	BasicGuiLayer guiLayer2(LayerType_ComponentEditor, "Middle");
 	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer2);
-	EngineLayer guiLayer4(LayerType_Base2DEngine, "Front");
+	EngineLayer guiLayer4(LayerType_Design2DEngine, "Front");
 	m_layerStack->pushLayerToFront<EngineLayer>(guiLayer4);
 
 	// ImGui Inits.
@@ -58,7 +58,7 @@ void Application::shutdown()
 	// ImGUI cleanup.
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
-	//ImGui::DestroyContext();  // This causes an exception.
+	//ImGui::DestroyContext();  // This causes an exception?
 
 	// Close application.
 	glfwDestroyWindow(m_window);

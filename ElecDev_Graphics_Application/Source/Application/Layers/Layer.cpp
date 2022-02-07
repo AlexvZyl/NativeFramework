@@ -37,19 +37,16 @@ void Layer::updateLayerData()
 void Layer::setDockingState(bool state)
 {
 	// On state change.
-	if (m_docked != state)
-	{
-		onDockingStateChange(state);
-		m_docked = state;
-	}
+	if (m_docked != state) onDockingStateChange(state);
 }
 
 void Layer::onDockingStateChange(bool newState) 
 {
+	m_docked = newState;
 	// If docked, get the dock ID.
 	if (newState) m_dockID = ImGui::GetWindowDockID();
 	// Log the dock.
-	std::cout << m_layerName << ": Docking state is " << newState << ".\n";
+	std::cout << m_layerName << ": Docking state is " << newState << ", with ID " << m_dockID << "\n";
 	
 	// The layer should be moved (in the stack) based on where it has been docked/undocked.
 	// It should go to the layers with which it was docked.
@@ -61,14 +58,16 @@ void Layer::detectResize()
 	// Check for resize.
 	if (currentSize.x != m_layerSize.x || currentSize.y != m_layerSize.y)
 	{
-		// Create resize event to pass onto layer elements.
-		glm::vec2 eventSize = { currentSize.x, currentSize.y };
-		WindowResizeEvent event(eventSize, 0);
-		onEvent(event);
-		// Update layer size.
+		// Update the layer size and border (includes entire window).
 		m_layerSize = currentSize;
-		// Update the layer border.
-		m_borderMax = { m_layerPosition.x + m_layerSize.x, m_layerPosition.y + m_layerSize.y };
+		updateBorderMax();
+		// Update the content regions of the layer elements.
+		// (This currently only works if we have one gui element per layer)
+		ImVec2 regionMin = ImGui::GetWindowContentRegionMin();
+		ImVec2 regionMax = ImGui::GetWindowContentRegionMax();
+		glm::vec2 contentRegionSize = { regionMax.x - regionMin.x, regionMax.y - regionMin.y };
+		WindowEvent event(contentRegionSize, EventType_WindowResize);
+		onEvent(event);
 	}
 }
 
@@ -78,11 +77,15 @@ void Layer::detectMove()
 	// Check for move.
 	if (currentPos.x != m_layerPosition.x || currentPos.y != m_layerPosition.y)
 	{
-		// Update the layer position.
+		// Update layer data.
 		m_layerPosition = currentPos;
-		// Update the layer border.
-		m_borderMax = { m_layerPosition.x + m_layerSize.x, m_layerPosition.y + m_layerSize.y };
+		updateBorderMax();
 	}
+}
+
+void Layer::updateBorderMax() 
+{
+	m_borderMax = { m_layerPosition.x + m_layerSize.x, m_layerPosition.y + m_layerSize.y };
 }
 
 //==============================================================================================================================================//
@@ -102,6 +105,11 @@ ImGuiID Layer::getDockID()
 std::string& Layer::getLayerName() 
 {
 	return m_layerName;
+}
+
+bool Layer::isDocked() 
+{
+	return m_docked;
 }
 
 //==============================================================================================================================================//

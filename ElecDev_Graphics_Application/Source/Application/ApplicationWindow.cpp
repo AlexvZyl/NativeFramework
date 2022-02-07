@@ -147,8 +147,13 @@ void Application::glfwInitCallbacks()
         if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
         if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
+        // Get the cursor position.
+        double cursorX, cursorY;
+        glfwGetCursorPos(window, &cursorX, &cursorY);
+        glm::vec2 cursorPos = { cursorX, cursorY };
+
         // Log event.
-        KeyEvent event(key, eventID);
+        KeyEvent event(key, eventID, cursorPos);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
         app->logEvent<KeyEvent>(event);
 
@@ -181,9 +186,9 @@ void Application::glfwInitCallbacks()
     {
         // Create and log event.
         glm::vec2 size(width, height);
-        WindowResizeEvent event(size, EventType_Application | EventType_WindowResize);
+        WindowEvent event(size, EventType_Application | EventType_WindowResize);
         Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<WindowResizeEvent>(event);
+        app->logEvent<WindowEvent>(event);
     });
 
     // ----------- //
@@ -305,7 +310,7 @@ GLFWwindow* Application::glfwInitWindow()
     io.IniFilename = NULL;                                      // Disable imgui ini file.
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
     // When viewports are enabled we tweak WindowRounding/WindowBg 
     // so platform windows can look identical to regular ones.

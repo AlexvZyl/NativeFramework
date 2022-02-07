@@ -44,15 +44,16 @@ enum EventType
 
 	// Window events.
 	EventType_WindowResize		=	1 << 18,
+	EventType_WindowMove		=	1 << 19,
 
 	// Application specific events.
-	EventType_FileDrop			=	1 << 19,
+	EventType_FileDrop			=	1 << 20,
 
 	// Layer events.
-	EventType_Focus				=	1 << 20,
-	EventType_Defocus			=	1 << 21,
-	EventType_Hover				=	1 << 22,
-	EventType_Dehover			=	1 << 23,
+	EventType_Focus				=	1 << 21,
+	EventType_Defocus			=	1 << 22,
+	EventType_Hover				=	1 << 23,
+	EventType_Dehover			=	1 << 24,
 };
 
 // Check if an ID contains a specific type.
@@ -107,7 +108,7 @@ class MouseEvent : public Event
 public:
 
 	// Returns the position of the mouse event in GLFW pixels.
-	glm::vec2& getPositionGLFW();
+	glm::vec2& getPosition();
 
 protected:
 
@@ -119,7 +120,7 @@ protected:
 private:
 
 	// The postion of the mouse event.
-	glm::vec2 m_mousePositionGLFW = { 0.f, 0.f };
+	glm::vec2 m_mousePosition = { 0.f, 0.f };
 };
 
 // ------------------------- //
@@ -180,15 +181,21 @@ class KeyEvent : public Event
 public:
 
 	// Constructor.
-	KeyEvent(int key, uint64_t ID);
+	KeyEvent(int key, uint64_t ID, glm::vec2& mousePos);
 
 	// Get the key associated with the event.
 	int getKey();
+
+	// Get the mouse potition of the event.
+	glm::vec2& getMousePosition();
 
 private:
 
 	// Key associated with the event.
 	int m_key;
+
+	// Position of the mouse when the key event ocurred.
+	glm::vec2 m_mousePosition;
 
 };
 
@@ -196,23 +203,26 @@ private:
 //  Window events.																																//
 //==============================================================================================================================================//
 
-class WindowResizeEvent : public Event
+class WindowEvent : public Event
 {
 
 public:
 
 	// Constructor.
-	WindowResizeEvent(glm::vec2& windowResize, uint64_t ID, bool isScale = false);
+	WindowEvent(glm::vec2& windowResize, uint64_t ID, bool isScale = false);
 
-	// Get the resized window size.
-	glm::vec2& getWindowResize();
+	// Get the window event data.
+	// For resize events it is the new size, or the scaling.
+	// For move events it is the new position.
+	glm::vec2& getWindowData();
 
+	// Is the resized data given in scale?
 	bool isScale();
 
 private:
 
 	// The new size of the window.
-	glm::vec2 m_windowResize = { 0.f, 0.f };
+	glm::vec2 m_windowData = { 0.f, 0.f };
 
 	// Is the resize value given in scale?
 	bool m_isScale;

@@ -69,12 +69,12 @@ public:
 	//  U T I L I T I E S  //
 	// ------------------- //
 
-	void setActiveComponent(unsigned eID) {};
-	void setActiveCable(unsigned eID) {};
+	void setActiveComponent(unsigned eID);
+	void setActiveCable(unsigned eID);
 	void ComponentPlaceMode(glm::vec2 screenCoords);
 	void deleteActiveComponent();
 	void deleteActiveCable();
-	Port* getPort(unsigned eID) {};
+	Port* getPort(unsigned eID);
 };
 
 //=============================================================================================================================================//

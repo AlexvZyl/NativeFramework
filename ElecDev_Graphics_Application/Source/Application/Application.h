@@ -64,6 +64,7 @@ public:
 
 	// Sets up the GLFW window and OpenGL context.
 	static GLFWwindow* glfwInitWindow();
+	// 
 	void shutdown();
 
 	// Sets up the GLFW callbacks.
@@ -98,7 +99,7 @@ private:
 	// Log containing all of the events.
 	std::unique_ptr<EventLog> m_eventLog;
 	// Handle window events.
-	void onWindowResizeEvent(WindowResizeEvent& event);
+	void onWindowResizeEvent(WindowEvent& event);
 	// Handle serialisation events.
 	void onFileDropEvent(FileDropEvent& event);
 	// Should the app close?

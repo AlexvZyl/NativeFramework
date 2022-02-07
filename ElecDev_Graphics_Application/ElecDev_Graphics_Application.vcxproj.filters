@@ -48,7 +48,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\FontsGL.h" />
     <ClCompile Include="Source\Graphics\OpenGL\Entities\Vertex.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Component2D.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_API.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Utilities.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Entities\Entity.cpp" />

@@ -29,7 +29,7 @@ void EngineCore::onEvent(Event& event)
 	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event));					}
 
 	// Window events.
-	else if (eventID == EventType_WindowResize) { onWindowResizeEvent(dynamic_cast<WindowResizeEvent&>(event)); }
+	else if (eventID == EventType_WindowResize) { onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 
 	// Layer events.
 	else if (eventID == EventType_Focus)		{ onFocusEvent(dynamic_cast<LayerEvent&>(event));				}
@@ -48,9 +48,9 @@ void EngineCore::onEvent(Event& event)
 //  Window Events.																																//
 //==============================================================================================================================================//
 
-void EngineCore::onWindowResizeEvent(WindowResizeEvent& event)
+void EngineCore::onWindowResizeEvent(WindowEvent& event)
 {
-	glm::vec2 eventSize = event.getWindowResize();
+	glm::vec2 eventSize = event.getWindowData();
 	m_scene->resize((int)eventSize.x, (int)eventSize.y);
 }
 

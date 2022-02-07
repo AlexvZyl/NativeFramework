@@ -7,6 +7,12 @@
 #include "GUI/GuiElementCore/GuiElementCore.h"
 
 //==============================================================================================================================================//
+//  Forward declerations.																														//
+//==============================================================================================================================================//
+
+class EngineCore;
+
+//==============================================================================================================================================//
 //  Graphics Scene.																																//
 //==============================================================================================================================================//
 
@@ -21,16 +27,18 @@ public:
 	virtual void renderBody() override;
 
 	// Set the texture ID that is to be rendered.
-	void setTextureID(unsigned textureID);
+	void setEngine(EngineCore* engine);
 
 private:
 
-	// Events.
-	virtual void onWindowResizeEvent(WindowResizeEvent& event) override;
+	friend class EngineLayer;
 
-	// Pointer to the graphics texture.
+	// Rendering texture data.
 	void* m_textureID = nullptr;
-	ImVec2 m_textureSize;
+	std::string m_textureChildName;
+
+	// The engine that is in this layer.
+	EngineCore* m_engine = nullptr;
 };
 
 //==============================================================================================================================================//

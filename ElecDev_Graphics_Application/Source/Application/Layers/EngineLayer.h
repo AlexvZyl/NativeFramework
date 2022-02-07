@@ -46,7 +46,6 @@ private:
 
 	// The imguiWindow flags related to the layer's ImGUI windows.
 	int m_imguiWindowflags = 0;
-
 };
 
 //==============================================================================================================================================//

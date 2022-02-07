@@ -14,13 +14,19 @@
 
 void Application::dispatchEvents()
 {
-	// Check for hovered layer if there is none.
-	if (!m_hoveredLayer) onHoveredLayerChange(findhoveredLayer());
-	
-	// If current hovered layer is no longer being hovered.
-	else if (!m_hoveredLayer->isMouseHovering()) onHoveredLayerChange(findhoveredLayer());
+	// These mouse events are kept seperately to prevent handling events more than once per frame.
+	if (m_eventLog->mouseMove)
+	{
+		// Check for hover change on mouse move.
+		onHoveredLayerChange(findhoveredLayer());
+		if(m_hoveredLayer) m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+	}
+	if (m_eventLog->mouseScroll && m_hoveredLayer)
+	{
+		m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
+	}
 
-	// Dispatch the events.
+	// Dispatch general events.
 	for (std::unique_ptr<Event>& event : m_eventLog->events)
 	{
 		uint64_t eventID = event->getID();
@@ -33,21 +39,10 @@ void Application::dispatchEvents()
 		}
 		
 		// On a mouse press we need to change the focused layer.
-		if (eventID == EventType_MousePress) 
-		{ 
-			// Only change focus if the layers are different.
-			if (m_hoveredLayer != m_focusedLayer) onFocusedLayerChange(m_hoveredLayer); 
-		}
+		if (eventID == EventType_MousePress) onFocusedLayerChange(m_hoveredLayer); 
 
 		// Pass events to focused layer.
 		if (m_focusedLayer) m_focusedLayer->onEvent(*event.get());
-	}
-
-	// These mouse events are kept seperately to prevent handling events more than once.
-	if (m_hoveredLayer)
-	{
-		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
-		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 
 	// All events have been handled.
@@ -59,7 +54,6 @@ Layer* Application::findhoveredLayer()
 	// Find the layer that is being hovered.  Iterate in 
 	// reverse since the layers last added are in front.
 	std::vector<std::unique_ptr<Layer>>& layers = m_layerStack->getLayers();
-	bool layerFound = false;
 	for (int i = layers.size() - 1; i >= 0; i--)
 	{
 		if (layers[i]->isMouseHovering())
@@ -75,6 +69,9 @@ Layer* Application::findhoveredLayer()
 
 void Application::onHoveredLayerChange(Layer* newLayer)
 {
+	// Check for actual change.
+	if(newLayer == m_hoveredLayer) return;
+
 	// Create a dehover event.
 	if (m_hoveredLayer)
 	{
@@ -95,6 +92,9 @@ void Application::onHoveredLayerChange(Layer* newLayer)
 
 void Application::onFocusedLayerChange(Layer* newLayer)
 {
+	// Check for actual change.
+	if (newLayer == m_focusedLayer) return;
+
 	// Create a defocus event.
 	if (m_focusedLayer)
 	{
@@ -108,6 +108,8 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 		LayerEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
 		ImGui::SetWindowFocus(newLayer->getLayerName().c_str());
+		// If not docked, move to the front.
+		if (!newLayer->isDocked()) m_layerStack->moveLayerToFront(*newLayer);
 	}
 	else 
 	{
@@ -130,7 +132,7 @@ void Application::onEvent(Event& event)
 	uint64_t eventID = event.getID();
 	
 	// Window events.																	 
-	if      (eventID == EventType_WindowResize)	{ onWindowResizeEvent(dynamic_cast<WindowResizeEvent&>(event)); }
+	if      (eventID == EventType_WindowResize)	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 												 								 
 	// Serialisation events.					 								 
 	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
@@ -139,7 +141,7 @@ void Application::onEvent(Event& event)
 	event.consume();
 }
 
-void Application::onWindowResizeEvent(WindowResizeEvent& event)
+void Application::onWindowResizeEvent(WindowEvent& event)
 {
 
 }

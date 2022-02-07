@@ -30,7 +30,6 @@ void ComponentEditor::begin()
 	// FIX ME!! The wondow size should be set dynamically
 	//ImGui::SetNextWindowSize(ImVec2{ 465.f, 400 }, ImGuiCond_Once);
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
-	m_size = ImGui::GetWindowSize();
 }
 
 void ComponentEditor::renderBody()
