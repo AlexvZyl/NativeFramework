@@ -147,6 +147,7 @@ void FrameBufferObject::createAttachments(int width, int height)
 
 	// Unbind.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
 // Destructor.
@@ -189,6 +190,9 @@ unsigned FrameBufferObject::getRenderTexture()
 void FrameBufferObject::bind() 
 { 
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
+	m_shader->bind();
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 void FrameBufferObject::bindRender() 

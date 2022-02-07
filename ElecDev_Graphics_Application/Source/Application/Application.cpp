@@ -24,7 +24,6 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/CameraGL.h"
 #include "Application/Layers/BasicGuiLayer.h"
-#include "Application/Layers/EngineLayer.h"
 
 #include "GLFW/glfw3.h"
 
@@ -40,12 +39,16 @@ Application::Application(GLFWwindow* window)
 	m_eventLog = std::make_unique<EventLog>();
 
 	// Testing layers.
-	BasicGuiLayer guiLayer(LayerType_ComponentEditor, "Back");
+	BasicGuiLayer guiLayer(LayerType_ComponentEditor, "Empty Window 1");
 	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer);
-	BasicGuiLayer guiLayer2(LayerType_ComponentEditor, "Middle");
+	BasicGuiLayer guiLayer2(LayerType_ComponentEditor, "Empty Window 2");
 	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer2);
-	EngineLayer guiLayer4(LayerType_Design2DEngine, "Front");
-	m_layerStack->pushLayerToFront<EngineLayer>(guiLayer4);
+	BasicGuiLayer guiLayer3(LayerType_Design2DEngine, "Graphics Window 1");
+	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer3);
+	BasicGuiLayer guiLayer4(LayerType_Design2DEngine, "Graphics Window 2");
+	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer4);
+	BasicGuiLayer guiLayer5(LayerType_Design2DEngine, "Graphics Window 3");
+	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer5);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;

@@ -80,6 +80,12 @@ void Layer::detectMove()
 		// Update layer data.
 		m_layerPosition = currentPos;
 		updateBorderMax();
+		// Update content region positions of elements.
+		// (This currently only works if we have one gui element per layer)
+		ImVec2 regionPos = ImGui::GetWindowContentRegionMin();
+		glm::vec2 contentRegionSize = { regionPos.x, regionPos.y };
+		WindowEvent event(contentRegionSize, EventType_WindowMove);
+		onEvent(event);
 	}
 }
 

@@ -7,6 +7,7 @@
 #include <glm.hpp>				
 #include <string>
 #include <memory>
+#include "OpenGL/SceneGL.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -19,7 +20,6 @@ class MouseScrollEvent;
 class KeyEvent;
 class WindowEvent;
 class LayerEvent;
-class Scene;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //

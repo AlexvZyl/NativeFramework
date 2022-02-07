@@ -57,12 +57,13 @@ protected:
 	// Is the window open?
 	bool m_isOpen = true;
 	// The window name.
-	std::string m_name;
+	std::string m_name = "NULL";
 	// The ImGUI flags describing the window.
 	int m_imguiWindowFlags = 0;
 
-	// The size of the gui component.
+	// The size of the content area.
 	ImVec2 m_contentRegionSize = { 0.f, 0.f };
+	// The position of the content area.
 	ImVec2 m_contentRegionPosition = { 0.f, 0.f };
 
 	// ------------- //
@@ -79,6 +80,7 @@ protected:
 
 	// Window events.
 	virtual void onWindowResizeEvent(WindowEvent& event);
+	virtual void onWindowMoveEvent(WindowEvent& event);
 
 	// Layer events.
 	inline virtual void onFocusEvent(LayerEvent& event) {};

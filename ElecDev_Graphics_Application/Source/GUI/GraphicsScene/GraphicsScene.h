@@ -4,6 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include <memory>
 #include "GUI/GuiElementCore/GuiElementCore.h"
 
 //==============================================================================================================================================//
@@ -21,24 +22,24 @@ class GraphicsScene : public GuiElementCore
 public:
 
 	// Constructor.
-	GraphicsScene(std::string name, int windowFlags);
+	GraphicsScene(uint64_t ID, std::string name, int windowFlags);
 
 	// Rendering functions.
 	virtual void renderBody() override;
 
-	// Set the texture ID that is to be rendered.
-	void setEngine(EngineCore* engine);
+	// Get the engine related to the element.
+	EngineCore* getEngine();
+
+	// Overridden to be able to call engine events.
+	virtual void onEvent(Event& event) override;
 
 private:
 
-	friend class EngineLayer;
-
 	// Rendering texture data.
 	void* m_textureID = nullptr;
-	std::string m_textureChildName;
 
 	// The engine that is in this layer.
-	EngineCore* m_engine = nullptr;
+	std::unique_ptr<EngineCore> m_engine = nullptr;
 };
 
 //==============================================================================================================================================//

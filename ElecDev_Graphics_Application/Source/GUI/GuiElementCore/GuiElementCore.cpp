@@ -52,6 +52,7 @@ void GuiElementCore::onEvent(Event& event)
 
 	// Window events.
 	else if (eventID == EventType_WindowResize) { onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	else if (eventID == EventType_WindowMove)	{ onWindowMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 
 	// Layer events.
 	else if (eventID == EventType_Focus)		{ onFocusEvent(dynamic_cast<LayerEvent&>(event)); }
@@ -70,6 +71,12 @@ void GuiElementCore::onWindowResizeEvent(WindowEvent& event)
 {
 	glm::vec2 windowSize = event.getWindowData();
 	m_contentRegionSize = { windowSize.x, windowSize.y };
+}
+
+void GuiElementCore::onWindowMoveEvent(WindowEvent& event)
+{
+	glm::vec2 windowSize = event.getWindowData();
+	m_contentRegionPosition = { windowSize.x, windowSize.y };
 }
 
 //==============================================================================================================================================//

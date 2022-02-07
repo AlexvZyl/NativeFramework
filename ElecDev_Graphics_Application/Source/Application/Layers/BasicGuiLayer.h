@@ -23,7 +23,7 @@ class BasicGuiLayer : public Layer
 public:
 
 	// Create a GUI layer based on the ID.
-	BasicGuiLayer(LayerType guiElement, std::string layerName, int imguiWindowFLags = 0);
+	BasicGuiLayer(uint64_t ID, std::string layerName, int imguiWindowFLags = 0);
 
 	// Get the gui element in the layer.
 	GuiElementCore* getGuiElement();

@@ -174,7 +174,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\Layers\BasicGuiLayer.cpp" />
-    <ClCompile Include="Source\Application\Layers\EngineLayer.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
     <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
@@ -275,7 +274,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application\Layers\BasicGuiLayer.h" />
-    <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\Application\Layers\LayerStack.h" />
     <ClInclude Include="Source\Application\Layers\Layer.h" />
     <ClInclude Include="Source\Application\Events\EventLog.h" />
