@@ -54,6 +54,9 @@ public:
 	// Resizes the scene based on a viewport change.
 	void resize(int width, int heigth);
 
+	// The camera.
+	std::unique_ptr<Camera> m_camera;
+
 private:
 
 	// Map containing all of the different primitives.
@@ -84,8 +87,6 @@ private:
 	// Upadate the matrices of the camera.
 	void updateCamera();
 
-	// The camera.
-	std::unique_ptr<Camera> m_camera;
 	// Map containing all of the textures used in the scene.
 	std::map<unsigned, std::unique_ptr<Texture>> m_textures;
 	// VAO's.

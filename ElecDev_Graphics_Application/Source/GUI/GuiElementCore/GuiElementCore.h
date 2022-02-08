@@ -18,6 +18,7 @@ class MouseMoveEvent;
 class MouseScrollEvent;
 class KeyEvent;
 class LayerEvent;
+struct ImGuiWindow;
 
 //==============================================================================================================================================//
 //  GUI Core Element.																															//
@@ -44,22 +45,28 @@ protected:
 	// ------------------- //
 
 	// Start the ImGUI widget.
-	virtual void begin();
+	inline virtual void begin() = 0;
 	// Render the ImGUI widget.
-	virtual void renderBody();
+	inline virtual void renderBody() = 0;
 	// End the ImGUI widget.
-	virtual void end();
+	inline virtual void end() = 0;
+	// Updates the data related to the gui element.
+	virtual void dispatchGuiEvents(ImGuiWindow* window);
 
 	// --------- //
 	//  D A T A  //
 	// --------- //
 
-	// Is the window open?
-	bool m_isOpen = true;
+	// Should the window close?
+	bool m_isOpen = false;
+	// Is the window collapsed?
+	bool m_isCollapsed = false;
 	// The window name.
 	std::string m_name = "NULL";
 	// The ImGUI flags describing the window.
 	int m_imguiWindowFlags = 0;
+	// Is the GUI element docked?
+	bool m_isDocked = false;
 
 	// The size of the content area.
 	ImVec2 m_contentRegionSize = { 0.f, 0.f };
@@ -78,9 +85,11 @@ protected:
 	// Key events.
 	inline virtual void onKeyEvent(KeyEvent& event) {};
 
-	// Window events.
-	virtual void onWindowResizeEvent(WindowEvent& event);
-	virtual void onWindowMoveEvent(WindowEvent& event);
+	// Content region events.
+	void detectContentRegionResize(ImGuiWindow* window);
+	void detectContentRegionMove(ImGuiWindow* window);
+	virtual void onContentRegionResizeEvent(WindowEvent& event);
+	virtual void onContentRegionMoveEvent(WindowEvent& event);
 
 	// Layer events.
 	inline virtual void onFocusEvent(LayerEvent& event) {};

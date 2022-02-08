@@ -39,16 +39,14 @@ Application::Application(GLFWwindow* window)
 	m_eventLog = std::make_unique<EventLog>();
 
 	// Testing layers.
-	BasicGuiLayer guiLayer(LayerType_ComponentEditor, "Empty Window 1");
-	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer);
-	BasicGuiLayer guiLayer2(LayerType_ComponentEditor, "Empty Window 2");
-	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer2);
-	BasicGuiLayer guiLayer3(LayerType_Design2DEngine, "Graphics Window 1");
-	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer3);
-	BasicGuiLayer guiLayer4(LayerType_Design2DEngine, "Graphics Window 2");
-	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer4);
-	BasicGuiLayer guiLayer5(LayerType_Design2DEngine, "Graphics Window 3");
-	m_layerStack->pushLayerToFront<BasicGuiLayer>(guiLayer5);
+	BasicGuiLayer guiLayer1(LayerType_ComponentEditor, "Component Editor 1");
+	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer1);
+	BasicGuiLayer guiLayer2(LayerType_Design2DEngine, "Graphics Window 1");
+	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer2);
+	BasicGuiLayer guiLayer3(LayerType_Design2DEngine, "Graphics Window 2");
+	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer3);
+	BasicGuiLayer guiLayer4(LayerType_Toolbar, "Main Toolbar");
+	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer4);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -90,7 +88,13 @@ void Application::onRender()
 	// Init.
 	onRenderInit();
 
-	// Render each layer from back to front.
+	// Dispatch the events to the layer before we render it.
+	// Has to be called after the init so all of the ImGui data
+	// is updated.
+	dispatchEvents();
+
+	// Render all of the layers.
+	// The order is not important since dear imgui handles that.
 	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
 		layer->onRender();
 
@@ -106,18 +110,16 @@ void Application::onRenderInit()
 	ImGui::NewFrame();
 
 	// Enable main viewport docking.
-	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+	ImGui::DockSpaceOverViewport(NULL);  // NULL uses the main viewport.
 
-	// Font.
+	// Push custom font.
 	ImGui::PushFont(m_defaultFont);
 }
 
 void Application::onRenderCleanup() 
 {
-	// Font.
+	// Pop custom font.
 	ImGui::PopFont();
-
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Assign values to viewport for ImGUI.
 	int display_w, display_h;
@@ -132,7 +134,7 @@ void Application::onRenderCleanup()
 	// Update and Render additional Platform Windows
 	// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
 	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		GLFWwindow* backup_current_context = glfwGetCurrentContext();
 		ImGui::UpdatePlatformWindows();

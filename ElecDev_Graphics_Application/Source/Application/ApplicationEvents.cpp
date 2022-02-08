@@ -14,24 +14,23 @@
 
 void Application::dispatchEvents()
 {
-	// These mouse events are kept seperately to prevent handling events more than once per frame.
-	if (m_eventLog->mouseMove)
-	{
-		// Check for hover change on mouse move.
-		onHoveredLayerChange(findhoveredLayer());
-		if(m_hoveredLayer) m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
-	}
-	if (m_eventLog->mouseScroll && m_hoveredLayer)
-	{
-		m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
-	}
+	// Find the hovered layer on a mouse move event.
+	if (m_eventLog->mouseMove) onHoveredLayerChange(findhoveredLayer());
 
+	// These mouse events are kept seperate to prevent handling events more than once per frame.
+	if (m_hoveredLayer) 
+	{
+		if (m_eventLog->mouseMove)	 m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
+	}
+	
 	// Dispatch general events.
 	for (std::unique_ptr<Event>& event : m_eventLog->events)
 	{
-		uint64_t eventID = event->getID();
+		uint64_t eventID = event->ID;
 
-		// Application specific events (since it is not a part of the layers).
+		// Application specific are dispatched explicitly 
+		// (since it is not a part of the layers).
 		if (eventID == EventType_Application)
 		{
 			Application::onEvent(*event.get()); 
@@ -39,11 +38,20 @@ void Application::dispatchEvents()
 		}
 		
 		// On a mouse press we need to change the focused layer.
+		// This also allows us to modify how dear imgui sets focused layers.
 		if (eventID == EventType_MousePress) onFocusedLayerChange(m_hoveredLayer); 
 
 		// Pass events to focused layer.
 		if (m_focusedLayer) m_focusedLayer->onEvent(*event.get());
 	}
+
+	// Dispatch the events that are handled by the layers.
+	// These include things such as window resizes and docking state changes.
+	// Currently every layer is checked every frame.  This is not necessary.
+	// The only thing preventing us from only update the focused layer is due to 
+	// how docking works.
+	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
+		layer->dispatchLayerEvents();
 
 	// All events have been handled.
 	m_eventLog->clear();
@@ -51,12 +59,13 @@ void Application::dispatchEvents()
 
 Layer* Application::findhoveredLayer() 
 {
-	// Find the layer that is being hovered.  Iterate in 
-	// reverse since the layers last added are in front.
+	// Find the layer that is being hovered.
+	// We do not have to worry about order, since 
+	// dear imgui handles it.
 	std::vector<std::unique_ptr<Layer>>& layers = m_layerStack->getLayers();
 	for (int i = layers.size() - 1; i >= 0; i--)
 	{
-		if (layers[i]->isMouseHovering())
+		if (layers[i]->isLayerHovered())
 			return layers[i].get();
 	}
 	// No layer is found.
@@ -69,7 +78,7 @@ Layer* Application::findhoveredLayer()
 
 void Application::onHoveredLayerChange(Layer* newLayer)
 {
-	// Check for actual change.
+	// Ensure change actually ocurred.
 	if(newLayer == m_hoveredLayer) return;
 
 	// Create a dehover event.
@@ -92,7 +101,7 @@ void Application::onHoveredLayerChange(Layer* newLayer)
 
 void Application::onFocusedLayerChange(Layer* newLayer)
 {
-	// Check for actual change.
+	// Ensure change actually ocurred.
 	if (newLayer == m_focusedLayer) return;
 
 	// Create a defocus event.
@@ -108,13 +117,9 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 		LayerEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
 		ImGui::SetWindowFocus(newLayer->getLayerName().c_str());
-		// If not docked, move to the front.
-		if (!newLayer->isDocked()) m_layerStack->moveLayerToFront(*newLayer);
 	}
-	else 
-	{
-		ImGui::SetWindowFocus(NULL);
-	}
+	// No layer is in focus.
+	else ImGui::SetWindowFocus(NULL);
 
 	// Assign new focused layer.
 	m_focusedLayer = newLayer;
@@ -126,24 +131,19 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 
 void Application::onEvent(Event& event)
 {
-	// Return if event is consumed.
-	if (event.isConsumed()) return;
-
-	uint64_t eventID = event.getID();
+	
+	uint64_t eventID = event.ID;
 	
 	// Window events.																	 
 	if      (eventID == EventType_WindowResize)	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 												 								 
 	// Serialisation events.					 								 
 	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
-
-	// Consume event.
-	event.consume();
 }
 
 void Application::onWindowResizeEvent(WindowEvent& event)
 {
-
+	// This should pass a scaled window resize event to all of the layers.
 }
 
 void Application::onFileDropEvent(FileDropEvent& event)

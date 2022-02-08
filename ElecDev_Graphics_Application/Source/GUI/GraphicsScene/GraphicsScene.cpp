@@ -17,7 +17,7 @@
 
 // Constructor.
 GraphicsScene::GraphicsScene(uint64_t ID, std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {
 	// Create the engine component.
 	if		(ID == LayerType_Base2DEngine)	 m_engine = std::make_unique<Base2DEngine>();
@@ -35,8 +35,16 @@ GraphicsScene::GraphicsScene(uint64_t ID, std::string name, int windowFlags)
 
 void GraphicsScene::onEvent(Event& event) 
 {
+	// Pass events to gui element.
 	GuiElementCore::onEvent(event);
-	m_engine->onEvent(event);
+
+	// The engine must be aware of these events, even if it is closed.
+	uint64_t eventID = event.ID;
+	if (eventID == EventType_Hover || eventID == EventType_Dehover || eventID == EventType_Focus || eventID == EventType_Defocus)
+		m_engine->onEvent(event);
+
+	// Otherwise the engine must only get events when it is open.
+	else if(!m_isCollapsed) m_engine->onEvent(event);
 }
 
 //==============================================================================================================================================//
@@ -48,10 +56,20 @@ EngineCore* GraphicsScene::getEngine()
 	return m_engine.get();
 }
 
+void GraphicsScene::begin() 
+{
+	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+}
+
 void GraphicsScene::renderBody() 
 {
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+}
+
+void GraphicsScene::end() 
+{
+	ImGui::End();
 }
 
 //==============================================================================================================================================//

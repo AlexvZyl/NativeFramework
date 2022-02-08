@@ -75,9 +75,6 @@ int main(int, char**)
             // Clear buffers for OpenGL.
             Renderer::clear();
 
-            // Handle the events.
-            application.dispatchEvents();
-
             // Render the frame to the screen.
             application.onRender();
             

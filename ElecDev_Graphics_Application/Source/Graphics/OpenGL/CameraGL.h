@@ -40,7 +40,7 @@ public:
 	// Resize the camera.
 	void resize(int width, int height);
 
-private:
+public:
 
 	friend class Renderer;
 	friend class Scene;
@@ -77,7 +77,7 @@ private:
 	glm::vec4 m_viewportVec = glm::vec4(1.0f);					// The vector that handles the viewport transform.  Converts screen pixel
 																// coordinates to the OpenGL uniform coordinate system.
 
-	// View matrix components.
+	// View matrix components.W
 	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);				// Handles camera scaling.
 	glm::mat4 m_translationMatrix = glm::mat4(1.0f);			// Handles camera translations.
 	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);				// Handles camera rotations.
@@ -89,6 +89,8 @@ private:
 	glm::mat4 m_rotationMatrixBase = glm::mat4(1.0f);			// Stores base matrix for camera rotation.
 
 	float m_projectionValues[6];								// Stores the valaues that is used to calculate the projection matrix.
+
+	float m_scaleRate = 0.5f;									// How fast the camera scales.
 };
 
 //==============================================================================================================================================//

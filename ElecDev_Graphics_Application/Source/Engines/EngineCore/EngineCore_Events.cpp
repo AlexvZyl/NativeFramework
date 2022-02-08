@@ -13,10 +13,7 @@
 
 void EngineCore::onEvent(Event& event)
 {
-	// Check if already handled.
-	if (event.isConsumed()) return;
-
-	uint64_t eventID = event.getID();
+	uint64_t eventID = event.ID;
 
 	// Mouse events.
 	if		(eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event));		}
@@ -39,9 +36,6 @@ void EngineCore::onEvent(Event& event)
 
 	// Pass the event on to the scene, since the scene contains the camera.
 	m_scene->onEvent(event);
-
-	// Event has been handled.
-	event.consume();
 }
 
 //==============================================================================================================================================//
@@ -50,7 +44,7 @@ void EngineCore::onEvent(Event& event)
 
 void EngineCore::onWindowResizeEvent(WindowEvent& event)
 {
-	glm::vec2 eventSize = event.getWindowData();
+	glm::vec2 eventSize = event.windowData;
 	m_scene->resize((int)eventSize.x, (int)eventSize.y);
 }
 

@@ -29,6 +29,13 @@ FrameBufferObject::FrameBufferObject() {};
 FrameBufferObject::FrameBufferObject(int width, int height, int MSAA) 
 	: m_MSAA(MSAA)
 {
+	// Do not create a FBO with size or width of zero.
+	if (!width || !height)
+	{
+		std::cout << yellow << "[OPENGL] [WARN]: " << white << "Tried to create a FBO with width or height of zero.";
+		return;
+	}
+
 	// Generate MSAA FBO.
 	GLCall(glGenFramebuffers(1, &m_msaaFrameBufferID));
 	GLCall(glGenTextures(1, &m_msaaColorTextureID));

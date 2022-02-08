@@ -19,7 +19,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {
 	Base2DEngine::onMouseButtonEvent(event);
 
-	uint64_t eventID = event.getID();
+	uint64_t eventID = event.ID;
 
 	// --------------------- //
 	//  L E F T   P R E S S  //
@@ -27,7 +27,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 	if (eventID == EventType_MousePress | EventType_MouseButtonLeft)
 	{
-		glm::vec2 pixelCoords = event.getPosition();
+		glm::vec2 pixelCoords = event.mousePosition;
 		float pixelCoordsf[2] = { pixelCoords.x, pixelCoords.y };
 		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoordsf);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
@@ -81,7 +81,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	else if (eventID == EventType_MousePress | EventType_MouseButtonRight)
 	{
 		// Update current entity ID.
-		m_currentEntityID = getEntityID(event.getPosition());
+		m_currentEntityID = getEntityID(event.mousePosition);
 		setActiveComponent(m_currentEntityID);
 	}
 
@@ -103,9 +103,9 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
 
-	uint64_t eventID = event.getID();
+	uint64_t eventID = event.ID;
 
-	glm::vec2 coords = event.getPosition();
+	glm::vec2 coords = event.mousePosition;
 	float coordsf[2] = { coords.x, coords.y };
 	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(coordsf);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
@@ -171,18 +171,18 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 	Base2DEngine::onKeyEvent(event);
 
 	// Get the event ID.
-	uint64_t eventID = event.getID();
+	uint64_t eventID = event.ID;
 
 	// Events based on key type.
 	if (eventID == EventType_KeyPress) 
 	{
 		// Event mouse coordinates.
-		glm::vec2 pixelCoords = event.getMousePosition();
+		glm::vec2 pixelCoords = event.mousePosition;
 		float pixelCoordsf[] = { pixelCoords.x, pixelCoords.y };
 		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoordsf);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		switch (event.getKey())
+		switch (event.key)
 		{
 			// --------------------------------------------------------------------------------------------------------------- //
 			

@@ -311,6 +311,7 @@ GLFWwindow* Application::glfwInitWindow()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    // For now multi viewports are disabled, since it makes events much more complex.
 
     // When viewports are enabled we tweak WindowRounding/WindowBg 
     // so platform windows can look identical to regular ones.
@@ -324,12 +325,6 @@ GLFWwindow* Application::glfwInitWindow()
     // Setup Platform/Renderer backends.
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
-    glfwMakeContextCurrent(window);
-
-    // Viewport.
-    int screen_width, screen_height;
-    glfwGetFramebufferSize(window, &screen_width, &screen_height);
-    GLCall(glViewport(0, 0, screen_width, screen_height));
 
     return window;
 }

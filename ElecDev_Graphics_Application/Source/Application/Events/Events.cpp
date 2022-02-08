@@ -26,23 +26,17 @@ bool operator!=(uint64_t id, EventType eventType)
 
 void Event::consume()
 { 
-	m_consumed = true; 
+	consumed = true; 
 }
 
 bool Event::isConsumed() 
 { 
-	return m_consumed; 
-}
-
-uint64_t Event::getID() 
-{ 
-	return m_eventID; 
+	return consumed; 
 }
 
 Event::Event(uint64_t ID) 
-{ 
-	m_eventID = ID; 
-}
+	: ID(ID)
+{}
 
 //==============================================================================================================================================//
 //  Mouse events.																																//
@@ -52,13 +46,8 @@ Event::Event(uint64_t ID)
 //  M O U S E   B A S E  //
 // --------------------- //
 
-glm::vec2& MouseEvent::getPosition()
-{
-	return m_mousePosition;
-}
-
 MouseEvent::MouseEvent(glm::vec2& positionPixels, uint64_t ID)
-	: Event(ID), m_mousePosition(positionPixels)
+	: Event(ID), mousePosition(positionPixels)
 {}
 
 // ------------------------- //
@@ -68,6 +57,8 @@ MouseEvent::MouseEvent(glm::vec2& positionPixels, uint64_t ID)
 MouseButtonEvent::MouseButtonEvent(glm::vec2& mousePositionPixels, uint64_t ID)
 	: MouseEvent(mousePositionPixels, ID)
 {}
+
+
 
 // --------------------- //
 //  M O U S E   M O V E  //
@@ -82,49 +73,24 @@ MouseMoveEvent::MouseMoveEvent(glm::vec2& mousePositionPixels, uint64_t ID)
 // ------------------------- //
 
 MouseScrollEvent::MouseScrollEvent(glm::vec2 mousePositionPixels, float yOffset, uint64_t ID)
-	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), m_yOffset(yOffset) 
+	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset) 
 {}
-
-float MouseScrollEvent::getYOffset() 
-{
-	return m_yOffset;
-}
 
 //==============================================================================================================================================//
 //  Key Events.																																    //
 //==============================================================================================================================================//
 
 KeyEvent::KeyEvent(int key, uint64_t ID, glm::vec2& mousePos)
-	: Event(ID), m_key(key), m_mousePosition(mousePos)
+	: Event(ID), key(key), mousePosition(mousePos)
 {}
-
-int KeyEvent::getKey()
-{
-	return m_key;
-}
-
-glm::vec2& KeyEvent::getMousePosition() 
-{
-	return m_mousePosition;
-}
 
 //==============================================================================================================================================//
 //  Window events.																																//
 //==============================================================================================================================================//
 
 WindowEvent::WindowEvent(glm::vec2& windowResize, uint64_t ID, bool isScale)
-	: Event(ID), m_windowData(windowResize), m_isScale(isScale)
+	: Event(ID), windowData(windowResize), isScale(isScale)
 {}
-
-glm::vec2& WindowEvent::getWindowData()
-{
-	return m_windowData;
-}
-
-bool WindowEvent::isScale()
-{
-	return m_isScale;
-}
 
 //==============================================================================================================================================//
 //  Serialisation events.																														//
@@ -138,12 +104,6 @@ FileDropEvent::FileDropEvent(std::vector<std::string>& paths)
 	: Event(EventType_FileDrop | EventType_Application)
 {
 	filePaths = std::make_unique<std::vector<std::string>>(std::move(paths));
-}
-
-// Get the dropped file.
-std::vector<std::string>& FileDropEvent::getPaths()
-{
-	return *filePaths.get();
 }
 
 //==============================================================================================================================================//

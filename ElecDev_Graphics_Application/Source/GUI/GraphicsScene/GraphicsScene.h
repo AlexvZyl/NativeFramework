@@ -25,7 +25,9 @@ public:
 	GraphicsScene(uint64_t ID, std::string name, int windowFlags);
 
 	// Rendering functions.
+	virtual void begin() override;
 	virtual void renderBody() override;
+	virtual void end() override;
 
 	// Get the engine related to the element.
 	EngineCore* getEngine();

@@ -45,15 +45,16 @@ enum EventType
 	// Window events.
 	EventType_WindowResize		=	1 << 18,
 	EventType_WindowMove		=	1 << 19,
+	EventType_WindowClose		=	1 << 20,
 
 	// Application specific events.
-	EventType_FileDrop			=	1 << 20,
+	EventType_FileDrop			=	1 << 21,
 
 	// Layer events.
-	EventType_Focus				=	1 << 21,
-	EventType_Defocus			=	1 << 22,
-	EventType_Hover				=	1 << 23,
-	EventType_Dehover			=	1 << 24,
+	EventType_Focus				=	1 << 22,
+	EventType_Defocus			=	1 << 23,
+	EventType_Hover				=	1 << 24,
+	EventType_Dehover			=	1 << 25,
 };
 
 // Check if an ID contains a specific type.
@@ -74,24 +75,21 @@ public:
 	void consume();
 	// Checks if the event has been handled.
 	bool isConsumed();
-	// Gets the ID of the event.
-	uint64_t getID();
 	// Destructor (for polymorphic type).
 	virtual ~Event() = default;
 
-protected:
+	// ID describing the event.
+	uint64_t ID;
 
+protected:
+	 
 	// Constructor that sets the ID of the event.
 	// This is a protected type to ensure that an 
 	// 'Event' object is not created.
 	Event(uint64_t ID);
 
-private:
-
-	// ID describing the event.
-	uint64_t m_eventID;
 	// Has the event been handled?
-	bool m_consumed = false;
+	bool consumed = false;
 };
 
 //==============================================================================================================================================//
@@ -107,8 +105,8 @@ class MouseEvent : public Event
 
 public:
 
-	// Returns the position of the mouse event in GLFW pixels.
-	glm::vec2& getPosition();
+	// The postion of the mouse event.
+	glm::vec2 mousePosition = { 0.f, 0.f };
 
 protected:
 
@@ -116,11 +114,6 @@ protected:
 	// This is a protected type to ensure that a
 	// 'MouseEvent' object is not created.
 	MouseEvent(glm::vec2& positionPixels, uint64_t ID);
-
-private:
-
-	// The postion of the mouse event.
-	glm::vec2 m_mousePosition = { 0.f, 0.f };
 };
 
 // ------------------------- //
@@ -161,14 +154,8 @@ public:
 	// Constructor with mouse position.
 	MouseScrollEvent(glm::vec2 mousePositionPixels, float yOffset, uint64_t ID);
 
-	// Getter for the amount of scrolling.
-	float getYOffset();
-
-private:
-
 	// How much the mouse wheel scrolled.
-	float m_yOffset = 0;
-
+	float yOffset = 0;
 };
 
 //==============================================================================================================================================//
@@ -183,19 +170,11 @@ public:
 	// Constructor.
 	KeyEvent(int key, uint64_t ID, glm::vec2& mousePos);
 
-	// Get the key associated with the event.
-	int getKey();
-
-	// Get the mouse potition of the event.
-	glm::vec2& getMousePosition();
-
-private:
-
 	// Key associated with the event.
-	int m_key;
+	int key;
 
 	// Position of the mouse when the key event ocurred.
-	glm::vec2 m_mousePosition;
+	glm::vec2 mousePosition;
 
 };
 
@@ -211,21 +190,12 @@ public:
 	// Constructor.
 	WindowEvent(glm::vec2& windowResize, uint64_t ID, bool isScale = false);
 
-	// Get the window event data.
 	// For resize events it is the new size, or the scaling.
 	// For move events it is the new position.
-	glm::vec2& getWindowData();
-
-	// Is the resized data given in scale?
-	bool isScale();
-
-private:
-
-	// The new size of the window.
-	glm::vec2 m_windowData = { 0.f, 0.f };
+	glm::vec2 windowData = { 0.f, 0.f };
 
 	// Is the resize value given in scale?
-	bool m_isScale;
+	bool isScale;
 
 };
 
@@ -239,11 +209,6 @@ public:
 
 	// Constructor.
 	FileDropEvent(std::vector<std::string>& paths);
-
-	// Get the dropped files.
-	std::vector<std::string>& getPaths();
-
-private:
 
 	// The path to the dropped files.
 	std::unique_ptr<std::vector<std::string>> filePaths;

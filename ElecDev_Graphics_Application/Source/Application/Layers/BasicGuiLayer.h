@@ -34,6 +34,9 @@ public:
 	// Render the specific layer.
 	virtual void onRender() override;
 
+	// Dispatch events related to the layer.
+	virtual void dispatchLayerEvents() override;
+
 protected:
 
 	// The GUI element that belongs to this layer.

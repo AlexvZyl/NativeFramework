@@ -119,6 +119,8 @@
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\Application\Layers\BasicGuiLayer.cpp" />
+    <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
+    <ClCompile Include="Source\GUI\ImGuiTweaks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1329,6 +1331,9 @@
     <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\Application\Layers\BasicGuiLayer.h" />
+    <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
+    <ClInclude Include="Source\Lumen.h" />
+    <ClInclude Include="Source\GUI\ImGuiTweaks.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

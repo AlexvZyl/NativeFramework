@@ -64,9 +64,8 @@ public:
 
 	// Sets up the GLFW window and OpenGL context.
 	static GLFWwindow* glfwInitWindow();
-	// 
+	// Close the application.
 	void shutdown();
-
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
 
