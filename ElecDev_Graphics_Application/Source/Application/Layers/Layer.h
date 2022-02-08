@@ -59,9 +59,8 @@ public:
 	// This function has to be called after a ImGui element has begun.
 	// The layer will use the data related to the specific ImGui element.
 	// If the layer consists of only on window it is simple, since the layer
-	// and the window uses the same data.  Just call it after ImGui::Begin().
-	// If a layer is going to contain more than one window we will probably have
-	// to either use the docking, or ImGui::BeginChild().
+	// and the window uses the same data.  Uses the data from the window contained
+	// in the class.
 	virtual void dispatchLayerEvents();
 
 	// --------------- //

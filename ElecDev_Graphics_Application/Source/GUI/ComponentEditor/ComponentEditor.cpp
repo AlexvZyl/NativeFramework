@@ -26,11 +26,14 @@ void ComponentEditor::begin()
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The wondow size should be set dynamically
 	ImGui::SetNextWindowSize(ImVec2{ 465.f, 400 }, ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);
 }
 
 void ComponentEditor::renderBody()
 {
+	// Should not render if closed or collapsed.
+	if (m_isCollapsed || m_isClosed) return;
+
 	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
 	ImGui::SameLine();

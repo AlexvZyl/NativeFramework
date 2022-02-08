@@ -25,11 +25,14 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 
 void Toolbar::begin() 
 {
-    m_isOpen = ImGui::BeginMainMenuBar();
+    m_isClosed != ImGui::BeginMainMenuBar();
 }
 
 void Toolbar::renderBody()
 {
+    // Should not render if closed or collapsed.
+    if (m_isCollapsed || m_isClosed) return;
+
     if (ImGui::BeginMenu("File"))
     {
         if (ImGui::MenuItem("Load..", "Ctrl+O"))

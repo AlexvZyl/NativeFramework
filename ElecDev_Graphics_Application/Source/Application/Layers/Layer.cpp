@@ -30,10 +30,11 @@ void Layer::dispatchLayerEvents()
 	
 	// Detect dock state change.
 	setDockingState(m_imGuiWindow->DockIsActive);
-
-	// Check for layer resizes.
-	detectLayerResize();
-	detectLayerMove();
+	 
+	// Currently we have no need for this information to be updated.
+	//// Check for layer resizes.
+	//detectLayerResize();
+	//detectLayerMove();
 }
 
 void Layer::setDockingState(bool state) 

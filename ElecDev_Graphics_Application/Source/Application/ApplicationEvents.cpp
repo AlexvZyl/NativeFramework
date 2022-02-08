@@ -15,7 +15,16 @@
 void Application::dispatchEvents()
 {
 	// Find the hovered layer on a mouse move event.
-	if (m_eventLog->mouseMove) onHoveredLayerChange(findhoveredLayer());
+	if (m_eventLog->mouseMove)
+	{
+		// If there is no hovered layer we need to check
+		// if a layer is hovered.
+		if (!m_hoveredLayer) onHoveredLayerChange(findhoveredLayer());
+
+		// If the currently hovered layer is no longer being hovered
+		// we need to find the new layer.
+		else if(!m_hoveredLayer->isLayerHovered()) onHoveredLayerChange(findhoveredLayer());
+	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer) 
@@ -47,8 +56,10 @@ void Application::dispatchEvents()
 
 	// Dispatch the events that are handled by the layers.
 	// These include things such as window resizes and docking state changes.
+	// These are events that occur seperately from GLFW, since layers essentially
+	// are their own windows.
 	// Currently every layer is checked every frame.  This is not necessary.
-	// The only thing preventing us from only update the focused layer is due to 
+	// The only thing preventing us from only updating the focused layer is due to 
 	// how docking works.
 	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
 		layer->dispatchLayerEvents();

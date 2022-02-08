@@ -47,6 +47,8 @@ Application::Application(GLFWwindow* window)
 	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer3);
 	BasicGuiLayer guiLayer4(LayerType_Toolbar, "Main Toolbar");
 	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer4);
+	BasicGuiLayer guiLayer5(LayerType_Ribbon, "Main Ribbon");
+	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer5);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -83,12 +85,26 @@ void Application::closeWindow()
 //  Rendering.																																	//
 //==============================================================================================================================================//
 
+void Application::onRenderInit() 
+{
+	// Feed inputs to ImGUI, start new frame.
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	// Enable main viewport docking.
+	ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
+
+	// Push custom font.
+	ImGui::PushFont(m_defaultFont);
+}
+
 void Application::onRender() 
 {
 	// Init.
 	onRenderInit();
 
-	// Dispatch the events to the layer before we render it.
+	// Dispatch the events to the layers before we render them.
 	// Has to be called after the init so all of the ImGui data
 	// is updated.
 	dispatchEvents();
@@ -100,20 +116,6 @@ void Application::onRender()
 
 	// Cleanup.
 	onRenderCleanup();
-}
-
-void Application::onRenderInit() 
-{
-	// Feed inputs to ImGUI, start new frame.
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	// Enable main viewport docking.
-	ImGui::DockSpaceOverViewport(NULL);  // NULL uses the main viewport.
-
-	// Push custom font.
-	ImGui::PushFont(m_defaultFont);
 }
 
 void Application::onRenderCleanup() 

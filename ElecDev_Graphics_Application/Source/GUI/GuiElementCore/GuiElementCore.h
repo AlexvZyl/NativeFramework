@@ -58,15 +58,15 @@ protected:
 	// --------- //
 
 	// Should the window close?
-	bool m_isOpen = false;
+	bool m_isClosed = false;
 	// Is the window collapsed?
 	bool m_isCollapsed = false;
+	// Is the GUI element docked?
+	bool m_isDocked = false;
 	// The window name.
 	std::string m_name = "NULL";
 	// The ImGUI flags describing the window.
 	int m_imguiWindowFlags = 0;
-	// Is the GUI element docked?
-	bool m_isDocked = false;
 
 	// The size of the content area.
 	ImVec2 m_contentRegionSize = { 0.f, 0.f };

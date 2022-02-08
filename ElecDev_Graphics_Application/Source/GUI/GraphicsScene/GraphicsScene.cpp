@@ -44,7 +44,7 @@ void GraphicsScene::onEvent(Event& event)
 		m_engine->onEvent(event);
 
 	// Otherwise the engine must only get events when it is open.
-	else if(!m_isCollapsed) m_engine->onEvent(event);
+	else if(!m_isCollapsed && !m_isClosed) m_engine->onEvent(event);
 }
 
 //==============================================================================================================================================//
@@ -58,11 +58,14 @@ EngineCore* GraphicsScene::getEngine()
 
 void GraphicsScene::begin() 
 {
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);
 }
 
 void GraphicsScene::renderBody() 
 {
+	// Should not render if closed or collapsed.
+	if (m_isCollapsed || m_isClosed) return;
+
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }

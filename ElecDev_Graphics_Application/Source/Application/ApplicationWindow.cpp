@@ -289,14 +289,10 @@ GLFWwindow* Application::glfwInitWindow()
     bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
 #endif
 
-    // Check for OpenGL load error.
-    if (err)
-    {
-        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white, " Failed to initialize OpenGL loader!\n");
-        // Log error here.
-    }
+    // Log OpenGL load error.
+    if (err) fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white, " Failed to initialize OpenGL loader!\n");
 
-    // Print OpenGL version.
+    // Log OpenGL version.
     std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
 
     // ----------------------------------------- //
@@ -311,14 +307,14 @@ GLFWwindow* Application::glfwInitWindow()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    // For now multi viewports are disabled, since it makes events much more complex.
+    // For now it is disabled.  How do we pass events to viewports that are outside of the glfw window?
 
     // When viewports are enabled we tweak WindowRounding/WindowBg 
     // so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        style.WindowRounding = 0.0f;
+        style.WindowRounding = 5.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 

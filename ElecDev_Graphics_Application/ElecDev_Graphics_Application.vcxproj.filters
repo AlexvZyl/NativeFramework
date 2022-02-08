@@ -121,6 +121,7 @@
     <ClCompile Include="Source\Application\Layers\BasicGuiLayer.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\ImGuiTweaks.cpp" />
+    <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1334,6 +1335,7 @@
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\GUI\ImGuiTweaks.h" />
+    <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

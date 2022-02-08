@@ -7,6 +7,7 @@
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/GraphicsScene/GraphicsScene.h"
+#include "GUI/Ribbon/Ribbon.h"
 #include "GUI/Toolbar/toolbar.h"
 #include "Misc/ConsoleColor.h"
 #include "Application/Events/Events.h"
@@ -44,6 +45,10 @@ BasicGuiLayer::BasicGuiLayer(uint64_t ID, std::string layerName, int imguiWindow
 	else if (ID == LayerType_Toolbar)
 	{
 		m_guiElement = std::make_unique<Toolbar>(m_layerName, m_imguiWindowflags);
+	}
+	else if (ID == LayerType_Ribbon)
+	{
+		m_guiElement = std::make_unique<Ribbon>(m_layerName, m_imguiWindowflags);
 	}
 
 	// ----------- //
@@ -120,8 +125,7 @@ void BasicGuiLayer::onEvent(Event& event)
 void BasicGuiLayer::onRender()
 {
 	m_guiElement->begin();
-	// We should not render an element that is not visible.
-	if (!m_guiElement->m_isCollapsed) m_guiElement->renderBody();
+	m_guiElement->renderBody();
 	m_guiElement->end();
 }
 

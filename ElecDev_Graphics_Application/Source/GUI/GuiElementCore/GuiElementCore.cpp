@@ -34,7 +34,7 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event)); }
 
 	// Do not pass the events below if the layer is collapsed.
-	else if (m_isCollapsed) return;
+	else if (m_isCollapsed || m_isClosed) return;
 
 	// Mouse events.
 	else if	(eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
@@ -53,12 +53,14 @@ void GuiElementCore::onEvent(Event& event)
 
 void GuiElementCore::dispatchGuiEvents(ImGuiWindow* window)
 {
+	// Update data.
 	m_isCollapsed = window->Collapsed;
-	// We do not have to pass events if the window is collapsed.
-	if (m_isCollapsed) return;
+	m_isDocked = window->DockIsActive;
+
+	// We do not have to pass events if the window is collapsed or closed.
+	if (m_isCollapsed || m_isClosed) return;
 
 	// Update gui data.
-	m_isDocked = window->DockIsActive;
 	detectContentRegionMove(window);
 	detectContentRegionResize(window);
 }

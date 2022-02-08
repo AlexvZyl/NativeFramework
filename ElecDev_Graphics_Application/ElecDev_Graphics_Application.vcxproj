@@ -260,6 +260,7 @@
     <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
     <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
     <ClCompile Include="Source\GUI\ImGuiTweaks.cpp" />
+    <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
@@ -390,6 +391,7 @@
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
     <ClInclude Include="Source\GUI\ImGuiTweaks.h" />
+    <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
