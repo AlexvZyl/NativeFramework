@@ -29,6 +29,11 @@ public:
 	virtual void renderBody() override;
 	virtual void end() override;
 
+	//  Data for the lumen logo.
+	float m_texWidth = 0;
+	float m_texHeight = 0;
+	unsigned m_texID = 0;
+
 };
 
 /*=======================================================================================================================================*/

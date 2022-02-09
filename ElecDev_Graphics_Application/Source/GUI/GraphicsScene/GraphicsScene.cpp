@@ -61,6 +61,9 @@ EngineCore* GraphicsScene::getEngine()
 
 void GraphicsScene::begin()
 {
+	// Setup.
+	ImGui::SetNextWindowSize(ImVec2(400,400), ImGuiCond_Once);
+
 	// Remove window padding.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
 	ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);

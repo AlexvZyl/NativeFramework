@@ -61,7 +61,10 @@ void EngineCore::onFocusEvent(LayerEvent& event)
 void EngineCore::onDefocusEvent(LayerEvent& event)
 {
 	m_isFocused = false;
-	Renderer::unbindScene();
+	// We not unbind the scene here, since focus can sometimes shift to 
+	// another window, but that window is editing things in this engine.
+	// By not unbinding here we always keep the latest focused engine's
+	// scene active.
 }
 
 void EngineCore::onHoverEvent(LayerEvent& event)

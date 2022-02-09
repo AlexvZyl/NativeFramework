@@ -178,6 +178,9 @@ FrameBufferObject::~FrameBufferObject()
 // Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height)
 {
+	// This is not the best wau to resize an FBO.
+	// 
+
 	// Recreate the attachments with the new size.
 	createAttachments(width, height);
 	// Save the dimenions.
@@ -196,10 +199,8 @@ unsigned FrameBufferObject::getRenderTexture()
 
 void FrameBufferObject::bind() 
 { 
+	// Bind the FBO.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
-	m_shader->bind();
-	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
-	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 void FrameBufferObject::bindRender() 
@@ -261,13 +262,16 @@ void FrameBufferObject::blitFromMSAA()
 
 void FrameBufferObject::renderFromMSAA() 
 {
-	GLCall(glViewport(0,0, m_viewport[0], m_viewport[1]));  // This might cause issues with ImGui.		
+	GLCall(glViewport(0,0, m_viewport[0], m_viewport[1]));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));		  
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									  
 	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); 
 	GLCall(glActiveTexture(GL_TEXTURE2));									  
     GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));	  
-	m_shader->bind();														  
+	m_shader->bind();		
+	// Update the data in the shader.
+	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
+	m_shader->setIntArray("textureSize", viewport, 2);
 	m_renderVAO->render();													  
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));							  
 }

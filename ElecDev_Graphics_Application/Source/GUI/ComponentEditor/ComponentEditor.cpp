@@ -11,6 +11,7 @@
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/Application.h"	
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -31,6 +32,15 @@ void ComponentEditor::begin()
 
 void ComponentEditor::renderBody()
 {
+	//	Fetch The active component.
+	Component2D* activeComponent = Application::get().m_guiState->active_component;
+	//check that the active component exists. Close if not.
+	if (!activeComponent)
+	{
+		Application::get().m_guiState->componentEditor = false;
+		return;
+	}
+
 	// Should not render if closed or collapsed.
 	if (m_isCollapsed || m_isClosed) return;
 
@@ -38,17 +48,14 @@ void ComponentEditor::renderBody()
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
 	ImGui::SameLine();
 	ImGui::SameLine();
-	/*if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
+	if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 	{
 		activeComponent->title->updateText(activeComponent->titleString);
-	}*/
+	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports"))
 	{
-		// Set the active window.
-		/*m_graphicsHandler->m_activeWindow = m_graphicsHandler->m_windowsDictionary[m_windowContext];*/
-
 		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit);
 		//ImGui::SetColumnWidth(1, 20.f);
 
@@ -59,61 +66,61 @@ void ComponentEditor::renderBody()
 		ImGui::TableHeadersRow();
 
 		ImGui::TableNextRow();
-		/*std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
+		std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
 																	activeComponent->portsEast,
 																	activeComponent->portsNorth,
-																	activeComponent->portsSouth };*/
+																	activeComponent->portsSouth };
 
 		std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
 
-		//for (int i = 0; i < allPorts.size(); i++)
-		//{
-		//	std::vector<std::shared_ptr<Port>> portsSide = allPorts[i];
-		//	int j = 0;
-		//	for (std::shared_ptr<Port> port : portsSide)
-		//	{
-		//		// Table labels.
-		//		char labelName[20];
-		//		sprintf_s(labelName, "##N%d,%d", i, j);
-		//		char labelPos[20];
-		//		sprintf_s(labelPos, "##P%d,%d", i, j);
-		//		char labelType[20];
-		//		sprintf_s(labelType, "##T%d,%d", i, j);
-		//		char labelRemove[20];
-		//		sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
+		for (int i = 0; i < allPorts.size(); i++)
+		{
+			std::vector<std::shared_ptr<Port>> portsSide = allPorts[i];
+			int j = 0;
+			for (std::shared_ptr<Port> port : portsSide)
+			{
+				// Table labels.
+				char labelName[20];
+				sprintf_s(labelName, "##N%d,%d", i, j);
+				char labelPos[20];
+				sprintf_s(labelPos, "##P%d,%d", i, j);
+				char labelType[20];
+				sprintf_s(labelType, "##T%d,%d", i, j);
+				char labelRemove[20];
+				sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
 
-		//		// Port entry in table.
-		//		ImGui::TableNextRow();
-		//		ImGui::TableNextColumn();
+				// Port entry in table.
+				ImGui::TableNextRow();
+				ImGui::TableNextColumn();
 
-		//		// Position.
-		//		ImGui::PushItemWidth(-1);
-		//		ImGui::Text(portPositions[i].c_str());
-		//		ImGui::PopItemWidth();
-		//		ImGui::TableNextColumn();
+				// Position.
+				ImGui::PushItemWidth(-1);
+				ImGui::Text(portPositions[i].c_str());
+				ImGui::PopItemWidth();
+				ImGui::TableNextColumn();
 
-		//		// Name.
-		//		ImGui::PushItemWidth(185.f);
-		//		if (ImGui::InputText(labelName, &port->m_label))
-		//		{
-		//			port->title->updateText(port->m_label);
-		//		}
-		//		ImGui::PopItemWidth();
-		//		ImGui::TableNextColumn();
+				// Name.
+				ImGui::PushItemWidth(185.f);
+				if (ImGui::InputText(labelName, &port->m_label))
+				{
+					port->title->updateText(port->m_label);
+				}
+				ImGui::PopItemWidth();
+				ImGui::TableNextColumn();
 
-		//		// Type.
-		//		ImGui::PushItemWidth(-1);
-		//		int* typeval = (int*)&port->m_type;
-		//		ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
-		//		ImGui::PopItemWidth();
-		//		ImGui::TableNextColumn();
+				// Type.
+				ImGui::PushItemWidth(-1);
+				int* typeval = (int*)&port->m_type;
+				ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
+				ImGui::PopItemWidth();
+				ImGui::TableNextColumn();
 
-		//		// Remove.
-		//		if (ImGui::Button(labelRemove)) { activeComponent->removePort(port); }
+				// Remove.
+				if (ImGui::Button(labelRemove)) { activeComponent->removePort(port); }
 
-		//	}
-		//	if (j) ImGui::Separator();
-		//}
+			}
+			if (j) ImGui::Separator();
+		}
 
 		if (addingPort) 
 		{
@@ -138,8 +145,8 @@ void ComponentEditor::renderBody()
 			//Add a "Confirm" button
 			if (ImGui::Button("Confirm"))
 			{
-				//Add the port to the component.
-				//activeComponent->addPort(newPos, (PortType)newType, newName);
+				// Add the port to the component.
+				activeComponent->addPort(newPos, (PortType)newType, newName);
 				addingPort = false;
 			}
 		}

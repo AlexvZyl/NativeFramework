@@ -9,6 +9,9 @@
 #include "Application/Layers/LayerStack.h"
 #include <vector>
 
+// TO BE DEPRECATED.
+#include "GuiState.h"
+
 //==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
@@ -73,6 +76,9 @@ public:
 	void shutdown();
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
+
+	// TO BE DEPRECATED!
+	std::unique_ptr<GUIState> m_guiState;
 
 private:
 

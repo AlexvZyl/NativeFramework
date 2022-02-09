@@ -23,7 +23,6 @@ Design2DEngine::Design2DEngine()
 {
 	// Default circuit (In this case handled like a default scene).
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
-
 }
 
 //=============================================================================================================================================//

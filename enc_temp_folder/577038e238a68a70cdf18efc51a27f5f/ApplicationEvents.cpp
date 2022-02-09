@@ -73,9 +73,6 @@ Layer* Application::findhoveredLayer()
 	// Find the layer that is being hovered.
 	// We do not have to worry about order, since 
 	// dear imgui handles it.
-	// This could be optimized by ordering the layer (finding the
-	// layer will happen faster) but we will always have so few layers
-	// it really does not matter.
 	std::vector<std::unique_ptr<Layer>>& layers = m_layerStack->getLayers();
 	for (int i = layers.size() - 1; i >= 0; i--)
 	{

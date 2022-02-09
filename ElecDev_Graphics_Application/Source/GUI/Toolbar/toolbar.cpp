@@ -2,7 +2,6 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-#include <Core/imgui.h>
 #include <iostream>
 #include <cmath>
 #include <cfenv>
@@ -10,6 +9,9 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include <GLFW/glfw3.h>
 #include "Lumen.h"
+#include "Resources/ResourceHandler.h"
+#include "External/ImGUI/Core/imgui.h"
+#include "External/ImGUI/Core/imgui_internal.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
@@ -32,12 +34,22 @@ void Toolbar::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
     // Begin.
     m_isClosed != ImGui::BeginMainMenuBar();
+
+    // Load texture 1. 
+    static BITMAP textureBM = loadImageFromResource(ICON_PNG);
+    m_texWidth = textureBM.bmWidth;
+    m_texHeight = textureBM.bmHeight;
+    m_texID = loadBitmapToGL(textureBM);
 }
 
 void Toolbar::renderBody()
 {
-    // Should not render if closed or collapsed.
-    if (m_isCollapsed || m_isClosed) return;
+    // Should not render in these cases.
+    if (m_isCollapsed || m_isClosed || m_isHidden) return;
+
+    float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING;
+        
+    ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
 
     if (ImGui::BeginMenu("File"))
     {

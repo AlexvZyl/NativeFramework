@@ -53,7 +53,7 @@ void Renderer::renderScene()
 	if	    (m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
 
-	// TODO!
+	//  Resolve the MSAA.
 	m_scene->m_FBO->renderFromMSAA();
 }
 
@@ -62,7 +62,7 @@ void Renderer::renderScene(Scene* scene)
 	if	    (scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
 
-	// TODO!
+	//  Resolve the MSAA.
 	scene->m_FBO->renderFromMSAA();
 }
 	

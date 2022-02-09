@@ -39,22 +39,25 @@ Application::Application(GLFWwindow* window)
 	// Store a pointer to the instance.
 	Application::m_instance = this;
 
+	//  NOTE:  TO BE DEPRECATED!
+	m_guiState = std::make_unique<GUIState>();
+
 	// Setup events.
 	glfwInitCallbacks();
 	m_layerStack = std::make_unique<LayerStack>();
 	m_eventLog = std::make_unique<EventLog>();
 
+	// Setup the main gui layer for Lumen.
+	BasicGuiLayer mainToolbar(LayerType_Toolbar, "Main Toolbar");
+	m_layerStack->pushLayer<BasicGuiLayer>(mainToolbar);
+	//BasicGuiLayer mainRibbon(LayerType_Ribbon, "Main Ribbon");
+	//m_layerStack->pushLayer<BasicGuiLayer>(mainRibbon);
+
 	// Testing layers.
-	BasicGuiLayer guiLayer1(LayerType_ComponentEditor, "Component Editor");
-	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer1);
-	BasicGuiLayer guiLayer2(LayerType_Design2DEngine, "Graphics Window");
-	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer2);
-	//BasicGuiLayer guiLayer3(LayerType_Design2DEngine, "Graphics Window");
-	//m_layerStack->pushLayer<BasicGuiLayer>(guiLayer3);
-	BasicGuiLayer guiLayer4(LayerType_Toolbar, "Main Toolbar");
-	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer4);
-	//BasicGuiLayer guiLayer5(LayerType_Ribbon, "Main Ribbon");
-	//m_layerStack->pushLayer<BasicGuiLayer>(guiLayer5);
+	BasicGuiLayer graphicsWindow(LayerType_Design2DEngine, "Graphics Window");
+	m_layerStack->pushLayer<BasicGuiLayer>(graphicsWindow);
+	BasicGuiLayer componentEditor(LayerType_ComponentEditor, "Component Editor");
+	m_layerStack->pushLayer<BasicGuiLayer>(componentEditor);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -63,6 +66,10 @@ Application::Application(GLFWwindow* window)
 
 	// ------------------------- //
 	//  D O C K   B U I L D E R  //
+	// ------------------------- //
+
+
+
 }
 
 void Application::shutdown() 
