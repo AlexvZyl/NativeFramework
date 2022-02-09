@@ -72,7 +72,7 @@ void Ribbon::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
-    ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);
+    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
 void Ribbon::renderBody()

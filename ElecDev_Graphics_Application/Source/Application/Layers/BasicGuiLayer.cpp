@@ -10,6 +10,7 @@
 #include "GUI/Ribbon/Ribbon.h"
 #include "GUI/Toolbar/toolbar.h"
 #include "Misc/ConsoleColor.h"
+#include "Application/Application.h"
 #include "Application/Events/Events.h"
 #include "Engines/EngineCore/EngineCore.h"
 
@@ -133,6 +134,10 @@ void BasicGuiLayer::onRender()
 	m_guiElement->begin();
 	m_guiElement->renderBody();
 	m_guiElement->end();
+
+	// Remove layer in next frame if close was clicked.
+	if(!m_guiElement->m_isOpen) 
+		Application::get().queuePopLayer(this);
 }
 
 void BasicGuiLayer::dispatchLayerEvents() 

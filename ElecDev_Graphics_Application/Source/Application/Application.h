@@ -49,6 +49,16 @@ public:
 	void onRender();
 	// Swap the window buffers.
 	void swapBuffers();
+	
+	// ------------- //
+	//  L A Y E R S  //
+	// ------------- //
+
+	// Push a layer onto the layerstack.
+	template<typename LayerType>
+	void pushLayer(Layer* layer);
+	// Pop a layer from the layerstack.
+	void queuePopLayer(Layer* layer);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -102,6 +112,8 @@ private:
 	// Handle when the hovered layer changes.
 	void onHoveredLayerChange(Layer* newLayer);
 	// Handle when the focused layer changes.
+	// This allows us to control when windows are focused
+	// in imgui.
 	void onFocusedLayerChange(Layer* newLayer);
 	// Find the layer that is being hovered.
 	Layer* findhoveredLayer();
@@ -143,6 +155,12 @@ template <typename EventType>
 void Application::logEvent(Event& event)
 {
 	m_eventLog->log<EventType>(event);
+}
+
+template<typename LayerType>
+void Application::pushLayer(Layer* layer)
+{
+	m_layerStack->pushLayer<LayerType>(*layer);
 }
 
 //==============================================================================================================================================//

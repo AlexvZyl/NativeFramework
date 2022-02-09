@@ -26,8 +26,13 @@ public:
 	template<typename LayerType>
 	void pushLayer(Layer& layer);
 
-	// Pop the specified layer.
-	void popLayer(Layer& layer);
+	// Add the specified layer to the to be removed vector.
+	void queuePopLayer(Layer& layer);
+	// Pop all the layers that have been scheduled to be removed.
+	void popLayers();
+	// The above two functions are implemented in this way, because we dont want to 
+	// immediately remove a layer while it is dispatching events or rendering.
+	// It should be done in the following frame.
 
 	// Get the layers in the stack.
 	std::vector<std::unique_ptr<Layer>>& getLayers();
@@ -36,6 +41,8 @@ private:
 
 	// Vector containing all of the layers.
 	std::vector<std::unique_ptr<Layer>> m_layers;
+	// Layers that are queued for removal.
+	std::vector<Layer*> m_layerPopQueue;
 
 	// Count of the total layers that have passed through the stack.
 	// Just used to create a unique ID for the layers.
@@ -64,6 +71,7 @@ void LayerStack::pushLayer(Layer& layer)
 	layer.changeName(newName);
 	// Push the layer.
 	m_layers.emplace_back(std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))));
+	m_layerPopQueue.reserve(m_layers.size());
 }
 
 //==============================================================================================================================================//

@@ -58,7 +58,7 @@ protected:
 	// --------- //
 
 	// Should the window close?
-	bool m_isClosed = false;
+	bool m_isOpen = true;
 	// Is the window collapsed?
 	bool m_isCollapsed = false;
 	// Is the window hidden?

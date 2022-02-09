@@ -13,6 +13,9 @@
 
 void Application::dispatchEvents()
 {
+	// Remove the layers that are scheduled for removal.
+	m_layerStack->popLayers();
+
 	// Find the hovered layer on a mouse move event.
 	if (m_eventLog->mouseMove)
 	{

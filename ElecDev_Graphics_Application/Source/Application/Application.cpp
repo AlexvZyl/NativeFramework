@@ -49,15 +49,23 @@ Application::Application(GLFWwindow* window)
 
 	// Setup the main gui layer for Lumen.
 	BasicGuiLayer mainToolbar(LayerType_Toolbar, "Main Toolbar");
-	m_layerStack->pushLayer<BasicGuiLayer>(mainToolbar);
+	pushLayer<BasicGuiLayer>(&mainToolbar);
 	//BasicGuiLayer mainRibbon(LayerType_Ribbon, "Main Ribbon");
-	//m_layerStack->pushLayer<BasicGuiLayer>(mainRibbon);
+	//pushLayer<BasicGuiLayer>(&mainRibbon);
 
 	// Testing layers.
 	BasicGuiLayer graphicsWindow(LayerType_Design2DEngine, "Graphics Window");
-	m_layerStack->pushLayer<BasicGuiLayer>(graphicsWindow);
+	pushLayer<BasicGuiLayer>(&graphicsWindow);
 	BasicGuiLayer componentEditor(LayerType_ComponentEditor, "Component Editor");
-	m_layerStack->pushLayer<BasicGuiLayer>(componentEditor);
+	pushLayer<BasicGuiLayer>(&componentEditor);
+	BasicGuiLayer graphicsWindow1(LayerType_Design2DEngine, "Graphics Window");
+	pushLayer<BasicGuiLayer>(&graphicsWindow1);
+	BasicGuiLayer componentEditor1(LayerType_ComponentEditor, "Component Editor");
+	pushLayer<BasicGuiLayer>(&componentEditor1); 
+	BasicGuiLayer graphicsWindow2(LayerType_Design2DEngine, "Graphics Window");
+	pushLayer<BasicGuiLayer>(&graphicsWindow2);
+	BasicGuiLayer componentEditor2(LayerType_ComponentEditor, "Component Editor");
+	pushLayer<BasicGuiLayer>(&componentEditor2);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -68,7 +76,8 @@ Application::Application(GLFWwindow* window)
 	//  D O C K   B U I L D E R  //
 	// ------------------------- //
 
-
+	// Set up the dock space before the rendering starts.
+	// TODO!
 
 }
 
@@ -95,6 +104,14 @@ bool Application::shouldWindowClose()
 void Application::closeWindow() 
 {
 	m_shouldWindowClose = true;
+}
+
+void Application::queuePopLayer(Layer* layer)
+{
+	m_layerStack->queuePopLayer(*layer);
+	// Remove from active layers.
+	if (m_hoveredLayer == layer) m_hoveredLayer = nullptr;
+	if (m_focusedLayer == layer) m_focusedLayer = nullptr;
 }
 
 //==============================================================================================================================================//

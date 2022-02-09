@@ -44,7 +44,7 @@ void GraphicsScene::onEvent(Event& event)
 		m_engine->onEvent(event);
 
 	// Do not pass events to the engine in these cases.
-	else if (m_isCollapsed || m_isClosed || m_isHidden) return;
+	else if (m_isCollapsed || !m_isOpen || m_isHidden) return;
 
 	// Pass events to the engine.
 	m_engine->onEvent(event);
@@ -66,19 +66,19 @@ void GraphicsScene::begin()
 
 	// Remove window padding.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
-	ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);
+	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
 void GraphicsScene::renderBody() 
 {
 	// Should not render the engine in these cases.
-	if (m_isCollapsed || m_isClosed || m_isHidden) return;
+	if (m_isCollapsed || !m_isOpen || m_isHidden) return;
 
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 
-void GraphicsScene::end() 
+void GraphicsScene::end()
 {
 	ImGui::End();
 	ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);

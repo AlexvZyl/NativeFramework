@@ -20,7 +20,13 @@
 // Constructor.
 Toolbar::Toolbar(std::string& name, int windowFlags)
     : GuiElementCore(name, windowFlags)
-{}
+{
+    // Load texture 1. 
+    static BITMAP textureBM = loadImageFromResource(ICON_PNG);
+    m_texWidth = textureBM.bmWidth;
+    m_texHeight = textureBM.bmHeight;
+    m_texID = loadBitmapToGL(textureBM);
+}
 
 /*=======================================================================================================================================*/
 /* Rendering                                                                                                                             */
@@ -33,19 +39,13 @@ void Toolbar::begin()
     // Set the size of the toolbar.
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
     // Begin.
-    m_isClosed != ImGui::BeginMainMenuBar();
-
-    // Load texture 1. 
-    static BITMAP textureBM = loadImageFromResource(ICON_PNG);
-    m_texWidth = textureBM.bmWidth;
-    m_texHeight = textureBM.bmHeight;
-    m_texID = loadBitmapToGL(textureBM);
+    m_isOpen = ImGui::BeginMainMenuBar();
 }
 
 void Toolbar::renderBody()
 {
     // Should not render in these cases.
-    if (m_isCollapsed || m_isClosed || m_isHidden) return;
+    if (m_isCollapsed || !m_isOpen || m_isHidden) return;
 
     float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING;
         
