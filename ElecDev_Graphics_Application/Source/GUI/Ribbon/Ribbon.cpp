@@ -30,28 +30,28 @@ Ribbon::Ribbon(std::string name, int windowFlags)
                         |   ImGuiWindowFlags_NoDecoration;
 
     // Load texture 1. 
-    BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
-    this->image1_width = texture1BM.bmWidth;
-    this->image1_height = texture1BM.bmHeight;
-    this->image1_texture = loadBitmapToGL(texture1BM);
+    static BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
+    image1_width = texture1BM.bmWidth;
+    image1_height = texture1BM.bmHeight;
+    image1_texture = loadBitmapToGL(texture1BM);
 
     // Load texture 2.
-    BITMAP texture2BM = loadImageFromResource(COMPONENT_PNG);
-    this->image2_width = texture2BM.bmWidth;
-    this->image2_height = texture2BM.bmHeight;
-    this->image2_texture = loadBitmapToGL(texture2BM);
+    static BITMAP texture2BM = loadImageFromResource(COMPONENT_PNG);
+    image2_width = texture2BM.bmWidth;
+    image2_height = texture2BM.bmHeight;
+    image2_texture = loadBitmapToGL(texture2BM);
 
     // Load texture 3.
-    BITMAP texture3BM = loadImageFromResource(DRAW_CIRCUIT_BUCKETS_PNG);
-    this->image3_width = texture3BM.bmWidth;
-    this->image3_height = texture3BM.bmHeight;
-    this->image3_texture = loadBitmapToGL(texture3BM);
+    static BITMAP texture3BM = loadImageFromResource(DRAW_CIRCUIT_BUCKETS_PNG);
+    image3_width = texture3BM.bmWidth;
+    image3_height = texture3BM.bmHeight;
+    image3_texture = loadBitmapToGL(texture3BM);
 
     // Load texture 4. 
-    BITMAP texture4BM = loadImageFromResource(CIRCUIT_CIRCLE_JPEG);
-    this->image4_width = texture4BM.bmWidth;
-    this->image4_height = texture4BM.bmHeight;
-    this->image4_texture = loadBitmapToGL(texture4BM);
+    static BITMAP texture4BM = loadImageFromResource(CIRCUIT_CIRCLE_JPEG);
+    image4_width = texture4BM.bmWidth;
+    image4_height = texture4BM.bmHeight;
+    image4_texture = loadBitmapToGL(texture4BM);
 
     this->sideBarFlag = "";
     first[0] = true;
@@ -61,6 +61,15 @@ Ribbon::Ribbon(std::string name, int windowFlags)
 
 void Ribbon::begin()
 {
+    // Dock the ribbon to the top of the viewport.
+    ImGuiViewport* mainViewport = ImGui::GetMainViewport();
+    ImGui::DockBuilderAddNode(mainViewport->ID);
+    ImGuiID dockID = ImGui::DockBuilderSplitNode(mainViewport->ID, ImGuiDir_Down, 0.5f, nullptr, nullptr);
+    ImGui::DockBuilderDockWindow(m_name.c_str(), dockID);
+    ImGui::DockBuilderFinish(mainViewport->ID);
+
+    // Remove rounding so that it docks nicely.
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
     ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);
@@ -68,13 +77,6 @@ void Ribbon::begin()
 
 void Ribbon::renderBody()
 {
-    const ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImVec2 work_pos = viewport->WorkPos; // Use work area to avoid menu-bar/task-bar, if any!
-    ImVec2 work_size = viewport->WorkSize;
-    /*m_guiState->toolsExpanded = ImGui::Begin("Tools", p_open, window_flags);*/
-    ImGui::SetWindowSize(ImVec2(work_size.x, RIBBON_HEIGHT));
-    ImGui::SetWindowPos(work_pos);
-    
     // -------------- //
     //  B U T T O N S //
     // -------------- //
@@ -116,6 +118,7 @@ void Ribbon::renderBody()
 void Ribbon::end() 
 {
     ImGui::End();
+    ImGui::PopStyleVar();
 }
 
 //==============================================================================================================================================//

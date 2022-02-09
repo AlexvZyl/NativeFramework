@@ -5,17 +5,13 @@
 #include <iostream>
 #include <memory>
 #include "Application/Application.h"
-#include "Application/Events/Events.h"
-#include "Application/Events/EventLog.h"
-#include "Application/Layers/LayerStack.h"
 #include "Application/Layers/Layer.h"
 #include "External/ImGUI/Core/imgui.h"
 #include "External/ImGUI/Implementations/imgui_impl_glfw.h"
 #include "External/ImGUI/Implementations/imgui_impl_opengl3.h"
 #include "External/Misc/ConsoleColor.h"
-#include "OpenGL/ErrorHandlerGL.h"
-#include "OpenGL/RendererGL.h"
 #include "Resources/ResourceHandler.h"
+#include "GUI/ImGuiTweaks.h"
 
 // Testing.
 #include "GUI/ComponentEditor/ComponentEditor.h"
@@ -28,32 +24,45 @@
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
+//  Statics.																																	//
+//==============================================================================================================================================//
+
+Application* Application::m_instance = nullptr;
+
+//==============================================================================================================================================//
 //  Setup																																		//
 //==============================================================================================================================================//
 
 Application::Application(GLFWwindow* window) 
 	: m_window(window)
 {
+	// Store a pointer to the instance.
+	Application::m_instance = this;
+
+	// Setup events.
 	glfwInitCallbacks();
 	m_layerStack = std::make_unique<LayerStack>();
 	m_eventLog = std::make_unique<EventLog>();
 
 	// Testing layers.
-	BasicGuiLayer guiLayer1(LayerType_ComponentEditor, "Component Editor 1");
+	BasicGuiLayer guiLayer1(LayerType_ComponentEditor, "Component Editor");
 	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer1);
-	BasicGuiLayer guiLayer2(LayerType_Design2DEngine, "Graphics Window 1");
+	BasicGuiLayer guiLayer2(LayerType_Design2DEngine, "Graphics Window");
 	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer2);
-	BasicGuiLayer guiLayer3(LayerType_Design2DEngine, "Graphics Window 2");
-	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer3);
+	//BasicGuiLayer guiLayer3(LayerType_Design2DEngine, "Graphics Window");
+	//m_layerStack->pushLayer<BasicGuiLayer>(guiLayer3);
 	BasicGuiLayer guiLayer4(LayerType_Toolbar, "Main Toolbar");
 	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer4);
-	BasicGuiLayer guiLayer5(LayerType_Ribbon, "Main Ribbon");
-	m_layerStack->pushLayer<BasicGuiLayer>(guiLayer5);
+	//BasicGuiLayer guiLayer5(LayerType_Ribbon, "Main Ribbon");
+	//m_layerStack->pushLayer<BasicGuiLayer>(guiLayer5);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	setGuiTheme();
+
+	// ------------------------- //
+	//  D O C K   B U I L D E R  //
 }
 
 void Application::shutdown() 
@@ -79,75 +88,6 @@ bool Application::shouldWindowClose()
 void Application::closeWindow() 
 {
 	m_shouldWindowClose = true;
-}
-
-//==============================================================================================================================================//
-//  Rendering.																																	//
-//==============================================================================================================================================//
-
-void Application::onRenderInit() 
-{
-	// Feed inputs to ImGUI, start new frame.
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	// Enable main viewport docking.
-	ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
-
-	// Push custom font.
-	ImGui::PushFont(m_defaultFont);
-}
-
-void Application::onRender() 
-{
-	// Init.
-	onRenderInit();
-
-	// Dispatch the events to the layers before we render them.
-	// Has to be called after the init so all of the ImGui data
-	// is updated.
-	dispatchEvents();
-
-	// Render all of the layers.
-	// The order is not important since dear imgui handles that.
-	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
-		layer->onRender();
-
-	// Cleanup.
-	onRenderCleanup();
-}
-
-void Application::onRenderCleanup() 
-{
-	// Pop custom font.
-	ImGui::PopFont();
-
-	// Assign values to viewport for ImGUI.
-	int display_w, display_h;
-	glfwGetFramebufferSize(m_window, &display_w, &display_h);
-	glm::vec2 viewport(display_w, display_h);
-	Renderer::setViewport(viewport);
-
-	// Rendering
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-	// Update and Render additional Platform Windows
-	// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		GLFWwindow* backup_current_context = glfwGetCurrentContext();
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-		glfwMakeContextCurrent(backup_current_context);
-	}
-}
-
-void Application::swapBuffers() 
-{
-	glfwSwapBuffers(m_window);
 }
 
 //==============================================================================================================================================//

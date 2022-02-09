@@ -56,9 +56,10 @@ void GuiElementCore::dispatchGuiEvents(ImGuiWindow* window)
 	// Update data.
 	m_isCollapsed = window->Collapsed;
 	m_isDocked = window->DockIsActive;
+	m_isHidden = window->Hidden;
 
-	// We do not have to pass events if the window is collapsed or closed.
-	if (m_isCollapsed || m_isClosed) return;
+	// We do not want to pass events in these cases.
+	if (m_isCollapsed || m_isClosed || m_isHidden) return;
 
 	// Update gui data.
 	detectContentRegionMove(window);
@@ -81,8 +82,10 @@ void GuiElementCore::onContentRegionMoveEvent(WindowEvent& event)
 
 void GuiElementCore::detectContentRegionResize(ImGuiWindow* window) 
 {
+	// Get the current content region size.
 	ImVec2 contentRegionSizeIm = window->ContentRegionRect.GetSize();
 	glm::vec2 contentRegionSize = { contentRegionSizeIm.x, contentRegionSizeIm.y};
+
 	// If the content region resized pass an event.
 	if (m_contentRegionSize.x != contentRegionSize.x || m_contentRegionSize.y != contentRegionSize.y)
 	{
@@ -93,10 +96,12 @@ void GuiElementCore::detectContentRegionResize(ImGuiWindow* window)
 
 void GuiElementCore::detectContentRegionMove(ImGuiWindow* window)
 {
+	// Get window current position.
 	ImVec2 regionPos = window->ContentRegionRect.Min;
 	glm::vec2 contentRegionPos = { regionPos.x, regionPos.y };
-	// If region moved, pass an event.
-	if (m_contentRegionPosition.x != contentRegionPos.x || m_contentRegionPosition.y != contentRegionPos.y)
+
+	// Check if the window has moved.
+	if(m_contentRegionPosition.x != regionPos.x || m_contentRegionPosition.y != regionPos.y)
 	{
 		WindowEvent event(contentRegionPos, EventType_WindowMove);
 		onEvent(event);

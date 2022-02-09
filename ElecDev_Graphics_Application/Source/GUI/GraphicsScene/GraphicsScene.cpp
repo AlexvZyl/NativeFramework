@@ -43,8 +43,11 @@ void GraphicsScene::onEvent(Event& event)
 	if (eventID == EventType_Hover || eventID == EventType_Dehover || eventID == EventType_Focus || eventID == EventType_Defocus)
 		m_engine->onEvent(event);
 
-	// Otherwise the engine must only get events when it is open.
-	else if(!m_isCollapsed && !m_isClosed) m_engine->onEvent(event);
+	// Do not pass events to the engine in these cases.
+	else if (m_isCollapsed || m_isClosed || m_isHidden) return;
+
+	// Pass events to the engine.
+	m_engine->onEvent(event);
 }
 
 //==============================================================================================================================================//
@@ -56,15 +59,17 @@ EngineCore* GraphicsScene::getEngine()
 	return m_engine.get();
 }
 
-void GraphicsScene::begin() 
+void GraphicsScene::begin()
 {
+	// Remove window padding.
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
 	ImGui::Begin(m_name.c_str(), &m_isClosed, m_imguiWindowFlags);
 }
 
 void GraphicsScene::renderBody() 
 {
-	// Should not render if closed or collapsed.
-	if (m_isCollapsed || m_isClosed) return;
+	// Should not render the engine in these cases.
+	if (m_isCollapsed || m_isClosed || m_isHidden) return;
 
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
@@ -73,6 +78,7 @@ void GraphicsScene::renderBody()
 void GraphicsScene::end() 
 {
 	ImGui::End();
+	ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
 }
 
 //==============================================================================================================================================//

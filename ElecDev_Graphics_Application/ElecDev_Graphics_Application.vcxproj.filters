@@ -122,6 +122,7 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\ImGuiTweaks.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
+    <ClCompile Include="Source\Application\ApplicationRender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">

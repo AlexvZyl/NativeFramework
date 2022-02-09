@@ -79,7 +79,12 @@ public:
 	// Should return a vector if the layer has more than one window.
 	bool isLayerHovered();
 
+	// Change the name of the layer and the elements contained in the layer.
+	inline virtual void changeName(std::string& name) = 0;
+
 protected:
+
+	friend class LayerStack;
 
 	// Set the docking state.
 	void setDockingState(bool state);

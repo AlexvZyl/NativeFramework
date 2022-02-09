@@ -61,6 +61,8 @@ protected:
 	bool m_isClosed = false;
 	// Is the window collapsed?
 	bool m_isCollapsed = false;
+	// Is the window hidden?
+	bool m_isHidden = false;
 	// Is the GUI element docked?
 	bool m_isDocked = false;
 	// The window name.

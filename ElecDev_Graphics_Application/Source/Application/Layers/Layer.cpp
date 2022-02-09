@@ -72,7 +72,7 @@ void Layer::detectLayerMove()
 bool Layer::isLayerHovered()
 {
 	if(!m_imGuiWindow) m_imGuiWindow = ImGui::FindWindowByName(m_layerName.c_str());
-	return ImGuiTweaks::IsWindowHovered(m_imGuiWindow);
+	return ImGuiTweaks::IsWindowHovered(0, m_imGuiWindow);
 }
 
 uint64_t Layer::getLayerID()

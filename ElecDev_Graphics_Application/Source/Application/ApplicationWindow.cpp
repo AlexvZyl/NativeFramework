@@ -18,12 +18,6 @@
 
 void Application::glfwInitCallbacks()
 {
-    // --------------- //
-    //  P O I N T E R  //
-    // --------------- //
-
-    glfwSetWindowUserPointer(m_window, static_cast<void*>(this));
-
     // ------------------------- //
     //  M O U S E   B U T T O N  //
     // ------------------------- //
@@ -52,8 +46,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         MouseButtonEvent event(cursorPos, eventID);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<MouseButtonEvent>(event);
+        Application::get().logEvent<MouseButtonEvent>(event);
 
         // Pass event to ImGUI.
         ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
@@ -86,8 +79,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         MouseMoveEvent event(cursorPos, eventID);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<MouseMoveEvent>(event);    
+        Application::get().logEvent<MouseMoveEvent>(event);
     });
 
     // ------------------------- //
@@ -117,8 +109,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         MouseScrollEvent event(cursorPos, yoffset, eventID);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<MouseScrollEvent>(event);
+        Application::get().logEvent<MouseScrollEvent>(event);
 
         // Pass event to ImGUI.
         ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
@@ -154,8 +145,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         KeyEvent event(key, eventID, cursorPos);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<KeyEvent>(event);
+        Application::get().logEvent<KeyEvent>(event);
 
         // Pass event to ImGUI.
         ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
@@ -174,8 +164,7 @@ void Application::glfwInitCallbacks()
 
         // Log the event.
         FileDropEvent event(filePaths);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<FileDropEvent>(event);
+        Application::get().logEvent<FileDropEvent>(event);
     });
 
     // --------------------- //
@@ -187,8 +176,7 @@ void Application::glfwInitCallbacks()
         // Create and log event.
         glm::vec2 size(width, height);
         WindowEvent event(size, EventType_Application | EventType_WindowResize);
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->logEvent<WindowEvent>(event);
+        Application::get().logEvent<WindowEvent>(event);
     });
 
     // ----------- //
@@ -197,10 +185,8 @@ void Application::glfwInitCallbacks()
 
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) 
     {
-        Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        app->closeWindow();
+            Application::get().closeWindow();
     });
-
 }
 
 //==============================================================================================================================================//

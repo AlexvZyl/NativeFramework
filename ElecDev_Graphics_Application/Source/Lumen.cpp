@@ -72,16 +72,17 @@ int main(int, char**)
             // Reset frametime.
             totalFrameTime = 0;
 
-            // Clear buffers for OpenGL.
+            // Clear buffers.
             Renderer::clear();
 
-            // Render the frame to the screen.
+            // Render the frame to the screen,
+            // as well as handle events.
             application.onRender();
             
             // Force push commands to the GPU.
             Renderer::finish();
             
-            // Swap the OpenGL buffers.
+            // Swap the window buffers.
             application.swapBuffers();
         }
     }

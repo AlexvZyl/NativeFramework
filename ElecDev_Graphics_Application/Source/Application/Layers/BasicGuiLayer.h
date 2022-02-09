@@ -37,6 +37,9 @@ public:
 	// Dispatch events related to the layer.
 	virtual void dispatchLayerEvents() override;
 
+	// Change the name of the layer and the elements contained in the layer.
+	virtual void changeName(std::string& name) override;
+
 protected:
 
 	// The GUI element that belongs to this layer.

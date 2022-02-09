@@ -4,7 +4,6 @@
 
 #include "Application.h"
 #include "Events/EventLog.h"
-#include "Events/EventLog.h"
 #include "Layers/Layer.h"
 #include "Layers/LayerStack.h"
 
@@ -56,15 +55,16 @@ void Application::dispatchEvents()
 
 	// Dispatch the events that are handled by the layers.
 	// These include things such as window resizes and docking state changes.
-	// These are events that occur seperately from GLFW, since layers essentially
-	// are their own windows.
+	// They are events that occur and GLFW is not aware of, since layers 
+	// essentially are their own windows.
 	// Currently every layer is checked every frame.  This is not necessary.
-	// The only thing preventing us from only updating the focused layer is due to 
-	// how docking works.
+	// The only thing preventing us from only updating only the focused layer is 
+	// due to how resizing works when windows are docked.  They do not necessarily
+	// come into focus, missing the resize event.
 	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
 		layer->dispatchLayerEvents();
 
-	// All events have been handled.
+	// All of the GLFW events have been handled and the log can be cleared.
 	m_eventLog->clear();
 }
 

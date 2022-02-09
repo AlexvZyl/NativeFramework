@@ -13,8 +13,9 @@
 
 namespace ImGuiTweaks
 {
+	ImGuiID DockSpaceOverViewport(const ImGuiViewport* viewport = NULL, ImGuiDockNodeFlags dockspace_flags = 0, const ImGuiWindowClass* window_class = NULL);
 	static bool IsWindowContentHoverable(ImGuiWindow* window, ImGuiHoveredFlags flags);
-	bool IsWindowHovered(ImGuiWindow* window, ImGuiHoveredFlags flags=0);
+	bool IsWindowHovered(ImGuiHoveredFlags flags = 0, ImGuiWindow* window = NULL);
 }
 
 //==============================================================================================================================================//

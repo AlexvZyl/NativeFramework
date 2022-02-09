@@ -11,16 +11,60 @@
 
 namespace ImGuiTweaks 
 {
-    bool IsWindowHovered(ImGuiWindow* window, ImGuiHoveredFlags flags)
+    // ----------------- //
+    //  V I E W P O R T  //
+    // ----------------- //
+
+    // This allows us to seperate the toolbar from the main viewport.
+    ImGuiID DockSpaceOverViewport(const ImGuiViewport* viewport, ImGuiDockNodeFlags dockspace_flags, const ImGuiWindowClass* window_class)
+    {
+        if (viewport == NULL)
+            viewport = ImGui::GetMainViewport();
+
+        ImVec2 size = { viewport->WorkSize.x, viewport->WorkSize.y - RIBBON_HEIGHT };
+        ImVec2 pos = { viewport->WorkPos.x, viewport->WorkPos.y + RIBBON_HEIGHT };
+        ImGui::SetNextWindowPos(pos);
+        ImGui::SetNextWindowSize(size);
+        ImGui::SetNextWindowViewport(viewport->ID);
+
+        ImGuiWindowFlags host_window_flags = 0;
+        host_window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking;
+        host_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+        if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+            host_window_flags |= ImGuiWindowFlags_NoBackground;
+
+        char label[32];
+        ImFormatString(label, IM_ARRAYSIZE(label), "DockSpaceViewport_%08X", viewport->ID);
+
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin(label, NULL, host_window_flags);
+        ImGui::PopStyleVar(3);
+
+        ImGuiID dockspace_id = ImGui::GetID("DockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags, window_class);
+        ImGui::End();
+
+        return dockspace_id;
+    }
+
+    // ------------- //
+    //  W I N D O W  //
+    // ------------- //
+
+    // This allows us to check if a window is hovered by passing a window pointer.
+    bool IsWindowHovered(ImGuiHoveredFlags flags, ImGuiWindow* window)
     {
         IM_ASSERT((flags & ImGuiHoveredFlags_AllowWhenOverlapped) == 0);   // Flags not supported by this function
         ImGuiContext& g = *GImGui;
         if (g.HoveredWindow == NULL)
             return false;
 
+        if (window == NULL) window = g.CurrentWindow; //  Added this line so that we can pass a window to check.
+
         if ((flags & ImGuiHoveredFlags_AnyWindow) == 0)
-        {
-            // ImGuiWindow* window = g.CurrentWindow;  Remove this line so that we can pass our own window to check.
+        { 
             switch (flags & (ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows))
             {
             case ImGuiHoveredFlags_RootWindow | ImGuiHoveredFlags_ChildWindows:

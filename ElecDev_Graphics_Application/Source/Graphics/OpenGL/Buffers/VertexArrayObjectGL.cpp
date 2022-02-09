@@ -53,7 +53,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
-	// Update data.
+	// Checks before rendering.
 	if		(!m_sized )		 resizeBuffer();
 	else if (!m_synced)		 syncBuffer();  
 	if      (!m_vertexCount) return;
@@ -127,7 +127,12 @@ void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr
 template <typename VertexType>
 void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigned vertexCount, unsigned indexPos, unsigned indexCount)
 {
-	if (!m_vertexCount) return;
+	// Ensure there are vertices to delete.
+	if (!m_vertexCount || !m_indexCount)
+	{
+		// Log warning.
+		return;
+	}
 
 	// Remove data from VAO.
 	m_vertexCPU.erase(m_vertexCPU.begin() + vertexPos, m_vertexCPU.begin() + vertexPos + vertexCount);

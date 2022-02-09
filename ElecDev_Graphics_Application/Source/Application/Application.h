@@ -33,6 +33,11 @@ public:
 	// Constructor.
 	Application(GLFWwindow* window);
 
+	// Return a pointer to the currently running application.
+	// This allows elements to use the app data without having
+	// to store a pointer to it.
+	inline static Application& get() { return *m_instance; };
+
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
@@ -73,6 +78,10 @@ private:
 
 	// The window containing the application.
 	GLFWwindow* m_window;
+	// A pointer to the application instance.
+	// For use with Application::get()
+	// HAS TO BE SINGLETON!
+	static Application* m_instance;
 
 	// ------------- //
 	//  L A Y E R S  //

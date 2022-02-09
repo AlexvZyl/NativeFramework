@@ -10,6 +10,8 @@ This is where the interactive 2D design engine is implemented.
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/CameraGL.h"
+#include "OpenGL/RendererGL.h"
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -21,6 +23,7 @@ Design2DEngine::Design2DEngine()
 {
 	// Default circuit (In this case handled like a default scene).
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
+
 }
 
 //=============================================================================================================================================//

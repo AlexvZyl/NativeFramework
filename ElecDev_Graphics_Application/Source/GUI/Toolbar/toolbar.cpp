@@ -9,6 +9,7 @@
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include <GLFW/glfw3.h>
+#include "Lumen.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
@@ -25,6 +26,11 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 
 void Toolbar::begin() 
 {
+    // Remove rounding so that it docks nicely.
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    // Set the size of the toolbar.
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
+    // Begin.
     m_isClosed != ImGui::BeginMainMenuBar();
 }
 
@@ -81,6 +87,9 @@ void Toolbar::renderBody()
 void Toolbar::end()
 {
     ImGui::EndMainMenuBar();
+    // Pop frame rounding and padding.
+    ImGui::PopStyleVar();
+    ImGui::PopStyleVar();
 }
 
 /*=======================================================================================================================================*/
