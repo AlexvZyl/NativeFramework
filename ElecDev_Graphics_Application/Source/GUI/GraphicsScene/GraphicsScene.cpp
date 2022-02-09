@@ -72,7 +72,8 @@ void GraphicsScene::begin()
 void GraphicsScene::renderBody() 
 {
 	// Should not render the engine in these cases.
-	if (m_isCollapsed || !m_isOpen || m_isHidden) return;
+	//if (m_isCollapsed || !m_isOpen || m_isHidden) return;
+	if (m_isCollapsed || m_isHidden) return;
 
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));

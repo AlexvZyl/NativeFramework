@@ -8,7 +8,6 @@
 #include <cmath>
 #include <cfenv>
 #include "../Utilities/PythonInterface/PythonInterface.h"
-#include "Graphics/GraphicsHandler.h"
 #include <iterator>
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <Core/imgui_internal.h>
@@ -31,8 +30,7 @@ constexpr size_t hash(const char* str) {
 }
 
 // Constructor.
-userGUI::userGUI(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface)
-	: m_guiState(guiState), graphicsHandler(graphicsHandler), m_pyInterface(pyInterface)
+userGUI::userGUI(PyInterface* pyInterface)
 {
 	this->pos.x = 0;
 	this->pos.y = 0;

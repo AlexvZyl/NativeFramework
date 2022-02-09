@@ -5,24 +5,8 @@
 #include "Utilities/PythonInterface/PythonInterface.h" 
 #include <stdio.h>
 #include <External/Misc/ConsoleColor.h>
-#include "GUI/GUIState.h"
-#include "Graphics/GraphicsHandler.h"
-#include "GUI/GuiHandler.h"
 #include "GUI/UserGUI/userGUI.h"
-
-/*=======================================================================================================================================*/
-/* Constructor & Destructor.                                                                                                             */
-/*=======================================================================================================================================*/
-
-PyInterface::PyInterface(GraphicsHandler* graphicsHandler, GUIHandler* guiHandler, GUIState* guiState)
-    : m_graphicsHandler(graphicsHandler), m_guiHandler(guiHandler), m_guiState(guiState)
-{
-}
-
-PyInterface::~PyInterface()
-{
-    delete[] & inputQueueWindow;  // Is this correct?...
-}
+#include "Application/Application.h"
 
 /*=======================================================================================================================================*/
 /* Processing Input.                                                                                                                     */
@@ -64,7 +48,7 @@ void PyInterface::procesInput(std::string inString)
         // Quit the thread.
     case hash("Quit"):
     {
-        m_guiState->globalQuit = true;
+        Application::get().m_guiState->globalQuit = true;
         break;
     }
 
@@ -171,7 +155,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
+                //m_graphicsHandler->drawLine(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
                 // Draw clear triangle.
@@ -183,7 +167,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
+                //m_graphicsHandler->drawTriangleClear(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
                 break;
 
                 // Draw filled triangle. 
@@ -195,7 +179,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
+                //m_graphicsHandler->drawTriangleFilled(mccName, new float[2]{ params[0],params[1] }, new float[2]{ params[2],params[3] }, new float[2]{ params[4], params[5] }, new float[4]{ params[6],params[7],params[8],params[9] });
                 break;
 
                 // Draw clear quad.
@@ -207,7 +191,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
+                //m_graphicsHandler->drawQuadClear(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
                 // Draw filled quad.
@@ -219,7 +203,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
+                //m_graphicsHandler->drawQuadFilled(mccName, new float[2]{ params[0],params[1] }, params[2], params[3], new float[4]{ params[4],params[5],params[6],params[7] });
                 break;
 
                 // Draw clear circle.
@@ -231,7 +215,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
+                //m_graphicsHandler->drawCircleClear(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
                 // Draw a filled circle.
@@ -243,7 +227,7 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
+                //m_graphicsHandler->drawCircleFilled(mccName, new float[2]{ params[0],params[1] }, params[2], new float[4]{ params[3],params[4],params[5],params[6] });
                 break;
 
                 // Draw text.
@@ -271,7 +255,7 @@ void PyInterface::deQueueInput()
                         temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                     }
                 }
-                m_graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
+                //m_graphicsHandler->drawText(mccName, text, new float[2]{ params[0],params[1] }, new float[4]{ params[2],params[3],params[4], params[5] }, params[6], align);
                 break;
 
                 // Add MCC window to draw.
@@ -280,14 +264,14 @@ void PyInterface::deQueueInput()
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 text = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_graphicsHandler->addWindow(mccName, text);
+                //m_graphicsHandler->addWindow(mccName, text);
                 break;
 
                 // Remove MCC window.
             case hash("RemoveWindow"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_graphicsHandler->removeWindow(mccName);
+                //m_graphicsHandler->removeWindow(mccName);
                 break;
 
                 // Draw the demo.
@@ -296,14 +280,14 @@ void PyInterface::deQueueInput()
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
+                //m_graphicsHandler->drawDemo(mccName, (unsigned int)params[0]);
                 break;
 
                 // Center the drawing around (0,0).
             case hash("AutoCenter"):
                 mccName = temp.parameters.substr(0, temp.parameters.find(";"));
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_graphicsHandler->autoCenter(mccName);
+                //m_graphicsHandler->autoCenter(mccName);
                 break;
 
             case hash("addGUI"):
@@ -313,7 +297,7 @@ void PyInterface::deQueueInput()
                 temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 docking = temp.parameters.substr(0, temp.parameters.find(";"));
                 parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
-                m_guiHandler->m_userGUIP->createGUI(guiName, guiPos, docking, parameters);
+                //m_guiHandler->m_userGUIP->createGUI(guiName, guiPos, docking, parameters);
                 break;
 
                 /*===================================================================================================================================*/
@@ -329,11 +313,11 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawQuadFilled3D(mccName, new float[3]{ params[0], params[1], params[2] },
+                /*m_graphicsHandler->drawQuadFilled3D(mccName, new float[3]{ params[0], params[1], params[2] },
                     new float[3]{ params[3], params[4], params[5] },
                     new float[3]{ params[6], params[7], params[8] },
                     new float[3]{ params[9], params[10], params[11] },
-                    new float[4]{ params[12],params[13],params[14],params[15] });
+                    new float[4]{ params[12],params[13],params[14],params[15] });*/
                 break;
 
                 // Draw filled quad.
@@ -345,12 +329,12 @@ void PyInterface::deQueueInput()
                     params.push_back(std::stof(temp.parameters.substr(0, temp.parameters.find(";"))));
                     temp.parameters = temp.parameters.substr(temp.parameters.find(";") + 1);
                 }
-                m_graphicsHandler->drawCuboidFilled(mccName, new float[3]{ params[0], params[1], params[2] },
+                /*m_graphicsHandler->drawCuboidFilled(mccName, new float[3]{ params[0], params[1], params[2] },
                     new float[3]{ params[3], params[4], params[5] },
                     new float[3]{ params[6], params[7], params[8] },
                     new float[3]{ params[9], params[10], params[11] },
                     params[12],
-                    new float[4]{ params[13],params[14],params[15],params[16] });
+                    new float[4]{ params[13],params[14],params[15],params[16] });*/
                 break;
 
             default:

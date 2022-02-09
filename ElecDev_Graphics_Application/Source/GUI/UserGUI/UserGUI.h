@@ -8,7 +8,6 @@
 #include <Core/imgui.h>
 #include <string>
 #include <list>
-#include <GUI/GUIState.h>
 
 /*=======================================================================================================================================*/
 /* Includes.																															 */
@@ -68,10 +67,8 @@ class userGUI
 public:
 
 	//Variables
-	GUIState* m_guiState;
 	PyInterface* m_pyInterface;
 	ImVec2 pos;
-	GraphicsHandler* graphicsHandler;
 	ImGuiID dock;
 	bool userPrevious;
 	bool close = true;
@@ -82,7 +79,7 @@ public:
 	bool resetDock = false;
 
 	//Constructor
-	userGUI(GUIState* guiState, GraphicsHandler* graphicsHandler, PyInterface* pyInterface);
+	userGUI(PyInterface* pyInterface);
 
 	//Renderer
 	void pushData(std::list<guiHolder>::iterator uiWindow);

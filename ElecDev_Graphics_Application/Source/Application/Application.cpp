@@ -58,14 +58,6 @@ Application::Application(GLFWwindow* window)
 	pushLayer<BasicGuiLayer>(&graphicsWindow);
 	BasicGuiLayer componentEditor(LayerType_ComponentEditor, "Component Editor");
 	pushLayer<BasicGuiLayer>(&componentEditor);
-	BasicGuiLayer graphicsWindow1(LayerType_Design2DEngine, "Graphics Window");
-	pushLayer<BasicGuiLayer>(&graphicsWindow1);
-	BasicGuiLayer componentEditor1(LayerType_ComponentEditor, "Component Editor");
-	pushLayer<BasicGuiLayer>(&componentEditor1); 
-	BasicGuiLayer graphicsWindow2(LayerType_Design2DEngine, "Graphics Window");
-	pushLayer<BasicGuiLayer>(&graphicsWindow2);
-	BasicGuiLayer componentEditor2(LayerType_ComponentEditor, "Component Editor");
-	pushLayer<BasicGuiLayer>(&componentEditor2);
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); (void)io;

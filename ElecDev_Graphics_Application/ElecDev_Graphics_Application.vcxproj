@@ -263,10 +263,12 @@
     <ClCompile Include="Source\GUI\ImGuiTweaks.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
+    <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Entities\Text.cpp" />
+    <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
@@ -395,6 +397,7 @@
     <ClInclude Include="Source\GUI\ImGuiTweaks.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
+    <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
@@ -762,6 +765,7 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Entities\Text.h" />
+    <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
   </ItemGroup>

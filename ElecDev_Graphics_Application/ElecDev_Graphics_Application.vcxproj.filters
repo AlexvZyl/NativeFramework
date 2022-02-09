@@ -123,6 +123,8 @@
     <ClCompile Include="Source\GUI\ImGuiTweaks.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
+    <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
+    <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1338,6 +1340,8 @@
     <ClInclude Include="Source\GUI\ImGuiTweaks.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\Application\GuiState.h" />
+    <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
+    <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

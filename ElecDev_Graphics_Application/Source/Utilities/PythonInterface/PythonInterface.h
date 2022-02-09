@@ -7,7 +7,6 @@
 
 #include <queue>
 #include <string>
-#include "GUI/GUIState.h"
 
 /*=======================================================================================================================================*/
 /* Forward Declerations.                                                                                                                             */
@@ -51,12 +50,8 @@ class PyInterface
 
 public:
 
-    // ----------------------------------------------- //
-    //  C O N S T R U C T O R   &   D E S T U C T O R  //
-    // ----------------------------------------------- //
-
-    PyInterface(GraphicsHandler* graphicsHandler, GUIHandler* guiHandler, GUIState* guiState);
-    ~PyInterface();
+    // Constructor.
+    PyInterface();
 
     // ------------- //
     //  Q U E U E S  //
@@ -65,14 +60,6 @@ public:
     std::queue<InputQueue> inputQueueWindow;
     std::queue<InputQueue> inputQueue;
     std::queue<OutputQueue> outputQueue;
-
-    // --------------- //
-    //  O B J E C T S  //
-    // --------------- //
-
-    GraphicsHandler* m_graphicsHandler;
-    GUIHandler* m_guiHandler;
-    GUIState* m_guiState;
 
     // ------------------- //
     //  F U N C T I O N S  //

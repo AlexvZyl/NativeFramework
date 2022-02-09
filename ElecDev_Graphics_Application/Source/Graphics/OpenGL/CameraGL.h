@@ -90,7 +90,7 @@ public:
 
 	float m_projectionValues[6];								// Stores the valaues that is used to calculate the projection matrix.
 
-	float m_scaleRate = 0.5f;									// How fast the camera scales.
+	float m_scaleRate = 0.2f;									// How fast the camera scales.
 };
 
 //==============================================================================================================================================//
