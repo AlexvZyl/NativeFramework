@@ -13,25 +13,24 @@
 
 void Application::dispatchEvents()
 {
-	// Remove the layers that are scheduled for removal.
+	// Remove the layers that are queued for removal.  We can only know 
+	// which layers have to be removed after the previous frame is done rendering.
 	m_layerStack->popLayers();
-
+	
 	// Find the hovered layer on a mouse move event.
 	if (m_eventLog->mouseMove)
 	{
-		// If there is no hovered layer we need to check
-		// if a layer is hovered.
+		// If there is no hovered layer, we need to check if a layer is hovered.
 		if (!m_hoveredLayer) onHoveredLayerChange(findhoveredLayer());
 
-		// If the currently hovered layer is no longer being hovered
-		// we need to find the new layer.
+		// If the currently hovered layer is no longer being hovered we need to find the new layer.
 		else if(!m_hoveredLayer->isLayerHovered()) onHoveredLayerChange(findhoveredLayer());
 	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer) 
 	{
-		if (m_eventLog->mouseMove)	 m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
 		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 	
@@ -40,8 +39,7 @@ void Application::dispatchEvents()
 	{
 		uint64_t eventID = event->ID;
 
-		// Application specific are dispatched explicitly 
-		// (since it is not a part of the layers).
+		// Application specific are dispatched explicitly (since it is not a part of the layers).
 		if (eventID == EventType_Application)
 		{
 			Application::onEvent(*event.get()); 
@@ -58,10 +56,9 @@ void Application::dispatchEvents()
 
 	// Dispatch the events that are handled by the layers.
 	// These include things such as window resizes and docking state changes.
-	// They are events that occur and GLFW is not aware of, since layers 
-	// essentially are their own windows.
-	// Currently every layer is checked every frame.  This is not necessary.
-	// The only thing preventing us from only updating only the focused layer is 
+	// They are events that occur and GLFW is not aware of, since layers essentially 
+	// are their own windows.  Currently every layer is checked every frame.  This is not 
+	// necessary.  The only thing preventing us from only updating only the focused layer is 
 	// due to how resizing works when windows are docked.  They do not necessarily
 	// come into focus, missing the resize event.
 	for (auto& layerPair : m_layerStack->getLayers())
@@ -74,11 +71,10 @@ void Application::dispatchEvents()
 Layer* Application::findhoveredLayer() 
 {
 	// Find the layer that is being hovered.
-	// We do not have to worry about order, since 
-	// dear imgui handles it.
+	// We do not have to worry about order, since dear imgui handles it.
 	// This could be optimized by ordering the layer (finding the
-	// layer will happen faster) but we will always have so few layers
-	// it really does not matter.
+	// layer will happen faster) but we will always have very few layers.
+	// Iterated in reverse since the back of the vector is most more likely to be hovered.
 	for (auto& layerPair : m_layerStack->getLayers())
 	{
 		if (layerPair.second->isLayerHovered())
