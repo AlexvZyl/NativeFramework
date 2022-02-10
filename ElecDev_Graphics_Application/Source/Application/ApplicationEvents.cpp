@@ -13,6 +13,10 @@
 
 void Application::dispatchEvents()
 {
+	// Remove the layers that are queued for removal.  We can only know 
+	// which layers have to be removed after the previous frame is done rendering.
+	m_layerStack->popLayers();
+	
 	// Find the hovered layer on a mouse move event.
 	if (m_eventLog->mouseMove)
 	{
@@ -26,7 +30,7 @@ void Application::dispatchEvents()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer) 
 	{
-		if (m_eventLog->mouseMove)	 m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
 		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 	
@@ -62,9 +66,6 @@ void Application::dispatchEvents()
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	m_eventLog->clear();
-	
-	// Remove the layers that are queued for removal.
-	m_layerStack->popLayers();
 }
 
 Layer* Application::findhoveredLayer() 
