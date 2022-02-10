@@ -38,12 +38,12 @@ void LayerStack::popLayers()
 		{
 			int index = it - m_layers.begin();
 			m_layers.erase(m_layers.begin() + index);
-			m_layers.shrink_to_fit();
 		}
 		// Log warning.
 		else std::cout << yellow << "\n[LAYERS] [WARN]: " << white << "Tried to remove a layer that is not on the stack.\n";
 	}
 	// All the layers have been removed.
+	m_layers.shrink_to_fit();
 	m_layerPopQueue.clear();
 	m_layerPopQueue.reserve(m_layers.size());
 }
