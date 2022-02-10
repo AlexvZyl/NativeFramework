@@ -47,7 +47,7 @@ void Toolbar::renderBody()
     // Should not render in these cases.
     if (m_isCollapsed || !m_isOpen || m_isHidden) return;
 
-    float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING;
+    float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
         
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
 

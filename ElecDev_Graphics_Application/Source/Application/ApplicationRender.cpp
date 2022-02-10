@@ -20,15 +20,16 @@ void Application::renderInitialFrame()
 	// Main ribbon dock space.
 	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Up, 0.075f, nullptr, &m_mainDockspaceID);
 	ImGuiDockNode* ribbonDockNode = ImGui::DockBuilderGetNode(ribbonDockID);
+	// FIX THIS!
 	ribbonDockNode->LocalFlags	|= ImGuiDockNodeFlags_NoTabBar			| ImGuiDockNodeFlags_NoDockingInCentralNode	
 								|  ImGuiDockNodeFlags_NoCloseButton		| ImGuiDockNodeFlags_NoDocking
-								|  ImGuiDockNodeFlags_NoDockingSplitMe	| ImGuiDockNodeFlags_NoDockingOverMe;
-	ribbonDockNode->MergedFlags |= ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResize
-		| ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoDocking
-		| ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoDockingOverMe;
-								
+								|  ImGuiDockNodeFlags_NoDockingSplitMe	| ImGuiDockNodeFlags_NoDockingOverMe
+								| ImGuiDockNodeFlags_DockSpace;							
 	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
 	ImGui::DockBuilderFinish(m_mainDockspaceID);
+
+	// Side panels.
+
 
 	// Cleanup.
 	onRenderCleanup();
@@ -57,6 +58,8 @@ void Application::onRender()
 	// Has to be called after the init so all of the ImGui data
 	// is updated.
 	dispatchEvents();
+
+	ImGui::ShowDemoWindow();
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.

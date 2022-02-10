@@ -145,7 +145,17 @@ private:
 	ImFont* m_defaultFont = nullptr;
 	// Renders the initial frame that is required for the dock builder.
 	void renderInitialFrame();
+
+	// --------------------- //
+	//  D O C K   N O D E S  //
+	// --------------------- //
+
+	// The main window dockspace (minus the toolbar).
 	ImGuiID m_mainDockspaceID = NULL;
+	// The side panel where GUIs can displayed.
+	ImGuiID m_sidePanelID = NULL;
+	// The area where the main graphics is displayed.
+	ImGuiID m_sceneViewportID = NULL;
 };
 
 

@@ -134,6 +134,7 @@ void Application::setGuiTheme()
 	style.PopupRounding = 5.0f;
 	style.WindowPadding = ImVec2(1.f, 1.f);
 	style.WindowBorderSize = 0.f;
+	style.DisplaySafeAreaPadding = ImVec2(0, 9);
 
 	ImVec4* colors = ImGui::GetStyle().Colors;
 	colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
