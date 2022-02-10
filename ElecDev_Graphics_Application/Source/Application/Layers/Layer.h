@@ -74,7 +74,7 @@ public:
 	// Get the ImGui dock ID.
 	ImGuiID getDockID();
 	// Get the name of the layer.
-	std::string& getLayerName();
+	std::string getLayerName();
 	// Get the ImGui window associated with the layer.
 	// Should return a vector if the layer has more than one window.
 	bool isLayerHovered();

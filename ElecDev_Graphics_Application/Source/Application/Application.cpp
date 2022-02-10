@@ -36,10 +36,13 @@ Application* Application::m_instance = nullptr;
 Application::Application(GLFWwindow* window) 
 	: m_window(window)
 {
+	// Reset glfw time an application start.
+	glfwSetTime(0);
+
 	// Store a pointer to the instance.
 	Application::m_instance = this;
 
-	//  NOTE:  TO BE DEPRECATED!
+	//  NOTE: TO BE DEPRECATED!
 	m_guiState = std::make_unique<GUIState>();
 
 	// Setup events.
@@ -50,27 +53,27 @@ Application::Application(GLFWwindow* window)
 	// Setup the main gui layer for Lumen.
 	BasicGuiLayer mainToolbar(LayerType_Toolbar, "Main Toolbar");
 	pushLayer<BasicGuiLayer>(&mainToolbar);
-	//BasicGuiLayer mainRibbon(LayerType_Ribbon, "Main Ribbon");
-	//pushLayer<BasicGuiLayer>(&mainRibbon);
+	// Push main ribbon to layerstack.
+	BasicGuiLayer mainRibbon(LayerType_Ribbon, "Main Ribbon");
+	pushLayer<BasicGuiLayer>(&mainRibbon);
+
+	// ImGui Inits.
+	ImGuiIO& io = ImGui::GetIO(); 
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	setGuiTheme();
+
+	// Initialisation frame.
+	renderInitialFrame();
+
+	// --------------- //
+	//  T E S T I N G  //
+	// --------------- //
 
 	// Testing layers.
 	BasicGuiLayer graphicsWindow(LayerType_Design2DEngine, "Graphics Window");
 	pushLayer<BasicGuiLayer>(&graphicsWindow);
 	BasicGuiLayer componentEditor(LayerType_ComponentEditor, "Component Editor");
 	pushLayer<BasicGuiLayer>(&componentEditor);
-
-	// ImGui Inits.
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	setGuiTheme();
-
-	// ------------------------- //
-	//  D O C K   B U I L D E R  //
-	// ------------------------- //
-
-	// Set up the dock space before the rendering starts.
-	// TODO!
-
 }
 
 void Application::shutdown() 

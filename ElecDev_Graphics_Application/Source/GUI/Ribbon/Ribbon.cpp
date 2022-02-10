@@ -24,10 +24,8 @@
 Ribbon::Ribbon(std::string name, int windowFlags)
     : GuiElementCore(name, windowFlags)
 {
-    m_imguiWindowFlags  |=  ImGuiWindowFlags_NoDocking
-                        |   ImGuiWindowFlags_NoMove
-                        |   ImGuiWindowFlags_NoFocusOnAppearing
-                        |   ImGuiWindowFlags_NoDecoration;
+    m_imguiWindowFlags  |=  ImGuiWindowFlags_NoMove
+                        |   ImGuiWindowFlags_NoDecoration;        
 
     // Load texture 1. 
     static BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
@@ -52,22 +50,10 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     image4_width = texture4BM.bmWidth;
     image4_height = texture4BM.bmHeight;
     image4_texture = loadBitmapToGL(texture4BM);
-
-    this->sideBarFlag = "";
-    first[0] = true;
-    first[1] = true;
-    first[2] = true;
 }
 
 void Ribbon::begin()
 {
-    // Dock the ribbon to the top of the viewport.
-    ImGuiViewport* mainViewport = ImGui::GetMainViewport();
-    ImGui::DockBuilderAddNode(mainViewport->ID);
-    ImGuiID dockID = ImGui::DockBuilderSplitNode(mainViewport->ID, ImGuiDir_Down, 0.5f, nullptr, nullptr);
-    ImGui::DockBuilderDockWindow(m_name.c_str(), dockID);
-    ImGui::DockBuilderFinish(mainViewport->ID);
-
     // Remove rounding so that it docks nicely.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     // Setup ribbon.
@@ -84,8 +70,7 @@ void Ribbon::renderBody()
     // Draw MCC.
     if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30)))
     {
-        if (this->sideBarFlag == "Draw MCC") { this->sideBarFlag = "None"; }
-        else { this->sideBarFlag = "Draw MCC"; }
+
     }
 
     ImGui::SameLine();
@@ -93,9 +78,7 @@ void Ribbon::renderBody()
     // Block diagram.
     if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
     {
-        if (this->sideBarFlag == "Block Diagram") { this->sideBarFlag = "None"; }
-        else { this->sideBarFlag = "Block Diagram"; }
-        /*m_guiState->blockDiagram = true;*/
+
     }
  
     ImGui::SameLine();
@@ -103,21 +86,22 @@ void Ribbon::renderBody()
     // Circuit bucket.
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
-        this->sideBarFlag = "Draw Circuit Bucket"; 
+
     }
 
     ImGui::SameLine();
 
     // Add design engine.
     if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 
-    { 
-        //m_guiState->circuitEditor = true; 
+    {
+
     }
 }
 
 void Ribbon::end() 
 {
     ImGui::End();
+    // Pop Window rounding.
     ImGui::PopStyleVar();
 }
 

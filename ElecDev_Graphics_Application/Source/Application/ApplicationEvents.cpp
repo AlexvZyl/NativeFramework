@@ -64,8 +64,8 @@ void Application::dispatchEvents()
 	// The only thing preventing us from only updating only the focused layer is 
 	// due to how resizing works when windows are docked.  They do not necessarily
 	// come into focus, missing the resize event.
-	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
-		layer->dispatchLayerEvents();
+	for (auto& layerPair : m_layerStack->getLayers())
+		layerPair.second->dispatchLayerEvents();
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	m_eventLog->clear();
@@ -79,11 +79,10 @@ Layer* Application::findhoveredLayer()
 	// This could be optimized by ordering the layer (finding the
 	// layer will happen faster) but we will always have so few layers
 	// it really does not matter.
-	std::vector<std::unique_ptr<Layer>>& layers = m_layerStack->getLayers();
-	for (int i = layers.size() - 1; i >= 0; i--)
+	for (auto& layerPair : m_layerStack->getLayers())
 	{
-		if (layers[i]->isLayerHovered())
-			return layers[i].get();
+		if (layerPair.second->isLayerHovered())
+			return layerPair.second.get();
 	}
 	// No layer is found.
 	return nullptr;

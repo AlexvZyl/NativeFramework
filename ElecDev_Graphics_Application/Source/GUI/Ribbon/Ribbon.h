@@ -51,12 +51,9 @@ private:
 	int image4_height;
 	GLuint image4_texture;
     bool ret3;
-	std::string sideBarFlag;
 	ImVec2 MCCPos;
 	ImGuiID* dock;
 	ImGuiID left;
-	bool first[3];
-	
 };
 
 //==============================================================================================================================================//

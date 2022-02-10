@@ -75,7 +75,8 @@ void GraphicsScene::renderBody()
 	//if (m_isCollapsed || !m_isOpen || m_isHidden) return;
 	if (m_isCollapsed || m_isHidden) return;
 
-	m_engine->onRender();
+	// Everything breaks when this stops being called, i.e. when m_isOpen = false.
+	m_engine->onRender();  
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 

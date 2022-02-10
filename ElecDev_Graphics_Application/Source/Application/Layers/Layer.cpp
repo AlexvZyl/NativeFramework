@@ -85,7 +85,7 @@ ImGuiID Layer::getDockID()
 	return m_dockID;
 }
 
-std::string& Layer::getLayerName() 
+std::string Layer::getLayerName() 
 {
 	return m_layerName;
 }

@@ -143,7 +143,9 @@ private:
 	void setGuiTheme();
 	// The default font used.
 	ImFont* m_defaultFont = nullptr;
-
+	// Renders the initial frame that is required for the dock builder.
+	void renderInitialFrame();
+	ImGuiID m_mainDockspaceID = NULL;
 };
 
 

@@ -65,7 +65,7 @@ void main()
 		float sd = median(msd.r, msd.g, msd.b);
 		float screenPxDistance = screenPxRangeTemp * (sd - 0.5);
 		float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
-		if (opacity < 0.5)
+		if (opacity < 0.1)
 			discard;
 		o_color.rgb = f_color.rgb;
 		o_color.a = opacity;

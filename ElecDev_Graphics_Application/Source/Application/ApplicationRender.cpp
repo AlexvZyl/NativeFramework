@@ -12,6 +12,28 @@
 //  Rendering.																																	//
 //==============================================================================================================================================//
 
+void Application::renderInitialFrame() 
+{	
+	// Init.
+	onRenderInit();
+
+	// Main ribbon dock space.
+	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Up, 0.075f, nullptr, &m_mainDockspaceID);
+	ImGuiDockNode* ribbonDockNode = ImGui::DockBuilderGetNode(ribbonDockID);
+	ribbonDockNode->LocalFlags	|= ImGuiDockNodeFlags_NoTabBar			| ImGuiDockNodeFlags_NoDockingInCentralNode	
+								|  ImGuiDockNodeFlags_NoCloseButton		| ImGuiDockNodeFlags_NoDocking
+								|  ImGuiDockNodeFlags_NoDockingSplitMe	| ImGuiDockNodeFlags_NoDockingOverMe;
+	ribbonDockNode->MergedFlags |= ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResize
+		| ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoDocking
+		| ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoDockingOverMe;
+								
+	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
+	ImGui::DockBuilderFinish(m_mainDockspaceID);
+
+	// Cleanup.
+	onRenderCleanup();
+}
+
 void Application::onRenderInit()
 {
 	// Feed inputs to ImGUI, start new frame.
@@ -20,14 +42,14 @@ void Application::onRenderInit()
 	ImGui::NewFrame();
 
 	// Enable main viewport docking.
-	ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
+	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
 
 	// Push custom font.
 	ImGui::PushFont(m_defaultFont);
 }
 
 void Application::onRender()
-{
+{	
 	// Init.
 	onRenderInit();
 
@@ -38,8 +60,8 @@ void Application::onRender()
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.
-	for (std::unique_ptr<Layer>& layer : m_layerStack->getLayers())
-		layer->onRender();
+	for (auto& layerPair : m_layerStack->getLayers())
+		layerPair.second->onRender();
 
 	// Cleanup.
 	onRenderCleanup();

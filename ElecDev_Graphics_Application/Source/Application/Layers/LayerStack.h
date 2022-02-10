@@ -10,6 +10,7 @@
 #include <memory>
 #include "Application/Layers/Layer.h"
 #include <string>
+#include <map>
 
 //==============================================================================================================================================//
 //  Layer Stack.																																//
@@ -35,12 +36,12 @@ public:
 	// It should be done in the following frame.
 
 	// Get the layers in the stack.
-	std::vector<std::unique_ptr<Layer>>& getLayers();
+	std::map<std::string, std::unique_ptr<Layer>>& getLayers();
 
 private:
 
 	// Vector containing all of the layers.
-	std::vector<std::unique_ptr<Layer>> m_layers;
+	std::map<std::string, std::unique_ptr<Layer>> m_layers;
 	// Layers that are queued for removal.
 	std::vector<Layer*> m_layerPopQueue;
 
@@ -70,7 +71,7 @@ void LayerStack::pushLayer(Layer& layer)
 	m_totalLayerCount++;
 	layer.changeName(newName);
 	// Push the layer.
-	m_layers.emplace_back(std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))));
+	m_layers.insert({ layer.getLayerName(), std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))) });
 	m_layerPopQueue.reserve(m_layers.size());
 }
 

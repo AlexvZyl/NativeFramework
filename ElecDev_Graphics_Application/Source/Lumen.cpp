@@ -51,9 +51,6 @@ int main(int, char**)
     double currTime = 0;
     double prevTime = 0;
 
-    // Reset glfw time.
-    glfwSetTime(0);
-
     // [MAIN LOOP].
     while (!application.shouldWindowClose())
     {
