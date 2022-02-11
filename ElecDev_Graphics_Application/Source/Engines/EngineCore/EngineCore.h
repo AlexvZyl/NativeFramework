@@ -36,7 +36,7 @@ class EngineCore
 public:
 
 	// Constructor
-	EngineCore() = default;
+	EngineCore();
 
 	// ---------- //
 	//  S C E N E //
