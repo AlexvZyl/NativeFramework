@@ -215,7 +215,7 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 ### Entities
 
-Now that we know how `Events` work, we need to be able to detect if our mouse is over a specific entity.  For that Lumen has an `EntityManager` that assign entity IDs.  It is not important for the end user to know how this is done.  The following example changes the color of an entity if it is pressed:
+Now that we know how `Events` work, we need to be able to detect if our mouse is over a specific `Entity`.  For that Lumen has an `EntityManager` that assign entity IDs.  It is not important for the end user to know how this is done.  The following example changes the color of an entity if it is pressed:
 
 ```C++
 #include "Engines/My2DEngine/My2DEngine.h"
