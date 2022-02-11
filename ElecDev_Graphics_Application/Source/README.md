@@ -1,3 +1,85 @@
 # Lumen Documentation
 
-This is the non official documentation of the Lumen Graphics Engine.  This contains information for new team members to get up and running with rendering inside of Lumen.  No knowledge of backend is required!
+This is the non official documentation of the Lumen Graphics Engine.  This contains information for new team members to get up and running with rendering inside of Lumen.  No knowledge of the backend is required!
+
+Lumen has its own implementation of a graphics renderer.  We did this so that we are not limited by the API of someone else's work and so that we can change and implement whatever we want.  This turned out to be very beneficial.  For example, we render text based on a new method of SDF's that someone developed in his Master's degree in graphics.  We would have no control over this if we had to use someone else's (high level) library.  Currently our renderer only supports an OpenGL backend, however we have plans to implement a Vulkan renderer in the future.
+
+## Prelude
+
+We use GLM for matrices, vectors, linear algebra etc.  The GitHub repo can be found [here](https://github.com/g-truc/glm).  Some example usage:
+
+```C++
+// Vector examples.
+glm::vec2 myVec2(1.f, 1.f);
+glm::vec3 myVec3(1.f, 1.f, 1.f);
+glm::vec4 myVec4(1.f, 1.f, 1.f, 1.f);
+
+// Matrix examples.
+glm::mat4 myMat4(1.f);  // Identity matrix.
+glm::mat4 myProjectionMatrix = glm::perspective(glm::pi<float>() * 0.25f, 4.0f / 3.0f, 0.1f, 100.f);
+
+// Manipulating matrices.
+glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -0.5f));
+View = glm::rotate(View, 3.f, glm::vec3(-1.0f, 0.0f, 0.0f));
+View = glm::rotate(View, 4.f, glm::vec3(0.0f, 1.0f, 0.0f));
+glm::mat4 Model = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
+```
+
+A very handy feature is the fact that glm vectors can be interpreted as position or color data:
+
+```C++
+glm::vec4 myVec4(0.1f, 0.2f, 0.3f, 0.4f);
+
+// Position data.
+float x = myVec4.x;  // 0.1f
+float y = myVec4.y;  // 0.2f
+float z = myVec4.z;  // 0.3f
+float w = myVec4.w;  // 0.4f
+
+// Color data.
+float r = myVec4.r;  // 0.1f
+float g = myVec4.g;  // 0.2f
+float b = myVec4.b;  // 0.3f
+float a = myVec4.a;  // 0.4f
+```
+
+## The Renderer
+
+In Lumen we have a static `Renderer` class.  This means that there is never going to be an instantation of `Renderer` (the constructor is pricvate).  `Renderer` contains static variables and the functions make use of these variables.  So, instead of having to do this every time:
+
+```C++
+Renderer renderer(...);
+renderer.function(...);
+```
+
+We simply do:
+
+```C++
+Renderer::function(...);
+```
+
+Lumen supports rendering to multiple scenes (as many as the user requires).  This is implemented by using a `Scene` class.  The contents of `Scene` is not of importance to the end user, but it contains all of the data that a graphics API requires to render a scene.  It includes things such as Vertex Array Objects, Framebuffer Objects, a camera, textures etc.  However, recall that the `Renderer` uses static variables, so this means we have to tell the `Renderer` to which `Scene` it has to render:
+
+```C++
+Scene scene(cameraType, width, height);
+Renderer::bindScene(&scene);
+```
+
+When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the end user, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the end user actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of how Lumen works.)
+
+Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/0814da386d05905ef036a09c9e1702bbf65c0c1f/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
+
+```
+Scene scene(CameraType::Standard2D, 900, 900)
+Renderer::bindScene(&scene);
+Renderer::addCircle2D();
+Renderer::unbindScene();  // Optional.
+```
+
+
+
+## Creating An Engine
+
+### Layers
+
+### Events
