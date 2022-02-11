@@ -65,7 +65,7 @@ Scene scene(cameraType, width, height);
 Renderer::bindScene(&scene);
 ```
 
-When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the end user, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the end user actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of how Lumen works.)
+When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the end user, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the end user actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of the `Renderer` works.)
 
 Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/0814da386d05905ef036a09c9e1702bbf65c0c1f/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
 
@@ -76,19 +76,62 @@ Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1
 Renderer::unbindScene();  // Optional.
 ```
 
-Now our `Scene` has a black circle, with radius 0.5, around the center.  However, static circles are of little use to us, so let us start manupulating it.
+Now our `Scene` has a black circle, with radius 0.5, around the center.  However, static circles are of little use to us, so let us start manipulating it.
 
 ```C++
 Scene scene(CameraType::Standard2D, 900, 900);
 Renderer::bindScene(&scene);
 Circle* myCircle = Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1.f));
 myCircle->translate(glm::vec2(1.f, 1.f));
+myCircle->setColor(glm::vec4(1.f, 1.f, 1.f, 1.f));
+myCircle->scale(glm::vec3(2.f, 2.f, 1.f););
 Renderer::unbindScene();  // Optional.
 ```
 
-Now our circle is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the end user.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the current component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
+Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the end user.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the current component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
 
 ## Creating An Engine
+
+The next step is to create an environment where we can manipulate, add and remove `Entities` contained in the `Scene`.  This is where `Engines` come in.  There are 3 `Engines` that are internal to Lumen, namely `EngineCore`, `Base2DEngine` and `Base3DEngine`.  The following examples shows how to set up a 2D enginge.  An example My2DEngine.h:
+
+```C++
+
+#include "Engines/Base2DEngine/Base2DEngine.h"
+
+class My2DEngine : public Base2DEngine
+{
+public:
+
+    // Constructor.
+    My2DEngine();
+    // Destructor.
+    ~My2DEngine() = default;
+    
+    // Mouse events.
+    virtual void onMouseButtonEvent(MouseButtonEvent& event) override;
+    virtual void onMouseMoveEvent(MouseMoveEvent& event) override;
+    virtual void onMouseScrollEvent(MouseScrollEvent& event) override;
+    // Key events.
+    virtual void onKeyEvent(KeyEvent& event) override;
+    
+    // Example primitives.  Ideally these should be Entities created by the end user.
+    Circle* myCircle1 = nullptr;
+    Circle* myCircle2 = nullptr;
+}
+
+```
+
+We created an `Engine` that includes functionality already contained inside `EngineCore` and `Base2DEngine`.  The `Base2DEngine` comes with things such as a `Scene` and basic 2D camera controls.  For more information on what these classes include, take a look at the [Engines](https://github.com/AlexEnerdyne/Lumen/tree/Main/ElecDev_Graphics_Application/Source/Engines).  An example My2DEngine.cpp:
+
+```C++
+
+#include "Engines/My2DEngine/My2DEngine.h"
+
+
+
+```
+
+### Entities
 
 ### Layers
 
