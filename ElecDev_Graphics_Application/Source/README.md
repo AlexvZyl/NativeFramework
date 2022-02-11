@@ -264,4 +264,12 @@ TODO: Cullen to add a section on `Entity` parents.
 
 ### Layers
 
+`My2DEngine` is now fully functioning.  There is only one last thing to do, we need it to be displayed in a window inside Lumen.  This is as easy as:
+
+```C++
+// Include Application.h
+Application::get().pushLayer<My2DEngine>("Our Engine Name!");
+```
+
+And now it will be showing in a window inside Lumen!  Due to how `templates` work, we do not have to change anything inside Lumen, it can display any type of custom engine any end user decides to create.  `Application::get()` is a static function that gives us a pointer to the singleton application, so this can be called from anywhere inside Lumen.
 
