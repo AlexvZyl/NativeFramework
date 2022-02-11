@@ -245,7 +245,8 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
         unsigned entityID = getEntityID(event.mousePosition);
         
         // Now that we have the ID of the entity, we have to retrieve it
-        // from the EntityManager.
+        // from the EntityManager.  Note that this function takes the
+        // mouse coordinate in pixels.
         Entity* entity = EntityManager::getEntity(entityID);
         
         // We need to check if there is an entity.  If there is no entity
