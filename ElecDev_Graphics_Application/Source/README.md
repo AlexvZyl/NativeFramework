@@ -241,12 +241,12 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
         glm::vec3 worldSpaceCoordinates = m_scene->pixelCoordsToWorldCoords(event.mousePosition);
         
         // First we need to retrieve the ID of the entity that the mouse is on.
-        // This is a function that we get from EngineCore.
+        // This is a function that we get from EngineCore.  Note that this function 
+        // takes the mouse coordinate in pixels.
         unsigned entityID = getEntityID(event.mousePosition);
         
         // Now that we have the ID of the entity, we have to retrieve it
-        // from the EntityManager.  Note that this function takes the
-        // mouse coordinate in pixels.
+        // from the EntityManager.
         Entity* entity = EntityManager::getEntity(entityID);
         
         // We need to check if there is an entity.  If there is no entity
