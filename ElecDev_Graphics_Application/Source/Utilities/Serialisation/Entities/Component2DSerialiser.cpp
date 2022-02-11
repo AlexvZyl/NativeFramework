@@ -3,8 +3,8 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Component2D.h"
-#include "CoreGL/FontLoaderGL.h"
+#include "Engines/Design2DEngine/Peripherals/Component2D.h"
+#include "OpenGL/FontLoaderGL.h"
 
 //=============================================================================================================================================//
 //  Component 2D serialiser.   																												   //

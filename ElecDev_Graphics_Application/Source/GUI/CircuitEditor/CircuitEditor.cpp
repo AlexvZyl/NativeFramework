@@ -2,10 +2,10 @@
 /* Includes.																															 */
 /*=======================================================================================================================================*/
 
-#include "GUI/guiHandler.h"
 #include "CircuitEditor.h"
 #include "Graphics/graphicsHandler.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
+#include "GUI/guiHandler.h"
 
 /*=======================================================================================================================================*/
 /* Circuit Editor.																													 */

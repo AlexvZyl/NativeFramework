@@ -1,138 +1,91 @@
-/*=======================================================================================================================================*/
-/* Include.	                                                                                                                             */
-/*=======================================================================================================================================*/
+//==============================================================================================================================================//
+//  Includes.																																	//
+//==============================================================================================================================================//
 
 #include "GraphicsScene.h"
-#include <Core/imgui.h>
-#include <iostream>
-#include <cmath>
-#include <cfenv>
-#include <string>
-#include "Graphics/graphicsHandler.h"
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include <Core/imgui_internal.h>
-#include "../PopUpMenu/PopUpMenu.h"
+#include "External/ImGUI/Core/imgui.h"
+#include "Application/Events/Events.h"
+#include "Application/Layers/Layer.h"
+#include "Engines/EngineCore/EngineCore.h"
+#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Engines/Base3DEngine/Base3DEngine.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
 
-#include "../GUIState.h"
-
-
-/*=======================================================================================================================================*/
-/* Declarations                                                                                                                          */
-/*=======================================================================================================================================*/
+//==============================================================================================================================================//
+//  Constructor.																																//
+//==============================================================================================================================================//
 
 // Constructor.
-GraphicsScene::GraphicsScene(GUIState* guiState, GraphicsHandler* graphicsHandler)
-	: m_guiState(guiState), graphicsHandler(graphicsHandler)
+GraphicsScene::GraphicsScene(uint64_t ID, std::string name, int windowFlags)
+	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {
-	this->pos.x = 0;
-	this->pos.y = 0;
-	this->dock = 0;
+	// Create the engine component.
+	if		(ID == LayerType_Base2DEngine)	 m_engine = std::make_unique<Base2DEngine>();
+	else if (ID == LayerType_Base3DEngine)	 m_engine = std::make_unique<Base3DEngine>();
+	else if (ID == LayerType_Design2DEngine) m_engine = std::make_unique<Design2DEngine>();
+	else if (ID == LayerType_Design3DEngine) m_engine = nullptr;
+
+	// Set the texture to be rendred.
+	m_textureID = (void*)m_engine->getRenderTexture();
 }
 
-GraphicsScene::~GraphicsScene(){}
+//==============================================================================================================================================//
+//  EVents.																																		//
+//==============================================================================================================================================//
 
-/*=======================================================================================================================================*/
-/* Declarations                                                                                                                          */
-/*=======================================================================================================================================*/
-
-// Render the graphics scene.
-void GraphicsScene::renderGraphics(ImGuiID dock)
+void GraphicsScene::onEvent(Event& event) 
 {
-	bool open = true;
-	if (graphicsHandler->m_windowsDictionary.size() != 0) {
-		std::vector<std::string> toRemove;
+	// Pass events to gui element.
+	GuiElementCore::onEvent(event);
 
-		// ----------------------------- //
-		//  R E N D E R   W I N D O W S  //
-		// ----------------------------- //
+	// The engine must be aware of these events, even if it is closed.
+	uint64_t eventID = event.ID;
+	if (eventID == EventType_Hover || eventID == EventType_Dehover || eventID == EventType_Focus || eventID == EventType_Defocus)
+		m_engine->onEvent(event);
 
-		// Iterate through all of the render windows.
-		for (auto const& [name, window] : graphicsHandler->m_windowsDictionary)
-		{
-			ImGui::SetNextWindowDockID(dock, ImGuiCond_Once);
-			if (window->close)
-			{
-				if (ImGui::Begin(window->engineGL->m_contextName.c_str(), &window->close))
-				{
-					// Using a Child allow to fill all the space of the window.
-					// It also allows customization
-					std::string childName = name + "Render";
-					ImGui::BeginChild(childName.c_str());
-					m_guiState->renderWindowHovered = ImGui::IsWindowHovered();
-					window->isHovered = ImGui::IsWindowHovered();
-					window->isFocused = ImGui::IsWindowFocused();
-					ImVec2 temp = ImGui::GetIO().MousePos;
-					window->mouseCoords[0] = temp.x - ImGui::GetWindowPos().x;
-					window->mouseCoords[1] = temp.y - ImGui::GetWindowPos().y;
+	// Do not pass events to the engine in these cases.
+	else if (m_isCollapsed || !m_isOpen || m_isHidden) return;
 
-					// Check for resize event.
-					ImVec2 windowSize = ImGui::GetWindowSize();
-					if (windowSize.x != window->viewportDimentions[0] || windowSize.y != window->viewportDimentions[1])
-					{
-						window->resizeEvent = true;
-						window->viewportDimentions[0] = windowSize[0];
-						window->viewportDimentions[1] = windowSize[1];
-					}
-
-					// ----------- //
-					//  F O C U S  //
-					// ----------- //
-
-					// Set the active engineGL.
-					if (window->isHovered)
-					{ 
-						graphicsHandler->m_activeWindow = graphicsHandler->m_windowsDictionary[name];
-						m_guiState->design_engine = reinterpret_cast<Design2DEngineGL*>(graphicsHandler->m_activeWindow->engineGL.get());
-					}
-					// If the window is not focused.
-					else
-					{
-						// If the active engineGL is the current engineGL, disable.
-						if (graphicsHandler->isActiveWindowValid()) {
-							if (name == graphicsHandler->m_activeWindow->windowName) {
-								graphicsHandler->m_activeWindow = NULL;
-							}
-						}
-
-						// Reset mouse coordinates when it moves outside of the window.
-						window->engineGL->m_prevMouseEventWorldVec[0] = NULL;
-						window->engineGL->m_prevMouseEventWorldVec[1] = NULL;
-						window->engineGL->m_prevMouseEventWorldVec[2] = NULL;
-						window->engineGL->m_prevMouseEventPixelCoords[0] = NULL;
-						window->engineGL->m_prevMouseEventPixelCoords[1] = NULL;
-					}
-
-					if (ImGui::GetWindowSize().x != pos.x || ImGui::GetWindowSize().y != pos.y) {
-						m_guiState->renderResizeEvent = true;
-						ImVec2 temp = ImGui::GetWindowSize();
-						m_guiState->renderWindowSize[0] = temp[0];
-						m_guiState->renderWindowSize[1] = temp[1];
-					}
-					pos.x = ImGui::GetWindowSize().x;
-					pos.y = ImGui::GetWindowSize().y;
-					// Get the size of the child (i.e. the whole draw size of the windows).
-					ImVec2 wsize = ImGui::GetWindowSize();
-					// Because I use the texture from OpenGL, I need to invert the V from the UV.
-					window->engineGL->renderLoop();
-					ImGui::Image((ImTextureID)window->engineGL->getRenderTexture(), wsize, ImVec2(0, 1), ImVec2(1, 0));
-
-					// End.
-					ImGui::EndChild();
-				}
-				ImGui::End();
-			}
-			// Add window to remove.
-			else 
-			{ 
-				toRemove.push_back(name.c_str()); 
-				m_guiState->componentEditor = false;
-			}
-		}
-		// Remove windows that have been closed.
-		for (auto remove : toRemove) { graphicsHandler->removeWindow(remove); }
-	}
+	// Pass events to the engine.
+	m_engine->onEvent(event);
 }
 
-/*=======================================================================================================================================*/
-/* EOF                                                                                                                                   */
-/*=======================================================================================================================================*/
+//==============================================================================================================================================//
+//  Rendering.																																	//
+//==============================================================================================================================================//
+
+EngineCore* GraphicsScene::getEngine() 
+{
+	return m_engine.get();
+}
+
+void GraphicsScene::begin()
+{
+	// Setup.
+	ImGui::SetNextWindowSize(ImVec2(400,400), ImGuiCond_Once);
+
+	// Remove window padding.
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
+	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+}
+
+void GraphicsScene::renderBody() 
+{
+	// Should not render the engine in these cases.
+	//if (m_isCollapsed || !m_isOpen || m_isHidden) return;
+	if (m_isCollapsed || m_isHidden) return;
+
+	// Everything breaks when this stops being called, i.e. when m_isOpen = false.
+	m_engine->onRender();  
+	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+}
+
+void GraphicsScene::end()
+{
+	ImGui::End();
+	ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
+}
+
+//==============================================================================================================================================//
+//  EOF.																																		//
+//==============================================================================================================================================//

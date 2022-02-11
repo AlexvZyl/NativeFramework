@@ -3,11 +3,11 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Circuit.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Design2D_Engine.h"
-#include "Graphics/OpenGL/Design2DEngineGL/Peripherals/Port.h"
-#include "CoreGL/RendererGL.h"
-#include "CoreGL/Entities/EntityManager.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "OpenGL/RendererGL.h"
+#include "OpenGL/Entities/EntityManager.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //
@@ -64,7 +64,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ci
 //  Single Circuit deserialiser.																											   //
 //=============================================================================================================================================//
 
-void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine)
+void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 {
 	// Context.
 	Renderer::bindScene(engine.m_scene.get());

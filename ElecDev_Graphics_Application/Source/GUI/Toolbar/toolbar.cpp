@@ -2,88 +2,107 @@
 /* Includes                                                                                                                              */
 /*=======================================================================================================================================*/
 
-#include <Core/imgui.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
 #include <cfenv>
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Graphics/graphicsHandler.h"
+#include <GLFW/glfw3.h>
+#include "Lumen.h"
+#include "Resources/ResourceHandler.h"
+#include "External/ImGUI/Core/imgui.h"
+#include "External/ImGUI/Core/imgui_internal.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(GUIState* guiState, GraphicsHandler* graphicsHandler)
-    : m_guiState(guiState), m_graphicsHandler(graphicsHandler)
+Toolbar::Toolbar(std::string& name, int windowFlags)
+    : GuiElementCore(name, windowFlags)
 {
-    this->my_tool_active = true;
-    this->show_app_main_menu_bar = false;
-    this->show_app_documents = false;
-
-    this->show_app_console = false;
-    this->show_app_log = false;
-    this->show_app_layout = false;
-    this->show_app_property_editor = false;
-    this->show_app_long_text = false;
-    this->show_app_auto_resize = false;
-    this->show_app_constrained_resize = false;
-    this->show_app_simple_overlay = false;
-    this->show_app_fullscreen = false;
-    this->show_app_window_titles = false;
-    this->show_app_custom_rendering = false;
-
-    this->show_app_metrics = false;
-    this->show_app_style_editor = false;
-    this->show_app_about = false;
-
-    this->no_titlebar = false;
-    this->no_scrollbar = false;
-    this->no_menu = false;
-    this->no_move = false;
-    this->no_resize = false;
-    this->no_collapse = false;
-    this->no_close = false;
-    this->no_nav = false;
-    this->no_background = false;
-    this->no_bring_to_front = false;
-    this->unsaved_document = false;
-    this->my_tool_active = true;
-};
+    // Load texture 1. 
+    static BITMAP textureBM = loadImageFromResource(ICON_PNG);
+    m_texWidth = textureBM.bmWidth;
+    m_texHeight = textureBM.bmHeight;
+    m_texID = loadBitmapToGL(textureBM);
+}
 
 /*=======================================================================================================================================*/
-/* Functions                                                                                                                             */
+/* Rendering                                                                                                                             */
 /*=======================================================================================================================================*/
 
-void Toolbar::renderToolbar()
+void Toolbar::begin() 
 {
-    if (ImGui::BeginMainMenuBar())
+    // Remove rounding so that it docks nicely.
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    // Set the size of the toolbar.
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
+    // Begin.
+    m_isOpen = ImGui::BeginMainMenuBar();
+}
+
+void Toolbar::renderBody()
+{
+    // Should not render in these cases.
+    if (m_isCollapsed || !m_isOpen || m_isHidden) return;
+
+    float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
+        
+    ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
+
+    if (ImGui::BeginMenu("File"))
     {
-        if (ImGui::BeginMenu("File"))
+        if (ImGui::MenuItem("Load..", "Ctrl+O"))
         {
-            if (ImGui::MenuItem("Load..", "Ctrl+O")) 
-            {
-                m_graphicsHandler->m_loadEvent.eventTrigger = true;
-                m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");
-            }
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { m_guiState->globalQuit = true; }
-            ImGui::EndMenu();
+            /*m_graphicsHandler->m_loadEvent.eventTrigger = true;
+            m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");*/
         }
-        if (ImGui::BeginMenu("Edit"))
+        if (ImGui::MenuItem("Close", "Ctrl+W"))
         {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-            ImGui::EndMenu();
+            /*m_guiState->globalQuit = true; */
         }
-        ImGui::EndMainMenuBar();
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Edit"))
+    {
+        if (ImGui::MenuItem("Undo", "CTRL+Z"))
+        {
+
+        }
+        if (ImGui::MenuItem("Redo", "CTRL+Y", false, false))
+        {
+
+        }
+
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Cut", "CTRL+X"))
+        {
+
+        }
+        if (ImGui::MenuItem("Copy", "CTRL+C"))
+        {
+
+        }
+        if (ImGui::MenuItem("Paste", "CTRL+V"))
+        {
+
+        }
+
+        ImGui::EndMenu();
     }
 };
+
+void Toolbar::end()
+{
+    ImGui::EndMainMenuBar();
+    // Pop frame rounding and padding.
+    ImGui::PopStyleVar();
+    ImGui::PopStyleVar();
+}
 
 /*=======================================================================================================================================*/
 /* EOF.                                                                                                                                  */

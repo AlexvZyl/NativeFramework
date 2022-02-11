@@ -19,7 +19,7 @@ storing circuit templates/diagrams in a YAML format.
 
 // Classes.
 class Circuit;
-class Design2DEngineGL;
+class Design2DEngine;
 class Port;
 class Component2D;
 class Cable;
@@ -50,9 +50,9 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string path, std::string 
 // Serialise a circuit to a BIN file.
 void saveToBIN(std::shared_ptr<Circuit> circuit, std::string folder = "");
 // Load a circuit from a YAML file.
-void loadFromYAML(Design2DEngineGL& engine, std::string path);
+void loadFromYAML(Design2DEngine& engine, std::string path);
 // Deserialise a circuit from a BIN file.
-void loadFromBIN(Design2DEngineGL& engine, std::string path);
+void loadFromBIN(Design2DEngine& engine, std::string path);
 
 //=============================================================================================================================================//
 //  Circuits.																																   //
@@ -63,7 +63,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit> circu
 // Overloads the << operator so that YAML-cpp can work with circuits.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>> circuitVector);
 // Deserialise a single circuit.
-void deserialise(YAML::Node& yamlNode, Design2DEngineGL& engine);
+void deserialise(YAML::Node& yamlNode, Design2DEngine& engine);
 
 //=============================================================================================================================================//
 //  Ports.																																	   //

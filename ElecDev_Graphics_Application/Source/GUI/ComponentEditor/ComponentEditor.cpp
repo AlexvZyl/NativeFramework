@@ -1,172 +1,171 @@
+#pragma once
+
 /*=======================================================================================================================================*/
 /* Includes.																															 */
 /*=======================================================================================================================================*/
-#pragma once
-//#include "GUI/guiHandler.h"
+
+#include "External/ImGUI/Core/imgui.h"
 #include "ComponentEditor.h"
-#include "Design2DEngineGL/Peripherals/Component2D.h"
-#include "Design2DEngineGL/Peripherals/Port.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
-#include "CoreGL/RendererGL.h"
+#include "OpenGL/RendererGL.h"
+#include "Engines/Design2DEngine/Peripherals/Component2D.h"
+#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/Application.h"	
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
 /*=======================================================================================================================================*/
 
-ComponentEditor::ComponentEditor(GUIState* guiState, GraphicsHandler* graphicsHandler)
-	: m_guiState(guiState), m_graphicsHandler(graphicsHandler)
+ComponentEditor::ComponentEditor(std::string name, int windowFlags)
+	: GuiElementCore(name, windowFlags)
 {}
 
-void ComponentEditor::render() 
+void ComponentEditor::begin() 
 {
-	// Save the editor context.
-	if (!m_contextSaved) 
-	{
-		m_windowContext = m_graphicsHandler->m_activeWindow->windowName;
-		m_contextSaved = true;
-	}
+	// Place editor at correct position.
+	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
+	// FIX ME!! The wondow size should be set dynamically
+	ImGui::SetNextWindowSize(ImVec2{ 465.f, 400 }, ImGuiCond_Once);
+	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+}
 
-	// If we are not in a design engine, we should not be here.
-	// We need to implement a check for this.
-
+void ComponentEditor::renderBody()
+{
 	//	Fetch The active component.
-	Component2D* activeComponent = m_guiState->active_component;
+	Component2D* activeComponent = Application::get().m_guiState->active_component;
 	//check that the active component exists. Close if not.
-	if (!activeComponent) 
+	if (!activeComponent)
 	{
-		m_guiState->componentEditor = false;
+		Application::get().m_guiState->componentEditor = false;
 		return;
 	}
 
-	// Place editor at correct position.
-	//ImGui::SetNextWindowPos(m_guiState->popUpPosition);
-	// Editor menu.
+	// Should not render if closed or collapsed.
+	if (m_isCollapsed || !m_isOpen) return;
+
 	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
-	//FIX ME!! The wondow size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2 {465.f, 400}, ImGuiCond_Once);
-	ImGui::Begin("Comoponent Editor", &m_guiState->componentEditor, ImGuiWindowFlags_NoDocking);
-
-	//ImGui::Button("New MCC");
-	//ImGui::CollapsingHeader("Ports");
-	ImGui::Text("Component Name:");
 	ImGui::SameLine();
-	if (ImGui::InputText("##ComponentName", &activeComponent->titleString)) 
+	ImGui::SameLine();
+	if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 	{
 		activeComponent->title->updateText(activeComponent->titleString);
 	}
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	if (ImGui::TreeNode("Ports")) 
+	if (ImGui::TreeNode("Ports"))
 	{
-		// Set the active window.
-		m_graphicsHandler->m_activeWindow = m_graphicsHandler->m_windowsDictionary[m_windowContext];
-
 		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit);
 		//ImGui::SetColumnWidth(1, 20.f);
 
 			//Setup table
-			ImGui::TableSetupColumn("Location    ");
-			ImGui::TableSetupColumn("Port Name");
-			ImGui::TableSetupColumn("I/O Type       ");
-			ImGui::TableHeadersRow();
+		ImGui::TableSetupColumn("Location    ");
+		ImGui::TableSetupColumn("Port Name");
+		ImGui::TableSetupColumn("I/O Type       ");
+		ImGui::TableHeadersRow();
 
-			ImGui::TableNextRow();
-			std::vector<std::vector<std::shared_ptr<Port>>> allPorts = {activeComponent->portsWest, 
-																	    activeComponent->portsEast,
-																	    activeComponent->portsNorth,
-																	    activeComponent->portsSouth};
+		ImGui::TableNextRow();
+		std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
+																	activeComponent->portsEast,
+																	activeComponent->portsNorth,
+																	activeComponent->portsSouth };
 
-			std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
+		std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
 
-			for (int i = 0; i < allPorts.size(); i++) 
+		for (int i = 0; i < allPorts.size(); i++)
+		{
+			std::vector<std::shared_ptr<Port>> portsSide = allPorts[i];
+			int j = 0;
+			for (std::shared_ptr<Port> port : portsSide)
 			{
-				std::vector<std::shared_ptr<Port>> portsSide = allPorts[i];
-				int j = 0;
-				for (std::shared_ptr<Port> port : portsSide) 
-				{
-					// Table labels.
-					char labelName[20];
-					sprintf_s(labelName, "##N%d,%d", i, j);
-					char labelPos[20];
-					sprintf_s(labelPos, "##P%d,%d", i, j);
-					char labelType[20];
-					sprintf_s(labelType, "##T%d,%d", i, j);
-					char labelRemove[20];
-					sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
+				// Table labels.
+				char labelName[20];
+				sprintf_s(labelName, "##N%d,%d", i, j);
+				char labelPos[20];
+				sprintf_s(labelPos, "##P%d,%d", i, j);
+				char labelType[20];
+				sprintf_s(labelType, "##T%d,%d", i, j);
+				char labelRemove[20];
+				sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
 
-					// Port entry in table.
-					ImGui::TableNextRow();
-					ImGui::TableNextColumn();
-
-					// Position.
-					ImGui::PushItemWidth(-1);
-					ImGui::Text(portPositions[i].c_str());
-					ImGui::PopItemWidth();
-					ImGui::TableNextColumn();
-
-					// Name.
-					ImGui::PushItemWidth(185.f);
-					if(ImGui::InputText(labelName, &port->m_label)) 
-					{ 
-						port->title->updateText(port->m_label); 
-					}
-					ImGui::PopItemWidth();
-					ImGui::TableNextColumn();
-
-					// Type.
-					ImGui::PushItemWidth(-1);
-					int* typeval = (int*)&port->m_type;
-					ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
-					ImGui::PopItemWidth();
-					ImGui::TableNextColumn();
-
-					// Remove.
-					if (ImGui::Button(labelRemove)) { activeComponent->removePort(port); }
-
-				}
-				if (j) ImGui::Separator();
-			}
-			if (addingPort) {
-				//create a table entry for the port to be added
+				// Port entry in table.
 				ImGui::TableNextRow();
 				ImGui::TableNextColumn();
-				//Add the position
+
+				// Position.
 				ImGui::PushItemWidth(-1);
-				ImGui::Combo("##newPos", &newPos, "Left\0Right\0Top\0Bottom");
+				ImGui::Text(portPositions[i].c_str());
 				ImGui::PopItemWidth();
 				ImGui::TableNextColumn();
-				//Add the Name
-				ImGui::PushItemWidth(-1);
-				ImGui::InputText("##newName", &newName);
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add the type
-				ImGui::PushItemWidth(-1);
-				ImGui::Combo("##newType", &newType, "IN\0OUT\0IN/OUT");
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add a "Confirm" button
-				if (ImGui::Button("Confirm")) 
+
+				// Name.
+				ImGui::PushItemWidth(185.f);
+				if (ImGui::InputText(labelName, &port->m_label))
 				{
-					//Add the port to the component.
-					activeComponent->addPort(newPos, (PortType) newType, newName);
-					addingPort = false;
+					port->title->updateText(port->m_label);
 				}
+				ImGui::PopItemWidth();
+				ImGui::TableNextColumn();
+
+				// Type.
+				ImGui::PushItemWidth(-1);
+				int* typeval = (int*)&port->m_type;
+				ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
+				ImGui::PopItemWidth();
+				ImGui::TableNextColumn();
+
+				// Remove.
+				if (ImGui::Button(labelRemove)) { activeComponent->removePort(port); }
+
 			}
-			ImGui::EndTable();
-			if (!addingPort) 
+			if (j) ImGui::Separator();
+		}
+
+		if (addingPort) 
+		{
+			//create a table entry for the port to be added
+			ImGui::TableNextRow();
+			ImGui::TableNextColumn();
+			//Add the position
+			ImGui::PushItemWidth(-1);
+			ImGui::Combo("##newPos", &newPos, "Left\0Right\0Top\0Bottom");
+			ImGui::PopItemWidth();
+			ImGui::TableNextColumn();
+			//Add the Name
+			ImGui::PushItemWidth(-1);
+			ImGui::InputText("##newName", &newName);
+			ImGui::PopItemWidth();
+			ImGui::TableNextColumn();
+			//Add the type
+			ImGui::PushItemWidth(-1);
+			ImGui::Combo("##newType", &newType, "IN\0OUT\0IN/OUT");
+			ImGui::PopItemWidth();
+			ImGui::TableNextColumn();
+			//Add a "Confirm" button
+			if (ImGui::Button("Confirm"))
 			{
-				if (ImGui::Button("New Port")) 
-				{
-					addingPort = true;
-				}
+				// Add the port to the component.
+				activeComponent->addPort(newPos, (PortType)newType, newName);
+				addingPort = false;
 			}
+		}
+		ImGui::EndTable();
+		if (!addingPort)
+		{
+			if (ImGui::Button("New Port"))
+			{
+				addingPort = true;
+			}
+		}
 		ImGui::TreePop();
 	}
-	//ImGui::Separator();
-	ImGui::End();
 	ImGui::PopStyleColor();
+}
+
+void ComponentEditor::end()
+{
+	ImGui::End();
 }
 
 /*=======================================================================================================================================*/

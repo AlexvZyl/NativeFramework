@@ -12,7 +12,7 @@
 
 struct GUIState;
 class GraphicsHandler;
-class Design2DEngineGL;
+class Design2DEngine;
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
