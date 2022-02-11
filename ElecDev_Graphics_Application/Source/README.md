@@ -273,3 +273,6 @@ Application::get().pushLayer<My2DEngine>("Our Engine Name!");
 
 And now it will be showing in a window inside Lumen and receive events!  Due to how `templates` work, we do not have to change anything inside Lumen, it can display any type of custom engine any end user decides to create.  `Application::get()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
 
+## Creating A GUI
+
+This section is going to describe how to create GUIs inside Lumen.
