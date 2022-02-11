@@ -1,12 +1,12 @@
 # Lumen Documentation
 
-This is the non official documentation of the Lumen Graphics Engine.  This contains information for new team members to get up and running with rendering inside of Lumen.  No knowledge of the backend is required!
+This is the non-official documentation of the Lumen Graphics Engine.  This contains information for new team members to get up and running with rendering inside of Lumen.  No knowledge of the backend is required!
 
-Lumen has its own implementation of a graphics renderer.  We did this so that we are not limited by the API of someone else's work and so that we can change and implement whatever we want.  This turned out to be very beneficial.  For example, we render text based on a new method of SDF's that someone developed in his Master's degree in graphics.  We would have no control over this if we had to use someone else's (high level) library.  Currently our renderer only supports an OpenGL backend, however we have plans to implement a Vulkan renderer in the future.
+Lumen has its own implementation of a graphics renderer.  We did this so that we are not limited by the API of someone else's work and so that we can change and implement whatever we want.  This turned out to be very beneficial.  For example, we render text based on a new method of SDF's that someone developed in his Master's degree in graphics.  We would have no control over this if we had to use someone else's (high level) library.  Currently our renderer only supports an [OpenGL](https://www.opengl.org/) backend, however we have plans to implement a [Vulkan](https://www.vulkan.org/) renderer in the future.
 
 ## Prelude
 
-We use GLM for matrices, vectors, linear algebra etc.  The GitHub repo can be found [here](https://github.com/g-truc/glm).  Some example usage:
+We use [GLM](https://github.com/g-truc/glm) for matrices, vectors, linear algebra etc.  Some example usage:
 
 ```C++
 // Vector examples.
@@ -45,7 +45,7 @@ float a = myVec4.a;  // 0.4f
 
 ## The Renderer
 
-In Lumen we have a static `Renderer` class.  This means that there is never going to be an instantation of `Renderer` (the constructor is pricvate).  `Renderer` contains static variables and the functions make use of these variables.  So, instead of having to do this every time:
+In Lumen we have a static `Renderer` class.  This means that there is never going to be an instantation of `Renderer` (the constructor is private).  `Renderer` contains static variables and the functions make use of these variables.  So, instead of having to do this every time:
 
 ```C++
 Renderer renderer(...);
@@ -67,7 +67,7 @@ Renderer::bindScene(&scene);
 
 When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the end user, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the end user actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of the `Renderer` works.)
 
-Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/0814da386d05905ef036a09c9e1702bbf65c0c1f/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
+Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
 
 ```C++
 Scene scene(CameraType::Standard2D, 900, 900);
@@ -88,7 +88,7 @@ myCircle->scale(glm::vec3(2.f, 2.f, 1.f););
 Renderer::unbindScene();  // Optional.
 ```
 
-Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the end user.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the current component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
+Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the end user.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
 
 ## Creating An Engine
 
@@ -184,7 +184,7 @@ void My2DEngine::onKeyEvent(KeyEvent& event)
 }
 ```
 
-Now that we know how to receive events to our `Engine`, let us start using it.  It is a good idea to go look at the [Events header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/Events/Events.h).  If you look at `enum EventType` you can see that we use bitshifts to create different types of `Events`.  The following example moves on of the circles to the mouse position on a mouse press, as well as keep our base controls.
+Now that we know how to receive events to our `Engine`, let us start using it.  It is a good idea to go look at the [Events header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/Events/Events.h).  If you look at `enum EventType`, you can see that we use bitshifts to create different types of `Events`.  The following example moves `m_myCircle1` to the mouse position on a left mouse button press, as well as keep our base controls.
 
 ```C++
 #include "Engines/My2DEngine/My2DEngine.h"
@@ -199,7 +199,7 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
     // The event ID is a description of the event, using the enum EventType.
     uint64_t eventID = event.ID;
     
-    // This checks if those two flags are contained in the ID, it does NOT check
+    // This checks if these two flags are contained in the ID, it does NOT check
     // any of the other flags (we use an overloaded operator).
     if(eventID == (EventType_MousePress | EventType_MouseButtonLeft))
     {
@@ -208,7 +208,7 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
         // into our world space coordinate system.
         glm::vec3 worldSpaceCoordinates = m_scene->pixelCoordsToWorldCoords(event.mousePosition);
         // Now we can use these coordinates to move our circle.
-        m_myCircle->translateTo(glm::vec2(worldSpaceCoordinates.x, worldSpaceCoordinates.y));
+        m_myCircle1->translateTo(glm::vec2(worldSpaceCoordinates.x, worldSpaceCoordinates.y));
     }
 }
 ```
@@ -271,7 +271,7 @@ TODO: Cullen to add a section on `Entity` parents.
 Application::get().pushLayer<My2DEngine>("Our Engine Name!");
 ```
 
-And now it will be showing in a window inside Lumen and receive events!  Due to how `templates` work, we do not have to change anything inside Lumen, it can display any type of custom engine any end user decides to create.  `Application::get()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
+And now it will be showing in a window inside Lumen and receiving events!  We are using `templates` to push layers.  This means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any end user decides to create.  `Application::get()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
 
 ## Creating A GUI
 
