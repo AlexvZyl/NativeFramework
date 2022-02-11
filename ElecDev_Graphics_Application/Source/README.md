@@ -259,6 +259,8 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 }
 ```
 
+TODO: Cullen to add a section on `Entity` parents.
+
 ### Layers
 
 
