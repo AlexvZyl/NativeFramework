@@ -282,7 +282,7 @@ TODO: Cullen to add a section on `Entity` parents.
 Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
 ```
 
-And now it will be showing in a window inside Lumen and receiving events!  We are using `templates` to push layers.  This means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any developer decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
+And now it will be showing in a window inside Lumen and receive events!  Lumen uses `templates` to push layers which means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any developer decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
 
 ## Creating A GUI
 
