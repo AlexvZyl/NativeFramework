@@ -2,7 +2,7 @@
 
 This is the non-official documentation of the Lumen Graphics Engine.  This contains information for new team members to get up and running with rendering inside of Lumen.  No knowledge of the backend is required!
 
-Lumen has its own implementation of a graphics renderer.  We did this so that we are not limited by the API of someone else's work and so that we can change and implement whatever we want.  This turned out to be very beneficial.  For example, we render text based on a new method of SDF's that someone developed in his Master's degree in graphics.  We would have no control over this if we had to use someone else's (high level) library.  Currently our renderer only supports an [OpenGL](https://www.opengl.org/) backend, however we have plans to implement a [Vulkan](https://www.vulkan.org/) renderer in the future.
+Lumen has its own implementation of a graphics renderer.  We did this so that we are not limited by the API of someone else's work and so that we can change and implement whatever we want.  This turned out to be very beneficial.  For example, we render text based on a new method of Signed Distance Fields that someone developed in his Master's degree in graphics.  We would have no control over this if we had to use someone else's (high level) library.  Currently our renderer only supports an [OpenGL](https://www.opengl.org/) backend, however we have plans to implement a [Vulkan](https://www.vulkan.org/) renderer in the future.
 
 ## Prelude
 
@@ -58,14 +58,14 @@ We simply do:
 Renderer::function(...);
 ```
 
-Lumen supports rendering to multiple scenes (as many as the user requires).  This is implemented by using a `Scene` class.  The contents of `Scene` is not of importance to the end user, but it contains all of the data that a graphics API requires to render a scene.  It includes things such as Vertex Array Objects, Framebuffer Objects, a camera, textures etc.  However, recall that the `Renderer` uses static variables, so this means we have to tell the `Renderer` to which `Scene` it has to render:
+Lumen supports rendering to multiple scenes (as many as the user requires).  This is implemented by using a `Scene` class.  The contents of `Scene` is not of importance to the developer, but it contains all of the data that a graphics API requires to render a scene.  It includes things such as Vertex Array Objects, Framebuffer Objects, a camera, textures etc.  However, recall that the `Renderer` uses static variables, so this means we have to tell the `Renderer` to which `Scene` it has to render:
 
 ```C++
 Scene scene(cameraType, width, height);
 Renderer::bindScene(&scene);
 ```
 
-When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the end user, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the end user actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of the `Renderer` works.)
+When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the developer, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the developer actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of the `Renderer` works.)
 
 Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
 
@@ -98,7 +98,7 @@ myCircle->scale(glm::vec3(2.f, 2.f, 1.f));
 Renderer::unbindScene();  // Optional.
 ```
 
-Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the end user.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
+Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the developer.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
 
 ## Creating An Engine
 
@@ -126,7 +126,7 @@ public:
     
 private:
     
-    // Example primitives.  Ideally these should be Entities created by the end user.
+    // Example primitives.  Ideally these should be Entities created by the developer.
     Circle* m_myCircle1 = nullptr;
     Circle* m_myCircle2 = nullptr;
 }
@@ -225,7 +225,7 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 ### Entities
 
-Now that we know how `Events` work, we need to be able to detect if our mouse is over a specific `Entity`.  For that Lumen has an `EntityManager` that assign entity IDs.  It is not important for the end user to know how this is done.  The following example changes the color of an entity if it is pressed:
+Now that we know how `Events` work, we need to be able to detect if our mouse is over a specific `Entity`.  For that Lumen has an `EntityManager` that assign entity IDs.  It is not important for the developer to know how this is done.  The following example changes the color of an entity if it is pressed:
 
 ```C++
 #include "Engines/My2DEngine/My2DEngine.h"
@@ -281,7 +281,7 @@ TODO: Cullen to add a section on `Entity` parents.
 Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
 ```
 
-And now it will be showing in a window inside Lumen and receiving events!  We are using `templates` to push layers.  This means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any end user decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
+And now it will be showing in a window inside Lumen and receiving events!  We are using `templates` to push layers.  This means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any developer decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
 
 ## Creating A GUI
 
