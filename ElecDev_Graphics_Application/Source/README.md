@@ -151,7 +151,7 @@ We have an engine that can draw to a `Scene`, now we need to be able to handle e
 #include "OpenGL/Entities/Circle.h"
 #include "Application/Events/Events.h"
 
-void onMouseMoveEvent(MouseMoveEvent& event)
+void My2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 {
     // Using predefined controls.
     Base2DEngine::onMouseMoveEvent(event);
@@ -159,7 +159,7 @@ void onMouseMoveEvent(MouseMoveEvent& event)
     // Implement our own logic...
 }
 
-void onMouseScrollEvent(MouseScrollEvent& event)
+void My2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 {
     // Using predefined controls.
     Base2DEngine::onMouseScrollEvent(event);
@@ -167,7 +167,7 @@ void onMouseScrollEvent(MouseScrollEvent& event)
     // Implement our own logic...
 }
 
-void onMouseButtonEvent(MouseButtonEvent& event)
+void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {
     // Using predefined controls.
     Base2DEngine::onMouseButtonEvent(event);
@@ -175,7 +175,7 @@ void onMouseButtonEvent(MouseButtonEvent& event)
     // Implement our own logic...
 }
 
-void onKeyEvent(KeyEvent& event)
+void My2DEngine::onKeyEvent(KeyEvent& event)
 {
     // Using predefined controls.
     Base2DEngine::onKeyEvent(event);
@@ -184,7 +184,80 @@ void onKeyEvent(KeyEvent& event)
 }
 ```
 
+Now that we know how to receive events to our `Engine`, let us start using it.  It is a good idea to go look at the [Events header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/Events/Events.h).  If you look at `enum EventType` you can see that we use bitshifts to create different types of `Events`.  The following example moves on of the circles to the mouse position on a mouse press, as well as keep our base controls.
+
+```C++
+#include "Engines/My2DEngine/My2DEngine.h"
+#include "OpenGL/Entities/Circle.h"
+#include "Application/Events/Events.h"
+
+void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
+{
+    // Using predefined controls.
+    Base2DEngine::onMouseButtonEvent(event);
+    
+    // The event ID is a description of the event, using the enum EventType.
+    uint64_t eventID = event.ID;
+    
+    // This checks if those two flags are contained in the ID, it does NOT check
+    // any of the other flags (we use an overloaded operator).
+    if(eventID == (EventType_MousePress | EventType_MouseButtonLeft))
+    {
+        // It is important to note that the mouse coordinates that are passed through the
+        // event are given in window pixel coordinates.  We must first convert these coordinates
+        // into our world space coordinate system.
+        glm::vec3 worldSpaceCoordinates = m_scene->pixelCoordsToWorldCoords(event.mousePosition);
+        // Now we can use these coordinates to move our circle.
+        m_myCircle->translateTo(glm::vec2(worldSpaceCoordinates.x, worldSpaceCoordinates.y));
+    }
+}
+```
+
 ### Entities
+
+Now that we know how `Events` work, we need to be able to detect if our mouse is over a specific entity.  For that Lumen has an `EntityManager` that assign entity IDs.  It is not important for the end user to know how this is done.  The following example changes the color of an entity if it is pressed:
+
+```C++
+#include "Engines/My2DEngine/My2DEngine.h"
+#include "OpenGL/Entities/Circle.h"
+#include "Application/Events/Events.h"
+#include "OpenGL/Entities/EntityManager.h"
+
+void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
+{
+    // Using predefined controls.
+    Base2DEngine::onMouseButtonEvent(event);
+    
+    // The event ID is a description of the event, using the enum EventType.
+    uint64_t eventID = event.ID;
+    
+    // This checks if those two flags are contained in the ID, it does NOT check
+    // any of the other flags (we use an overloaded operator).
+    if(eventID == (EventType_MousePress | EventType_MouseButtonLeft))
+    {
+        // It is important to note that the mouse coordinates that are passed through the
+        // event are given in window pixel coordinates.  We must first convert these coordinates
+        // into our world space coordinate system.
+        glm::vec3 worldSpaceCoordinates = m_scene->pixelCoordsToWorldCoords(event.mousePosition);
+        
+        // First we need to retrieve the ID of the entity that the mouse is on.
+        // This is a function that we get from EngineCore.
+        unsigned entityID = getEntityID(event.mousePosition);
+        
+        // Now that we have the ID of the entity, we have to retrieve it
+        // from the EntityManager.
+        Entity* entity = EntityManager::getEntity(entityID);
+        
+        // We need to check if there is an entity.  If there is no entity
+        // under the cursor we get a nullptr.
+        if(entity)  // This is the same as if(entity != nullptr)
+        {
+            // And now we can change the color.
+            entity->setColor(glm::vec4(1.f, 0.f, 1.f, 1.f));    
+        }
+    }
+}
+```
 
 ### Layers
 
