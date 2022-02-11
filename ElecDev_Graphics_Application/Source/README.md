@@ -69,14 +69,24 @@ When creating a `Scene` we need to specify what type of `Camera` we require, sin
 
 Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/0814da386d05905ef036a09c9e1702bbf65c0c1f/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
 
-```
-Scene scene(CameraType::Standard2D, 900, 900)
+```C++
+Scene scene(CameraType::Standard2D, 900, 900);
 Renderer::bindScene(&scene);
-Renderer::addCircle2D();
+Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1.f));
 Renderer::unbindScene();  // Optional.
 ```
 
+Now our `Scene` has a black circle, with radius 0.5, around the center.  However, static circles are of little use to us, so let us start manupulating it.
 
+```C++
+Scene scene(CameraType::Standard2D, 900, 900);
+Renderer::bindScene(&scene);
+Circle* myCircle = Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1.f));
+myCircle->translate(glm::vec2(1.f, 1.f));
+Renderer::unbindScene();  // Optional.
+```
+
+Now our circle is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the end user.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the current component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
 
 ## Creating An Engine
 
