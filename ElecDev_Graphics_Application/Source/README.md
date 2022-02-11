@@ -90,6 +90,7 @@ Renderer::bindScene(&scene);
 
 // Rendering.
 Circle* myCircle = Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1.f));
+// Manipulation.
 myCircle->translate(glm::vec2(1.f, 1.f));
 myCircle->setColor(glm::vec4(1.f, 1.f, 1.f, 1.f));
 myCircle->scale(glm::vec3(2.f, 2.f, 1.f));
