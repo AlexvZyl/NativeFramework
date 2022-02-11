@@ -1,84 +1,87 @@
+#pragma once
+
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
 #include <iostream>
-#include "BasicGuiLayer.h"
-#include "GUI/GuiElementCore/GuiElementCore.h"
-#include "GUI/ComponentEditor/ComponentEditor.h"
-#include "GUI/GraphicsScene/GraphicsScene.h"
-#include "GUI/Ribbon/Ribbon.h"
-#include "GUI/Toolbar/toolbar.h"
-#include "Misc/ConsoleColor.h"
-#include "Application/Application.h"
+#include <string>
+#include "Lumen.h"
+#include "Application/Layers/Layer.h"
 #include "Application/Events/Events.h"
-#include "Engines/EngineCore/EngineCore.h"
+#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/Layers/LayerStack.h"
+#include "Misc/ConsoleColor.h"
 
 //==============================================================================================================================================//
 //  GUI Layer.																																	//
 //==============================================================================================================================================//
 
-BasicGuiLayer::BasicGuiLayer(uint64_t ID, std::string layerName, int imguiWindowFlags)
-	: Layer(ID | LayerType_GUI, layerName), m_imguiWindowflags(imguiWindowFlags)
+template<class GuiType>
+class GuiLayer : public Layer
 {
-	// --------------- //
-	//  E N G I N E S  //
-	// --------------- //
+public:
 
-	if (ID == LayerType_Base2DEngine   ||
-		ID == LayerType_Base3DEngine   ||
-		ID == LayerType_Design2DEngine ||
-		ID == LayerType_Design3DEngine)
-	{
-		m_layerID |= LayerType_GraphicsScene | LayerType_GUI | LayerType_Engine;
-		m_guiElement = std::make_unique<GraphicsScene>(ID, m_layerName, m_imguiWindowflags);
-	}
+	// Constructor.
+	GuiLayer(std::string layerName, int imguiWindowFLags = 0);
 
-	// ------------------------- //
-	//  G U I   E L E M E N T S  //
-	// ------------------------- //
+	// Get the gui element in the layer.
+	GuiElementCore* getGuiElement();
 
-	else if (ID == LayerType_ComponentEditor)
-	{
-		m_guiElement = std::make_unique<ComponentEditor>(m_layerName, m_imguiWindowflags);
-	}
+	// Pass an event to the layer.
+	virtual void onEvent(Event& event) override;
 
-	else if (ID == LayerType_Toolbar)
-	{
-		m_guiElement = std::make_unique<Toolbar>(m_layerName, m_imguiWindowflags);
-	}
-	else if (ID == LayerType_Ribbon)
-	{
-		m_guiElement = std::make_unique<Ribbon>(m_layerName, m_imguiWindowflags);
-	}
+	// Render the specific layer.
+	virtual void onRender() override;
 
-	// ----------- //
-	//  E R R O R  //
-	// ----------- //
+	// Dispatch events related to the layer.
+	virtual void dispatchEvents() override;
 
-	else
-	{
-		std::cout << red << "\n[LAYERS] [ERROR]: " << white << "Could not create GuiLayer based on the provided ID.\n";
-		assert(true);
-	}
+	// Set the name of the layer elements.
+	virtual void setName(std::string& newName) override;
+
+protected:
+
+	// The GUI element that belongs to this layer.
+	// The basic layer only has on Gui element.
+	std::unique_ptr<GuiType> m_guiElement = nullptr;
+
+	// The imguiWindow flags related to the layer's ImGUI windows.
+	int m_imguiWindowflags = 0;
+
+};
+
+//==============================================================================================================================================//
+//  GUI Layer.																																	//
+//==============================================================================================================================================//
+
+template<class GuiType>
+GuiLayer<GuiType>::GuiLayer(std::string layerName, int imguiWindowFlags)
+	: Layer(layerName), m_imguiWindowflags(imguiWindowFlags)
+{
+	// Create GUI element.
+	m_guiElement = std::make_unique<GuiType>(layerName, imguiWindowFlags);
 }
 
-GuiElementCore* BasicGuiLayer::getGuiElement()
+template<class GuiType>
+GuiElementCore* GuiLayer<GuiType>::getGuiElement()
 {
 	return m_guiElement.get();
 }
 
-void BasicGuiLayer::changeName(std::string& name) 
+template<class GuiType>
+void GuiLayer<GuiType>::setName(std::string& newName)
 {
-	m_layerName = name;
-	m_guiElement->m_name = name;
+	m_layerName = newName;
+	m_guiElement->m_name = newName;
 }
 
 //==============================================================================================================================================//
 //  Events.																																		//
 //==============================================================================================================================================//
 
-void BasicGuiLayer::onEvent(Event& event)
+template<class GuiType>
+void GuiLayer<GuiType>::onEvent(Event& event)
 {
 	// Global events are created using GLFW coordinates.  They
 	// have to be converted to coordinates that are local to the 
@@ -90,6 +93,9 @@ void BasicGuiLayer::onEvent(Event& event)
 	// look into using imgui as the event dispatcher instead of using
 	// glfw directly.  This prevents us from having to create multiple instaces
 	// of events.  And what if an event is already passed as local coordinates?
+
+	// Log the event.
+	std::cout << m_layerName << ": " << event.ID << "\n";
 
 	uint64_t eventID = event.ID;
 
@@ -129,24 +135,26 @@ void BasicGuiLayer::onEvent(Event& event)
 	else m_guiElement->onEvent(event);
 }
 
-void BasicGuiLayer::onRender()
+template<class GuiType>
+void GuiLayer<GuiType>::onRender()
 {
 	m_guiElement->begin();
-	m_guiElement->renderBody();
+	m_guiElement->onRender();
 	m_guiElement->end();
 
 	// Remove layer in next frame if close was clicked.
-	if(!m_guiElement->m_isOpen) 
-		Application::get().queuePopLayer(this);
+	if (!m_guiElement->m_isOpen)
+		Lumen::getApp().queuePopLayer(this);
 }
 
-void BasicGuiLayer::dispatchLayerEvents() 
+template<class GuiType>
+void GuiLayer<GuiType>::dispatchEvents()
 {
 	// Ensure window exists.
 	if (!m_imGuiWindow) return;
 
 	// Call layer dispatcher.
-	Layer::dispatchLayerEvents();
+	Layer::dispatchEvents();
 
 	// Add Gui events onto the layer events.
 	m_guiElement->dispatchGuiEvents(m_imGuiWindow);

@@ -6,12 +6,14 @@
 
 #include <memory>
 #include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Engines/EngineCore/EngineCore.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
 class EngineCore;
+class Event;
 
 //==============================================================================================================================================//
 //  Graphics Scene.																																//
@@ -22,26 +24,27 @@ class GraphicsScene : public GuiElementCore
 public:
 
 	// Constructor.
-	GraphicsScene(uint64_t ID, std::string name, int windowFlags);
+	GraphicsScene(std::string name, int windowFlags);
 
 	// Rendering functions.
 	virtual void begin() override;
-	virtual void renderBody() override;
+	virtual void onRender() override;
 	virtual void end() override;
 
-	// Get the engine related to the element.
-	EngineCore* getEngine();
-
-	// Overridden to be able to call engine events.
+	// Override the on event so that we pass it to the engine.
 	virtual void onEvent(Event& event) override;
+
+	// Set the texture that the graphics window will render.
+	void setEngine(EngineCore* engine);
+	// Get the engine inside the graphics scene.
+	EngineCore* getEngine();
 
 private:
 
 	// Rendering texture data.
 	void* m_textureID = nullptr;
-
-	// The engine that is in this layer.
-	std::unique_ptr<EngineCore> m_engine = nullptr;
+	// The engine that belongs to the window.
+	EngineCore* m_engine = nullptr;
 };
 
 //==============================================================================================================================================//

@@ -174,7 +174,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
-    <ClCompile Include="Source\Application\Layers\BasicGuiLayer.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
     <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
@@ -264,9 +263,10 @@
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
+    <ClCompile Include="Source\Lumen.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
-    <ClCompile Include="Source\Lumen.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Entities\Text.cpp" />
     <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
@@ -279,7 +279,8 @@
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Application\Layers\BasicGuiLayer.h" />
+    <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
+    <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\Application\Layers\LayerStack.h" />
     <ClInclude Include="Source\Application\Layers\Layer.h" />
     <ClInclude Include="Source\Application\Events\EventLog.h" />
@@ -914,8 +915,7 @@
     <None Include="Source\External\glm\gtx\vector_angle.inl" />
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
-    <None Include="Source\Graphics\OpenGL\README.md" />
-    <None Include="Source\Graphics\README.md" />
+    <None Include="Source\DOCS.md" />
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />

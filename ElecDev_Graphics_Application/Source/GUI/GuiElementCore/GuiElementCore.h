@@ -18,6 +18,7 @@ class MouseMoveEvent;
 class MouseScrollEvent;
 class KeyEvent;
 class LayerEvent;
+
 struct ImGuiWindow;
 
 //==============================================================================================================================================//
@@ -31,12 +32,6 @@ public:
 	// Pass event to element.
 	virtual void onEvent(Event& event);
 
-protected:
-
-	friend class Layer;
-	friend class BasicGuiLayer;
-	friend class EngineLayer;
-
 	// Constructor.
 	GuiElementCore(std::string name, int windowFlags);
 
@@ -47,11 +42,13 @@ protected:
 	// Start the ImGUI widget.
 	inline virtual void begin() = 0;
 	// Render the ImGUI widget.
-	inline virtual void renderBody() = 0;
+	inline virtual void onRender() = 0;
 	// End the ImGUI widget.
 	inline virtual void end() = 0;
 	// Updates the data related to the gui element.
 	virtual void dispatchGuiEvents(ImGuiWindow* window);
+	// Should the gui element render, based on certain flags.
+	bool shouldRender();
 
 	// --------- //
 	//  D A T A  //

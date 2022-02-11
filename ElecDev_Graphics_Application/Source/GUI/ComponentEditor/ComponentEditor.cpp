@@ -30,19 +30,16 @@ void ComponentEditor::begin()
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void ComponentEditor::renderBody()
+void ComponentEditor::onRender()
 {
 	//	Fetch The active component.
-	Component2D* activeComponent = Application::get().m_guiState->active_component;
+	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
 	//check that the active component exists. Close if not.
 	if (!activeComponent)
 	{
-		Application::get().m_guiState->componentEditor = false;
+		Lumen::getApp().m_guiState->componentEditor = false;
 		return;
 	}
-
-	// Should not render if closed or collapsed.
-	if (m_isCollapsed || !m_isOpen) return;
 
 	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);

@@ -4,10 +4,9 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Application/Events/EventLog.h"
-#include "Application/Events/Events.h"
-#include "Application/Layers/LayerStack.h"
 #include <vector>
+#include "Application/Events/EventLog.h"
+#include "Application/Layers/LayerStack.h"
 
 // TO BE DEPRECATED.
 #include "GuiState.h"
@@ -16,7 +15,6 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class GraphicsHandler;
 class GUIHandler;
 class EventLog;
 class Layer;
@@ -36,11 +34,6 @@ public:
 	// Constructor.
 	Application(GLFWwindow* window);
 
-	// Return a pointer to the currently running application.
-	// This allows elements to use the app data without having
-	// to store a pointer to it.
-	inline static Application& get() { return *m_instance; };
-
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
@@ -54,9 +47,12 @@ public:
 	//  L A Y E R S  //
 	// ------------- //
 
-	// Push a layer onto the layerstack.
-	template<typename LayerType>
-	void pushLayer(Layer* layer);
+	// Push an engine onto the layerstack.
+	template<typename EngineType>
+	void pushEngineLayer(std::string layerName, int imguiWindowFlags = 0);
+	// Push a gui onto the layerstack.
+	template<typename GuiType>
+	void pushGuiLayer(std::string layerName, int imguiWindowFlags = 0);
 	// Pop a layer from the layerstack.
 	void queuePopLayer(Layer* layer);
 
@@ -95,7 +91,7 @@ private:
 	// The window containing the application.
 	GLFWwindow* m_window;
 	// A pointer to the application instance.
-	// For use with Application::get()
+	// For use with Lumen::getApp()
 	// HAS TO BE SINGLETON!
 	static Application* m_instance;
 
@@ -169,10 +165,38 @@ void Application::logEvent(Event& event)
 	m_eventLog->log<EventType>(event);
 }
 
-template<typename LayerType>
-void Application::pushLayer(Layer* layer)
+template<typename EngineType>
+void Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 {
-	m_layerStack->pushLayer<LayerType>(*layer);
+	// Make sure we are pushing a gui layer.
+	if (!std::is_base_of<EngineCore, EngineType>::value)
+	{
+		std::cout << yellow << "\n[LAYERS] [WARN]: " << white << "Passing non Engine layer to pushEngineLayer().\n";
+		return;
+	}
+
+	// Create an EngineLayer.
+	EngineLayer<EngineType>* layer = new EngineLayer<EngineType>(layerName);
+
+	// Push the layer.
+	m_layerStack->pushLayer<EngineLayer<EngineType>>(*layer);
+}
+
+template<typename GuiType>
+void Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
+{
+	// Make sure we are pushing a gui layer.
+	if (!std::is_base_of<GuiElementCore, GuiType>::value)
+	{
+		std::cout << yellow << "\n[LAYERS] [WARN]: " << white << "Passing non GUI layer to pushGuiLayer().\n";
+		return;
+	}
+
+	// Create the GUI layer.
+	GuiLayer<GuiType>* layer = new GuiLayer<GuiType>(layerName);
+
+	// Push the layer.
+	m_layerStack->pushLayer<GuiLayer<GuiType>>(*layer);
 }
 
 //==============================================================================================================================================//

@@ -25,7 +25,7 @@ public:
 
 	// Rendering.
 	virtual void begin() override;
-	virtual void renderBody() override;
+	virtual void onRender() override;
 	virtual void end() override;
 
 private:

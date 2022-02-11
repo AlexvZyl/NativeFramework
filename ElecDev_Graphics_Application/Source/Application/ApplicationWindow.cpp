@@ -3,6 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Application/Application.h"
+#include "Lumen.h"
 #include "Misc/ConsoleColor.h"
 #include "ImGUI/Core/imgui.h"
 #include "ImGUI/Implementations/imgui_impl_glfw.h"
@@ -46,7 +47,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         MouseButtonEvent event(cursorPos, eventID);
-        Application::get().logEvent<MouseButtonEvent>(event);
+        Lumen::getApp().logEvent<MouseButtonEvent>(event);
 
         // Pass event to ImGUI.
         ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
@@ -79,7 +80,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         MouseMoveEvent event(cursorPos, eventID);
-        Application::get().logEvent<MouseMoveEvent>(event);
+        Lumen::getApp().logEvent<MouseMoveEvent>(event);
     });
 
     // ------------------------- //
@@ -109,7 +110,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         MouseScrollEvent event(cursorPos, yoffset, eventID);
-        Application::get().logEvent<MouseScrollEvent>(event);
+        Lumen::getApp().logEvent<MouseScrollEvent>(event);
 
         // Pass event to ImGUI.
         ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
@@ -145,7 +146,7 @@ void Application::glfwInitCallbacks()
 
         // Log event.
         KeyEvent event(key, eventID, cursorPos);
-        Application::get().logEvent<KeyEvent>(event);
+        Lumen::getApp().logEvent<KeyEvent>(event);
 
         // Pass event to ImGUI.
         ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
@@ -164,7 +165,7 @@ void Application::glfwInitCallbacks()
 
         // Log the event.
         FileDropEvent event(filePaths);
-        Application::get().logEvent<FileDropEvent>(event);
+        Lumen::getApp().logEvent<FileDropEvent>(event);
     });
 
     // --------------------- //
@@ -176,7 +177,7 @@ void Application::glfwInitCallbacks()
         // Create and log event.
         glm::vec2 size(width, height);
         WindowEvent event(size, EventType_Application | EventType_WindowResize);
-        Application::get().logEvent<WindowEvent>(event);
+        Lumen::getApp().logEvent<WindowEvent>(event);
     });
 
     // ----------- //
@@ -185,7 +186,7 @@ void Application::glfwInitCallbacks()
 
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) 
     {
-            Application::get().closeWindow();
+            Lumen::getApp().closeWindow();
     });
 }
 

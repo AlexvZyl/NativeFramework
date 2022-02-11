@@ -16,37 +16,24 @@
 //==============================================================================================================================================//
 
 // Constructor.
-GraphicsScene::GraphicsScene(uint64_t ID, std::string name, int windowFlags)
+GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
-{
-	// Create the engine component.
-	if		(ID == LayerType_Base2DEngine)	 m_engine = std::make_unique<Base2DEngine>();
-	else if (ID == LayerType_Base3DEngine)	 m_engine = std::make_unique<Base3DEngine>();
-	else if (ID == LayerType_Design2DEngine) m_engine = std::make_unique<Design2DEngine>();
-	else if (ID == LayerType_Design3DEngine) m_engine = nullptr;
+{}
 
-	// Set the texture to be rendred.
+void GraphicsScene::setEngine(EngineCore* engine) 
+{
+	m_engine = engine;
 	m_textureID = (void*)m_engine->getRenderTexture();
 }
 
-//==============================================================================================================================================//
-//  EVents.																																		//
-//==============================================================================================================================================//
+EngineCore* GraphicsScene::getEngine() 
+{
+	return m_engine;
+}
 
 void GraphicsScene::onEvent(Event& event) 
 {
-	// Pass events to gui element.
 	GuiElementCore::onEvent(event);
-
-	// The engine must be aware of these events, even if it is closed.
-	uint64_t eventID = event.ID;
-	if (eventID == EventType_Hover || eventID == EventType_Dehover || eventID == EventType_Focus || eventID == EventType_Defocus)
-		m_engine->onEvent(event);
-
-	// Do not pass events to the engine in these cases.
-	else if (m_isCollapsed || !m_isOpen || m_isHidden) return;
-
-	// Pass events to the engine.
 	m_engine->onEvent(event);
 }
 
@@ -54,29 +41,18 @@ void GraphicsScene::onEvent(Event& event)
 //  Rendering.																																	//
 //==============================================================================================================================================//
 
-EngineCore* GraphicsScene::getEngine() 
-{
-	return m_engine.get();
-}
-
 void GraphicsScene::begin()
 {
 	// Setup.
 	ImGui::SetNextWindowSize(ImVec2(400,400), ImGuiCond_Once);
 
-	// Remove window padding.
+	// Adjust window padding.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void GraphicsScene::renderBody() 
+void GraphicsScene::onRender() 
 {
-	// Should not render the engine in these cases.
-	//if (m_isCollapsed || !m_isOpen || m_isHidden) return;
-	if (m_isCollapsed || m_isHidden) return;
-
-	// Everything breaks when this stops being called, i.e. when m_isOpen = false.
-	m_engine->onRender();  
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 

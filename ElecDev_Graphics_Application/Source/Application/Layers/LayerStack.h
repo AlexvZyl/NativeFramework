@@ -4,13 +4,16 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include <string>
+#include <map>
 #include <iostream>
-#include "External/Misc/ConsoleColor.h"
 #include <vector>
 #include <memory>
 #include "Application/Layers/Layer.h"
-#include <string>
-#include <map>
+#include "Application/Layers/EngineLayer.h"
+#include "Application/Layers/GuiLayer.h"
+#include "Engines/EngineCore/EngineCore.h"
+#include "External/Misc/ConsoleColor.h"
 
 //==============================================================================================================================================//
 //  Layer Stack.																																//
@@ -24,7 +27,7 @@ public:
 	LayerStack() = default;
 
 	// Add a layer to the front of the stack.
-	template<typename LayerType>
+	template<class LayerType>
 	void pushLayer(Layer& layer);
 
 	// Add the specified layer to the to be removed vector.
@@ -52,28 +55,25 @@ private:
 };
 
 //==============================================================================================================================================//
-//  Operators.																																	//
-//==============================================================================================================================================//
-
-bool operator==(const std::unique_ptr<Layer>& layerUPtr, const Layer& layer);
-bool operator!=(const std::unique_ptr<Layer>& layerUPtr, const Layer& layer);
-
-//==============================================================================================================================================//
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-template<typename LayerType>
+template<class LayerType>
 void LayerStack::pushLayer(Layer& layer)
 {
-	// Create a unique imgui ID that is not displayed so that we can have
-	// windows with the same name.
-	std::string newName = layer.m_layerName + "##" + std::to_string(m_totalLayerCount);
+	// Create a name with an unqiue ID.
+	// This allows us to have windows with the same name.
+	std::string newName = layer.getName() + "##" + std::to_string(m_totalLayerCount);
+	layer.setName(newName);
 	m_totalLayerCount++;
-	layer.changeName(newName);
+
 	// Push the layer.
-	m_layers.insert({ layer.getLayerName(), std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))) });
+	m_layers.insert({ layer.getName(), std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))) });
+
+	// Resize the layer pop queue.
 	m_layerPopQueue.reserve(m_layers.size());
 }
+
 
 //==============================================================================================================================================//
 //  EOF.																																		//

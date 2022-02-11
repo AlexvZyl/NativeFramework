@@ -25,7 +25,7 @@ public:
 	
 	// Rendering functions.
 	virtual void begin();
-	virtual void renderBody();
+	virtual void onRender();
 	virtual void end();
 
 private:

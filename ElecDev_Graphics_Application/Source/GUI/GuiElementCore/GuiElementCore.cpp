@@ -16,6 +16,11 @@ GuiElementCore::GuiElementCore(std::string name, int windowFlags)
 	: m_name(name), m_imguiWindowFlags(windowFlags)
 {}
 
+bool GuiElementCore::shouldRender() 
+{
+	return !m_isCollapsed && !m_isHidden;
+}
+
 //==============================================================================================================================================//
 //  Event dispatching.																															//
 //==============================================================================================================================================//
@@ -34,7 +39,7 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event)); }
 
 	// Do not pass the events below if the layer is collapsed.
-	else if (m_isCollapsed || !m_isOpen) return;
+	else if (!shouldRender()) return;
 
 	// Mouse events.
 	else if	(eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
@@ -58,8 +63,8 @@ void GuiElementCore::dispatchGuiEvents(ImGuiWindow* window)
 	m_isDocked = window->DockIsActive;
 	m_isHidden = window->Hidden;
 
-	// We do not want to pass events in these cases.
-	if (m_isCollapsed || !m_isOpen || m_isHidden) return;
+	// Check if we should pass the events.
+	if (!shouldRender()) return;
 
 	// Update gui data.
 	detectContentRegionMove(window);

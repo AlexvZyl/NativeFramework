@@ -15,15 +15,15 @@
 //  Layer Base Class.																															//
 //==============================================================================================================================================//
 
-Layer::Layer(uint64_t ID, std::string layerName) 
-	: m_layerID(ID), m_layerName(layerName)
+Layer::Layer(std::string layerName) 
+	: m_layerName(layerName)
 {}
 
 //==============================================================================================================================================//
 //  Layer data.																																	//
 //==============================================================================================================================================//
 
-void Layer::dispatchLayerEvents()
+void Layer::dispatchEvents()
 {
 	// Ensure that the window has been created.
 	if (!m_imGuiWindow) return;
@@ -33,8 +33,8 @@ void Layer::dispatchLayerEvents()
 	 
 	// Currently we have no need for this information to be updated.
 	//// Check for layer resizes.
-	//detectLayerResize();
-	//detectLayerMove();
+	//detectResize();
+	//detectMove();
 }
 
 void Layer::setDockingState(bool state) 
@@ -50,7 +50,7 @@ void Layer::onDockingStateChange(bool newState)
 	if (newState) m_dockID = ImGui::GetWindowDockID();
 }
 
-void Layer::detectLayerResize() 
+void Layer::detectResize() 
 {
 	ImVec2 currentSize = m_imGuiWindow->Size;
 	// Check for resize.
@@ -58,7 +58,7 @@ void Layer::detectLayerResize()
 		m_layerSize = currentSize;
 }
 
-void Layer::detectLayerMove() 
+void Layer::detectMove() 
 {
 	ImVec2 currentPos = m_imGuiWindow->Pos;
 	if (currentPos.x != m_layerPosition.x || currentPos.y != m_layerPosition.y) 
@@ -69,15 +69,10 @@ void Layer::detectLayerMove()
 //  Setters and getters.																														//
 //==============================================================================================================================================//
 
-bool Layer::isLayerHovered()
+bool Layer::isHovered()
 {
 	if(!m_imGuiWindow) m_imGuiWindow = ImGui::FindWindowByName(m_layerName.c_str());
 	return ImGuiTweaks::IsWindowHovered(0, m_imGuiWindow);
-}
-
-uint64_t Layer::getLayerID()
-{
-	return m_layerID;
 }
 
 ImGuiID Layer::getDockID()
@@ -85,7 +80,7 @@ ImGuiID Layer::getDockID()
 	return m_dockID;
 }
 
-std::string Layer::getLayerName() 
+std::string Layer::getName() 
 {
 	return m_layerName;
 }

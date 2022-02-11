@@ -42,7 +42,7 @@ void Toolbar::begin()
     m_isOpen = ImGui::BeginMainMenuBar();
 }
 
-void Toolbar::renderBody()
+void Toolbar::onRender()
 {
     // Should not render in these cases.
     if (m_isCollapsed || !m_isOpen || m_isHidden) return;

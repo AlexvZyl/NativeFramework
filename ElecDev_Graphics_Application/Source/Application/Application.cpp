@@ -12,6 +12,9 @@
 #include "External/Misc/ConsoleColor.h"
 #include "Resources/ResourceHandler.h"
 #include "GUI/ImGuiTweaks.h"
+#include "GUI/Ribbon/Ribbon.h"
+#include "GUI/Toolbar/toolbar.h"
+#include "Lumen.h"
 
 // Testing.
 #include "GUI/ComponentEditor/ComponentEditor.h"
@@ -19,7 +22,9 @@
 #include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/CameraGL.h"
-#include "Application/Layers/BasicGuiLayer.h"
+#include "Application/Layers/GuiLayer.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Base2DEngine/Base2DEngine.h"
 
 #include "GLFW/glfw3.h"
 
@@ -40,7 +45,7 @@ Application::Application(GLFWwindow* window)
 	glfwSetTime(0);
 
 	// Store a pointer to the instance.
-	Application::m_instance = this;
+	Lumen::setApp(this);
 
 	//  NOTE: TO BE DEPRECATED!
 	m_guiState = std::make_unique<GUIState>();
@@ -51,11 +56,9 @@ Application::Application(GLFWwindow* window)
 	m_eventLog = std::make_unique<EventLog>();
 
 	// Setup the main gui layer for Lumen.
-	BasicGuiLayer mainToolbar(LayerType_Toolbar, "Main Toolbar");
-	pushLayer<BasicGuiLayer>(&mainToolbar);
+	pushGuiLayer<Toolbar>("Main Toolbar");
 	// Push main ribbon to layerstack.
-	BasicGuiLayer mainRibbon(LayerType_Ribbon, "Main Ribbon");
-	pushLayer<BasicGuiLayer>(&mainRibbon);
+	pushGuiLayer<Ribbon>("Main Ribbon");
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 
@@ -70,10 +73,9 @@ Application::Application(GLFWwindow* window)
 	// --------------- //
 
 	// Testing layers.
-	BasicGuiLayer graphicsWindow(LayerType_Design2DEngine, "Graphics Window");
-	pushLayer<BasicGuiLayer>(&graphicsWindow);
-	BasicGuiLayer componentEditor(LayerType_ComponentEditor, "Component Editor");
-	pushLayer<BasicGuiLayer>(&componentEditor);
+	pushEngineLayer<Design2DEngine>("Graphics Window");
+	pushEngineLayer<Base2DEngine>("Graphics Window");
+	pushGuiLayer<ComponentEditor>("Component Editor");
 }
 
 void Application::shutdown() 

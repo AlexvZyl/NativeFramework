@@ -37,7 +37,7 @@ void Design2DEngine::deleteActiveComponent()
 		{
 			m_circuit->m_components.erase(iterator);
 			m_activeComponent = nullptr;
-			Application::get().m_guiState->active_component = nullptr;
+			Lumen::getApp().m_guiState->active_component = nullptr;
 		}
 	}
 }
@@ -64,11 +64,11 @@ void Design2DEngine::setActiveComponent(unsigned eID) {
 	}
 	if ((eID == 0) || (eID == -1))
 	{
-		Application::get().m_guiState->clickedZone.background = true;
+		Lumen::getApp().m_guiState->clickedZone.background = true;
 	}
 	else
 	{
-		Application::get().m_guiState->clickedZone.background = false;
+		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		currentEntity->setContext();
 		while (currentEntity->m_type != EntityType::COMPONENT)
@@ -89,7 +89,7 @@ void Design2DEngine::setActiveComponent(unsigned eID) {
 		m_activeComponent->highlight();
 
 		// Pass the active component to the GUI state for editing.
-		Application::get().m_guiState->active_component = m_activeComponent.get();
+		Lumen::getApp().m_guiState->active_component = m_activeComponent.get();
 	}
 }
 void Design2DEngine::setActiveCable(unsigned eID) 
@@ -101,11 +101,11 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	}
 	if ((eID == 0) || (eID == -1)) 
 	{
-		Application::get().m_guiState->clickedZone.background = true;
+		Lumen::getApp().m_guiState->clickedZone.background = true;
 	}
 	else 
 	{
-		Application::get().m_guiState->clickedZone.background = false;
+		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
@@ -131,12 +131,12 @@ Port* Design2DEngine::getPort(unsigned eID)
 {
 	if ((eID == 0) || (eID == -1))
 	{
-		Application::get().m_guiState->clickedZone.background = true;
+		Lumen::getApp().m_guiState->clickedZone.background = true;
 		return nullptr;
 	}
 	else
 	{
-		Application::get().m_guiState->clickedZone.background = false;
+		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		while (currentEntity->m_type != EntityType::PORT)
 		{
