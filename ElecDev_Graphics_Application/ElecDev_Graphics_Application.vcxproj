@@ -915,6 +915,7 @@
     <None Include="Source\External\glm\gtx\vector_query.inl" />
     <None Include="Source\External\glm\gtx\wrap.inl" />
     <None Include="Source\Graphics\OpenGL\README.md" />
+    <None Include="Source\Graphics\README.md" />
     <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />

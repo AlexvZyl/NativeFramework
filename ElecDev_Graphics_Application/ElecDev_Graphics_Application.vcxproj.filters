@@ -1789,6 +1789,7 @@
     <None Include="Source\Resources\Shaders\GLSL\staticTextureShader.glsl" />
     <None Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.json" />
     <None Include="Source\Graphics\OpenGL\README.md" />
+    <None Include="Source\Graphics\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">
