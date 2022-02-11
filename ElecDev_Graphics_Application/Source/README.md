@@ -70,21 +70,31 @@ When creating a `Scene` we need to specify what type of `Camera` we require, sin
 Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
 
 ```C++
+// Setup.
 Scene scene(CameraType::Standard2D, 900, 900);
 Renderer::bindScene(&scene);
+
+// Rendering.
 Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1.f));
-Renderer::unbindScene();  // Optional.
+
+// Optional cleanup.
+Renderer::unbindScene();
 ```
 
 Now our `Scene` has a black circle, with radius 0.5, around the center.  However, static circles are of little use to us, so let us start manipulating it.
 
 ```C++
+// Setup.
 Scene scene(CameraType::Standard2D, 900, 900);
 Renderer::bindScene(&scene);
+
+// Rendering.
 Circle* myCircle = Renderer::addCircle2D(glm::vec3(0.f, 0.f, 0.f), 0.5f, glm::vec4(0.f, 0.f, 0.f, 1.f));
 myCircle->translate(glm::vec2(1.f, 1.f));
 myCircle->setColor(glm::vec4(1.f, 1.f, 1.f, 1.f));
-myCircle->scale(glm::vec3(2.f, 2.f, 1.f););
+myCircle->scale(glm::vec3(2.f, 2.f, 1.f));
+
+// Optional cleanup.
 Renderer::unbindScene();  // Optional.
 ```
 
@@ -267,8 +277,8 @@ TODO: Cullen to add a section on `Entity` parents.
 `My2DEngine` is now fully functioning.  There is only one last thing to do, we need it to be displayed in a window inside Lumen.  This is as easy as:
 
 ```C++
-// Include Application.h
-Lumen::getApp().pushLayer<My2DEngine>("My2DEngine Name");
+// #include "Lumen.h"
+Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
 ```
 
 And now it will be showing in a window inside Lumen and receiving events!  We are using `templates` to push layers.  This means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any end user decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
