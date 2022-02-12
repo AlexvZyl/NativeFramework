@@ -96,7 +96,7 @@ myCircle->setColor(glm::vec4(1.f, 1.f, 1.f, 1.f));
 myCircle->scale(glm::vec3(2.f, 2.f, 1.f));
 
 // Optional cleanup.
-Renderer::unbindScene();  // Optional.
+Renderer::unbindScene();
 ```
 
 Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the developer.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
