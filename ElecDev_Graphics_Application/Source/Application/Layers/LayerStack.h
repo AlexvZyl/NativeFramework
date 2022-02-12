@@ -25,7 +25,7 @@ public:
 
 	// Add a layer to the stack.
 	template<class LayerType>
-	void pushLayer(Layer& layer);
+	std::string pushLayer(Layer& layer);
 
 	// Queue the layer to be removed.
 	void queuePopLayer(Layer& layer);
@@ -56,7 +56,7 @@ private:
 //==============================================================================================================================================//
 
 template<class LayerType>
-void LayerStack::pushLayer(Layer& layer)
+std::string LayerStack::pushLayer(Layer& layer)
 {
 	// Create a name with an unqiue ID.
 	// This allows us to have windows with the same name.
@@ -69,6 +69,9 @@ void LayerStack::pushLayer(Layer& layer)
 
 	// Resize the layer pop queue.
 	m_layerPopQueue.reserve(m_layers.size());
+
+	// return the name with the ID.
+	return newName;
 }
 
 //==============================================================================================================================================//
