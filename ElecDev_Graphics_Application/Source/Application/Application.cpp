@@ -41,8 +41,7 @@ Application* Application::m_instance = nullptr;
 Application::Application(GLFWwindow* window) 
 	: m_window(window)
 {
-	// Reset glfw time an application start.
-	glfwSetTime(0);
+	// Reset glfw time an application start.	glfwSetTime(0);
 
 	// Store a pointer to the instance.
 	Lumen::setApp(this);
@@ -58,7 +57,7 @@ Application::Application(GLFWwindow* window)
 	// Setup the main gui layer for Lumen.
 	pushGuiLayer<Toolbar>("Main Toolbar");
 	// Push main ribbon to layerstack.
-	pushGuiLayer<Ribbon>("Main Ribbon");
+	//pushGuiLayer<Ribbon>("Main Ribbon");
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 
@@ -68,13 +67,15 @@ Application::Application(GLFWwindow* window)
 	// Initialisation frame.
 	renderInitialFrame();
 
-	// --------------- //
+	//  --------------- //
 	//  T E S T I N G  //
 	// --------------- //
 
 	// Testing layers.
 	pushEngineLayer<Design2DEngine>("Graphics Window");
-	pushGuiLayer<ComponentEditor>("Component Editor");
+	pushEngineLayer<Design2DEngine>("Graphics Window");
+	pushEngineLayer<Design2DEngine>("Graphics Window");
+	//pushGuiLayer<ComponentEditor>("Component Editor");
 }
 
 void Application::shutdown() 

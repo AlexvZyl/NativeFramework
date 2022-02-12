@@ -28,8 +28,11 @@ bool GuiElementCore::shouldRender()
 
 void GuiElementCore::onEvent(Event& event)
 {
+
+#ifdef _DEBUG
 	// Log the event.
 	std::cout << m_name << ": " << event.ID << "\n";
+#endif
 
 	uint64_t eventID = event.ID;
 
@@ -63,9 +66,11 @@ void GuiElementCore::dispatchEvents()
 	if (!m_imguiWindow) return;
 
 	// Update data.
-	m_isCollapsed = m_imguiWindow->Collapsed;
-	m_isDocked = m_imguiWindow->DockIsActive;
-	m_isHidden = m_imguiWindow->Hidden;
+	m_isCollapsed	= m_imguiWindow->Collapsed;
+	m_isDocked		= m_imguiWindow->DockIsActive;
+	m_isHidden		= m_imguiWindow->Hidden;
+	if (!m_dockID) 
+		m_dockID	= m_imguiWindow->DockId;
 
 	// Check if we should pass the events.
 	if (!shouldRender()) return;

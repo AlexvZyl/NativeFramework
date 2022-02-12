@@ -33,16 +33,15 @@ public:
 	}
 
 	// Pass an event to the layer.
-	virtual void onEvent(Event& event);
+	virtual void onEvent(Event& event) override;
 
 	// Render the layer.
-	virtual void onRender();
+	virtual void onRender() override;
 
 protected:
 
 	// The engine that belongs to the layer.
 	std::unique_ptr<EngineType> m_engine = nullptr;
-
 };
 
 //==============================================================================================================================================//
@@ -52,19 +51,7 @@ protected:
 template<class EngineType>
 void EngineLayer<EngineType>::onEvent(Event& event)
 {
-	// Global events are created using GLFW coordinates.  They
-	// have to be converted to coordinates that are local to the 
-	// window's content region.
-	// The event is copied (instead of using a reference) so that it can 
-	// still be used in other places throughout Lumen.
-
-	// Since we now have access to the windows outside of the loop we can 
-	// look into using imgui as the event dispatcher instead of using
-	// glfw directly.  This prevents us from having to create multiple instaces
-	// of events.  And what if an event is already passed as local coordinates?
-
-	// Log the event.
-	std::cout << m_guiElement->m_name << ": " << event.ID << "\n";
+	// The layer is responsible for passing the events coordinates as local to the window.
 
 	uint64_t eventID = event.ID;
 
@@ -123,8 +110,8 @@ void EngineLayer<EngineType>::onRender()
 		// Render.
 		m_engine->onRender();
 		m_guiElement->onRender();
-		m_guiElement->end();
 	}
+	m_guiElement->end();
 
 	// Remove layer in next frame if close was clicked.
 	if (!m_guiElement->m_isOpen)

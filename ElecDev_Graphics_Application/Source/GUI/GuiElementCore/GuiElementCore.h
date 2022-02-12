@@ -62,6 +62,8 @@ public:
 	bool m_isHidden = false;
 	// Is the GUI element docked?
 	bool m_isDocked = false;
+	// The gui dock id.
+	ImGuiID m_dockID = NULL;
 	// The window name.
 	std::string m_name = "NULL";
 	// The ImGUI flags describing the window.

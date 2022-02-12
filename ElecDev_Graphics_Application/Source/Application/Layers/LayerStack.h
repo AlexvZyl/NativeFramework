@@ -23,19 +23,19 @@ public:
 	// Constructor.
 	LayerStack() = default;
 
-	// Add a layer to the front of the stack.
+	// Add a layer to the stack.
 	template<class LayerType>
 	void pushLayer(Layer& layer);
 
-	// Add the specified layer to the to be removed vector.
+	// Queue the layer to be removed.
 	void queuePopLayer(Layer& layer);
-	// Pop all the layers that have been scheduled to be removed.
+	// Pop all the layers that have been queued for removal.
 	void popLayers();
 	// The above two functions are implemented in this way, because we dont want to 
 	// immediately remove a layer while it is dispatching events or rendering.
 	// It should be done in the following frame.
 
-	// Get the layers in the stack.
+	// Get the layers contained in the stack.
 	std::map<std::string, std::unique_ptr<Layer>>& getLayers();
 
 private:
@@ -70,7 +70,6 @@ void LayerStack::pushLayer(Layer& layer)
 	// Resize the layer pop queue.
 	m_layerPopQueue.reserve(m_layers.size());
 }
-
 
 //==============================================================================================================================================//
 //  EOF.																																		//

@@ -30,23 +30,23 @@ public:
 	GuiElementCore* getGuiElement();
 
 	// Pass an event to the layer.
-	virtual void onEvent(Event& event);
+	virtual void onEvent(Event& event) override;
 
 	// Render the layer.
-	virtual void onRender();
+	virtual void onRender() override;
 
 	// Dispatch the ImGUI events, if there are elements
 	// in the layer that has to do this.
-	virtual void dispatchEvents();
+	virtual void dispatchEvents() override;
 
 	// Set the name of all the elements in the layer.
-	virtual void setName(std::string& newName);
+	virtual void setName(std::string& newName) override;
 
 	// Get the name of the layer.
-	virtual std::string& getName();
+	virtual std::string& getName() override;
 
 	// Checks if the layer is hovered.
-	virtual bool isHovered();
+	virtual bool isHovered() override;
 
 protected:
 
@@ -101,9 +101,6 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 {
 	// The layer is responsible for passing the events coordinates as local to the window.
 
-	// Log the event.
-	std::cout << m_guiElement->m_name << ": " << event.ID << "\n";
-
 	uint64_t eventID = event.ID;
 
 	// Mouse events.
@@ -149,8 +146,8 @@ void GuiLayer<GuiType>::onRender()
 	if (m_guiElement->shouldRender())
 	{
 		m_guiElement->onRender();
-		m_guiElement->end();
 	}
+	m_guiElement->end();
 	
 	// Remove layer in next frame if close was clicked.
 	if (!m_guiElement->m_isOpen)
