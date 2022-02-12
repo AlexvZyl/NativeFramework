@@ -7,10 +7,11 @@
 #include <iostream>
 #include <string>
 #include "Lumen.h"
+#include "Application/Application.h"
 #include "Application/Layers/Layer.h"
 #include "Application/Events/Events.h"
-#include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Layers/LayerStack.h"
+#include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Misc/ConsoleColor.h"
 
 //==============================================================================================================================================//
@@ -23,31 +24,35 @@ class GuiLayer : public Layer
 public:
 
 	// Constructor.
-	GuiLayer(std::string layerName, int imguiWindowFLags = 0);
+	GuiLayer(std::string name, int imguiWindowFLags = 0);
 
 	// Get the gui element in the layer.
 	GuiElementCore* getGuiElement();
 
 	// Pass an event to the layer.
-	virtual void onEvent(Event& event) override;
+	virtual void onEvent(Event& event);
 
-	// Render the specific layer.
-	virtual void onRender() override;
+	// Render the layer.
+	virtual void onRender();
 
-	// Dispatch events related to the layer.
-	virtual void dispatchEvents() override;
+	// Dispatch the ImGUI events, if there are elements
+	// in the layer that has to do this.
+	virtual void dispatchEvents();
 
-	// Set the name of the layer elements.
-	virtual void setName(std::string& newName) override;
+	// Set the name of all the elements in the layer.
+	virtual void setName(std::string& newName);
+
+	// Get the name of the layer.
+	virtual std::string& getName();
+
+	// Checks if the layer is hovered.
+	virtual bool isHovered();
 
 protected:
 
 	// The GUI element that belongs to this layer.
 	// The basic layer only has on Gui element.
 	std::unique_ptr<GuiType> m_guiElement = nullptr;
-
-	// The imguiWindow flags related to the layer's ImGUI windows.
-	int m_imguiWindowflags = 0;
 
 };
 
@@ -56,11 +61,11 @@ protected:
 //==============================================================================================================================================//
 
 template<class GuiType>
-GuiLayer<GuiType>::GuiLayer(std::string layerName, int imguiWindowFlags)
-	: Layer(layerName), m_imguiWindowflags(imguiWindowFlags)
+GuiLayer<GuiType>::GuiLayer(std::string name, int imguiWindowFlags)
+	: Layer()
 {
 	// Create GUI element.
-	m_guiElement = std::make_unique<GuiType>(layerName, imguiWindowFlags);
+	m_guiElement = std::make_unique<GuiType>(name, imguiWindowFlags);
 }
 
 template<class GuiType>
@@ -72,8 +77,19 @@ GuiElementCore* GuiLayer<GuiType>::getGuiElement()
 template<class GuiType>
 void GuiLayer<GuiType>::setName(std::string& newName)
 {
-	m_layerName = newName;
 	m_guiElement->m_name = newName;
+}
+
+template<class GuiType>
+std::string& GuiLayer<GuiType>::getName()
+{
+	return m_guiElement->m_name;
+}
+
+template<class GuiType>
+bool GuiLayer<GuiType>::isHovered() 
+{
+	return m_guiElement->isHovered();
 }
 
 //==============================================================================================================================================//
@@ -83,19 +99,10 @@ void GuiLayer<GuiType>::setName(std::string& newName)
 template<class GuiType>
 void GuiLayer<GuiType>::onEvent(Event& event)
 {
-	// Global events are created using GLFW coordinates.  They
-	// have to be converted to coordinates that are local to the 
-	// window's content region.
-	// The event is copied (instead of using a reference) so that it can 
-	// still be used in other places throughout Lumen.
-
-	// Since we now have access to the windows outside of the loop we can 
-	// look into using imgui as the event dispatcher instead of using
-	// glfw directly.  This prevents us from having to create multiple instaces
-	// of events.  And what if an event is already passed as local coordinates?
+	// The layer is responsible for passing the events coordinates as local to the window.
 
 	// Log the event.
-	std::cout << m_layerName << ": " << event.ID << "\n";
+	std::cout << m_guiElement->m_name << ": " << event.ID << "\n";
 
 	uint64_t eventID = event.ID;
 
@@ -138,10 +145,13 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 template<class GuiType>
 void GuiLayer<GuiType>::onRender()
 {
-	m_guiElement->begin();
-	m_guiElement->onRender();
-	m_guiElement->end();
-
+	m_guiElement->begin(); 
+	if (m_guiElement->shouldRender())
+	{
+		m_guiElement->onRender();
+		m_guiElement->end();
+	}
+	
 	// Remove layer in next frame if close was clicked.
 	if (!m_guiElement->m_isOpen)
 		Lumen::getApp().queuePopLayer(this);
@@ -150,14 +160,8 @@ void GuiLayer<GuiType>::onRender()
 template<class GuiType>
 void GuiLayer<GuiType>::dispatchEvents()
 {
-	// Ensure window exists.
-	if (!m_imGuiWindow) return;
-
-	// Call layer dispatcher.
-	Layer::dispatchEvents();
-
 	// Add Gui events onto the layer events.
-	m_guiElement->dispatchGuiEvents(m_imGuiWindow);
+	m_guiElement->dispatchEvents();
 }
 //==============================================================================================================================================//
 //  EOF.																																		//

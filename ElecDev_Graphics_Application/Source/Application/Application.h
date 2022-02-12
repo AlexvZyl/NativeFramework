@@ -7,6 +7,8 @@
 #include <vector>
 #include "Application/Events/EventLog.h"
 #include "Application/Layers/LayerStack.h"
+#include "Application/Layers/GuiLayer.h"
+#include "Application/Layers/EngineLayer.h"
 
 // TO BE DEPRECATED.
 #include "GuiState.h"
@@ -168,16 +170,9 @@ void Application::logEvent(Event& event)
 template<typename EngineType>
 void Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 {
-	// Make sure we are pushing a gui layer.
-	if (!std::is_base_of<EngineCore, EngineType>::value)
-	{
-		std::cout << yellow << "\n[LAYERS] [WARN]: " << white << "Passing non Engine layer to pushEngineLayer().\n";
-		return;
-	}
-
 	// Create an EngineLayer.
+	// pushLayer() takes ownership of the memory.
 	EngineLayer<EngineType>* layer = new EngineLayer<EngineType>(layerName);
-
 	// Push the layer.
 	m_layerStack->pushLayer<EngineLayer<EngineType>>(*layer);
 }
@@ -185,16 +180,9 @@ void Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 template<typename GuiType>
 void Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
 {
-	// Make sure we are pushing a gui layer.
-	if (!std::is_base_of<GuiElementCore, GuiType>::value)
-	{
-		std::cout << yellow << "\n[LAYERS] [WARN]: " << white << "Passing non GUI layer to pushGuiLayer().\n";
-		return;
-	}
-
 	// Create the GUI layer.
+	// pushLayer() takes ownership of the memory.
 	GuiLayer<GuiType>* layer = new GuiLayer<GuiType>(layerName);
-
 	// Push the layer.
 	m_layerStack->pushLayer<GuiLayer<GuiType>>(*layer);
 }

@@ -111,7 +111,6 @@
     <ClCompile Include="Source\Graphics\Vulkan\README.md" />
     <ClCompile Include="Source\Application\Events\EventLog.cpp" />
     <ClCompile Include="Source\Application\ApplicationWindow.cpp" />
-    <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
     <ClCompile Include="Source\GUI\GuiElementCore\GuiElementCore.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />

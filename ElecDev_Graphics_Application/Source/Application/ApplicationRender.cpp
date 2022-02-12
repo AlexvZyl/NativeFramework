@@ -2,8 +2,10 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "External/ImGUI/Implementations/imgui_impl_glfw.h"
-#include "External/ImGUI/Implementations/imgui_impl_opengl3.h"
+#include "ImGUI/Implementations/imgui_impl_glfw.h"
+#include "ImGUI/Implementations/imgui_impl_opengl3.h"
+#include "ImGUI/Core/imgui.h"
+#include "ImGUI/Core/imgui_internal.h"
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
 #include "GLFW/glfw3.h"
@@ -51,6 +53,9 @@ void Application::onRenderInit()
 
 void Application::onRender()
 {	
+	// Clear buffers.
+	Renderer::clear();
+
 	// Init.
 	onRenderInit();
 
@@ -66,6 +71,12 @@ void Application::onRender()
 
 	// Cleanup.
 	onRenderCleanup();
+
+	// Force push commands to the GPU.
+	Renderer::finish();
+
+	// Swap the window buffers.
+	swapBuffers();
 }
 
 void Application::onRenderCleanup()

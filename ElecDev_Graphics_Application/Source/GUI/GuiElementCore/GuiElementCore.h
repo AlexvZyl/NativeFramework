@@ -46,7 +46,7 @@ public:
 	// End the ImGUI widget.
 	inline virtual void end() = 0;
 	// Updates the data related to the gui element.
-	virtual void dispatchGuiEvents(ImGuiWindow* window);
+	virtual void dispatchEvents();
 	// Should the gui element render, based on certain flags.
 	bool shouldRender();
 
@@ -66,7 +66,8 @@ public:
 	std::string m_name = "NULL";
 	// The ImGUI flags describing the window.
 	int m_imguiWindowFlags = 0;
-
+	// The imgui window that the gui is in.
+	ImGuiWindow* m_imguiWindow = nullptr;
 	// The size of the content area.
 	ImVec2 m_contentRegionSize = { 0.f, 0.f };
 	// The position of the content area.
@@ -75,6 +76,9 @@ public:
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
+
+	// Checks if the window is hovered.
+	bool isHovered();
 
 	// Mouse events.
 	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) {};
@@ -85,8 +89,8 @@ public:
 	inline virtual void onKeyEvent(KeyEvent& event) {};
 
 	// Content region events.
-	void detectContentRegionResize(ImGuiWindow* window);
-	void detectContentRegionMove(ImGuiWindow* window);
+	void detectContentRegionResize();
+	void detectContentRegionMove();
 	virtual void onContentRegionResizeEvent(WindowEvent& event);
 	virtual void onContentRegionMoveEvent(WindowEvent& event);
 

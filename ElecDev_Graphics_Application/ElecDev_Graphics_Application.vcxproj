@@ -175,7 +175,6 @@
   <ItemGroup>
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
-    <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Application\ApplicationWindow.cpp" />

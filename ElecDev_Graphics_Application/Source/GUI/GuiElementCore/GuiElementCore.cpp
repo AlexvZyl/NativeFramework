@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "GUI/GuiElementCore/GuiElementCore.h"
+#include "GUI/ImGuiTweaks.h"
 #include "Application/Events/Events.h"
 #include "External/ImGUI/Core/imgui.h"
 #include "External/ImGUI/Core/imgui_internal.h"
@@ -56,24 +57,41 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 }
 
-void GuiElementCore::dispatchGuiEvents(ImGuiWindow* window)
+void GuiElementCore::dispatchEvents()
 {
+	// Ensure window exists.
+	if (!m_imguiWindow) return;
+
 	// Update data.
-	m_isCollapsed = window->Collapsed;
-	m_isDocked = window->DockIsActive;
-	m_isHidden = window->Hidden;
+	m_isCollapsed = m_imguiWindow->Collapsed;
+	m_isDocked = m_imguiWindow->DockIsActive;
+	m_isHidden = m_imguiWindow->Hidden;
 
 	// Check if we should pass the events.
 	if (!shouldRender()) return;
 
 	// Update gui data.
-	detectContentRegionMove(window);
-	detectContentRegionResize(window);
+	detectContentRegionMove();
+	detectContentRegionResize();
 }
 
 //==============================================================================================================================================//
 //  Events.																																		//
 //==============================================================================================================================================//
+
+bool GuiElementCore::isHovered() 
+{
+	// If the window exists.
+	if(m_imguiWindow) 
+		return ImGuiTweaks::IsWindowHovered(0, m_imguiWindow);
+
+	// Find the window.
+	else
+	{
+		m_imguiWindow = ImGui::FindWindowByName(m_name.c_str());
+		return ImGuiTweaks::IsWindowHovered(0, m_imguiWindow);
+	}
+}
 
 void GuiElementCore::onContentRegionResizeEvent(WindowEvent& event)
 {
@@ -85,10 +103,10 @@ void GuiElementCore::onContentRegionMoveEvent(WindowEvent& event)
 	m_contentRegionPosition	= { event.windowData.x, event.windowData.y };
 }
 
-void GuiElementCore::detectContentRegionResize(ImGuiWindow* window) 
+void GuiElementCore::detectContentRegionResize() 
 {
 	// Get the current content region size.
-	ImVec2 contentRegionSizeIm = window->ContentRegionRect.GetSize();
+	ImVec2 contentRegionSizeIm = m_imguiWindow->ContentRegionRect.GetSize();
 	glm::vec2 contentRegionSize = { contentRegionSizeIm.x, contentRegionSizeIm.y};
 
 	// If the content region resized pass an event.
@@ -99,10 +117,10 @@ void GuiElementCore::detectContentRegionResize(ImGuiWindow* window)
 	}
 }
 
-void GuiElementCore::detectContentRegionMove(ImGuiWindow* window)
+void GuiElementCore::detectContentRegionMove()
 {
 	// Get window current position.
-	ImVec2 regionPos = window->ContentRegionRect.Min;
+	ImVec2 regionPos = m_imguiWindow->ContentRegionRect.Min;
 	glm::vec2 contentRegionPos = { regionPos.x, regionPos.y };
 
 	// Check if the window has moved.
