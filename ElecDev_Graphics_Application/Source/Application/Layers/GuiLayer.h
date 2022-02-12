@@ -143,10 +143,10 @@ template<class GuiType>
 void GuiLayer<GuiType>::onRender()
 {
 	m_guiElement->begin(); 
+
 	if (m_guiElement->shouldRender())
-	{
 		m_guiElement->onRender();
-	}
+
 	m_guiElement->end();
 	
 	// Remove layer in next frame if close was clicked.

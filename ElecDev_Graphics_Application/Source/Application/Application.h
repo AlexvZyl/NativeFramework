@@ -42,8 +42,6 @@ public:
 
 	// Renders the next frame.
 	void onRender();
-	// Swap the window buffers.
-	void swapBuffers();
 	
 	// ------------- //
 	//  L A Y E R S  //
