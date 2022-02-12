@@ -48,7 +48,7 @@ void PyInterface::procesInput(std::string inString)
         // Quit the thread.
     case hash("Quit"):
     {
-        Application::get().m_guiState->globalQuit = true;
+        Lumen::getApp().m_guiState->globalQuit = true;
         break;
     }
 

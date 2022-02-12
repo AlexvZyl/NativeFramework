@@ -4,13 +4,13 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include <string>
+#include <map>
 #include <iostream>
-#include "External/Misc/ConsoleColor.h"
 #include <vector>
 #include <memory>
 #include "Application/Layers/Layer.h"
-#include <string>
-#include <map>
+#include "External/Misc/ConsoleColor.h"
 
 //==============================================================================================================================================//
 //  Layer Stack.																																//
@@ -23,19 +23,19 @@ public:
 	// Constructor.
 	LayerStack() = default;
 
-	// Add a layer to the front of the stack.
-	template<typename LayerType>
+	// Add a layer to the stack.
+	template<class LayerType>
 	void pushLayer(Layer& layer);
 
-	// Add the specified layer to the to be removed vector.
+	// Queue the layer to be removed.
 	void queuePopLayer(Layer& layer);
-	// Pop all the layers that have been scheduled to be removed.
+	// Pop all the layers that have been queued for removal.
 	void popLayers();
 	// The above two functions are implemented in this way, because we dont want to 
 	// immediately remove a layer while it is dispatching events or rendering.
 	// It should be done in the following frame.
 
-	// Get the layers in the stack.
+	// Get the layers contained in the stack.
 	std::map<std::string, std::unique_ptr<Layer>>& getLayers();
 
 private:
@@ -52,26 +52,22 @@ private:
 };
 
 //==============================================================================================================================================//
-//  Operators.																																	//
-//==============================================================================================================================================//
-
-bool operator==(const std::unique_ptr<Layer>& layerUPtr, const Layer& layer);
-bool operator!=(const std::unique_ptr<Layer>& layerUPtr, const Layer& layer);
-
-//==============================================================================================================================================//
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-template<typename LayerType>
+template<class LayerType>
 void LayerStack::pushLayer(Layer& layer)
 {
-	// Create a unique imgui ID that is not displayed so that we can have
-	// windows with the same name.
-	std::string newName = layer.m_layerName + "##" + std::to_string(m_totalLayerCount);
+	// Create a name with an unqiue ID.
+	// This allows us to have windows with the same name.
+	std::string newName = layer.getName() + "##" + std::to_string(m_totalLayerCount);
+	layer.setName(newName);
 	m_totalLayerCount++;
-	layer.changeName(newName);
+
 	// Push the layer.
-	m_layers.insert({ layer.getLayerName(), std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))) });
+	m_layers.insert({ layer.getName(), std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))) });
+
+	// Resize the layer pop queue.
 	m_layerPopQueue.reserve(m_layers.size());
 }
 

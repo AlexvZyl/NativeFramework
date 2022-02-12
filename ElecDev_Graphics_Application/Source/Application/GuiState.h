@@ -11,8 +11,9 @@
 /*=======================================================================================================================================*/
 /* Forward declerations                                                                                                                  */
 /*=======================================================================================================================================*/
+
 class Component2D;
-class Design2DEngineGL;
+class Design2DEngine;
 
 /*=======================================================================================================================================*/
 /* Struture.                                                                                                                             */
@@ -67,7 +68,7 @@ struct GUIState
 	bool placingComponent = false;
 
 	//Design Engine
-	Design2DEngineGL* design_engine = NULL;
+	Design2DEngine* design_engine = NULL;
 	Component2D* active_component = NULL;
 
 };

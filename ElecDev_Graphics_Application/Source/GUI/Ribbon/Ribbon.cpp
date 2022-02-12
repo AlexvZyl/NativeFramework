@@ -61,7 +61,7 @@ void Ribbon::begin()
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void Ribbon::renderBody()
+void Ribbon::onRender()
 {
     // -------------- //
     //  B U T T O N S //

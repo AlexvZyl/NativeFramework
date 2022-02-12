@@ -18,6 +18,7 @@ class MouseMoveEvent;
 class MouseScrollEvent;
 class KeyEvent;
 class LayerEvent;
+
 struct ImGuiWindow;
 
 //==============================================================================================================================================//
@@ -31,12 +32,6 @@ public:
 	// Pass event to element.
 	virtual void onEvent(Event& event);
 
-protected:
-
-	friend class Layer;
-	friend class BasicGuiLayer;
-	friend class EngineLayer;
-
 	// Constructor.
 	GuiElementCore(std::string name, int windowFlags);
 
@@ -47,11 +42,13 @@ protected:
 	// Start the ImGUI widget.
 	inline virtual void begin() = 0;
 	// Render the ImGUI widget.
-	inline virtual void renderBody() = 0;
+	inline virtual void onRender() = 0;
 	// End the ImGUI widget.
 	inline virtual void end() = 0;
 	// Updates the data related to the gui element.
-	virtual void dispatchGuiEvents(ImGuiWindow* window);
+	virtual void dispatchEvents();
+	// Should the gui element render, based on certain flags.
+	bool shouldRender();
 
 	// --------- //
 	//  D A T A  //
@@ -65,11 +62,14 @@ protected:
 	bool m_isHidden = false;
 	// Is the GUI element docked?
 	bool m_isDocked = false;
+	// The gui dock id.
+	ImGuiID m_dockID = NULL;
 	// The window name.
 	std::string m_name = "NULL";
 	// The ImGUI flags describing the window.
 	int m_imguiWindowFlags = 0;
-
+	// The imgui window that the gui is in.
+	ImGuiWindow* m_imguiWindow = nullptr;
 	// The size of the content area.
 	ImVec2 m_contentRegionSize = { 0.f, 0.f };
 	// The position of the content area.
@@ -78,6 +78,9 @@ protected:
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
+
+	// Checks if the window is hovered.
+	bool isHovered();
 
 	// Mouse events.
 	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) {};
@@ -88,8 +91,8 @@ protected:
 	inline virtual void onKeyEvent(KeyEvent& event) {};
 
 	// Content region events.
-	void detectContentRegionResize(ImGuiWindow* window);
-	void detectContentRegionMove(ImGuiWindow* window);
+	void detectContentRegionResize();
+	void detectContentRegionMove();
 	virtual void onContentRegionResizeEvent(WindowEvent& event);
 	virtual void onContentRegionMoveEvent(WindowEvent& event);
 

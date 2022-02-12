@@ -1,95 +1,57 @@
+#pragma once
+
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include <iostream>
-#include "BasicGuiLayer.h"
-#include "GUI/GuiElementCore/GuiElementCore.h"
-#include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/GraphicsScene/GraphicsScene.h"
-#include "GUI/Ribbon/Ribbon.h"
-#include "GUI/Toolbar/toolbar.h"
-#include "Misc/ConsoleColor.h"
-#include "Application/Application.h"
-#include "Application/Events/Events.h"
-#include "Engines/EngineCore/EngineCore.h"
+#include "Application/Layers/GuiLayer.h"
 
 //==============================================================================================================================================//
 //  GUI Layer.																																	//
 //==============================================================================================================================================//
 
-BasicGuiLayer::BasicGuiLayer(uint64_t ID, std::string layerName, int imguiWindowFlags)
-	: Layer(ID | LayerType_GUI, layerName), m_imguiWindowflags(imguiWindowFlags)
+template<class EngineType>
+class EngineLayer : public GuiLayer<GraphicsScene>
 {
-	// --------------- //
-	//  E N G I N E S  //
-	// --------------- //
+public:
 
-	if (ID == LayerType_Base2DEngine   ||
-		ID == LayerType_Base3DEngine   ||
-		ID == LayerType_Design2DEngine ||
-		ID == LayerType_Design3DEngine)
+	// Constructor.
+	EngineLayer(std::string name, int imguiWindowFLags = 0)
+		: GuiLayer<GraphicsScene>(name, imguiWindowFLags)
 	{
-		m_layerID |= LayerType_GraphicsScene | LayerType_GUI | LayerType_Engine;
-		m_guiElement = std::make_unique<GraphicsScene>(ID, m_layerName, m_imguiWindowflags);
+		// Create the engine.
+		m_engine = std::make_unique<EngineType>();
+		// Set the texture.
+		m_guiElement->setEngine(m_engine.get());
 	}
 
-	// ------------------------- //
-	//  G U I   E L E M E N T S  //
-	// ------------------------- //
-
-	else if (ID == LayerType_ComponentEditor)
+	// Get the engine in the layer.
+	inline EngineType* getEngine() 
 	{
-		m_guiElement = std::make_unique<ComponentEditor>(m_layerName, m_imguiWindowflags);
+		return m_engine.get();
 	}
 
-	else if (ID == LayerType_Toolbar)
-	{
-		m_guiElement = std::make_unique<Toolbar>(m_layerName, m_imguiWindowflags);
-	}
-	else if (ID == LayerType_Ribbon)
-	{
-		m_guiElement = std::make_unique<Ribbon>(m_layerName, m_imguiWindowflags);
-	}
+	// Pass an event to the layer.
+	virtual void onEvent(Event& event) override;
 
-	// ----------- //
-	//  E R R O R  //
-	// ----------- //
+	// Render the layer.
+	virtual void onRender() override;
 
-	else
-	{
-		std::cout << red << "\n[LAYERS] [ERROR]: " << white << "Could not create GuiLayer based on the provided ID.\n";
-		assert(true);
-	}
-}
+protected:
 
-GuiElementCore* BasicGuiLayer::getGuiElement()
-{
-	return m_guiElement.get();
-}
-
-void BasicGuiLayer::changeName(std::string& name) 
-{
-	m_layerName = name;
-	m_guiElement->m_name = name;
-}
+	// The engine that belongs to the layer.
+	std::unique_ptr<EngineType> m_engine = nullptr;
+};
 
 //==============================================================================================================================================//
 //  Events.																																		//
 //==============================================================================================================================================//
 
-void BasicGuiLayer::onEvent(Event& event)
+template<class EngineType>
+void EngineLayer<EngineType>::onEvent(Event& event)
 {
-	// Global events are created using GLFW coordinates.  They
-	// have to be converted to coordinates that are local to the 
-	// window's content region.
-	// The event is copied (instead of using a reference) so that it can 
-	// still be used in other places throughout Lumen.
-
-	// Since we now have access to the windows outside of the loop we can 
-	// look into using imgui as the event dispatcher instead of using
-	// glfw directly.  This prevents us from having to create multiple instaces
-	// of events.  And what if an event is already passed as local coordinates?
+	// The layer is responsible for passing the events coordinates as local to the window.
 
 	uint64_t eventID = event.ID;
 
@@ -99,6 +61,7 @@ void BasicGuiLayer::onEvent(Event& event)
 		MouseMoveEvent mouseEvent = dynamic_cast<MouseMoveEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
+		m_engine->onEvent(mouseEvent);
 		m_guiElement->onEvent(mouseEvent);
 	}
 	else if (eventID == EventType_MouseScroll)
@@ -106,6 +69,7 @@ void BasicGuiLayer::onEvent(Event& event)
 		MouseScrollEvent mouseEvent = dynamic_cast<MouseScrollEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
+		m_engine->onEvent(mouseEvent);
 		m_guiElement->onEvent(mouseEvent);
 	}
 	else if (eventID == EventType_MousePress || eventID == EventType_MouseRelease)
@@ -113,6 +77,7 @@ void BasicGuiLayer::onEvent(Event& event)
 		MouseButtonEvent mouseEvent = dynamic_cast<MouseButtonEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
+		m_engine->onEvent(mouseEvent);
 		m_guiElement->onEvent(mouseEvent);
 	}
 
@@ -122,35 +87,37 @@ void BasicGuiLayer::onEvent(Event& event)
 		KeyEvent keyEvent = dynamic_cast<KeyEvent&>(event);
 		keyEvent.mousePosition.x = keyEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
 		keyEvent.mousePosition.y = keyEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
+		m_engine->onEvent(keyEvent);
 		m_guiElement->onEvent(keyEvent);
 	}
 
 	// The other events do not need adjustments.
-	else m_guiElement->onEvent(event);
+	else
+	{
+		m_engine->onEvent(event);
+		m_guiElement->onEvent(event);
+	}
 }
 
-void BasicGuiLayer::onRender()
+template<class EngineType>
+void EngineLayer<EngineType>::onRender()
 {
 	m_guiElement->begin();
-	m_guiElement->renderBody();
+
+	// Check if should render.
+	if (m_guiElement->shouldRender()) 
+	{
+		// Render.
+		m_engine->onRender();
+		m_guiElement->onRender();
+	}
 	m_guiElement->end();
 
 	// Remove layer in next frame if close was clicked.
-	if(!m_guiElement->m_isOpen) 
-		Application::get().queuePopLayer(this);
+	if (!m_guiElement->m_isOpen)
+		Lumen::getApp().queuePopLayer(this);
 }
 
-void BasicGuiLayer::dispatchLayerEvents() 
-{
-	// Ensure window exists.
-	if (!m_imGuiWindow) return;
-
-	// Call layer dispatcher.
-	Layer::dispatchLayerEvents();
-
-	// Add Gui events onto the layer events.
-	m_guiElement->dispatchGuiEvents(m_imGuiWindow);
-}
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

@@ -24,7 +24,7 @@ void Application::dispatchEvents()
 		if (!m_hoveredLayer) onHoveredLayerChange(findhoveredLayer());
 
 		// If the currently hovered layer is no longer being hovered we need to find the new layer.
-		else if(!m_hoveredLayer->isLayerHovered()) onHoveredLayerChange(findhoveredLayer());
+		else if(!m_hoveredLayer->isHovered()) onHoveredLayerChange(findhoveredLayer());
 	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
@@ -62,7 +62,7 @@ void Application::dispatchEvents()
 	// due to how resizing works when windows are docked.  They do not necessarily
 	// come into focus, missing the resize event.
 	for (auto& layerPair : m_layerStack->getLayers())
-		layerPair.second->dispatchLayerEvents();
+		layerPair.second->dispatchEvents();
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	m_eventLog->clear();
@@ -77,7 +77,7 @@ Layer* Application::findhoveredLayer()
 	// Iterated in reverse since the back of the vector is most more likely to be hovered.
 	for (auto& layerPair : m_layerStack->getLayers())
 	{
-		if (layerPair.second->isLayerHovered())
+		if (layerPair.second->isHovered())
 			return layerPair.second.get();
 	}
 	// No layer is found.
@@ -128,7 +128,7 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	{
 		LayerEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
-		ImGui::SetWindowFocus(newLayer->getLayerName().c_str());
+		ImGui::SetWindowFocus(newLayer->getName().c_str());
 	}
 	// No layer is in focus.
 	else ImGui::SetWindowFocus(NULL);
