@@ -27,7 +27,7 @@ public:
 	GuiLayer(std::string name, int imguiWindowFLags = 0);
 
 	// Get the gui element in the layer.
-	GuiElementCore* getGuiElement();
+	GuiType* getGuiElement();
 
 	// Pass an event to the layer.
 	virtual void onEvent(Event& event) override;
@@ -69,7 +69,7 @@ GuiLayer<GuiType>::GuiLayer(std::string name, int imguiWindowFlags)
 }
 
 template<class GuiType>
-GuiElementCore* GuiLayer<GuiType>::getGuiElement()
+GuiType* GuiLayer<GuiType>::getGuiElement()
 {
 	return m_guiElement.get();
 }
@@ -143,10 +143,10 @@ template<class GuiType>
 void GuiLayer<GuiType>::onRender()
 {
 	m_guiElement->begin(); 
+
 	if (m_guiElement->shouldRender())
-	{
 		m_guiElement->onRender();
-	}
+
 	m_guiElement->end();
 	
 	// Remove layer in next frame if close was clicked.

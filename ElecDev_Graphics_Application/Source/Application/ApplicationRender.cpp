@@ -39,6 +39,9 @@ void Application::renderInitialFrame()
 
 void Application::onRenderInit()
 {
+	// Clear buffers.
+	Renderer::clear();
+
 	// Feed inputs to ImGUI, start new frame.
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -53,9 +56,6 @@ void Application::onRenderInit()
 
 void Application::onRender()
 {	
-	// Clear buffers.
-	Renderer::clear();
-
 	// Init.
 	onRenderInit();
 
@@ -71,12 +71,6 @@ void Application::onRender()
 
 	// Cleanup.
 	onRenderCleanup();
-
-	// Force push commands to the GPU.
-	Renderer::finish();
-
-	// Swap the window buffers.
-	swapBuffers();
 }
 
 void Application::onRenderCleanup()
@@ -104,11 +98,13 @@ void Application::onRenderCleanup()
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
-}
 
-void Application::swapBuffers()
-{
+	// Push commands to the GPU.
+	Renderer::finish();
+
+	// Swap the window buffers.
 	glfwSwapBuffers(m_window);
+
 }
 
 //==============================================================================================================================================//

@@ -42,8 +42,6 @@ public:
 
 	// Renders the next frame.
 	void onRender();
-	// Swap the window buffers.
-	void swapBuffers();
 	
 	// ------------- //
 	//  L A Y E R S  //
@@ -51,10 +49,10 @@ public:
 
 	// Push an engine onto the layerstack.
 	template<typename EngineType>
-	void pushEngineLayer(std::string layerName, int imguiWindowFlags = 0);
+	EngineType* pushEngineLayer(std::string layerName, int imguiWindowFlags = 0);
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
-	void pushGuiLayer(std::string layerName, int imguiWindowFlags = 0);
+	GuiType* pushGuiLayer(std::string layerName, int imguiWindowFlags = 0);
 	// Pop a layer from the layerstack.
 	void queuePopLayer(Layer* layer);
 
@@ -168,23 +166,26 @@ void Application::logEvent(Event& event)
 }
 
 template<typename EngineType>
-void Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
+EngineType* Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 {
 	// Create an EngineLayer.
 	// pushLayer() takes ownership of the memory.
 	EngineLayer<EngineType>* layer = new EngineLayer<EngineType>(layerName);
 	// Push the layer.
-	m_layerStack->pushLayer<EngineLayer<EngineType>>(*layer);
+	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(*layer);
+	// Return a pointer to the engine.
+	return dynamic_cast<EngineLayer<EngineType>*>(m_layerStack->getLayers()[newName].get())->getEngine();
 }
 
 template<typename GuiType>
-void Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
+GuiType* Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
 {
 	// Create the GUI layer.
 	// pushLayer() takes ownership of the memory.
 	GuiLayer<GuiType>* layer = new GuiLayer<GuiType>(layerName);
 	// Push the layer.
-	m_layerStack->pushLayer<GuiLayer<GuiType>>(*layer);
+	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(*layer);
+	return dynamic_cast<GuiLayer<GuiType>*>(m_layerStack->getLayers()[newName].get())->getGuiElement();
 }
 
 //==============================================================================================================================================//
