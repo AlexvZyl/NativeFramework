@@ -275,11 +275,21 @@ TODO: Cullen to add a section on `Entity` parents.
 
 ### Layers
 
-`My2DEngine` is now fully functioning.  There is only one last thing to do, we need it to be displayed in a window inside Lumen.  This is as easy as:
+`My2DEngine` is now fully functioning.  There is only one last thing to do, we need to be able to start using instances of `My2DEngine` inside of Lumen.  Creating a window with an instance is as easy as:
 
 ```C++
 // #include "Lumen.h"
+// #include "Application.h"
 Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
+```
+
+Pushing layers into Lumen only allows constructors that provide names and flags (flags are not important for the developer).  So if you want to have extra arguments passed into the constructor you can do something like:
+
+```C++
+// #include "Lumen.h"
+// #include "Application.h"
+My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
+myEnginePtr->init(...);
 ```
 
 And now it will be showing in a window inside Lumen and receive events!  Lumen uses `templates` to push layers which means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any developer decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
