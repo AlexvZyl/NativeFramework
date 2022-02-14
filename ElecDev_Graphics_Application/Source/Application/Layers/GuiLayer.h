@@ -26,6 +26,9 @@ public:
 	// Constructor.
 	GuiLayer(std::string name, int imguiWindowFLags = 0);
 
+	// Destructor.
+	inline virtual ~GuiLayer() = default;
+
 	// Get the gui element in the layer.
 	GuiType* getGuiElement();
 
@@ -99,7 +102,8 @@ bool GuiLayer<GuiType>::isHovered()
 template<class GuiType>
 void GuiLayer<GuiType>::onEvent(Event& event)
 {
-	// The layer is responsible for passing the events coordinates as local to the window.
+	// The layer is responsible for passing the events coordinates as local to the window,
+	// since these are GLFW events that whose coordinates are in the entire window.
 
 	uint64_t eventID = event.ID;
 
@@ -142,11 +146,14 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 template<class GuiType>
 void GuiLayer<GuiType>::onRender()
 {
+	// Begin the window.
 	m_guiElement->begin(); 
 
+	// Render contents.
 	if (m_guiElement->shouldRender())
 		m_guiElement->onRender();
 
+	// End window.
 	m_guiElement->end();
 	
 	// Remove layer in next frame if close was clicked.
@@ -157,7 +164,7 @@ void GuiLayer<GuiType>::onRender()
 template<class GuiType>
 void GuiLayer<GuiType>::dispatchEvents()
 {
-	// Add Gui events onto the layer events.
+	// Dispatch the GUI window events.
 	m_guiElement->dispatchEvents();
 }
 //==============================================================================================================================================//

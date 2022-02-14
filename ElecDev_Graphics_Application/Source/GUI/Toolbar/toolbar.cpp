@@ -7,11 +7,12 @@
 #include <cfenv>
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
-#include <GLFW/glfw3.h>
 #include "Lumen.h"
+#include "Application/Application.h"
 #include "Resources/ResourceHandler.h"
 #include "External/ImGUI/Core/imgui.h"
 #include "External/ImGUI/Core/imgui_internal.h"
+#include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
@@ -60,7 +61,7 @@ void Toolbar::onRender()
         }
         if (ImGui::MenuItem("Close", "Ctrl+W"))
         {
-            /*m_guiState->globalQuit = true; */
+            Lumen::getApp().closeWindow();
         }
 
         ImGui::EndMenu();

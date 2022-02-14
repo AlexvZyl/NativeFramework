@@ -12,6 +12,8 @@ This is where the interactive 2D design engine is implemented.
 #include "OpenGL/CameraGL.h"
 #include "OpenGL/RendererGL.h"
 #include <iostream>
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

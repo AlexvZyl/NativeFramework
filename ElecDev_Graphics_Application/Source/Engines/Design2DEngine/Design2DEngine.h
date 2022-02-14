@@ -5,6 +5,7 @@
 //=============================================================================================================================================//
 
 #include "Engines/Base2DEngine/Base2DEngine.h"
+#include <iostream>
 
 //=============================================================================================================================================//
 //  Forward declerations																													   //
@@ -34,6 +35,11 @@ class Design2DEngine : public Base2DEngine
 {
 public:
 
+	// Constructor
+	Design2DEngine();
+	// Destructor.
+	virtual ~Design2DEngine() = default;
+	
 	// ------------------ //
 	//  V A R I A B L E S //
 	// ------------------ //
@@ -46,13 +52,6 @@ public:
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;
-
-	// ------------------------------------------------ //
-	//  C O N S T R U C T O R   &   D E S T R U C T O R //
-	// ------------------------------------------------ //
-
-	// Constructor
-	Design2DEngine();
 
 	// ------------- //
 	//  E V E N T S  //

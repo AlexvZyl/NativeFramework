@@ -33,7 +33,10 @@ EngineCore* GraphicsScene::getEngine()
 
 void GraphicsScene::onEvent(Event& event) 
 {
+	// Pass evevnts to the GUI.
 	GuiElementCore::onEvent(event);
+
+	// We need to pass events on to the engine as well.
 	m_engine->onEvent(event);
 }
 

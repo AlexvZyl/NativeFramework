@@ -195,7 +195,7 @@ public:
 	glm::vec2 windowData = { 0.f, 0.f };
 
 	// Is the resize value given in scale?
-	bool isScale;
+	bool isScale = false;
 
 };
 

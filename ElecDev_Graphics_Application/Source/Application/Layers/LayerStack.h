@@ -25,11 +25,12 @@ public:
 
 	// Add a layer to the stack.
 	template<class LayerType>
-	std::string pushLayer(Layer& layer);
+	std::string pushLayer(std::unique_ptr<LayerType>& layer);
 
 	// Queue the layer to be removed.
 	void queuePopLayer(Layer& layer);
 	// Pop all the layers that have been queued for removal.
+	// We need to pass the layers in use to check if they have been removed.
 	void popLayers();
 	// The above two functions are implemented in this way, because we dont want to 
 	// immediately remove a layer while it is dispatching events or rendering.
@@ -37,6 +38,13 @@ public:
 
 	// Get the layers contained in the stack.
 	std::map<std::string, std::unique_ptr<Layer>>& getLayers();
+
+	// Retrieve the layer from the dictionary.
+	template<class LayerType>
+	LayerType* getLayer(std::string& layerName) 
+	{
+		return dynamic_cast<LayerType*>(m_layers[layerName].get());
+	}
 
 private:
 
@@ -56,16 +64,16 @@ private:
 //==============================================================================================================================================//
 
 template<class LayerType>
-std::string LayerStack::pushLayer(Layer& layer)
+std::string LayerStack::pushLayer(std::unique_ptr<LayerType>& layer)
 {
 	// Create a name with an unqiue ID.
 	// This allows us to have windows with the same name.
-	std::string newName = layer.getName() + "##" + std::to_string(m_totalLayerCount);
-	layer.setName(newName);
+	std::string newName = layer->getName() + "##" + std::to_string(m_totalLayerCount);
+	layer->setName(newName);
 	m_totalLayerCount++;
 
 	// Push the layer.
-	m_layers.insert({ layer.getName(), std::make_unique<LayerType>(std::move(dynamic_cast<LayerType&>(layer))) });
+	m_layers.insert({ layer->getName(), std::move(layer) });
 
 	// Resize the layer pop queue.
 	m_layerPopQueue.reserve(m_layers.size());

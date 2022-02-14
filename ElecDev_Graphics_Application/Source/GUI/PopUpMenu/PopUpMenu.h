@@ -20,17 +20,10 @@ class Design2DEngine;
 
 class PopUpMenu
 {
-private:
-
-	GUIState* m_guiState;
-	GraphicsHandler* m_graphicsHandler;
-	std::string m_windowContext;
-	bool m_contextSaved = false;
-
 public:
 
 	// Constructor.
-	PopUpMenu(GUIState* guiState, GraphicsHandler* graphicsHandler);
+	PopUpMenu();
 	// Render call.
 	void render();
 	void close();

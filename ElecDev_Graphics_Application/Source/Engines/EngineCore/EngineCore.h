@@ -36,7 +36,9 @@ class EngineCore
 public:
 
 	// Constructor
-	EngineCore();
+	EngineCore() = default;
+	// Destructor.
+	virtual ~EngineCore() = default;
 
 	// ---------- //
 	//  S C E N E //
