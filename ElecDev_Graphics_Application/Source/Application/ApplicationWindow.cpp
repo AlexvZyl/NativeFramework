@@ -238,6 +238,7 @@ GLFWwindow* Application::glfwInitWindow()
     glfwWindowHint(GLFW_SAMPLES, 8);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
+    glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     // Error.
     if (window == NULL) { /* Log error here. */ }
     glfwMakeContextCurrent(window);

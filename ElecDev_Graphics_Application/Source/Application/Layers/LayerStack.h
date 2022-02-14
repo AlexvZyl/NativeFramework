@@ -38,6 +38,13 @@ public:
 	// Get the layers contained in the stack.
 	std::map<std::string, std::unique_ptr<Layer>>& getLayers();
 
+	// Retrieve the layer from the dictionary.
+	template<class LayerType>
+	LayerType* getLayer(std::string& layerName) 
+	{
+		return dynamic_cast<LayerType*>(m_layers[layerName].get());
+	}
+
 private:
 
 	// Vector containing all of the layers.

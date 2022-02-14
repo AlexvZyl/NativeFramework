@@ -41,28 +41,29 @@ Application* Application::m_instance = nullptr;
 Application::Application(GLFWwindow* window) 
 	: m_window(window)
 {
-	// Reset glfw time an application start.	glfwSetTime(0);
+	// Reset glfw time an application start.	
+	glfwSetTime(0);
 
-	// Store a pointer to the instance.
+	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
 	//  NOTE: TO BE DEPRECATED!
 	m_guiState = std::make_unique<GUIState>();
 
-	// Setup events.
+	// Setup.
 	glfwInitCallbacks();
 	m_layerStack = std::make_unique<LayerStack>();
 	m_eventLog = std::make_unique<EventLog>();
-
-	// Setup the main gui layer for Lumen.
-	pushGuiLayer<Toolbar>("Main Toolbar");
-	// Push main ribbon to layerstack.
-	//pushGuiLayer<Ribbon>("Main Ribbon");
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	setGuiTheme();
+
+	// Create the main GUI layers.
+	pushGuiLayer<Toolbar>("Main Toolbar");
+	// Push main ribbon to layerstack.
+	pushGuiLayer<Ribbon>("Main Ribbon");
 
 	// Initialisation frame.
 	renderInitialFrame();
@@ -73,9 +74,7 @@ Application::Application(GLFWwindow* window)
 
 	// Testing layers.
 	pushEngineLayer<Design2DEngine>("Graphics Window");
-	pushEngineLayer<Design2DEngine>("Graphics Window");
-	pushEngineLayer<Design2DEngine>("Graphics Window");
-	//pushGuiLayer<ComponentEditor>("Component Editor");
+	pushGuiLayer<ComponentEditor>("Component Editor");
 }
 
 void Application::shutdown() 

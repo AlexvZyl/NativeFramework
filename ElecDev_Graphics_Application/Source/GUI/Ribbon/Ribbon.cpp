@@ -73,7 +73,6 @@ void Ribbon::onRender()
 
     }
 
-    ImGui::SameLine();
 
     // Block diagram.
     if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
@@ -81,7 +80,6 @@ void Ribbon::onRender()
 
     }
  
-    ImGui::SameLine();
 
     // Circuit bucket.
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
@@ -89,7 +87,6 @@ void Ribbon::onRender()
 
     }
 
-    ImGui::SameLine();
 
     // Add design engine.
     if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 

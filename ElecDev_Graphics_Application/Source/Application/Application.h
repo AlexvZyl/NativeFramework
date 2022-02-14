@@ -168,24 +168,19 @@ void Application::logEvent(Event& event)
 template<typename EngineType>
 EngineType* Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 {
-	// Create an EngineLayer.
-	// pushLayer() takes ownership of the memory.
-	EngineLayer<EngineType>* layer = new EngineLayer<EngineType>(layerName);
-	// Push the layer.
-	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(*layer);
-	// Return a pointer to the engine.
-	return dynamic_cast<EngineLayer<EngineType>*>(m_layerStack->getLayers()[newName].get())->getEngine();
+	// Create and push the layer.
+	EngineLayer<EngineType> layer(layerName);
+	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
+	return m_layerStack->getLayer<EngineLayer<EngineType>>(newName)->getEngine();
 }
 
 template<typename GuiType>
 GuiType* Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
 {
-	// Create the GUI layer.
-	// pushLayer() takes ownership of the memory.
-	GuiLayer<GuiType>* layer = new GuiLayer<GuiType>(layerName);
-	// Push the layer.
-	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(*layer);
-	return dynamic_cast<GuiLayer<GuiType>*>(m_layerStack->getLayers()[newName].get())->getGuiElement();
+	// Create and push the layer.
+	GuiLayer<GuiType> layer(layerName);
+	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(layer);
+	return m_layerStack->getLayer<GuiLayer<GuiType>>(newName)->getGuiElement();
 }
 
 //==============================================================================================================================================//
