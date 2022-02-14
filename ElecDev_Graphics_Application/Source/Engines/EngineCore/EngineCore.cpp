@@ -21,6 +21,11 @@ and notify the user via the terminal interface.
 //  Rendering.																																   //
 //=============================================================================================================================================//
 
+EngineCore::EngineCore()
+{
+	Renderer::bindScene(m_scene.get());
+}
+
 void EngineCore::onRender()
 {
 	Renderer::renderScene(m_scene.get());
