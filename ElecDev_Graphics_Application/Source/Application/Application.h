@@ -17,7 +17,6 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class GUIHandler;
 class EventLog;
 class Layer;
 class ImFont;
@@ -87,6 +86,8 @@ public:
 	std::unique_ptr<GUIState> m_guiState;
 
 private:
+
+	friend class LayerStack;
 
 	// The window containing the application.
 	GLFWwindow* m_window;
@@ -169,7 +170,7 @@ template<typename EngineType>
 EngineType* Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 {
 	// Create and push the layer.
-	EngineLayer<EngineType> layer(layerName);
+	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
 	return m_layerStack->getLayer<EngineLayer<EngineType>>(newName)->getEngine();
 }
@@ -178,7 +179,7 @@ template<typename GuiType>
 GuiType* Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
 {
 	// Create and push the layer.
-	GuiLayer<GuiType> layer(layerName);
+	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(layer);
 	return m_layerStack->getLayer<GuiLayer<GuiType>>(newName)->getGuiElement();
 }

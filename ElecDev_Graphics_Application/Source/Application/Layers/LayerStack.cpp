@@ -7,6 +7,8 @@
 #include "External/Misc/ConsoleColor.h"
 #include "Application/Layers/LayerStack.h"
 #include "Application/Layers/Layer.h"
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //==============================================================================================================================================//
 //  Layer management.																															//
@@ -33,7 +35,7 @@ void LayerStack::popLayers()
 
 	// All the layers have been removed.
 	m_layerPopQueue.clear();
-	m_layerPopQueue.reserve(m_layers.size());
+	m_layerPopQueue.reserve(m_layers.size()-2);
 }
 
 //==============================================================================================================================================//

@@ -19,7 +19,7 @@ GuiElementCore::GuiElementCore(std::string name, int windowFlags)
 
 bool GuiElementCore::shouldRender() 
 {
-	return !m_isCollapsed && !m_isHidden;
+	return !m_isCollapsed && !m_isHidden && m_isOpen;
 }
 
 //==============================================================================================================================================//
@@ -28,7 +28,6 @@ bool GuiElementCore::shouldRender()
 
 void GuiElementCore::onEvent(Event& event)
 {
-
 #ifdef _DEBUG
 	// Log the event.
 	std::cout << m_name << ": " << event.ID << "\n";
@@ -42,6 +41,10 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_Hover)		{ onHoverEvent(dynamic_cast<LayerEvent&>(event)); }
 	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event)); }
 
+	// Window events.
+	else if (eventID == EventType_WindowResize) { onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
+
 	// Do not pass the events below if the layer is collapsed.
 	else if (!shouldRender()) return;
 
@@ -54,10 +57,6 @@ void GuiElementCore::onEvent(Event& event)
 	// Key events.
 	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
-
-	// Window events.
-	else if (eventID == EventType_WindowResize) { onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
-	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 }
 
 void GuiElementCore::dispatchEvents()
@@ -69,10 +68,13 @@ void GuiElementCore::dispatchEvents()
 	m_isCollapsed	= m_imguiWindow->Collapsed;
 	m_isDocked		= m_imguiWindow->DockIsActive;
 	m_isHidden		= m_imguiWindow->Hidden;
+
+	// Get dock ID if it has not been assigned.
 	if (!m_dockID) 
 		m_dockID	= m_imguiWindow->DockId;
 
-	// Check if we should pass the events.
+	// If it should not be rendered we do not have to 
+	// check for resizes.
 	if (!shouldRender()) return;
 
 	// Update gui data.

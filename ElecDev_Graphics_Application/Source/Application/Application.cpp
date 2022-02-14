@@ -62,7 +62,6 @@ Application::Application(GLFWwindow* window)
 
 	// Create the main GUI layers.
 	pushGuiLayer<Toolbar>("Main Toolbar");
-	// Push main ribbon to layerstack.
 	pushGuiLayer<Ribbon>("Main Ribbon");
 
 	// Initialisation frame.
@@ -74,6 +73,7 @@ Application::Application(GLFWwindow* window)
 
 	// Testing layers.
 	pushEngineLayer<Design2DEngine>("Graphics Window");
+	pushEngineLayer<Base2DEngine>("Graphics Window");
 	pushGuiLayer<ComponentEditor>("Component Editor");
 }
 

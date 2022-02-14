@@ -33,10 +33,14 @@ public:
 	// Checks if the layer is hovered.
 	inline virtual bool isHovered() = 0;
 
+	// Protected destructor.
+	inline virtual ~Layer() = default;
+
 protected:
 
 	// Protected constructor.
 	inline Layer() = default;	
+
 };
 
 //==============================================================================================================================================//
