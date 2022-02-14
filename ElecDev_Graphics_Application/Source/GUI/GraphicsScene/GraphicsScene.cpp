@@ -65,6 +65,18 @@ void GraphicsScene::end()
 	ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
 }
 
+void GraphicsScene::onRenderStateChange(bool newState)
+{
+	// Need to start using the attachments.
+	if (newState) 
+		m_engine->m_scene->createFrameBufferResources();
+
+	// Have no use for the attachments.
+	else 
+		m_engine->m_scene->deleteFrameBufferResources();
+
+}
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

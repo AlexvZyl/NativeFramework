@@ -91,6 +91,16 @@ unsigned Scene::getEntityID(glm::vec2& pixelCoords)
 	return m_FBO->getEntityID(pixelCoordsTemp);
 }
 
+void Scene::deleteFrameBufferResources() 
+{
+	m_FBO->deleteResources();
+}
+
+void Scene::createFrameBufferResources() 
+{
+	m_FBO->createResources(m_camera->m_viewportVec[2], m_camera->m_viewportVec[3]);
+}
+
 //==============================================================================================================================================//
 //  Coordinates.																															    //
 //==============================================================================================================================================//

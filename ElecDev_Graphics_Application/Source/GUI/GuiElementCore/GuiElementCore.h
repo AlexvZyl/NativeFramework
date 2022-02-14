@@ -49,6 +49,10 @@ public:
 	virtual void dispatchEvents();
 	// Should the gui element render, based on certain flags.
 	bool shouldRender();
+	// Update the render state.
+	void updateRenderState();
+	// Event handler called when the render state changes.
+	inline virtual void onRenderStateChange(bool newState) {};
 
 	// --------- //
 	//  D A T A  //
@@ -62,6 +66,8 @@ public:
 	bool m_isHidden = false;
 	// Is the GUI element docked?
 	bool m_isDocked = false;
+	// Should the element be rendered?
+	bool m_shouldRender = true;
 	// The gui dock id.
 	ImGuiID m_dockID = NULL;
 	// The window name.

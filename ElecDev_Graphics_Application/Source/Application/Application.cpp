@@ -72,8 +72,8 @@ Application::Application(GLFWwindow* window)
 	// --------------- //
 
 	// Testing layers.
-	pushEngineLayer<Design2DEngine>("Graphics Window");
-	pushEngineLayer<Base2DEngine>("Graphics Window");
+	pushEngineLayer<Design2DEngine>("Design 2D Engine");
+	pushEngineLayer<Base2DEngine>("Base 2D Engine");
 	pushGuiLayer<ComponentEditor>("Component Editor");
 }
 
