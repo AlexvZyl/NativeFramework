@@ -46,8 +46,6 @@ public:
 	void bindRender();
 	// Unbind the FBO.
 	void unbind();
-	// Create the color, depth and stencil attachments.
-	void createAttachments(int width, int height);
 	// Get access to the render texture ID.
 	unsigned int getRenderTexture();
 	// Blit the MSAA texture to the Render texture.
@@ -67,6 +65,15 @@ public:
 	void clearRender();
 	// Return the ID of the entity at the pixel coordinates.
 	unsigned int getEntityID(glm::vec2& pixelCoords);
+
+
+	// Initialise the color, depth and stencil attachments.
+	void initAttachments(int width, int height);
+	// Delete all of the attachments.
+	void deleteResources();
+	// Create and init the attachments (usually after a delete)
+	void createResources(int width, int height);
+
 
 private:
 
@@ -92,6 +99,9 @@ private:
 
 	// Shader to render the scene with.
 	static std::unique_ptr<Shader> m_shader;
+
+	// Has the resources been deleted?
+	bool m_resourcesDeleted = false;
 };
 
 //=============================================================================================================================================//

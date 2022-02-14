@@ -34,6 +34,9 @@ public:
 	// Override the on event so that we pass it to the engine.
 	virtual void onEvent(Event& event) override;
 
+	// Event handler for when the render state changes.
+	virtual void onRenderStateChange(bool newState) override;
+
 	// Set the texture that the graphics window will render.
 	void setEngine(EngineCore* engine);
 	// Get the engine inside the graphics scene.

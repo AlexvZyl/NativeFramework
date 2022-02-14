@@ -29,38 +29,8 @@ FrameBufferObject::FrameBufferObject() {};
 FrameBufferObject::FrameBufferObject(int width, int height, int MSAA) 
 	: m_MSAA(MSAA)
 {
-	// Do not create a FBO with size or width of zero.
-	if (!width || !height)
-	{
-		std::cout << yellow << "[OPENGL] [WARN]: " << white << "Tried to create a FBO with width or height of zero.";
-		return;
-	}
-
-	// Generate MSAA FBO.
-	GLCall(glGenFramebuffers(1, &m_msaaFrameBufferID));
-	GLCall(glGenTextures(1, &m_msaaColorTextureID));
-	GLCall(glGenTextures(1, &m_msaaEntityIDTextureID));
-	GLCall(glGenRenderbuffers(1, &m_msaaDepthStencilBufferID));
-	// Check for generation error.
-	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
-	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " MSAA FBO could not be generated.\n"; }
-
-	// Generate render FBO.
-	GLCall(glGenFramebuffers(1, &m_renderFrameBufferID));
-	GLCall(glGenTextures(1, &m_renderColorTextureID));
-	GLCall(glGenTextures(1, &m_renderEntityIDTextureID));
-	// Check for generation error.
-	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
-	{ std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO could not be generated.\n"; }
-
-	// Post processing.
-
-	// Create attachments for the FBO's.
-	createAttachments(width, height);
-
-	// Save the dimenions.
-	m_viewport[0] = width;
-	m_viewport[1] = height;
+	// Create the attachments and the FBOs.
+	createResources(width, height);
 
 	// ----------------------- //
 	//  R E N D E R   Q U A D  //
@@ -86,7 +56,7 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 }
 
 // Create the FBO attachments.
-void FrameBufferObject::createAttachments(int width, int height)
+void FrameBufferObject::initAttachments(int width, int height)
 {
 	// -------------------------------- //
 	//  M S A A   A T T A C H M E N T S //
@@ -160,15 +130,58 @@ void FrameBufferObject::createAttachments(int width, int height)
 // Destructor.
 FrameBufferObject::~FrameBufferObject()
 {
-	// Delete the textures.
-	GLCall(glDeleteTextures(1, &m_msaaColorTextureID));
+	deleteResources();
+}
+
+void FrameBufferObject::deleteResources() 
+{
+	m_resourcesDeleted = true;
+
+	// Delete attachments.
 	GLCall(glDeleteRenderbuffers(1, &m_msaaDepthStencilBufferID));
+	GLCall(glDeleteTextures(1, &m_msaaColorTextureID));
 	GLCall(glDeleteTextures(1, &m_msaaEntityIDTextureID));
 	GLCall(glDeleteTextures(1, &m_renderColorTextureID));
 	GLCall(glDeleteTextures(1, &m_renderEntityIDTextureID));
-	// Delete the buffers.
+	// Delete FBOs.
 	GLCall(glDeleteFramebuffers(1, &m_msaaFrameBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_renderFrameBufferID));
+}
+
+void FrameBufferObject::createResources(int width, int height)
+{
+	// Do not create a FBO with size or width of zero.
+	if (!width || !height)
+	{
+		std::cout << yellow << "[OPENGL] [WARN]: " << white << "Tried to create a FBO with width or height of zero."; \
+			return;
+	}
+
+	m_resourcesDeleted = false;
+
+	// Generate MSAA FBO.
+	GLCall(glGenFramebuffers(1, &m_msaaFrameBufferID));
+	GLCall(glGenTextures(1, &m_msaaColorTextureID));
+	GLCall(glGenTextures(1, &m_msaaEntityIDTextureID));
+	GLCall(glGenRenderbuffers(1, &m_msaaDepthStencilBufferID));
+	// Check for generation error.
+	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
+		std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " MSAA FBO could not be generated.\n";
+
+	// Generate render FBO.
+	GLCall(glGenFramebuffers(1, &m_renderFrameBufferID));
+	GLCall(glGenTextures(1, &m_renderColorTextureID));
+	GLCall(glGenTextures(1, &m_renderEntityIDTextureID));
+	// Check for generation error.
+	if (!glCheckFramebufferStatus(GL_FRAMEBUFFER))
+		std::cout << red << "\n\n[OPENGL] [ERROR] :" << white << " Render FBO could not be generated.\n";
+
+	// Create attachments for the FBO's.
+	initAttachments(width, height);
+
+	// Save the dimenions.
+	m_viewport[0] = width;
+	m_viewport[1] = height;
 }
 
 //=============================================================================================================================================//
@@ -178,18 +191,26 @@ FrameBufferObject::~FrameBufferObject()
 // Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height)
 {
-	// This is not the best wau to resize an FBO.
-	// 
+	// Resize texture attachment.
+	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));
+	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_RGBA8, width, height, GL_TRUE));
+	// Resize MSAA entityID buffer.
+	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaEntityIDTextureID));
+	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_R32UI, width, height, GL_TRUE));
+	// th/stencil MSAA buffer texture.
+	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_msaaDepthStencilBufferID));
+	GLCall(glRenderbufferStorageMultisample(GL_RENDERBUFFER, m_MSAA, GL_DEPTH24_STENCIL8, width, height));
 
-	// Recreate the attachments with the new size.
-	createAttachments(width, height);
+	// Resize color texture.
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderColorTextureID));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+	// Resize Entity ID texture.
+	GLCall(glBindTexture(GL_TEXTURE_2D, m_renderEntityIDTextureID));
+	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, NULL));
+
 	// Save the dimenions.
 	m_viewport[0] = width;
 	m_viewport[1] = height;
-	// Change texture size variable in  shader.
-	m_shader->bind();
-	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
-	m_shader->setIntArray("textureSize", viewport, 2);
 }
 
 unsigned FrameBufferObject::getRenderTexture() 
@@ -227,6 +248,8 @@ void FrameBufferObject::clearRender()
 
 unsigned int FrameBufferObject::getEntityID(glm::vec2& pixelCoords) 
 {
+	if (m_resourcesDeleted) return -1;
+
 	int entityID = -1; 
 	// Resolve the MSAA and copy to the render FBO.
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_msaaFrameBufferID));

@@ -19,7 +19,18 @@ GuiElementCore::GuiElementCore(std::string name, int windowFlags)
 
 bool GuiElementCore::shouldRender() 
 {
-	return !m_isCollapsed && !m_isHidden && m_isOpen;
+	return m_shouldRender;
+}
+
+void GuiElementCore::updateRenderState() 
+{
+	bool newState = !m_isCollapsed && !m_isHidden && m_isOpen;
+	// If the state has changed.
+	if (m_shouldRender != newState)
+	{
+		onRenderStateChange(newState);
+		m_shouldRender = newState;
+	}
 }
 
 //==============================================================================================================================================//
@@ -28,6 +39,7 @@ bool GuiElementCore::shouldRender()
 
 void GuiElementCore::onEvent(Event& event)
 {
+
 #ifdef _DEBUG
 	// Log the event.
 	std::cout << m_name << ": " << event.ID << "\n";
@@ -68,6 +80,7 @@ void GuiElementCore::dispatchEvents()
 	m_isCollapsed	= m_imguiWindow->Collapsed;
 	m_isDocked		= m_imguiWindow->DockIsActive;
 	m_isHidden		= m_imguiWindow->Hidden;
+	updateRenderState();
 
 	// Get dock ID if it has not been assigned.
 	if (!m_dockID) 

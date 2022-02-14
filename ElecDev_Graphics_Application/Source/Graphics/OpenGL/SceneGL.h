@@ -54,6 +54,11 @@ public:
 	// Resizes the scene based on a viewport change.
 	void resize(int width, int heigth);
 
+	// Delete the resources to save on VRAM.
+	void deleteFrameBufferResources();
+	// Recreate the resources once it has been deleted.
+	void createFrameBufferResources();
+
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
 
