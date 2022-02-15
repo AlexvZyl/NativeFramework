@@ -96,6 +96,7 @@ void GraphicsScene::onMouseButtonEvent(MouseButtonEvent& event)
 			event.mousePosition.y + m_contentRegionPosition.y
 		};
 		menu->setInitialPosition(pos);
+		menu->setEngine(dynamic_cast<Design2DEngine*>(m_engine));
 		event.consume();
 	}
 }

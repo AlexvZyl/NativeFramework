@@ -102,6 +102,10 @@ void Application::closeWindow()
 	m_shouldWindowClose = true;
 }
 
+//==============================================================================================================================================//
+//  Layers																																		//
+//==============================================================================================================================================//
+
 void Application::queuePopLayer(Layer* layer)
 {
 	m_layerStack->queuePopLayer(*layer);
@@ -112,7 +116,6 @@ void Application::queuePopLayer(std::string& layerName)
 	Layer* toPop = m_layerStack->getLayer<Layer>(layerName);
 	m_layerStack->queuePopLayer(*toPop);
 }
-
 
 //==============================================================================================================================================//
 //  GUI Theme.																																	//

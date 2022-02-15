@@ -13,10 +13,6 @@
 
 void Application::dispatchEvents()
 {
-	// Remove the layers that are queued for removal.  We can only know 
-	// which layers have to be removed after the previous frame is done rendering.
-	m_layerStack->popLayers();
-	
 	// Find the hovered layer on a mouse move event.
 	if (m_eventLog->mouseMove)
 	{
@@ -55,6 +51,11 @@ void Application::dispatchEvents()
 		if (m_focusedLayer) 
 			m_focusedLayer->onEvent(*event.get());
 	}
+
+	// Remove the layers that are queued for removal.  We can only know 
+	// which layers have to be removed after the previous frame is done rendering.
+	// Some layers are set to be removed in events so remove after dispatching.
+	m_layerStack->popLayers();
 
 	// Dispatch the events that are handled by the layers.
 	// These include things such as window resizes and docking state changes.

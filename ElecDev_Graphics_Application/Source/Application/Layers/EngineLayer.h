@@ -11,6 +11,10 @@
 //  GUI Layer.																																	//
 //==============================================================================================================================================//
 
+// The engine layer does not have to pass events on to the engine,
+// since GraphicsScene does that.  Need to think about if this is the
+// best way to do it.
+
 template<class EngineType>
 class EngineLayer : public GuiLayer<GraphicsScene>
 {
@@ -55,10 +59,6 @@ public:
 		if (!m_guiElement->m_isOpen)
 			Lumen::getApp().queuePopLayer(this);
 	}
-
-	// The engine layer does not have to pass events on to the engine,
-	// since GraphicsScene does that.  Need to think about if this is the
-	// best way to do it.
 
 protected:
 
