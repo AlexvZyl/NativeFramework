@@ -46,7 +46,7 @@ struct GUIState
 	Context clickedZone;
 
 	// Popup menu.
-	ImVec2 popUpPosition = { 0.f, 0.f };
+	glm::vec2 popUpPosition = { 0.f, 0.f };
 	bool popUpMenu = false;
 	bool componentEditor = false;
 
@@ -57,11 +57,11 @@ struct GUIState
 	bool userWindowHovered = false;
 
 	// ImGui Variables.
-	ImVec2 imguiGlobalMouseCoords = { 0.f, 0.f };
+	glm::vec2 imguiGlobalMouseCoords = { 0.f, 0.f };
 
 	// Render windows information.
-	ImVec2 renderWindowMouseCoordinate = { 0,0 };
-	ImVec2 renderWindowSize = { 500,500 };
+	glm::vec2 renderWindowMouseCoordinate = { 0,0 };
+	glm::vec2 renderWindowSize = { 500,500 };
 
 	// Engine.
 	bool portHovered = false;

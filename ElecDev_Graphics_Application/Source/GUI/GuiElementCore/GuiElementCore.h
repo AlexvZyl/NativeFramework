@@ -80,9 +80,9 @@ public:
 	// The imgui window that the gui is in.
 	ImGuiWindow* m_imguiWindow = nullptr;
 	// The size of the content area.
-	ImVec2 m_contentRegionSize = { 0.f, 0.f };
+	glm::vec2 m_contentRegionSize = { 0.f, 0.f };
 	// The position of the content area.
-	ImVec2 m_contentRegionPosition = { 0.f, 0.f };
+	glm::vec2 m_contentRegionPosition = { 0.f, 0.f };
 
 	// ------------- //
 	//  E V E N T S  //
