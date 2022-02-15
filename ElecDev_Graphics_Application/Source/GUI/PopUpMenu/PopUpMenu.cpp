@@ -58,23 +58,25 @@ void PopUpMenu::begin()
 // Render call.
 void PopUpMenu::onRender()
 { 
+    Application& app = Lumen::getApp();
+
     // --------------------- //
     //  B A C K G R O U N D  //
     // --------------------- //
     
     // Render menu items.
-    if (Lumen::getApp().m_guiState->clickedZone.background) 
+    if (app.m_guiState->clickedZone.background)
     {
         if (ImGui::MenuItem("Place component", "P"))
         {   
             //get screen coordinates
-            float pixelCoords[] = { Lumen::getApp().m_guiState->renderWindowMouseCoordinate.x, Lumen::getApp().m_guiState->renderWindowMouseCoordinate.y };
-            glm::vec3 WorldCoords = Lumen::getApp().m_guiState->design_engine->m_scene->pixelCoordsToWorldCoords(pixelCoords);
+            float pixelCoords[] = { app.m_guiState->renderWindowMouseCoordinate.x, app.m_guiState->renderWindowMouseCoordinate.y };
+            glm::vec3 WorldCoords = app.m_guiState->design_engine->m_scene->pixelCoordsToWorldCoords(pixelCoords);
             glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
             // Place a dummy component.
             m_engine->ComponentPlaceMode(screenCoords);
             // Remove popup.
-            Lumen::getApp().queuePopLayer(m_name);
+            app.queuePopLayer(m_name);
         }
     }
 
@@ -82,15 +84,15 @@ void PopUpMenu::onRender()
     //  C O M P O N E N T  //
     // ------------------- //
 
-    else if (Lumen::getApp().m_guiState->clickedZone.component)
+    else if (app.m_guiState->clickedZone.component)
     {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
-            ImGui::SetNextWindowPos(Lumen::getApp().m_guiState->popUpPosition);
-            Lumen::getApp().m_guiState->componentEditor = true;
+            ImGui::SetNextWindowPos(app.m_guiState->popUpPosition);
+            app.m_guiState->componentEditor = true;
             
             // Remove popup.
-            Lumen::getApp().queuePopLayer(m_name);
+            app.queuePopLayer(m_name);
         }
         //if (ImGui::MenuItem("Edit Ports", "P"))
         //{
@@ -100,14 +102,14 @@ void PopUpMenu::onRender()
         if (ImGui::MenuItem("Add Cable", "C"))
         {
             // Remove popup.
-            Lumen::getApp().queuePopLayer(m_name);
+            app.queuePopLayer(m_name);
         }
         if (ImGui::MenuItem("Remove component", "DEL"))
         {
-            Lumen::getApp().m_guiState->design_engine->deleteActiveComponent();
+            app.m_guiState->design_engine->deleteActiveComponent();
 
             // Remove popup.
-            Lumen::getApp().queuePopLayer(m_name);
+            app.queuePopLayer(m_name);
         }
     }
     ImGui::Separator();
@@ -121,6 +123,9 @@ void PopUpMenu::onRender()
         /*m_graphicsHandler->m_loadEvent.eventTrigger = true;
         m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");*/
         //close();
+
+        // Remove popup.
+        app.queuePopLayer(m_name);
     }
     if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
     {
@@ -129,6 +134,9 @@ void PopUpMenu::onRender()
         Design2DEngine* activeEngine = reinterpret_cast<Design2DEngine*>(m_graphicsHandler->m_activeWindow->engineGL.get());
         m_graphicsHandler->m_saveEvent.path = selectFile("Lumen Save Circuit", "", activeEngine->m_circuit->m_label, "Save");*/
         //close();
+
+        // Remove popup.
+        app.queuePopLayer(m_name);
     }
 }
 
