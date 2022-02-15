@@ -101,6 +101,22 @@ void GraphicsScene::onMouseButtonEvent(MouseButtonEvent& event)
 	}
 }
 
+void GraphicsScene::onContentRegionMoveEvent(WindowEvent& event) 
+{
+	GuiElementCore::onContentRegionMoveEvent(event);
+
+	// Pass data to engine.
+	m_engine->setContentRegionPos(glm::vec2(event.windowData.x, event.windowData.y));
+}
+
+void GraphicsScene::onContentRegionResizeEvent(WindowEvent& event) 
+{
+	GuiElementCore::onContentRegionResizeEvent(event);
+
+	// Pass data to engine.
+	m_engine->setContentRegionSize(glm::vec2(event.windowData.x, event.windowData.y));
+}
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

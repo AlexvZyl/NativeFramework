@@ -72,6 +72,8 @@ public:
 	bool shouldWindowClose();
 	// Close the app.
 	void closeWindow();
+	// Get the GLFW window.
+	GLFWwindow* getWindow();
 
 	// ----------------------- //
 	//  G L F W   W I N D O W  //

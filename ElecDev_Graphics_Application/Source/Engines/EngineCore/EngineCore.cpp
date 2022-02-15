@@ -16,6 +16,8 @@ and notify the user via the terminal interface.
 #include "OpenGL/SceneGL.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //=============================================================================================================================================//
 //  Rendering.																																   //
@@ -47,6 +49,32 @@ float EngineCore::deltaTime()
 	m_deltaTime = currentFrame - m_lastFrame;
 	m_lastFrame = currentFrame;
 	return m_deltaTime;
+}
+
+//=============================================================================================================================================//
+//  Content Region.																															   //
+//=============================================================================================================================================//
+
+void EngineCore::setContentRegionPos(const glm::vec2& pos)
+{
+	m_contentRegionPos = pos;
+}
+
+void EngineCore::setContentRegionSize(const glm::vec2& size)
+{
+	m_contentRegionSize = size;
+}
+
+glm::vec2 EngineCore::getMousePos() 
+{
+	// Get the cursor position.
+	double cursorX, cursorY;
+	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
+	glm::vec2 cursorPos = { 
+		cursorX - m_contentRegionPos.x, 
+		cursorY - m_contentRegionPos.y
+	};
+	return cursorPos;
 }
 
 //=============================================================================================================================================//

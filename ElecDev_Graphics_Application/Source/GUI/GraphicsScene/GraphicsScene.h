@@ -53,6 +53,10 @@ private:
 
 	// Mouse events.
 	virtual void onMouseButtonEvent(MouseButtonEvent& event);
+
+	// Content region events.  These need to be passed onto the engine.
+	virtual void onContentRegionResizeEvent(WindowEvent& event);
+	virtual void onContentRegionMoveEvent(WindowEvent& event);
 };
 
 //==============================================================================================================================================//
