@@ -43,7 +43,7 @@ float b = myVec4.b;  // 0.3f
 float a = myVec4.a;  // 0.4f
 ```
 
-[Dear ImGui](https://github.com/ocornut/imgui) is used as the GUI and they use their own vectors, namely `ImVec2` and `ImVec4`.  Lumen overloads these functions so that we only have to use `glm` vectors.  These examples are all valid:
+[Dear ImGui](https://github.com/ocornut/imgui) is used as the GUI and they use their own vectors, namely `ImVec2` and `ImVec4`.  Lumen overloads these vectors so that they are interchangeable with `glm` vectors.  These examples are all valid:
 
 ```C++
 ImVec2 vector1(0,0);
