@@ -127,7 +127,7 @@ public:
 public:
 
 	// Return the mouse position in the engine coordinates.
-	glm::vec2 getMousePos();
+	glm::vec2 getMousePosition();
 
 	// Set content region size.
 	void setContentRegionSize(const glm::vec2& size);
