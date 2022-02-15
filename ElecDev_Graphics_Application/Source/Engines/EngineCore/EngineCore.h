@@ -100,10 +100,15 @@ public:
 	virtual void onHoverEvent(LayerEvent& event);
 	virtual void onDehoverEvent(LayerEvent& event);
 
+	// --------- //
+	//  D A T A  //
+	// --------- //
+
 	// Stores the previous mouse event information.
 	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };		
 	// Stores the vector that goes into the world.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
+
 
 	// ------------- //
 	//  S T A T E S  //
@@ -113,6 +118,28 @@ public:
 	bool m_isHovered = false;
 	// Is the engine focused?
 	bool m_isFocused = false;
+
+
+	// ----------------------------- //
+	//  C O N T E N T   R E G I O N  //
+	// ----------------------------- //
+
+public:
+
+	// Return the mouse position in the engine coordinates.
+	glm::vec2 getMousePosition();
+
+	// Set content region size.
+	void setContentRegionSize(const glm::vec2& size);
+	// Set content region pos.
+	void setContentRegionPos(const glm::vec2& pos);
+
+private:
+
+	// The graphics window size.
+	glm::vec2 m_contentRegionSize = { 0,0 };
+	// The graphics window position in the window.
+	glm::vec2 m_contentRegionPos = { 0, 0 };
 };
 
 //=============================================================================================================================================//
