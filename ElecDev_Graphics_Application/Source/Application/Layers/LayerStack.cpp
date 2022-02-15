@@ -29,9 +29,19 @@ void LayerStack::popLayers()
 	// Check if there are layers to remove.
 	if (!m_layerPopQueue.size()) return;
 
+	// Get active layers.
+	Layer* hoveredLayer = Lumen::getApp().m_hoveredLayer;
+	Layer* focusedLayer = Lumen::getApp().m_focusedLayer;
+
 	// Remove layers.
 	for (Layer* layer : m_layerPopQueue)
+	{
+		// Check for active layer change.
+		if (layer == hoveredLayer) Lumen::getApp().onHoveredLayerChange(nullptr);
+		if (layer == focusedLayer) Lumen::getApp().onFocusedLayerChange(nullptr);
+		// Remove layer.
 		m_layers.erase(layer->getName());
+	}
 
 	// All the layers have been removed.
 	m_layerPopQueue.clear();

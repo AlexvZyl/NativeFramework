@@ -13,6 +13,8 @@
 
 void EngineCore::onEvent(Event& event)
 {
+	if (event.isConsumed()) return;
+
 	uint64_t eventID = event.ID;
 
 	// Mouse events.

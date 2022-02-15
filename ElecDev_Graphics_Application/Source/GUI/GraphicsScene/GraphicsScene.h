@@ -25,6 +25,8 @@ public:
 
 	// Constructor.
 	GraphicsScene(std::string name, int windowFlags);
+	// Destructor.
+	virtual ~GraphicsScene() = default;
 
 	// Rendering functions.
 	virtual void begin() override;
@@ -48,6 +50,9 @@ private:
 	void* m_textureID = nullptr;
 	// The engine that belongs to the window.
 	EngineCore* m_engine = nullptr;
+
+	// Mouse events.
+	virtual void onMouseButtonEvent(MouseButtonEvent& event);
 };
 
 //==============================================================================================================================================//

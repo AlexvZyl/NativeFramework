@@ -52,8 +52,10 @@ public:
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
 	GuiType* pushGuiLayer(std::string layerName, int imguiWindowFlags = 0);
-	// Pop a layer from the layerstack.
+	// Pop a layer from the layerstack using the pointer.
 	void queuePopLayer(Layer* layer);
+	// Pop a layer from the layerstack using the layer name.
+	void queuePopLayer(std::string& layerName);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -136,12 +138,12 @@ private:
 	void onRenderInit();
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
+	// Renders the initial frame that is required for the dock builder.
+	void renderInitialFrame();
 	// Set the ImGUI theme.
 	void setGuiTheme();
 	// The default font used.
 	ImFont* m_defaultFont = nullptr;
-	// Renders the initial frame that is required for the dock builder.
-	void renderInitialFrame();
 
 	// --------------------- //
 	//  D O C K   N O D E S  //
@@ -150,7 +152,9 @@ private:
 	// The main window dockspace (minus the toolbar).
 	ImGuiID m_mainDockspaceID = NULL;
 	// The side panel where GUIs can displayed.
-	ImGuiID m_sidePanelID = NULL;
+	ImGuiID m_leftPanelID = NULL;
+	ImGuiID m_rightPanelID = NULL;
+	ImGuiID m_bottomPanelID = NULL;
 	// The area where the main graphics is displayed.
 	ImGuiID m_sceneViewportID = NULL;
 };
@@ -163,6 +167,7 @@ private:
 template <typename EventType>
 void Application::logEvent(Event& event)
 {
+	// Log event in the event log.
 	m_eventLog->log<EventType>(event);
 }
 
@@ -172,7 +177,9 @@ EngineType* Application::pushEngineLayer(std::string layerName, int imguiWindowF
 	// Create and push the layer.
 	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
-	return m_layerStack->getLayer<EngineLayer<EngineType>>(newName)->getEngine();
+	EngineLayer<EngineType>* ptr = m_layerStack->getLayer<EngineLayer<EngineType>>(newName);
+	onFocusedLayerChange(ptr);
+	return ptr->getEngine();
 }
 
 template<typename GuiType>
@@ -181,7 +188,9 @@ GuiType* Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
 	// Create and push the layer.
 	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(layer);
-	return m_layerStack->getLayer<GuiLayer<GuiType>>(newName)->getGuiElement();
+	GuiLayer<GuiType>* ptr = m_layerStack->getLayer<GuiLayer<GuiType>>(newName);
+	onFocusedLayerChange(ptr);
+	return ptr->getGuiElement();
 }
 
 //==============================================================================================================================================//

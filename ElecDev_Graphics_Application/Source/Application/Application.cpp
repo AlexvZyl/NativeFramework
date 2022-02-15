@@ -73,9 +73,9 @@ Application::Application(GLFWwindow* window)
 
 	// Testing layers.
 	pushEngineLayer<Design2DEngine>("Design 2D Engine");
-	pushEngineLayer<Base2DEngine>("Base 2D Engine");
 	pushGuiLayer<ComponentEditor>("Component Editor");
 }
+
 
 void Application::shutdown() 
 {
@@ -105,10 +105,14 @@ void Application::closeWindow()
 void Application::queuePopLayer(Layer* layer)
 {
 	m_layerStack->queuePopLayer(*layer);
-	// Remove from active layers.
-	if (m_hoveredLayer == layer) m_hoveredLayer = nullptr;
-	if (m_focusedLayer == layer) m_focusedLayer = nullptr;
 }
+
+void Application::queuePopLayer(std::string& layerName) 
+{
+	Layer* toPop = m_layerStack->getLayer<Layer>(layerName);
+	m_layerStack->queuePopLayer(*toPop);
+}
+
 
 //==============================================================================================================================================//
 //  GUI Theme.																																	//

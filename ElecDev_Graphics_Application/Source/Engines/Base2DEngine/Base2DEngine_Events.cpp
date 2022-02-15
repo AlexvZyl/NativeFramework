@@ -5,6 +5,9 @@
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Application/Events/Events.h"
 #include "External/GLM/gtc/matrix_transform.hpp"
+#include "Lumen.h"
+#include "Application/Application.h"
+#include "GUI/PopUpMenu/PopUpMenu.h"
 
 //==============================================================================================================================================//
 //  Mouse events.																																//
@@ -18,7 +21,7 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  L E F T   P R E S S  //
 	// --------------------- //
 
-	if (eventID == EventType_MousePress | EventType_MouseButtonLeft)
+	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		// Find current click in world coords.
 		glm::vec2 pos = event.mousePosition;
@@ -33,16 +36,16 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  R I G H T   P R E S S  //
 	// ----------------------- //
 
-	else if (eventID == EventType_MousePress | EventType_MouseButtonRight)
+	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
-
+		
 	}
 
 	// ------------------------- //
 	//  M I D D L E   P R E S S  //
 	// ------------------------- //
 
-	else if (eventID == EventType_MousePress | EventType_MouseButtonMiddle)
+	else if (eventID == (EventType_MousePress | EventType_MouseButtonMiddle))
 	{
 		// Find current click in world coords.
 		glm::vec2 pos = event.mousePosition;

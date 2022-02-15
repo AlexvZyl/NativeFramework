@@ -40,6 +40,8 @@ void GuiElementCore::updateRenderState()
 void GuiElementCore::onEvent(Event& event)
 {
 
+	if (event.isConsumed()) return;
+
 #ifdef _DEBUG
 	// Log the event.
 	std::cout << m_name << ": " << event.ID << "\n";

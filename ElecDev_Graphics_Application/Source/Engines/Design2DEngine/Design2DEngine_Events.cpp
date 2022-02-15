@@ -25,7 +25,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  L E F T   P R E S S  //
 	// --------------------- //
 
-	if (eventID == EventType_MousePress | EventType_MouseButtonLeft)
+	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		float pixelCoordsf[2] = { pixelCoords.x, pixelCoords.y };
@@ -78,7 +78,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  R I G H T   P R E S S  //
 	// ----------------------- //
 
-	else if (eventID == EventType_MousePress | EventType_MouseButtonRight)
+	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
 		// Update current entity ID.
 		m_currentEntityID = getEntityID(event.mousePosition);
@@ -89,7 +89,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  M I D D L E   P R E S S  //
 	// ------------------------- //
 
-	else if (eventID == EventType_MousePress | EventType_MouseButtonMiddle)
+	else if (eventID == (EventType_MousePress | EventType_MouseButtonMiddle))
 	{
 
 	}

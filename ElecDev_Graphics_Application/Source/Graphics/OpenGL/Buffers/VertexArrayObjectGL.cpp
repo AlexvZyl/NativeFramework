@@ -96,7 +96,7 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::appendVertexData(std::vector<std::unique_ptr<VertexType>>& vertices, std::vector<unsigned>& indices,
 													 unsigned* vertexPos, unsigned* indexPos)
 {
-	if (!vertices.size())  return;
+	if (!vertices.size())  return;  // Make sure we want this.
 	if (vertexPos)		  *vertexPos = m_vertexCount;
 	if (indexPos)		  *indexPos  = m_indexCount;
 
@@ -145,7 +145,8 @@ void VertexArrayObject<VertexType>::deleteVertexData(unsigned vertexPos, unsigne
 	m_indexCount -= indexCount;
 
 	// Offset indices placed after deleted indices.
-	for (int i = indexPos; i < m_indexCount; i++) m_indexCPU[i] -= vertexCount; 
+	for (int i = indexPos; i < m_indexCount; i++) 
+		m_indexCPU[i] -= vertexCount; 
 
 	// Set the VAO to be resized.
 	resize();
@@ -231,11 +232,10 @@ void VertexArrayObject<VertexType>::resizeBuffer()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::syncBuffer()
 {
-	// Write changed primitives to VBO.
+	// Update the primitives' vertex data.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-	for (PrimitivePtr*& primitive : m_primitivesToSync) 
+	for (PrimitivePtr* primitive : m_primitivesToSync) 
 	{
-		// Sync the primitive vertices.
 		for (int index = primitive->m_vertexBufferPos; index < primitive->m_vertexCount + primitive->m_vertexBufferPos; index++)
 		{
 			std::unique_ptr<VertexType>& vertex = m_vertexCPU[index];

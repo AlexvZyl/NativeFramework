@@ -153,8 +153,8 @@ void FrameBufferObject::createResources(int width, int height)
 	// Do not create a FBO with size or width of zero.
 	if (!width || !height)
 	{
-		std::cout << yellow << "[OPENGL] [WARN]: " << white << "Tried to create a FBO with width or height of zero."; \
-			return;
+		std::cout << yellow << "[OPENGL] [WARN]: " << white << "Tried to create a FBO with width or height of zero.";
+		return;
 	}
 
 	m_resourcesDeleted = false;
@@ -191,6 +191,8 @@ void FrameBufferObject::createResources(int width, int height)
 // Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height)
 {
+	if (m_resourcesDeleted) return;
+
 	// Resize texture attachment.
 	GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColorTextureID));
 	GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, m_MSAA, GL_RGBA8, width, height, GL_TRUE));
@@ -220,12 +222,16 @@ unsigned FrameBufferObject::getRenderTexture()
 
 void FrameBufferObject::bind() 
 { 
+	if (m_resourcesDeleted) return;
+
 	// Bind the FBO.
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_msaaFrameBufferID));
 }
 
 void FrameBufferObject::bindRender() 
 { 
+	if (m_resourcesDeleted) return;
+
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID)); 
 }
 												   
@@ -236,12 +242,16 @@ void FrameBufferObject::unbind()
 
 void FrameBufferObject::clear()	  
 { 
+	if (m_resourcesDeleted) return;
+
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									// Clear depth buffer.
 	GLCall(glClearTexImage(m_msaaColorTextureID, 0, GL_RGBA, GL_FLOAT, 0));	// Clear color attachment.
 }
 
 void FrameBufferObject::clearRender()
 {
+	if (m_resourcesDeleted) return;
+
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									  // Clear depth buffer.
 	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); // Clear color attachment.
 }
@@ -270,6 +280,8 @@ unsigned int FrameBufferObject::getEntityID(glm::vec2& pixelCoords)
 
 void FrameBufferObject::blitFromMSAA()
 {
+	if (m_resourcesDeleted) return;
+
 	// Resolve the MSAA and copy to the render FBO.
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_msaaFrameBufferID));
 	GLCall(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_renderFrameBufferID));
@@ -285,6 +297,8 @@ void FrameBufferObject::blitFromMSAA()
 
 void FrameBufferObject::renderFromMSAA() 
 {
+	if (m_resourcesDeleted) return;
+
 	GLCall(glViewport(0,0, m_viewport[0], m_viewport[1]));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_renderFrameBufferID));		  
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));									  

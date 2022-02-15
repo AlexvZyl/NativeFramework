@@ -178,6 +178,7 @@ void Scene::resize(int width, int height)
 
 void Scene::onEvent(Event& event) 
 {
+	if (event.isConsumed()) return;
 
 }
 
