@@ -27,11 +27,11 @@ PopUpMenu::PopUpMenu(std::string name, int imguiWindowFlags)
 
 PopUpMenu::~PopUpMenu() 
 {
-    Lumen::getApp().m_guiState->clickedZone.background = false;
-    Lumen::getApp().m_guiState->clickedZone.component = false;
-    Lumen::getApp().m_guiState->clickedZone.primative= false;
-    Lumen::getApp().m_guiState->clickedZone.port = false;
-    Lumen::getApp().m_guiState->popUpMenu = false;
+    //Lumen::getApp().m_guiState->clickedZone.background = false;
+    //Lumen::getApp().m_guiState->clickedZone.component = false;
+    //Lumen::getApp().m_guiState->clickedZone.primative= false;
+    //Lumen::getApp().m_guiState->clickedZone.port = false;
+    //Lumen::getApp().m_guiState->popUpMenu = false;
 }
 
 void PopUpMenu::setInitialPosition(glm::vec2& pos) 
@@ -48,7 +48,7 @@ void PopUpMenu::begin()
 {
     // Place at mouse position.
     ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y));
-    if (ImGui::Begin("PopUpMenu", &m_isOpen, m_imguiWindowFlags));
+    if (ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags));
 }
 
 /*=======================================================================================================================================*/

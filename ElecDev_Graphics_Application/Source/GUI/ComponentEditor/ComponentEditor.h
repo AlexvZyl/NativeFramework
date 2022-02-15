@@ -24,9 +24,9 @@ public:
 	ComponentEditor(std::string name, int windowFlags);
 	
 	// Rendering functions.
-	virtual void begin();
-	virtual void onRender();
-	virtual void end();
+	virtual void begin() override;
+	virtual void onRender() override;
+	virtual void end() override;
 
 private:
 
