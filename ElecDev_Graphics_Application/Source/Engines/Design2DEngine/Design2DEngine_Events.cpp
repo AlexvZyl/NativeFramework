@@ -103,10 +103,6 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
 
-	glm::vec2 mousePos = getMousePosition();
-	std::cout << "\n" << mousePos.x << " , " << mousePos.y << "\n";
-
-
 	uint64_t eventID = event.ID;
 
 	glm::vec2 coords = event.mousePosition;
