@@ -105,6 +105,8 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 	// The layer is responsible for passing the events coordinates as local to the window,
 	// since these are GLFW events that whose coordinates are in the entire window.
 
+	if (event.isConsumed()) return;
+
 	uint64_t eventID = event.ID;
 
 	// Mouse events.

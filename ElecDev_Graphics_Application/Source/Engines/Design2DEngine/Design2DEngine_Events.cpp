@@ -25,7 +25,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  L E F T   P R E S S  //
 	// --------------------- //
 
-	if (eventID == EventType_MousePress | EventType_MouseButtonLeft)
+	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		float pixelCoordsf[2] = { pixelCoords.x, pixelCoords.y };
@@ -61,7 +61,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			Port* clickedPort = getPort(m_currentEntityID);
 			if (clickedPort != nullptr)
 			{
-				//Only add the cable if the end port is different to the start port.
+				// Only add the cable if the end port is different to the start port.
 				if (clickedPort != m_activeCable->m_startPort)
 				{
 					m_activeCable->attach(clickedPort);
@@ -78,7 +78,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  R I G H T   P R E S S  //
 	// ----------------------- //
 
-	else if (eventID == EventType_MousePress | EventType_MouseButtonRight)
+	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
 		// Update current entity ID.
 		m_currentEntityID = getEntityID(event.mousePosition);
@@ -89,7 +89,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  M I D D L E   P R E S S  //
 	// ------------------------- //
 
-	else if (eventID == EventType_MousePress | EventType_MouseButtonMiddle)
+	else if (eventID == (EventType_MousePress | EventType_MouseButtonMiddle))
 	{
 
 	}
@@ -141,7 +141,6 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 				if (m_activeComponent.get()) m_activeComponent->move(translation);
 				if (m_activeCable.get())     m_activeCable->moveActivePrimitiveTo(screenCoords);
 			}
-
 		}
 	}
 
@@ -194,22 +193,22 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 			
 			// --------------------------------------------------------------------------------------------------------------- //
 
-		case GLFW_KEY_ESCAPE:
-			designerState = ENTITY_SELECT;
-			// Remove the dummy component.
-			m_activeComponent = nullptr;
-			m_activeCable = nullptr;
-			break;
+			case GLFW_KEY_ESCAPE:
+				designerState = ENTITY_SELECT;
+				// Remove the dummy component.
+				m_activeComponent = nullptr;
+				m_activeCable = nullptr;
+				break;
 
 			// --------------------------------------------------------------------------------------------------------------- //
 
-		case GLFW_KEY_DELETE:
-			if (designerState == ENTITY_SELECT)
-			{
-				deleteActiveComponent();
-				deleteActiveCable();
-			}
-			break;
+			case GLFW_KEY_DELETE:
+				if (designerState == ENTITY_SELECT)
+				{
+					deleteActiveComponent();
+					deleteActiveCable();
+				}
+				break;
 		}
 	}
 }

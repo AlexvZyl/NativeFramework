@@ -10,12 +10,14 @@
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Engines/Base3DEngine/Base3DEngine.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
+#include "GUI/PopUpMenu/PopUpMenu.h"
+#include "Application/Application.h"
+#include "Lumen.h"
 
 //==============================================================================================================================================//
 //  Constructor.																																//
 //==============================================================================================================================================//
 
-// Constructor.
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {}
@@ -75,6 +77,28 @@ void GraphicsScene::onRenderStateChange(bool newState)
 	else 
 		m_engine->m_scene->deleteFrameBufferResources();
 
+}
+
+//==============================================================================================================================================//
+//  Events.																																		//
+//==============================================================================================================================================//
+
+void GraphicsScene::onMouseButtonEvent(MouseButtonEvent& event) 
+{
+	uint64_t eventID = event.ID;
+
+	if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
+	{
+		// Create a popup menu on a right click on a graphics scene.
+		PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu");
+		glm::vec2 pos = {
+			event.mousePosition.x + m_contentRegionPosition.x,
+			event.mousePosition.y + m_contentRegionPosition.y
+		};
+		menu->setInitialPosition(pos);
+		menu->setEngine(dynamic_cast<Design2DEngine*>(m_engine));
+		event.consume();
+	}
 }
 
 //==============================================================================================================================================//

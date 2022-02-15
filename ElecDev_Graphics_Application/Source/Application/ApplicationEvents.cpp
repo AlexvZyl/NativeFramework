@@ -13,10 +13,6 @@
 
 void Application::dispatchEvents()
 {
-	// Remove the layers that are queued for removal.  We can only know 
-	// which layers have to be removed after the previous frame is done rendering.
-	m_layerStack->popLayers();
-	
 	// Find the hovered layer on a mouse move event.
 	if (m_eventLog->mouseMove)
 	{
@@ -48,11 +44,18 @@ void Application::dispatchEvents()
 		
 		// On a mouse press we need to change the focused layer.
 		// This also allows us to modify how dear imgui sets focused layers.
-		if (eventID == EventType_MousePress) onFocusedLayerChange(m_hoveredLayer); 
+		if (eventID == EventType_MousePress) 
+			onFocusedLayerChange(m_hoveredLayer); 
 
 		// Pass events to focused layer.
-		if (m_focusedLayer) m_focusedLayer->onEvent(*event.get());
+		if (m_focusedLayer) 
+			m_focusedLayer->onEvent(*event.get());
 	}
+
+	// Remove the layers that are queued for removal.  We can only know 
+	// which layers have to be removed after the previous frame is done rendering.
+	// Some layers are set to be removed in events so remove after dispatching.
+	m_layerStack->popLayers();
 
 	// Dispatch the events that are handled by the layers.
 	// These include things such as window resizes and docking state changes.
@@ -74,7 +77,6 @@ Layer* Application::findhoveredLayer()
 	// We do not have to worry about order, since dear imgui handles it.
 	// This could be optimized by ordering the layer (finding the
 	// layer will happen faster) but we will always have very few layers.
-	// Iterated in reverse since the back of the vector is most more likely to be hovered.
 	for (auto& layerPair : m_layerStack->getLayers())
 	{
 		if (layerPair.second->isHovered())

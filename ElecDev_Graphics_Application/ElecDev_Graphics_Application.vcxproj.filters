@@ -124,6 +124,7 @@
     <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
+    <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\glm\detail\_features.hpp">
@@ -1342,6 +1343,7 @@
     <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
+    <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

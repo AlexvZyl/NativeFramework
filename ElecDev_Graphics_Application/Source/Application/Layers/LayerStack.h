@@ -41,10 +41,7 @@ public:
 
 	// Retrieve the layer from the dictionary.
 	template<class LayerType>
-	LayerType* getLayer(std::string& layerName) 
-	{
-		return dynamic_cast<LayerType*>(m_layers[layerName].get());
-	}
+	LayerType* getLayer(std::string& layerName);
 
 private:
 
@@ -80,6 +77,12 @@ std::string LayerStack::pushLayer(std::unique_ptr<LayerType>& layer)
 
 	// return the name with the ID.
 	return newName;
+}
+
+template<class LayerType>
+LayerType* LayerStack::getLayer(std::string& layerName)
+{
+	return dynamic_cast<LayerType*>(m_layers[layerName].get());
 }
 
 //==============================================================================================================================================//

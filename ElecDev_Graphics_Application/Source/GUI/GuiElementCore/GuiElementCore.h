@@ -18,6 +18,7 @@ class MouseMoveEvent;
 class MouseScrollEvent;
 class KeyEvent;
 class LayerEvent;
+class Layer;
 
 struct ImGuiWindow;
 
@@ -34,6 +35,8 @@ public:
 
 	// Constructor.
 	GuiElementCore(std::string name, int windowFlags);
+	// Destructor.
+	inline virtual ~GuiElementCore() = default;
 
 	// ------------------- //
 	//  R E N D E R I N G  //
