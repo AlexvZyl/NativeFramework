@@ -19,7 +19,9 @@
 
 ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags)
-{}
+{
+		
+}
 
 void ComponentEditor::begin() 
 {
