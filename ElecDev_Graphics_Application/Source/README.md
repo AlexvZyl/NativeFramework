@@ -43,6 +43,16 @@ float b = myVec4.b;  // 0.3f
 float a = myVec4.a;  // 0.4f
 ```
 
+[Dear ImGui](https://github.com/ocornut/imgui) is used as the GUI and they use their own vectors, namely `ImVec2` and `ImVec4`.  Lumen overloads these functions so that we only have to use `glm` vectors.  These examples are all valid:
+
+```C++
+ImVec2 vector1(0,0);
+glm::vec2 vector2 = vector1;
+glm::vec2 cursosPos = ImGui::GetCursosPos();  // Returns an ImVec2.
+```
+
+When creating vectors and matrices, stick to `glm`.
+
 ## The Renderer
 
 In Lumen we have a static `Renderer` class.  This means that there is never going to be an instantation of `Renderer` (the constructor is private).  `Renderer` contains static variables and the functions make use of these variables.  So, instead of having to do this every time:
