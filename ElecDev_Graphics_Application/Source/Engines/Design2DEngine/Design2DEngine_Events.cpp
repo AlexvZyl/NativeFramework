@@ -10,6 +10,9 @@
 #include "Application/Events/Events.h"
 #include "OpenGL/SceneGL.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
+#include "GUI/PopUpMenu/PopUpMenu.h"
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
@@ -83,6 +86,15 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 		// Update current entity ID.
 		m_currentEntityID = getEntityID(event.mousePosition);
 		setActiveComponent(m_currentEntityID);
+
+		// Create a popup menu on a right click on a graphics scene.
+		PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu");
+		glm::vec2 pos = {
+			event.mousePosition.x + m_contentRegionPos.x,
+			event.mousePosition.y + m_contentRegionPos.y
+		};
+		menu->setInitialPosition(pos);
+		menu->setEngine(this);
 	}
 
 	// ------------------------- //

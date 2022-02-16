@@ -83,24 +83,6 @@ void GraphicsScene::onRenderStateChange(bool newState)
 //  Events.																																		//
 //==============================================================================================================================================//
 
-void GraphicsScene::onMouseButtonEvent(MouseButtonEvent& event) 
-{
-	uint64_t eventID = event.ID;
-
-	if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
-	{
-		// Create a popup menu on a right click on a graphics scene.
-		PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu");
-		glm::vec2 pos = {
-			event.mousePosition.x + m_contentRegionPosition.x,
-			event.mousePosition.y + m_contentRegionPosition.y
-		};
-		menu->setInitialPosition(pos);
-		menu->setEngine(dynamic_cast<Design2DEngine*>(m_engine));
-		event.consume();
-	}
-}
-
 void GraphicsScene::onContentRegionMoveEvent(WindowEvent& event) 
 {
 	GuiElementCore::onContentRegionMoveEvent(event);

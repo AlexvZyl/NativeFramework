@@ -71,6 +71,7 @@ public:
 	void setActiveComponent(unsigned eID);
 	void setActiveCable(unsigned eID);
 	void ComponentPlaceMode(glm::vec2 screenCoords);
+	void ComponentPlaceMode();
 	void deleteActiveComponent();
 	void deleteActiveCable();
 	Port* getPort(unsigned eID);

@@ -110,6 +110,11 @@ glm::vec3 Scene::pixelCoordsToWorldCoords(float pixelCoords[2])
 	return m_camera->pixelCoordsToWorldCoords(pixelCoords);  
 }
 
+glm::vec3 Scene::pixelCoordsToWorldCoords(glm::vec2 pixelCoords)
+{
+	return m_camera->pixelCoordsToWorldCoords(pixelCoords);
+}
+
 glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2]) 
 { 
 	return m_camera->pixelCoordsToCameraCoords(pixelCoords); 
