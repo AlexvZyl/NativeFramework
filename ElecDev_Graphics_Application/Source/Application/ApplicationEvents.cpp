@@ -22,13 +22,6 @@ void Application::dispatchEvents()
 		// If the currently hovered layer is no longer being hovered we need to find the new layer.
 		else if(!m_hoveredLayer->isHovered()) onHoveredLayerChange(findhoveredLayer());
 	}
-
-	// These mouse events are kept seperate to prevent handling events more than once per frame.
-	if (m_hoveredLayer) 
-	{
-		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
-		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
-	}
 	
 	// Dispatch general events.
 	for (std::unique_ptr<Event>& event : m_eventLog->events)
@@ -50,6 +43,13 @@ void Application::dispatchEvents()
 		// Pass events to focused layer.
 		if (m_focusedLayer) 
 			m_focusedLayer->onEvent(*event.get());
+	}
+
+	// These mouse events are kept seperate to prevent handling events more than once per frame.
+	if (m_hoveredLayer)
+	{
+		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 
 	// Remove the layers that are queued for removal.  We can only know 

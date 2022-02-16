@@ -18,10 +18,11 @@ void EngineCore::onEvent(Event& event)
 	uint64_t eventID = event.ID;
 
 	// Mouse events.
-	if		(eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event));		}
+
+	if (eventID == EventType_MousePress) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event));		}
 	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event));	}
-	else if (eventID == EventType_MousePress)	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event));	}
-	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event));	}
 
 	// Key events.
 	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event));					}
