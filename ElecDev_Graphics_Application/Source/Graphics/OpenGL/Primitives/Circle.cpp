@@ -2,8 +2,8 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "OpenGL/Entities/Circle.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Circle.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 

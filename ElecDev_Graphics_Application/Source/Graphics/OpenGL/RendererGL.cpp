@@ -5,19 +5,19 @@
 #include "glad/glad.h"
 #include "Resources/ResourceHandler.h"
 #include "OpenGL/ShaderGL.h"
-#include "OpenGL/TextureGL.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/CameraGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/FontLoaderGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
-#include "OpenGL/Entities/Polygon.h"
+#include "OpenGL/Primitives/Polygon.h"
+#include "OpenGL/Primitives/TextureGL.h"
+#include "OpenGL/Primitives/Circle.h"
+#include "OpenGL/Primitives/LineSegment.h"
+#include "OpenGL/Primitives/Text.h"
+#include "OpenGL/Primitives/Primitive.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Entities/EntityManager.h"
-#include "OpenGL/Entities/Circle.h"
-#include "OpenGL/Entities/LineSegment.h"
-#include "OpenGL/Entities/Text.h"
-#include "OpenGL/Entities/Primitive.h"
-#include "OpenGL/Entities/Vertex.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 
@@ -188,24 +188,20 @@ void Renderer::render3DScene(Scene* scene)
 //  Textures.																																	//
 //==============================================================================================================================================//
 
-Texture* Renderer::generateTexture(unsigned resourceID)
+Texture* Renderer::generateTexture(unsigned resourceID, const std::string& name)
 {
-	m_scene->m_textures.insert({ resourceID, std::make_unique<Texture>(resourceID) });
-	return m_scene->m_textures[resourceID].get();
+	m_scene->m_textures.insert({ name, std::make_unique<Texture>(resourceID, name) });
+	return m_scene->m_textures[name].get();
 }
 
-Texture* Renderer::getTexture(unsigned resourceID)
+void Renderer::addTexture(const Texture& texture) 
 {
-	// If texture exists, return pointer.
-	if (m_scene->m_textures.find(resourceID) != m_scene->m_textures.end())
-	{
-		return m_scene->m_textures[resourceID].get();
-	} // Has to be a better way other than looping through all of the textures.
-	// Else, generate new texture and return.
-	else
-	{
-		return generateTexture(resourceID);
-	}
+	m_scene->m_textures.insert({texture.m_name, std::make_unique<Texture>(texture)});
+}
+
+Texture* Renderer::getTexture(const std::string& name)
+{
+	return m_scene->m_textures[name].get();
 }
 
 void Renderer::loadTextures(Scene* scene)
@@ -215,13 +211,21 @@ void Renderer::loadTextures(Scene* scene)
 	int textureCount = scene->m_textures.size() + 2;
 	std::vector<int> samplers = { 0 };
 	for (int i = 1; i < textureCount; i++) { samplers.push_back(i); }
+
 	// Prepare shader.
 	GLCall(auto loc = glGetUniformLocation(m_shaders["TextureShader"]->m_rendererID, "f_textures"));
 	GLCall(glUniform1iv(loc, textureCount, samplers.data()));
+
 	// Load font.
 	GLCall(glBindTextureUnit(1, m_defaultFont->textureID));
+
 	// Load all of the other textures.
-	for (int i = 2; i < textureCount; i++) { GLCall(glBindTextureUnit(i, scene->m_textures[i]->m_GLID)); }
+	int count = 2;
+	for (auto& [name, texture] : m_scene->m_textures)
+	{
+		GLCall(glBindTextureUnit(count, texture->m_rendererID));
+		count++;
+	}
 }
 
 //==============================================================================================================================================//
@@ -288,6 +292,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
 				       										  m_scene->m_texturedTrianglesVAO.get(), m_defaultFont.get(),
 				       										  parent, horizontalAlignment, verticalAlignment)});
+	
 	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
 }
 

@@ -8,9 +8,9 @@
 #include <memory>
 #include "External/GLM/glm.hpp"
 #include "OpenGL/Entities/Entity.h"
-#include "OpenGL/Entities/Circle.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "OpenGL/Entities/Text.h"
+#include "OpenGL/Primitives/Circle.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Text.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 
 //==============================================================================================================================================//

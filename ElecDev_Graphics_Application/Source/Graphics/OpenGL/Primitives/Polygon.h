@@ -6,7 +6,7 @@
 
 #include <vector>
 #include <glm.hpp>
-#include "OpenGL/Entities/Primitive.h"
+#include "OpenGL/Primitives/Primitive.h"
 
 //=============================================================================================================================================//
 //  Forward dclerations.																													   //

@@ -2,8 +2,8 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "OpenGL/Entities/Vertex.h"
-#include "OpenGL/Entities/Polygon.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 

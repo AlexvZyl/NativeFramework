@@ -170,17 +170,18 @@ void Text::generateText(const std::string& text)
 	// Vertex 3.
 	vertices.emplace_back(std::make_unique<VertexDataTextured>
 	(
-		glm::vec3((m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos)),
+		glm::vec3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos),
 		m_boxColor, glm::vec2((1.f, 1.f)), 0, m_entityID)
 	);
 	// -----------------------
 	// Vertex 4.
 	vertices.emplace_back(std::make_unique<VertexDataTextured>
 	(
-		glm::vec3((m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos)),
+		glm::vec3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos),
 		m_boxColor, glm::vec2((0.f, 1.f)), 0, m_entityID)
 	);
 	// -----------------------
+	// Indices.
 	indices.insert(indices.end(),
 		{
 			0 + m_vertexCount,
@@ -271,7 +272,7 @@ void Text::generateText(const std::string& text)
 			m_colour, glm::vec2(c.xTextureCoords[1], c.yTextureCoords[0]), 1, m_entityID)
 		);
 		// -----------------------
-		// Insert indices.
+		// Indices.
 		indices.insert(indices.end(),
 			{
 				0 + m_vertexCount,

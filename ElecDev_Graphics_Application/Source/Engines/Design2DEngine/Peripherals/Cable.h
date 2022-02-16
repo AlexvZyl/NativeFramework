@@ -4,7 +4,7 @@
 //  Includes.  																																    //
 //==============================================================================================================================================//
 
-#include "OpenGL/Entities/LineSegment.h"
+#include "OpenGL/Primitives/LineSegment.h"
 #include "OpenGL/Entities/Entity.h"
 #include "Port.h"
 

@@ -103,10 +103,12 @@ public:
 	// ----------------- //
 
 	// Generates a texture that is used in OpenGL, given the resource ID.
-	static Texture* generateTexture(unsigned resourceID);
+	static Texture* generateTexture(unsigned resourceID, const std::string& name);
 	// Returns the texture generated from the resource ID.
 	// If a texture has not been generated, generate a new one.
-	static Texture* getTexture(unsigned resourceID);
+	static Texture* getTexture(const std::string& name);
+	// Add an existing texture to the scene.
+	static void addTexture(const Texture& texture);
 	
 private:
 

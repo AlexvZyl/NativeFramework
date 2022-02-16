@@ -4,8 +4,8 @@
 
 #include "Port.h"
 #include "Component2D.h"
-#include "OpenGL/Entities/Polygon.h"
-#include "OpenGL/Entities/Text.h"
+#include "OpenGL/Primitives/Polygon.h"
+#include "OpenGL/Primitives/Text.h"
 #include "OpenGL/FontLoaderGL.h"
 #include "Resources/ResourceHandler.h"
 #include "Cable.h"

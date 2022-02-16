@@ -3,13 +3,13 @@
 //=============================================================================================================================================//
 
 #include "Component2D.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "OpenGL/Entities/Polygon.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/FontLoaderGL.h"
-#include "OpenGL/Entities/Text.h"
+#include "OpenGL/Primitives/Text.h"
 #include "Resources/ResourceHandler.h"
-#include "OpenGL/Entities/Circle.h"
+#include "OpenGL/Primitives/Circle.h"
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "Circuit.h"

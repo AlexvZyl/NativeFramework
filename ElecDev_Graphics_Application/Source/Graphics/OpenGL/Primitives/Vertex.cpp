@@ -2,7 +2,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "External/GLAD/Includes/glad/glad.h"
 #include "OpenGL/ErrorHandlerGL.h"
 

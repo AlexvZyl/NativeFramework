@@ -3,10 +3,10 @@
 //=============================================================================================================================================//
 
 #include <vector>
-#include "OpenGL/Entities/Primitive.h"
+#include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/RendererGL.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
 
 //=============================================================================================================================================//
 //  Constructor and Deconstructor.																											   //

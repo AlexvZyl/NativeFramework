@@ -9,9 +9,9 @@
 #include "External/Misc/ConsoleColor.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Entities/Entity.h"
-#include "OpenGL/Entities/Primitive.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
