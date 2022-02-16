@@ -35,6 +35,22 @@ void LineSegment::translate(glm::vec2& translation)
 	m_VAO->sync(this);
 }
 
+void LineSegment::setStart(glm::vec2 start)
+{
+	m_start = start;
+	m_VAO->m_vertexCPU[m_vertexBufferPos]->data.position = glm::vec3(m_start - m_thickness * (m_perpendicular::member), 0.f);
+	m_VAO->m_vertexCPU[m_vertexBufferPos + 1]->data.position = glm::vec3(m_start + m_thickness * (m_perpendicular::member), 0.f);
+	m_VAO->sync(this);
+}
+
+void LineSegment::setEnd(glm::vec2 end)
+{
+	m_end = end;
+	m_VAO->m_vertexCPU[m_vertexBufferPos + 2]->data.position = glm::vec3(m_end + m_thickness * (m_perpendicular::member), 0.f);
+	m_VAO->m_vertexCPU[m_vertexBufferPos + 3]->data.position = glm::vec3(m_end - m_thickness * (m_perpendicular::member), 0.f);
+	m_VAO->sync(this);
+}
+
 //==============================================================================================================================================//
 // EOF.																																			//
 //==============================================================================================================================================//
