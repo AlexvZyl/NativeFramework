@@ -30,10 +30,11 @@ public:
     glm::vec2 m_end;
 
     // Constructor.
-    LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<VertexData>* VAO, Entity* parent, 
-                float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f });
+    LineSegment(const glm::vec2& start, const glm::vec2& end, VertexArrayObject<VertexData>* VAO, Entity* parent, 
+                float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f });
+
     // Translate by the given vector.
-    void translate(glm::vec2& translation) override;
+    void translate(const glm::vec2& translation) override;
 };
 
 //==============================================================================================================================================//

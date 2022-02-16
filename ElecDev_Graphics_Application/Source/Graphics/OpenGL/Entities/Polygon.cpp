@@ -11,7 +11,7 @@
 //  Constructor & Destructor.																										       	   //
 //=============================================================================================================================================//
 
-Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent) 
+Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent) 
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
@@ -27,10 +27,8 @@ Polygon2D::Polygon2D(std::vector<glm::vec3> vertices, VertexArrayObject<VertexDa
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	for (glm::vec3 vertex : vertices)
-	{
+	for (auto& vertex : vertices)
 		vertexVector.emplace_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
-	}
 
 	// --------------- //
 	//  I N D I C E S  //

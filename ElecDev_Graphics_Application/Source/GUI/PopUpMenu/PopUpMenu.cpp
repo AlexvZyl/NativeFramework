@@ -48,7 +48,7 @@ void PopUpMenu::begin()
 {
     // Place at mouse position.
     ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y));
-    if (ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags));
+    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
 /*=======================================================================================================================================*/

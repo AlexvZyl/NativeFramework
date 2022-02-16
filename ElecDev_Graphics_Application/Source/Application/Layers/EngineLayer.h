@@ -39,7 +39,10 @@ public:
 		return m_engine.get();
 	}
 
-	// Render the layer.
+	// ----------- //
+	//  L A Y E R  //	
+	// ----------- //
+	
 	virtual void onRender() override 
 	{
 		// Begin the window.

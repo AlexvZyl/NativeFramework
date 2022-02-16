@@ -247,47 +247,47 @@ void Renderer::remove(Primitive<VertexDataCircle>* primitive)
 //  Adding 2D Primitives.																														//
 //==============================================================================================================================================//
 
-Polygon2D* Renderer::addPolygon2D(std::vector<glm::vec3> vertices, Entity* parent)
+Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, m_scene->m_trianglesVAO.get(), parent)});
 	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[id].get());
 }
 
-Polygon2D* Renderer::addPolygon2DClear(std::vector<glm::vec3> vertices, Entity* parent)
+Polygon2D* Renderer::addPolygon2DClear(const std::vector<glm::vec3>& vertices, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, m_scene->m_linesVAO.get(), parent) });
 	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[id].get());
 }
 
-Circle* Renderer::addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent) 
+Circle* Renderer::addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent) 
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent)});
 	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
 }
 
-Circle* Renderer::addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
+Circle* Renderer::addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent) });
 	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
 }
 
-LineSegment* Renderer::addLineSegment2D(glm::vec2 start, glm::vec2 end, float thickness, glm::vec4 colour, Entity* parent)
+LineSegment* Renderer::addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness, const glm::vec4& colour, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<LineSegment>(start, end, m_scene->m_trianglesVAO.get(), parent, thickness, colour) });
 	return dynamic_cast<LineSegment*>(m_scene->m_primitives[id].get());
 }
 
-Text* Renderer::addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, std::string horizontalAlignment, std::string verticalAlignment, Entity* parent)
+Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment, const std::string& verticalAlignment, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
-				       			   m_scene->m_texturedTrianglesVAO.get(), *m_defaultFont.get(),
-				       			   parent, horizontalAlignment, verticalAlignment)});
+				       										  m_scene->m_texturedTrianglesVAO.get(), m_defaultFont.get(),
+				       										  parent, horizontalAlignment, verticalAlignment)});
 	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
 }
 
@@ -357,12 +357,12 @@ void Renderer::setDepthFunc(unsigned function)
 	GLCall(glDepthFunc(function));
 }
 
-void Renderer::setViewport(glm::vec2& viewport)
+void Renderer::setViewport(const glm::vec2& viewport)
 {
 	GLCall(glViewport(0, 0, (int)viewport[0], (int)viewport[1]));
 }
 
-void Renderer::setViewport(glm::vec4& viewport)
+void Renderer::setViewport(const glm::vec4& viewport)
 {
 	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
 }

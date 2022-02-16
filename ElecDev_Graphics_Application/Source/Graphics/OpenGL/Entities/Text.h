@@ -31,15 +31,19 @@ class Text : public Primitive<VertexDataTextured>
 public:
 
 	// Constructor.
-	Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
-		 VertexArrayObject<VertexDataTextured>* vao, Font& font, Entity* parent,
-		 std::string horizontalAlignment = "L", std::string verticalAlignment = "B");
+	Text(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale,
+		 VertexArrayObject<VertexDataTextured>* VAO, Font* font, Entity* parent,
+		 const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B");
+
 	// Updates the text of the text entity.
-	void updateText(std::string text);
+	void updateText(const std::string& text);
+
 	// Sets the text box colour.
-	void setBoxColour(glm::vec4 colour);
+	void setBoxColour(const glm::vec4& colour);
+
 	// Sets the text colour only.
-	virtual void setColor(glm::vec4& color) override;
+	virtual void setColor(const glm::vec4& color) override;
+
 	// Sets the later of the text entity.
 	// Currently the text box layer is automatically set to be right behind the text.
 	virtual void setLayer(float layer) override;
@@ -56,7 +60,7 @@ private:
 	float m_textLength = 0;
 
 	// Generates the textured quads.
-	void generateText(std::string text);
+	void generateText(const std::string& text);
 };
 
 //=============================================================================================================================================//

@@ -37,8 +37,12 @@ public:
 	unsigned m_indexBufferPos = 0;		// The position in the indices buffer.
 	unsigned m_primitiveBufferPos = 0;	// The primitive position in the VAO buffer.
 
-	PrimitivePtr(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}
+	// Constructor.
+	PrimitivePtr(Entity* parent) 
+		: Entity(EntityType::PRIMITIVE, parent) 
+	{}
 
+	// Destructor.
 	virtual ~PrimitivePtr() = default;
 };
 
@@ -74,24 +78,24 @@ public:
 	// ----------------- //
 
 	// Translate the entity by the given vector.
-	virtual void translate(glm::vec3& translation);
+	virtual void translate(const glm::vec3& translation);
 	// Translate the entity by the given vector.
-	virtual void translate(glm::vec2& translation);
+	virtual void translate(const glm::vec2& translation);
 	// Translate the entity to the given position.
-	virtual void translateTo(glm::vec3& position);
+	virtual void translateTo(const glm::vec3& position);
 	//Translates the entity in the XY plane, keeping the same Z value.
-	virtual void translateTo(glm::vec2& position);
+	virtual void translateTo(const glm::vec2& position);
 	// Rotates the entity by the given vector and center point.
-	virtual void rotate(glm::vec3& rotation);
+	virtual void rotate(const glm::vec3& rotation);
 	// Scales the entity by the given vector and center point.
-	virtual void scale(glm::vec3& scaling);
+	virtual void scale(const glm::vec3& scaling);
 	
 	// --------------------- //
 	//  A T T R I B U T E S  //
 	// --------------------- //
 
 	// Sets the color for all of the vertices.
-	virtual void setColor(glm::vec4& color);
+	virtual void setColor(const glm::vec4& color);
 	// Sets the entty ID of the entity.
 	virtual void setEntityID(unsigned int eID);
 	// Set the entity later.

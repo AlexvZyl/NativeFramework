@@ -9,7 +9,7 @@
 //  Methods.																																	//
 //==============================================================================================================================================//
 
-LineSegment::LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, glm::vec4 colour) 
+LineSegment::LineSegment(const glm::vec2& start, const glm::vec2& end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, const glm::vec4& colour) 
 	: m_direction((end-start)/(glm::length(glm::vec2(end - start)))),
 	  m_perpendicular(- m_direction::member.y, -m_direction::member.x),
 	  m_start(start), m_end(end), m_thickness(thickness),
@@ -22,7 +22,7 @@ LineSegment::LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<Verte
 	setColor(colour);
 }
 
-void LineSegment::translate(glm::vec2& translation)
+void LineSegment::translate(const glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)

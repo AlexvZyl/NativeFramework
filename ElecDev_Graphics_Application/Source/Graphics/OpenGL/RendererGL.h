@@ -80,17 +80,17 @@ public:
 	// --------------------------- //
 
 	// Add a filled 2D polygon.
-	static Polygon2D* addPolygon2D(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
+	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
-	static Polygon2D* addPolygon2DClear(std::vector<glm::vec3> vertices, Entity* parent = nullptr);
+	static Polygon2D* addPolygon2DClear(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
 	// Add a circle.
-	static Circle* addCircle2D(glm::vec3& center, float radius, glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
+	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a circle.
-	static Circle* addCircle2D(glm::vec2& center, float radius, glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
+	static Circle* addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a singular line segment.
-	static LineSegment* addLineSegment2D(glm::vec2 start, glm::vec2 end, float thickness = 0.001f, glm::vec4 colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
+	static LineSegment* addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Add a 2D text string.
-	static Text* addText2D(std::string text, glm::vec3& position, glm::vec4& color, float scale, std::string horizontalAlignment = "L", std::string verticalAlignment = "B", Entity* parent = nullptr);
+	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale,const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
 	
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
@@ -112,6 +112,9 @@ private:
 
 	friend class Application;
 
+	// Prevent instances from being created.
+	Renderer() {}
+
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //
@@ -129,12 +132,9 @@ private:
 	// Sets the OpenGL depth function.
 	static void setDepthFunc(unsigned function);
 	// Set the OpenGL viewport.  Assumes it starts from (0,0).
-	static void setViewport(glm::vec2& viewport);
+	static void setViewport(const glm::vec2& viewport);
 	// Sets the OpenGL viewport.  Does not assume a start from (0,0).
-	static void setViewport(glm::vec4& viewport);
-
-	// Prevent instances from being created.
-	Renderer() {}
+	static void setViewport(const glm::vec4& viewport);
 
 	// ------------- //
 	//  S C E N E S  //
