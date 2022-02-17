@@ -9,7 +9,7 @@
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/ShaderGL.h"
 
 //=============================================================================================================================================//
