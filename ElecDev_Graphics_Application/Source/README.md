@@ -396,6 +396,8 @@ void MyGui::end()
 }
 ```
 
+### Layers
+
 Now we have a GUI with a single button.  When the button is pressed, it calls a function in `My2DEngine`.  Now we want to create an instance of the engine and also create the GUI:
 
 ```C++
