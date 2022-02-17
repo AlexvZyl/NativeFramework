@@ -77,7 +77,7 @@ Renderer::bindScene(&scene);
 
 When creating a `Scene` we need to specify what type of `Camera` we require, since Lumen supports 2D as well as 3D.  `width` and `height` are the dimensions of the `Scene` in pixels, but this is not strictly neccessary for the developer, since Lumen handles resizing events as well.  Binding the `Scene` tells the `Renderer` that all of the following render functions should be applied to that specific scene.  (**NOTE**:  Lumen's event system binds the scenes automatically based on certain events, so the developer actually never has to bind the `Scene`.  It is only mentioned here to give a proper description of the `Renderer` works.)
 
-Now we want to start rendering to the `Scene`.  To see a list of the available functions, see the [Renderer header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
+Now we want to start rendering to the `Scene`.  To see a list of the available functions, see [RendererGL.h](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/RendererGL.h).  To render a simple circle to the `Scene`, we do this:
 
 ```C++
 // Setup.
@@ -109,7 +109,7 @@ myCircle->scale(glm::vec3(2.f, 2.f, 1.f));
 Renderer::unbindScene();
 ```
 
-Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at the [Primitives header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the developer.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
+Now we have a white circle, with radius 1, that is centered around (1,1).  To see a list of functions that can be used, take a look at [Primitive.h](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Graphics/OpenGL/Entities/Primitive.h).  `Primitives` are described as a basic rendering shape, for example circles, polygons, text etc.  `Entities` are seen as a collection of primitives, and these have to be created by the developer.  For example, in the current `Design2DEngine` we have a `Component2D` class that stores pointers to all of the `Primitives` that make up the component.  The `Primitives` are added to the `Scene` in the constructor.  This allows you to only have to interact with a `Component2D` and not a bunch of `Primitives`.
 
 ## Creating An Engine
 
@@ -205,7 +205,7 @@ void My2DEngine::onKeyEvent(KeyEvent& event)
 }
 ```
 
-Now that we know how to receive events to our `Engine`, let us start using it.  It is a good idea to go look at the [Events header file](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/Events/Events.h).  If you look at `enum EventType`, you can see that we use bitshifts to create different types of `Events`.  The following example moves `m_myCircle1` to the mouse position on a left mouse button press, as well as keep our base controls.
+Now that we know how to receive events to our `Engine`, let us start using it.  It is a good idea to go look at [Events.h](https://github.com/AlexEnerdyne/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/Events/Events.h).  If you look at `enum EventType`, you can see that we use bitshifts to create different types of `Events`.  The following example moves `m_myCircle1` to the mouse position on a left mouse button press, as well as keep our base controls.
 
 ```C++
 #include "Engines/My2DEngine/My2DEngine.h"
@@ -272,7 +272,7 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
         
         // We need to check if there is an entity.  If there is no entity
         // under the cursor we get a nullptr.
-        if(entity)  // This is the same as if(entity != nullptr)
+        if(entity)  // This is the same as 'if(entity != nullptr)'
         {
             // And now we can change the color.
             entity->setColor(glm::vec4(1.f, 0.f, 1.f, 1.f));    
@@ -290,6 +290,8 @@ TODO: Cullen to add a section on `Entity` parents.
 ```C++
 // #include "Lumen.h"
 // #include "Application.h"
+// #include "Engines/My2DEngine/My2DEngine.h"
+
 Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
 ```
 
@@ -298,6 +300,8 @@ Pushing layers into Lumen only allows constructors that provide names and flags 
 ```C++
 // #include "Lumen.h"
 // #include "Application.h"
+// #include "Engines/My2DEngine/My2DEngine.h"
+
 My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
 myEnginePtr->init(...);
 ```
@@ -306,4 +310,108 @@ And now it will be showing in a window inside Lumen and receive events!  Lumen u
 
 ## Creating A GUI
 
-This section is going to describe how to create GUIs inside Lumen.
+Creating a `GUI` is very similar to creating an `Engine` in Lumen.  Here is an example `MyGui.h`:
+
+```C++
+#include "GUI/GuiElementCore/GuiElementCore.h"
+
+class MyGui : public GuiElementCore
+{
+public:
+
+    // Constructor.
+    MyGui(std::string& name, int windowFlags = 0);
+    
+    // Set the engine that the GUI interacts with.
+    void setEngine(My2DEngine* engine);
+    
+    // Rendering functions.
+    virtual void begin() override;
+    virtual void onRender() override;
+    virtual void end() override;
+    
+private:
+    
+    // We want to GUI to be able to interact with our engine.
+    My2DEngine* m_engine = nullptr;
+}
+```
+
+We have to inherit from `GuiElementCore` that gives us all of the functionality we need to display a `GUI` in Lumen.  Al we have to do is overload the rendering functions and add the data we want.  We also have the option to add events, but this is rarely necessary for a `GUI`, since dear imgui handles the events.  Take a look at [GuiElementCore.h](https://github.com/Alex-vZyl/Lumen/blob/Main/ElecDev_Graphics_Application/Source/GUI/GuiElementCore/GuiElementCore.h).  For some information on what functions are available, take a look at [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h).  An example `MyGui.cpp`:
+
+```C++
+#include "GUI/MyGui/MyGui.h"
+#include "Engines/My2DEngine/My2DEngine.h"
+#include "External/ImGUI/Core/imgui.h"
+
+// Constructor.
+
+MyGui::MyGui(std::string& name, int windowFlags)
+    : GuiElementCore(name, windowflags)
+{
+    // We cannot pass more arguments into the contructor (allows us to push layers with templates).
+    // So we use helper functions.
+}
+
+// This is a function we can call after the constructor to set data that
+// we did not set in the constructor.
+void MyGui::setEngine(My2DEngine* engine)
+{
+    m_engine = engine;
+}
+
+// The most important part of this function is calling ImGui::Begin().
+// Seperating this function from the main and end function allows Lumen
+// to optimise the rendering of engines and GUIs.  In addition to calling
+// begin, this function should also be used to setup styles, sizes, etc.
+void MyGui::begin()
+{
+    // Sets the size of the window (only runs on the first call).
+    ImGui::SetNextWindowSize(glm::vec2{ 400.f, 400.f }, ImGuiCond_Once);
+    // Calling this function allows us to set a specific style for the window.
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, glm::vec2(1.f, 1.f));
+    // Begins the ImGui window.
+    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+}
+
+// This should render the contents of the window.
+void MyGui::onRender()
+{
+    // Create an ImGui button.  If the button is pressed the if statement will be entered.
+    if(ImGui::Button("A button", glm::vec2(10, 10)))  // The second parameter is the size.
+    {
+        // Call a function in the engine when a button is pressed.
+        m_engine->function(...);
+    }
+}
+
+// The most important part of this function is calling ImGui::Begin().
+// It should also be used to do any cleanup code necessary.
+void MyGui::end()
+{
+    // Ends the ImGui window.
+    ImGui::End();
+    // Pop the style that was pushed with begin().
+    ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
+}
+```
+
+### Layers
+
+Now we have a GUI with a single button.  When the button is pressed, it calls a function in `My2DEngine`.  Now we want to create an instance of the engine and also create the GUI:
+
+```C++
+// #include "Lumen.h"
+// #include "Application.h"
+// #include "Engines/My2DEngine/My2DEngine.h"
+// #include "GUI/MyGui/MyGui.h"
+
+// Create the windows inside Lumen.
+My2DEngine* engine = Lumen::getApp().pushEngineLayer<My2DEngine>("My Engine");
+MyGui* gui = Lumen::getApp().pushGuiLayer<MyGui>("My Gui");
+
+// Now some setup.
+gui->setEngine(engine);
+```
+
+And now Lumen will have an `Engine` displaying, with a `Gui` that can interact with it!
