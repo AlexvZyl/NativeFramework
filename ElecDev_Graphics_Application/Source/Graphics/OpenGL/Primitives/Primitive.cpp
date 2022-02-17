@@ -3,17 +3,19 @@
 //=============================================================================================================================================//
 
 #include <vector>
-#include "OpenGL/Entities/Primitive.h"
+#include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/RendererGL.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
 
 //=============================================================================================================================================//
 //  Constructor and Deconstructor.																											   //
 //=============================================================================================================================================//
 
 template<typename VertexType>
-Primitive<VertexType>::Primitive(Entity* parent) : PrimitivePtr(parent) {}
+Primitive<VertexType>::Primitive(Entity* parent) 
+	: PrimitivePtr(parent) 
+{}
 
 template<typename VertexType>
 Primitive<VertexType>::~Primitive() 
@@ -40,7 +42,7 @@ void Primitive<VertexType>::wipeGPU()
 //=============================================================================================================================================//
 
 template<typename VertexType>
-void Primitive<VertexType>::translate(glm::vec3& translation)
+void Primitive<VertexType>::translate(const glm::vec3& translation)
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 	{
@@ -51,7 +53,7 @@ void Primitive<VertexType>::translate(glm::vec3& translation)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::translate(glm::vec2& translation)
+void Primitive<VertexType>::translate(const glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
@@ -61,7 +63,7 @@ void Primitive<VertexType>::translate(glm::vec2& translation)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::translateTo(glm::vec3& position)
+void Primitive<VertexType>::translateTo(const glm::vec3& position)
 { 
 	glm::vec3 translation = position - m_trackedCenter; 
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
@@ -71,7 +73,7 @@ void Primitive<VertexType>::translateTo(glm::vec3& position)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::translateTo(glm::vec2& position)
+void Primitive<VertexType>::translateTo(const glm::vec2& position)
 {
 	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
@@ -81,13 +83,13 @@ void Primitive<VertexType>::translateTo(glm::vec2& position)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::rotate(glm::vec3& rotation)
+void Primitive<VertexType>::rotate(const glm::vec3& rotation)
 {
 	m_VAO->sync(this);
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::scale(glm::vec3& scaling)
+void Primitive<VertexType>::scale(const glm::vec3& scaling)
 {
 	m_VAO->sync(this);
 }
@@ -97,7 +99,7 @@ void Primitive<VertexType>::scale(glm::vec3& scaling)
 //=============================================================================================================================================//
 
 template<typename VertexType>
-void Primitive<VertexType>::setColor(glm::vec4& color)
+void Primitive<VertexType>::setColor(const glm::vec4& color)
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i]->data.color = color;

@@ -5,7 +5,7 @@
 #include <map>
 #include "Resources/ResourceHandler.h"
 #include "External/JSON/json.hpp"
-#include "OpenGL/FontLoaderGL.h"
+#include "Graphics/Fonts/FontLoader.h"
 
 //=============================================================================================================================================//
 //  MSDFGen font loading.																													   //

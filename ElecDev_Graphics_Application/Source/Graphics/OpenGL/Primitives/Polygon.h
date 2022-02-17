@@ -4,38 +4,29 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Primitive.h"
+#include <vector>
+#include <glm.hpp>
+#include "OpenGL/Primitives/Primitive.h"
 
 //=============================================================================================================================================//
-//  Forward decleration.																													   //
+//  Forward dclerations.																													   //
 //=============================================================================================================================================//
 
 template<typename VertexType>
 class VertexArrayObject;
 
-class VertexDataCircle;
+class VertexData;
 
 //=============================================================================================================================================//
-//  Circle class.		 																													   //
+//  Class.																																	   //
 //=============================================================================================================================================//
 
-class Circle : public Primitive<VertexDataCircle>
+class Polygon2D : public Primitive<VertexData>
 {
-public:
-
-	// Local texture coordinates for the circle shader.
-	static inline glm::vec2 local1 = {-1.f, 1.f};
-	static inline glm::vec2 local2 = {1.f, 1.f};
-	static inline glm::vec2 local3 = {1.f, -1.f};
-	static inline glm::vec2 local4 = {-1.f, -1.f};
-
-	// Circle data.
-	float m_thickness = 0;
-	float m_fade = 0;
-
-	// Constructors. 
-	Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
-	Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent);
+public:				
+	
+	// Constructors.
+	Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent);
 };
 
 //=============================================================================================================================================//

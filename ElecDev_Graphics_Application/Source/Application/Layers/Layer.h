@@ -33,6 +33,9 @@ public:
 	// Checks if the layer is hovered.
 	inline virtual bool isHovered() = 0;
 
+	// Focus the layer.
+	inline virtual void focus() = 0;
+
 	// Destructor.
 	inline virtual ~Layer() = default;
 

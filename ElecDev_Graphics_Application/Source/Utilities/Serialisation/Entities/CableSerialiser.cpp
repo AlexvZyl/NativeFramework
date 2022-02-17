@@ -4,7 +4,7 @@
 
 #include "../Serialiser.h"
 #include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "OpenGL/Entities/Circle.h"
+#include "OpenGL/Primitives/Circle.h"
 
 //=============================================================================================================================================//
 //  Cable serialiser.     																													   //

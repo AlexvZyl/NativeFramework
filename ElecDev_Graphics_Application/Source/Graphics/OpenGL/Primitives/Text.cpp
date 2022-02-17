@@ -3,11 +3,11 @@
 //=============================================================================================================================================//
 
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "EntityManager.h"
-# include<iostream>
-#include "OpenGL/Entities/Text.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "Graphics/Entities/EntityManager.h"
+#include <iostream>
+#include "OpenGL/Primitives/Text.h"
+#include "Graphics/Fonts/FontLoader.h"
 #include "External/Misc/ConsoleColor.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/SceneGL.h"
@@ -17,21 +17,21 @@
 //=============================================================================================================================================//
 
 // Writes the text to the buffer based on the font loaded in the constructor.
-Text::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale, 
-					   VertexArrayObject<VertexDataTextured>* vao, Font& font, Entity* parent,
-					   std::string horizontalAlignment, std::string verticalAlignment)
+Text::Text(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, 
+		   VertexArrayObject<VertexDataTextured>* VAO, Font* font, Entity* parent,
+		   const std::string& horizontalAlignment, const std::string& verticalAlignment)
 	: Primitive<VertexDataTextured>(parent)
 {
 	// ---------- //
 	// S E T U P  //
 	// ---------- //
 
-	m_VAO = vao;
+	m_VAO = VAO;
 	m_trackedCenter = position;  // This does not track the center, but rather the initial cursor position.
 								 // This does not affect functionality but the name does not make sense.
 	m_cursorStart = position;
 	m_textScale = scale;
-	m_font = &font;
+	m_font = font;
 	m_verticalAlign = verticalAlignment;
 	m_horizontalAlign = horizontalAlignment;
 	m_colour = color;
@@ -43,7 +43,7 @@ Text::Text(std::string text, glm::vec3& position, glm::vec4& color, float scale,
 	generateText(text);
 }
 
-void Text::generateText(std::string text)
+void Text::generateText(const std::string& text)
 {
 	// Init.
 	m_cursorStart = m_trackedCenter;
@@ -73,11 +73,14 @@ void Text::generateText(std::string text)
 	{
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
-		unsigned currCharacter = m_font->characterDictionary.at(text[i]).id;
-		unsigned prevCharacter = m_font->characterDictionary.at(text[i - 1]).id;
-		std::pair kerningPair = std::pair(prevCharacter, currCharacter);
-		if (m_font->kerningDictionary.count(kerningPair))	// Check if kerning exists for current pair.  OPTIMIZE!
+		// Create kerning pair.
+		std::pair kerningPair = std::pair(m_font->characterDictionary.at(text[i]).id,
+										  m_font->characterDictionary.at(text[i - 1]).id);
+
+		// Check if kerning exists for current pair.  OPTIMIZE!
+		if (m_font->kerningDictionary.count(kerningPair))	
 			kerning = m_font->kerningDictionary.at(kerningPair);
+
 		// Add character length to total.
 		m_textLength += m_font->characterDictionary[text[i]].xAdvance + kerning;
 	}
@@ -93,13 +96,13 @@ void Text::generateText(std::string text)
 	}
 	else if (m_horizontalAlign == "R" || m_horizontalAlign == "r") 
 	{ 
-		Character endChar = m_font->characterDictionary.at(text[charCount-1]);
+		const Character& endChar = m_font->characterDictionary.at(text[charCount-1]);
 		float offset = endChar.xAdvance - endChar.xPlaneBounds[1];
 		m_cursorStart.x = m_cursorStart.x - (m_textLength - offset) * m_textScale;
 	}
 	else if (m_horizontalAlign == "L" || m_horizontalAlign == "l") 
 	{ 
-		Character initialChar = m_font->characterDictionary.at(text[0]);
+		const Character& initialChar = m_font->characterDictionary.at(text[0]);
 		m_cursorStart.x = m_cursorStart.x - (initialChar.xPlaneBounds[0]) * m_textScale;
 	}
 	// Display error.
@@ -151,25 +154,34 @@ void Text::generateText(std::string text)
 
 	// -----------------------
 	// Vertex 1.
-	glm::vec3 pos1(m_cursorStart.x, m_cursorStart.y + m_font->descender * m_textScale, boxZPos);
-	glm::vec2 tex1(0.f, 0.f);
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos1, m_boxColor, tex1, 0, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	(
+		glm::vec3(m_cursorStart.x, m_cursorStart.y + m_font->descender * m_textScale, boxZPos),
+		m_boxColor, glm::vec2(0.f, 0.f), 0, m_entityID)
+	);
 	// -----------------------
 	// Vertex2.
-	glm::vec3 pos2(m_cursorStart.x, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos);
-	glm::vec2 tex2(0.f, 1.f);
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos2, m_boxColor, tex2, 0, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	(
+		glm::vec3(m_cursorStart.x, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos),
+		m_boxColor, glm::vec2(0.f, 1.f), 0, m_entityID)
+	);
 	// -----------------------
 	// Vertex 3.
-	glm::vec3 pos3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos);
-	glm::vec2 tex3(1.f, 1.f);
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos3, m_boxColor, tex3, 0, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	(
+		glm::vec3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos),
+		m_boxColor, glm::vec2((1.f, 1.f)), 0, m_entityID)
+	);
 	// -----------------------
 	// Vertex 4.
-	glm::vec3 pos4(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos);
-	glm::vec2 tex4(0.f, 1.f);
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(pos4, m_boxColor, tex4, 0, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	(
+		glm::vec3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos),
+		m_boxColor, glm::vec2((0.f, 1.f)), 0, m_entityID)
+	);
 	// -----------------------
+	// Indices.
 	indices.insert(indices.end(),
 		{
 			0 + m_vertexCount,
@@ -208,60 +220,59 @@ void Text::generateText(std::string text)
 	{
 		// -----------------------
 		// Load character.
-		Character c = m_font->characterDictionary.at(text[i]);
+		const Character& c = m_font->characterDictionary.at(text[i]);
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
-		if (i)  // Kerning does not apply to the first character.
+		// Kerning does not apply to the first character.
+		if (i)  
 		{
-			unsigned currCharacter = m_font->characterDictionary.at(text[i]).id;
-			unsigned prevCharacter = m_font->characterDictionary.at(text[i - 1]).id;
-			std::pair kerningPair = std::pair(prevCharacter, currCharacter);
-			if (m_font->kerningDictionary.count(kerningPair))	// Check if kerning exists for current pair.
+			// Create kerning pair.
+			std::pair kerningPair = std::pair(m_font->characterDictionary.at(text[i]).id,
+											  m_font->characterDictionary.at(text[i - 1]).id);
+
+			// Check if kerning exists for current pair.
+			if (m_font->kerningDictionary.count(kerningPair))	
 				kerning = m_font->kerningDictionary.at(kerningPair);
 		}
 
 		// -----------------------
 		// Vertex 1.
-		glm::vec3 pos1
+		vertices.emplace_back(std::make_unique<VertexDataTextured>
 		(
-			m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + kerning) * m_textScale,
-			m_cursorStart.y + (c.yPlaneBounds[0]) * m_textScale,
-			m_cursorStart.z
+			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + kerning) * m_textScale,
+					  m_cursorStart.y + (c.yPlaneBounds[0]) * m_textScale,
+					  m_cursorStart.z),
+			m_colour, glm::vec2(c.xTextureCoords[0], c.yTextureCoords[0]), 1, m_entityID)
 		);
-		glm::vec2 tex1(c.xTextureCoords[0], c.yTextureCoords[0]);
-		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos1, m_colour, tex1, 1, m_entityID));
 		// -----------------------
 		// Vertex2.
-		glm::vec3 pos2
+		vertices.emplace_back(std::make_unique<VertexDataTextured>
 		(
-			m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + kerning) * m_textScale,
-			m_cursorStart.y + (c.yPlaneBounds[0] + c.height) * m_textScale,
-			m_cursorStart.z
+			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + kerning) * m_textScale,
+					  m_cursorStart.y + (c.yPlaneBounds[0] + c.height) * m_textScale,
+					  m_cursorStart.z),
+			m_colour, glm::vec2(c.xTextureCoords[0], c.yTextureCoords[1]), 1, m_entityID)
 		);
-		glm::vec2 tex2(c.xTextureCoords[0], c.yTextureCoords[1]);
-		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos2, m_colour, tex2, 1, m_entityID));
 		// -----------------------
 		// Vertex 3.
-		glm::vec3 pos3
+		vertices.emplace_back(std::make_unique<VertexDataTextured>
 		(
-			m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + c.width + kerning) * m_textScale,
-			m_cursorStart.y + (c.yPlaneBounds[0] + c.height) * m_textScale,
-			m_cursorStart.z
+			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + c.width + kerning) * m_textScale,
+					  m_cursorStart.y + (c.yPlaneBounds[0] + c.height) * m_textScale,
+					  m_cursorStart.z),
+			m_colour, glm::vec2(c.xTextureCoords[1], c.yTextureCoords[1]), 1, m_entityID)
 		);
-		glm::vec2 tex3(c.xTextureCoords[1], c.yTextureCoords[1]);
-		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos3, m_colour, tex3, 1, m_entityID));
 		// -----------------------
 		// Vertex 4.
-		glm::vec3 pos4
+		vertices.emplace_back(std::make_unique<VertexDataTextured>
 		(
-			m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + c.width + kerning) * m_textScale,
-			m_cursorStart.y + (c.yPlaneBounds[0]) * m_textScale,
-			m_cursorStart.z
+			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + c.width + kerning) * m_textScale,
+					  m_cursorStart.y + (c.yPlaneBounds[0]) * m_textScale,
+					  m_cursorStart.z),
+			m_colour, glm::vec2(c.xTextureCoords[1], c.yTextureCoords[0]), 1, m_entityID)
 		);
-		glm::vec2 tex4(c.xTextureCoords[1], c.yTextureCoords[0]);
-		vertices.emplace_back(std::make_unique<VertexDataTextured>(pos4, m_colour, tex4, 1, m_entityID));
 		// -----------------------
-		// Insert indices.
+		// Indices.
 		indices.insert(indices.end(),
 			{
 				0 + m_vertexCount,
@@ -288,13 +299,13 @@ void Text::generateText(std::string text)
 //  Text manipulation.																													       //
 //=============================================================================================================================================//
 
-void Text::updateText(std::string text) 
+void Text::updateText(const std::string& text) 
 {
 	wipeGPU();
 	generateText(text);
 }
 
-void Text::setBoxColour(glm::vec4 colour) 
+void Text::setBoxColour(const glm::vec4& colour) 
 { 
 	m_boxColor = colour;
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++) 
@@ -302,7 +313,7 @@ void Text::setBoxColour(glm::vec4 colour)
 	m_VAO->sync(this);
 }
 
-void Text::setColor(glm::vec4& color) 
+void Text::setColor(const glm::vec4& color) 
 {
 	m_colour = color;
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)

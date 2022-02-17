@@ -6,13 +6,13 @@
 
 #include <vector>
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include "External/GLM/glm.hpp"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/TextureGL.h"
-#include "OpenGL/Entities/Primitive.h"
-#include "OpenGL/CameraGL.h"
+#include "OpenGL/Primitives/TextureGL.h"
+#include "OpenGL/Primitives/Primitive.h"
+#include "Graphics/Camera/Camera.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -47,7 +47,7 @@ public:
 	glm::vec4& getViewport();
 	// Calculate the world coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
-	glm::vec3 pixelCoordsToWorldCoords(glm::vec2 pixelCoords);
+	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
 	// Calculate the camera coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 	// Returns the ID of the entity at the coordinates.
@@ -66,7 +66,7 @@ public:
 private:
 
 	// Map containing all of the different primitives.
-	std::map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
+	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
 
 	// Friends.
 	friend class Renderer;
@@ -94,7 +94,7 @@ private:
 	void updateCamera();
 
 	// Map containing all of the textures used in the scene.
-	std::map<unsigned, std::unique_ptr<Texture>> m_textures;
+	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
 	// VAO's.
 	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;
 	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;

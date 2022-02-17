@@ -3,13 +3,13 @@
 //=============================================================================================================================================//
 
 #include "Component2D.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "OpenGL/Entities/Polygon.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/FontLoaderGL.h"
-#include "OpenGL/Entities/Text.h"
+#include "Graphics/Fonts/FontLoader.h"
+#include "OpenGL/Primitives/Text.h"
 #include "Resources/ResourceHandler.h"
-#include "OpenGL/Entities/Circle.h"
+#include "OpenGL/Primitives/Circle.h"
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "Circuit.h"
@@ -38,10 +38,11 @@ Component2D::Component2D(Circuit* parent)
 
 	// Create vertices.
 	centre = glm::vec2(0.0f, 0.0f);
-	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y - height, 0.0f));
-	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y - height, 0.0f));
-	vertices.insert(vertices.end(), glm::vec3(centre.x + width, centre.y + height, 0.0f));
-	vertices.insert(vertices.end(), glm::vec3(centre.x - width, centre.y + height, 0.0f));
+	vertices.reserve(4);
+	vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
+	vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
+	vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
+	vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
 	// --------------------- //
 	//  P R I M I T I V E S  //
@@ -69,7 +70,7 @@ Component2D::Component2D(Circuit* parent)
 
 }
 
-Component2D::Component2D(glm::vec2 centreCoords, Circuit* parent)
+Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	: Component2D(parent)
 {
 	moveTo(centreCoords);
@@ -87,29 +88,33 @@ Component2D::~Component2D()
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-void Component2D::moveTo(glm::vec2 pointerPos)
+void Component2D::moveTo(const glm::vec2& pointerPos)
 {
 	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
 	shape->translateTo(translateDestination);
 	border->translateTo(translateDestination);
 	glm::vec2 titleDest = translateDestination + titleOffset;
 	title->translateTo(titleDest);
-	for (int i = 0; i < portsWest.size(); i++) {
+	for (int i = 0; i < portsWest.size(); i++) 
+	{
 		portsWest[i]->moveTo(translateDestination);
 	}
-	for (int i = 0; i < portsEast.size(); i++) {
+	for (int i = 0; i < portsEast.size(); i++) 
+	{
 		portsEast[i]->moveTo(translateDestination);
 	}
-	for (int i = 0; i < portsNorth.size(); i++) {
+	for (int i = 0; i < portsNorth.size(); i++) 
+	{
 		portsNorth[i]->moveTo(translateDestination);
 	}
-	for (int i = 0; i < portsSouth.size(); i++) {
+	for (int i = 0; i < portsSouth.size(); i++) 
+	{
 		portsSouth[i]->moveTo(translateDestination);
 	}
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
-void Component2D::move(glm::vec2 translation)
+void Component2D::move(const glm::vec2& translation)
 {
 	shape->translate(translation);
 	border->translate(translation);
@@ -129,15 +134,16 @@ void Component2D::move(glm::vec2 translation)
 	centre += translation;
 }
 
-void Component2D::place(glm::vec2 pos)
-{	//ensure the component is at the desired position
+void Component2D::place(const glm::vec2& pos)
+{	
+	// Ensure the component is at the desired position.
 	moveTo(pos);
 	setLayer(0.0f);
 	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
 	titleColour = { 0.f, 0.f, 0.f, 1.0f };
 	shape->setColor(shapeColour);
 	title->setColor(titleColour);
-	//Move to placement layer
+	// Move to placement layer.
 }
 
 void Component2D::setLayer(float layer)
@@ -170,18 +176,18 @@ void Component2D::highlight()
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border->setColor(borderColour);
 
-	for (int i = 0; i < portsWest.size(); i++) {
+	for (int i = 0; i < portsWest.size(); i++) 
 		portsWest[i]->highlight();
-	}
-	for (int i = 0; i < portsEast.size(); i++) {
+	
+	for (int i = 0; i < portsEast.size(); i++) 
 		portsEast[i]->highlight();
-	}
-	for (int i = 0; i < portsNorth.size(); i++) {
+	
+	for (int i = 0; i < portsNorth.size(); i++) 
 		portsNorth[i]->highlight();
-	}
-	for (int i = 0; i < portsSouth.size(); i++) {
+	
+	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->highlight();
-	}
+	
 }
 
 void Component2D::unhighlight()
@@ -189,21 +195,21 @@ void Component2D::unhighlight()
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
 
-	for (int i = 0; i < portsWest.size(); i++) {
+	for (int i = 0; i < portsWest.size(); i++) 
 		portsWest[i]->unhighlight();
-	}
-	for (int i = 0; i < portsEast.size(); i++) {
+	
+	for (int i = 0; i < portsEast.size(); i++) 
 		portsEast[i]->unhighlight();
-	}
-	for (int i = 0; i < portsNorth.size(); i++) {
+	
+	for (int i = 0; i < portsNorth.size(); i++) 
 		portsNorth[i]->unhighlight();
-	}
-	for (int i = 0; i < portsSouth.size(); i++) {
+	
+	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->unhighlight();
-	}
+	
 }
 
-unsigned Component2D::addPort(int side, PortType type, std::string name)
+unsigned Component2D::addPort(int side, PortType type, const std::string& name)
 {
 	switch(side){
 	case 0:

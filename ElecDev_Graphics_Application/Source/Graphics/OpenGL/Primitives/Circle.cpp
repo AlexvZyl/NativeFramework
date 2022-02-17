@@ -2,38 +2,42 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "OpenGL/Entities/Circle.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "OpenGL/Primitives/Circle.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec3 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
+Circle::Circle(VertexArrayObject<VertexDataCircle>* VAO, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
 	: Primitive<VertexDataCircle>(parent)
 {
 	// Init.
-	m_VAO = vao;
+	m_VAO = VAO;
 	m_trackedCenter = center;
 	m_colour = color;
 	m_thickness = thickness;
 	m_fade = fade;
 
-	// Create position variables.
-	glm::vec3 pos1(center.x - radius, center.y + radius, center.z);
-	glm::vec3 pos2(center.x + radius, center.y + radius, center.z);
-	glm::vec3 pos3(center.x + radius, center.y - radius, center.z);
-	glm::vec3 pos4(center.x - radius, center.y - radius, center.z);
-
-	// Create vertices and indices.
+	// Create the vertices.
 	std::vector<std::unique_ptr<VertexDataCircle>> vertices;
 	vertices.reserve(4);
-	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos1, local1, m_colour, m_thickness, m_fade, m_entityID));
-	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos2, local2, m_colour, m_thickness, m_fade, m_entityID));
-	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos3, local3, m_colour, m_thickness, m_fade, m_entityID));
-	vertices.emplace_back(std::make_unique<VertexDataCircle>(pos4, local4, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(
+		glm::vec3(center.x - radius, center.y + radius, center.z), local1, m_colour, m_thickness, m_fade, m_entityID)
+	);
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(
+		glm::vec3(center.x + radius, center.y + radius, center.z), local2, m_colour, m_thickness, m_fade, m_entityID)
+	);
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(
+		glm::vec3(center.x + radius, center.y - radius, center.z), local3, m_colour, m_thickness, m_fade, m_entityID)
+	);
+	vertices.emplace_back(std::make_unique<VertexDataCircle>(
+		glm::vec3(center.x - radius, center.y - radius, center.z), local4, m_colour, m_thickness, m_fade, m_entityID)
+	);
+
+	// Create the indices.
 	std::vector<unsigned> indices = {0,1,2,2,3,0};
 	m_vertexCount = 4;
 	m_indexCount = 6;
@@ -43,7 +47,7 @@ Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec3 center, float
 	m_VAO->pushPrimitive(this);
 }
 
-Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, glm::vec2 center, float radius, glm::vec4& color, float thickness, float fade, Entity* parent)
+Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
 	: Circle( vao, glm::vec3(center, 0.f), radius, color, thickness, fade, parent)
 {}
 

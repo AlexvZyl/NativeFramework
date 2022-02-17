@@ -4,7 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-
+#include <string>
 
 //==============================================================================================================================================//
 //  Texture Class.																																//
@@ -15,7 +15,7 @@ class Texture
 public:
 
 	// Constructor.
-	Texture(int resourceID);
+	Texture(int resourceID, const std::string& name);
 
 	// Sert the mipmap level for the texture.
 	void setMipmapLevel(float LOD);
@@ -24,8 +24,14 @@ private:
 
 	friend class Renderer;
 
-	unsigned m_GLID;
-	unsigned m_textureType;
+	// The ID associated with the texture.
+	unsigned m_rendererID = 0;
+	// The texture name.
+	std::string m_name = "";
+	// The type of texture.
+	unsigned m_textureType = 0;
+	// The ID of the texture atlas this texture belongs to.
+	unsigned m_textureAtlasID = 0;
 };
 
 //==============================================================================================================================================//

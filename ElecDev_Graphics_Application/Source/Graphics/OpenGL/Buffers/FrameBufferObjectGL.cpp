@@ -9,7 +9,7 @@
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/ShaderGL.h"
 
 //=============================================================================================================================================//
@@ -40,10 +40,10 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	m_renderVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	std::vector<std::unique_ptr<VertexDataTextured>> vertices;
 	vertices.reserve(4);
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(-1.f, -1.f,  0.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,   2.f,  1));
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(-1.f,  1.f,  0.f,   0.f, 1.f, 0.f, 1.f,   0.f, 1.f,   2.f,  1));
-	vertices.emplace_back(std::make_unique<VertexDataTextured>( 1.f,  1.f,  0.f,   0.f, 0.f, 1.f, 1.f,   1.f, 1.f,   2.f,  1));
-	vertices.emplace_back(std::make_unique<VertexDataTextured>( 1.f, -1.f,  0.f,   1.f, 0.f, 1.f, 1.f,   1.f, 0.f,   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3(-1.f, -1.f,  0.f), glm::vec4(1.f, 0.f, 0.f, 1.f), glm::vec2(0.f, 0.f),   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3(-1.f,  1.f,  0.f), glm::vec4(0.f, 1.f, 0.f, 1.f), glm::vec2(0.f, 1.f),   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3( 1.f,  1.f,  0.f), glm::vec4(0.f, 0.f, 1.f, 1.f), glm::vec2(1.f, 1.f),   2.f,  1));
+	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3( 1.f, -1.f,  0.f), glm::vec4(1.f, 0.f, 1.f, 1.f), glm::vec2(1.f, 0.f),   2.f,  1));
 	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
 	m_renderVAO->appendVertexData(vertices, indices);
 	unsigned texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));

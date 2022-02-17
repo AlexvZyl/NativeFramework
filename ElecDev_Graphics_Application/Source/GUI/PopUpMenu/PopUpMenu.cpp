@@ -49,7 +49,7 @@ void PopUpMenu::begin()
 {
     // Place at mouse position.
     ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y));
-    if (ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags));
+    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
 /*=======================================================================================================================================*/
@@ -85,10 +85,9 @@ void PopUpMenu::onRender()
     {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
-            ComponentEditor* editor = app.pushGuiLayer<ComponentEditor>("Component Editor");
-            
-            // Remove popup.
-            app.queuePopLayer(m_name);
+            // Pushing this GUI layer defocuses the popup, causing a 
+            // defocus event, which removes the popup event.
+            app.pushGuiLayer<ComponentEditor>("Component Editor");
         }
         //if (ImGui::MenuItem("Edit Ports", "P"))
         //{

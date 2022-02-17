@@ -4,9 +4,9 @@
 
 #include "Port.h"
 #include "Component2D.h"
-#include "OpenGL/Entities/Polygon.h"
-#include "OpenGL/Entities/Text.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "OpenGL/Primitives/Polygon.h"
+#include "OpenGL/Primitives/Text.h"
+#include "Graphics/Fonts/FontLoader.h"
 #include "Resources/ResourceHandler.h"
 #include "Cable.h"
 #include "Circuit.h"
@@ -17,7 +17,7 @@
 //  Methods.																																	//
 //==============================================================================================================================================//
 
-Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string label) 
+Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const std::string& label) 
 	: Entity(EntityType::PORT, parent), 
 	  bodyColour( 0.7f, 0.7f, 0.7f, 1.f ),
 	  borderColour(0.f, 0.f, 0.f, 1.f),
@@ -34,33 +34,37 @@ Port::Port(glm::vec2 offset, PortType type, Component2D* parent, std::string lab
 	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
 
 	portLayer = parent->componentLayer + parent->portLayerOffset;
-	if (label == "default") {
+
+	// Assign port label.
+	if (label == "default") 
 		m_label = "Port " + std::to_string(parent->numPorts++);
-	}
-	else {
-		m_label = label;
-	}
+	else m_label = label;
+
 	float textMargin = 0.015;
 	//infer the port position from the offset, and set the title
-	if (m_offset.y > 0.099) {//top
+	if (m_offset.y > 0.099) 
+	{//top
 		m_position = PortPosition::TOP;
 		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "T", this);
 	}	
-	else if (m_offset.y < -0.099) {//bottom
+	else if (m_offset.y < -0.099) 
+	{//bottom
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "U", this);
 	}
-	else if (m_offset.x > 0.099) {//right
+	else if (m_offset.x > 0.099) 
+	{//right
 		m_position = PortPosition::RIGHT;
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C", this);
 	}
-	else if (m_offset.x < -0.099) {//left
+	else if (m_offset.x < -0.099) 
+	{//left
 		m_position = PortPosition::LEFT;
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
@@ -98,7 +102,7 @@ Port::~Port()
 	Renderer::remove(title);
 }
 
-void Port::moveTo(glm::vec2 destination)
+void Port::moveTo(const glm::vec2& destination)
 {
 	//update the port centre
 	centre = destination + m_offset;
@@ -108,12 +112,11 @@ void Port::moveTo(glm::vec2 destination)
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
 	title->translateTo(titlePos);
-	for (Cable* cable: m_cables) {
+	for (Cable* cable: m_cables)
 		cable->followPort(this);
-	}
 }
 
-void Port::move(glm::vec2 translation)
+void Port::move(const glm::vec2& translation)
 {	
 	//update the port centre
 	centre += translation;
@@ -122,9 +125,8 @@ void Port::move(glm::vec2 translation)
 	border->translate(translation);
 	attachmentIndicator->translate(translation);
 	title->translate(translation);
-	for (Cable* cable : m_cables) {
+	for (Cable* cable : m_cables)
 		cable->followPort(this);
-	}
 }
 
 Port& Port::operator=(const Port& t)
@@ -153,7 +155,7 @@ void Port::unhighlight()
 	border->setColor(borderColour);
 }
 
-void Port::setOffset(glm::vec2 offset)
+void Port::setOffset(const glm::vec2& offset)
 {
 	//move port to new offset (trust the math)
 	moveTo(centre - m_offset - m_offset + offset);
@@ -170,13 +172,15 @@ void Port::attachCable(Cable* cable)
 
 void Port::detachCable(Cable* cable)
 {
-	//find the cable in the internal list.
+	// Find the cable in the internal list.
 	auto cableIt = std::find(m_cables.begin(), m_cables.end(), cable);
-	//remove the cable if found in the list.
-	if (cableIt != m_cables.end()) {
+
+	// Remove the cable if found in the list.
+	if (cableIt != m_cables.end()) 
 		m_cables.erase(cableIt);
-	}
-	if (m_cables.empty()) {
+
+	if (m_cables.empty()) 
+	{
 		indicatorColour = { 0.5f, 0.5f, 0.5f, 0.f };
 		attachmentIndicator->setColor(indicatorColour);
 	}
@@ -184,7 +188,8 @@ void Port::detachCable(Cable* cable)
 
 void Port::showAttachIndicator()
 {
-	if (m_cables.empty()) {
+	if (m_cables.empty()) 
+	{
 		indicatorColour.a = 1.f;
 		attachmentIndicator->setColor(indicatorColour);
 	}
@@ -192,7 +197,8 @@ void Port::showAttachIndicator()
 
 void Port::hideAttachIndicator()
 {
-	if (m_cables.empty()) {
+	if (m_cables.empty()) 
+	{
 		indicatorColour.a = 0.f;
 		attachmentIndicator->setColor(indicatorColour);
 	}

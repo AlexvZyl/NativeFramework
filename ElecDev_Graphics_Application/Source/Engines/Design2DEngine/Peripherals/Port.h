@@ -7,10 +7,10 @@
 #include <string>
 #include <memory>
 #include "External/GLM/glm.hpp"
-#include "OpenGL/Entities/Entity.h"
-#include "OpenGL/Entities/Circle.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "OpenGL/Entities/Text.h"
+#include "Graphics/Entities/Entity.h"
+#include "OpenGL/Primitives/Circle.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Text.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 
 //==============================================================================================================================================//
@@ -70,16 +70,21 @@ public:
 
 	std::vector<Cable*> m_cables;
 
-	Port(glm::vec2 pos, PortType type, Component2D* parent, std::string label = "default");
+	// Constructor.
+	Port(const glm::vec2& pos, PortType type, Component2D* parent, const std::string& label = "default");
+	// Destructor.
 	~Port();
+
 	Port& operator = (const Port &t);
-	void moveTo(glm::vec2 destination);
-	void move(glm::vec2 translation);
+	
+	// Helper methods.
+	void moveTo(const glm::vec2& destination);
+	void move(const glm::vec2& translation);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
 	void highlight();
 	void unhighlight();
-	void setOffset(glm::vec2 offset);
+	void setOffset(const glm::vec2& offset);
 	void attachCable(Cable* cable);
 	void detachCable(Cable* cable);
 	void showAttachIndicator();

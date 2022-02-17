@@ -73,11 +73,7 @@ public:
 	glm::vec4* color = &data.color;							// Color of the vertex.
 
 	// Constructor.
-	VertexData();
-	VertexData(glm::vec3& pos, glm::vec4& clr, unsigned int eID);
-	VertexData(float pos0, float pos1, float pos2,
-			   float col0, float col1, float col2, float col3,
-			   unsigned int eID);
+	VertexData(const glm::vec3& pos, const glm::vec4& clr, unsigned int eID);
 	
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	
@@ -126,12 +122,8 @@ public:
 	glm::vec2* textureCoords = &data.textureCoords;			// Position
 	float* textureID = &data.textureID;
 
-	// Constructors.
-	VertexDataTextured(glm::vec3& pos, glm::vec4& clr, glm::vec2& texCoords, float texID, unsigned int eID);
-	VertexDataTextured(float pos0, float pos1, float pos2,
-					   float col0, float col1, float col2, float col3,
-					   float texPos0, float texPos1, float texID,
-					   unsigned int eID);
+	// Constructor.
+	VertexDataTextured(const glm::vec3& pos, const glm::vec4& color, const glm::vec2& texCoords, float texID, unsigned int eID);
 	
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	
@@ -184,7 +176,7 @@ public:
 	float* fade = &data.fade;
 
 	// Constructors.
-	VertexDataCircle(glm::vec3& Position, glm::vec2& local, glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
+	VertexDataCircle(const glm::vec3& Position, const glm::vec2& local, const glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
 
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	

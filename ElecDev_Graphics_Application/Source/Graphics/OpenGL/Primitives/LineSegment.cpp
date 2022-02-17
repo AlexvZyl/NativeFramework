@@ -9,20 +9,20 @@
 //  Methods.																																	//
 //==============================================================================================================================================//
 
-LineSegment::LineSegment(glm::vec2 start, glm::vec2 end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, glm::vec4 colour) 
-	: m_direction((end-start)/(glm::length(glm::vec2(end - start)))),
-	  m_perpendicular(- m_direction::member.y, -m_direction::member.x),
-	  m_start(start), m_end(end), m_thickness(thickness),
-	  Polygon2D(std::vector<glm::vec3>{glm::vec3(start - thickness * (m_perpendicular::member), 0.f),
-									   glm::vec3(start + thickness * (m_perpendicular::member), 0.f),
-									   glm::vec3(end + thickness * (m_perpendicular::member), 0.f),
-									   glm::vec3(end - thickness * (m_perpendicular::member), 0.f)},
-									   VAO, parent)
+LineSegment::LineSegment(const glm::vec2& start, const glm::vec2& end, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, const glm::vec4& colour)
+	: m_direction((end - start) / (glm::length(glm::vec2(end - start)))),
+	m_perpendicular(-m_direction::member.y, -m_direction::member.x),
+	m_start(start), m_end(end), m_thickness(thickness),
+	Polygon2D(std::vector<glm::vec3>{glm::vec3(start - thickness * (m_perpendicular::member), 0.f),
+		glm::vec3(start + thickness * (m_perpendicular::member), 0.f),
+		glm::vec3(end + thickness * (m_perpendicular::member), 0.f),
+		glm::vec3(end - thickness * (m_perpendicular::member), 0.f)},
+		VAO, parent)
 {
 	setColor(colour);
 }
 
-void LineSegment::translate(glm::vec2& translation)
+void LineSegment::translate(const glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
@@ -35,7 +35,7 @@ void LineSegment::translate(glm::vec2& translation)
 	m_VAO->sync(this);
 }
 
-void LineSegment::setStart(glm::vec2 start)
+void LineSegment::setStart(const glm::vec2& start)
 {
 	m_start = start;
 	m_VAO->m_vertexCPU[m_vertexBufferPos]->data.position = glm::vec3(m_start - m_thickness * (m_perpendicular::member), 0.f);
@@ -43,7 +43,7 @@ void LineSegment::setStart(glm::vec2 start)
 	m_VAO->sync(this);
 }
 
-void LineSegment::setEnd(glm::vec2 end)
+void LineSegment::setEnd(const glm::vec2& end)
 {
 	m_end = end;
 	m_VAO->m_vertexCPU[m_vertexBufferPos + 2]->data.position = glm::vec3(m_end + m_thickness * (m_perpendicular::member), 0.f);

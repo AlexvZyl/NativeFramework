@@ -109,7 +109,6 @@ public:
 	// Stores the vector that goes into the world.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
 
-
 	// ------------- //
 	//  S T A T E S  //
 	// ------------- //
@@ -119,14 +118,14 @@ public:
 	// Is the engine focused?
 	bool m_isFocused = false;
 
-
 	// ----------------------------- //
 	//  C O N T E N T   R E G I O N  //
 	// ----------------------------- //
 
 public:
 
-	// Return the mouse position in the engine coordinates.
+	// Return the mouse position in the local scene coordinates (pixels).
+	// (0,0) is in the top left.
 	glm::vec2 getMousePosition();
 
 	// Set content region size.

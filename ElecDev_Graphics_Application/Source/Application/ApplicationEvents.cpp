@@ -130,7 +130,7 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	{
 		LayerEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
-		ImGui::SetWindowFocus(newLayer->getName().c_str());
+		newLayer->focus();
 	}
 	// No layer is in focus.
 	else ImGui::SetWindowFocus(NULL);

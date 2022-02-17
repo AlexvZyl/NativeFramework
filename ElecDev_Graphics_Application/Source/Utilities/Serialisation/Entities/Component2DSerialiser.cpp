@@ -4,7 +4,7 @@
 
 #include "../Serialiser.h"
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "Graphics/Fonts/FontLoader.h"
 
 //=============================================================================================================================================//
 //  Component 2D serialiser.   																												   //
@@ -34,7 +34,6 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> c
 	emitter << YAML::Key << "Title" << YAML::Value;
 	emitter << YAML::BeginMap;
 		emitter << YAML::Key << "String" << YAML::Value << comp->titleString;
-		emitter << YAML::Key << "Font" << YAML::Value << comp->titleFont.name;
 		emitter << YAML::Key << "Size" << YAML::Value << comp->titleSize;
 		emitter << YAML::Key << "Offset" << YAML::Value << comp->titleOffset;
 		emitter << YAML::Key << "Colour" << YAML::Value << comp->titleColour;

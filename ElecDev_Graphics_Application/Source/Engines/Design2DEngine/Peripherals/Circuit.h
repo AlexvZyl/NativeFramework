@@ -4,7 +4,7 @@
 //  Includes. 																																   //
 //=============================================================================================================================================//
 
-#include "OpenGL/Entities/Entity.h"
+#include "Graphics/Entities/Entity.h"
 #include "Cable.h"
 #include "Component2D.h"
 

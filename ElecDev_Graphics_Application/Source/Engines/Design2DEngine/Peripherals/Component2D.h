@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 #include "Port.h"
-#include "OpenGL/Entities/Entity.h"
+#include "Graphics/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -85,16 +85,16 @@ public:
 	// Creates a generic component centred at (0, 0).
 	Component2D(Circuit* parent);
 	// Creates a generic component centred at the specified coordinates.
-	Component2D(glm::vec2 centreCoords, Circuit* parent);
+	Component2D(const glm::vec2& centreCoords, Circuit* parent);
 
 	// Deconstructor.s
 	~Component2D();
 	//Move the component to a new positioned centred at the given coordinates
-	void moveTo(glm::vec2 pointerPos);
+	void moveTo(const glm::vec2& pointerPos);
 	//Move the component by the  given vector
-	void move(glm::vec2 translation);
+	void move(const glm::vec2& translation);
 	//Place the component.
-	void place(glm::vec2 pos);
+	void place(const glm::vec2& pos);
 	//Move the component to a new layer.
 	void setLayer(float layer);
 	//set the clickedZone.component flag in the GUIState.
@@ -104,7 +104,7 @@ public:
 	//Remove the component highlighting.
 	void unhighlight();
 	//Add a port with the given definition to the component.
-	unsigned addPort(int side, PortType type, std::string name);
+	unsigned addPort(int side, PortType type, const std::string& name);
 	//remove a specified port from the component.
 	void removePort(std::shared_ptr<Port> port);
 	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.

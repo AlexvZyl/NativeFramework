@@ -32,24 +32,17 @@ public:
 	// Get the gui element in the layer.
 	GuiType* getGuiElement();
 
-	// Pass an event to the layer.
+	// ----------- //
+	//  L A Y E R  //	
+	// ----------- //
+
 	virtual void onEvent(Event& event) override;
-
-	// Render the layer.
 	virtual void onRender() override;
-
-	// Dispatch the ImGUI events, if there are elements
-	// in the layer that has to do this.
 	virtual void dispatchEvents() override;
-
-	// Set the name of all the elements in the layer.
 	virtual void setName(std::string& newName) override;
-
-	// Get the name of the layer.
 	virtual std::string& getName() override;
-
-	// Checks if the layer is hovered.
 	virtual bool isHovered() override;
+	virtual void focus() override;
 
 protected:
 
@@ -169,6 +162,13 @@ void GuiLayer<GuiType>::dispatchEvents()
 	// Dispatch the GUI window events.
 	m_guiElement->dispatchEvents();
 }
+
+template<class GuiType>
+void GuiLayer<GuiType>::focus() 
+{
+	ImGui::SetWindowFocus(m_guiElement->m_name.c_str());
+}
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//
