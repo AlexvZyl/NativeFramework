@@ -377,7 +377,7 @@ void MyGui::begin()
 // This should render the contents of the window.
 void MyGui::onRender()
 {
-    // Create an ImGui button.  If the button is pressed if will enter the if statement.
+    // Create an ImGui button.  If the button is pressed the if statement will be entered.
     if(ImGui::Button("A button", glm::vec2(10, 10)))  // The second parameter is the size.
     {
         // Call a function in the engine when a button is pressed.
