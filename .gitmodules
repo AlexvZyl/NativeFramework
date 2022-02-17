@@ -1,0 +1,3 @@
+[submodule "ElecDev_Graphics_Application/External/imgui"]
+	path = ElecDev_Graphics_Application/External/imgui
+	url = https://github.com/Alex-vZyl/imgui
