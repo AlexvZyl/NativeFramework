@@ -25,7 +25,8 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     : GuiElementCore(name, windowFlags)
 {
     m_imguiWindowFlags  |=  ImGuiWindowFlags_NoMove
-                        |   ImGuiWindowFlags_NoDecoration;        
+                        |   ImGuiWindowFlags_NoDecoration
+                        |   ImGuiWindowFlags_NoResize;        
 
     // Load texture 1. 
     static BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
