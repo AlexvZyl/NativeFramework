@@ -85,10 +85,9 @@ void PopUpMenu::onRender()
     {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
-            ComponentEditor* editor = app.pushGuiLayer<ComponentEditor>("Component Editor");
-            
-            // Remove popup.
-            app.queuePopLayer(m_name);
+            // Pushing this GUI layer defocuses the popup, causing a 
+            // defocus event, which removes the popup event.
+            app.pushGuiLayer<ComponentEditor>("Component Editor");
         }
         //if (ImGui::MenuItem("Edit Ports", "P"))
         //{
