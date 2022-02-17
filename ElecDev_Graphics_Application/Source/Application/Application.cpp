@@ -72,7 +72,7 @@ Application::Application(GLFWwindow* window)
 	// --------------- //
 
 	// Testing layers.
-	pushEngineLayer<Design2DEngine>("Design 2D Engine");
+	pushEngineLayer<Design2DEngine>("Design 2D Engine 1");
 }
 
 
