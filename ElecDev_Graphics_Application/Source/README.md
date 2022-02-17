@@ -272,7 +272,7 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
         
         // We need to check if there is an entity.  If there is no entity
         // under the cursor we get a nullptr.
-        if(entity)  // This is the same `as if(entity != nullptr)`
+        if(entity)  // This is the same as 'if(entity != nullptr)'
         {
             // And now we can change the color.
             entity->setColor(glm::vec4(1.f, 0.f, 1.f, 1.f));    
