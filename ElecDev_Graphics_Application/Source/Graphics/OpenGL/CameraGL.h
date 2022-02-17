@@ -60,6 +60,7 @@ public:
 
 	// Calculate the world coordinates from the pixel coordinates.
 	virtual glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
+	glm::vec3 pixelCoordsToWorldCoords(glm::vec2 pixelCoords);
 	// Calculate the camera coordinates from the pixel coordinates.
 	virtual glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 

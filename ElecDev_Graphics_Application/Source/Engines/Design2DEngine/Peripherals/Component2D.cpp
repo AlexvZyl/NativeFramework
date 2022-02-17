@@ -134,7 +134,7 @@ void Component2D::place(glm::vec2 pos)
 	moveTo(pos);
 	setLayer(0.0f);
 	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
-	titleColour = { 0.f, 0.f, 1.f, 1.0f };
+	titleColour = { 0.f, 0.f, 0.f, 1.0f };
 	shape->setColor(shapeColour);
 	title->setColor(titleColour);
 	//Move to placement layer
@@ -308,6 +308,12 @@ void Component2D::updatePortPositions()
 		}
 	}
 
+}
+
+void Component2D::translateTitle(glm::vec2 translation)
+{
+	titleOffset += translation;
+	title->translate(translation);
 }
 
 //void Component2D::destroy()

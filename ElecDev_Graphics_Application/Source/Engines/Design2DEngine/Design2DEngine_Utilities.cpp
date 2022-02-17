@@ -28,6 +28,13 @@ void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords)
 	}
 }
 
+void Design2DEngine::ComponentPlaceMode()
+{
+	glm::vec2 pos = getMousePosition();
+	pos = m_scene->pixelCoordsToWorldCoords(pos);
+	ComponentPlaceMode(pos);
+}
+
 void Design2DEngine::deleteActiveComponent()
 {
 	if (m_activeComponent)
