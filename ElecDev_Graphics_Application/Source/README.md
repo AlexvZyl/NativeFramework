@@ -369,7 +369,7 @@ void MyGui::begin()
     // Sets the size of the window (only runs on the first call).
     ImGui::SetNextWindowSize(glm::vec2{ 400.f, 400.f }, ImGuiCond_Once);
     // Calling this function allows us to set a specific style for the window.
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, glm::vec2(1.f, 1.f));
     // Begins the ImGui window.
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
