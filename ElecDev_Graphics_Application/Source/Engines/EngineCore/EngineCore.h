@@ -133,7 +133,7 @@ public:
 	// Set content region pos.
 	void setContentRegionPos(const glm::vec2& pos);
 
-private:
+protected:
 
 	// The graphics window size.
 	glm::vec2 m_contentRegionSize = { 0,0 };

@@ -11,6 +11,7 @@
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "GUI/ComponentEditor/ComponentEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -65,16 +66,12 @@ void PopUpMenu::onRender()
     // --------------------- //
     
     // Render menu items.
-    if (app.m_guiState->clickedZone.background)
+    if (m_engine->m_activeComponent == nullptr)
     {
         if (ImGui::MenuItem("Place component", "P"))
         {   
-            //get screen coordinates
-            float pixelCoords[] = { app.m_guiState->renderWindowMouseCoordinate.x, app.m_guiState->renderWindowMouseCoordinate.y };
-            glm::vec3 WorldCoords = app.m_guiState->design_engine->m_scene->pixelCoordsToWorldCoords(pixelCoords);
-            glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
             // Place a dummy component.
-            m_engine->ComponentPlaceMode(screenCoords);
+            m_engine->ComponentPlaceMode();
             // Remove popup.
             app.queuePopLayer(m_name);
         }
@@ -84,12 +81,11 @@ void PopUpMenu::onRender()
     //  C O M P O N E N T  //
     // ------------------- //
 
-    else if (app.m_guiState->clickedZone.component)
+    else if (m_engine->m_activeComponent)
     {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
-            ImGui::SetNextWindowPos(app.m_guiState->popUpPosition);
-            app.m_guiState->componentEditor = true;
+            ComponentEditor* editor = app.pushGuiLayer<ComponentEditor>("Component Editor");
             
             // Remove popup.
             app.queuePopLayer(m_name);
@@ -99,14 +95,15 @@ void PopUpMenu::onRender()
         //    // Remove popup.
         //    Lumen::getApp().queuePopLayer(m_name);
         //}
-        if (ImGui::MenuItem("Add Cable", "C"))
+        /*if (ImGui::MenuItem("Add Cable", "C"))
         {
+            //
             // Remove popup.
             app.queuePopLayer(m_name);
-        }
+        }*/
         if (ImGui::MenuItem("Remove component", "DEL"))
         {
-            app.m_guiState->design_engine->deleteActiveComponent();
+            m_engine->deleteActiveComponent();
 
             // Remove popup.
             app.queuePopLayer(m_name);
