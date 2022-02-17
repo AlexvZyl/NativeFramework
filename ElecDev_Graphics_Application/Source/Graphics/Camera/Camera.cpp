@@ -83,7 +83,7 @@ glm::vec3 Camera::pixelCoordsToWorldCoords(float pixelCoords[2])
 	return worldVec;
 }
 
-glm::vec3 Camera::pixelCoordsToWorldCoords(glm::vec2 pixelCoords)
+glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
 {
 	glm::vec3 pixelCoords3 = glm::vec3{ pixelCoords[0], m_viewportVec[3] - pixelCoords[1], 0.0f };
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
@@ -91,6 +91,7 @@ glm::vec3 Camera::pixelCoordsToWorldCoords(glm::vec2 pixelCoords)
 	return worldVec;
 }
 
+// TODO: This function need to be checked.
 glm::vec3 Camera::pixelCoordsToCameraCoords(float pixelCoords[2])
 {
 	// Find the viewpwort dimensions.
@@ -110,14 +111,6 @@ glm::vec3 Camera::pixelCoordsToCameraCoords(float pixelCoords[2])
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
 	glm::mat4 MVPinverse = glm::inverse(m_modelMatrix * m_viewMatrix * m_projectionMatrix);
 	glm::vec4 worldVec = screenVec * MVPinverse;
-	return worldVec;
-}
-
-glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
-{
-	glm::vec3 pixelCoords3 = glm::vec3{ pixelCoords[0], m_viewportVec[3] - pixelCoords[1], 0.0f };
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	glm::vec3 worldVec = glm::unProject(pixelCoords3, m_viewMatrix, m_projectionMatrix, m_viewportVec);
 	return worldVec;
 }
 
