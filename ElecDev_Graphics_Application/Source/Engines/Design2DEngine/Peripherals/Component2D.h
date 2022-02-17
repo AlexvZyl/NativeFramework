@@ -43,6 +43,9 @@ public:
 
 	static unsigned componentID;
 
+	// Specify the type of the equipment
+	std::string equipType = "Block";
+
 	// Component shape attributes.
 	float height = 0.1f;
 	float width = 0.1f;

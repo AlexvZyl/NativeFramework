@@ -52,6 +52,10 @@ void ComponentEditor::onRender()
 		activeComponent->title->updateText(activeComponent->titleString);
 	}
 
+	ImGui::InputText("##Equipment Type", &activeComponent->equipType);
+
+	// Get Active component type to change component editor based on type
+
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports"))
 	{
@@ -159,6 +163,58 @@ void ComponentEditor::onRender()
 		}
 		ImGui::TreePop();
 	}
+
+	std::unordered_map<std::string, std::string> cableDict;
+	cableDict.insert(std::pair<std::string, std::string>("Name	", activeComponent->titleString));
+	cableDict.insert(std::pair<std::string, std::string>("FromTagNumber	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("ToTagNumber	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("From	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("To	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Description	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Voltage	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Circuit	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableRating	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableIsolation	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableSuffix	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableLength	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableTAG	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("IndoorTermCount	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("OutdoorTermCount	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableSize	", "Size()"));
+	cableDict.insert(std::pair<std::string, std::string>("CoreCount	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Metal	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("DBRef	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableDiameter	", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableMass	", "From(Circuit Database)"));
+
+	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	if (ImGui::TreeNode("Data Automation"))
+	{
+		ImGui::BeginTable("Columns to specify", 21, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX);
+
+		//Setup table columns
+		for (auto& it: cableDict) {
+			ImGui::TableSetupColumn(it.first.c_str());
+		}
+		
+		ImGui::TableHeadersRow();
+
+		// Port entry in table.
+		ImGui::TableNextRow();
+		ImGui::TableNextColumn();
+
+		for (auto& it : cableDict) {
+			ImGui::PushItemWidth(-1);
+			ImGui::InputText("##Column", &it.second);
+			ImGui::PopItemWidth();
+			ImGui::TableNextColumn();
+		}
+
+		//ImGui::SetColumnWidth(1, 20.f);
+		ImGui::EndTable();
+		ImGui::TreePop();
+	}
+
 	ImGui::PopStyleColor();
 }
 
