@@ -4,7 +4,7 @@
 
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Primitives/Polygon.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//

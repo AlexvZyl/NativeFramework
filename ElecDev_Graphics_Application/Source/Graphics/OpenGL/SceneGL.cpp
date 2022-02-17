@@ -4,12 +4,12 @@
 
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/Entities/Vertex.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/CameraGL.h"
-#include "OpenGL/Entities/Entity.h"
-#include "OpenGL/TextureGL.h"
-#include "OpenGL/Entities/Primitive.h"
+#include "Graphics/Camera/Camera.h"
+#include "Graphics/Entities/Entity.h"
+#include "OpenGL/Primitives/TextureGL.h"
+#include "OpenGL/Primitives/Primitive.h"
 #include "Application/Events/Events.h"
 
 //==============================================================================================================================================//

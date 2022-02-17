@@ -6,9 +6,9 @@
 #include "Resources/ResourceHandler.h"
 #include "OpenGL/ShaderGL.h"
 #include "OpenGL/RendererGL.h"
-#include "OpenGL/CameraGL.h"
+#include "Graphics/Camera/Camera.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "Graphics/Fonts/FontLoader.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Primitives/TextureGL.h"
@@ -17,7 +17,7 @@
 #include "OpenGL/Primitives/Text.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Primitives/Vertex.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 
@@ -182,6 +182,11 @@ void Renderer::render3DScene(Scene* scene)
 	scene->unbindFBO();
 	// Disable blending.
 	disable(GL_BLEND);
+}
+
+void Renderer::useFont(const Font& font)
+{
+	m_defaultFont = std::make_unique<Font>(font);
 }
 
 //==============================================================================================================================================//

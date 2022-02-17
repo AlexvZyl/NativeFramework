@@ -3,11 +3,11 @@
 //=============================================================================================================================================//
 
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/Entities/Vertex.h"
-#include "EntityManager.h"
-# include<iostream>
-#include "OpenGL/Entities/Text.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "Graphics/Entities/EntityManager.h"
+#include <iostream>
+#include "OpenGL/Primitives/Text.h"
+#include "Graphics/Fonts/FontLoader.h"
 #include "External/Misc/ConsoleColor.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/SceneGL.h"

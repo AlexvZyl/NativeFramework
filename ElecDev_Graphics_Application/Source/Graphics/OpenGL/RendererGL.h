@@ -48,7 +48,7 @@ public:
 	// Set up the renderer.
 	static void initialise();
 	// Use the font provided.
-	static void useFont(Font* font);
+	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
 	static void remove(Primitive<VertexData>* primitive);
 	// Remove the primitive from the scene.

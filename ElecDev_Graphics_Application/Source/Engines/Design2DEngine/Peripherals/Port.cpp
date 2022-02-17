@@ -6,7 +6,7 @@
 #include "Component2D.h"
 #include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Primitives/Text.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "Graphics/Fonts/FontLoader.h"
 #include "Resources/ResourceHandler.h"
 #include "Cable.h"
 #include "Circuit.h"

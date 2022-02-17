@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 #include "Port.h"
-#include "OpenGL/Entities/Entity.h"
+#include "Graphics/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //

@@ -9,7 +9,7 @@
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "Graphics/Entities/EntityManager.h"
 #include "Application/Application.h"
 
 //=============================================================================================================================================//

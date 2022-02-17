@@ -7,7 +7,7 @@
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "OpenGL/RendererGL.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "Graphics/Entities/EntityManager.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //
@@ -69,7 +69,7 @@ void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 	// Context.
 	Renderer::bindScene(engine.m_scene.get());
 
-	// An ID table that hold the reference between new and old ID's.
+	// An ID table that holds the reference between new and old ID's.
 	std::map<unsigned, unsigned> idTable;	// Old -> New
 
 	// --------------- //
@@ -78,10 +78,8 @@ void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 
 	YAML::Node circuitInfo = yamlNode["Circuit Info"];
 	engine.m_circuit.reset();
-	engine.m_circuit = std::make_unique<Circuit>(
-		circuitInfo["Label"].as<std::string>(),
-		circuitInfo["Type"].as<std::string>()
-		);
+	engine.m_circuit = std::make_unique<Circuit>(circuitInfo["Label"].as<std::string>(),
+												 circuitInfo["Type"].as<std::string>());
 
 	// -------------------- //
 	// C O M P O N E N T S  //
@@ -206,9 +204,9 @@ void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 
 PortType getPortType(YAML::Node node) 
 {
-	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PortType::PORT_IN; }
-	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PortType::PORT_OUT; }
-	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
+	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PortType::PORT_IN;    }
+	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PortType::PORT_OUT;   }
+	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }           
 }
 
 //=============================================================================================================================================//

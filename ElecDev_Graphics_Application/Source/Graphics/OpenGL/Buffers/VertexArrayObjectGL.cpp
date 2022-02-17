@@ -11,7 +11,7 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Primitives/Primitive.h"
-#include "OpenGL/Entities/Entity.h"
+#include "Graphics/Entities/Entity.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

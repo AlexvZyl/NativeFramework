@@ -21,7 +21,7 @@
 #include "GUI/GraphicsScene/GraphicsScene.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/CameraGL.h"
+#include "Graphics/Camera/Camera.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Base2DEngine/Base2DEngine.h"

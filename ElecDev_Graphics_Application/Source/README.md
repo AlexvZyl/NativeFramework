@@ -242,7 +242,7 @@ Now that we know how `Events` work, we need to be able to detect if our mouse is
 #include "Engines/My2DEngine/My2DEngine.h"
 #include "OpenGL/Entities/Circle.h"
 #include "Application/Events/Events.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "Graphics/Entities/EntityManager.h"
 
 void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {

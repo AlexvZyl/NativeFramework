@@ -9,7 +9,7 @@
 #include "Engines/EngineCore/EngineCore.h"
 #include "Engines/Base3DEngine/Base3DEngine.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/CameraGL.h"
+#include "Graphics/Camera/Camera.h"
 
 //=============================================================================================================================================//
 //  Constructor and Destructor.																												   //

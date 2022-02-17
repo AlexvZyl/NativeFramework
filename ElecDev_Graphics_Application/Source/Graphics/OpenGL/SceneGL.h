@@ -12,7 +12,7 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
-#include "OpenGL/CameraGL.h"
+#include "Graphics/Camera/Camera.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//

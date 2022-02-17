@@ -4,7 +4,7 @@
 
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Primitives/Vertex.h"
-#include "OpenGL/Entities/EntityManager.h"
+#include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 
 //=============================================================================================================================================//

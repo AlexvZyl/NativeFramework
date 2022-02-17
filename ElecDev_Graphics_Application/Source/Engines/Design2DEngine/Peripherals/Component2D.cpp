@@ -6,7 +6,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/FontLoaderGL.h"
+#include "Graphics/Fonts/FontLoader.h"
 #include "OpenGL/Primitives/Text.h"
 #include "Resources/ResourceHandler.h"
 #include "OpenGL/Primitives/Circle.h"

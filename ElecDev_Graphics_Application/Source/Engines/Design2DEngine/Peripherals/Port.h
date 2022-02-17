@@ -7,7 +7,7 @@
 #include <string>
 #include <memory>
 #include "External/GLM/glm.hpp"
-#include "OpenGL/Entities/Entity.h"
+#include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Primitives/Text.h"

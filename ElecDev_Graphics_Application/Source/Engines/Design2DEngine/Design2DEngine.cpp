@@ -9,7 +9,7 @@ This is where the interactive 2D design engine is implemented.
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/CameraGL.h"
+#include "Graphics/Camera/Camera.h"
 #include "OpenGL/RendererGL.h"
 #include <iostream>
 #include "Lumen.h"
