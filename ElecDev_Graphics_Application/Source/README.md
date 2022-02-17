@@ -337,7 +337,7 @@ private:
 }
 ```
 
-We have to inherit from `GuiElementCore` that gives us all of the functionality we need to display a `GUI` in Lumen.  Al we have to do is overload the rendering functions and add the data we want.  We also have the option to add events, but this is rarely necessary for a `GUI`, since dear imgui handles the events.  Take a look at [GuiElementCore.h](https://github.com/Alex-vZyl/Lumen/blob/Main/ElecDev_Graphics_Application/Source/GUI/GuiElementCore/GuiElementCore.h).  An example `MyGui.cpp`:
+We have to inherit from `GuiElementCore` that gives us all of the functionality we need to display a `GUI` in Lumen.  Al we have to do is overload the rendering functions and add the data we want.  We also have the option to add events, but this is rarely necessary for a `GUI`, since dear imgui handles the events.  Take a look at [GuiElementCore.h](https://github.com/Alex-vZyl/Lumen/blob/Main/ElecDev_Graphics_Application/Source/GUI/GuiElementCore/GuiElementCore.h).  For some information on what functions are available, take a look at [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h).  An example `MyGui.cpp`:
 
 ```C++
 #include "GUI/MyGui/MyGui.h"
