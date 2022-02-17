@@ -47,7 +47,7 @@ public:
 	glm::vec4& getViewport();
 	// Calculate the world coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
-	glm::vec3 pixelCoordsToWorldCoords(glm::vec2 pixelCoords);
+	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
 	// Calculate the camera coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
 	// Returns the ID of the entity at the coordinates.
