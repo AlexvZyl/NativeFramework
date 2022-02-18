@@ -1,0 +1,20 @@
+Performing C++ SOURCE FILE Test boost_callable_traits_HAS_QUNUSED_ARGUMENTS failed with the following output:
+Change Dir: C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/libs/callable_traits/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_de177 && [1/2] Building CXX object CMakeFiles\cmTC_de177.dir\src.cxx.obj
+cl : Command line warning D9002 : ignoring unknown option '-Qunused-arguments'
+[2/2] Linking CXX executable cmTC_de177.exe
+
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test boost_callable_traits_HAS_FGNU_TM failed with the following output:
+Change Dir: C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/libs/callable_traits/out/build/x64-Debug/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_e29f7 && [1/2] Building CXX object CMakeFiles\cmTC_e29f7.dir\src.cxx.obj
+cl : Command line warning D9002 : ignoring unknown option '-fgnu-tm'
+[2/2] Linking CXX executable cmTC_e29f7.exe
+
+
+Source file was:
+int main() { return 0; }

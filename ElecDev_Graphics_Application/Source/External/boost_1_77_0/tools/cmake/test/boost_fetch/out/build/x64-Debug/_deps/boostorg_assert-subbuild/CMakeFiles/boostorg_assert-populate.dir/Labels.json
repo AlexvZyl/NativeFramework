@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/CMakeFiles/boostorg_assert-populate"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/CMakeFiles/boostorg_assert-populate.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/CMakeFiles/boostorg_assert-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/test/boost_fetch/out/build/x64-Debug/_deps/boostorg_assert-subbuild/boostorg_assert-populate-prefix/src/boostorg_assert-populate-stamp/boostorg_assert-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"boostorg_assert-populate"
+		],
+		"name" : "boostorg_assert-populate"
+	}
+}
