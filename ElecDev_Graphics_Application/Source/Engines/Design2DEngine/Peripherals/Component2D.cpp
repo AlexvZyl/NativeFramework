@@ -65,8 +65,9 @@ Component2D::Component2D(Circuit* parent)
 	// It is a bit of a pain setting up ports every time we test.
 	addPort(0, PortType::PORT_IN, "LX1");
 	addPort(1, PortType::PORT_OUT, "RX1");
+	highlight();
 
-	// Dictionary for GUI of component for data automation
+	// Dictionary for GUI of component for data automation.
 	cableDict.insert(std::pair<std::string, std::string>("FromTagNumber",	"From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("ToTagNumber",		"From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("From",			"From(Circuit Database)"));
@@ -87,9 +88,6 @@ Component2D::Component2D(Circuit* parent)
 	cableDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("CableDiameter", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("CableMass", "From(Circuit Database)"));
-
-	highlight();
-
 }
 
 Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
