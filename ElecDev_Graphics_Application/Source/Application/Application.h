@@ -9,6 +9,8 @@
 #include "Application/Layers/LayerStack.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
+#include "imgui/imgui.h"
+#include "imgui_internal.h"
 
 // TO BE DEPRECATED.
 #include "GuiState.h"
@@ -185,7 +187,7 @@ EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, int
 	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
 	EngineLayer<EngineType>* ptr = m_layerStack->getLayer<EngineLayer<EngineType>>(newName);
 	onFocusedLayerChange(ptr);
-	ImGui::DockBuilderDockWindow(newName, m_scenePanelID);  
+	ImGui::DockBuilderDockWindow(newName.c_str(), m_scenePanelID);
 	return ptr;
 }
 

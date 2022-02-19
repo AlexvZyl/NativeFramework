@@ -23,7 +23,7 @@ void Application::renderInitialFrame()
 	//  M A I N   R I B B O N  //
 	// ----------------------- //
 
-	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.033f, &m_scenePanelID, &m_mainDockspaceID);
+	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.033f, NULL, &m_scenePanelID);
 	ImGuiDockNode* ribbonDockNode = ImGui::DockBuilderGetNode(ribbonDockID);
 	// FIX THIS!
 	ribbonDockNode->LocalFlags	|= ImGuiDockNodeFlags_NoTabBar			| ImGuiDockNodeFlags_NoDockingInCentralNode	
