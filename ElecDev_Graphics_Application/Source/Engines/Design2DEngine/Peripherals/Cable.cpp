@@ -7,6 +7,8 @@
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 
+
+unsigned Cable::cableID = 0;
 //==============================================================================================================================================//
 //  Constructor & Destructor.  																													//
 //==============================================================================================================================================//
@@ -17,33 +19,40 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	// Keep the VAO and start port.
 	m_startPort = startPort;
 
+	//Set the default title string
+	m_titleString = "Cable " + std::to_string(cableID++);
+
 	startPort->attachCable(this);
 
 	// Get the initial points and orientation of the first segment.
 	glm::vec2 endPt = m_startPort->centre;
 	glm::vec2 endPt2 = m_startPort->centre;
-	float initial_length = 0.01f;
+	float initial_length = m_titleOffset;
 	switch (startPort->m_position) 
 	{
 	case PortPosition::TOP:
 		m_curOrientation = LineOrientation::VERTICAL;
 		endPt += glm::vec2(0.f, initial_length);
 		endPt2 += glm::vec2(-initial_length, 0.f);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt, 0.f), m_titleColour, m_titleSize);
 		break;
 	case PortPosition::BOTTOM:
 		m_curOrientation = LineOrientation::VERTICAL;
 		endPt += glm::vec2(0.f, -initial_length);
 		endPt2 += glm::vec2(-initial_length, 0.f);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt, 0.f), m_titleColour, m_titleSize);
 		break;
 	case PortPosition::LEFT:
 		m_curOrientation = LineOrientation::HORIZONTAL;
 		endPt += glm::vec2(-initial_length, 0.f);
 		endPt2 += glm::vec2(0.f, initial_length);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt + glm::vec2(0.f, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
 		break;
 	case PortPosition::RIGHT:
 		m_curOrientation = LineOrientation::HORIZONTAL;
 		endPt += glm::vec2(initial_length, 0.f);
 		endPt2 += glm::vec2(0.f, initial_length);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt + glm::vec2(0.f, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
 		break;
 	}
 
@@ -82,6 +91,47 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	}
 	//Add final line segment.
 	m_lines.emplace_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
+
+	//Add title
+	switch (endPort->m_position) {
+	case PortPosition::TOP:
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		//endPt += glm::vec2(0.f, initial_length);
+		break;
+	case PortPosition::BOTTOM:
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		//endPt += glm::vec2(0.f, -initial_length);
+		break;
+	case PortPosition::LEFT:
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
+		//endPt += glm::vec2(-initial_length, 0.f);
+		break;
+	case PortPosition::RIGHT:
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
+		//endPt += glm::vec2(initial_length, 0.f);
+		break;
+	}
+
+	switch (startPort->m_position) {
+	case PortPosition::TOP:
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		//endPt += glm::vec2(0.f, initial_length);
+		break;
+	case PortPosition::BOTTOM:
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		//endPt += glm::vec2(0.f, -initial_length);
+		break;
+	case PortPosition::LEFT:
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
+		//endPt += glm::vec2(-initial_length, 0.f);
+		break;
+	case PortPosition::RIGHT:
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
+		//endPt += glm::vec2(initial_length, 0.f);
+		break;
+	}
+
+
 }
 
 Cable::~Cable()
@@ -97,6 +147,11 @@ Cable::~Cable()
 	for (LineSegment* lineSegment : m_lines) Renderer::remove(lineSegment);
 	m_lines.clear();
 	m_lines.shrink_to_fit();
+	
+
+	//remove title text
+	Renderer::remove(m_title1);
+	Renderer::remove(m_title2);
 }
 
 //==============================================================================================================================================//
@@ -169,18 +224,22 @@ void Cable::attach(Port* endPort)
 	switch (endPort->m_position) {
 	case PortPosition::TOP:
 		portOrientation = LineOrientation::VERTICAL;
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
 		//endPt += glm::vec2(0.f, initial_length);
 		break;
 	case PortPosition::BOTTOM:
 		portOrientation = LineOrientation::VERTICAL;
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
 		//endPt += glm::vec2(0.f, -initial_length);
 		break;
 	case PortPosition::LEFT:
 		portOrientation = LineOrientation::HORIZONTAL;
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
 		//endPt += glm::vec2(-initial_length, 0.f);
 		break;
 	case PortPosition::RIGHT:
 		portOrientation = LineOrientation::HORIZONTAL;
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
 		//endPt += glm::vec2(initial_length, 0.f);
 		break;
 	}
@@ -199,24 +258,31 @@ void Cable::attach(Port* endPort)
 
 void Cable::followPort(Port* movedPort)
 {
-
-	switch (movedPort->m_position) 
+	glm::vec3 titlePos;
+	switch (movedPort->m_position)
 	{
 	case PortPosition::TOP:
 		m_curOrientation = LineOrientation::HORIZONTAL;
+		titlePos = glm::vec3(movedPort->centre + glm::vec2(0.f, m_titleOffset), 0.f);
 		break;
 	case PortPosition::BOTTOM:
 		m_curOrientation = LineOrientation::HORIZONTAL;
+		titlePos = glm::vec3(movedPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f);
 		break;
 	case PortPosition::LEFT:
 		m_curOrientation = LineOrientation::VERTICAL;
+		titlePos = glm::vec3(movedPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f);
 		break;
 	case PortPosition::RIGHT:
 		m_curOrientation = LineOrientation::VERTICAL;
+		titlePos = glm::vec3(movedPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f);
 		break;
 	}
 
-	if (movedPort == m_endPort) extendSegment(movedPort->centre); 
+	if (movedPort == m_endPort) {
+		extendSegment(movedPort->centre);
+		m_title2->translateTo(titlePos);
+	}
 
 	else if (movedPort == m_startPort) 
 	{
@@ -241,6 +307,9 @@ void Cable::followPort(Port* movedPort)
 		// Move first segment.
 		m_lines[0]->setStart(startPoint);
 		m_lines[0]->setEnd(m_lines[1]->m_start);
+
+		//move the title
+		m_title1->translateTo(titlePos);
 	}
 }
 

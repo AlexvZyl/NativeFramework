@@ -31,6 +31,8 @@ enum class LineOrientation
 class Cable : public Entity
 {
 public:
+
+    static unsigned cableID;
         
     Port* m_startPort;
     Port* m_endPort = nullptr;
@@ -43,6 +45,14 @@ public:
     LineOrientation m_curOrientation = LineOrientation::HORIZONTAL;
     LineSegment* m_activeLine = nullptr;
     Circle* m_activeNode = nullptr;
+
+    std::string m_titleString ="Cable";
+    Text* m_title1;
+    Text* m_title2;
+    static Font m_titleFont;
+    float m_titleOffset = 0.01f;
+    glm::vec4 m_titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
+    float m_titleSize = 0.02f;
 
 public:
     
