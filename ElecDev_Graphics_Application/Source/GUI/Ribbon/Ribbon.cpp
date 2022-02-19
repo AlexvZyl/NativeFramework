@@ -13,6 +13,7 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui_internal.h>
+#include "GUI/ComponentEditor/ComponentEditor.h"
 
 #include "Lumen.h"
 #include "Application/Application.h"
@@ -86,7 +87,10 @@ void Ribbon::onRender()
     // Circuit bucket.
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
-
+        // Testing.
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::LeftPanel);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::RightPanel);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::BottomPanel);
     }
 
     // Add design engine.

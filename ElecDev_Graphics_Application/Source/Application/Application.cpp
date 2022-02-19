@@ -59,12 +59,12 @@ Application::Application(GLFWwindow* window)
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	setGuiTheme();
 
-	// Create the main GUI layers.
-	pushGuiLayer<Toolbar>("Main Toolbar");
-	pushGuiLayer<Ribbon>("Main Ribbon");
-
 	// Initialisation frame.
 	renderInitialFrame();
+
+	// Create the main GUI layers.
+	pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::FixedPanel);
+	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::FixedPanel);
 }
 
 void Application::shutdown() 
@@ -110,6 +110,41 @@ void Application::queuePopLayer(std::string& layerName)
 {
 	Layer* toPop = m_layerStack->getLayer<Layer>(layerName);
 	m_layerStack->queuePopLayer(*toPop);
+}
+
+void Application::dockLayerToPanel(std::string& name, DockPanel panel) 
+{
+	// Dock the layer.
+	switch (panel)
+	{
+	case DockPanel::ScenePanel:
+		ImGui::DockBuilderDockWindow(name.c_str(), m_scenePanelID);
+		break;
+
+	case DockPanel::LeftPanel:
+		ImGui::DockBuilderDockWindow(name.c_str(), m_leftPanelID);
+		break;
+
+	case DockPanel::RightPanel:
+		ImGui::DockBuilderDockWindow(name.c_str(), m_rightPanelID);
+		break;
+
+	case DockPanel::BottomPanel:
+		ImGui::DockBuilderDockWindow(name.c_str(), m_bottomPanelID);
+		break;
+
+	case DockPanel::Floating:
+		// Do not dock, maybe move to a specific position.
+		break;
+
+	case DockPanel::FixedPanel:
+		// These have to be handled manually.
+		break;
+
+	default:
+		std::cout << yellow << "\n[IMGUI] [WARN]: " << white << "Invalid docking configuration!\n";
+		break;
+	}
 }
 
 //==============================================================================================================================================//

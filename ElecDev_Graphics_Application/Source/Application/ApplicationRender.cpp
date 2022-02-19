@@ -19,22 +19,43 @@ void Application::renderInitialFrame()
 	// Init.
 	onRenderInit();
 
-	// ----------------------- //
-	//  M A I N   R I B B O N  //
-	// ----------------------- //
+	// ------------------------- //
+	//  D O C K   B U I L D E R  //
+	// ------------------------- //
 
+	// Pointer used to access nodes.
+	ImGuiDockNode* dockNode = nullptr;
+
+	// Ribbon dock.
 	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.033f, NULL, &m_scenePanelID);
-	ImGuiDockNode* ribbonDockNode = ImGui::DockBuilderGetNode(ribbonDockID);
-	// FIX THIS!
-	ribbonDockNode->LocalFlags	|= ImGuiDockNodeFlags_NoTabBar			| ImGuiDockNodeFlags_NoDockingInCentralNode	
-								|  ImGuiDockNodeFlags_NoCloseButton		| ImGuiDockNodeFlags_NoDocking
-								|  ImGuiDockNodeFlags_NoDockingSplitMe	| ImGuiDockNodeFlags_NoDockingOverMe
-								| ImGuiDockNodeFlags_DockSpace;							
+	dockNode = ImGui::DockBuilderGetNode(ribbonDockID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
+						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
+						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
+						 | ImGuiDockNodeFlags_NoTabBar;
 	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
+
+	// Left Panel.
+	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.1f, NULL, &m_scenePanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+
+	// Right Panel.
+	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.1f, NULL, &m_scenePanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+
+	// Right Panel.
+	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.15f, NULL, &m_scenePanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+
+	// Scene dock.
+	dockNode = ImGui::DockBuilderGetNode(m_scenePanelID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+
+	// Finish dock builder.
 	ImGui::DockBuilderFinish(m_mainDockspaceID);
-
-	// Side panels.
-
 
 	// Cleanup.
 	onRenderCleanup();
@@ -50,8 +71,11 @@ void Application::onRenderInit()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	// Enable main viewport docking.
+	// Enable docking in main viewport.
+	// Do we really have to call this every frame?
 	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
+	ImGuiDockNode* mainDockNode = ImGui::DockBuilderGetNode(m_mainDockspaceID);
+	mainDockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
 	// Push custom font.
 	ImGui::PushFont(m_defaultFont);
@@ -103,7 +127,7 @@ void Application::onRenderCleanup()
 	}
 
 	// Push commands to the GPU.
-	Renderer::finish();
+	//Renderer::finish();
 
 	// Swap the window buffers.
 	glfwSwapBuffers(m_window);
