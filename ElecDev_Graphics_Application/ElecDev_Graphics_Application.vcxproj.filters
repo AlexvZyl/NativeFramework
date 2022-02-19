@@ -107,6 +107,9 @@
     <ClCompile Include="External\glm\glm\detail\glm.cpp" />
     <ClCompile Include="External\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="External\imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="External\imgui\backends\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="External\imgui\backends\imgui_impl_win32.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -758,6 +761,10 @@
     <ClInclude Include="External\glm\glm\vector_relational.hpp" />
     <ClInclude Include="External\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="External\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="External\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="External\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="External\imgui\backends\imgui_impl_opengl2.h" />
+    <ClInclude Include="External\imgui\backends\imgui_impl_win32.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

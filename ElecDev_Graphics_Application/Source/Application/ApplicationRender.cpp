@@ -78,14 +78,11 @@ void Application::onRenderCleanup()
 	// Pop custom font.
 	ImGui::PopFont();
 
-	// Assign values to viewport for ImGUI.
-	int display_w, display_h;
-	glfwGetFramebufferSize(m_window, &display_w, &display_h);
-	glm::vec2 viewport(display_w, display_h);
-	Renderer::setViewport(viewport);
-
 	// Rendering
 	ImGui::Render();
+	int display_w, display_h;
+	glfwGetFramebufferSize(m_window, &display_w, &display_h);
+	Renderer::setViewport(glm::vec2(display_w, display_h));
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// Update and Render additional Platform Windows
@@ -104,7 +101,6 @@ void Application::onRenderCleanup()
 
 	// Swap the window buffers.
 	glfwSwapBuffers(m_window);
-
 }
 
 //==============================================================================================================================================//
