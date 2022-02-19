@@ -10,7 +10,7 @@ storing circuit templates/diagrams in a YAML format.
 //=============================================================================================================================================//
 
 #include <string>
-#include "External/GLM/glm.hpp"
+#include "glm/glm.hpp"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
 #include <unordered_map>
 

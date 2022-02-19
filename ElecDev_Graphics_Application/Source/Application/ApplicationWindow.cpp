@@ -4,14 +4,15 @@
 
 #include "Application/Application.h"
 #include "Lumen.h"
-#include "Misc/ConsoleColor.h"
-#include "ImGUI/Core/imgui.h"
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
-#include "ImGUI/Implementations/imgui_impl_opengl3.h"
+#include "External/Misc/ConsoleColor.h"
+#include "imgui/imgui.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
 #include "Resources/ResourceHandler.h"
 #include "External/GLAD/Includes/glad/glad.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Callbacks.																																	//
@@ -79,6 +80,9 @@ void Application::glfwInitCallbacks()
         // Log event.
         MouseMoveEvent event(glm::vec2(cursorX, cursorY), eventID);
         Lumen::getApp().logEvent<MouseMoveEvent>(event);
+
+        // Pass event to ImGUI.
+        ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
     });
 
     // ------------------------- //
@@ -153,16 +157,16 @@ void Application::glfwInitCallbacks()
     // --------- //
 
     glfwSetDropCallback(m_window, [](GLFWwindow* window, int count, const char** paths)
-    {
-        // Load the files.
-        std::vector<std::string> filePaths;
-        filePaths.reserve(count);
-        for (int i = 0; i < count; i++) { filePaths.emplace_back(std::string(paths[i])); }
+        {
+            // Load the files.
+            std::vector<std::string> filePaths;
+            filePaths.reserve(count);
+            for (int i = 0; i < count; i++) { filePaths.emplace_back(std::string(paths[i])); }
 
-        // Log the event.
-        FileDropEvent event(filePaths);
-        Lumen::getApp().logEvent<FileDropEvent>(event);
-    });
+            // Log the event.
+            FileDropEvent event(filePaths);
+            Lumen::getApp().logEvent<FileDropEvent>(event);
+        });
 
     // --------------------- //
     //  F B O   R E S I Z E  //
@@ -179,10 +183,10 @@ void Application::glfwInitCallbacks()
     //  C L O S E  //
     // ----------- //
 
-    glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) 
-    {
+    glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
+        {
             Lumen::getApp().closeWindow();
-    });
+        });
 }
 
 //==============================================================================================================================================//
@@ -203,13 +207,7 @@ GLFWwindow* Application::glfwInitWindow()
     //  O P E N G L   V E R S I O N  //
     // ----------------------------- //
 
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    // GL ES 2.0 + GLSL 100.
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#elif defined(__APPLE__)
+#if defined(__APPLE__)
     // GL 3.2 + GLSL 150.
     const char* glsl_version = "#version 150";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -229,15 +227,19 @@ GLFWwindow* Application::glfwInitWindow()
     //  G L F W   S E T U P  //
     // --------------------- //
 
-    // Enable 8x MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 8);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
-    //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     // Error.
-    if (window == NULL) { /* Log error here. */ }
+    if (window == NULL) 
+    { 
+        /* Log error here. */ 
+    }
+    // Enable 8x MSAA.
+    glfwWindowHint(GLFW_SAMPLES, 8);
+    // Remove decorations.
+    //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);
-    // VSync.  If set to 0 it is disabled.
+    // VSync (0 = disabled).
     glfwSwapInterval(0);
 
     // Load GLFW app icon.
@@ -254,26 +256,12 @@ GLFWwindow* Application::glfwInitWindow()
     //  O P E N G L   L O A D E R  //
     // --------------------------- //
 
-#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
-    bool err = gl3wInit() != 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)
-    bool err = glewInit() != GLEW_OK;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-    bool err = gladLoadGL() == 0;
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)
-    bool err = gladLoadGL(glfwGetProcAddress) == 0; // glad2 recommend using the windowing library loader instead of the (optionally) bundled one.
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)
-    bool err = false;
-    glbinding::Binding::initialize();
-#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)
-    bool err = false;
-    glbinding::initialize([](const char* name) { return (glbinding::ProcAddress)glfwGetProcAddress(name); });
-#else
-    bool err = false; // If you use IMGUI_IMPL_OPENGL_LOADER_CUSTOM, your loader is likely to requires some form of initialization.
-#endif
-
-    // Log OpenGL load error.
-    if (err) fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white, " Failed to initialize OpenGL loader!\n");
+    // Load OpenGL functions using GLAD.
+    if(!gladLoadGL())
+    {
+        // Log error.
+        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white, " Failed to initialize OpenGL loader!\n");
+    }
 
     // Log OpenGL version.
     std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
@@ -291,6 +279,8 @@ GLFWwindow* Application::glfwInitWindow()
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     // For now it is disabled.  How do we pass events to viewports that are outside of the glfw window?
+    //io.ConfigViewportsNoAutoMerge = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
 
     // When viewports are enabled we tweak WindowRounding/WindowBg 
     // so platform windows can look identical to regular ones.

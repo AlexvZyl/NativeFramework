@@ -3,14 +3,14 @@
 /*=======================================================================================================================================*/
 
 #include "userGUI.h"
-#include <Core/imgui.h>
+#include <imgui/imgui.h>
 #include <iostream>
 #include <cmath>
 #include <cfenv>
 #include "../Utilities/PythonInterface/PythonInterface.h"
 #include <iterator>
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <Core/imgui_internal.h>
+#include <imgui/imgui_internal.h>
 
 /*=======================================================================================================================================*/
 /* Functions.																															 */
