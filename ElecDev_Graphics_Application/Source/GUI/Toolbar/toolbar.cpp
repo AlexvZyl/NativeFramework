@@ -45,19 +45,25 @@ void Toolbar::begin()
 
 void Toolbar::onRender()
 {
-    // Should not render in these cases.
-    if (m_isCollapsed || !m_isOpen || m_isHidden) return;
-
+    // Get the app.
+    Application& app = Lumen::getApp();
+    
+    // Draw the image.
     float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
-        
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
+
+    // --------- //
+    //  F I L E  //
+    // --------- //
 
     if (ImGui::BeginMenu("File"))
     {
         if (ImGui::MenuItem("Load..", "Ctrl+O"))
         {
-            /*m_graphicsHandler->m_loadEvent.eventTrigger = true;
-            m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");*/
+            // Create a load event.
+            std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
+            FileLoadEvent event(path);
+            app.logEvent<FileLoadEvent>(event);
         }
         if (ImGui::MenuItem("Close", "Ctrl+W"))
         {
@@ -66,6 +72,10 @@ void Toolbar::onRender()
 
         ImGui::EndMenu();
     }
+
+    // --------- //
+    //  E D I T  //
+    // --------- //
 
     if (ImGui::BeginMenu("Edit"))
     {

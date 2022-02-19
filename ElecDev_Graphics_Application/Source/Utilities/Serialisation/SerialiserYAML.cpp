@@ -2,22 +2,24 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+#include <sys/stat.h>
+#include <iostream>
+#include <direct.h>
+#include <fstream>
 #include "Serialiser.h"
 #include <Windows.h>
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Graphics/Fonts/FontLoader.h"
-#include <sys/stat.h>
-#include <iostream>
-#include <direct.h>
-#include <fstream>
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::string filename)
+void saveToYAML(std::shared_ptr<Circuit>& circuit, std::string& directory, std::string& filename)
 {
 	std::string labelTemp;
 	// Check if file name supplied.
@@ -50,13 +52,14 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 	yamlEmitter << circuit;
 
 	// Restore current (in Lumen) circuit name.
-	if (filename.length()) { circuit->m_label = labelTemp; }
+	if (filename.length()) 
+		circuit->m_label = labelTemp;
 	
 	// --------- //
 	//  S A V E  //
 	// --------- //
 
-	// Make sure directory has backslach.
+	// Make sure directory has backslash.
 	if (directory.back() != '\\') { directory.push_back('\\'); }
 	
 	std::string file;
@@ -87,7 +90,7 @@ void saveToYAML(std::shared_ptr<Circuit> circuit, std::string directory, std::st
 //  Deserialisation.		  																												   //
 //=============================================================================================================================================//
 
-void loadFromYAML(Design2DEngine& engine, std::string path)
+void loadFromYAML(std::string& path)
 {
 	// Create yaml node from file.
 	YAML::Node yamlFile = YAML::LoadFile(path);
@@ -95,7 +98,7 @@ void loadFromYAML(Design2DEngine& engine, std::string path)
 	// Deserialise the circuit into the engine.
 	if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
 	{
-		deserialise(yamlFile, engine);
+		deserialiseCircuit(yamlFile);
 	}
 }
 

@@ -9,6 +9,7 @@
 #include <memory>
 #include <vector>
 #include "Port.h"
+#include <unordered_map>
 #include "Graphics/Entities/Entity.h"
 
 //=============================================================================================================================================//
@@ -42,6 +43,12 @@ public:
 	Text* title;
 
 	static unsigned componentID;
+
+	// Specify the type of the equipment
+	std::string equipType = "Block";
+
+	// 
+	std::unordered_map<std::string, std::string> cableDict;
 
 	// Component shape attributes.
 	float height = 0.1f;

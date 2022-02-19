@@ -24,6 +24,7 @@ public:
 	LayerStack() = default;
 
 	// Add a layer to the stack.
+	// It returns the new name of the layer with its ID appended.
 	template<class LayerType>
 	std::string pushLayer(std::unique_ptr<LayerType>& layer);
 
@@ -65,9 +66,12 @@ std::string LayerStack::pushLayer(std::unique_ptr<LayerType>& layer)
 {
 	// Create a name with an unqiue ID.
 	// This allows us to have windows with the same name.
-	std::string newName = layer->getName() + "##" + std::to_string(m_totalLayerCount);
-	layer->setName(newName);
+	layer->setID(m_totalLayerCount);
 	m_totalLayerCount++;
+	// Resets the name with the ID.
+	layer->setName(layer->getName());
+	// We want to return the new name with the ID.
+	std::string newName = layer->getName();
 
 	// Push the layer.
 	m_layers.insert({ layer->getName(), std::move(layer) });
@@ -75,7 +79,7 @@ std::string LayerStack::pushLayer(std::unique_ptr<LayerType>& layer)
 	// Resize the layer pop queue.
 	m_layerPopQueue.reserve(m_layers.size());
 
-	// return the name with the ID.
+	// Return the name with the ID.
 	return newName;
 }
 

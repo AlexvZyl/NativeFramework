@@ -10,7 +10,7 @@
 //  Cable serialiser.     																													   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable> cable) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable>& cable) 
 {
 	// Begin cable data.
 	emitter << YAML::BeginMap;
@@ -41,7 +41,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable> cable)
 //  Cable vector serialiser.																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Cable>> cableVector)
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Cable>>& cableVector)
 {
 	emitter << YAML::BeginMap;
 	int cablesIndex = 0;
@@ -61,7 +61,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ca
 //  Single Cable deserialiser.																												   //
 //=============================================================================================================================================//
 
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable> cable)
+void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable>& cable)
 {
 
 }

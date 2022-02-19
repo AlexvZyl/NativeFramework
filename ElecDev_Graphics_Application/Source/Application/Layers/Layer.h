@@ -39,11 +39,16 @@ public:
 	// Destructor.
 	inline virtual ~Layer() = default;
 
+	// Set the layer ID.
+	inline void setID(unsigned ID) { m_ID = ID; }
+
 protected:
 
 	// Protected constructor.
 	inline Layer() = default;	
-
+	
+	// The ID given to the layer for ImGui rendering.
+	unsigned m_ID = 0;
 };
 
 //==============================================================================================================================================//

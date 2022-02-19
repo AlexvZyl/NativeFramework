@@ -302,7 +302,7 @@ Pushing layers into Lumen only allows constructors that provide names and flags 
 // #include "Application.h"
 // #include "Engines/My2DEngine/My2DEngine.h"
 
-My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
+My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name")->getEngine();
 myEnginePtr->init(...);
 ```
 
@@ -406,9 +406,12 @@ Now we have a GUI with a single button.  When the button is pressed, it calls a 
 // #include "Engines/My2DEngine/My2DEngine.h"
 // #include "GUI/MyGui/MyGui.h"
 
+// Get the application.
+Application& app = Lumen::getApp();
+
 // Create the windows inside Lumen.
-My2DEngine* engine = Lumen::getApp().pushEngineLayer<My2DEngine>("My Engine");
-MyGui* gui = Lumen::getApp().pushGuiLayer<MyGui>("My Gui");
+My2DEngine* engine = app.pushEngineLayer<My2DEngine>("My Engine")->getEngine();
+MyGui* gui = app.pushGuiLayer<MyGui>("My Gui")->getGui();
 
 // Now some setup.
 gui->setEngine(engine);

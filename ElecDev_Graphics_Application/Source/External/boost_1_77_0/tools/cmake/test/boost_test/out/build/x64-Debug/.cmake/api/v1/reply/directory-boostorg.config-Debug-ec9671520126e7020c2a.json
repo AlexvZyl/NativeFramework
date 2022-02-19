@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "boostorg/config",
+		"source" : "C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/libs/config"
+	}
+}

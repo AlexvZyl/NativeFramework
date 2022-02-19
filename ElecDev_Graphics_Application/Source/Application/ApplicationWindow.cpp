@@ -43,10 +43,9 @@ void Application::glfwInitCallbacks()
         // Get the cursor position.
         double cursorX, cursorY;
         glfwGetCursorPos(window, &cursorX, &cursorY);
-        glm::vec2 cursorPos = { cursorX, cursorY };
 
         // Log event.
-        MouseButtonEvent event(cursorPos, eventID);
+        MouseButtonEvent event(glm::vec2(cursorX, cursorY), eventID);
         Lumen::getApp().logEvent<MouseButtonEvent>(event);
 
         // Pass event to ImGUI.
@@ -76,10 +75,9 @@ void Application::glfwInitCallbacks()
         // Get the cursor position.
         double cursorX, cursorY;
         glfwGetCursorPos(window, &cursorX, &cursorY);
-        glm::vec2 cursorPos = { cursorX, cursorY };
 
         // Log event.
-        MouseMoveEvent event(cursorPos, eventID);
+        MouseMoveEvent event(glm::vec2(cursorX, cursorY), eventID);
         Lumen::getApp().logEvent<MouseMoveEvent>(event);
     });
 
@@ -106,10 +104,9 @@ void Application::glfwInitCallbacks()
         // Get the cursor position.
         double cursorX, cursorY;
         glfwGetCursorPos(window, &cursorX, &cursorY);
-        glm::vec2 cursorPos = { cursorX, cursorY };
 
         // Log event.
-        MouseScrollEvent event(cursorPos, yoffset, eventID);
+        MouseScrollEvent event(glm::vec2(cursorX, cursorY), yoffset, eventID);
         Lumen::getApp().logEvent<MouseScrollEvent>(event);
 
         // Pass event to ImGUI.
@@ -142,10 +139,9 @@ void Application::glfwInitCallbacks()
         // Get the cursor position.
         double cursorX, cursorY;
         glfwGetCursorPos(window, &cursorX, &cursorY);
-        glm::vec2 cursorPos = { cursorX, cursorY };
 
         // Log event.
-        KeyEvent event(key, eventID, cursorPos);
+        KeyEvent event(key, eventID, glm::vec2(cursorX, cursorY));
         Lumen::getApp().logEvent<KeyEvent>(event);
 
         // Pass event to ImGUI.
@@ -175,8 +171,7 @@ void Application::glfwInitCallbacks()
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
     {
         // Create and log event.
-        glm::vec2 size(width, height);
-        WindowEvent event(size, EventType_Application | EventType_WindowResize);
+        WindowEvent event(glm::vec2(width, height), EventType_Application | EventType_WindowResize);
         Lumen::getApp().logEvent<WindowEvent>(event);
     });
 

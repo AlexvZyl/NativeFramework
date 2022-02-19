@@ -15,6 +15,8 @@
 #include <Core/imgui_internal.h>
 
 #include "Lumen.h"
+#include "Application/Application.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -74,25 +76,22 @@ void Ribbon::onRender()
 
     }
 
-
     // Block diagram.
     if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
     {
 
     }
  
-
     // Circuit bucket.
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
 
     }
 
-
     // Add design engine.
     if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 
     {
-
+        Lumen::getApp().pushEngineLayer<Design2DEngine>("Design 2D Engine");
     }
 }
 

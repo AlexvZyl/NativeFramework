@@ -11,6 +11,8 @@
 #include <iostream>
 #include <External/Misc/ConsoleColor.h>
 #include <glad/glad.h>
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //----------------------------------------------------------------------------------------------------------------------
 //  Functions.
@@ -19,7 +21,6 @@
 // Clear the error flags.
 void glClearErrors()
 {
-	// Clear the errors.
 	while (glGetError() != GL_NO_ERROR);
 }
 
