@@ -4,10 +4,12 @@
 
 #include "../Serialiser.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Design2DEngine/Design2Dengine.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "OpenGL/RendererGL.h"
 #include "Graphics/Entities/EntityManager.h"
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //
@@ -22,7 +24,7 @@ Port* findPort(std::shared_ptr<Circuit> circuit, unsigned entityID);
 //  Serialise single circuit.  																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit> circuit) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit>& circuit) 
 {
 	// Circuit data.
 	emitter << YAML::Key << "Circuit Info" << YAML::Value;
@@ -44,7 +46,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit> circu
 //  Serialise circuit vector.  																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>> circuitVector) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>>& circuitVector) 
 {
 	// Begin.
 	emitter << YAML::BeginMap;
@@ -64,11 +66,8 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ci
 //  Single Circuit deserialiser.																											   //
 //=============================================================================================================================================//
 
-void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
+void deserialiseCircuit(YAML::Node& yamlNode)
 {
-	// Context.
-	Renderer::bindScene(engine.m_scene.get());
-
 	// An ID table that holds the reference between new and old ID's.
 	std::map<unsigned, unsigned> idTable;	// Old -> New
 
@@ -76,10 +75,17 @@ void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 	//  C I R C U I T  //
 	// --------------- //
 
+	// Load the circuit info.
 	YAML::Node circuitInfo = yamlNode["Circuit Info"];
-	engine.m_circuit.reset();
-	engine.m_circuit = std::make_unique<Circuit>(circuitInfo["Label"].as<std::string>(),
-												 circuitInfo["Type"].as<std::string>());
+
+	// Create the circuit for the engine.
+	Circuit circuit(circuitInfo["Label"].as<std::string>(),
+					circuitInfo["Type"].as<std::string>());
+	
+	// Create an engine with the circuit.
+	Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit.m_label)->getEngine();
+	engine->m_circuit.reset();
+	engine->m_circuit = std::make_shared<Circuit>(std::move(circuit));
 
 	// -------------------- //
 	// C O M P O N E N T S  //
@@ -91,9 +97,9 @@ void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 	{
 		YAML::Node componentNode = compIterator->second;
 		// Create component.
-		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine.m_circuit.get());
+		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine->m_circuit.get());
 		// Add component to circuit.
-		engine.m_circuit->m_components.push_back(component);
+		engine->m_circuit->m_components.push_back(component);
 
 		// Remove the default ports.
 		component->removePort(component->portsEast[0]);
@@ -191,10 +197,10 @@ void deserialise(YAML::Node& yamlNode, Design2DEngine& engine)
 		std::shared_ptr<Cable> cable = std::make_shared<Cable>(startPort,
 															   nodeVector,
 															   endPort,
-															   engine.m_circuit.get());
+															   engine->m_circuit.get());
 		cable->unhighlight();
 		// Add cable to circuit.
-		engine.m_circuit->m_cables.push_back(cable);
+		engine->m_circuit->m_cables.push_back(cable);
 	}
 }
 

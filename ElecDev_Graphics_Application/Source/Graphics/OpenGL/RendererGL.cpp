@@ -226,7 +226,7 @@ void Renderer::loadTextures(Scene* scene)
 
 	// Load all of the other textures.
 	int count = 2;
-	for (auto& [name, texture] : m_scene->m_textures)
+	for (auto& [name, texture] : scene->m_textures)
 	{
 		GLCall(glBindTextureUnit(count, texture->m_rendererID));
 		count++;

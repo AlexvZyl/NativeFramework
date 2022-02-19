@@ -47,14 +47,16 @@ enum EventType
 	EventType_WindowMove		=	1 << 19,
 	EventType_WindowClose		=	1 << 20,
 
-	// Application specific events.
+	// File events.
 	EventType_FileDrop			=	1 << 21,
+	EventType_FileSave			=	1 << 22,
+	EventType_FileLoad			=	1 << 23,
 
 	// Layer events.
-	EventType_Focus				=	1 << 22,
-	EventType_Defocus			=	1 << 23,
-	EventType_Hover				=	1 << 24,
-	EventType_Dehover			=	1 << 25,
+	EventType_Focus				=	1 << 24,
+	EventType_Defocus			=	1 << 25,
+	EventType_Hover				=	1 << 26,
+	EventType_Dehover			=	1 << 27,
 };
 
 // Check if an ID contains a specific type.
@@ -113,7 +115,7 @@ protected:
 	// Constructor that sets the mouse position.
 	// This is a protected type to ensure that a
 	// 'MouseEvent' object is not created.
-	MouseEvent(glm::vec2& positionPixels, uint64_t ID);
+	MouseEvent(const glm::vec2& positionPixels, uint64_t ID);
 };
 
 // ------------------------- //
@@ -126,7 +128,7 @@ class MouseButtonEvent : public MouseEvent
 public:
 
 	// Constructor with mouse position.
-	MouseButtonEvent(glm::vec2& mousePositionPixels, uint64_t ID);
+	MouseButtonEvent(const glm::vec2& mousePositionPixels, uint64_t ID);
 };
 
 // --------------------- //
@@ -139,7 +141,7 @@ class MouseMoveEvent : public MouseEvent
 public:
 
 	// Constructor with mouse position.
-	MouseMoveEvent(glm::vec2& mousePositionPixels, uint64_t ID);
+	MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID);
 };
 
 // ------------------------- //
@@ -152,7 +154,7 @@ class MouseScrollEvent : public MouseEvent
 public:
 
 	// Constructor with mouse position.
-	MouseScrollEvent(glm::vec2 mousePositionPixels, float yOffset, uint64_t ID);
+	MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, uint64_t ID);
 
 	// How much the mouse wheel scrolled.
 	float yOffset = 0;
@@ -168,7 +170,7 @@ class KeyEvent : public Event
 public:
 
 	// Constructor.
-	KeyEvent(int key, uint64_t ID, glm::vec2& mousePos);
+	KeyEvent(int key, uint64_t ID, const glm::vec2& mousePos);
 
 	// Key associated with the event.
 	int key;
@@ -188,7 +190,7 @@ class WindowEvent : public Event
 public:
 
 	// Constructor.
-	WindowEvent(glm::vec2& windowResize, uint64_t ID, bool isScale = false);
+	WindowEvent(const glm::vec2& windowResize, uint64_t ID, bool isScale = false);
 
 	// For resize events it is the new size, or the scaling.
 	// For move events it is the new position.
@@ -200,20 +202,27 @@ public:
 };
 
 //==============================================================================================================================================//
-//  File drop event.																															//
+//  File events.																																//
 //==============================================================================================================================================//
+// 
+// ------------------------------- //
+//  F I L E   D R O P   E V E N T  //
+// ------------------------------- //
 
-class FileDropEvent : public Event
+class FileEvent : public Event
 {
 public:
 
-	// Constructor.
-	FileDropEvent(std::vector<std::string>& paths);
+	// Constructors.
+	FileEvent(uint64_t eventID, std::vector<std::string>& files);
+	FileEvent(uint64_t eventID, std::string& file);
 
 	// The path to the dropped files.
-	std::unique_ptr<std::vector<std::string>> filePaths;
+	std::vector<std::string> fileData;
 		
 };
+
+//  F I L E   S A V E   
 
 //==============================================================================================================================================//
 //  Engine Specific Events.																														//

@@ -10,7 +10,7 @@
 //  Component 2D serialiser.   																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> comp) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& comp) 
 {
 	// Begin component data.
 	emitter << YAML::BeginMap;
@@ -57,7 +57,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> c
 //  Component2D Vector serialiser.   																										   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Component2D>> compVector) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Component2D>>& compVector) 
 {
 	// Begin.
 	emitter << YAML::BeginMap;
@@ -77,7 +77,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Co
 //  Deserialise single Component2D  																										   //
 //=============================================================================================================================================//
 
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Component2D> component)
+void deserialise(YAML::Node& yamlNode, std::shared_ptr<Component2D>& component)
 {
 
 }

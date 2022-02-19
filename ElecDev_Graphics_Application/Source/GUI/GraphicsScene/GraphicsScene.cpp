@@ -58,6 +58,7 @@ void GraphicsScene::begin()
 
 void GraphicsScene::onRender() 
 {
+	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 
