@@ -52,7 +52,7 @@ void GraphicsScene::begin()
 	ImGui::SetNextWindowSize(ImVec2(400,400), ImGuiCond_Once);
 
 	// Adjust window padding.
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
