@@ -162,7 +162,7 @@ private:
 	ImGuiID m_rightPanelID = NULL;
 	ImGuiID m_bottomPanelID = NULL;
 	// The area where the main graphics is displayed.
-	ImGuiID m_sceneViewportID = NULL;
+	ImGuiID m_scenePanelID = NULL;
 };
 
 
@@ -185,6 +185,7 @@ EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, int
 	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
 	EngineLayer<EngineType>* ptr = m_layerStack->getLayer<EngineLayer<EngineType>>(newName);
 	onFocusedLayerChange(ptr);
+	ImGui::DockBuilderDockWindow(newName, m_scenePanelID);  
 	return ptr;
 }
 

@@ -39,6 +39,8 @@ void Toolbar::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     // Set the size of the toolbar.
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
+    // Color.
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.0f, 0.0f, 0.0f, 1.00f));
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
 }
@@ -113,6 +115,7 @@ void Toolbar::end()
     // Pop frame rounding and padding.
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
 }
 
 /*=======================================================================================================================================*/

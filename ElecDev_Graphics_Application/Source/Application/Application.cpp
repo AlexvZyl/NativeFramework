@@ -68,13 +68,12 @@ Application::Application(GLFWwindow* window)
 	renderInitialFrame();
 }
 
-
 void Application::shutdown() 
 {
 	// ImGUI cleanup.
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
-	//ImGui::DestroyContext();  // This causes an exception?
+	//ImGui::DestroyContext();
 
 	// Close application.
 	glfwDestroyWindow(m_window);
