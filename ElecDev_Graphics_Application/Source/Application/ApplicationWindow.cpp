@@ -12,6 +12,7 @@
 #include "External/GLAD/Includes/glad/glad.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "GLFW/glfw3.h"
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Callbacks.																																	//
@@ -276,10 +277,10 @@ GLFWwindow* Application::glfwInitWindow()
     io.IniFilename = NULL;                                      // Disable imgui ini file.
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
     // For now it is disabled.  How do we pass events to viewports that are outside of the glfw window?
     //io.ConfigViewportsNoAutoMerge = true;
-    io.ConfigViewportsNoTaskBarIcon = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
 
     // When viewports are enabled we tweak WindowRounding/WindowBg 
     // so platform windows can look identical to regular ones.
