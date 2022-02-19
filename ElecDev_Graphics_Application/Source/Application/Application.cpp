@@ -66,15 +66,6 @@ Application::Application(GLFWwindow* window)
 
 	// Initialisation frame.
 	renderInitialFrame();
-
-	//  --------------- //
-	//  T E S T I N G  //
-	// --------------- //
-
-	// Testing layers.
-	pushEngineLayer<Design2DEngine>("Design 2D Engine 1");
-	pushEngineLayer<Design2DEngine>("Design 2D Engine 2");
-	pushEngineLayer<Design2DEngine>("Design 2D Engine 3");
 }
 
 
