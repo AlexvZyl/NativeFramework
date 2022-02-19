@@ -3,8 +3,9 @@
 //==============================================================================================================================================//
 
 #include "imgui/backends/imgui_impl_glfw.h"
-#include "GLFW/glfw3.h"
 #include "Events.h"
+#include "Engines/EngineCore/EngineCore.h"
+#include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  Event overloaded functions.																													//
@@ -46,7 +47,7 @@ Event::Event(uint64_t ID)
 //  M O U S E   B A S E  //
 // --------------------- //
 
-MouseEvent::MouseEvent(glm::vec2& positionPixels, uint64_t ID)
+MouseEvent::MouseEvent(const glm::vec2& positionPixels, uint64_t ID)
 	: Event(ID), mousePosition(positionPixels)
 {}
 
@@ -54,7 +55,7 @@ MouseEvent::MouseEvent(glm::vec2& positionPixels, uint64_t ID)
 //  M O U S E   B U T T O N  //
 // ------------------------- //
 
-MouseButtonEvent::MouseButtonEvent(glm::vec2& mousePositionPixels, uint64_t ID)
+MouseButtonEvent::MouseButtonEvent(const glm::vec2& mousePositionPixels, uint64_t ID)
 	: MouseEvent(mousePositionPixels, ID)
 {}
 
@@ -64,7 +65,7 @@ MouseButtonEvent::MouseButtonEvent(glm::vec2& mousePositionPixels, uint64_t ID)
 //  M O U S E   M O V E  //
 // --------------------- //
 
-MouseMoveEvent::MouseMoveEvent(glm::vec2& mousePositionPixels, uint64_t ID)
+MouseMoveEvent::MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID)
 	: MouseEvent(mousePositionPixels, ID | EventType_MouseMove)
 {}
 
@@ -72,7 +73,7 @@ MouseMoveEvent::MouseMoveEvent(glm::vec2& mousePositionPixels, uint64_t ID)
 //  M O U S E   S C R O L L  //
 // ------------------------- //
 
-MouseScrollEvent::MouseScrollEvent(glm::vec2 mousePositionPixels, float yOffset, uint64_t ID)
+MouseScrollEvent::MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, uint64_t ID)
 	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset) 
 {}
 
@@ -80,7 +81,7 @@ MouseScrollEvent::MouseScrollEvent(glm::vec2 mousePositionPixels, float yOffset,
 //  Key Events.																																    //
 //==============================================================================================================================================//
 
-KeyEvent::KeyEvent(int key, uint64_t ID, glm::vec2& mousePos)
+KeyEvent::KeyEvent(int key, uint64_t ID, const glm::vec2& mousePos)
 	: Event(ID), key(key), mousePosition(mousePos)
 {}
 
@@ -88,26 +89,66 @@ KeyEvent::KeyEvent(int key, uint64_t ID, glm::vec2& mousePos)
 //  Window events.																																//
 //==============================================================================================================================================//
 
-WindowEvent::WindowEvent(glm::vec2& windowResize, uint64_t ID, bool isScale)
+WindowEvent::WindowEvent(const glm::vec2& windowResize, uint64_t ID, bool isScale)
 	: Event(ID), windowData(windowResize), isScale(isScale)
 {}
 
 //==============================================================================================================================================//
-//  Serialisation events.																														//
+//  File events.																																//
 //==============================================================================================================================================//
+
+// --------- //
+//  F I L E  //
+// --------- //
+
+FileEvent::FileEvent(uint64_t eventID, std::vector<std::string>& files)
+	: Event(eventID | EventType_Application), fileData(files)
+{}
+
+FileEvent::FileEvent(uint64_t eventID, std::string& file)
+	: Event(eventID | EventType_Application)
+{
+	fileData.emplace_back(file);
+}
+
+// ------------------- //
+//  F I L E   L O A D  //
+// ------------------- //
+
+FileLoadEvent::FileLoadEvent(std::vector<std::string>& files)
+	: FileEvent(EventType_FileLoad, files)
+{}
+
+FileLoadEvent::FileLoadEvent(std::string& file) 
+	: FileEvent(EventType_FileLoad, file)
+{}
+
+// ------------------- //
+//  F I L E   S A V E  //
+// ------------------- //
+
+FileSaveEvent::FileSaveEvent(std::vector<std::string>& files, EngineCore* engine)
+	: FileEvent(EventType_FileSave, files), engine(engine)
+{}
+
+FileSaveEvent::FileSaveEvent(std::string& file, EngineCore* engine)
+	: FileEvent(EventType_FileSave, file), engine(engine)
+{}
 
 // ------------------- //
 //  F I L E   D R O P  //
 // ------------------- //
 
-FileDropEvent::FileDropEvent(std::vector<std::string>& paths)
-	: Event(EventType_FileDrop | EventType_Application)
-{
-	filePaths = std::make_unique<std::vector<std::string>>(std::move(paths));
-}
+FileDropEvent::FileDropEvent(std::vector<std::string>& files)
+	: FileEvent(EventType_FileDrop, files)
+{}
+
+FileDropEvent::FileDropEvent(std::string& file)
+	: FileEvent(EventType_FileDrop, file)
+{}
 
 //==============================================================================================================================================//
-//  Layer Events.																														//
+//  Layer Events.																																//
 //==============================================================================================================================================//
 
 LayerEvent::LayerEvent(uint64_t ID)

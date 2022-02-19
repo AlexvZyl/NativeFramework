@@ -66,8 +66,11 @@ void Application::onRender()
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.
-	for (auto& layerPair : m_layerStack->getLayers())
-		layerPair.second->onRender();
+	for (auto& [name, layer] : m_layerStack->getLayers())
+		layer->onRender();
+
+	// Some layers are queued to pop after rendering.
+	m_layerStack->popLayers();
 
 	// Cleanup.
 	onRenderCleanup();

@@ -48,10 +48,10 @@ public:
 
 	// Push an engine onto the layerstack.
 	template<typename EngineType>
-	EngineType* pushEngineLayer(std::string layerName, int imguiWindowFlags = 0);
+	EngineLayer<EngineType>* pushEngineLayer(std::string layerName, int imguiWindowFlags = 0);
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
-	GuiType* pushGuiLayer(std::string layerName, int imguiWindowFlags = 0);
+	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, int imguiWindowFlags = 0);
 	// Pop a layer from the layerstack using the pointer.
 	void queuePopLayer(Layer* layer);
 	// Pop a layer from the layerstack using the layer name.
@@ -129,6 +129,10 @@ private:
 	void onWindowResizeEvent(WindowEvent& event);
 	// Handle serialisation events.
 	void onFileDropEvent(FileDropEvent& event);
+	// Load files.
+	void onFileLoadEvent(FileLoadEvent& event);
+	// Save files.
+	void onFileSaveEvent(FileSaveEvent& event);
 	// Should the app close?
 	bool m_shouldWindowClose = false;
 	
@@ -174,25 +178,25 @@ void Application::logEvent(Event& event)
 }
 
 template<typename EngineType>
-EngineType* Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
+EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, int imguiWindowFlags)
 {
 	// Create and push the layer.
 	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
 	EngineLayer<EngineType>* ptr = m_layerStack->getLayer<EngineLayer<EngineType>>(newName);
 	onFocusedLayerChange(ptr);
-	return ptr->getEngine();
+	return ptr;
 }
 
 template<typename GuiType>
-GuiType* Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
+GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, int imguiWindowFlags)
 {
 	// Create and push the layer.
 	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(layer);
 	GuiLayer<GuiType>* ptr = m_layerStack->getLayer<GuiLayer<GuiType>>(newName);
 	onFocusedLayerChange(ptr);
-	return ptr->getGuiElement();
+	return ptr;
 }
 
 //==============================================================================================================================================//

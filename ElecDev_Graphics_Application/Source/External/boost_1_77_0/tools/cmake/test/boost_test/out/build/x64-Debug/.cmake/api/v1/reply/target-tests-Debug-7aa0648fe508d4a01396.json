@@ -1,0 +1,337 @@
+{
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"boost_test",
+			"add_dependencies",
+			"boost_test_jamfile"
+		],
+		"files" : 
+		[
+			"C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/include/BoostTest.cmake",
+			"CMakeLists.txt",
+			"C:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/tools/cmake/include/BoostTestJamfile.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 141,
+				"parent" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 56,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 54,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 152,
+				"parent" : 4
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 37,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 6
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 54,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 184,
+				"parent" : 8
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 40,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 10
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 34,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 12
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 152,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 28,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 184,
+				"parent" : 15
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 54,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 17
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 49,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 19
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 54,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 21
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 32,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 23
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 27,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 174,
+				"parent" : 25
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 30,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 27
+			},
+			{
+				"command" : 1,
+				"file" : 2,
+				"line" : 54,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 174,
+				"parent" : 29
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 35,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 31
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 39,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 33
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 29,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 35
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 50,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 203,
+				"parent" : 37
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 5,
+			"id" : "boost_cmake_test_jamfile-compile_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "boost_cmake_test-requires_variadic_templates_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "compile-boost_cmake_test_jamfile-link_fail_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "boost_cmake_test-requires_no_exceptions_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "boost_cmake_test-return_exit_code_pass::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "boost_cmake_test-compile_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 16,
+			"id" : "compile-boost_cmake_test-link_fail_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 18,
+			"id" : "boost_cmake_test_jamfile-run_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 20,
+			"id" : "boost_cmake_test_globals-requires_no_rtti_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 22,
+			"id" : "boost_cmake_test_jamfile-run_fail_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 24,
+			"id" : "boost_cmake_test-arguments_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 26,
+			"id" : "boost_cmake_test-link_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 28,
+			"id" : "boost_cmake_test-run_fail_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 30,
+			"id" : "boost_cmake_test_jamfile-link_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 32,
+			"id" : "boost_cmake_test-return_exit_code_fail::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 34,
+			"id" : "boost_cmake_test-requires_no_rtti_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 36,
+			"id" : "boost_cmake_test-run_cpp::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 38,
+			"id" : "boost_cmake_test_globals-requires_no_exceptions_cpp::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "tests::@6890427a1f51a3e7e1df",
+	"name" : "tests",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -30,7 +30,7 @@ public:
 	inline virtual ~GuiLayer() = default;
 
 	// Get the gui element in the layer.
-	GuiType* getGuiElement();
+	GuiType* getGui();
 
 	// ----------- //
 	//  L A Y E R  //	
@@ -65,7 +65,7 @@ GuiLayer<GuiType>::GuiLayer(std::string name, int imguiWindowFlags)
 }
 
 template<class GuiType>
-GuiType* GuiLayer<GuiType>::getGuiElement()
+GuiType* GuiLayer<GuiType>::getGui()
 {
 	return m_guiElement.get();
 }
@@ -73,7 +73,7 @@ GuiType* GuiLayer<GuiType>::getGuiElement()
 template<class GuiType>
 void GuiLayer<GuiType>::setName(std::string& newName)
 {
-	m_guiElement->m_name = newName;
+	m_guiElement->m_name = newName + "##" + std::to_string(m_ID);
 }
 
 template<class GuiType>
@@ -151,7 +151,7 @@ void GuiLayer<GuiType>::onRender()
 	// End window.
 	m_guiElement->end();
 	
-	// Remove layer in next frame if close was clicked.
+	// Remove layer if close was clicked.
 	if (!m_guiElement->m_isOpen)
 		Lumen::getApp().queuePopLayer(this);
 }

@@ -20,7 +20,7 @@
 ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags)
 {
-		
+
 }
 
 void ComponentEditor::begin() 
@@ -51,6 +51,10 @@ void ComponentEditor::onRender()
 	{
 		activeComponent->title->updateText(activeComponent->titleString);
 	}
+
+	ImGui::InputText("##Equipment Type", &activeComponent->equipType);
+
+	// Get Active component type to change component editor based on type
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports"))
@@ -159,6 +163,38 @@ void ComponentEditor::onRender()
 		}
 		ImGui::TreePop();
 	}
+
+
+	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	if (ImGui::TreeNode("Data Automation"))
+	{
+		ImGui::BeginTable("Columns to specify", 21, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX);
+
+		//Setup table columns
+		for (auto& [key, val]: activeComponent->cableDict) {
+			ImGui::TableSetupColumn(key.c_str());
+		}
+		
+		ImGui::TableHeadersRow();
+
+		// Port entry in table.
+		ImGui::TableNextRow();
+		ImGui::TableNextColumn();
+
+		for (auto& [key, val]: activeComponent->cableDict) {
+			ImGui::PushItemWidth(-1);
+			ImGui::InputText(key.c_str(), &val);
+
+			ImGui::PopItemWidth();
+			ImGui::TableNextColumn();
+
+		}
+
+		//ImGui::SetColumnWidth(1, 20.f);
+		ImGui::EndTable();
+		ImGui::TreePop();
+	}
+
 	ImGui::PopStyleColor();
 }
 

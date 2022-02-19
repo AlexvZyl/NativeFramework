@@ -22,7 +22,7 @@ GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {}
 
-void GraphicsScene::setEngine(EngineCore* engine) 
+void GraphicsScene::setEngine(EngineCore* engine)
 {
 	m_engine = engine;
 	m_textureID = (void*)m_engine->getRenderTexture();
@@ -58,6 +58,7 @@ void GraphicsScene::begin()
 
 void GraphicsScene::onRender() 
 {
+	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 

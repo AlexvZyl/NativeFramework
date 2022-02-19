@@ -39,30 +39,6 @@ public:
 		return m_engine.get();
 	}
 
-	// ----------- //
-	//  L A Y E R  //	
-	// ----------- //
-	
-	virtual void onRender() override 
-	{
-		// Begin the window.
-		m_guiElement->begin();
-
-		// Render contents.
-		if (m_guiElement->shouldRender())
-		{
-			m_engine->onRender();
-			m_guiElement->onRender();
-		}
-
-		// End window.
-		m_guiElement->end();
-
-		// Remove layer in next frame if close was clicked.
-		if (!m_guiElement->m_isOpen)
-			Lumen::getApp().queuePopLayer(this);
-	}
-
 protected:
 
 	// The engine that belongs to the layer.
