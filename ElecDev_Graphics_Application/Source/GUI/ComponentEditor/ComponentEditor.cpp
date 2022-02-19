@@ -4,7 +4,7 @@
 /* Includes.																															 */
 /*=======================================================================================================================================*/
 
-#include "External/ImGUI/Core/imgui.h"
+#include "imgui/imgui.h"
 #include "ComponentEditor.h"
 #include "ImGui/misc/cpp/imgui_stdlib.h"
 #include "OpenGL/RendererGL.h"

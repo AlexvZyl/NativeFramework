@@ -6,7 +6,7 @@
 
 #include <string>
 #include <memory>
-#include "External/GLM/glm.hpp"
+#include "glm/glm.hpp"
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Primitives/Vertex.h"

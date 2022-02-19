@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\Source\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\Source\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\Source\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -158,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\Source\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLAD\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\Graphics\;$(SolutionDir)ElecDev_Graphics_Application\External\glm;$(SolutionDir)ElecDev_Graphics_Application\External;$(SolutionDir)ElecDev_Graphics_Application\External\imgui;$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLEW\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\External\YAML-CPP\Includes;$(SolutionDir)ElecDev_Graphics_Application\Source\;$(SolutionDir)ElecDev_Graphics_Application\Source\External\boost_1_77_0</AdditionalIncludeDirectories>
       <ExceptionHandling>Sync</ExceptionHandling>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -174,6 +174,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="External\glm\glm\detail\glm.cpp" />
+    <ClCompile Include="External\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="External\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="External\imgui\imgui.cpp" />
     <ClCompile Include="External\imgui\imgui_demo.cpp" />
     <ClCompile Include="External\imgui\imgui_draw.cpp" />
@@ -229,7 +231,6 @@
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Circuit.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\LineSegment.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Cable.cpp" />
-    <ClCompile Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\TextureGL.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Port.cpp" />
@@ -256,13 +257,6 @@
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\GuiElementCore\GuiElementCore.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Core\imgui.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Core\imgui_demo.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Core\imgui_draw.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Core\imgui_tables.cpp" />
-    <ClCompile Include="Source\External\ImGUI\Core\imgui_widgets.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
@@ -569,6 +563,8 @@
     <ClInclude Include="External\glm\glm\vec3.hpp" />
     <ClInclude Include="External\glm\glm\vec4.hpp" />
     <ClInclude Include="External\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="External\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="External\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="External\imgui\imconfig.h" />
     <ClInclude Include="External\imgui\imgui.h" />
     <ClInclude Include="External\imgui\imgui_internal.h" />
@@ -651,7 +647,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\LineSegment.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Cable.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\TextureGL.h" />
-    <ClInclude Include="Source\External\ImGUI\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\Entities\Entity.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Circle.h" />
@@ -771,11 +766,6 @@
     <ClInclude Include="Source\External\Misc\stb_image.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3.h" />
     <ClInclude Include="Source\External\GLFW\Includes\GLFW\glfw3native.h" />
-    <ClInclude Include="Source\External\ImGUI\Core\imconfig.h" />
-    <ClInclude Include="Source\External\ImGUI\Core\imgui.h" />
-    <ClInclude Include="Source\External\ImGUI\Implementations\imgui_impl_glfw.h" />
-    <ClInclude Include="Source\External\ImGUI\Implementations\imgui_impl_opengl3.h" />
-    <ClInclude Include="Source\External\ImGUI\Core\imgui_internal.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_rectpack.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_textedit.h" />
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />

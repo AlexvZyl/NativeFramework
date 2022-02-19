@@ -2,7 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_glfw.h"
 #include "GLFW/glfw3.h"
 #include "Events.h"
 

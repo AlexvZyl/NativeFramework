@@ -2,10 +2,10 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
-#include "ImGUI/Implementations/imgui_impl_opengl3.h"
-#include "ImGUI/Core/imgui.h"
-#include "ImGUI/Core/imgui_internal.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
 #include "GLFW/glfw3.h"

@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "GraphicsScene.h"
-#include "External/ImGUI/Core/imgui.h"
+#include "imgui/imgui.h"
 #include "Application/Events/Events.h"
 #include "Application/Layers/Layer.h"
 #include "Engines/EngineCore/EngineCore.h"

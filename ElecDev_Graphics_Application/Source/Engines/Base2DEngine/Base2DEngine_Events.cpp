@@ -4,7 +4,7 @@
 
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Application/Events/Events.h"
-#include "External/GLM/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"

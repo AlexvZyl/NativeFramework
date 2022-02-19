@@ -12,7 +12,7 @@
 #include "Application/Events/Events.h"
 #include "Application/Layers/LayerStack.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "Misc/ConsoleColor.h"
+#include "External/Misc/ConsoleColor.h"
 
 //==============================================================================================================================================//
 //  GUI Layer.																																	//

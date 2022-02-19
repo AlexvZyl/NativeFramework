@@ -4,10 +4,9 @@
 
 #include <iostream>
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "GUI/ImGuiTweaks.h"
 #include "Application/Events/Events.h"
-#include "External/ImGUI/Core/imgui.h"
-#include "External/ImGUI/Core/imgui_internal.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 
 //==============================================================================================================================================//
 //  Rendering.																																	//
@@ -105,13 +104,13 @@ bool GuiElementCore::isHovered()
 {
 	// If the window exists.
 	if(m_imguiWindow) 
-		return ImGuiTweaks::IsWindowHovered(0, m_imguiWindow);
+		return ImGui::IsWindowHovered(0, m_imguiWindow);
 
 	// Find the window.
 	else
 	{
 		m_imguiWindow = ImGui::FindWindowByName(m_name.c_str());
-		return ImGuiTweaks::IsWindowHovered(0, m_imguiWindow);
+		return ImGui::IsWindowHovered(0, m_imguiWindow);
 	}
 }
 

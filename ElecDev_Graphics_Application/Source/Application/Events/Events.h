@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include "External/GLM/glm.hpp"
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Event types.																																//
