@@ -127,7 +127,7 @@ glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2])
 void Scene::createDefaultBackground() 
 {
 	if      (m_camera->m_type == CameraType::Standard2D) create2DBackground();
-	else if (m_camera->m_type == CameraType::Standard3D) create2DBackground();  // TODO: Implement skybox.
+	else if (m_camera->m_type == CameraType::Standard3D) create2DBackground();
 }
 
 void Scene::create2DBackground()
@@ -148,8 +148,8 @@ void Scene::create2DBackground()
 	// Create the VAO.
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	// Assign background data.
-	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
 	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 1.f);
+	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
 	glm::vec3 pos1(1.0f, 1.0f, 0.99f);
 	glm::vec3 pos2(-1.0f, 1.0f, 0.99);
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99);

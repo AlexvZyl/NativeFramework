@@ -30,7 +30,6 @@ void Application::renderInitialFrame()
 						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
 						 | ImGuiDockNodeFlags_NoTabBar;
 	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
-	ImGui::DockBuilderFinish(m_mainDockspaceID);
 
 	// Left Panel.
 	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.1f, NULL, &m_scenePanelID);
@@ -51,6 +50,9 @@ void Application::renderInitialFrame()
 	dockNode = ImGui::DockBuilderGetNode(m_scenePanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
+	// Finish dock builder.
+	ImGui::DockBuilderFinish(m_mainDockspaceID);
+
 	// Cleanup.
 	onRenderCleanup();
 }
@@ -65,8 +67,11 @@ void Application::onRenderInit()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	// Enable main viewport docking.
+	// Enable docking in main viewport.
+	// Do we really have to call this every frame?
 	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
+	ImGuiDockNode* mainDockNode = ImGui::DockBuilderGetNode(m_mainDockspaceID);
+	mainDockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
 	// Push custom font.
 	ImGui::PushFont(m_defaultFont);
@@ -118,7 +123,7 @@ void Application::onRenderCleanup()
 	}
 
 	// Push commands to the GPU.
-	Renderer::finish();
+	//Renderer::finish();
 
 	// Swap the window buffers.
 	glfwSwapBuffers(m_window);

@@ -13,6 +13,7 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui_internal.h>
+#include "GUI/ComponentEditor/ComponentEditor.h"
 
 #include "Lumen.h"
 #include "Application/Application.h"
@@ -59,6 +60,7 @@ void Ribbon::begin()
 {
     // Remove rounding so that it docks nicely.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.f, 0.f, 0.04f, 1.00f));
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
@@ -85,7 +87,10 @@ void Ribbon::onRender()
     // Circuit bucket.
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
-
+        // Testing.
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::LeftPanel);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::RightPanel);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::BottomPanel);
     }
 
     // Add design engine.
@@ -100,6 +105,7 @@ void Ribbon::end()
     ImGui::End();
     // Pop Window rounding.
     ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
 }
 
 //==============================================================================================================================================//

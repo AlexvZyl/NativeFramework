@@ -77,6 +77,7 @@ void Design2DEngine::setActiveComponent(unsigned eID) {
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (!currentEntity) return;
 		currentEntity->setContext();
 		while (currentEntity->m_type != EntityType::COMPONENT)
 		{
