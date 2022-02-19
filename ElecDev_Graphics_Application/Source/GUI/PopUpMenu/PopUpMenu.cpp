@@ -116,18 +116,20 @@ void PopUpMenu::onRender()
 
     if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
     {
-        // Create a load event.
+        // Create and log load event.
         std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-        FileEvent event(EventType_FileLoad, path);
-        app.logEvent<FileEvent>(event);
+        FileLoadEvent event(path);
+        app.logEvent<FileLoadEvent>(event);
         
         // Remove popup.
         app.queuePopLayer(m_name);
     }
     if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
     {
-        /*Design2DEngineGL* activeEngine = reinterpret_cast<Design2DEngineGL*>(m_graphicsHandler->m_activeWindow->engineGL.get());
-        std::string path = selectFile("Lumen Save Circuit", "", activeEngine->m_circuit->m_label, "Save");*/
+        // Create and log save event.
+        std::string path = selectFile("Lumen Save Circuit", "", m_engine->m_circuit->m_label, "Save");
+        FileSaveEvent event(path, m_engine);
+        app.logEvent<FileSaveEvent>(event);
 
         // Remove popup.
         app.queuePopLayer(m_name);

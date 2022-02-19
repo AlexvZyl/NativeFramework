@@ -160,8 +160,8 @@ void Application::glfwInitCallbacks()
         for (int i = 0; i < count; i++) { filePaths.emplace_back(std::string(paths[i])); }
 
         // Log the event.
-        FileEvent event(EventType_FileDrop, filePaths);
-        Lumen::getApp().logEvent<FileEvent>(event);
+        FileDropEvent event(filePaths);
+        Lumen::getApp().logEvent<FileDropEvent>(event);
     });
 
     // --------------------- //

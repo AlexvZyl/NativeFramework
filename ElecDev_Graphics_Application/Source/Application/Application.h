@@ -128,11 +128,11 @@ private:
 	// Handle window events.
 	void onWindowResizeEvent(WindowEvent& event);
 	// Handle serialisation events.
-	void onFileDropEvent(FileEvent& event);
+	void onFileDropEvent(FileDropEvent& event);
 	// Load files.
-	void onFileLoadEvent(FileEvent& event);
+	void onFileLoadEvent(FileLoadEvent& event);
 	// Save files.
-	void onFileSaveEvent(FileEvent& event);
+	void onFileSaveEvent(FileSaveEvent& event);
 	// Should the app close?
 	bool m_shouldWindowClose = false;
 	

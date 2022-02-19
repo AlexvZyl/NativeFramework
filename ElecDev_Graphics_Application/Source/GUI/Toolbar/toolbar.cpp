@@ -62,8 +62,8 @@ void Toolbar::onRender()
         {
             // Create a load event.
             std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-            FileEvent event(EventType_FileLoad, path);
-            app.logEvent<FileEvent>(event);
+            FileLoadEvent event(path);
+            app.logEvent<FileLoadEvent>(event);
         }
         if (ImGui::MenuItem("Close", "Ctrl+W"))
         {

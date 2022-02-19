@@ -11,6 +11,12 @@
 #include "External/GLM/glm.hpp"
 
 //==============================================================================================================================================//
+//  Forward declerations.																														//
+//==============================================================================================================================================//
+
+class EngineCore;
+
+//==============================================================================================================================================//
 //  Event types.																																//
 //==============================================================================================================================================//
 
@@ -204,30 +210,76 @@ public:
 //==============================================================================================================================================//
 //  File events.																																//
 //==============================================================================================================================================//
-// 
-// ------------------------------- //
-//  F I L E   D R O P   E V E N T  //
-// ------------------------------- //
+
+// --------- //
+//  F I L E  //
+// --------- //
 
 class FileEvent : public Event
 {
 public:
 
+	// The path to the dropped files.
+	std::vector<std::string> fileData;	
+
+protected:
+
 	// Constructors.
 	FileEvent(uint64_t eventID, std::vector<std::string>& files);
 	FileEvent(uint64_t eventID, std::string& file);
-
-	// The path to the dropped files.
-	std::vector<std::string> fileData;
-		
 };
 
-//  F I L E   S A V E   
+// ------------------- //
+//  F I L E   L O A D  //
+// ------------------- //
+
+class FileLoadEvent : public FileEvent
+{
+
+public: 
+
+	// Constructors.
+	FileLoadEvent(std::vector<std::string>& files);
+	FileLoadEvent(std::string& file);
+};
+
+// ------------------- //
+//  F I L E   S A V E  //
+// ------------------- //
+
+class FileSaveEvent : public FileEvent
+{
+
+public:
+
+	// Constructors.
+	FileSaveEvent(std::vector<std::string>& files, EngineCore* engine);
+	FileSaveEvent(std::string& file, EngineCore* engine);
+
+	// The engine that is to be saved.
+	EngineCore* engine = nullptr;
+};
+
+// ------------------ //
+//  F I L E  D R O P  //
+// ------------------ //
+
+class FileDropEvent : public FileEvent
+{
+
+public:
+
+	// Constructors.
+	FileDropEvent(std::vector<std::string>& files);
+	FileDropEvent(std::string& file);
+};
 
 //==============================================================================================================================================//
-//  Engine Specific Events.																														//
+//  Layer Events.																																//
 //==============================================================================================================================================//
 
+// Currently these events only notify the layer of specific things,
+// it does not supply any data.
 class LayerEvent : public Event
 {
 

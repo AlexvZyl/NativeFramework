@@ -17,8 +17,6 @@
 
 // Return the type of the port.
 PortType getPortType(YAML::Node node);
-// Return pointer to the port with the provided Entity ID.
-Port* findPort(std::shared_ptr<Circuit> circuit, unsigned entityID);
 
 //=============================================================================================================================================//
 //  Serialise single circuit.  																												   //
@@ -78,7 +76,7 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 	// Load the circuit info.
 	YAML::Node circuitInfo = yamlNode["Circuit Info"];
 
-	// Create the circuit for the engine.
+	// Create the circuit for the engine. 
 	Circuit circuit(circuitInfo["Label"].as<std::string>(),
 					circuitInfo["Type"].as<std::string>());
 	

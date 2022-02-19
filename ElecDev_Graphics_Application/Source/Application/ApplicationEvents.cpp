@@ -153,9 +153,9 @@ void Application::onEvent(Event& event)
 	if      (eventID == EventType_WindowResize)	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 												 								 
 	// File events.					 								 
-	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileEvent&>(event)); }
-	else if (eventID == EventType_FileSave)		{ onFileSaveEvent(dynamic_cast<FileEvent&>(event)); }
-	else if (eventID == EventType_FileLoad)		{ onFileLoadEvent(dynamic_cast<FileEvent&>(event)); }
+	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
+	else if (eventID == EventType_FileSave)		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
+	else if (eventID == EventType_FileLoad)		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
 }
 
 //==============================================================================================================================================//
@@ -171,46 +171,57 @@ void Application::onWindowResizeEvent(WindowEvent& event)
 //  File events.																																//
 //==============================================================================================================================================//
 
-void Application::onFileDropEvent(FileEvent& event)
+void Application::onFileDropEvent(FileDropEvent& event)
 {
-
+	// Load all of the paths in the event.
+	for (auto& path : event.fileData)
+	{
+		// Check if operation did not fail.
+		// This should be handled differently!
+		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
+		{
+			// Load file into Lumen.
+			loadFromYAML(path);
+		}
+	}
 }
 
-void Application::onFileSaveEvent(FileEvent& event) 
+void Application::onFileSaveEvent(FileSaveEvent& event) 
 {
-	//// Check if operation did not fail.
-	//if (m_loadEvent.path != "OPERATION_CANCELLED" && m_loadEvent.path != "FOLDER_EMPTY")
-	//{
-	//	// Find engine.
-	//	Design2DEngineGL* saveEngine = reinterpret_cast<Design2DEngineGL*>(m_windowsDictionary[m_saveEvent.saveEngine]->engineGL.get());
+	// Iterate through the paths.
+	for (auto& path : event.fileData)
+	{
+		// Check if operation did not fail.
+		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
+		{
+			// Find engine.
+			Design2DEngine* saveEngine = reinterpret_cast<Design2DEngine*>(event.engine);
 
-	//	// Check if file is added to the save event.
-	//	std::string savePath = m_saveEvent.path;
-	//	if (savePath.find(".lmct") != std::string::npos ||
-	//		savePath.find(".yml") != std::string::npos ||
-	//		savePath.find(".yaml") != std::string::npos)
-	//	{
-	//		// Move the file onto a new string.
-	//		std::string file;
-	//		while (savePath.back() != '\\')
-	//		{
-	//			file.push_back(savePath.back());
-	//			savePath.pop_back();
-	//		}
-	//		std::reverse(file.begin(), file.end());
-	//		saveToYAML(saveEngine->m_circuit, savePath, file);
-	//	}
-	//	else
-	//	{
-	//		saveToYAML(saveEngine->m_circuit, m_saveEvent.path);
-	//	}
-	//}
-	//m_saveEvent.saveEngine = "";
-	//m_saveEvent.eventTrigger = false;
-	//m_saveEvent.path = "";
+			// Check if file is added to the save event.
+			if (path.find(".lmct") != std::string::npos ||
+				path.find(".yml") != std::string::npos ||
+				path.find(".yaml") != std::string::npos)
+			{
+				// Move the file onto a new string.
+				std::string file;
+				while (path.back() != '\\')
+				{
+					file.push_back(path.back());
+					path.pop_back();
+				}
+				std::reverse(file.begin(), file.end());
+				saveToYAML(saveEngine->m_circuit, path, file);
+			}
+			else
+			{
+				std::string empty = "";
+				saveToYAML(saveEngine->m_circuit, path, empty);
+			}
+		}
+	}
 }
 
-void Application::onFileLoadEvent(FileEvent& event)
+void Application::onFileLoadEvent(FileLoadEvent& event)
 {
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
