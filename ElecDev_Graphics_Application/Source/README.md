@@ -385,7 +385,7 @@ void MyGui::onRender()
     }
 }
 
-// The most important part of this function is calling ImGui::Begin().
+// The most important part of this function is calling ImGui::End().
 // It should also be used to do any cleanup code necessary.
 void MyGui::end()
 {

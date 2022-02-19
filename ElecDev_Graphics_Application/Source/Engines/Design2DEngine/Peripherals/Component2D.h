@@ -33,7 +33,7 @@ class Scene;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Component2D: public Entity
+class Component2D : public Entity
 {
 public:
 
@@ -77,6 +77,7 @@ public:
 	// Interaction attributes.
 	bool selected = true;
 
+	// Port lists.
 	std::vector<std::shared_ptr<Port>> portsNorth;
 	std::vector<std::shared_ptr<Port>> portsSouth;
 	std::vector<std::shared_ptr<Port>> portsEast;
