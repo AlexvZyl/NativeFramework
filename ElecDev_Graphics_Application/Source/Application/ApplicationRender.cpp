@@ -2,10 +2,10 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
-#include "ImGUI/Implementations/imgui_impl_opengl3.h"
-#include "ImGUI/Core/imgui.h"
-#include "ImGUI/Core/imgui_internal.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
 #include "GLFW/glfw3.h"
@@ -81,14 +81,11 @@ void Application::onRenderCleanup()
 	// Pop custom font.
 	ImGui::PopFont();
 
-	// Assign values to viewport for ImGUI.
-	int display_w, display_h;
-	glfwGetFramebufferSize(m_window, &display_w, &display_h);
-	glm::vec2 viewport(display_w, display_h);
-	Renderer::setViewport(viewport);
-
 	// Rendering
 	ImGui::Render();
+	int display_w, display_h;
+	glfwGetFramebufferSize(m_window, &display_w, &display_h);
+	Renderer::setViewport(glm::vec2(display_w, display_h));
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// Update and Render additional Platform Windows
@@ -107,7 +104,6 @@ void Application::onRenderCleanup()
 
 	// Swap the window buffers.
 	glfwSwapBuffers(m_window);
-
 }
 
 //==============================================================================================================================================//

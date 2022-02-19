@@ -11,7 +11,7 @@ for a VAO to be able to render the entity to the screen.
 
 #include <vector>
 #include <memory>
-#include "External/GLM/glm.hpp"
+#include "glm/glm.hpp"
 #include "Graphics/Entities/Entity.h"
 
 //=============================================================================================================================================//

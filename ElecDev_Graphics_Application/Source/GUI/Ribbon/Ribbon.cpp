@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Ribbon.h"
-#include <Core/imgui.h>
+#include <imgui/imgui.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
@@ -12,7 +12,7 @@
 #include <External/Misc/stb_image.h>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <Core/imgui_internal.h>
+#include <imgui/imgui_internal.h>
 
 #include "Lumen.h"
 #include "Application/Application.h"

@@ -10,8 +10,8 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Resources/ResourceHandler.h"
-#include "External/ImGUI/Core/imgui.h"
-#include "External/ImGUI/Core/imgui_internal.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
