@@ -23,6 +23,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	emitter << YAML::Key << "Layer offset" << YAML::Value << comp->portLayerOffset;
 	emitter << YAML::Key << "Number of ports" << YAML::Value << comp->numPorts;
 	emitter << YAML::Key << "Internal circuit" << YAML::Value << "Test AE 234";
+	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->cableDict;
 
 	// Shape.
 	emitter << YAML::Key << "Shape" << YAML::Value;
@@ -68,6 +69,24 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Co
 		emitter << YAML::Key << "Component " + std::to_string(componentIndex) << YAML::Value << comp;
 		componentIndex++;
 	}
+	// Done.
+	emitter << YAML::EndMap;
+	return emitter;
+}
+
+//=============================================================================================================================================//
+//  Component2D Vector serialiser.   																										   //
+//=============================================================================================================================================//
+
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string, std::string>& dict) 
+{
+	// Begin.
+	emitter << YAML::BeginMap;
+
+	// Data.
+	for (auto& [key, value] : dict)
+		emitter << YAML::Key << key << YAML::Value << value;
+
 	// Done.
 	emitter << YAML::EndMap;
 	return emitter;

@@ -12,6 +12,7 @@ storing circuit templates/diagrams in a YAML format.
 #include <string>
 #include "External/GLM/glm.hpp"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
+#include <unordered_map>
 
 //=============================================================================================================================================//
 //  Forward decelrations.																													   //
@@ -85,6 +86,8 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Port>& port);
 //  Componenet 2D.																															   //
 //=============================================================================================================================================//
 
+// Component dictionary data.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string, std::string>& dict);
 // Serialise a single Component2D.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& comp);
 // Serialise a Component2D vecrtor.
