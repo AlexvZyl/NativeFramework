@@ -25,132 +25,132 @@ void Application::glfwInitCallbacks()
     // ------------------------- //
 
     glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
-    {
-        // Create the event ID. 
-        uint64_t eventID = 0;
-        if      (action == GLFW_PRESS)               { eventID |= EventType_MousePress;        }
-        else if (action == GLFW_RELEASE)             { eventID |= EventType_MouseRelease;      }
-        if      (button == GLFW_MOUSE_BUTTON_LEFT)   { eventID |= EventType_MouseButtonLeft;   }
-        else if (button == GLFW_MOUSE_BUTTON_RIGHT)  { eventID |= EventType_MouseButtonRight;  }
-        else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { eventID |= EventType_MouseButtonMiddle; }
-        // Key states.
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
+        {
+            // Create the event ID. 
+            uint64_t eventID = 0;
+            if      (action == GLFW_PRESS)               { eventID |= EventType_MousePress;        }
+            else if (action == GLFW_RELEASE)             { eventID |= EventType_MouseRelease;      }
+            if      (button == GLFW_MOUSE_BUTTON_LEFT)   { eventID |= EventType_MouseButtonLeft;   }
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT)  { eventID |= EventType_MouseButtonRight;  }
+            else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { eventID |= EventType_MouseButtonMiddle; }
+            // Key states.
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
-        // Get the cursor position.
-        double cursorX, cursorY;
-        glfwGetCursorPos(window, &cursorX, &cursorY);
+            // Get the cursor position.
+            double cursorX, cursorY;
+            glfwGetCursorPos(window, &cursorX, &cursorY);
 
-        // Log event.
-        MouseButtonEvent event(glm::vec2(cursorX, cursorY), eventID);
-        Lumen::getApp().logEvent<MouseButtonEvent>(event);
+            // Log event.
+            MouseButtonEvent event(glm::vec2(cursorX, cursorY), eventID);
+            Lumen::getApp().logEvent<MouseButtonEvent>(event);
 
-        // Pass event to ImGUI.
-        ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
-    });
+            // Pass event to ImGUI.
+            ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+        });
 
     // --------------------- //
     //  M O U S E   M O V E  //
     // --------------------- //
 
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
-    {
-        // Event ID.
-        uint64_t eventID = EventType_MouseMove;
-        // Mouse button states.
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
-        // Key states.
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
+        {
+            // Event ID.
+            uint64_t eventID = EventType_MouseMove;
+            // Mouse button states.
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+            // Key states.
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
-        // Get the cursor position.
-        double cursorX, cursorY;
-        glfwGetCursorPos(window, &cursorX, &cursorY);
+            // Get the cursor position.
+            double cursorX, cursorY;
+            glfwGetCursorPos(window, &cursorX, &cursorY);
 
-        // Log event.
-        MouseMoveEvent event(glm::vec2(cursorX, cursorY), eventID);
-        Lumen::getApp().logEvent<MouseMoveEvent>(event);
+            // Log event.
+            MouseMoveEvent event(glm::vec2(cursorX, cursorY), eventID);
+            Lumen::getApp().logEvent<MouseMoveEvent>(event);
 
-        // Pass event to ImGUI.
-        ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
-    });
+            // Pass event to ImGUI.
+            ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
+        });
 
     // ------------------------- //
     //  M O U S E   S C R O L L  //
     // ------------------------- //
 
     glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset)
-    {
-        // Event ID.
-        uint64_t eventID = EventType_MouseScroll;
-        // Mouse button states.
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
-        // Key states.
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
+        {
+            // Event ID.
+            uint64_t eventID = EventType_MouseScroll;
+            // Mouse button states.
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+            // Key states.
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
-        // Get the cursor position.
-        double cursorX, cursorY;
-        glfwGetCursorPos(window, &cursorX, &cursorY);
+            // Get the cursor position.
+            double cursorX, cursorY;
+            glfwGetCursorPos(window, &cursorX, &cursorY);
 
-        // Log event.
-        MouseScrollEvent event(glm::vec2(cursorX, cursorY), yoffset, eventID);
-        Lumen::getApp().logEvent<MouseScrollEvent>(event);
+            // Log event.
+            MouseScrollEvent event(glm::vec2(cursorX, cursorY), yoffset, eventID);
+            Lumen::getApp().logEvent<MouseScrollEvent>(event);
 
-        // Pass event to ImGUI.
-        ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
-    });
+            // Pass event to ImGUI.
+            ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+        });
 
     // ------- //
     //  K E Y  //
     // ------- //
 
     glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
-        // Event ID.
-        uint64_t eventID = 0;
-        if      (action == GLFW_PRESS)   { eventID |= EventType_KeyPress;   }
-        else if (action == GLFW_RELEASE) { eventID |= EventType_KeyRelease; }
-        else if (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
-        // Mouse button states.
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
-        // Key states.
-        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
-        if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
+        {
+            // Event ID.
+            uint64_t eventID = 0;
+            if      (action == GLFW_PRESS)   { eventID |= EventType_KeyPress;   }
+            else if (action == GLFW_RELEASE) { eventID |= EventType_KeyRelease; }
+            else if (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
+            // Mouse button states.
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+            // Key states.
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
 
-        // Get the cursor position.
-        double cursorX, cursorY;
-        glfwGetCursorPos(window, &cursorX, &cursorY);
+            // Get the cursor position.
+            double cursorX, cursorY;
+            glfwGetCursorPos(window, &cursorX, &cursorY);
 
-        // Log event.
-        KeyEvent event(key, eventID, glm::vec2(cursorX, cursorY));
-        Lumen::getApp().logEvent<KeyEvent>(event);
+            // Log event.
+            KeyEvent event(key, eventID, glm::vec2(cursorX, cursorY));
+            Lumen::getApp().logEvent<KeyEvent>(event);
 
-        // Pass event to ImGUI.
-        ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-    });
+            // Pass event to ImGUI.
+            ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+        });
     
     // --------- //
     //  D R O P  //
@@ -173,11 +173,11 @@ void Application::glfwInitCallbacks()
     // --------------------- //
 
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
-    {
-        // Create and log event.
-        WindowEvent event(glm::vec2(width, height), EventType_Application | EventType_WindowResize);
-        Lumen::getApp().logEvent<WindowEvent>(event);
-    });
+        {
+            // Create and log event.
+            WindowEvent event(glm::vec2(width, height), EventType_Application | EventType_WindowResize);
+            Lumen::getApp().logEvent<WindowEvent>(event);
+        });
 
     // ----------- //
     //  C L O S E  //
@@ -234,8 +234,8 @@ GLFWwindow* Application::glfwInitWindow()
     { 
         /* Log error here. */ 
     }
-    // Enable 8x MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 8);
+    // Enable MSAA.
+    glfwWindowHint(GLFW_SAMPLES, 1);
     // Remove decorations.
     //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);

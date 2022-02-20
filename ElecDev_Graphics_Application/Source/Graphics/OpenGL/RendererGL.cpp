@@ -92,28 +92,34 @@ void Renderer::render2DScene(Scene* scene)
 	//  R E N D E R I N G  //
 	// ------------------- //
 
+	// The shader used in rendering.
+	Shader* shader = nullptr;
+
 	// Draw background.
 	m_shaders["BackgroundShader2D"]->bind();
 	scene->m_backgroundVAO->render();
 
 	// Draw basic primitives.
-	m_shaders["BasicShader"]->bind();
-	m_shaders["BasicShader"]->setMat4("viewMatrix", scene->getViewMatrix());
-	m_shaders["BasicShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader = m_shaders["BasicShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	scene->m_linesVAO->render();
 	scene->m_trianglesVAO->render();
 
 	// Draw textured primitives.
-	m_shaders["TextureShader"]->bind();
-	m_shaders["TextureShader"]->setMat4("viewMatrix", scene->getViewMatrix());
-	m_shaders["TextureShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader = m_shaders["TextureShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	loadTextures(scene);
 	scene->m_texturedTrianglesVAO->render();
 
 	// Draw Circles.
-	m_shaders["CircleShader"]->bind();
-	m_shaders["CircleShader"]->setMat4("viewMatrix", scene->getViewMatrix());
-	m_shaders["CircleShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader = m_shaders["CircleShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	scene->m_circlesVAO->render();
 
 	// --------------- //
@@ -148,6 +154,9 @@ void Renderer::render3DScene(Scene* scene)
 	//  R E N D E R I N G  //
 	// ------------------- //
 
+	// The shader used in rendering.
+	Shader* shader = nullptr;
+
 	// Draw background.
 	m_shaders["BackgroundShader3D"]->bind();
 	setDepthFunc(GL_EQUAL);
@@ -155,23 +164,26 @@ void Renderer::render3DScene(Scene* scene)
 	setDepthFunc(GL_LESS);
 
 	// Draw basic primitives.
-	m_shaders["BasicShader"]->bind();
-	m_shaders["BasicShader"]->setMat4("viewMatrix", scene->getViewMatrix());
-	m_shaders["BasicShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader = m_shaders["BasicShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	scene->m_linesVAO->render();
 	scene->m_trianglesVAO->render();
 
 	// Draw textured primitives.
-	m_shaders["TextureShader"]->bind();
-	m_shaders["TextureShader"]->setMat4("viewMatrix", scene->getViewMatrix());
-	m_shaders["TextureShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader = m_shaders["TextureShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	loadTextures(scene);
 	scene->m_texturedTrianglesVAO->render();
 
 	// Draw Circles.
-	m_shaders["CircleShader"]->bind();
-	m_shaders["CircleShader"]->setMat4("viewMatrix", scene->getViewMatrix());
-	m_shaders["CircleShader"]->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader = m_shaders["CircleShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	scene->m_circlesVAO->render();
 
 	// --------------- //
@@ -313,7 +325,7 @@ void Renderer::initialise()
 	GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
 	GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
-	GLCall(glClearColor(0.08f, 0.08f, 0.10f, 1.00f));           // Set the color to which OpenGL clears.
+	GLCall(glClearColor(1.f, 0.0f, 1.0f, 1.0f));				// Set the color to which OpenGL clears.
 
 	// Compiles the shaders used by the renderer and the FBO.
 	Renderer::compileShaders();

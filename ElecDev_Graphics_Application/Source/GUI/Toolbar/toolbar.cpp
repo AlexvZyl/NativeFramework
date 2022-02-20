@@ -51,7 +51,7 @@ void Toolbar::onRender()
     Application& app = Lumen::getApp();
     
     // Draw the image.
-    float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
+    static float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
 
     // --------- //

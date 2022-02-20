@@ -88,9 +88,9 @@ void Ribbon::onRender()
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
         // Testing.
-        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::LeftPanel);
-        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::RightPanel);
-        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::BottomPanel);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::Left);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::Right);
+        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::Bottom);
     }
 
     // Add design engine.
