@@ -32,12 +32,12 @@ struct GLFWwindow;
 
 enum class DockPanel 
 {
-	FixedPanel,	// These panels are handled manually.
+	Fixed,	// These panels are handled manually.
 	Floating,
-	LeftPanel,
-	RightPanel,
-	BottomPanel,
-	ScenePanel
+	Left,
+	Right,
+	Bottom,
+	Scene
 };
 
 //==============================================================================================================================================//
@@ -65,7 +65,7 @@ public:
 
 	// Push an engine onto the layerstack.
 	template<typename EngineType>
-	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  DockPanel dockPanel = DockPanel::ScenePanel, int imguiWindowFlags = 0);
+	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  DockPanel dockPanel = DockPanel::Scene, int imguiWindowFlags = 0);
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
 	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, DockPanel dockPanel = DockPanel::Floating, int imguiWindowFlags = 0);
@@ -164,7 +164,7 @@ private:
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
 	// Renders the initial frame that is required for the dock builder.
-	void renderInitialFrame();
+	void buildDocks();
 	// Set the ImGUI theme.
 	void setGuiTheme();
 	// The default font used.

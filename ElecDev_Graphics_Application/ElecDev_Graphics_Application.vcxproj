@@ -184,6 +184,10 @@
     <ClCompile Include="External\imgui\imgui_tables.cpp" />
     <ClCompile Include="External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="External\imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="External\implot\implot.cpp" />
+    <ClCompile Include="External\implot\implot_demo.cpp" />
+    <ClCompile Include="External\implot\implot_items.cpp" />
+    <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
@@ -578,6 +582,8 @@
     <ClInclude Include="External\imgui\imstb_textedit.h" />
     <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="External\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="External\implot\implot.h" />
+    <ClInclude Include="External\implot\implot_internal.h" />
     <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
     <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\Application\Layers\LayerStack.h" />

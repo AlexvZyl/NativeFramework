@@ -14,49 +14,6 @@
 //  Rendering.																																	//
 //==============================================================================================================================================//
 
-void Application::renderInitialFrame() 
-{	
-	// Init.
-	onRenderInit();
-
-	// Pointer used to access nodes.
-	ImGuiDockNode* dockNode = nullptr;
-
-	// Ribbon dock.
-	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.033f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(ribbonDockID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
-						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
-						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
-						 | ImGuiDockNodeFlags_NoTabBar;
-	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
-
-	// Left Panel.
-	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.1f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
-
-	// Right Panel.
-	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.1f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
-
-	// Bottom Panel.
-	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.15f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
-
-	// Scene dock.
-	dockNode = ImGui::DockBuilderGetNode(m_scenePanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
-
-	// Finish dock builder.
-	ImGui::DockBuilderFinish(m_mainDockspaceID);
-
-	// Cleanup.
-	onRenderCleanup();
-}
-
 void Application::onRenderInit()
 {
 	// Clear buffers.
@@ -69,9 +26,7 @@ void Application::onRenderInit()
 
 	// Enable docking in main viewport.
 	// Do we really have to call this every frame?
-	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
-	ImGuiDockNode* mainDockNode = ImGui::DockBuilderGetNode(m_mainDockspaceID);
-	mainDockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
 
 	// Push custom font.
 	ImGui::PushFont(m_defaultFont);
@@ -86,6 +41,8 @@ void Application::onRender()
 	// Has to be called after the init so all of the ImGui data
 	// is updated.
 	dispatchEvents();
+
+	ImGui::ShowStyleEditor();
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.

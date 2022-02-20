@@ -110,6 +110,10 @@
     <ClCompile Include="External\imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="External\imgui\backends\imgui_impl_opengl2.cpp" />
     <ClCompile Include="External\imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="External\implot\implot.cpp" />
+    <ClCompile Include="External\implot\implot_demo.cpp" />
+    <ClCompile Include="External\implot\implot_items.cpp" />
+    <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -765,6 +769,8 @@
     <ClInclude Include="External\imgui\backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="External\imgui\backends\imgui_impl_opengl2.h" />
     <ClInclude Include="External\imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="External\implot\implot.h" />
+    <ClInclude Include="External\implot\implot_internal.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
