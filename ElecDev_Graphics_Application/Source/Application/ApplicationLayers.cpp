@@ -30,17 +30,17 @@ void Application::buildDocks()
 	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
 
 	// Left Panel.
-	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.1f, NULL, &m_scenePanelID);
+	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
 	// Right Panel.
-	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.1f, NULL, &m_scenePanelID);
+	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
 	// Right Panel.
-	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.15f, NULL, &m_scenePanelID);
+	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.35f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 

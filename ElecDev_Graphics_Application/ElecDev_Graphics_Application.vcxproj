@@ -262,6 +262,7 @@
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\Graphics\Vulkan\README.md" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
+    <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditorPopup\ComponentEditorPopup.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\GuiElementCore\GuiElementCore.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
@@ -698,6 +699,7 @@
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Application\GuiState.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
+    <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditorPopup\ComponentEditorPopup.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />

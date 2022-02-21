@@ -42,7 +42,8 @@ void Application::onRender()
 	// is updated.
 	dispatchEvents();
 
-	//ImGui::ShowStyleEditor();
+	ImGui::ShowStyleEditor();
+	//ImGui::ShowDemoWindow();
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.

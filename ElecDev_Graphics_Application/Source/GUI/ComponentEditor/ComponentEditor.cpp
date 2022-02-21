@@ -12,6 +12,7 @@
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Application.h"	
+#include "ComponentEditorPopup/ComponentEditorPopup.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -28,7 +29,9 @@ void ComponentEditor::begin()
 	// Place editor at correct position.
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The wondow size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2{ 465.f, 400 }, ImGuiCond_Once);
+	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
+	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
@@ -43,15 +46,15 @@ void ComponentEditor::onRender()
 		return;
 	}
 
-	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
-	ImGui::SameLine();
+	ImGui::Text(" Name:\t");
 	ImGui::SameLine();
 	if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 	{
 		activeComponent->title->updateText(activeComponent->titleString);
 	}
 
+	ImGui::Text(" Type:\t");
+	ImGui::SameLine();
 	ImGui::InputText("##Equipment Type", &activeComponent->equipType);
 
 	// Get Active component type to change component editor based on type
@@ -69,12 +72,12 @@ void ComponentEditor::onRender()
 		ImGui::TableHeadersRow();
 
 		ImGui::TableNextRow();
-		std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
-																	activeComponent->portsEast,
-																	activeComponent->portsNorth,
-																	activeComponent->portsSouth };
+		static std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
+																			activeComponent->portsEast,
+																			activeComponent->portsNorth,
+																			activeComponent->portsSouth };
 
-		std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
+		static std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
 
 		for (int i = 0; i < allPorts.size(); i++)
 		{
@@ -105,9 +108,8 @@ void ComponentEditor::onRender()
 				// Name.
 				ImGui::PushItemWidth(185.f);
 				if (ImGui::InputText(labelName, &port->m_label))
-				{
 					port->title->updateText(port->m_label);
-				}
+			
 				ImGui::PopItemWidth();
 				ImGui::TableNextColumn();
 
@@ -119,7 +121,8 @@ void ComponentEditor::onRender()
 				ImGui::TableNextColumn();
 
 				// Remove.
-				if (ImGui::Button(labelRemove)) { activeComponent->removePort(port); }
+				if (ImGui::Button(labelRemove)) 
+					activeComponent->removePort(port);
 
 			}
 			if (j) ImGui::Separator();
@@ -164,42 +167,86 @@ void ComponentEditor::onRender()
 		ImGui::TreePop();
 	}
 
+	// --------------------- //
+	//  D A T A   T A B L E  //
+	// --------------------- //
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Data Automation"))
 	{
-		ImGui::BeginTable("Columns to specify", 21, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX);
-
-		//Setup table columns
-		for (auto& [key, val]: activeComponent->cableDict) {
-			ImGui::TableSetupColumn(key.c_str());
+		// Add dict entry.
+		static std::string entryToAdd;
+		ImGui::Text("Add an attribute to the dictionary:");
+		ImGui::InputText("##DictEntry", &entryToAdd);
+		ImGui::SameLine();
+		if (ImGui::Button("Add"))
+		{
+			activeComponent->cableDict.insert({entryToAdd, "From(Circuit Database)"});
+			entryToAdd = "";
 		}
+
+		// Setup table.
+		ImGui::BeginTable("Columns to specify", 3,	  ImGuiTableFlags_Resizable		| ImGuiTableFlags_SizingFixedFit 
+													| ImGuiTableFlags_ScrollX		| ImGuiTableFlags_RowBg
+													| ImGuiTableFlags_Borders);
 		
+		// Setup header.
+		ImGui::TableSetupColumn("Attribute");
+		ImGui::TableSetupColumn("Function");
+		ImGui::TableSetupColumn("Action");
 		ImGui::TableHeadersRow();
 
-		// Port entry in table.
-		ImGui::TableNextRow();
-		ImGui::TableNextColumn();
+		// Store entries to be removed.
+		static std::vector<std::string> toRemove;
+		toRemove.reserve(1);
 
-		for (auto& [key, val]: activeComponent->cableDict) {
-			ImGui::PushItemWidth(-1);
-			ImGui::InputText(key.c_str(), &val);
+		// Table.
+		ImGui::PushItemWidth(-1);
+		for (auto& [key, val]: activeComponent->cableDict) 
+		{
+			// ID.
+			ImGui::PushID((int)key.c_str());
 
-			ImGui::PopItemWidth();
-			ImGui::TableNextColumn();
+			// Selectable.
+			bool isOpen = true;
+			ImGui::TableNextRow();
+			
+			// Dict data.
+			ImGui::TableSetColumnIndex(0);
+			/*if (ImGui::Selectable(key.c_str(), isOpen, ImGuiSelectableFlags_SpanAllColumns)) 
+			{
+				ComponentEditorPopup* popup = Lumen::getApp().pushGuiLayer<ComponentEditorPopup>("PopUp")->getGui();
+				popup->setComponentEditor(this);
+				popup->setPosition(getMousePosition());
+			}*/
+			ImGui::Text(key.c_str());
+			ImGui::TableSetColumnIndex(1);
+			ImGui::InputText("##Input", &val);
+			ImGui::TableSetColumnIndex(2);
 
+			// Remove button.
+			if (ImGui::Button("Remove"))
+				toRemove.push_back(key);
+
+			// ID.
+			ImGui::PopID();
 		}
+		ImGui::PopItemWidth();
 
-		//ImGui::SetColumnWidth(1, 20.f);
+		// Cleanup table.
 		ImGui::EndTable();
 		ImGui::TreePop();
-	}
 
-	ImGui::PopStyleColor();
+		// Remove entries.
+		for (auto& key : toRemove)
+			activeComponent->cableDict.erase(key);
+		toRemove.clear();
+	}
 }
 
 void ComponentEditor::end()
 {
+	ImGui::PopStyleColor();
 	ImGui::End();
 }
 
