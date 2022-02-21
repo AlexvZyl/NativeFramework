@@ -72,10 +72,10 @@ void ComponentEditor::onRender()
 		ImGui::TableHeadersRow();
 
 		ImGui::TableNextRow();
-		static std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
-																			activeComponent->portsEast,
-																			activeComponent->portsNorth,
-																			activeComponent->portsSouth };
+		std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
+																	 activeComponent->portsEast,
+																	 activeComponent->portsNorth,
+																	 activeComponent->portsSouth };
 
 		static std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
 
