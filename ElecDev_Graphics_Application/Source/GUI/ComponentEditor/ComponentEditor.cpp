@@ -107,9 +107,8 @@ void ComponentEditor::onRender()
 				// Name.
 				ImGui::PushItemWidth(185.f);
 				if (ImGui::InputText(labelName, &port->m_label))
-				{
 					port->title->updateText(port->m_label);
-				}
+			
 				ImGui::PopItemWidth();
 				ImGui::TableNextColumn();
 
@@ -121,7 +120,8 @@ void ComponentEditor::onRender()
 				ImGui::TableNextColumn();
 
 				// Remove.
-				if (ImGui::Button(labelRemove)) { activeComponent->removePort(port); }
+				if (ImGui::Button(labelRemove)) 
+					activeComponent->removePort(port);
 
 			}
 			if (j) ImGui::Separator();
@@ -173,16 +173,31 @@ void ComponentEditor::onRender()
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Data Automation"))
 	{
+		// Add dict entry.
+		static std::string entryToAdd;
+		ImGui::Text("Add an attribute to the dictionary:");
+		ImGui::InputText("##DictEntry", &entryToAdd);
+		ImGui::SameLine();
+		if (ImGui::Button("Add"))
+		{
+			activeComponent->cableDict.insert({entryToAdd, ""});
+			entryToAdd = "";
+		}
+
 		// Setup table.
-		ImGui::BeginTable("Columns to specify", 2,	  ImGuiTableFlags_Resizable		| ImGuiTableFlags_SizingFixedFit 
+		ImGui::BeginTable("Columns to specify", 3,	  ImGuiTableFlags_Resizable		| ImGuiTableFlags_SizingFixedFit 
 													| ImGuiTableFlags_ScrollX		| ImGuiTableFlags_RowBg
 													| ImGuiTableFlags_Borders);
 		
 		// Setup header.
 		ImGui::TableSetupColumn("Attribute");
 		ImGui::TableSetupColumn("Function");
+		ImGui::TableSetupColumn("Action");
 		ImGui::TableHeadersRow();
-		
+
+		// Store entries to be removed.
+		static std::vector<std::string> toRemove;
+		toRemove.reserve(1);
 		// Table data.
 		ImGui::PushItemWidth(-1);
 		for (auto& [key, val]: activeComponent->cableDict) 
@@ -191,13 +206,25 @@ void ComponentEditor::onRender()
 			ImGui::TableSetColumnIndex(0);
 			ImGui::Text(key.c_str());
 			ImGui::TableSetColumnIndex(1);
-			ImGui::InputText(key.c_str(), &val);
+			std::string inputLabel = "##Input" + key;
+			ImGui::InputText(inputLabel.c_str(), &val);
+			ImGui::TableSetColumnIndex(2);
+
+			// Remove.
+			std::string buttonLabel = "Remove##button" + key;
+			if (ImGui::Button(buttonLabel.c_str()))
+				toRemove.push_back(key);
 		}
 		ImGui::PopItemWidth();
 
 		// Cleanup table.
 		ImGui::EndTable();
 		ImGui::TreePop();
+
+		// Remove entries.
+		for (auto& key : toRemove)
+			activeComponent->cableDict.erase(key);
+		toRemove.clear();
 	}
 }
 
