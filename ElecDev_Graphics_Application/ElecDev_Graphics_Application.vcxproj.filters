@@ -114,6 +114,7 @@
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
     <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
+    <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditorPopup\ComponentEditorPopup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -771,6 +772,7 @@
     <ClInclude Include="External\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="External\implot\implot.h" />
     <ClInclude Include="External\implot\implot_internal.h" />
+    <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditorPopup\ComponentEditorPopup.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

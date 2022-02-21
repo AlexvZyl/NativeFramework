@@ -42,7 +42,7 @@ void Application::onRender()
 	// is updated.
 	dispatchEvents();
 
-	//ImGui::ShowStyleEditor();
+	ImGui::ShowStyleEditor();
 	//ImGui::ShowDemoWindow();
 
 	// Render all of the layers.

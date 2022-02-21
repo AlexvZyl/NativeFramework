@@ -12,6 +12,7 @@
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Application.h"	
+#include "ComponentEditorPopup/ComponentEditorPopup.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -71,12 +72,12 @@ void ComponentEditor::onRender()
 		ImGui::TableHeadersRow();
 
 		ImGui::TableNextRow();
-		std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
-																	activeComponent->portsEast,
-																	activeComponent->portsNorth,
-																	activeComponent->portsSouth };
+		static std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
+																			activeComponent->portsEast,
+																			activeComponent->portsNorth,
+																			activeComponent->portsSouth };
 
-		std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
+		static std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
 
 		for (int i = 0; i < allPorts.size(); i++)
 		{
@@ -180,7 +181,7 @@ void ComponentEditor::onRender()
 		ImGui::SameLine();
 		if (ImGui::Button("Add"))
 		{
-			activeComponent->cableDict.insert({entryToAdd, ""});
+			activeComponent->cableDict.insert({entryToAdd, "From(Circuit Database)"});
 			entryToAdd = "";
 		}
 
@@ -198,22 +199,42 @@ void ComponentEditor::onRender()
 		// Store entries to be removed.
 		static std::vector<std::string> toRemove;
 		toRemove.reserve(1);
-		// Table data.
+
+		// Table.
 		ImGui::PushItemWidth(-1);
 		for (auto& [key, val]: activeComponent->cableDict) 
 		{
+			// ID.
+			ImGui::PushID((int)key.c_str());
+
+			// Selectable.
+			bool isOpen = true;
 			ImGui::TableNextRow();
+			
+			// Dict data.
 			ImGui::TableSetColumnIndex(0);
-			ImGui::Text(key.c_str());
+			if (ImGui::Selectable(key.c_str(), isOpen, ImGuiSelectableFlags_SpanAllColumns)) 
+			{
+
+				
+
+				if (ImGui::IsMouseDoubleClicked(0))
+				{
+					ComponentEditorPopup* popup = Lumen::getApp().pushGuiLayer<ComponentEditorPopup>("PopUp")->getGui();
+					popup->setComponentEditor(this);
+					popup->setPosition(getMousePosition());
+				}
+			}
 			ImGui::TableSetColumnIndex(1);
-			std::string inputLabel = "##Input" + key;
-			ImGui::InputText(inputLabel.c_str(), &val);
+			ImGui::InputText("##Input", &val);
 			ImGui::TableSetColumnIndex(2);
 
-			// Remove.
-			std::string buttonLabel = "Remove##button" + key;
-			if (ImGui::Button(buttonLabel.c_str()))
+			// Remove button.
+			if (ImGui::Button("Remove"))
 				toRemove.push_back(key);
+
+			// ID.
+			ImGui::PopID();
 		}
 		ImGui::PopItemWidth();
 

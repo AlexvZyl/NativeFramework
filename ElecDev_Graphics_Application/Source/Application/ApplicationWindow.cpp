@@ -278,7 +278,7 @@ GLFWwindow* Application::glfwInitWindow()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    // For now it is disabled.  How do we pass events to viewports that are outside of the glfw window?
+    // Multi viewports still seem to be buggy.
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 

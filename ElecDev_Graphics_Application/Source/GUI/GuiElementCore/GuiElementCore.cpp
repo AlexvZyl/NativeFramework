@@ -7,6 +7,9 @@
 #include "Application/Events/Events.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "Application/Application.h"
+#include "Lumen.h"
+#include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  Rendering.																																	//
@@ -146,6 +149,18 @@ void GuiElementCore::detectContentRegionMove()
 		WindowEvent event(contentRegionPos, EventType_WindowMove);
 		onEvent(event);
 	}
+}
+
+glm::vec2 GuiElementCore::getMousePosition() 
+{
+	// Get the cursor position.
+	double cursorX, cursorY;
+	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
+	glm::vec2 cursorPos = {
+		cursorX - m_contentRegionPosition.x,
+		cursorY - m_contentRegionPosition.y
+	};
+	return cursorPos;
 }
 
 //==============================================================================================================================================//
