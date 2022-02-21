@@ -28,7 +28,9 @@ void ComponentEditor::begin()
 	// Place editor at correct position.
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The wondow size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2{ 465.f, 400 }, ImGuiCond_Once);
+	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
+	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
@@ -43,15 +45,15 @@ void ComponentEditor::onRender()
 		return;
 	}
 
-	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
-	ImGui::SameLine();
+	ImGui::Text(" Name:\t");
 	ImGui::SameLine();
 	if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 	{
 		activeComponent->title->updateText(activeComponent->titleString);
 	}
 
+	ImGui::Text(" Type:\t");
+	ImGui::SameLine();
 	ImGui::InputText("##Equipment Type", &activeComponent->equipType);
 
 	// Get Active component type to change component editor based on type
@@ -164,42 +166,44 @@ void ComponentEditor::onRender()
 		ImGui::TreePop();
 	}
 
+	// --------------------- //
+	//  D A T A   T A B L E  //
+	// --------------------- //
 
 	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 	if (ImGui::TreeNode("Data Automation"))
 	{
-		ImGui::BeginTable("Columns to specify", 21, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX);
-
-		//Setup table columns
-		for (auto& [key, val]: activeComponent->cableDict) {
-			ImGui::TableSetupColumn(key.c_str());
-		}
+		// Setup table.
+		ImGui::BeginTable("Columns to specify", 2,	  ImGuiTableFlags_Resizable		| ImGuiTableFlags_SizingFixedFit 
+													| ImGuiTableFlags_ScrollX		| ImGuiTableFlags_RowBg
+													| ImGuiTableFlags_Borders);
 		
+		// Setup header.
+		ImGui::TableSetupColumn("Attribute");
+		ImGui::TableSetupColumn("Function");
 		ImGui::TableHeadersRow();
-
-		// Port entry in table.
-		ImGui::TableNextRow();
-		ImGui::TableNextColumn();
-
-		for (auto& [key, val]: activeComponent->cableDict) {
-			ImGui::PushItemWidth(-1);
+		
+		// Table data.
+		ImGui::PushItemWidth(-1);
+		for (auto& [key, val]: activeComponent->cableDict) 
+		{
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text(key.c_str());
+			ImGui::TableSetColumnIndex(1);
 			ImGui::InputText(key.c_str(), &val);
-
-			ImGui::PopItemWidth();
-			ImGui::TableNextColumn();
-
 		}
+		ImGui::PopItemWidth();
 
-		//ImGui::SetColumnWidth(1, 20.f);
+		// Cleanup table.
 		ImGui::EndTable();
 		ImGui::TreePop();
 	}
-
-	ImGui::PopStyleColor();
 }
 
 void ComponentEditor::end()
 {
+	ImGui::PopStyleColor();
 	ImGui::End();
 }
 

@@ -117,6 +117,13 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 		component->title->updateText(compTitle);
 		component->titleString = compTitle;
 
+		// Dictionary.
+		YAML::Node componentDict = componentNode["Dictionary"];
+		for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
+		{
+			component->cableDict.insert({it->first.as<std::string>(), it->second.as<std::string>()});
+		}
+
 		// ----------- //
 		//  P O R T S  //
 		// ----------- //

@@ -43,6 +43,7 @@ void Application::onRender()
 	dispatchEvents();
 
 	//ImGui::ShowStyleEditor();
+	//ImGui::ShowDemoWindow();
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.
