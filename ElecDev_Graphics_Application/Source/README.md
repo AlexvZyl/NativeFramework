@@ -292,7 +292,7 @@ TODO: Cullen to add a section on `Entity` parents.
 // #include "Application.h"
 // #include "Engines/My2DEngine/My2DEngine.h"
 
-Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name");
+Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name", DockPanel::Scene);
 ```
 
 Pushing layers into Lumen only allows constructors that provide names and flags (flags are not important for the developer).  So if you want to have extra arguments passed into the constructor you can do something like:
@@ -302,7 +302,7 @@ Pushing layers into Lumen only allows constructors that provide names and flags 
 // #include "Application.h"
 // #include "Engines/My2DEngine/My2DEngine.h"
 
-My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name")->getEngine();
+My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name", DockPanel::Scene)->getEngine();
 myEnginePtr->init(...);
 ```
 
@@ -410,8 +410,8 @@ Now we have a GUI with a single button.  When the button is pressed, it calls a 
 Application& app = Lumen::getApp();
 
 // Create the windows inside Lumen.
-My2DEngine* engine = app.pushEngineLayer<My2DEngine>("My Engine")->getEngine();
-MyGui* gui = app.pushGuiLayer<MyGui>("My Gui")->getGui();
+My2DEngine* engine = app.pushEngineLayer<My2DEngine>("My Engine", DockPanel::Scene)->getEngine();
+MyGui* gui = app.pushGuiLayer<MyGui>("My Gui", DockPanel::Left)->getGui();
 
 // Now some setup.
 gui->setEngine(engine);
