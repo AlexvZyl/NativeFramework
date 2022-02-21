@@ -118,6 +118,7 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 		component->titleString = compTitle;
 
 		// Dictionary.
+		component->cableDict.clear();
 		YAML::Node componentDict = componentNode["Dictionary"];
 		for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
 		{
