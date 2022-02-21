@@ -213,18 +213,13 @@ void ComponentEditor::onRender()
 			
 			// Dict data.
 			ImGui::TableSetColumnIndex(0);
-			if (ImGui::Selectable(key.c_str(), isOpen, ImGuiSelectableFlags_SpanAllColumns)) 
+			/*if (ImGui::Selectable(key.c_str(), isOpen, ImGuiSelectableFlags_SpanAllColumns)) 
 			{
-
-				
-
-				if (ImGui::IsMouseDoubleClicked(0))
-				{
-					ComponentEditorPopup* popup = Lumen::getApp().pushGuiLayer<ComponentEditorPopup>("PopUp")->getGui();
-					popup->setComponentEditor(this);
-					popup->setPosition(getMousePosition());
-				}
-			}
+				ComponentEditorPopup* popup = Lumen::getApp().pushGuiLayer<ComponentEditorPopup>("PopUp")->getGui();
+				popup->setComponentEditor(this);
+				popup->setPosition(getMousePosition());
+			}*/
+			ImGui::Text(key.c_str());
 			ImGui::TableSetColumnIndex(1);
 			ImGui::InputText("##Input", &val);
 			ImGui::TableSetColumnIndex(2);
