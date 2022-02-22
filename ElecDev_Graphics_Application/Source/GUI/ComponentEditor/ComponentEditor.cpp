@@ -276,8 +276,7 @@ void ComponentEditor::onRender()
 
 		if (ImGui::Button("Insert From function"))
 		{
-			from += fromSelection[databaseSelector];
-			from += end;
+			from += fromSelection[databaseSelector] + end;
 			activeComponent->cableDict[buffer[fromSelector]] = from;
 		}
 
@@ -288,7 +287,7 @@ void ComponentEditor::onRender()
 	//     SIZE     //
 	// ------------ //
 
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("Size"))
 	{
 		ImGui::Combo("Select Column##size", &sizeSelector, buffer, IM_ARRAYSIZE(buffer));
@@ -298,6 +297,84 @@ void ComponentEditor::onRender()
 		if (ImGui::Button("Insert Size function"))
 		{
 			activeComponent->cableDict[buffer[sizeSelector]] = "Size()";
+		}
+
+		ImGui::TreePop();
+	}
+
+	// --------------------- //
+	//      IF STATEMENT     //
+	// --------------------- //
+
+	// This should be the number of components of a specific type or the names of the components
+	const char* ifRowSelection[] = { "0", "1", "2", "3" };
+
+	std::string ifString = "IF(";
+
+	std::string forwardBracket = "[";
+
+	std::string backwardBracket = "]";
+
+	std::string comma = ",";
+
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+	if (ImGui::TreeNode("IF"))
+	{
+		ImGui::Combo("Select Column##IF", &ifSelector, buffer, IM_ARRAYSIZE(buffer));
+
+		ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, IM_ARRAYSIZE(buffer));
+
+		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, ifRowSelection, IM_ARRAYSIZE(ifRowSelection));
+
+		ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
+
+		ImGui::InputText("##Comparison Value", &comparisonValue);
+
+		ImGui::InputText("##True Statement", &trueStatement);
+
+		ImGui::InputText("##False Statement", &falseStatement);
+
+		if (ImGui::Button("Insert IF function"))
+		{
+			if (trueStatement.find(comma) != std::string::npos) {
+				trueStatement = forwardBracket + trueStatement + backwardBracket;
+			}
+			if (comparisonValue.find(comma) != std::string::npos) {
+				comparisonValue = forwardBracket + comparisonValue + backwardBracket;
+			}
+
+			ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
+			activeComponent->cableDict[buffer[ifSelector]] = ifString;
+		}
+
+		ImGui::TreePop();
+	}
+
+	// --------------------- //
+	//      COMBINE TEXT     //
+	// --------------------- //
+
+// This should be the number of components of a specific type or the names of the components
+	std::string combineText = "combine_text(";
+
+	std::string plusString = "+";
+
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+	if (ImGui::TreeNode("Combine Text"))
+	{
+		ImGui::Combo("Select Column##Combine", &combineSelector, buffer, IM_ARRAYSIZE(buffer));
+
+		if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, IM_ARRAYSIZE(buffer))) {
+			combineTextString += buffer[combineSelectorVariable] + plusString;
+		}
+
+		ImGui::InputText("##Combine String", &combineTextString);
+
+		if (ImGui::Button("Insert Combine function"))
+		{
+			combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
+			combineText += combineTextString + end;
+			activeComponent->cableDict[buffer[combineSelector]] = combineText;
 		}
 
 		ImGui::TreePop();
