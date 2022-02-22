@@ -133,8 +133,9 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 		newLayer->onEvent(focusEvent);
 		newLayer->focus();
 	}
-	// No layer is in focus.
-	else ImGui::SetWindowFocus(NULL);
+
+	// We should not handle setting no window focused manually,
+	// this breaks with things such as combo boxes.  We leave it to imgui.
 
 	// Assign new focused layer.
 	m_focusedLayer = newLayer;
