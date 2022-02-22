@@ -173,6 +173,15 @@ void ComponentEditor::onRender()
 
 	const char* buffer[5];
 
+	int i = 0;
+
+	for (auto& [key, val] : activeComponent->cableDict)
+	{
+
+		buffer[i] = key.c_str();
+		i++;
+	}
+
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("Data Automation"))
 	{
@@ -202,15 +211,13 @@ void ComponentEditor::onRender()
 		static std::vector<std::string> toRemove;
 		toRemove.reserve(1);
 
-		int i = 0;
+		
 		// Table.
 		ImGui::PushItemWidth(-1);
 		for (auto& [key, val]: activeComponent->cableDict) 
 		{
 			// ID.
 			ImGui::PushID((int)key.c_str());
-
-			buffer[i] = key.c_str();
 
 			// Selectable.
 			bool isOpen = true;
@@ -235,8 +242,6 @@ void ComponentEditor::onRender()
 
 			// ID.
 			ImGui::PopID();
-
-			//i+=1;
 		}
 		ImGui::PopItemWidth();
 
@@ -254,12 +259,28 @@ void ComponentEditor::onRender()
 	//     FROM SELECTION    //
 	// --------------------- //
 
+	const char* fromSelection[] = {"Circuit Database", "Motor Database", "Cable Database"};
+
+	std::string from = "FROM(";
+
+	std::string end = ")";
+
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("From"))
 	{
 		// int* typeval2 = (int*)&activeComponent->cableDict;
-		ImGui::Combo("Select columns", &typeval2, buffer, 3);
+		ImGui::Combo("Select Column##From", &fromSelector, buffer, IM_ARRAYSIZE(buffer));
+
+		ImGui::Combo("Select Column##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 		// ImGui::Text("Hello World");
+
+		if (ImGui::Button("Insert From function"))
+		{
+			from += fromSelection[databaseSelector];
+			from += end;
+			activeComponent->cableDict[buffer[fromSelector]] = from;
+		}
+
 		ImGui::TreePop();
 	}
 
@@ -267,20 +288,20 @@ void ComponentEditor::onRender()
 	//     SIZE     //
 	// ------------ //
 
-	//ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-	//if (ImGui::TreeNode("Size"))
-	//{
-	//	ImGui::Combo("Size", &typeval3, buffer, 5);
-	//	// ImGui::Text(std::to_string(typeval3).c_str());
-	//	
+	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	if (ImGui::TreeNode("Size"))
+	{
+		ImGui::Combo("Select Column##size", &sizeSelector, buffer, IM_ARRAYSIZE(buffer));
+		// ImGui::Text(std::to_string(typeval3).c_str());
+		
 
-	//	//if (ImGui::Button("Insert Size function"))
-	//	//{
-	//	//	std::to_string(typeval3).c_str();
-	//	//}
+		if (ImGui::Button("Insert Size function"))
+		{
+			activeComponent->cableDict[buffer[sizeSelector]] = "Size()";
+		}
 
-	//	ImGui::TreePop();
-	//}
+		ImGui::TreePop();
+	}
 
 }
 
