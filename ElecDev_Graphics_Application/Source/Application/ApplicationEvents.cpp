@@ -16,6 +16,10 @@
 
 void Application::dispatchEvents()
 {
+	// Pop the layers queued from the render loop.
+	// Dispatched here so that they do not get GLFW events.
+	popLayers();
+
 	// Find the hovered layer on a mouse move event.
 	if (m_eventLog->mouseMove)
 	{
@@ -55,8 +59,9 @@ void Application::dispatchEvents()
 		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 
-	// Some layers are queued to pop after events.
-	m_layerStack->popLayers();
+	// Pop layers that are queued from GLFW events.
+	// We pop them here so that they do not get dispatched for events.
+	popLayers();
 
 	// Dispatch the events that are handled by the layers.
 	// These include things such as window resizes and docking state changes.
@@ -119,6 +124,12 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	// Ensure change actually ocurred.
 	if (newLayer == m_focusedLayer) return;
 
+	// There are some cases where imgui thinks the layer not being hovered,
+	// but that might be because another item (that still belongs to the layer)
+	// is focused.  In these cases we do not want to defocus.
+	// If there is no item under the mouse the ID will be 0.
+	if (newLayer==nullptr && ImGui::GetHoveredID()) return;
+
 	// Create a defocus event.
 	if (m_focusedLayer)
 	{
@@ -133,9 +144,8 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 		newLayer->onEvent(focusEvent);
 		newLayer->focus();
 	}
-
-	// We should not handle setting no window focused manually,
-	// this breaks with things such as combo boxes.  We leave it to imgui.
+	// No layer is being hovered.
+	else ImGui::SetWindowFocus(NULL);
 
 	// Assign new focused layer.
 	m_focusedLayer = newLayer;

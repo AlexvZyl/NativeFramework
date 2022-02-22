@@ -70,6 +70,11 @@ void Application::queuePopLayer(std::string& layerName)
 	m_layerStack->queuePopLayer(*toPop);
 }
 
+void Application::popLayers() 
+{
+	m_layerStack->popLayers();
+}
+
 void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 {
 	// Dock the layer.
@@ -80,7 +85,7 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 		break;
 
 	case DockPanel::Left:
-		//ImGui::DockBuilderRemoveNode();
+		// Could have the left panel only consist of one GUI, like in VS Code.
 		ImGui::DockBuilderDockWindow(name.c_str(), m_leftPanelID);
 		break;
 

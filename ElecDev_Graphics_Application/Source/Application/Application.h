@@ -137,6 +137,8 @@ private:
 	Layer* findhoveredLayer();
 	// Dock a layer to the panel.
 	void dockLayerToPanel(std::string& name, DockPanel panel);
+	// Pop the layers queued for removal.
+	void popLayers();
 
 	// ------------- //
 	//  E V E N T S  //
