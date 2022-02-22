@@ -29,7 +29,8 @@ public:
 	virtual void end() override;
 
 private:
-
+	int typeval2 = 1;
+	int typeval3 = 1;
 	bool addingPort = false;
 	std::string newName = "Untitled";
 	int newType = 2;

@@ -59,7 +59,7 @@ void ComponentEditor::onRender()
 
 	// Get Active component type to change component editor based on type
 
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports"))
 	{
 		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit);
@@ -171,7 +171,9 @@ void ComponentEditor::onRender()
 	//  D A T A   T A B L E  //
 	// --------------------- //
 
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	const char* buffer[5];
+
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("Data Automation"))
 	{
 		// Add dict entry.
@@ -200,12 +202,15 @@ void ComponentEditor::onRender()
 		static std::vector<std::string> toRemove;
 		toRemove.reserve(1);
 
+		int i = 0;
 		// Table.
 		ImGui::PushItemWidth(-1);
 		for (auto& [key, val]: activeComponent->cableDict) 
 		{
 			// ID.
 			ImGui::PushID((int)key.c_str());
+
+			buffer[i] = key.c_str();
 
 			// Selectable.
 			bool isOpen = true;
@@ -230,6 +235,8 @@ void ComponentEditor::onRender()
 
 			// ID.
 			ImGui::PopID();
+
+			//i+=1;
 		}
 		ImGui::PopItemWidth();
 
@@ -242,6 +249,39 @@ void ComponentEditor::onRender()
 			activeComponent->cableDict.erase(key);
 		toRemove.clear();
 	}
+
+	// --------------------- //
+	//     FROM SELECTION    //
+	// --------------------- //
+
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+	if (ImGui::TreeNode("From"))
+	{
+		// int* typeval2 = (int*)&activeComponent->cableDict;
+		ImGui::Combo("Select columns", &typeval2, buffer, 3);
+		// ImGui::Text("Hello World");
+		ImGui::TreePop();
+	}
+
+	// ------------ //
+	//     SIZE     //
+	// ------------ //
+
+	//ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	//if (ImGui::TreeNode("Size"))
+	//{
+	//	ImGui::Combo("Size", &typeval3, buffer, 5);
+	//	// ImGui::Text(std::to_string(typeval3).c_str());
+	//	
+
+	//	//if (ImGui::Button("Insert Size function"))
+	//	//{
+	//	//	std::to_string(typeval3).c_str();
+	//	//}
+
+	//	ImGui::TreePop();
+	//}
+
 }
 
 void ComponentEditor::end()
