@@ -1,4 +1,4 @@
-# Lumen Graphics Engine
+# Lumen Design Engine
 
 ![image](https://user-images.githubusercontent.com/81622310/154917106-6c005226-f536-4917-933f-24afcb5b455a.png)
 
