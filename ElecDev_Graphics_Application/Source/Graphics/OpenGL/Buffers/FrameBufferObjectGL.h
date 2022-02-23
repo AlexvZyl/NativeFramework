@@ -101,7 +101,7 @@ private:
 	static std::unique_ptr<Shader> m_shader;
 
 	// Has the resources been deleted?
-	bool m_resourcesDeleted = false;
+	bool m_resourcesDeleted = true;
 };
 
 //=============================================================================================================================================//
