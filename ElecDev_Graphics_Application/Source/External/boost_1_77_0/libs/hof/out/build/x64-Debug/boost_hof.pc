@@ -1,6 +1,0 @@
-Name: boost_hof
-Description: C++ function utility library
-URL: https://github.com/pfultz2/hof
-Version: .
-
-Cflags: -IC:/Users/Admin/Documents/Ulrich/Automated-Electrical-Development/Lumen/ElecDev_Graphics_Application/Source/External/boost_1_77_0/libs/hof/out/install/x64-Debug/include
