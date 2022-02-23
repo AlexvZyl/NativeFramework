@@ -151,7 +151,9 @@ Cable::~Cable()
 
 	//remove title text
 	Renderer::remove(m_title1);
-	Renderer::remove(m_title2);
+	if (m_title2) {
+		Renderer::remove(m_title2);
+	}
 }
 
 //==============================================================================================================================================//
