@@ -64,7 +64,7 @@ Application::Application(GLFWwindow* window)
 
 	// Create the main GUI layers.
 	pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::Fixed);
-	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Fixed);
+	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
 }
 
 void Application::shutdown() 

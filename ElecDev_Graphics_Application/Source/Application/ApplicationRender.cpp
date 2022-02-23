@@ -42,13 +42,15 @@ void Application::onRender()
 	// is updated.
 	dispatchEvents();
 
-	ImGui::ShowStyleEditor();
-	//ImGui::ShowDemoWindow();
-
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.
 	for (auto& [name, layer] : m_layerStack->getLayers())
 		layer->onRender();
+
+#ifdef _DEBUG
+	//ImGui::ShowStyleEditor();
+	//ImGui::ShowDemoWindow();
+#endif // _DEBUG
 
 	// Cleanup.
 	onRenderCleanup();
@@ -78,7 +80,7 @@ void Application::onRenderCleanup()
 	}
 
 	// Push commands to the GPU.
-	//Renderer::finish();
+	Renderer::finish();
 
 	// Swap the window buffers.
 	glfwSwapBuffers(m_window);

@@ -18,6 +18,7 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
+#include "GUI/CircuitEditor/CircuitEditor.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -88,15 +89,15 @@ void Ribbon::onRender()
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
         // Testing.
-        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::Left);
-        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::Right);
-        Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::Bottom);
+        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::Left);
+        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::Right);
+        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::Bottom);
     }
 
     // Add design engine.
     if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 
     {
-        Lumen::getApp().pushEngineLayer<Design2DEngine>("Design 2D Engine");
+        Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }
 }
 
