@@ -134,7 +134,7 @@ private:
 	// in imgui.
 	void onFocusedLayerChange(Layer* newLayer);
 	// Find the layer that is being hovered.
-	Layer* findhoveredLayer();
+	Layer* findHoveredLayer();
 	// Dock a layer to the panel.
 	void dockLayerToPanel(std::string& name, DockPanel panel);
 	// Pop the layers queued for removal.

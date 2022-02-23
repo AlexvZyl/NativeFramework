@@ -24,10 +24,10 @@ void Application::dispatchEvents()
 	if (m_eventLog->mouseMove)
 	{
 		// If there is no hovered layer, we need to check if a layer is hovered.
-		if (!m_hoveredLayer) onHoveredLayerChange(findhoveredLayer());
+		if (!m_hoveredLayer) onHoveredLayerChange(findHoveredLayer());
 
 		// If the currently hovered layer is no longer being hovered we need to find the new layer.
-		else if(!m_hoveredLayer->isHovered()) onHoveredLayerChange(findhoveredLayer());
+		else if(!m_hoveredLayer->isHovered()) onHoveredLayerChange(findHoveredLayer());
 	}
 	
 	// Dispatch general events.
@@ -77,7 +77,7 @@ void Application::dispatchEvents()
 	m_eventLog->clear();
 }
 
-Layer* Application::findhoveredLayer() 
+Layer* Application::findHoveredLayer()
 {
 	// Find the layer that is being hovered.
 	// We do not have to worry about order, since dear imgui handles it.

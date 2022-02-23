@@ -39,7 +39,7 @@ void Application::buildDocks()
 	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
-	// Right Panel.
+	// Bottom Panel.
 	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.35f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;

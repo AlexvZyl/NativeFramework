@@ -1,55 +1,38 @@
-/*=======================================================================================================================================*/
-/* Includes.																															 */
-/*=======================================================================================================================================*/
+//=======================================================================================================================================//
+// Includes.																															 //
+//=======================================================================================================================================//
 
 #include "CircuitEditor.h"
-#include "Graphics/graphicsHandler.h"
-#include "ImGui/misc/cpp/imgui_stdlib.h"
-#include "GUI/guiHandler.h"
 
-/*=======================================================================================================================================*/
-/* Circuit Editor.																													 */
-/*=======================================================================================================================================*/
+//=======================================================================================================================================//
+// Circuit editor.																														 //
+//=======================================================================================================================================//
 
-CircuitEditor::CircuitEditor(GUIState* guiState, GraphicsHandler* graphicsHandler)
-	: m_guiState(guiState), m_graphicsHandler(graphicsHandler), m_circuitName("Untitled " + std::to_string(m_circuitCount))
+CircuitEditor::CircuitEditor(std::string name, int windowFlags)
+	: GuiElementCore(name, windowFlags)
 {
+
 }
 
-void CircuitEditor::render() 
+void CircuitEditor::begin() 
 {
-	// ----------- //
-	//  S E T U P  //
-	// ----------- //
+	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+}
 
-	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
-	//FIX ME!! The wondow size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2{ 400.f, 200.f }, ImGuiCond_Once);
-	ImGui::Begin("Circuit Editor", &m_guiState->circuitEditor, ImGuiWindowFlags_NoDocking);
+void CircuitEditor::onRender() 
+{
+	ImGui::Text("Circuit Name");
+	ImGui::SameLine();
+	static std::string circuitName = "";
+	ImGui::InputText("##circuitName", &circuitName);
+	if(ImGui)
+}
 
-	// ----------------- //
-	//  C O N T E N T S  //
-	// ----------------- //
-
-	
-	ImGui::InputText("Circuit Name", &m_circuitName);
-	if (ImGui::Button("Create")) 
-	{ 
-		m_graphicsHandler->m_addWindow = true;
-		m_guiState->circuitEditor = false;
-		m_graphicsHandler->m_newWindowTitle = m_circuitName; 
-		m_circuitName = "Untitled " + std::to_string(++m_circuitCount);
-	}
-
-	// --------- //
-	//  D O N E  //
-	// --------- //
-
+void CircuitEditor::end() 
+{
 	ImGui::End();
-	ImGui::PopStyleColor();
 }
 
-/*=======================================================================================================================================*/
-/* EOF.																																	 */
-/*=======================================================================================================================================*/
+//=======================================================================================================================================//
+// EOF.																																	 //
+//=======================================================================================================================================//
