@@ -10,7 +10,7 @@
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Application.h"	
-#include "ComponentEditorPopup/ComponentEditorPopup.h"
+// #include "ComponentEditorPopup/ComponentEditorPopup.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 
