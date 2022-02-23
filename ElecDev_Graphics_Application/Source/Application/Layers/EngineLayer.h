@@ -33,6 +33,14 @@ public:
 	// Destructor.
 	inline virtual ~EngineLayer() = default;
 
+	// Set the name of the elements.
+	inline virtual void setName(std::string name) override 
+	{
+		GuiLayer::setName(name);
+		m_engine->setName(name);
+	}
+
+
 	// Get the engine in the layer.
 	inline EngineType* getEngine() 
 	{

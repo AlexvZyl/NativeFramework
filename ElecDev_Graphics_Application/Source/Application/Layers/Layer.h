@@ -25,10 +25,10 @@ public:
 	inline virtual void dispatchEvents() = 0; 
 
 	// Set the name of all the elements in the layer.
-	inline virtual void setName(std::string& newName) = 0;
+	inline virtual void setName(std::string newName) = 0;
 
 	// Get the name of the layer.
-	inline virtual std::string& getName() = 0;
+	inline virtual std::string getName() = 0;
 
 	// Checks if the layer is hovered.
 	inline virtual bool isHovered() = 0;
