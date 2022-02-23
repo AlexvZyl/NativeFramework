@@ -12,6 +12,7 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
+#include "GUI/CircuitEditor/CircuitEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -113,6 +114,13 @@ void PopUpMenu::onRender()
     // --------------- //
     //  D E F A U L T  //
     // --------------- //
+
+    if (ImGui::MenuItem("Circuit Editor..."))
+    {
+        CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Right)->getGui();
+        editor->setEngine(m_engine);
+        editor->setActiveEngineTracking(true);
+    }
 
     if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
     {

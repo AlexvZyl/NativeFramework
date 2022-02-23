@@ -1,55 +1,90 @@
-/*=======================================================================================================================================*/
-/* Includes.																															 */
-/*=======================================================================================================================================*/
+//=======================================================================================================================================//
+// Includes.																															 //
+//=======================================================================================================================================//
 
 #include "CircuitEditor.h"
-#include "Graphics/graphicsHandler.h"
-#include "ImGui/misc/cpp/imgui_stdlib.h"
-#include "GUI/guiHandler.h"
+#include "Lumen.h"
+#include "Application/Application.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Application/Layers/EngineLayer.h"
 
-/*=======================================================================================================================================*/
-/* Circuit Editor.																													 */
-/*=======================================================================================================================================*/
+//=======================================================================================================================================//
+// Circuit editor.																														 //
+//=======================================================================================================================================//
 
-CircuitEditor::CircuitEditor(GUIState* guiState, GraphicsHandler* graphicsHandler)
-	: m_guiState(guiState), m_graphicsHandler(graphicsHandler), m_circuitName("Untitled " + std::to_string(m_circuitCount))
+CircuitEditor::CircuitEditor(std::string name, int windowFlags)
+	: GuiElementCore(name, windowFlags)
 {
+	m_imguiWindowFlags |= ImGuiWindowFlags_AlwaysAutoResize;
 }
 
-void CircuitEditor::render() 
+void CircuitEditor::begin() 
 {
-	// ----------- //
-	//  S E T U P  //
-	// ----------- //
+	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+}
 
-	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
-	//FIX ME!! The wondow size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2{ 400.f, 200.f }, ImGuiCond_Once);
-	ImGui::Begin("Circuit Editor", &m_guiState->circuitEditor, ImGuiWindowFlags_NoDocking);
+void CircuitEditor::onRender() 
+{
+	ImGui::NewLine();
 
-	// ----------------- //
-	//  C O N T E N T S  //
-	// ----------------- //
+	// Get the active engine.
+	if(m_trackActiveEngine)
+		m_engine = Lumen::getApp().m_guiState->design_engine;
 
-	
-	ImGui::InputText("Circuit Name", &m_circuitName);
-	if (ImGui::Button("Create")) 
-	{ 
-		m_graphicsHandler->m_addWindow = true;
-		m_guiState->circuitEditor = false;
-		m_graphicsHandler->m_newWindowTitle = m_circuitName; 
-		m_circuitName = "Untitled " + std::to_string(++m_circuitCount);
+	// --------------- //
+	//  C R E A T O R  //
+	// --------------- //
+
+	if (!m_trackActiveEngine)
+	{
+		ImGui::Text("Circuit Name");
+		ImGui::SameLine();
+		ImGui::InputText("##circuitName", &m_circuitNameOnCreation);
+		if (ImGui::Button("Create Circuit##CircuitCreatorButton"))
+		{
+			Application& app = Lumen::getApp();
+			app.pushEngineLayer<Design2DEngine>(m_circuitNameOnCreation);
+			app.queuePopLayer(m_name);
+		}
 	}
 
-	// --------- //
-	//  D O N E  //
-	// --------- //
+	// ------------- //
+	//  E D I T O R  //
+	// ------------- //
 
-	ImGui::End();
-	ImGui::PopStyleColor();
+	else if(m_trackActiveEngine && m_engine)
+	{
+		ImGui::Text("Circuit Name");
+		ImGui::SameLine();
+		if (ImGui::InputText("##circuitName", &m_engine->m_circuit->m_label)) 
+		{
+			auto* layer = Lumen::getApp().getEngineLayer<Design2DEngine>(m_engine);
+			layer->setName(m_engine->m_circuit->m_label);
+		}
+	}
+
+	else 
+	{
+		ImGui::Text("No active circuit.");
+	}
 }
 
-/*=======================================================================================================================================*/
-/* EOF.																																	 */
-/*=======================================================================================================================================*/
+void CircuitEditor::end() 
+{
+	ImGui::End();
+}
+
+void CircuitEditor::setEngine(EngineCore* engine) 
+{
+	m_engine = dynamic_cast<Design2DEngine*>(engine);
+}
+
+void CircuitEditor::setActiveEngineTracking(bool track)
+{
+	m_trackActiveEngine = track;
+}
+
+//=======================================================================================================================================//
+// EOF.																																	 //
+//=======================================================================================================================================//

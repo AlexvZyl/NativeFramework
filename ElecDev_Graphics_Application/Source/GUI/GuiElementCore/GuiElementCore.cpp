@@ -77,8 +77,13 @@ void GuiElementCore::onEvent(Event& event)
 
 void GuiElementCore::dispatchEvents()
 {
-	// Ensure window exists.
-	if (!m_imguiWindow) return;
+	// Get window if it does not exist.
+	if (!m_imguiWindow)
+	{
+		m_imguiWindow = ImGui::FindWindowByName(m_name.c_str());
+		// If it does still not exist, return.
+		if (!m_imguiWindow) return;
+	}
 
 	// Update data.
 	m_isCollapsed	= m_imguiWindow->Collapsed;
@@ -87,8 +92,7 @@ void GuiElementCore::dispatchEvents()
 	updateRenderState();
 
 	// Get dock ID if it has not been assigned.
-	if (!m_dockID) 
-		m_dockID	= m_imguiWindow->DockId;
+	if (!m_dockID) m_dockID = m_imguiWindow->DockId;
 
 	// If it should not be rendered we do not have to 
 	// check for resizes.
@@ -106,15 +110,11 @@ void GuiElementCore::dispatchEvents()
 bool GuiElementCore::isHovered() 
 {
 	// If the window exists.
-	if(m_imguiWindow) 
+	if (m_imguiWindow)
 		return ImGui::IsWindowHovered(0, m_imguiWindow);
 
-	// Find the window.
-	else
-	{
-		m_imguiWindow = ImGui::FindWindowByName(m_name.c_str());
-		return ImGui::IsWindowHovered(0, m_imguiWindow);
-	}
+	// Window does not exist yet.
+	return false;
 }
 
 void GuiElementCore::onContentRegionResizeEvent(WindowEvent& event)

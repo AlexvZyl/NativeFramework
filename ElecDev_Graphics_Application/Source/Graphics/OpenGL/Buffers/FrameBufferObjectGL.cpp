@@ -135,6 +135,8 @@ FrameBufferObject::~FrameBufferObject()
 
 void FrameBufferObject::deleteResources() 
 {
+	// Do not delete if already deleted.
+	if (m_resourcesDeleted) return;
 	m_resourcesDeleted = true;
 
 	// Delete attachments.
@@ -150,6 +152,7 @@ void FrameBufferObject::deleteResources()
 
 void FrameBufferObject::createResources(int width, int height)
 {
+
 	// Do not create a FBO with size or width of zero.
 	if (!width || !height)
 	{
@@ -157,6 +160,8 @@ void FrameBufferObject::createResources(int width, int height)
 		return;
 	}
 
+	// Do not recreate if already exist.
+	if (!m_resourcesDeleted) return;
 	m_resourcesDeleted = false;
 
 	// Generate MSAA FBO.
@@ -188,7 +193,6 @@ void FrameBufferObject::createResources(int width, int height)
 //  Methods.																																   //
 //=============================================================================================================================================//
 
-// Resizing the texture for when the window changes size.
 void FrameBufferObject::resize(int width, int height)
 {
 	if (m_resourcesDeleted) return;

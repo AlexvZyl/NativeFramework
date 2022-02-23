@@ -4,9 +4,7 @@
 /* Includes.																															 */
 /*=======================================================================================================================================*/
 
-#include "imgui/imgui.h"
 #include "ComponentEditor.h"
-#include "ImGui/misc/cpp/imgui_stdlib.h"
 #include "OpenGL/RendererGL.h"
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
@@ -208,9 +206,9 @@ void ComponentEditor::onRender()
 						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(600.0, 400.0));
 		
 		// Setup header.
-		ImGui::TableSetupColumn("Attribute");
-		ImGui::TableSetupColumn("Automation Function");
-		ImGui::TableSetupColumn("Action");
+		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableHeadersRow();
 
 		// Store entries to be removed.
@@ -219,7 +217,6 @@ void ComponentEditor::onRender()
 
 		
 		// Table.
-		ImGui::PushItemWidth(-1);
 		for (auto& [key, val]: activeComponent->cableDict) 
 		{
 			// ID.
@@ -231,12 +228,6 @@ void ComponentEditor::onRender()
 			
 			// Dict data.
 			ImGui::TableSetColumnIndex(0);
-			/*if (ImGui::Selectable(key.c_str(), isOpen, ImGuiSelectableFlags_SpanAllColumns)) 
-			{
-				ComponentEditorPopup* popup = Lumen::getApp().pushGuiLayer<ComponentEditorPopup>("PopUp")->getGui();
-				popup->setComponentEditor(this);
-				popup->setPosition(getMousePosition());
-			}*/
 			ImGui::Text(key.c_str());
 			ImGui::TableSetColumnIndex(1);
 			ImGui::InputText("##Input", &val);
@@ -247,7 +238,6 @@ void ComponentEditor::onRender()
 			// ID.
 			ImGui::PopID();
 		}
-		ImGui::PopItemWidth();
 
 		// Cleanup table.
 		
@@ -298,13 +288,10 @@ void ComponentEditor::onRender()
 	{
 		ImGui::Combo("Select Column##size", &sizeSelector, buffer, activeComponent->cableDict.size());
 		// ImGui::Text(std::to_string(typeval3).c_str());
-		
-
 		if (ImGui::Button("Insert Size function"))
 		{
 			activeComponent->cableDict[buffer[sizeSelector]] = "Size()";
 		}
-
 		ImGui::TreePop();
 	}
 
@@ -327,19 +314,12 @@ void ComponentEditor::onRender()
 	if (ImGui::TreeNode("IF"))
 	{
 		ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
-
 		ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
-
 		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, ifRowSelection, IM_ARRAYSIZE(ifRowSelection));
-
 		ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
-
 		ImGui::InputText("##Comparison Value", &comparisonValue);
-
 		ImGui::InputText("##True Statement", &trueStatement);
-
 		ImGui::InputText("##False Statement", &falseStatement);
-
 		if (ImGui::Button("Insert IF function"))
 		{
 			if (trueStatement.find(comma) != std::string::npos) {
@@ -369,20 +349,17 @@ void ComponentEditor::onRender()
 	if (ImGui::TreeNode("Combine Text"))
 	{
 		ImGui::Combo("Select Column##Combine", &combineSelector, buffer, activeComponent->cableDict.size());
-
-		if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, activeComponent->cableDict.size())) {
+		if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, activeComponent->cableDict.size())) 
+    {
 			combineTextString += buffer[combineSelectorVariable] + plusString;
 		}
-
 		ImGui::InputText("##Combine String", &combineTextString);
-
 		if (ImGui::Button("Insert Combine function"))
 		{
 			combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
 			combineText += combineTextString + end;
 			activeComponent->cableDict[buffer[combineSelector]] = combineText;
 		}
-
 		ImGui::TreePop();
 	}
 

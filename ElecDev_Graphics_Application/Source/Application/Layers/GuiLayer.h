@@ -39,8 +39,8 @@ public:
 	virtual void onEvent(Event& event) override;
 	virtual void onRender() override;
 	virtual void dispatchEvents() override;
-	virtual void setName(std::string& newName) override;
-	virtual std::string& getName() override;
+	virtual void setName(std::string newName) override;
+	virtual std::string getName() override;
 	virtual bool isHovered() override;
 	virtual void focus() override;
 
@@ -71,13 +71,14 @@ GuiType* GuiLayer<GuiType>::getGui()
 }
 
 template<class GuiType>
-void GuiLayer<GuiType>::setName(std::string& newName)
+void GuiLayer<GuiType>::setName(std::string newName)
 {
-	m_guiElement->m_name = newName + "##" + std::to_string(m_ID);
+	std::string name = newName + "###LumenLayer" + std::to_string(m_ID);
+	m_guiElement->m_name = name;
 }
 
 template<class GuiType>
-std::string& GuiLayer<GuiType>::getName()
+std::string GuiLayer<GuiType>::getName()
 {
 	return m_guiElement->m_name;
 }

@@ -32,12 +32,13 @@ struct GLFWwindow;
 
 enum class DockPanel 
 {
-	Fixed,	// These panels are handled manually.
-	Floating,
-	Left,
-	Right,
-	Bottom,
-	Scene
+	Fixed,		// These panels are handled manually.
+	Floating,	// Undocked windows.
+	Left,		// The left panel.
+	Right,		// The right panel.
+	Bottom,		// The bottom panel.
+	Scene,		// The main scene panel where the graphics are displayed.
+	Ribbon		// The left ribbon that holds the buttons.
 };
 
 //==============================================================================================================================================//
@@ -73,6 +74,12 @@ public:
 	void queuePopLayer(Layer* layer);
 	// Pop a layer from the layerstack using the layer name.
 	void queuePopLayer(std::string& layerName);
+	// Get the layer, given the name.
+	template<class LayerType>
+	LayerType* getLayer(std::string& name);
+	// Find the layer that this engine belongs to.
+	template<class EngineType>
+	EngineLayer<EngineType>* getEngineLayer(EngineCore* engine);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -134,7 +141,7 @@ private:
 	// in imgui.
 	void onFocusedLayerChange(Layer* newLayer);
 	// Find the layer that is being hovered.
-	Layer* findhoveredLayer();
+	Layer* findHoveredLayer();
 	// Dock a layer to the panel.
 	void dockLayerToPanel(std::string& name, DockPanel panel);
 	// Pop the layers queued for removal.
@@ -176,14 +183,13 @@ private:
 	//  D O C K   N O D E S  //
 	// --------------------- //
 
-	// The main window dockspace (minus the toolbar).
+	// Dock space IDs.
 	ImGuiID m_mainDockspaceID = NULL;
-	// The side panel where GUIs can displayed.
 	ImGuiID m_leftPanelID = NULL;
 	ImGuiID m_rightPanelID = NULL;
 	ImGuiID m_bottomPanelID = NULL;
-	// The area where the main graphics is displayed.
 	ImGuiID m_scenePanelID = NULL;
+	ImGuiID m_ribbonPanelID = NULL;
 };
 
 //==============================================================================================================================================//
@@ -223,6 +229,28 @@ GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel do
 	dockLayerToPanel(newName, dockPanel);
 	// Return the layer.
 	return ptr;
+}
+
+template<class LayerType>
+LayerType* Application::getLayer(std::string& name)
+{
+	return m_layerStack->getLayer<LayerType>(name);
+}
+
+template<class EngineType>
+EngineLayer<EngineType>* Application::getEngineLayer(EngineCore* engine)
+{
+	// Find the layer with the engine.
+	for (auto& [name, layer] : m_layerStack->getLayers())
+	{
+		EngineLayer<EngineType>* engineLayer = dynamic_cast<EngineLayer<EngineType>*>(layer.get());
+		// Valid cast?
+		if (!engineLayer) continue;
+		// Does it contain the engine?
+		if (engineLayer->getEngine() == engine) return engineLayer;
+	}
+	// Engine not found.
+	return nullptr;
 }
 
 //==============================================================================================================================================//
