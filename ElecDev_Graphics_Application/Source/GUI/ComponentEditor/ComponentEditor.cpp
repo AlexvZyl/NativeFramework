@@ -10,6 +10,9 @@
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Application.h"	
+#include "ComponentEditorPopup/ComponentEditorPopup.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -34,6 +37,10 @@ void ComponentEditor::begin()
 
 void ComponentEditor::onRender()
 {
+	// Fetch all the component names
+	//auto designEng = Lumen::getApp().m_guiState->design_engine;
+	//auto piet = koos->m_circuit->m_components;
+	//auto componentsUla = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
 	//	Fetch The active component.
 	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
 	//check that the active component exists. Close if not.
@@ -166,9 +173,12 @@ void ComponentEditor::onRender()
 	// --------------------- //
 
 	const char* buffer[100];
+
 	int i = 0;
+
 	for (auto& [key, val] : activeComponent->cableDict)
 	{
+
 		buffer[i] = key.c_str();
 		i++;
 	}
@@ -188,9 +198,9 @@ void ComponentEditor::onRender()
 		}
 
 		// Setup table.
-		ImGui::BeginTable("Columns to specify", 3,	  ImGuiTableFlags_Resizable		| ImGuiTableFlags_SizingFixedFit 
-													| ImGuiTableFlags_ScrollX		| ImGuiTableFlags_RowBg
-													| ImGuiTableFlags_Borders);
+		ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX 
+						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
+						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(600.0, 400.0));
 		
 		// Setup header.
 		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
@@ -202,6 +212,7 @@ void ComponentEditor::onRender()
 		static std::vector<std::string> toRemove;
 		toRemove.reserve(1);
 
+		
 		// Table.
 		for (auto& [key, val]: activeComponent->cableDict) 
 		{
@@ -218,17 +229,17 @@ void ComponentEditor::onRender()
 			ImGui::TableSetColumnIndex(1);
 			ImGui::InputText("##Input", &val);
 			ImGui::TableSetColumnIndex(2);
-
 			// Remove button.
 			if (ImGui::Button("Remove"))
 				toRemove.push_back(key);
-
 			// ID.
 			ImGui::PopID();
 		}
 
 		// Cleanup table.
+		
 		ImGui::EndTable();
+		
 		ImGui::TreePop();
 
 		// Remove entries.
@@ -252,7 +263,8 @@ void ComponentEditor::onRender()
 	{
 		// int* typeval2 = (int*)&activeComponent->cableDict;
 		ImGui::Combo("Select Column##From", &fromSelector, buffer, activeComponent->cableDict.size());
-		ImGui::Combo("Select Column##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
+
+		ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 		// ImGui::Text("Hello World");
 
 		if (ImGui::Button("Insert From function"))
