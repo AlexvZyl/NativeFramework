@@ -63,9 +63,9 @@ void ComponentEditor::onRender()
 		//ImGui::SetColumnWidth(1, 20.f);
 
 			//Setup table
-		ImGui::TableSetupColumn("Location    ");
-		ImGui::TableSetupColumn("Port Name");
-		ImGui::TableSetupColumn("I/O Type       ");
+		ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableHeadersRow();
 
 		ImGui::TableNextRow();

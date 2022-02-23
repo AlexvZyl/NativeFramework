@@ -19,7 +19,7 @@ void EngineCore::onEvent(Event& event)
 
 	// Mouse events.
 
-	if (eventID == EventType_MousePress) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	if		(eventID == EventType_MousePress)	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 	else if (eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event));		}
 	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event));	}

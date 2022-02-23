@@ -109,6 +109,16 @@ public:
 	static Texture* getTexture(const std::string& name);
 	// Add an existing texture to the scene.
 	static void addTexture(const Texture& texture);
+
+	// ----------------------------- //
+	//  D E F A U L T   S C E N E S  //
+	// ----------------------------- //
+
+	// Generate the default scenes.
+	static void generateDefaultScenes();
+	// Get the default 2D scene texture.
+	static unsigned getDefault2DSceneTexture();
+
 	
 private:
 
@@ -157,6 +167,16 @@ private:
 	static std::unique_ptr<Font> m_defaultFont;
 	// Shaders used by the renderer.
 	static std::map<std::string, std::unique_ptr<Shader>> m_shaders;
+
+	// ---------------------------- //
+	// D E F A U L T   S C E N E S  //
+	// ---------------------------- //
+
+	// These scenes are used to render as the default.
+	// For example, when FBO resources are deleted, instead of rendering
+	// a black texture, we render these senes.
+	static std::unique_ptr<Scene> m_default2DScene;
+
 };
 
 //==============================================================================================================================================//

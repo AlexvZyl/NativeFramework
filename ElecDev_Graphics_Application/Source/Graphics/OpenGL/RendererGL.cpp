@@ -28,6 +28,7 @@
 std::map<std::string, std::unique_ptr<Shader>> Renderer::m_shaders;
 Scene* Renderer::m_scene = nullptr;
 std::unique_ptr<Font> Renderer::m_defaultFont = nullptr;
+std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
 
 //==============================================================================================================================================//
 //  Scene.																																		//
@@ -331,6 +332,8 @@ void Renderer::initialise()
 	Renderer::compileShaders();
 	// Loads the default font to be used by the renderer.
 	Renderer::loadDefaultFont();
+	// Default scenes.
+	generateDefaultScenes();
 }
 
 void Renderer::loadDefaultFont()
@@ -387,6 +390,23 @@ void Renderer::setViewport(const glm::vec2& viewport)
 void Renderer::setViewport(const glm::vec4& viewport)
 {
 	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
+}
+
+//==============================================================================================================================================//
+//  Default Scenes.																																//
+//==============================================================================================================================================//
+
+void Renderer::generateDefaultScenes() 
+{
+	m_default2DScene = std::make_unique<Scene>(CameraType::Standard2D, 900, 900, 1);
+	// Create the scene.
+	render2DScene(m_default2DScene.get());
+	m_default2DScene->m_FBO->renderFromMSAA();
+}
+
+unsigned Renderer::getDefault2DSceneTexture() 
+{
+	return m_default2DScene->getRenderTexture();
 }
 
 //==============================================================================================================================================//

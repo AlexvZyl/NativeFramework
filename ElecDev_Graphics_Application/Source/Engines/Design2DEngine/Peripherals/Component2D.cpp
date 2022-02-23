@@ -98,6 +98,10 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 
 Component2D::~Component2D() 
 {
+	portsEast.clear();
+	portsWest.clear();
+	portsNorth.clear();
+	portsSouth.clear();
 	// Remove the renderer primitives.
 	Renderer::remove(shape);
 	Renderer::remove(border);
