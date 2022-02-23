@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "GraphicsScene.h"
-#include "External/ImGUI/Core/imgui.h"
+#include "imgui/imgui.h"
 #include "Application/Events/Events.h"
 #include "Application/Layers/Layer.h"
 #include "Engines/EngineCore/EngineCore.h"
@@ -22,7 +22,7 @@ GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {}
 
-void GraphicsScene::setEngine(EngineCore* engine) 
+void GraphicsScene::setEngine(EngineCore* engine)
 {
 	m_engine = engine;
 	m_textureID = (void*)m_engine->getRenderTexture();
@@ -58,13 +58,14 @@ void GraphicsScene::begin()
 
 void GraphicsScene::onRender() 
 {
+	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 }
 
 void GraphicsScene::end()
 {
 	ImGui::End();
-	ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
+	ImGui::PopStyleVar();
 }
 
 void GraphicsScene::onRenderStateChange(bool newState)

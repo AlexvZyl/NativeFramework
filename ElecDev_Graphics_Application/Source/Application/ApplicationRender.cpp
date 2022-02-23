@@ -2,10 +2,10 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "ImGUI/Implementations/imgui_impl_glfw.h"
-#include "ImGUI/Implementations/imgui_impl_opengl3.h"
-#include "ImGUI/Core/imgui.h"
-#include "ImGUI/Core/imgui_internal.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
 #include "GLFW/glfw3.h"
@@ -13,29 +13,6 @@
 //==============================================================================================================================================//
 //  Rendering.																																	//
 //==============================================================================================================================================//
-
-void Application::renderInitialFrame() 
-{	
-	// Init.
-	onRenderInit();
-
-	// Main ribbon dock space.
-	ImGuiID ribbonDockID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.035f, nullptr, &m_mainDockspaceID);
-	ImGuiDockNode* ribbonDockNode = ImGui::DockBuilderGetNode(ribbonDockID);
-	// FIX THIS!
-	ribbonDockNode->LocalFlags	|= ImGuiDockNodeFlags_NoTabBar			| ImGuiDockNodeFlags_NoDockingInCentralNode	
-								|  ImGuiDockNodeFlags_NoCloseButton		| ImGuiDockNodeFlags_NoDocking
-								|  ImGuiDockNodeFlags_NoDockingSplitMe	| ImGuiDockNodeFlags_NoDockingOverMe
-								| ImGuiDockNodeFlags_DockSpace;							
-	ImGui::DockBuilderDockWindow("Main Ribbon##1", ribbonDockID);  // Only valid if main ribbon added second.
-	ImGui::DockBuilderFinish(m_mainDockspaceID);
-
-	// Side panels.
-
-
-	// Cleanup.
-	onRenderCleanup();
-}
 
 void Application::onRenderInit()
 {
@@ -47,8 +24,9 @@ void Application::onRenderInit()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	// Enable main viewport docking.
-	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_PassthruCentralNode);  // NULL uses the main viewport.
+	// Enable docking in main viewport.
+	// Do we really have to call this every frame?
+	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
 
 	// Push custom font.
 	ImGui::PushFont(m_defaultFont);
@@ -66,8 +44,13 @@ void Application::onRender()
 
 	// Render all of the layers.
 	// The order is not important since dear imgui handles that.
-	for (auto& layerPair : m_layerStack->getLayers())
-		layerPair.second->onRender();
+	for (auto& [name, layer] : m_layerStack->getLayers())
+		layer->onRender();
+
+#ifdef _DEBUG
+	//ImGui::ShowStyleEditor();
+	//ImGui::ShowDemoWindow();
+#endif // _DEBUG
 
 	// Cleanup.
 	onRenderCleanup();
@@ -78,14 +61,11 @@ void Application::onRenderCleanup()
 	// Pop custom font.
 	ImGui::PopFont();
 
-	// Assign values to viewport for ImGUI.
-	int display_w, display_h;
-	glfwGetFramebufferSize(m_window, &display_w, &display_h);
-	glm::vec2 viewport(display_w, display_h);
-	Renderer::setViewport(viewport);
-
 	// Rendering
 	ImGui::Render();
+	int display_w, display_h;
+	glfwGetFramebufferSize(m_window, &display_w, &display_h);
+	Renderer::setViewport(glm::vec2(display_w, display_h));
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// Update and Render additional Platform Windows
@@ -104,7 +84,6 @@ void Application::onRenderCleanup()
 
 	// Swap the window buffers.
 	glfwSwapBuffers(m_window);
-
 }
 
 //==============================================================================================================================================//

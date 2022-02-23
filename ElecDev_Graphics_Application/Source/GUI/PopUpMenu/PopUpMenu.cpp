@@ -4,7 +4,7 @@
 
 #include "PopUpMenu.h"
 #include <iostream>
-#include "Core/imgui.h"
+#include "imgui/imgui.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
@@ -12,6 +12,7 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
+#include "GUI/CircuitEditor/CircuitEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -87,7 +88,7 @@ void PopUpMenu::onRender()
         {
             // Pushing this GUI layer defocuses the popup, causing a 
             // defocus event, which removes the popup event.
-            app.pushGuiLayer<ComponentEditor>("Component Editor");
+            app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
         }
         //if (ImGui::MenuItem("Edit Ports", "P"))
         //{
@@ -114,22 +115,29 @@ void PopUpMenu::onRender()
     //  D E F A U L T  //
     // --------------- //
 
+    if (ImGui::MenuItem("Circuit Editor..."))
+    {
+        CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Right)->getGui();
+        editor->setEngine(m_engine);
+        editor->setActiveEngineTracking(true);
+    }
+
     if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
     {
-        /*m_graphicsHandler->m_loadEvent.eventTrigger = true;
-        m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");*/
-        //close();
-
+        // Create and log load event.
+        std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
+        FileLoadEvent event(path);
+        app.logEvent<FileLoadEvent>(event);
+        
         // Remove popup.
         app.queuePopLayer(m_name);
     }
     if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
     {
-        /*m_graphicsHandler->m_saveEvent.eventTrigger = true;
-        m_graphicsHandler->m_saveEvent.saveEngine = m_windowContext;
-        Design2DEngine* activeEngine = reinterpret_cast<Design2DEngine*>(m_graphicsHandler->m_activeWindow->engineGL.get());
-        m_graphicsHandler->m_saveEvent.path = selectFile("Lumen Save Circuit", "", activeEngine->m_circuit->m_label, "Save");*/
-        //close();
+        // Create and log save event.
+        std::string path = selectFile("Lumen Save Circuit", "", m_engine->m_circuit->m_label, "Save");
+        FileSaveEvent event(path, m_engine);
+        app.logEvent<FileSaveEvent>(event);
 
         // Remove popup.
         app.queuePopLayer(m_name);

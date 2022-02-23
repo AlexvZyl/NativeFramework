@@ -12,7 +12,7 @@
 #include "Application/Events/Events.h"
 #include "Application/Layers/LayerStack.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "Misc/ConsoleColor.h"
+#include "External/Misc/ConsoleColor.h"
 
 //==============================================================================================================================================//
 //  GUI Layer.																																	//
@@ -30,7 +30,7 @@ public:
 	inline virtual ~GuiLayer() = default;
 
 	// Get the gui element in the layer.
-	GuiType* getGuiElement();
+	GuiType* getGui();
 
 	// ----------- //
 	//  L A Y E R  //	
@@ -39,8 +39,8 @@ public:
 	virtual void onEvent(Event& event) override;
 	virtual void onRender() override;
 	virtual void dispatchEvents() override;
-	virtual void setName(std::string& newName) override;
-	virtual std::string& getName() override;
+	virtual void setName(std::string newName) override;
+	virtual std::string getName() override;
 	virtual bool isHovered() override;
 	virtual void focus() override;
 
@@ -65,19 +65,20 @@ GuiLayer<GuiType>::GuiLayer(std::string name, int imguiWindowFlags)
 }
 
 template<class GuiType>
-GuiType* GuiLayer<GuiType>::getGuiElement()
+GuiType* GuiLayer<GuiType>::getGui()
 {
 	return m_guiElement.get();
 }
 
 template<class GuiType>
-void GuiLayer<GuiType>::setName(std::string& newName)
+void GuiLayer<GuiType>::setName(std::string newName)
 {
-	m_guiElement->m_name = newName;
+	std::string name = newName + "###LumenLayer" + std::to_string(m_ID);
+	m_guiElement->m_name = name;
 }
 
 template<class GuiType>
-std::string& GuiLayer<GuiType>::getName()
+std::string GuiLayer<GuiType>::getName()
 {
 	return m_guiElement->m_name;
 }
@@ -151,7 +152,7 @@ void GuiLayer<GuiType>::onRender()
 	// End window.
 	m_guiElement->end();
 	
-	// Remove layer in next frame if close was clicked.
+	// Remove layer if close was clicked.
 	if (!m_guiElement->m_isOpen)
 		Lumen::getApp().queuePopLayer(this);
 }

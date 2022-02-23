@@ -10,7 +10,7 @@
 //  Component 2D serialiser.   																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> comp) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& comp) 
 {
 	// Begin component data.
 	emitter << YAML::BeginMap;
@@ -23,6 +23,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> c
 	emitter << YAML::Key << "Layer offset" << YAML::Value << comp->portLayerOffset;
 	emitter << YAML::Key << "Number of ports" << YAML::Value << comp->numPorts;
 	emitter << YAML::Key << "Internal circuit" << YAML::Value << "Test AE 234";
+	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->cableDict;
 
 	// Shape.
 	emitter << YAML::Key << "Shape" << YAML::Value;
@@ -57,7 +58,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D> c
 //  Component2D Vector serialiser.   																										   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Component2D>> compVector) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Component2D>>& compVector) 
 {
 	// Begin.
 	emitter << YAML::BeginMap;
@@ -74,10 +75,28 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Co
 }
 
 //=============================================================================================================================================//
+//  Component2D Vector serialiser.   																										   //
+//=============================================================================================================================================//
+
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string, std::string>& dict) 
+{
+	// Begin.
+	emitter << YAML::BeginMap;
+
+	// Data.
+	for (auto& [key, value] : dict)
+		emitter << YAML::Key << key << YAML::Value << value;
+
+	// Done.
+	emitter << YAML::EndMap;
+	return emitter;
+}
+
+//=============================================================================================================================================//
 //  Deserialise single Component2D  																										   //
 //=============================================================================================================================================//
 
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Component2D> component)
+void deserialise(YAML::Node& yamlNode, std::shared_ptr<Component2D>& component)
 {
 
 }

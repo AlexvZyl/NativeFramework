@@ -6,7 +6,7 @@
 
 #include <Windows.h>
 #include <glad/glad.h>
-#include <Core/imgui.h>
+#include <imgui/imgui.h>
 #include <string>
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Resources/ResourceHandler.h"

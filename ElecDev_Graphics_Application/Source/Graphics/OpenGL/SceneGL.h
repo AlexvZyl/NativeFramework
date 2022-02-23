@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-#include "External/GLM/glm.hpp"
+#include "glm/glm.hpp"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/TextureGL.h"

@@ -8,7 +8,7 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToBIN(std::shared_ptr<Circuit> circuit, std::string folder)
+void saveToBIN(std::shared_ptr<Circuit>& circuit, std::string& folder)
 {
 
 }
@@ -17,7 +17,7 @@ void saveToBIN(std::shared_ptr<Circuit> circuit, std::string folder)
 //  Deserialisation.																														   //
 //=============================================================================================================================================//
 
-void loadFromBIN(Design2DEngine& engine, std::string path)
+void loadFromBIN(std::string& path)
 {
 
 }

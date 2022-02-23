@@ -5,7 +5,9 @@
 //==============================================================================================================================================//
 
 #include <string>
-#include "External/ImGUI/Core/imgui.h"
+#include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -110,6 +112,10 @@ public:
 	inline virtual void onDefocusEvent(LayerEvent& event) {};
 	inline virtual void onHoverEvent(LayerEvent& event) {};
 	inline virtual void onDehoverEvent(LayerEvent& event) {};
+
+	// Return the mouse position in the local scene coordinates (pixels).
+	// (0,0) is in the top left.
+	glm::vec2 getMousePosition();
 };
 
 //==============================================================================================================================================//

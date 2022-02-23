@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Ribbon.h"
-#include <Core/imgui.h>
+#include <imgui/imgui.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <cmath>
@@ -12,9 +12,13 @@
 #include <External/Misc/stb_image.h>
 
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <Core/imgui_internal.h>
+#include <imgui/imgui_internal.h>
+#include "GUI/ComponentEditor/ComponentEditor.h"
 
 #include "Lumen.h"
+#include "Application/Application.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "GUI/CircuitEditor/CircuitEditor.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -57,6 +61,7 @@ void Ribbon::begin()
 {
     // Remove rounding so that it docks nicely.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.f, 0.f, 0.04f, 1.00f));
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
@@ -74,25 +79,25 @@ void Ribbon::onRender()
 
     }
 
-
     // Block diagram.
     if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
     {
 
     }
  
-
     // Circuit bucket.
     if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
     { 
-
+        // Testing.
+        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::Left);
+        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::Right);
+        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::Bottom);
     }
-
 
     // Add design engine.
     if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 
     {
-
+        Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }
 }
 
@@ -101,6 +106,7 @@ void Ribbon::end()
     ImGui::End();
     // Pop Window rounding.
     ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
 }
 
 //==============================================================================================================================================//

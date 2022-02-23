@@ -10,8 +10,8 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Resources/ResourceHandler.h"
-#include "External/ImGUI/Core/imgui.h"
-#include "External/ImGUI/Core/imgui_internal.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
@@ -39,25 +39,33 @@ void Toolbar::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     // Set the size of the toolbar.
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
+    // Color.
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.0f, 0.0f, 0.0f, 1.00f));
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
 }
 
 void Toolbar::onRender()
 {
-    // Should not render in these cases.
-    if (m_isCollapsed || !m_isOpen || m_isHidden) return;
-
-    float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
-        
+    // Get the app.
+    Application& app = Lumen::getApp();
+    
+    // Draw the image.
+    static float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
+
+    // --------- //
+    //  F I L E  //
+    // --------- //
 
     if (ImGui::BeginMenu("File"))
     {
         if (ImGui::MenuItem("Load..", "Ctrl+O"))
         {
-            /*m_graphicsHandler->m_loadEvent.eventTrigger = true;
-            m_graphicsHandler->m_loadEvent.path = selectFile("Lumen Load Circuit", "", "", "Load");*/
+            // Create a load event.
+            std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
+            FileLoadEvent event(path);
+            app.logEvent<FileLoadEvent>(event);
         }
         if (ImGui::MenuItem("Close", "Ctrl+W"))
         {
@@ -66,6 +74,10 @@ void Toolbar::onRender()
 
         ImGui::EndMenu();
     }
+
+    // --------- //
+    //  E D I T  //
+    // --------- //
 
     if (ImGui::BeginMenu("Edit"))
     {
@@ -103,6 +115,7 @@ void Toolbar::end()
     // Pop frame rounding and padding.
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
 }
 
 /*=======================================================================================================================================*/

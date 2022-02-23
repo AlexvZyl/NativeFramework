@@ -4,10 +4,12 @@
 
 #include <iostream>
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "GUI/ImGuiTweaks.h"
 #include "Application/Events/Events.h"
-#include "External/ImGUI/Core/imgui.h"
-#include "External/ImGUI/Core/imgui_internal.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+#include "Application/Application.h"
+#include "Lumen.h"
+#include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  Rendering.																																	//
@@ -105,13 +107,13 @@ bool GuiElementCore::isHovered()
 {
 	// If the window exists.
 	if(m_imguiWindow) 
-		return ImGuiTweaks::IsWindowHovered(0, m_imguiWindow);
+		return ImGui::IsWindowHovered(0, m_imguiWindow);
 
 	// Find the window.
 	else
 	{
 		m_imguiWindow = ImGui::FindWindowByName(m_name.c_str());
-		return ImGuiTweaks::IsWindowHovered(0, m_imguiWindow);
+		return ImGui::IsWindowHovered(0, m_imguiWindow);
 	}
 }
 
@@ -147,6 +149,18 @@ void GuiElementCore::detectContentRegionMove()
 		WindowEvent event(contentRegionPos, EventType_WindowMove);
 		onEvent(event);
 	}
+}
+
+glm::vec2 GuiElementCore::getMousePosition() 
+{
+	// Get the cursor position.
+	double cursorX, cursorY;
+	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
+	glm::vec2 cursorPos = {
+		cursorX - m_contentRegionPosition.x,
+		cursorY - m_contentRegionPosition.y
+	};
+	return cursorPos;
 }
 
 //==============================================================================================================================================//

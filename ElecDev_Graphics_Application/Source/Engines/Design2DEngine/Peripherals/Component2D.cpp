@@ -65,9 +65,29 @@ Component2D::Component2D(Circuit* parent)
 	// It is a bit of a pain setting up ports every time we test.
 	addPort(0, PortType::PORT_IN, "LX1");
 	addPort(1, PortType::PORT_OUT, "RX1");
-
 	highlight();
 
+	// Dictionary for GUI of component for data automation.
+	cableDict.insert(std::pair<std::string, std::string>("FromTagNumber",	"From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("ToTagNumber",		"From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("From",			"From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("To", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("Voltage", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("Circuit", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableRating", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableIsolation", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableSuffix", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableLength", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableTAG", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("IndoorTermCount", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("OutdoorTermCount", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableSize", "Size()"));
+	//cableDict.insert(std::pair<std::string, std::string>("CoreCount", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("Metal", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableDiameter", "From(Circuit Database)"));
+	//cableDict.insert(std::pair<std::string, std::string>("CableMass", "From(Circuit Database)"));
 }
 
 Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
@@ -95,22 +115,19 @@ void Component2D::moveTo(const glm::vec2& pointerPos)
 	border->translateTo(translateDestination);
 	glm::vec2 titleDest = translateDestination + titleOffset;
 	title->translateTo(titleDest);
+
 	for (int i = 0; i < portsWest.size(); i++) 
-	{
 		portsWest[i]->moveTo(translateDestination);
-	}
+
 	for (int i = 0; i < portsEast.size(); i++) 
-	{
 		portsEast[i]->moveTo(translateDestination);
-	}
+	
 	for (int i = 0; i < portsNorth.size(); i++) 
-	{
 		portsNorth[i]->moveTo(translateDestination);
-	}
+	
 	for (int i = 0; i < portsSouth.size(); i++) 
-	{
 		portsSouth[i]->moveTo(translateDestination);
-	}
+	
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
 
@@ -119,18 +136,19 @@ void Component2D::move(const glm::vec2& translation)
 	shape->translate(translation);
 	border->translate(translation);
 	title->translate(translation);
-	for (int i = 0; i < portsWest.size(); i++) {
+
+	for (int i = 0; i < portsWest.size(); i++) 
 		portsWest[i]->move(translation);
-	}
-	for (int i = 0; i < portsEast.size(); i++) {
+	
+	for (int i = 0; i < portsEast.size(); i++) 
 		portsEast[i]->move(translation);
-	}
-	for (int i = 0; i < portsNorth.size(); i++) {
+	
+	for (int i = 0; i < portsNorth.size(); i++) 
 		portsNorth[i]->move(translation);
-	}
-	for (int i = 0; i < portsSouth.size(); i++) {
+	
+	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->move(translation);
-	}
+	
 	centre += translation;
 }
 
@@ -151,18 +169,19 @@ void Component2D::setLayer(float layer)
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
-	for (int i = 0; i < portsWest.size(); i++) {
+
+	for (int i = 0; i < portsWest.size(); i++) 
 		portsWest[i]->setLayer(layer + portLayerOffset);
-	}
-	for (int i = 0; i < portsEast.size(); i++) {
+	
+	for (int i = 0; i < portsEast.size(); i++) 
 		portsEast[i]->setLayer(layer + portLayerOffset);
-	}
-	for (int i = 0; i < portsNorth.size(); i++) {
+	
+	for (int i = 0; i < portsNorth.size(); i++) 
 		portsNorth[i]->setLayer(layer + portLayerOffset);
-	}
-	for (int i = 0; i < portsSouth.size(); i++) {
+	
+	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->setLayer(layer + portLayerOffset);
-	}
+	
 	componentLayer = layer;
 }
 
@@ -211,23 +230,28 @@ void Component2D::unhighlight()
 
 unsigned Component2D::addPort(int side, PortType type, const std::string& name)
 {
-	switch(side){
+	switch(side)
+	{
 	case 0:
 		portsWest.push_back(std::make_shared<Port>(glm::vec2(-width, 0.f), type, this, name));
 		updatePortPositions();
 		return portsWest.back()->m_entityID;
+
 	case 1:
 		portsEast.push_back(std::make_shared<Port>(glm::vec2(width, 0.f), type, this, name));
 		updatePortPositions();
 		return portsEast.back()->m_entityID;
+
 	case 2:
 		portsNorth.push_back(std::make_shared<Port>(glm::vec2(0.f, height), type, this, name));
 		updatePortPositions();
 		return portsNorth.back()->m_entityID;
+
 	case 3:
 		portsSouth.push_back(std::make_shared<Port>(glm::vec2(0.f, -height), type, this, name));
 		updatePortPositions();
 		return portsSouth.back()->m_entityID;
+
 	default:
 		// Invalid value passed.
 		std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Cannot add a port to side " << side << " (require side < 4).";
@@ -248,7 +272,8 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 
 		auto port_to_remove = std::find(begin(portsSide), end(portsSide), port);
 
-		if (port_to_remove != end(portsSide)) {
+		if (port_to_remove != end(portsSide)) 
+		{
 			portsSide.erase(port_to_remove);
 			portsSide.shrink_to_fit();
 			updatePortPositions();
@@ -277,35 +302,43 @@ void Component2D::updatePortPositions()
 
 			//Placement is dependent on which side we are on.
 			glm::vec2 offset_side;
-			switch (i) {
+			switch (i) 
+			{
 			case 0:
 				//Set west offsets
 				offset_side = glm::vec2(-width, -height);
-				for (int j = 0; j < *n_ports; j++) {
+				for (int j = 0; j < *n_ports; j++) 
+				{
 					glm::vec2 offset_j = glm::vec2(0.f, 2.f * (j+1) * height / (*n_ports + 1));
 					portsSide[j]->setOffset(offset_side + offset_j);
 				}
 				break;
+
 			case 1:
 				//Set east offsets
 				offset_side = glm::vec2(width, -height);
-				for (int j = 0; j < *n_ports; j++) {
+				for (int j = 0; j < *n_ports; j++) 
+				{
 					glm::vec2 offset_j = glm::vec2(0.f, 2.f * (j + 1) * height / (*n_ports + 1));
 					portsSide[j]->setOffset(offset_side + offset_j);
 				}
 				break;
+
 			case 2:
 				//Set north offsets
 				offset_side = glm::vec2(-width, height);
-				for (int j = 0; j < *n_ports; j++) {
+				for (int j = 0; j < *n_ports; j++) 
+				{
 					glm::vec2 offset_j = glm::vec2(2.f * (j + 1) * width / (*n_ports + 1), 0.f);
 					portsSide[j]->setOffset(offset_side + offset_j);
 				}
 				break;
+
 			case 3:
 				//Set south offsets
 				offset_side = glm::vec2(-width, -height);
-				for (int j = 0; j < *n_ports; j++) {
+				for (int j = 0; j < *n_ports; j++) 
+				{
 					glm::vec2 offset_j = glm::vec2(2.f * (j + 1) * width / (*n_ports + 1), 0.f);
 					portsSide[j]->setOffset(offset_side + offset_j);
 				}
