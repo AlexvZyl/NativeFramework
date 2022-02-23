@@ -4,15 +4,12 @@
 /* Includes.																															 */
 /*=======================================================================================================================================*/
 
-#include "imgui/imgui.h"
 #include "ComponentEditor.h"
-#include "ImGui/misc/cpp/imgui_stdlib.h"
 #include "OpenGL/RendererGL.h"
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Application.h"	
-#include "ComponentEditorPopup/ComponentEditorPopup.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -202,18 +199,16 @@ void ComponentEditor::onRender()
 													| ImGuiTableFlags_Borders);
 		
 		// Setup header.
-		ImGui::TableSetupColumn("Attribute");
-		ImGui::TableSetupColumn("Function");
-		ImGui::TableSetupColumn("Action");
+		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableHeadersRow();
 
 		// Store entries to be removed.
 		static std::vector<std::string> toRemove;
 		toRemove.reserve(1);
 
-		
 		// Table.
-		ImGui::PushItemWidth(-1);
 		for (auto& [key, val]: activeComponent->cableDict) 
 		{
 			// ID.
@@ -225,12 +220,6 @@ void ComponentEditor::onRender()
 			
 			// Dict data.
 			ImGui::TableSetColumnIndex(0);
-			/*if (ImGui::Selectable(key.c_str(), isOpen, ImGuiSelectableFlags_SpanAllColumns)) 
-			{
-				ComponentEditorPopup* popup = Lumen::getApp().pushGuiLayer<ComponentEditorPopup>("PopUp")->getGui();
-				popup->setComponentEditor(this);
-				popup->setPosition(getMousePosition());
-			}*/
 			ImGui::Text(key.c_str());
 			ImGui::TableSetColumnIndex(1);
 			ImGui::InputText("##Input", &val);
@@ -243,7 +232,6 @@ void ComponentEditor::onRender()
 			// ID.
 			ImGui::PopID();
 		}
-		ImGui::PopItemWidth();
 
 		// Cleanup table.
 		ImGui::EndTable();

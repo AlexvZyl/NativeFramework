@@ -75,6 +75,7 @@ public:
 	void deleteActiveComponent();
 	void deleteActiveCable();
 	Port* getPort(unsigned eID);
+	virtual void setName(std::string& name) override;
 };
 
 //=============================================================================================================================================//

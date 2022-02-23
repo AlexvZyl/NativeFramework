@@ -3,6 +3,11 @@
 //=======================================================================================================================================//
 
 #include "CircuitEditor.h"
+#include "Lumen.h"
+#include "Application/Application.h"
+#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Application/Layers/EngineLayer.h"
 
 //=======================================================================================================================================//
 // Circuit editor.																														 //
@@ -11,7 +16,7 @@
 CircuitEditor::CircuitEditor(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags)
 {
-
+	m_imguiWindowFlags |= ImGuiWindowFlags_AlwaysAutoResize;
 }
 
 void CircuitEditor::begin() 
@@ -21,16 +26,63 @@ void CircuitEditor::begin()
 
 void CircuitEditor::onRender() 
 {
-	ImGui::Text("Circuit Name");
-	ImGui::SameLine();
-	static std::string circuitName = "";
-	ImGui::InputText("##circuitName", &circuitName);
-	if(ImGui)
+	ImGui::NewLine();
+
+	// Get the active engine.
+	if(m_trackActiveEngine)
+		m_engine = Lumen::getApp().m_guiState->design_engine;
+
+	// --------------- //
+	//  C R E A T O R  //
+	// --------------- //
+
+	if (!m_trackActiveEngine)
+	{
+		ImGui::Text("Circuit Name");
+		ImGui::SameLine();
+		ImGui::InputText("##circuitName", &m_circuitNameOnCreation);
+		if (ImGui::Button("Create Circuit##CircuitCreatorButton"))
+		{
+			Application& app = Lumen::getApp();
+			app.pushEngineLayer<Design2DEngine>(m_circuitNameOnCreation);
+			app.queuePopLayer(m_name);
+		}
+	}
+
+	// ------------- //
+	//  E D I T O R  //
+	// ------------- //
+
+	else if(m_trackActiveEngine && m_engine)
+	{
+		ImGui::Text("Circuit Name");
+		ImGui::SameLine();
+		if (ImGui::InputText("##circuitName", &m_engine->m_circuit->m_label)) 
+		{
+			auto* layer = Lumen::getApp().getEngineLayer<Design2DEngine>(m_engine);
+			layer->setName(m_engine->m_circuit->m_label);
+		}
+	}
+
+	else 
+	{
+		ImGui::Text("No active circuit.");
+	}
 }
 
 void CircuitEditor::end() 
 {
 	ImGui::End();
+}
+
+void CircuitEditor::setEngine(EngineCore* engine) 
+{
+	m_engine = dynamic_cast<Design2DEngine*>(engine);
+}
+
+void CircuitEditor::setActiveEngineTracking(bool track)
+{
+	m_trackActiveEngine = track;
 }
 
 //=======================================================================================================================================//

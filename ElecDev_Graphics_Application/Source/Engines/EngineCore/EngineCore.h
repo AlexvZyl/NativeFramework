@@ -108,6 +108,8 @@ public:
 	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };		
 	// Stores the vector that goes into the world.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
+	// Set the name elements of the engine.
+	inline virtual void setName(std::string& name) {}
 
 	// ------------- //
 	//  S T A T E S  //
