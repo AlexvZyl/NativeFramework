@@ -40,7 +40,7 @@ void ComponentEditor::begin()
 void ComponentEditor::onRender()
 {
 	// Fetch all the component names
-	// auto componentsUla = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
+	auto componentsUla = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
 	//	Fetch The active component.
 	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
 	//check that the active component exists. Close if not.
