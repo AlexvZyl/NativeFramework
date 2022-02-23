@@ -169,12 +169,9 @@ void ComponentEditor::onRender()
 	// --------------------- //
 
 	const char* buffer[100];
-
 	int i = 0;
-
 	for (auto& [key, val] : activeComponent->cableDict)
 	{
-
 		buffer[i] = key.c_str();
 		i++;
 	}
@@ -258,7 +255,6 @@ void ComponentEditor::onRender()
 	{
 		// int* typeval2 = (int*)&activeComponent->cableDict;
 		ImGui::Combo("Select Column##From", &fromSelector, buffer, activeComponent->cableDict.size());
-
 		ImGui::Combo("Select Column##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 		// ImGui::Text("Hello World");
 
@@ -280,13 +276,10 @@ void ComponentEditor::onRender()
 	{
 		ImGui::Combo("Select Column##size", &sizeSelector, buffer, activeComponent->cableDict.size());
 		// ImGui::Text(std::to_string(typeval3).c_str());
-		
-
 		if (ImGui::Button("Insert Size function"))
 		{
 			activeComponent->cableDict[buffer[sizeSelector]] = "Size()";
 		}
-
 		ImGui::TreePop();
 	}
 
@@ -309,19 +302,12 @@ void ComponentEditor::onRender()
 	if (ImGui::TreeNode("IF"))
 	{
 		ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
-
 		ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
-
 		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, ifRowSelection, IM_ARRAYSIZE(ifRowSelection));
-
 		ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
-
 		ImGui::InputText("##Comparison Value", &comparisonValue);
-
 		ImGui::InputText("##True Statement", &trueStatement);
-
 		ImGui::InputText("##False Statement", &falseStatement);
-
 		if (ImGui::Button("Insert IF function"))
 		{
 			if (trueStatement.find(comma) != std::string::npos) {
@@ -351,20 +337,17 @@ void ComponentEditor::onRender()
 	if (ImGui::TreeNode("Combine Text"))
 	{
 		ImGui::Combo("Select Column##Combine", &combineSelector, buffer, activeComponent->cableDict.size());
-
-		if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, activeComponent->cableDict.size())) {
+		if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, activeComponent->cableDict.size())) 
+    {
 			combineTextString += buffer[combineSelectorVariable] + plusString;
 		}
-
 		ImGui::InputText("##Combine String", &combineTextString);
-
 		if (ImGui::Button("Insert Combine function"))
 		{
 			combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
 			combineText += combineTextString + end;
 			activeComponent->cableDict[buffer[combineSelector]] = combineText;
 		}
-
 		ImGui::TreePop();
 	}
 
