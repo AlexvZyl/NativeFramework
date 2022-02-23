@@ -49,7 +49,7 @@ void Application::onRender()
 
 #ifdef _DEBUG
 	//ImGui::ShowStyleEditor();
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 #endif // _DEBUG
 
 	// Cleanup.
