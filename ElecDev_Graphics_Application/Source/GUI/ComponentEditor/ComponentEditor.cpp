@@ -24,7 +24,7 @@ ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 
 }
 
-void ComponentEditor::begin() 
+void ComponentEditor::begin()
 {
 	// Place editor at correct position.
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
@@ -52,18 +52,10 @@ void ComponentEditor::onRender()
 	}
 
 	//	Fetch The active component.
-	Cable* activeCable = Lumen::getApp().m_guiState->active_cable;
-	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
+	Component2D* activeComponent = Lumen::getApp().m_guiState->design_engine->m_activeComponent.get();
+	Cable* activeCable = Lumen::getApp().m_guiState->design_engine->m_activeCable.get();
 	//check that the active component exists. Close if not.
-	if (!activeComponent && !activeCable)
-	{
-		Lumen::getApp().m_guiState->componentEditor = false;
-		return;
-	}
-	if (activeCable) {
-		int  rubbish = 1;
-	}
-	else if (activeComponent) {
+	if (activeComponent) {
 
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
@@ -192,13 +184,13 @@ void ComponentEditor::onRender()
 
 		const char* buffer[100];
 
-		int i = 0;
+		int numKeys = 0;
 
 		for (auto& [key, val] : activeComponent->cableDict)
 		{
 
-			buffer[i] = key.c_str();
-			i++;
+			buffer[numKeys] = key.c_str();
+			numKeys++;
 		}
 
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -215,10 +207,18 @@ void ComponentEditor::onRender()
 				entryToAdd = "";
 			}
 
+
+			// Dimension of Table
+			int height;
+			int width = 600;
+
+			if (numKeys < 10) height = 50 + 25 * (numKeys - 1);
+			else height = 300;
+
 			// Setup table.
 			ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX
 				| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-				| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(600.0, 400.0));
+				| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(width, height));
 
 			// Setup header.
 			ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
@@ -226,56 +226,20 @@ void ComponentEditor::onRender()
 			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableHeadersRow();
 
-	int numKeys = 0;
+			// Store entries to be removed.
+			static std::vector<std::string> toRemove;
+			toRemove.reserve(1);
 
 
-		buffer[numKeys] = key.c_str();
-		numKeys++;
-	}
+			// Table.
+			for (auto& [key, val] : activeComponent->cableDict)
+			{
+				// ID.
+				ImGui::PushID((int)key.c_str());
 
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::TreeNode("Data Automation"))
-	{
-		// Add dict entry.
-		static std::string entryToAdd;
-		ImGui::Text("Add an attribute to the dictionary:");
-		ImGui::InputText("##DictEntry", &entryToAdd);
-		ImGui::SameLine();
-		if (ImGui::Button("Add"))
-		{
-			activeComponent->cableDict.insert({entryToAdd, "From(Circuit Database)"});
-			entryToAdd = "";
-		}
-
-		
-		// Dimension of Table
-		int height;
-		int width = 600;
-
-		if (numKeys < 10) height = 50 + 25 * (numKeys -1);
-		else height = 300;
-		
-		// Setup table.
-		ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX 
-						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(width, height));
-		
-		// Setup header.
-		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
-		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableHeadersRow();
-
-		// Store entries to be removed.
-		static std::vector<std::string> toRemove;
-		toRemove.reserve(1);
-
-		
-		// Table.
-		for (auto& [key, val]: activeComponent->cableDict) 
-		{
-			// ID.
-			ImGui::PushID((int)key.c_str());
+				// Selectable.
+				bool isOpen = true;
+				ImGui::TableNextRow();
 
 				// Dict data.
 				ImGui::TableSetColumnIndex(0);
@@ -350,7 +314,7 @@ void ComponentEditor::onRender()
 		//      IF STATEMENT     //
 		// --------------------- //
 
-	// This should be the number of components of a specific type or the names of the components
+		// This should be the number of components of a specific type or the names of the components
 
 		std::string ifString = "IF(";
 
@@ -360,21 +324,12 @@ void ComponentEditor::onRender()
 
 		std::string comma = ",";
 
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::TreeNode("IF"))
-	{
-		ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
-		ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
-		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
-		ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
-		ImGui::InputText("##Comparison Value", &comparisonValue);
-		ImGui::InputText("##True Statement", &trueStatement);
-		ImGui::InputText("##False Statement", &falseStatement);
-		if (ImGui::Button("Insert IF function"))
+		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+		if (ImGui::TreeNode("IF"))
 		{
 			ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
 			ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
-			ImGui::Combo("Select Equipment##IF2", &equipmentSelector, ifRowSelection, IM_ARRAYSIZE(ifRowSelection));
+			ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
 			ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
 			ImGui::InputText("##Comparison Value", &comparisonValue);
 			ImGui::InputText("##True Statement", &trueStatement);
@@ -421,10 +376,17 @@ void ComponentEditor::onRender()
 			}
 			ImGui::TreePop();
 		}
+	}	
+	else if (activeCable) 
+	{
+	//Handle cable properties here
 	}
-	else if (activeCable) {
-		//Handle cable properties here
+	else
+	{
+		Lumen::getApp().m_guiState->componentEditor = false;
+		return;
 	}
+
 }
 
 void ComponentEditor::end()
