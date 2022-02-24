@@ -38,9 +38,19 @@ void ComponentEditor::begin()
 void ComponentEditor::onRender()
 {
 	// Fetch all the component names
-	//auto designEng = Lumen::getApp().m_guiState->design_engine;
-	//auto piet = koos->m_circuit->m_components;
-	//auto componentsUla = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
+	auto numComponents = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
+
+	const char* componentNames[100];
+
+	int numCom = 0;
+
+	for (auto& key : numComponents)
+	{
+
+		componentNames[numCom] = key->titleString.c_str();
+		numCom++;
+	}
+
 	//	Fetch The active component.
 	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
 	//check that the active component exists. Close if not.
@@ -177,13 +187,13 @@ void ComponentEditor::onRender()
 
 	const char* buffer[100];
 
-	int i = 0;
+	int numKeys = 0;
 
 	for (auto& [key, val] : activeComponent->cableDict)
 	{
 
-		buffer[i] = key.c_str();
-		i++;
+		buffer[numKeys] = key.c_str();
+		numKeys++;
 	}
 
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -200,10 +210,18 @@ void ComponentEditor::onRender()
 			entryToAdd = "";
 		}
 
+		
+		// Dimension of Table
+		int height;
+		int width = 600;
+
+		if (numKeys < 10) height = 50 + 25 * (numKeys -1);
+		else height = 300;
+		
 		// Setup table.
 		ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX 
 						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(600.0, 400.0));
+						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(width, height));
 		
 		// Setup header.
 		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
@@ -300,7 +318,6 @@ void ComponentEditor::onRender()
 	// --------------------- //
 
 	// This should be the number of components of a specific type or the names of the components
-	const char* ifRowSelection[] = { "0", "1", "2", "3" };
 
 	std::string ifString = "IF(";
 
@@ -315,7 +332,7 @@ void ComponentEditor::onRender()
 	{
 		ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
 		ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
-		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, ifRowSelection, IM_ARRAYSIZE(ifRowSelection));
+		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
 		ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
 		ImGui::InputText("##Comparison Value", &comparisonValue);
 		ImGui::InputText("##True Statement", &trueStatement);
