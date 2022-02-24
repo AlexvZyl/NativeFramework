@@ -52,14 +52,12 @@ void Text::generateText(const std::string& text)
 	// Push primitive so that the VAO still keeps track of it.
 	if (!text.size()) 
 	{ 
-		m_vertexBufferPos = m_VAO->m_vertexCPU.size();
-		m_indexBufferPos = m_VAO->m_indexCPU.size();
-		m_VAO->pushPrimitive(this);
+		m_VAO->pushPrimitive(this, {}, {});
 		return; 
 	}
 
 	// Create variables and reserve memory.
-	std::vector<std::unique_ptr<VertexDataTextured>> vertices;
+	std::vector<VertexDataTextured> vertices;
 	std::vector<unsigned> indices;
 	int charCount = text.length();
 	indices.reserve((charCount + 1) * 6);	// Add one to the char count for
@@ -154,28 +152,28 @@ void Text::generateText(const std::string& text)
 
 	// -----------------------
 	// Vertex 1.
-	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	vertices.emplace_back(VertexDataTextured
 	(
 		glm::vec3(m_cursorStart.x, m_cursorStart.y + m_font->descender * m_textScale, boxZPos),
 		m_boxColor, glm::vec2(0.f, 0.f), 0, m_entityID)
 	);
 	// -----------------------
 	// Vertex2.
-	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	vertices.emplace_back(VertexDataTextured
 	(
 		glm::vec3(m_cursorStart.x, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos),
 		m_boxColor, glm::vec2(0.f, 1.f), 0, m_entityID)
 	);
 	// -----------------------
 	// Vertex 3.
-	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	vertices.emplace_back(VertexDataTextured
 	(
 		glm::vec3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->ascender * m_textScale, boxZPos),
 		m_boxColor, glm::vec2((1.f, 1.f)), 0, m_entityID)
 	);
 	// -----------------------
 	// Vertex 4.
-	vertices.emplace_back(std::make_unique<VertexDataTextured>
+	vertices.emplace_back(VertexDataTextured
 	(
 		glm::vec3(m_cursorStart.x + m_textLength * m_textScale, m_cursorStart.y + m_font->descender * m_textScale, boxZPos),
 		m_boxColor, glm::vec2((0.f, 1.f)), 0, m_entityID)
@@ -237,7 +235,7 @@ void Text::generateText(const std::string& text)
 
 		// -----------------------
 		// Vertex 1.
-		vertices.emplace_back(std::make_unique<VertexDataTextured>
+		vertices.emplace_back(VertexDataTextured
 		(
 			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + kerning) * m_textScale,
 					  m_cursorStart.y + (c.yPlaneBounds[0]) * m_textScale,
@@ -246,7 +244,7 @@ void Text::generateText(const std::string& text)
 		);
 		// -----------------------
 		// Vertex2.
-		vertices.emplace_back(std::make_unique<VertexDataTextured>
+		vertices.emplace_back(VertexDataTextured
 		(
 			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + kerning) * m_textScale,
 					  m_cursorStart.y + (c.yPlaneBounds[0] + c.height) * m_textScale,
@@ -255,7 +253,7 @@ void Text::generateText(const std::string& text)
 		);
 		// -----------------------
 		// Vertex 3.
-		vertices.emplace_back(std::make_unique<VertexDataTextured>
+		vertices.emplace_back(VertexDataTextured
 		(
 			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + c.width + kerning) * m_textScale,
 					  m_cursorStart.y + (c.yPlaneBounds[0] + c.height) * m_textScale,
@@ -264,7 +262,7 @@ void Text::generateText(const std::string& text)
 		);
 		// -----------------------
 		// Vertex 4.
-		vertices.emplace_back(std::make_unique<VertexDataTextured>
+		vertices.emplace_back(VertexDataTextured
 		(
 			glm::vec3(m_cursorStart.x + (totalAdvance + c.xPlaneBounds[0] + c.width + kerning) * m_textScale,
 					  m_cursorStart.y + (c.yPlaneBounds[0]) * m_textScale,
@@ -291,8 +289,7 @@ void Text::generateText(const std::string& text)
 	}
 
 	// Write data to VAO.
-	m_VAO->appendVertexData(vertices, indices, &m_vertexBufferPos, &m_indexBufferPos);
-	m_VAO->pushPrimitive(this);
+	m_VAO->pushPrimitive(this, vertices, indices);
 }
 
 //=============================================================================================================================================//
@@ -309,25 +306,29 @@ void Text::setBoxColour(const glm::vec4& colour)
 { 
 	m_boxColor = colour;
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++) 
-		m_VAO->m_vertexCPU[i]->data.color = colour;
-	m_VAO->sync(this);
+		m_VAO->m_vertexCPU[i].data.color = colour;
+
+	syncWithGPU();
 }
 
 void Text::setColor(const glm::vec4& color) 
 {
 	m_colour = color;
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i]->data.color = color;
-	m_VAO->sync(this);
+		m_VAO->m_vertexCPU[i].data.color = color;
+
+	syncWithGPU();
 }
 
 void Text::setLayer(float layer)
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++)
-		m_VAO->m_vertexCPU[i]->data.position.z = layer - 0.001;
+		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
+
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i]->data.position.z = layer;
-	m_VAO->sync(this);
+		m_VAO->m_vertexCPU[i].data.position.z = layer;
+
+	syncWithGPU();
 }
 
 //=============================================================================================================================================//

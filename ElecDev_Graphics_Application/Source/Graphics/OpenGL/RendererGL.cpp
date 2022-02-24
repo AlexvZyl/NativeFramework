@@ -28,6 +28,7 @@
 std::map<std::string, std::unique_ptr<Shader>> Renderer::m_shaders;
 Scene* Renderer::m_scene = nullptr;
 std::unique_ptr<Font> Renderer::m_defaultFont = nullptr;
+std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
 
 //==============================================================================================================================================//
 //  Scene.																																		//
@@ -84,7 +85,7 @@ void Renderer::render2DScene(Scene* scene)
 	// Update camera.
 	scene->updateCamera();
 
-	// Render to framebffer.
+	// Render to framebuffer.
 	scene->bindFBO();
 	scene->clearFBO();
 
@@ -309,7 +310,6 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
 				       										  m_scene->m_texturedTrianglesVAO.get(), m_defaultFont.get(),
 				       										  parent, horizontalAlignment, verticalAlignment)});
-	
 	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
 }
 
@@ -331,6 +331,9 @@ void Renderer::initialise()
 	Renderer::compileShaders();
 	// Loads the default font to be used by the renderer.
 	Renderer::loadDefaultFont();
+
+	// Default scenes.
+	//generateDefaultScenes();
 }
 
 void Renderer::loadDefaultFont()
@@ -387,6 +390,23 @@ void Renderer::setViewport(const glm::vec2& viewport)
 void Renderer::setViewport(const glm::vec4& viewport)
 {
 	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
+}
+
+//==============================================================================================================================================//
+//  Default Scenes.																																//
+//==============================================================================================================================================//
+
+void Renderer::generateDefaultScenes() 
+{
+	m_default2DScene = std::make_unique<Scene>(CameraType::Standard2D, 900, 900, 1);
+	// Create the scene.
+	render2DScene(m_default2DScene.get());
+	m_default2DScene->m_FBO->renderFromMSAA();
+}
+
+unsigned Renderer::getDefault2DSceneTexture() 
+{
+	return m_default2DScene->getRenderTexture();
 }
 
 //==============================================================================================================================================//

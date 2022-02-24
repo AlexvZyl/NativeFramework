@@ -23,7 +23,7 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	std::vector<std::unique_ptr<VertexData>> vertexVector;
+	std::vector<VertexData> vertexVector;
 	vertexVector.reserve(4);
 	std::vector<glm::vec3> vertices;
 	vertices.reserve(4);
@@ -32,7 +32,7 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject
 	vertices.emplace_back(glm::vec3(0.008f, 0.f, 0.9f));
 	vertices.emplace_back(glm::vec3(-0.008f, 0.f, 0.9f));
 	for (glm::vec3 vertex : vertices)
-		vertexVector.emplace_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
+		vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
 	m_vertexCount = vertexVector.size();
 
 	// --------------- //
@@ -77,8 +77,7 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject
 	m_indexCount = indices.size();
 	translateTo(parent->centre);
 
-	m_VAO->appendVertexData(vertexVector, indices, &m_vertexBufferPos, &m_indexBufferPos);
-	m_VAO->pushPrimitive(this);
+	m_VAO->pushPrimitive(this, vertexVector, indices);
 }
 
 void IOIndicator::setType(PortType type, PortPosition position)
@@ -92,14 +91,14 @@ void IOIndicator::setType(PortType type, PortPosition position)
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	std::vector<std::unique_ptr<VertexData>> vertexVector;
+	std::vector<VertexData> vertexVector;
 	std::vector<glm::vec3> vertices;
 	vertices.push_back(glm::vec3(0.f, 0.008f, 0.9f));
 	vertices.push_back(glm::vec3(0.f, -0.008f, 0.9f));
 	vertices.push_back(glm::vec3(0.008f, 0.f, 0.9f));
 	vertices.push_back(glm::vec3(-0.008f, 0.f, 0.9f));
 	for (glm::vec3 vertex : vertices)
-		vertexVector.push_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
+		vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
 	m_vertexCount = vertexVector.size();
 
 	// --------------- //
@@ -143,9 +142,7 @@ void IOIndicator::setType(PortType type, PortPosition position)
 		// Handle PORT_INOUT.
 	}
 	m_indexCount = indices.size();
-
-	m_VAO->appendVertexData(vertexVector, indices, &m_vertexBufferPos, &m_indexBufferPos);
-	m_VAO->pushPrimitive(this);
+	m_VAO->pushPrimitive(this, vertexVector, indices);
 }
 
 //==============================================================================================================================================//

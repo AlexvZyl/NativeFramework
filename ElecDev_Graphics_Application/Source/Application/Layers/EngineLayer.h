@@ -6,6 +6,7 @@
 
 #include "GUI/GraphicsScene/GraphicsScene.h"
 #include "Application/Layers/GuiLayer.h"
+#include "OpenGL/RendererGL.h"
 
 //==============================================================================================================================================//
 //  GUI Layer.																																	//
@@ -31,7 +32,10 @@ public:
 	}
 
 	// Destructor.
-	inline virtual ~EngineLayer() = default;
+	inline virtual ~EngineLayer() 
+	{
+		Renderer::bindScene(m_engine->m_scene.get());
+	};
 
 	// Set the name of the elements.
 	inline virtual void setName(std::string name) override 
@@ -39,7 +43,6 @@ public:
 		GuiLayer::setName(name);
 		m_engine->setName(name);
 	}
-
 
 	// Get the engine in the layer.
 	inline EngineType* getEngine() 

@@ -149,11 +149,11 @@ Port* Design2DEngine::getPort(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (!currentEntity) return nullptr;
 		while (currentEntity->m_type != EntityType::PORT)
 		{
 			currentEntity = currentEntity->m_parent;
 			if (!currentEntity) return nullptr;
-			if (currentEntity->m_parent == nullptr) return nullptr;
 		}
 
 		// This cast remains valid provided all entities on screen are decendents of components. 

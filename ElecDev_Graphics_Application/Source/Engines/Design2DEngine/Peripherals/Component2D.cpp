@@ -49,7 +49,6 @@ Component2D::Component2D(Circuit* parent)
 	// --------------------- //
 
 	// Main shape.
-	Scene* scene = Renderer::getScene();
 	shape = Renderer::addPolygon2D(vertices, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
@@ -98,7 +97,6 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 
 Component2D::~Component2D() 
 {
-	// Remove the renderer primitives.
 	Renderer::remove(shape);
 	Renderer::remove(border);
 	Renderer::remove(title);

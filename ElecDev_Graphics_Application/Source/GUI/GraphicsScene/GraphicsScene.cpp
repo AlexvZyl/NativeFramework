@@ -13,6 +13,7 @@
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Application/Application.h"
 #include "Lumen.h"
+#include "OpenGL/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Constructor.																																//
@@ -83,7 +84,8 @@ void GraphicsScene::onRenderStateChange(bool newState)
 	{
 		m_engine->m_scene->deleteFrameBufferResources();
 		// The FBO has been destroyed.
-		m_textureID = nullptr;
+		//m_textureID = (void*)Renderer::getDefault2DSceneTexture();
+		m_textureID = nullptr;	
 	}
 }
 
