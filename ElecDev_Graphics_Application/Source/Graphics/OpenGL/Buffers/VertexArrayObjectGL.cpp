@@ -327,24 +327,21 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::syncPrimitives()
 {
-	// Check if we resize it.
-	if (!queryBufferResize())
+	// Could there be a situation where a removed primitive is set to be synced?
+	// Update the primitives' vertex data.
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+	for (PrimitivePtr* primitive : m_primitivesToSync)
 	{
-		// Could there be a situation where a removed primitive is set to be synced?
-		// Update the primitives' vertex data.
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
-		for (PrimitivePtr* primitive : m_primitivesToSync)
+		for (int index = primitive->m_vertexBufferPos; index < primitive->m_vertexCount + primitive->m_vertexBufferPos; index++)
 		{
-			for (int index = primitive->m_vertexBufferPos; index < primitive->m_vertexCount + primitive->m_vertexBufferPos; index++)
-			{
-				auto& vertex = m_vertexCPU[index];
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.getData()));
-				GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.getID()));
-			}
-			// Primitive removed from queue.
-			primitive->m_queuedForSync = false;
+			auto& vertex = m_vertexCPU[index];
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize(), vertex.getDataSize(), vertex.getData()));
+			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.getID()));
 		}
+		// Primitive removed from queue.
+		primitive->m_queuedForSync = false;
 	}
+	
 	// Update flags.
 	m_primitivesSynced = true;
 	// Primitives have been synced.

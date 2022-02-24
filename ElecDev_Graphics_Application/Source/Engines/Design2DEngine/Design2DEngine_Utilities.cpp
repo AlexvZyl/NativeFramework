@@ -149,9 +149,9 @@ Port* Design2DEngine::getPort(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (!currentEntity) return nullptr;
 		while (currentEntity->m_type != EntityType::PORT)
 		{
-			if (!currentEntity) return nullptr;
 			currentEntity = currentEntity->m_parent;
 			if (!currentEntity) return nullptr;
 		}

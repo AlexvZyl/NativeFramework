@@ -211,7 +211,7 @@ void ComponentEditor::onRender()
 
 			// Dimension of Table
 			int height;
-			if (numKeys < 10) height = 50 + 25 * (numKeys - 1);
+			if (numKeys < 10) height = 50 + 27 * (numKeys - 1);
 			else height = 300;
 
 			// Setup table.
@@ -383,11 +383,7 @@ void ComponentEditor::onRender()
 	{
 	//Handle cable properties here
 	}
-	else
-	{
-		Lumen::getApp().m_guiState->componentEditor = false;
-		return;
-	}
+
 }
 
 void ComponentEditor::end()
