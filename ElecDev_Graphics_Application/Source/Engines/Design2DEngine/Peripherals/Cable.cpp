@@ -68,12 +68,14 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, endPt2, m_thickness, m_colour, this));
 }
 
-Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent) 
+Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent, std::string titleString)
 	: Entity(EntityType::CABLE, parent)
 {
 	m_startPort = startPort;
 	m_endPort = endPort;
 	m_colour = { 0.4f, 0.4f, 0.5f, 1.0f };
+
+	m_titleString = titleString;
 
 	// Attach the ports
 	m_startPort->attachCable(this);
@@ -114,19 +116,19 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 
 	switch (startPort->m_position) {
 	case PortPosition::TOP:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
 		//endPt += glm::vec2(0.f, initial_length);
 		break;
 	case PortPosition::BOTTOM:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
 		//endPt += glm::vec2(0.f, -initial_length);
 		break;
 	case PortPosition::LEFT:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
 		//endPt += glm::vec2(-initial_length, 0.f);
 		break;
 	case PortPosition::RIGHT:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
 		//endPt += glm::vec2(initial_length, 0.f);
 		break;
 	}
