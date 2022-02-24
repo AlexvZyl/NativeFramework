@@ -20,6 +20,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable>& cable)
 	emitter << YAML::Key << "Thickness" << YAML::Value << cable->m_thickness;
 	emitter << YAML::Key << "Start port" << cable->m_startPort->m_entityID;
 	emitter << YAML::Key << "End port" << cable->m_endPort->m_entityID;
+	emitter << YAML::Key << "Title1 pos" << YAML::Value << cable->m_title1->m_trackedCenter;
+	emitter << YAML::Key << "Title2 pos" << YAML::Value << cable->m_title2->m_trackedCenter;
+	emitter << YAML::Key << "Title" << YAML::Value << cable->m_titleString;
 
 	// Nodes.
 	emitter << YAML::Key << "Nodes" << YAML::Value;

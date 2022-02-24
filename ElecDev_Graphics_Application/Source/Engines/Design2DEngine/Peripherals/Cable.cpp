@@ -68,12 +68,16 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, endPt2, m_thickness, m_colour, this));
 }
 
-Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent) 
+Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent, glm::vec3 title1pos, glm::vec3 title2pos, std::string titleString)
 	: Entity(EntityType::CABLE, parent)
 {
 	m_startPort = startPort;
 	m_endPort = endPort;
 	m_colour = { 0.4f, 0.4f, 0.5f, 1.0f };
+
+	m_titleString = titleString;
+	m_title1 = Renderer::addText2D(m_titleString, title1pos, m_titleColour, m_titleSize);
+	m_title2 = Renderer::addText2D(m_titleString, title2pos, m_titleColour, m_titleSize);
 
 	// Attach the ports
 	m_startPort->attachCable(this);

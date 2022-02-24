@@ -59,7 +59,7 @@ public:
     //Create a new cable attached to the start port.
     Cable(Port* startPort, Circuit* parent);
     //Create a new cable from one port to another that gots through each node in the node list
-    Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent);
+    Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent, glm::vec3 title1pos, glm::vec3 title2pos, std::string titleString);
     ~Cable();
     void extendSegment(glm::vec2 nextPoint);
     void extendPrevSegment(glm::vec2 nextPoint);
