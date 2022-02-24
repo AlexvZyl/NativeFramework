@@ -38,9 +38,19 @@ void ComponentEditor::begin()
 void ComponentEditor::onRender()
 {
 	// Fetch all the component names
-	//auto designEng = Lumen::getApp().m_guiState->design_engine;
-	//auto piet = koos->m_circuit->m_components;
-	//auto componentsUla = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
+	auto numComponents = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
+
+	const char* componentNames[100];
+
+	int numCom = 0;
+
+	for (auto& key : numComponents)
+	{
+
+		componentNames[numCom] = key->titleString.c_str();
+		numCom++;
+	}
+
 	//	Fetch The active component.
 	Cable* activeCable = Lumen::getApp().m_guiState->active_cable;
 	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
@@ -216,20 +226,56 @@ void ComponentEditor::onRender()
 			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableHeadersRow();
 
-			// Store entries to be removed.
-			static std::vector<std::string> toRemove;
-			toRemove.reserve(1);
+	int numKeys = 0;
 
 
-			// Table.
-			for (auto& [key, val] : activeComponent->cableDict)
-			{
-				// ID.
-				ImGui::PushID((int)key.c_str());
+		buffer[numKeys] = key.c_str();
+		numKeys++;
+	}
 
-				// Selectable.
-				bool isOpen = true;
-				ImGui::TableNextRow();
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+	if (ImGui::TreeNode("Data Automation"))
+	{
+		// Add dict entry.
+		static std::string entryToAdd;
+		ImGui::Text("Add an attribute to the dictionary:");
+		ImGui::InputText("##DictEntry", &entryToAdd);
+		ImGui::SameLine();
+		if (ImGui::Button("Add"))
+		{
+			activeComponent->cableDict.insert({entryToAdd, "From(Circuit Database)"});
+			entryToAdd = "";
+		}
+
+		
+		// Dimension of Table
+		int height;
+		int width = 600;
+
+		if (numKeys < 10) height = 50 + 25 * (numKeys -1);
+		else height = 300;
+		
+		// Setup table.
+		ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX 
+						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
+						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(width, height));
+		
+		// Setup header.
+		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableHeadersRow();
+
+		// Store entries to be removed.
+		static std::vector<std::string> toRemove;
+		toRemove.reserve(1);
+
+		
+		// Table.
+		for (auto& [key, val]: activeComponent->cableDict) 
+		{
+			// ID.
+			ImGui::PushID((int)key.c_str());
 
 				// Dict data.
 				ImGui::TableSetColumnIndex(0);
@@ -304,8 +350,7 @@ void ComponentEditor::onRender()
 		//      IF STATEMENT     //
 		// --------------------- //
 
-		// This should be the number of components of a specific type or the names of the components
-		const char* ifRowSelection[] = { "0", "1", "2", "3" };
+	// This should be the number of components of a specific type or the names of the components
 
 		std::string ifString = "IF(";
 
@@ -315,8 +360,17 @@ void ComponentEditor::onRender()
 
 		std::string comma = ",";
 
-		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-		if (ImGui::TreeNode("IF"))
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+	if (ImGui::TreeNode("IF"))
+	{
+		ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
+		ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
+		ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
+		ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
+		ImGui::InputText("##Comparison Value", &comparisonValue);
+		ImGui::InputText("##True Statement", &trueStatement);
+		ImGui::InputText("##False Statement", &falseStatement);
+		if (ImGui::Button("Insert IF function"))
 		{
 			ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
 			ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
