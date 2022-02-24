@@ -26,8 +26,6 @@ void CircuitEditor::begin()
 
 void CircuitEditor::onRender() 
 {
-	ImGui::NewLine();
-
 	// Get the active engine.
 	if(m_trackActiveEngine)
 		m_engine = Lumen::getApp().m_guiState->design_engine;

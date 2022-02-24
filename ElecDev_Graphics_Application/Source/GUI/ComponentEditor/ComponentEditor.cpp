@@ -38,24 +38,33 @@ void ComponentEditor::onRender()
 {
 	// Fetch all the component names
 	auto numComponents = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
-
 	const char* componentNames[100];
-
 	int numCom = 0;
-
 	for (auto& key : numComponents)
 	{
-
 		componentNames[numCom] = key->titleString.c_str();
 		numCom++;
 	}
 
-	//	Fetch The active component.
-	Component2D* activeComponent = Lumen::getApp().m_guiState->design_engine->m_activeComponent.get();
-	Cable* activeCable = Lumen::getApp().m_guiState->design_engine->m_activeCable.get();
-	//check that the active component exists. Close if not.
-	if (activeComponent) {
+	// Fetch active elements.
+	static Component2D* activeComponent;
+	static Cable* activeCable;
+	Component2D* tempComp = Lumen::getApp().m_guiState->design_engine->m_activeComponent.get();
+	if (tempComp)
+	{
+		activeComponent = tempComp;
+		activeCable = nullptr;
+	}
+	Cable* tempCable = Lumen::getApp().m_guiState->design_engine->m_activeCable.get();
+	if (tempCable)
+	{
+		activeCable = tempCable;
+		activeComponent = nullptr;
+	}
 
+	//check that the active component exists. Close if not.
+	if (activeComponent) 
+	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
 		if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
@@ -71,13 +80,14 @@ void ComponentEditor::onRender()
 	if (ImGui::TreeNode("Ports"))
 	{
 		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg 
-											| ImGuiTableFlags_ScrollY, ImVec2(0, 250));
+											| ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 250));
 		//ImGui::SetColumnWidth(1, 20.f);
 
 		//Setup table
 		ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
 		ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableHeadersRow();
 
 			ImGui::TableNextRow();
@@ -103,36 +113,31 @@ void ComponentEditor::onRender()
 					sprintf_s(labelType, "##T%d,%d", i, j);
 					char labelRemove[20];
 					sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
-
 					// Port entry in table.
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
-
 					// Position.
 					ImGui::PushItemWidth(-1);
 					ImGui::Text(portPositions[i].c_str());
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
-
 					// Name.
-					ImGui::PushItemWidth(185.f);
+					ImGui::PushItemWidth(-1);
 					if (ImGui::InputText(labelName, &port->m_label))
 						port->title->updateText(port->m_label);
-
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
-
 					// Type.
 					ImGui::PushItemWidth(-1);
 					int* typeval = (int*)&port->m_type;
 					ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
-
 					// Remove.
+					ImGui::PushItemWidth(-1);
 					if (ImGui::Button(labelRemove))
 						activeComponent->removePort(port);
-
+					ImGui::PopItemWidth();
 				}
 				if (j) ImGui::Separator();
 			}
@@ -158,21 +163,23 @@ void ComponentEditor::onRender()
 				ImGui::PopItemWidth();
 				ImGui::TableNextColumn();
 				//Add a "Confirm" button
+				ImGui::PushItemWidth(-1);
 				if (ImGui::Button("Confirm"))
 				{
 					// Add the port to the component.
 					activeComponent->addPort(newPos, (PortType)newType, newName);
 					addingPort = false;
 				}
+				ImGui::PopItemWidth();
 			}
 			ImGui::EndTable();
+
 			if (!addingPort)
 			{
 				if (ImGui::Button("New Port"))
-				{
 					addingPort = true;
-				}
 			}
+
 			ImGui::TreePop();
 		}
 
@@ -181,12 +188,9 @@ void ComponentEditor::onRender()
 		// --------------------- //
 
 		const char* buffer[100];
-
 		int numKeys = 0;
-
 		for (auto& [key, val] : activeComponent->cableDict)
 		{
-
 			buffer[numKeys] = key.c_str();
 			numKeys++;
 		}
@@ -205,18 +209,15 @@ void ComponentEditor::onRender()
 				entryToAdd = "";
 			}
 
-
 			// Dimension of Table
 			int height;
-			int width = 600;
-
 			if (numKeys < 10) height = 50 + 25 * (numKeys - 1);
 			else height = 300;
 
 			// Setup table.
 			ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX
 				| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-				| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(width, height));
+				| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(0, height));
 
 			// Setup header.
 			ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
@@ -227,7 +228,6 @@ void ComponentEditor::onRender()
 			// Store entries to be removed.
 			static std::vector<std::string> toRemove;
 			toRemove.reserve(1);
-
 
 			// Table.
 			for (auto& [key, val] : activeComponent->cableDict)
@@ -241,21 +241,25 @@ void ComponentEditor::onRender()
 
 				// Dict data.
 				ImGui::TableSetColumnIndex(0);
+				ImGui::PushItemWidth(-1);
 				ImGui::Text(key.c_str());
+				ImGui::PopItemWidth();
 				ImGui::TableSetColumnIndex(1);
+				ImGui::PushItemWidth(-1);
 				ImGui::InputText("##Input", &val);
+				ImGui::PopItemWidth();
 				ImGui::TableSetColumnIndex(2);
 				// Remove button.
+				ImGui::PushItemWidth(-1);
 				if (ImGui::Button("Remove"))
 					toRemove.push_back(key);
+				ImGui::PopItemWidth();
 				// ID.
 				ImGui::PopID();
 			}
 
 			// Cleanup table.
-
 			ImGui::EndTable();
-
 			ImGui::TreePop();
 
 			// Remove entries.

@@ -48,7 +48,7 @@ void Application::onRender()
 		layer->onRender();
 
 #ifdef _DEBUG
-	//ImGui::ShowStyleEditor();
+	ImGui::ShowStyleEditor();
 	//ImGui::ShowDemoWindow();
 #endif
 

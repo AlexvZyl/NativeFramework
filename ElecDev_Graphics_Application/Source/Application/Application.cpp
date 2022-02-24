@@ -137,7 +137,7 @@ void Application::setGuiTheme()
 
 	// Padding.
 	style.DisplaySafeAreaPadding = ImVec2(0.f, 0.f);
-	style.WindowPadding = ImVec2(1.f, 1.f);
+	style.WindowPadding = ImVec2(10.f, 10.f);
 	style.FramePadding = ImVec2(6.f, 3.5f);
 
 	// ------------- //

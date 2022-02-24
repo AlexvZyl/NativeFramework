@@ -153,7 +153,7 @@ Port* Design2DEngine::getPort(unsigned eID)
 		{
 			if (!currentEntity) return nullptr;
 			currentEntity = currentEntity->m_parent;
-			if (!currentEntity->m_parent) return nullptr;
+			if (!currentEntity) return nullptr;
 		}
 
 		// This cast remains valid provided all entities on screen are decendents of components. 
