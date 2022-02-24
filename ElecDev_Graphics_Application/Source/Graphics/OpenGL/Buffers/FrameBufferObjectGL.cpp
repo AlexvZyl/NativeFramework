@@ -36,17 +36,25 @@ FrameBufferObject::FrameBufferObject(int width, int height, int MSAA)
 	//  R E N D E R   Q U A D  //
 	// ----------------------- //
 
-	// Create the quad.
+	// Create VAO.
 	m_renderVAO = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	std::vector<std::unique_ptr<VertexDataTextured>> vertices;
-	vertices.reserve(4);
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3(-1.f, -1.f,  0.f), glm::vec4(1.f, 0.f, 0.f, 1.f), glm::vec2(0.f, 0.f),   2.f,  1));
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3(-1.f,  1.f,  0.f), glm::vec4(0.f, 1.f, 0.f, 1.f), glm::vec2(0.f, 1.f),   2.f,  1));
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3( 1.f,  1.f,  0.f), glm::vec4(0.f, 0.f, 1.f, 1.f), glm::vec2(1.f, 1.f),   2.f,  1));
-	vertices.emplace_back(std::make_unique<VertexDataTextured>(glm::vec3( 1.f, -1.f,  0.f), glm::vec4(1.f, 0.f, 1.f, 1.f), glm::vec2(1.f, 0.f),   2.f,  1));
-	std::vector<unsigned> indices = { 0,1,2, 2,3,0 };
-	m_renderVAO->appendVertexData(vertices, indices);
-	unsigned texture = loadBitmapToGL(loadImageFromResource(CIRCUIT_TREE_PNG));
+	m_renderVAO->setBufferIncrementSize(4);
+
+	// Vertex data.
+	m_renderVAO->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(-1.f, -1.f, 0.f), glm::vec4(1.f, 0.f, 0.f, 1.f), glm::vec2(0.f, 0.f), 2.f, 1));
+	m_renderVAO->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(-1.f, 1.f, 0.f), glm::vec4(0.f, 1.f, 0.f, 1.f), glm::vec2(0.f, 1.f), 2.f, 1));
+	m_renderVAO->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 1.f, 1.f), glm::vec2(1.f, 1.f), 2.f, 1));
+	m_renderVAO->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3( 1.f, -1.f,  0.f), glm::vec4(1.f, 0.f, 1.f, 1.f), glm::vec2(1.f, 0.f),   2.f,  1));
+	m_renderVAO->m_vertexCount += 4;
+
+	// Index data.
+	m_renderVAO->m_indexCPU.insert(m_renderVAO->m_indexCPU.end(), { 0,1,2, 2,3,0 });
+	m_renderVAO->m_indexCount += 6;
+
+	// Data will be loaded upon first resize.
+	m_renderVAO->queryBufferResize();
+
+	// Shader for render pass.
 	int msaaTextureID = 2;	// Reserved for FBO redering.
 	m_shader->bind();
 	m_shader->setInt("msaaSamples", m_MSAA);

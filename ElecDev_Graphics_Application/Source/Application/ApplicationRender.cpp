@@ -50,7 +50,7 @@ void Application::onRender()
 #ifdef _DEBUG
 	//ImGui::ShowStyleEditor();
 	//ImGui::ShowDemoWindow();
-#endif // _DEBUG
+#endif
 
 	// Cleanup.
 	onRenderCleanup();

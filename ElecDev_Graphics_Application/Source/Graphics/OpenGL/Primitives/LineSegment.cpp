@@ -29,29 +29,28 @@ void LineSegment::translate(const glm::vec2& translation)
 {
 	glm::vec3 translation3{ translation, 0.f };
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-	{
-		m_VAO->m_vertexCPU[i]->data.position += translation3;
-	}
+		m_VAO->m_vertexCPU[i].data.position += translation3;
+
 	m_trackedCenter += translation3;
 	m_start += translation;
 	m_end += translation;
-	m_VAO->sync(this);
+	syncWithGPU();
 }
 
 void LineSegment::setStart(const glm::vec2& start)
 {
 	m_start = start;
-	m_VAO->m_vertexCPU[m_vertexBufferPos]->data.position = glm::vec3(m_start - m_thickness * (m_perpendicular::member), 0.f);
-	m_VAO->m_vertexCPU[m_vertexBufferPos + 1]->data.position = glm::vec3(m_start + m_thickness * (m_perpendicular::member), 0.f);
-	m_VAO->sync(this);
+	m_VAO->m_vertexCPU[m_vertexBufferPos].data.position = glm::vec3(m_start - m_thickness * (m_perpendicular::member), 0.f);
+	m_VAO->m_vertexCPU[m_vertexBufferPos + 1].data.position = glm::vec3(m_start + m_thickness * (m_perpendicular::member), 0.f);
+	syncWithGPU();
 }
 
 void LineSegment::setEnd(const glm::vec2& end)
 {
 	m_end = end;
-	m_VAO->m_vertexCPU[m_vertexBufferPos + 2]->data.position = glm::vec3(m_end + m_thickness * (m_perpendicular::member), 0.f);
-	m_VAO->m_vertexCPU[m_vertexBufferPos + 3]->data.position = glm::vec3(m_end - m_thickness * (m_perpendicular::member), 0.f);
-	m_VAO->sync(this);
+	m_VAO->m_vertexCPU[m_vertexBufferPos + 2].data.position = glm::vec3(m_end + m_thickness * (m_perpendicular::member), 0.f);
+	m_VAO->m_vertexCPU[m_vertexBufferPos + 3].data.position = glm::vec3(m_end - m_thickness * (m_perpendicular::member), 0.f);
+	syncWithGPU();
 }
 
 //==============================================================================================================================================//

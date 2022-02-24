@@ -113,9 +113,10 @@ void Application::setGuiTheme()
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ItemSpacing = ImVec2(12, 6);
 	style.ItemInnerSpacing = ImVec2(8, 4);
-	style.IndentSpacing = 25.0f;
+	style.IndentSpacing = 1.0f;
 	style.ScrollbarSize = 15.0f;
 	style.GrabMinSize = 5.0f;
+	style.WindowMenuButtonPosition = ImGuiDir_Right;
 
 	// Rounding.
 	style.WindowRounding = 1.f;

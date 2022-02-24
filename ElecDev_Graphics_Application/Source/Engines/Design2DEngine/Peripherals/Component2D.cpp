@@ -49,7 +49,6 @@ Component2D::Component2D(Circuit* parent)
 	// --------------------- //
 
 	// Main shape.
-	Scene* scene = Renderer::getScene();
 	shape = Renderer::addPolygon2D(vertices, this);
 	shape->setColor(shapeColour);
 	shape->setLayer(0.001f);//temp fix
@@ -73,21 +72,6 @@ Component2D::Component2D(Circuit* parent)
 	cableDict.insert(std::pair<std::string, std::string>("From",			"From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("To", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("Voltage", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("Circuit", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableRating", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableIsolation", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableSuffix", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableLength", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableTAG", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("IndoorTermCount", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("OutdoorTermCount", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableSize", "Size()"));
-	//cableDict.insert(std::pair<std::string, std::string>("CoreCount", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("Metal", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableDiameter", "From(Circuit Database)"));
-	//cableDict.insert(std::pair<std::string, std::string>("CableMass", "From(Circuit Database)"));
 }
 
 Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
@@ -98,11 +82,6 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 
 Component2D::~Component2D() 
 {
-	portsEast.clear();
-	portsWest.clear();
-	portsNorth.clear();
-	portsSouth.clear();
-	// Remove the renderer primitives.
 	Renderer::remove(shape);
 	Renderer::remove(border);
 	Renderer::remove(title);

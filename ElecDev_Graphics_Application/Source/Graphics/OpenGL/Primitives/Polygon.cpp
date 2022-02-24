@@ -19,7 +19,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
-	std::vector<std::unique_ptr<VertexData>> vertexVector;
+	std::vector<VertexData> vertexVector;
 	vertexVector.reserve(m_vertexCount);
 	std::vector<unsigned> indices;
 	
@@ -28,7 +28,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	// ----------------- //
 
 	for (auto& vertex : vertices)
-		vertexVector.emplace_back(std::make_unique<VertexData>(vertex, m_colour, m_entityID));
+		vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
 
 	// --------------- //
 	//  I N D I C E S  //
@@ -58,8 +58,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	m_indexCount = indices.size();
     
 	// Pass to VAO.
-	m_VAO->appendVertexData(vertexVector, indices, &m_vertexBufferPos, &m_indexBufferPos);
-	m_VAO->pushPrimitive(this);
+	m_VAO->pushPrimitive(this, vertexVector, indices);
 }
 
 //=============================================================================================================================================//

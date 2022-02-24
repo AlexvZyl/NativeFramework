@@ -10,7 +10,6 @@
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Application/Application.h"	
-#include "ComponentEditorPopup/ComponentEditorPopup.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 
@@ -66,10 +65,11 @@ void ComponentEditor::onRender()
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("Ports"))
 	{
-		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingFixedFit);
+		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg 
+											| ImGuiTableFlags_ScrollY, ImVec2(0, 250));
 		//ImGui::SetColumnWidth(1, 20.f);
 
-			//Setup table
+		//Setup table
 		ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
 		ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
@@ -110,8 +110,10 @@ void ComponentEditor::onRender()
 				ImGui::TableNextColumn();
 
 				// Name.
+				ImGui::PushItemWidth(-1);
 				if (ImGui::InputText(labelName, &port->m_label))
 					port->title->updateText(port->m_label);
+				ImGui::PopItemWidth();
 
 				// Type.
 				ImGui::TableNextColumn();
@@ -131,7 +133,7 @@ void ComponentEditor::onRender()
 
 		if (addingPort) 
 		{
-			//create a table entry for the port to be added
+			// Create a table entry for the port to be added
 			ImGui::TableNextRow();
 			ImGui::TableNextColumn();
 			//Add the position
@@ -171,14 +173,12 @@ void ComponentEditor::onRender()
 	// --------------------- //
 	//  D A T A   T A B L E  //
 	// --------------------- //
-
+	
+	// Generate dropdown data.
 	const char* buffer[100];
-
 	int i = 0;
-
 	for (auto& [key, val] : activeComponent->cableDict)
 	{
-
 		buffer[i] = key.c_str();
 		i++;
 	}
@@ -198,54 +198,50 @@ void ComponentEditor::onRender()
 		}
 
 		// Setup table.
-		ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX 
-						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(600.0, 400.0));
-		
-		// Setup header.
-		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
-		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableHeadersRow();
-
-		// Store entries to be removed.
-		static std::vector<std::string> toRemove;
-		toRemove.reserve(1);
-
-		
-		// Table.
-		for (auto& [key, val]: activeComponent->cableDict) 
+		if(ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg	 
+												 | ImGuiTableFlags_Borders, ImVec2(0, 250)));	
 		{
-			// ID.
-			ImGui::PushID((int)key.c_str());
+			// Setup header.
+			ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableHeadersRow();
 
-			// Selectable.
-			bool isOpen = true;
-			ImGui::TableNextRow();
-			
-			// Dict data.
-			ImGui::TableSetColumnIndex(0);
-			ImGui::Text(key.c_str());
-			ImGui::TableSetColumnIndex(1);
-			ImGui::InputText("##Input", &val);
-			ImGui::TableSetColumnIndex(2);
-			// Remove button.
-			if (ImGui::Button("Remove"))
-				toRemove.push_back(key);
-			// ID.
-			ImGui::PopID();
+			// Store entries to be removed.
+			static std::vector<std::string> toRemove;
+			toRemove.reserve(1);
+
+			// Table.
+			for (auto& [key, val] : activeComponent->cableDict)
+			{
+				// ID.
+				ImGui::PushID((int)key.c_str());
+				// Selectable.
+				bool isOpen = true;
+				ImGui::TableNextRow();
+				// Dict data.
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(key.c_str());
+				ImGui::TableSetColumnIndex(1);
+				ImGui::PushItemWidth(-1);
+				ImGui::InputText("##Input", &val);
+				ImGui::PopItemWidth();
+				ImGui::TableSetColumnIndex(2);
+				// Remove button.
+				if (ImGui::Button("Remove"))
+					toRemove.push_back(key);
+				// ID.
+				ImGui::PopID();
+			}
+			// Cleanup table.
+			ImGui::EndTable();
+			// Remove entries.
+			for (auto& key : toRemove)
+				activeComponent->cableDict.erase(key);
+			toRemove.clear();
 		}
-
-		// Cleanup table.
-		
-		ImGui::EndTable();
-		
+		// Cleanup tree.
 		ImGui::TreePop();
-
-		// Remove entries.
-		for (auto& key : toRemove)
-			activeComponent->cableDict.erase(key);
-		toRemove.clear();
 	}
 
 	// --------------------- //
@@ -253,9 +249,7 @@ void ComponentEditor::onRender()
 	// --------------------- //
 
 	const char* fromSelection[] = {"Circuit Database", "Motor Database", "Cable Database"};
-
 	std::string from = "FROM(";
-
 	std::string end = ")";
 
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -263,16 +257,13 @@ void ComponentEditor::onRender()
 	{
 		// int* typeval2 = (int*)&activeComponent->cableDict;
 		ImGui::Combo("Select Column##From", &fromSelector, buffer, activeComponent->cableDict.size());
-
 		ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 		// ImGui::Text("Hello World");
-
 		if (ImGui::Button("Insert From function"))
 		{
 			from += fromSelection[databaseSelector] + end;
 			activeComponent->cableDict[buffer[fromSelector]] = from;
 		}
-
 		ImGui::TreePop();
 	}
 
@@ -286,9 +277,7 @@ void ComponentEditor::onRender()
 		ImGui::Combo("Select Column##size", &sizeSelector, buffer, activeComponent->cableDict.size());
 		// ImGui::Text(std::to_string(typeval3).c_str());
 		if (ImGui::Button("Insert Size function"))
-		{
 			activeComponent->cableDict[buffer[sizeSelector]] = "Size()";
-		}
 		ImGui::TreePop();
 	}
 
@@ -298,15 +287,10 @@ void ComponentEditor::onRender()
 
 	// This should be the number of components of a specific type or the names of the components
 	const char* ifRowSelection[] = { "0", "1", "2", "3" };
-
 	std::string ifString = "IF(";
-
 	std::string forwardBracket = "[";
-
 	std::string backwardBracket = "]";
-
 	std::string comma = ",";
-
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("IF"))
 	{
@@ -325,11 +309,9 @@ void ComponentEditor::onRender()
 			if (comparisonValue.find(comma) != std::string::npos) {
 				comparisonValue = forwardBracket + comparisonValue + backwardBracket;
 			}
-
 			ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
 			activeComponent->cableDict[buffer[ifSelector]] = ifString;
 		}
-
 		ImGui::TreePop();
 	}
 
@@ -337,11 +319,9 @@ void ComponentEditor::onRender()
 	//      COMBINE TEXT     //
 	// --------------------- //
 
-// This should be the number of components of a specific type or the names of the components
+	// This should be the number of components of a specific type or the names of the components
 	std::string combineText = "combine_text(";
-
 	std::string plusString = "+";
-
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::TreeNode("Combine Text"))
 	{
@@ -359,7 +339,6 @@ void ComponentEditor::onRender()
 		}
 		ImGui::TreePop();
 	}
-
 }
 
 void ComponentEditor::end()

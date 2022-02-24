@@ -148,9 +148,9 @@ Port* Design2DEngine::getPort(unsigned eID)
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		while (currentEntity->m_type != EntityType::PORT)
 		{
-			currentEntity = currentEntity->m_parent;
 			if (!currentEntity) return nullptr;
-			if (currentEntity->m_parent == nullptr) return nullptr;
+			currentEntity = currentEntity->m_parent;
+			if (!currentEntity->m_parent) return nullptr;
 		}
 
 		// This cast remains valid provided all entities on screen are decendents of components. 

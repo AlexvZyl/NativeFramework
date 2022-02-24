@@ -85,7 +85,7 @@ void Renderer::render2DScene(Scene* scene)
 	// Update camera.
 	scene->updateCamera();
 
-	// Render to framebffer.
+	// Render to framebuffer.
 	scene->bindFBO();
 	scene->clearFBO();
 
@@ -310,7 +310,6 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
 				       										  m_scene->m_texturedTrianglesVAO.get(), m_defaultFont.get(),
 				       										  parent, horizontalAlignment, verticalAlignment)});
-	
 	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
 }
 
@@ -332,8 +331,9 @@ void Renderer::initialise()
 	Renderer::compileShaders();
 	// Loads the default font to be used by the renderer.
 	Renderer::loadDefaultFont();
+
 	// Default scenes.
-	generateDefaultScenes();
+	//generateDefaultScenes();
 }
 
 void Renderer::loadDefaultFont()

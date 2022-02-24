@@ -36,14 +36,17 @@ public:
 	unsigned m_vertexBufferPos = 0;		// The start position of the entity in the VAO.
 	unsigned m_indexBufferPos = 0;		// The position in the indices buffer.
 	unsigned m_primitiveBufferPos = 0;	// The primitive position in the VAO buffer.
+	bool m_queuedForSync = false;		// Has the primitive been synced?
+
+	// Destructor.
+	virtual ~PrimitivePtr() = default;
+
+protected:
 
 	// Constructor.
 	PrimitivePtr(Entity* parent) 
 		: Entity(EntityType::PRIMITIVE, parent) 
 	{}
-
-	// Destructor.
-	virtual ~PrimitivePtr() = default;
 };
 
 //=============================================================================================================================================//
@@ -109,6 +112,8 @@ public:
 
 	// Deletes the primitive from the GPU but keeps it in the CPU.
 	virtual void wipeGPU();
+	// Sync the primitive data to the GPU.
+	virtual void syncWithGPU();
 
 };
 
