@@ -106,6 +106,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	{
 		m_activeCable->unhighlight();
 		m_activeCable = NULL;
+		Lumen::getApp().m_guiState->active_cable = nullptr;
 	}
 	if ((eID == 0) || (eID == -1)) 
 	{
@@ -129,6 +130,8 @@ void Design2DEngine::setActiveCable(unsigned eID)
 					});
 				m_activeCable->setActivePrimitive(currentEntity);
 				m_activeCable->highlight();
+
+				Lumen::getApp().m_guiState->active_cable = m_activeCable.get();
 			}
 			currentEntity = currentEntity->m_parent;
 		}

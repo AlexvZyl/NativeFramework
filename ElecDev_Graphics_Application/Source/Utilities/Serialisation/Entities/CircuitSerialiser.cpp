@@ -199,11 +199,16 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 		// Find connected prorts.
 		Port* startPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["Start port"].as<unsigned>()]));
 		Port* endPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["End port"].as<unsigned>()]));
-		// Create cable.
+
+		//Get the title details
+		std::string titleString = cableNode["Title"].as<std::string>();
+		//glm::vec3 title1pos = { cableNode["Title1 pos"][0].as<float>(), cableNode["Title1 pos"][1].as<float>(), cableNode["Title1 pos"][2].as<float>() };
+		//glm::vec3 title2pos = { cableNode["Title2 pos"][0].as<float>(), cableNode["Title2 pos"][1].as<float>(), cableNode["Title2 pos"][2].as<float>() };
+		// 1Create cable.
 		std::shared_ptr<Cable> cable = std::make_shared<Cable>(startPort,
 															   nodeVector,
 															   endPort,
-															   engine->m_circuit.get());
+															   engine->m_circuit.get(), titleString);
 		cable->unhighlight();
 		// Add cable to circuit.
 		engine->m_circuit->m_cables.push_back(cable);
