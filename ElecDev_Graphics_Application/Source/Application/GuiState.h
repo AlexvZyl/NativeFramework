@@ -14,6 +14,7 @@
 
 class Component2D;
 class Design2DEngine;
+class Cable;
 
 /*=======================================================================================================================================*/
 /* Struture.                                                                                                                             */
@@ -70,6 +71,7 @@ struct GUIState
 	//Design Engine
 	Design2DEngine* design_engine = NULL;
 	Component2D* active_component = NULL;
+	Cable* active_cable = nullptr;
 
 };
 
