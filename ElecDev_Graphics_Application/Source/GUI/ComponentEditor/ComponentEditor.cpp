@@ -40,7 +40,7 @@ void ComponentEditor::onRender()
 	// Fetch all the component names
 	//auto designEng = Lumen::getApp().m_guiState->design_engine;
 	//auto piet = koos->m_circuit->m_components;
-	//auto componentsUla = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
+	auto numComponents = Lumen::getApp().m_guiState->design_engine->m_circuit->m_components;
 	//	Fetch The active component.
 	Component2D* activeComponent = Lumen::getApp().m_guiState->active_component;
 	//check that the active component exists. Close if not.
@@ -200,10 +200,18 @@ void ComponentEditor::onRender()
 			entryToAdd = "";
 		}
 
+		
+		// Dimension of Table
+		int height;
+		int width = 600;
+
+		if (i < 10) height = 50 + 25 * (i-1);
+		else height = 300;
+		
 		// Setup table.
 		ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX 
 						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(600.0, 400.0));
+						| ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(width, height));
 		
 		// Setup header.
 		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
