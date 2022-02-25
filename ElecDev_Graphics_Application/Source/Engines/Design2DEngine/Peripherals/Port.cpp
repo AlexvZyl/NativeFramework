@@ -200,7 +200,7 @@ void Port::hideAttachIndicator()
 	if (m_cables.empty()) 
 	{
 		indicatorColour.a = 0.f;
-		attachmentIndicator->setColor(indicatorColour);
+	attachmentIndicator->setColor(indicatorColour);
 	}
 }
 

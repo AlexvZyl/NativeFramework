@@ -11,7 +11,7 @@
 
 unsigned EntityManager::lastID = 0;
 std::vector<unsigned> EntityManager::freeIDs;
-std::vector<Entity*> EntityManager::entityLog;
+std::unordered_map<unsigned, Entity*> EntityManager::entityLog = std::unordered_map<unsigned, Entity*>();
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -22,14 +22,14 @@ unsigned EntityManager::generateEID(Entity* entity)
 	// Check to see if there are any freed (recycled) ID's.
 	if (!freeIDs.size()) 
 	{
-		entityLog.push_back(entity);
-		return ++lastID;
+		entityLog.insert(std::pair<unsigned, Entity*>(++lastID, entity));
+		return lastID;
 	}
 	else  // Recycle ID's.
 	{
 		unsigned freeID = freeIDs.back();
 		freeIDs.pop_back();
-		entityLog[freeID - 1] = entity;
+		entityLog.insert(std::pair<unsigned, Entity*>(freeID, entity));
 		return freeID;
 	}
 }
@@ -40,7 +40,6 @@ void EntityManager::freeEID(unsigned EID)
 	if (EID == lastID) 
 	{ 
 		lastID--; 
-		entityLog.pop_back();
 	}
 	// Remember to recycle this ID.
 	else			   
@@ -48,6 +47,7 @@ void EntityManager::freeEID(unsigned EID)
 		freeIDs.push_back(EID); 
 		// Consider invalidating pointers to deleted entities in the log here.
 	}
+	entityLog.erase(EID);
 }
 
 Entity* EntityManager::getEntity(unsigned EID)
@@ -57,9 +57,9 @@ Entity* EntityManager::getEntity(unsigned EID)
 		std::cout << "\nEntities with ID = -1 or 0 are not managed by the entity manager.";
 		return nullptr;
 	}
-	if (entityLog.size() >= EID)
+	if (entityLog.contains(EID))
 	{
-		return entityLog[EID - 1];
+		return entityLog[EID];
 	}
 	else 
 	{

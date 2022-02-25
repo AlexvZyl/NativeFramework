@@ -134,7 +134,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		m_hoveredID = getEntityID(coords);
 		auto lastHoveredPort = m_hoveredPort;
 		m_hoveredPort = getPort(m_hoveredID);
-		if (m_hoveredPort != lastHoveredPort)
+		if (m_hoveredPort != lastHoveredPort && m_hoveredPort)
 		{
 			if (m_hoveredPort)   m_hoveredPort->showAttachIndicator();
 			else if (lastHoveredPort) lastHoveredPort->hideAttachIndicator();
