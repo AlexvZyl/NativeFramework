@@ -48,7 +48,7 @@ public:
 	std::string equipType = "Block";
 
 	// 
-	std::unordered_map<std::string, std::string> cableDict;
+	std::unordered_map<std::string, std::string> dataDict;
 
 	// Component shape attributes.
 	float height = 0.1f;
