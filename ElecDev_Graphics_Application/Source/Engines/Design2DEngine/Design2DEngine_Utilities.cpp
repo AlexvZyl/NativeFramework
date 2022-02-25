@@ -37,19 +37,19 @@ void Design2DEngine::ComponentPlaceMode()
 
 void Design2DEngine::deleteActiveComponent()
 {
-	if (m_activeComponent)
+	if (!m_activeComponent) return;
+
+	auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
+	if (iterator != m_circuit->m_components.end())
 	{
-		auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), m_activeComponent);
-		if (iterator != m_circuit->m_components.end())
-		{
-			m_circuit->m_components.erase(iterator);
-			m_activeComponent = nullptr;
-			Lumen::getApp().m_guiState->active_component = nullptr;
-			//Check to see if the hovered port was deleted.
-			if (!EntityManager::getEntity(m_hoveredPort->m_entityID)) {
-				m_hoveredPort = nullptr;
-			}
-		}
+		m_circuit->m_components.erase(iterator);
+		m_activeComponent = nullptr;
+		Lumen::getApp().m_guiState->active_component = nullptr;
+		// Check if there is an hovered port.
+		if (!m_hoveredPort) return;
+		// Check to see if the hovered port was deleted.
+		if (!EntityManager::getEntity(m_hoveredPort->m_entityID)) 
+			m_hoveredPort = nullptr;
 	}
 }
 

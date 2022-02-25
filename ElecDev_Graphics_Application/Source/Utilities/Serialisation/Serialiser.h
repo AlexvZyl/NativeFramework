@@ -30,7 +30,7 @@ class LineSegment;
 enum class PortType;
 
 //=============================================================================================================================================//
-//  GLM.																																	   //
+//  Utilities.																																   //
 //=============================================================================================================================================//
 
 // Overloads the << operator so that YAML-cpp can accept glm::vec2.
@@ -39,6 +39,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec2& vec);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec3& vec);
 // Overloads the << operator so that YAML-cpp can accept glm::vec4.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4& vec);
+
+// Dictionaries.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string, std::string>& dict);
 
 //=============================================================================================================================================//
 //  General.																																   //
@@ -86,8 +89,6 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Port>& port);
 //  Componenet 2D.																															   //
 //=============================================================================================================================================//
 
-// Component dictionary data.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string, std::string>& dict);
 // Serialise a single Component2D.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& comp);
 // Serialise a Component2D vecrtor.

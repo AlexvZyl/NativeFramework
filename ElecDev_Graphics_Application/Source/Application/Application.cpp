@@ -157,7 +157,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 	colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	colors[ImGuiCol_TitleBgActive] = ImVec4(0.02f, 0.20f, 0.20f, 1.00f);
-	colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.12f, 0.12f, 0.79f);
+	colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.10f, 0.09f, 0.12f, 0.90f);
 	colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
@@ -172,7 +172,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_Header] = ImVec4(0.13f, 0.12f, 0.14f, 1.00f);
 	colors[ImGuiCol_HeaderHovered] = ImVec4(0.00f, 0.15f, 0.15f, 1.00f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	colors[ImGuiCol_Separator] = ImVec4(0.08f, 0.08f, 0.08f, 1.00f);
+	colors[ImGuiCol_Separator] = ImVec4(0.13f, 0.13f, 0.13f, 1.00f);
 	colors[ImGuiCol_SeparatorHovered] = ImVec4(0.00f, 0.63f, 0.64f, 1.00f);
 	colors[ImGuiCol_SeparatorActive] = ImVec4(0.00f, 0.98f, 1.00f, 0.83f);
 	colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);

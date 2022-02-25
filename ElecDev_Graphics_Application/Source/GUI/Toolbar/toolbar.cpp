@@ -60,13 +60,14 @@ void Toolbar::onRender()
 
     if (ImGui::BeginMenu("File"))
     {
-        if (ImGui::MenuItem("Load..", "Ctrl+O"))
+        if (ImGui::MenuItem("Load...", "Ctrl+O"))
         {
             // Create a load event.
             std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
             FileLoadEvent event(path);
             app.logEvent<FileLoadEvent>(event);
         }
+        ImGui::Separator();
         if (ImGui::MenuItem("Close", "Ctrl+W"))
         {
             Lumen::getApp().closeWindow();
