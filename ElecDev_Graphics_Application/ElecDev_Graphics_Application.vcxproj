@@ -276,6 +276,7 @@
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Text.cpp" />
+    <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
     <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
@@ -790,6 +791,7 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Text.h" />
+    <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
     <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />

@@ -9,6 +9,7 @@
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Utilities/Profiler/Profiler.h"
 
 //==============================================================================================================================================//
 //  Layer event dispatching.																													//
@@ -16,6 +17,8 @@
 
 void Application::dispatchEvents()
 {
+	PROFILE_SCOPE("Events Dispatcher");
+
 	// Pop the layers queued from the render loop.
 	// Dispatched here so that they do not get GLFW events.
 	popLayers();

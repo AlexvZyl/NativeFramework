@@ -12,6 +12,7 @@
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
 #include "imgui_internal.h"
+#include "Utilities/Profiler/Profiler.h"
 
 // TO BE DEPRECATED.
 #include "GuiState.h"
@@ -112,6 +113,13 @@ public:
 
 	// TO BE DEPRECATED!
 	std::unique_ptr<GUIState> m_guiState;
+
+	// ----------------- //
+	//  P R O F I L E R  //
+	// ----------------- //
+
+	// The results from the profiler.
+	std::vector<ProfileResult> m_profilerResults;
 
 private:
 

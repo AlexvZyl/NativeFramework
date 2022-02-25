@@ -117,6 +117,7 @@
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
     <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
+    <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -777,6 +778,7 @@
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />
     <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />
+    <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

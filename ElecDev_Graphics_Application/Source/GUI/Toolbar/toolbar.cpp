@@ -120,7 +120,7 @@ void Toolbar::onRender()
             static std::string statsName;
             if (stats)
             {
-                auto* layer = Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Floating, 0, false);
+                auto* layer = Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Right, 0, false);
                 statsName = layer->getName();
             }
             else 

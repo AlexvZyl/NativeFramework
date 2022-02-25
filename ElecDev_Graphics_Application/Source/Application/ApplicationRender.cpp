@@ -16,6 +16,8 @@
 
 void Application::onRenderInit()
 {
+	PROFILE_SCOPE("Render Init");
+
 	// Clear buffers.
 	Renderer::clear();
 
@@ -34,6 +36,8 @@ void Application::onRenderInit()
 
 void Application::onRender()
 {	
+	PROFILE_SCOPE("Render Loop");
+
 	// Init.
 	onRenderInit();
 
@@ -53,6 +57,8 @@ void Application::onRender()
 
 void Application::onRenderCleanup()
 {
+	PROFILE_SCOPE("Render Cleanup");
+
 	// Pop custom font.
 	ImGui::PopFont();
 
