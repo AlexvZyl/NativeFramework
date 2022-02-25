@@ -265,7 +265,9 @@
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\GuiElementCore\GuiElementCore.cpp" />
+    <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
+    <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
@@ -702,7 +704,9 @@
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
+    <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
+    <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />

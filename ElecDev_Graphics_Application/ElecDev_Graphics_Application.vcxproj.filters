@@ -115,6 +115,8 @@
     <ClCompile Include="External\implot\implot_items.cpp" />
     <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
+    <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
+    <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -773,6 +775,8 @@
     <ClInclude Include="External\implot\implot.h" />
     <ClInclude Include="External\implot\implot_internal.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
+    <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />
+    <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

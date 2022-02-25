@@ -6,7 +6,7 @@
 
 #define TOOLBAR_PADDING 6
 #define RIBBON_HEIGHT 40
-#define VERTEX_BUFFER_INCREMENTS 100
+#define VERTEX_BUFFER_INCREMENTS 1000
 #define MAX_VERTEX_BUFFER_SIZE 10000
 
 //==============================================================================================================================================//

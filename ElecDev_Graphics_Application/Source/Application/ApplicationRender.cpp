@@ -47,11 +47,6 @@ void Application::onRender()
 	for (auto& [name, layer] : m_layerStack->getLayers())
 		layer->onRender();
 
-#ifdef _DEBUG
-	//ImGui::ShowStyleEditor();
-	//ImGui::ShowDemoWindow();
-#endif
-
 	// Cleanup.
 	onRenderCleanup();
 }

@@ -8,10 +8,12 @@
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Lumen.h"
+#include "GUI/RendererStats/RendererStats.h"
 #include "Application/Application.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "GUI/ImGuiDemoWindow/ImGuiDebugWindow.h"
 #include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
@@ -35,12 +37,10 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 
 void Toolbar::begin() 
 {
-    // Remove rounding so that it docks nicely.
+    // Style.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-    // Set the size of the toolbar.
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, TOOLBAR_PADDING));
-    // Color.
-    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.0f, 0.0f, 0.0f, 1.00f));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.05f, 0.05f, 0.05f, 1.00f));
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
 }
@@ -51,7 +51,7 @@ void Toolbar::onRender()
     Application& app = Lumen::getApp();
     
     // Draw the image.
-    static float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 3;
+    static float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 5;
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
 
     // --------- //
@@ -81,7 +81,7 @@ void Toolbar::onRender()
 
     if (ImGui::BeginMenu("Edit"))
     {
-        if (ImGui::MenuItem("Undo", "CTRL+Z"))
+        if (ImGui::MenuItem("Undo", "CTRL+Z", false, false))
         {
 
         }
@@ -92,27 +92,75 @@ void Toolbar::onRender()
 
         ImGui::Separator();
 
-        if (ImGui::MenuItem("Cut", "CTRL+X"))
+        if (ImGui::MenuItem("Cut", "CTRL+X", false, false))
         {
 
         }
-        if (ImGui::MenuItem("Copy", "CTRL+C"))
+        if (ImGui::MenuItem("Copy", "CTRL+C", false, false))
         {
 
         }
-        if (ImGui::MenuItem("Paste", "CTRL+V"))
+        if (ImGui::MenuItem("Paste", "CTRL+V", false, false))
         {
 
         }
+        ImGui::EndMenu();
+    }
 
+    // ----------- //
+    //  T O O L S  //
+    // ----------- //
+
+    if(ImGui::BeginMenu("Tools"))
+    {
+        if (ImGui::MenuItem("Add Renderer Stats"))
+        {
+            Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Stats", DockPanel::Floating, ImGuiWindowFlags_NoCollapse);
+        }
+        ImGui::Separator();
+       
+        // Style editor.
+        static bool style = false;
+        if (ImGui::Checkbox("Style Editor", &style)) 
+        {
+            static std::string styleLayernName;
+            if (style)
+            {
+                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Style Editor");
+                layer->getGui()->showStyleEditor = true;
+                styleLayernName = layer->getName();
+            }
+            else
+            {
+                Lumen::getApp().queuePopLayer(styleLayernName);
+            }
+        }
+
+        // ImGui demo window.
+        static bool demo = false;
+        if (ImGui::Checkbox("Demo Window", &demo))
+        {
+            static std::string demoLayerName;
+            if (demo)
+            {
+                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Style Editor");
+                layer->getGui()->showDemoWindow = true;
+                demoLayerName = layer->getName();
+            }
+            else
+            {
+                Lumen::getApp().queuePopLayer(demoLayerName);
+            }
+        }
         ImGui::EndMenu();
     }
 };
 
 void Toolbar::end()
 {
+    // End.
     ImGui::EndMainMenuBar();
-    // Pop frame rounding and padding.
+    // Style.
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor();

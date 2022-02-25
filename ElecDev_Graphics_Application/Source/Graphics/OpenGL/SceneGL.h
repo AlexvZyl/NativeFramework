@@ -71,6 +71,7 @@ private:
 	// Friends.
 	friend class Renderer;
 	friend class Shader;
+	friend class RendererStats;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();

@@ -383,7 +383,6 @@ void ComponentEditor::onRender()
 	{
 	//Handle cable properties here
 	}
-
 }
 
 void ComponentEditor::end()
