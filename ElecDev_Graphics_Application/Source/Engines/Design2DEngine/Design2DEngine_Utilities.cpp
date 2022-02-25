@@ -45,6 +45,10 @@ void Design2DEngine::deleteActiveComponent()
 			m_circuit->m_components.erase(iterator);
 			m_activeComponent = nullptr;
 			Lumen::getApp().m_guiState->active_component = nullptr;
+			//Check to see if the hovered port was deleted.
+			if (!EntityManager::getEntity(m_hoveredPort->m_entityID)) {
+				m_hoveredPort = nullptr;
+			}
 		}
 	}
 }
