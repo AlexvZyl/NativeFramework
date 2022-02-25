@@ -15,12 +15,12 @@
 
 RendererStats::RendererStats(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags)
-{
-}
+{}
 
 void RendererStats::begin()
 {
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::SetNextWindowSize(glm::vec2(325, 0), ImGuiCond_Once);
+	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
 	ImGui::PushItemWidth(-1);
 }
 
@@ -37,10 +37,9 @@ void RendererStats::onRender()
 		float circlesMem = (sizeof(VertexDataCircle) * (float)scene->m_circlesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_circlesVAO->m_indexBufferSize) / 1000000;
 		float totalMem = linesMem + trianglesMem + texturesMem + circlesMem;
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-		if (ImGui::TreeNode("Scene"))
+		if (ImGui::CollapsingHeader("Scene"))
 		{
 			ImGui::Text("Total VAO VRAM Usage : %.3f MB", totalMem);
-			ImGui::TreePop();
 		}
 		ImGui::Separator();
 
@@ -50,7 +49,7 @@ void RendererStats::onRender()
 
 		ImGui::PushID("LinesVAORendererStats");
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-		if (ImGui::TreeNode("Lines VAO"))
+		if (ImGui::CollapsingHeader("Lines VAO"))
 		{
 			// Setup table
 			ImGui::BeginTable("Lines VAO", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg);
@@ -95,7 +94,6 @@ void RendererStats::onRender()
 
 			// Done.
 			ImGui::EndTable();
-			ImGui::TreePop();
 		}
 		ImGui::PopID();
 
@@ -105,7 +103,7 @@ void RendererStats::onRender()
 
 		ImGui::PushID("TrianglesVAORendererStats");
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-		if (ImGui::TreeNode("Triangles VAO"))
+		if (ImGui::CollapsingHeader("Triangles VAO"))
 		{
 			// Setup table
 			ImGui::BeginTable("Triangles VAO", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg);
@@ -150,7 +148,6 @@ void RendererStats::onRender()
 
 			// Done.
 			ImGui::EndTable();
-			ImGui::TreePop();
 		}
 		ImGui::PopID();
 
@@ -160,7 +157,7 @@ void RendererStats::onRender()
 
 		ImGui::PushID("TexturesVAORendererStats");
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-		if (ImGui::TreeNode("Textures VAO"))
+		if (ImGui::CollapsingHeader("Textures VAO"))
 		{
 			// Setup table
 			ImGui::BeginTable("Textures VAO", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg);
@@ -205,7 +202,6 @@ void RendererStats::onRender()
 
 			// Done.
 			ImGui::EndTable();
-			ImGui::TreePop();
 		}
 		ImGui::PopID();
 
@@ -215,7 +211,7 @@ void RendererStats::onRender()
 
 		ImGui::PushID("CirclesVAORendererStats");
 		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-		if (ImGui::TreeNode("Circles VAO"))
+		if (ImGui::CollapsingHeader("Circles VAO"))
 		{
 			// Setup table
 			ImGui::BeginTable("Circles VAO", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg);
@@ -260,7 +256,6 @@ void RendererStats::onRender()
 
 			// Done.
 			ImGui::EndTable();
-			ImGui::TreePop();
 		}
 		ImGui::PopID();
 	}

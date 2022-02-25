@@ -113,10 +113,21 @@ void Toolbar::onRender()
 
     if(ImGui::BeginMenu("Tools"))
     {
-        if (ImGui::MenuItem("Add Renderer Stats"))
+        static bool stats = false;
+        if (ImGui::Checkbox("Renderer Info", &stats))
         {
-            Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Stats", DockPanel::Floating, ImGuiWindowFlags_NoCollapse);
-        }
+            static std::string statsName;
+            if (stats)
+            {
+                auto* layer = Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Floating, 0, false);
+                statsName = layer->getName();
+            }
+            else 
+            {
+                Lumen::getApp().queuePopLayer(statsName);
+            }
+        }   
+        
         ImGui::Separator();
        
         // Style editor.
@@ -126,7 +137,7 @@ void Toolbar::onRender()
             static std::string styleLayernName;
             if (style)
             {
-                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Style Editor");
+                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Style Editor", DockPanel::Floating, 0, false);
                 layer->getGui()->showStyleEditor = true;
                 styleLayernName = layer->getName();
             }
@@ -143,7 +154,7 @@ void Toolbar::onRender()
             static std::string demoLayerName;
             if (demo)
             {
-                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Style Editor");
+                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Demo Window", DockPanel::Floating, 0, false);
                 layer->getGui()->showDemoWindow = true;
                 demoLayerName = layer->getName();
             }
