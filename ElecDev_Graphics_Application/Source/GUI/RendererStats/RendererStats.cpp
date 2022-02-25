@@ -39,7 +39,7 @@ void RendererStats::onRender()
 	{
 		// Setup table
 		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg);
-		ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
 		ImGui::TableSetupColumn("Time (ms)", ImGuiTableColumnFlags_WidthStretch);
 		ImGui::TableHeadersRow();
 

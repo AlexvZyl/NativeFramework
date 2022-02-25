@@ -36,8 +36,6 @@ void Application::onRenderInit()
 
 void Application::onRender()
 {	
-	PROFILE_SCOPE("Render Loop");
-
 	// Init.
 	onRenderInit();
 
@@ -46,10 +44,13 @@ void Application::onRender()
 	// is updated.
 	dispatchEvents();
 
-	// Render all of the layers.
-	// The order is not important since dear imgui handles that.
-	for (auto& [name, layer] : m_layerStack->getLayers())
-		layer->onRender();
+	// Render the layers.
+	{
+		PROFILE_SCOPE("Render Layers");
+		// The order is not important since dear imgui handles that.
+		for (auto& [name, layer] : m_layerStack->getLayers())
+			layer->onRender();
+	}
 
 	// Cleanup.
 	onRenderCleanup();
@@ -57,34 +58,39 @@ void Application::onRender()
 
 void Application::onRenderCleanup()
 {
-	PROFILE_SCOPE("Render Cleanup");
-
-	// Pop custom font.
-	ImGui::PopFont();
-
-	// Rendering
-	ImGui::Render();
-	int display_w, display_h;
-	glfwGetFramebufferSize(m_window, &display_w, &display_h);
-	Renderer::setViewport(glm::vec2(display_w, display_h));
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-	// Update and Render additional Platform Windows
-	// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
-		GLFWwindow* backup_current_context = glfwGetCurrentContext();
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-		glfwMakeContextCurrent(backup_current_context);
+		PROFILE_SCOPE("Render Cleanup");
+
+		// Pop custom font.
+		ImGui::PopFont();
+
+		// Rendering
+		ImGui::Render();
+		int display_w, display_h;
+		glfwGetFramebufferSize(m_window, &display_w, &display_h);
+		Renderer::setViewport(glm::vec2(display_w, display_h));
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		// Update and Render additional Platform Windows
+		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
+
+		// Push commands to the GPU.
+		Renderer::finish();
 	}
 
-	// Push commands to the GPU.
-	Renderer::finish();
-
-	// Swap the window buffers.
-	glfwSwapBuffers(m_window);
+	{
+		PROFILE_SCOPE("Swap Buffers");
+		// Swap the window buffers.
+		glfwSwapBuffers(m_window);
+	}
 }
 
 //==============================================================================================================================================//
