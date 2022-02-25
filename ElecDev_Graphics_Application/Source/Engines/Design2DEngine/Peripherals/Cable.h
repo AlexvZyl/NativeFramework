@@ -7,6 +7,7 @@
 #include "OpenGL/Primitives/LineSegment.h"
 #include "Graphics/Entities/Entity.h"
 #include "Port.h"
+#include <unordered_map>
 
 //==============================================================================================================================================//
 //  Forward declerations.  																													    //
@@ -36,6 +37,9 @@ public:
         
     Port* m_startPort;
     Port* m_endPort = nullptr;
+
+    // Data Automation
+    std::unordered_map<std::string, std::string> cableDict;
 
     float m_thickness = 0.005f;
     glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.2f };

@@ -63,7 +63,7 @@ void ComponentEditor::onRender()
 	}
 
 	//check that the active component exists. Close if not.
-	if (activeComponent) 
+	if (activeComponent)
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
@@ -76,19 +76,19 @@ void ComponentEditor::onRender()
 		ImGui::SameLine();
 		ImGui::InputText("##Equipment Type", &activeComponent->equipType);
 
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::TreeNode("Ports"))
-	{
-		ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg 
-											| ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 250));
-		//ImGui::SetColumnWidth(1, 20.f);
+		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+		if (ImGui::TreeNode("Ports"))
+		{
+			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
+				| ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 250));
+			//ImGui::SetColumnWidth(1, 20.f);
 
-		//Setup table
-		ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
-		ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableHeadersRow();
+			//Setup table
+			ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableHeadersRow();
 
 			ImGui::TableNextRow();
 			std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
@@ -182,17 +182,49 @@ void ComponentEditor::onRender()
 
 			ImGui::TreePop();
 		}
+	}
+	if (activeCable)
+	{
+	//Handle cable properties here
+	ImGui::Text(" Name:\t");
+	ImGui::SameLine();
+	if (ImGui::InputText("##ComponentName", &activeCable->m_titleString))
+	{
+		activeCable->m_title1->updateText(activeCable->m_titleString);
+		activeCable->m_title2->updateText(activeCable->m_titleString);
+	}
 
-		// --------------------- //
-		//  D A T A   T A B L E  //
-		// --------------------- //
+	ImGui::Text(" Type:\t Cable");
+	}
+
+
+	// --------------------- //
+	//  D A T A   T A B L E  //
+	// --------------------- //
+
+	if (activeComponent || activeCable){
+
+		std::unordered_map<std::string, std::string> dataDict;
+
+		if (activeComponent) dataDict = activeComponent->dataDict;
+		else if (activeCable) dataDict = activeCable->cableDict;
 
 		const char* buffer[100];
 		int numKeys = 0;
-		for (auto& [key, val] : activeComponent->cableDict)
-		{
-			buffer[numKeys] = key.c_str();
-			numKeys++;
+
+		if (activeComponent) {
+			for (auto& [key, val] : activeComponent->dataDict)
+			{
+				buffer[numKeys] = key.c_str();
+				numKeys++;
+			}
+		}
+		else if (activeCable) {
+			for (auto& [key, val] : activeCable->cableDict)
+			{
+				buffer[numKeys] = key.c_str();
+				numKeys++;
+			}
 		}
 
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -205,7 +237,12 @@ void ComponentEditor::onRender()
 			ImGui::SameLine();
 			if (ImGui::Button("Add"))
 			{
-				activeComponent->cableDict.insert({ entryToAdd, "From(Circuit Database)" });
+				if (activeComponent) {
+					activeComponent->dataDict.insert({ entryToAdd, "From(Circuit Database)" });
+				}
+				else {
+					activeCable->cableDict.insert({ entryToAdd, "From(Circuit Database)" });
+				}
 				entryToAdd = "";
 			}
 
@@ -230,7 +267,7 @@ void ComponentEditor::onRender()
 			toRemove.reserve(1);
 
 			// Table.
-			for (auto& [key, val] : activeComponent->cableDict)
+			for (auto& [key, val] : dataDict)
 			{
 				// ID.
 				ImGui::PushID((int)key.c_str());
@@ -263,8 +300,14 @@ void ComponentEditor::onRender()
 			ImGui::TreePop();
 
 			// Remove entries.
-			for (auto& key : toRemove)
-				activeComponent->cableDict.erase(key);
+			for (auto& key : toRemove) {
+				if (activeComponent) {
+					activeComponent->dataDict.erase(key);
+				}
+				else {
+					activeCable->cableDict.erase(key);
+				}
+			}
 			toRemove.clear();
 		}
 
@@ -281,8 +324,8 @@ void ComponentEditor::onRender()
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 		if (ImGui::TreeNode("From"))
 		{
-			// int* typeval2 = (int*)&activeComponent->cableDict;
-			ImGui::Combo("Select Column##From", &fromSelector, buffer, activeComponent->cableDict.size());
+			// int* typeval2 = (int*)&dataDict;
+			ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict.size());
 
 			ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 			// ImGui::Text("Hello World");
@@ -290,7 +333,12 @@ void ComponentEditor::onRender()
 			if (ImGui::Button("Insert From function"))
 			{
 				from += fromSelection[databaseSelector] + end;
-				activeComponent->cableDict[buffer[fromSelector]] = from;
+				if (activeComponent) {
+					activeComponent->dataDict[buffer[fromSelector]] = from;
+				}
+				else {
+					activeCable->cableDict[buffer[fromSelector]] = from;
+				}
 			}
 
 			ImGui::TreePop();
@@ -303,11 +351,16 @@ void ComponentEditor::onRender()
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 		if (ImGui::TreeNode("Size"))
 		{
-			ImGui::Combo("Select Column##size", &sizeSelector, buffer, activeComponent->cableDict.size());
+			ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict.size());
 			// ImGui::Text(std::to_string(typeval3).c_str());
 			if (ImGui::Button("Insert Size function"))
 			{
-				activeComponent->cableDict[buffer[sizeSelector]] = "Size()";
+				if (activeComponent) {
+					activeComponent->dataDict[buffer[fromSelector]] = "Size()";
+				}
+				else {
+					activeCable->cableDict[buffer[fromSelector]] = "Size()";
+				}
 			}
 			ImGui::TreePop();
 		}
@@ -329,8 +382,8 @@ void ComponentEditor::onRender()
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 		if (ImGui::TreeNode("IF"))
 		{
-			ImGui::Combo("Select Column##IF", &ifSelector, buffer, activeComponent->cableDict.size());
-			ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, activeComponent->cableDict.size());
+			ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
+			ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, dataDict.size());
 			ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
 			ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
 			ImGui::InputText("##Comparison Value", &comparisonValue);
@@ -346,7 +399,7 @@ void ComponentEditor::onRender()
 				}
 
 				ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
-				activeComponent->cableDict[buffer[ifSelector]] = ifString;
+				dataDict[buffer[ifSelector]] = ifString;
 			}
 
 			ImGui::TreePop();
@@ -364,8 +417,8 @@ void ComponentEditor::onRender()
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 		if (ImGui::TreeNode("Combine Text"))
 		{
-			ImGui::Combo("Select Column##Combine", &combineSelector, buffer, activeComponent->cableDict.size());
-			if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, activeComponent->cableDict.size()))
+			ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
+			if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, dataDict.size()))
 			{
 				combineTextString += buffer[combineSelectorVariable] + plusString;
 			}
@@ -374,15 +427,16 @@ void ComponentEditor::onRender()
 			{
 				combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
 				combineText += combineTextString + end;
-				activeComponent->cableDict[buffer[combineSelector]] = combineText;
+				if (activeComponent) {
+					activeComponent->dataDict[buffer[combineSelector]] = combineText;
+				}
+				else {
+					activeCable->cableDict[buffer[combineSelector]] = combineText;
+				}
 			}
 			ImGui::TreePop();
 		}
 	}	
-	else if (activeCable) 
-	{
-	//Handle cable properties here
-	}
 
 }
 

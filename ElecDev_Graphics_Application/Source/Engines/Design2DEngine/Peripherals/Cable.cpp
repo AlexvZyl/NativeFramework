@@ -13,9 +13,32 @@ unsigned Cable::cableID = 0;
 //  Constructor & Destructor.  																													//
 //==============================================================================================================================================//
 
+
 Cable::Cable(Port* startPort, Circuit* parent) 
 	: Entity(EntityType::CABLE, parent)
 {
+
+	// Dictionary for GUI of component for data automation.
+	cableDict.insert(std::pair<std::string, std::string>("FromTagNumber", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("ToTagNumber", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("From", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("To", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Voltage", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Circuit", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableRating", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableIsolation", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableSuffix", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableLength", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableTAG", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("IndoorTermCount", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("OutdoorTermCount", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableSize", "Size()"));
+	cableDict.insert(std::pair<std::string, std::string>("CoreCount", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("Metal", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableDiameter", "From(Circuit Database)"));
+	cableDict.insert(std::pair<std::string, std::string>("CableMass", "From(Circuit Database)"));
 	// Keep the VAO and start port.
 	m_startPort = startPort;
 
