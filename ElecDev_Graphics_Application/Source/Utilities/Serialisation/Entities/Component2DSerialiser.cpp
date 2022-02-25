@@ -23,7 +23,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	emitter << YAML::Key << "Layer offset" << YAML::Value << comp->portLayerOffset;
 	emitter << YAML::Key << "Number of ports" << YAML::Value << comp->numPorts;
 	emitter << YAML::Key << "Internal circuit" << YAML::Value << "Test AE 234";
-	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->cableDict;
+	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
 
 	// Shape.
 	emitter << YAML::Key << "Shape" << YAML::Value;
