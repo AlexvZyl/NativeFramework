@@ -1,43 +1,42 @@
 #pragma once
 
 //==============================================================================================================================================//
-//  Defines.																																	//
-//==============================================================================================================================================//
-
-#define TOOLBAR_PADDING 6
-#define RIBBON_HEIGHT 40
-#define VERTEX_BUFFER_INCREMENTS 1000
-#define MAX_VERTEX_BUFFER_SIZE 10000
-
-//==============================================================================================================================================//
-//  Forward declerations.																														//
-//==============================================================================================================================================//
-
-class Application;
-
-//==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-class Lumen
+#include "Lumen.h"
+#include "Application/Application.h"
+
+//==============================================================================================================================================//
+//  Timer.																																		//
+//==============================================================================================================================================//
+
+Timer::Timer(const char* name)
+	: m_name(name)
 {
+	// Start the timer.
+	m_startPoint = std::chrono::high_resolution_clock::now();
+}
 
-public:
+Timer::~Timer()
+{
+	stop();
+}
 
-	// Set the singleton Lumen uses.
-	static void setApp(Application* app);
-	// Get the singleton Lumen is using.
-	static Application& getApp();
+// Stop the timer.
+void Timer::stop()
+{
+	// Get end time.
+	auto endTimePoint = std::chrono::high_resolution_clock::now();
 
-private:
+	// Get microseconds.
+	auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_startPoint).time_since_epoch().count();
+	auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch().count();
+	float duration = (end - start) * 0.001f;
 
-	// No instantiations.
-	Lumen() = default;
-
-	// The singleton application.
-	static Application* s_applicationSingleton;
-
-};
+	// Add result to be displayed.
+	Lumen::getApp().m_profilerResults.push_back(ProfileResult(m_name, duration));
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

@@ -56,9 +56,9 @@ public:
 	void resize(int width, int heigth);
 
 	// Delete the resources to save on VRAM.
-	void deleteFrameBufferResources();
+	void deleteGPUResources();
 	// Recreate the resources once it has been deleted.
-	void createFrameBufferResources();
+	void recreateGPUResources();
 
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
@@ -71,6 +71,7 @@ private:
 	// Friends.
 	friend class Renderer;
 	friend class Shader;
+	friend class RendererStats;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();

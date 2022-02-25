@@ -265,7 +265,9 @@
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\GuiElementCore\GuiElementCore.cpp" />
+    <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
+    <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
@@ -274,6 +276,7 @@
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Text.cpp" />
+    <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
     <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
@@ -702,7 +705,9 @@
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
+    <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
+    <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
@@ -786,6 +791,7 @@
     <ClInclude Include="Source\External\ImGUI\Core\imstb_truetype.h" />
     <ClInclude Include="Source\GUI\toolbar.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Text.h" />
+    <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
     <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />

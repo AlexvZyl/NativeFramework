@@ -44,7 +44,7 @@ void LayerStack::popLayers()
 		if (layer == focusedLayer)
 		{
 			// Check if design engine was removed.
-			// TODO: FIX THIS.
+			// TODO: Thas to be a better way to handle this.
 			auto* engineLayer = dynamic_cast<EngineLayer<Design2DEngine>*>(focusedLayer);
 			if (engineLayer)
 				app.m_guiState->design_engine = nullptr;

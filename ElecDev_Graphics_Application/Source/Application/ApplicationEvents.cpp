@@ -9,6 +9,7 @@
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Utilities/Profiler/Profiler.h"
 
 //==============================================================================================================================================//
 //  Layer event dispatching.																													//
@@ -16,6 +17,8 @@
 
 void Application::dispatchEvents()
 {
+	PROFILE_SCOPE("Events Dispatcher");
+
 	// Pop the layers queued from the render loop.
 	// Dispatched here so that they do not get GLFW events.
 	popLayers();
@@ -128,12 +131,6 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 {
 	// Ensure change actually ocurred.
 	if (newLayer == m_focusedLayer) return;
-
-	// There are some cases where imgui thinks the layer not being hovered,
-	// but that might be because another item (that still belongs to the layer)
-	// is focused.  In these cases we do not want to defocus.
-	// If there is no item under the mouse the ID will be 0.
-	if (newLayer==nullptr && ImGui::GetHoveredID()) return;
 
 	// Create a defocus event.
 	if (m_focusedLayer)

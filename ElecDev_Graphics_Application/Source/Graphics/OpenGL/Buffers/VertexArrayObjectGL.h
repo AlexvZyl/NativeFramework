@@ -98,6 +98,7 @@ private:
 
 	friend class Scene;
 	friend class FrameBufferObject;
+	friend class RendererStats;
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
