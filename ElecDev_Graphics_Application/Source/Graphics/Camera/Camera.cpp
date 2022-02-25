@@ -75,17 +75,9 @@ void Camera::setViewport(int width, int height)
 	m_viewportVec[3] = (float)height;
 }
 
-glm::vec3 Camera::pixelCoordsToWorldCoords(float pixelCoords[2])
-{
-	glm::vec3 pixelCoords3 = { pixelCoords[0], m_viewportVec[3] - pixelCoords[1], 0.0f };
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
-	glm::vec3 worldVec = glm::unProject(pixelCoords3, m_viewMatrix, m_projectionMatrix, m_viewportVec);
-	return worldVec;
-}
-
 glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
 {
-	glm::vec3 pixelCoords3 = glm::vec3{ pixelCoords[0], m_viewportVec[3] - pixelCoords[1], 0.0f };
+	glm::vec3 pixelCoords3 = glm::vec3{ pixelCoords.x, m_viewportVec[3] - pixelCoords.y, 0.0f };
 	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
 	glm::vec3 worldVec = glm::unProject(pixelCoords3, m_viewMatrix, m_projectionMatrix, m_viewportVec);
 	return worldVec;

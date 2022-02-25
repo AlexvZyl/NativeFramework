@@ -111,7 +111,7 @@ bool GuiElementCore::isHovered()
 {
 	// If the window exists.
 	if (m_imguiWindow)
-		return ImGui::IsWindowHovered(0, m_imguiWindow);
+		return ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows, m_imguiWindow);
 
 	// Window does not exist yet.
 	return false;

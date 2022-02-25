@@ -129,12 +129,6 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	// Ensure change actually ocurred.
 	if (newLayer == m_focusedLayer) return;
 
-	// There are some cases where imgui thinks the layer not being hovered,
-	// but that might be because another item (that still belongs to the layer)
-	// is focused.  In these cases we do not want to defocus.
-	// If there is no item under the mouse the ID will be 0.
-	if (newLayer==nullptr && ImGui::GetHoveredID()) return;
-
 	// Create a defocus event.
 	if (m_focusedLayer)
 	{

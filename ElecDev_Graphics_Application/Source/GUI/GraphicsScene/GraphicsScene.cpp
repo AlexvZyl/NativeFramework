@@ -74,15 +74,15 @@ void GraphicsScene::onRenderStateChange(bool newState)
 	// Need to start using the attachments.
 	if (newState)
 	{
-		m_engine->m_scene->createFrameBufferResources();
+		m_engine->m_scene->recreateGPUResources();
 		// Reassign FBO.
-		m_textureID = (void*) m_engine->getRenderTexture();
+		m_textureID = (void*)m_engine->getRenderTexture();
 	}
 
 	// Have no use for the attachments.
 	else
 	{
-		m_engine->m_scene->deleteFrameBufferResources();
+		m_engine->m_scene->deleteGPUResources();
 		// The FBO has been destroyed.
 		//m_textureID = (void*)Renderer::getDefault2DSceneTexture();
 		m_textureID = nullptr;	

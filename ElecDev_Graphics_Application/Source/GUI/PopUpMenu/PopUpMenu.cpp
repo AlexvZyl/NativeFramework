@@ -21,10 +21,9 @@
 PopUpMenu::PopUpMenu(std::string name, int imguiWindowFlags)
     : GuiElementCore(name, imguiWindowFlags)
 {
-    m_imguiWindowFlags  |= ImGuiWindowFlags_NoDecoration
-                        | ImGuiWindowFlags_NoMove
-                        | ImGuiWindowFlags_NoDocking
-                        | ImGuiWindowFlags_AlwaysAutoResize;
+    m_imguiWindowFlags |= ImGuiWindowFlags_NoDecoration
+        | ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_NoDocking;
 }
 
 PopUpMenu::~PopUpMenu() 

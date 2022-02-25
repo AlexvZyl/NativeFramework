@@ -56,9 +56,9 @@ public:
 	void resize(int width, int heigth);
 
 	// Delete the resources to save on VRAM.
-	void deleteFrameBufferResources();
+	void deleteGPUResources();
 	// Recreate the resources once it has been deleted.
-	void createFrameBufferResources();
+	void recreateGPUResources();
 
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
