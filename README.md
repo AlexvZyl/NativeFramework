@@ -1,6 +1,6 @@
 # Lumen Design Engine
 
-![image](https://user-images.githubusercontent.com/81622310/155702587-2f1be90d-f634-4b14-a3a4-c2b589df7955.png)
+![image](https://user-images.githubusercontent.com/81622310/155811339-1cc48730-c1de-4ac9-ab19-39c4410ecb17.png)
 
 This is the graphics application that is to be used with the ElecDev software.  It is built to be a standalone executable that can interface with Excel.
 
