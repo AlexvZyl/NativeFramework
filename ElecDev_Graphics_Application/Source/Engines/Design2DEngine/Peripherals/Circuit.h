@@ -20,7 +20,7 @@ public:
     std::string m_label;
     std::string m_type;
     Circuit(std::string label, std::string type);
-    ~Circuit() = default;
+    ~Circuit();
 };
 
 //=============================================================================================================================================//
