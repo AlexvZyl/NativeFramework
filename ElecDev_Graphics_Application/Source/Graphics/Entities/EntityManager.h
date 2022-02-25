@@ -5,6 +5,7 @@
 //==============================================================================================================================================//
 
 #include <vector>
+#include <unordered_map>
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -39,7 +40,7 @@ private:
 	//Vector to store any IDs that have been freed before reuse
 	static std::vector<unsigned> freeIDs;
 	//Vector to store pointers to each registered entity
-	static std::vector<Entity*> entityLog;
+	static std::unordered_map<unsigned, Entity*> entityLog;
 };
 
 //==============================================================================================================================================//

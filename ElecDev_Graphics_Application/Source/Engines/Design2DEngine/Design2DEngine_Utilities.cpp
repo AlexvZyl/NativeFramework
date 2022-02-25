@@ -116,7 +116,10 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
-		currentEntity->setContext();
+		if (!currentEntity) {
+			return;
+		}
+	currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
 			if (currentEntity->m_parent->m_type == EntityType::CABLE) 
