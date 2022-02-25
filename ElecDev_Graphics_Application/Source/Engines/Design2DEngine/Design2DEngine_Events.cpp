@@ -83,9 +83,14 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
+
+		//Switch out of any placement state
+		designerState = ENTITY_SELECT;
+
 		// Update current entity ID.
 		m_currentEntityID = getEntityID(event.mousePosition);
 		setActiveComponent(m_currentEntityID);
+
 
 		// Create a popup menu on a right click on a graphics scene.
 		PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", DockPanel::Floating)->getGui();
