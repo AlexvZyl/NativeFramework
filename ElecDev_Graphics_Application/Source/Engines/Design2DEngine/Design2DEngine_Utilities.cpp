@@ -106,6 +106,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	{
 		m_activeCable->unhighlight();
 		m_activeCable = NULL;
+		Lumen::getApp().m_guiState->active_cable = nullptr;
 	}
 	if ((eID == 0) || (eID == -1)) 
 	{
@@ -115,7 +116,10 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
-		currentEntity->setContext();
+		if (!currentEntity) {
+			return;
+		}
+	currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
 			if (currentEntity->m_parent->m_type == EntityType::CABLE) 
@@ -129,6 +133,8 @@ void Design2DEngine::setActiveCable(unsigned eID)
 					});
 				m_activeCable->setActivePrimitive(currentEntity);
 				m_activeCable->highlight();
+
+				Lumen::getApp().m_guiState->active_cable = m_activeCable.get();
 			}
 			currentEntity = currentEntity->m_parent;
 		}
@@ -146,11 +152,11 @@ Port* Design2DEngine::getPort(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (!currentEntity) return nullptr;
 		while (currentEntity->m_type != EntityType::PORT)
 		{
 			currentEntity = currentEntity->m_parent;
 			if (!currentEntity) return nullptr;
-			if (currentEntity->m_parent == nullptr) return nullptr;
 		}
 
 		// This cast remains valid provided all entities on screen are decendents of components. 

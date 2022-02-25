@@ -79,16 +79,16 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 
 Port::~Port()
 {
-	// If a port is removed, we need to find and destroy any linked cables
+	// If a port is removed, we need to find and destroy any linked cables.
 	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
 	for (Cable* cable : m_cables) 
 	{
-		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr < Cable > current)
+		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr<Cable> current)
 			{
 				return current.get() == cable;
 			});
 
-		//check that the cable is in the list
+		// Check that the cable is in the list.
 		if (toRemove != cableList.end()) 
 		{
 			cableList.erase(toRemove);
@@ -200,7 +200,7 @@ void Port::hideAttachIndicator()
 	if (m_cables.empty()) 
 	{
 		indicatorColour.a = 0.f;
-		attachmentIndicator->setColor(indicatorColour);
+	attachmentIndicator->setColor(indicatorColour);
 	}
 }
 

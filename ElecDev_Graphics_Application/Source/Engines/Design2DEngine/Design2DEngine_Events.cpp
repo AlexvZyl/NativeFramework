@@ -83,19 +83,30 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
-		// Update current entity ID.
-		m_currentEntityID = getEntityID(event.mousePosition);
-		setActiveComponent(m_currentEntityID);
 
-		// Create a popup menu on a right click on a graphics scene.
-		PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", DockPanel::Floating)->getGui();
-		glm::vec2 pos = {
+		//Switch out of any placement state
+		if (designerState == COMPONENT_PLACE || designerState == CABLE_PLACE) {
+			m_activeComponent = nullptr;
+			m_activeCable = nullptr;
+			designerState = ENTITY_SELECT;
+		}
+		else {
 
-			event.mousePosition.x + m_contentRegionPos.x,
-			event.mousePosition.y + m_contentRegionPos.y
-		};
-		menu->setInitialPosition(pos);
-		menu->setEngine(this);
+			// Update current entity ID.
+			m_currentEntityID = getEntityID(event.mousePosition);
+			setActiveComponent(m_currentEntityID);
+
+
+			// Create a popup menu on a right click on a graphics scene.
+			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", DockPanel::Floating)->getGui();
+			glm::vec2 pos = {
+
+				event.mousePosition.x + m_contentRegionPos.x,
+				event.mousePosition.y + m_contentRegionPos.y
+			};
+			menu->setInitialPosition(pos);
+			menu->setEngine(this);
+		}
 	}
 
 	// ------------------------- //
@@ -134,7 +145,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		m_hoveredID = getEntityID(coords);
 		auto lastHoveredPort = m_hoveredPort;
 		m_hoveredPort = getPort(m_hoveredID);
-		if (m_hoveredPort != lastHoveredPort)
+		if (m_hoveredPort != lastHoveredPort && m_hoveredPort)
 		{
 			if (m_hoveredPort)   m_hoveredPort->showAttachIndicator();
 			else if (lastHoveredPort) lastHoveredPort->hideAttachIndicator();

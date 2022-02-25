@@ -235,7 +235,7 @@ GLFWwindow* Application::glfwInitWindow()
         /* Log error here. */ 
     }
     // Enable MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 1);
+    glfwWindowHint(GLFW_SAMPLES, 2);
     // Remove decorations.
     //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);
@@ -278,7 +278,7 @@ GLFWwindow* Application::glfwInitWindow()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable keyboard controls.
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-    // Multi viewports still seem to be buggy.
+    // Multi viewports need some work with GLFW to be implemented.
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 

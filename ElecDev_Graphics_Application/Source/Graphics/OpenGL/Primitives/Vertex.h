@@ -28,9 +28,7 @@ public:
 	// --------- //
 	//  D A T A  //
 	// --------- //
-
-	// The entire data size.
-	virtual int getTotalSize() { return 0; };					
+	
 	// Size of the texture data (excluding the entity ID).
 	virtual int getDataSize()  { return 0; };					
 	// Size of offset to the entity ID.
@@ -78,7 +76,7 @@ public:
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	
 	// The entire data size.
-	virtual int getTotalSize() override;	
+	static int getTotalSize();	
 	// Size of the texture data (excluding the entity ID).
 	virtual int getDataSize() override;		
 	// Size of offset to the entity ID.
@@ -128,7 +126,7 @@ public:
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	
 	// The entire data size.
-	virtual int getTotalSize() override;	
+	static int getTotalSize();	
 	// Size of the texture data (excluding the entity ID).
 	virtual int getDataSize() override;		
 	// Size of offset to the entity ID.
@@ -181,7 +179,7 @@ public:
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	
 	// The entire data size.
-	virtual int getTotalSize() override;	
+	static int getTotalSize();	
 	// Size of the texture data (excluding the entity ID).
 	virtual int getDataSize() override;		
 	// Size of offset to the entity ID.

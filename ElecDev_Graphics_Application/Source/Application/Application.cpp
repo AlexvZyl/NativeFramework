@@ -113,9 +113,10 @@ void Application::setGuiTheme()
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.ItemSpacing = ImVec2(12, 6);
 	style.ItemInnerSpacing = ImVec2(8, 4);
-	style.IndentSpacing = 25.0f;
+	style.IndentSpacing = 1.0f;
 	style.ScrollbarSize = 15.0f;
 	style.GrabMinSize = 5.0f;
+	style.WindowMenuButtonPosition = ImGuiDir_Right;
 
 	// Rounding.
 	style.WindowRounding = 1.f;
@@ -136,7 +137,7 @@ void Application::setGuiTheme()
 
 	// Padding.
 	style.DisplaySafeAreaPadding = ImVec2(0.f, 0.f);
-	style.WindowPadding = ImVec2(1.f, 1.f);
+	style.WindowPadding = ImVec2(10.f, 10.f);
 	style.FramePadding = ImVec2(6.f, 3.5f);
 
 	// ------------- //
@@ -148,7 +149,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_TextDisabled] = ImVec4(0.00f, 0.81f, 0.82f, 0.90f);
 	colors[ImGuiCol_WindowBg] = ImVec4(0.05f, 0.05f, 0.07f, 1.00f);
 	colors[ImGuiCol_ChildBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	colors[ImGuiCol_PopupBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+	colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 1.00f);
 	colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
 	colors[ImGuiCol_BorderShadow] = ImVec4(0.08f, 0.08f, 0.08f, 1.00f);
 	colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);

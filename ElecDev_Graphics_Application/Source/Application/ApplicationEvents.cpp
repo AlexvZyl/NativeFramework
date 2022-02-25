@@ -24,13 +24,15 @@ void Application::dispatchEvents()
 	if (m_eventLog->mouseMove)
 	{
 		// If there is no hovered layer, we need to check if a layer is hovered.
-		if (!m_hoveredLayer) onHoveredLayerChange(findHoveredLayer());
+		if (!m_hoveredLayer) 
+			onHoveredLayerChange(findHoveredLayer());
 
-		// If the currently hovered layer is no longer being hovered we need to find the new layer.
-		else if(!m_hoveredLayer->isHovered()) onHoveredLayerChange(findHoveredLayer());
+		// If the currently hovered layer is no longer being hovered, we need to find the new layer.
+		else if(!m_hoveredLayer->isHovered()) 
+			onHoveredLayerChange(findHoveredLayer());
 	}
 	
-	// Dispatch general events.
+	// Dispatch GLFW events.
 	for (std::unique_ptr<Event>& event : m_eventLog->events)
 	{
 		uint64_t eventID = event->ID;
@@ -55,8 +57,11 @@ void Application::dispatchEvents()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer)
 	{
-		if (m_eventLog->mouseMove)   m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
-		if (m_eventLog->mouseScroll) m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
+		if (m_eventLog->mouseMove)   
+			m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+
+		if (m_eventLog->mouseScroll) 
+			m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
 	}
 
 	// Pop layers that are queued from GLFW events.

@@ -61,6 +61,7 @@ void Ribbon::begin()
 {
     // Remove rounding so that it docks nicely.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2,2));
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.f, 0.f, 0.04f, 1.00f));
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
@@ -105,6 +106,7 @@ void Ribbon::end()
 {
     ImGui::End();
     // Pop Window rounding.
+    ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor();
 }

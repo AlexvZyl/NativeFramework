@@ -147,6 +147,8 @@ void Scene::create2DBackground()
 	
 	// Create the VAO.
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
+	m_backgroundVAO->setBufferIncrementSize(4);
+
 	// Assign background data.
 	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 1.f);
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
@@ -154,16 +156,20 @@ void Scene::create2DBackground()
 	glm::vec3 pos2(-1.0f, 1.0f, 0.99);
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99);
 	glm::vec3 pos4(1.0f, -1.0f, 0.99);
-	// Create and append the vertices.
-	std::vector<std::unique_ptr<VertexData>> vertices;
-	vertices.reserve(4);
-	vertices.emplace_back(std::make_unique<VertexData>(pos1, bgColor2, -1)); //  Top right.
-	vertices.emplace_back(std::make_unique<VertexData>(pos2, bgColor1, -1)); //  Top left.
-	vertices.emplace_back(std::make_unique<VertexData>(pos3, bgColor1, -1)); //  Bottom left.
-	vertices.emplace_back(std::make_unique<VertexData>(pos4, bgColor1, -1)); //  Bottom right.
-	// Create background.
-	std::vector<unsigned> indices({ 0,1,2,2,3,0 });
-	m_backgroundVAO->appendVertexData(vertices, indices);
+
+	// Vertices.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos1, bgColor2, -1)); //  Top right.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos2, bgColor1, -1)); //  Top left.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos3, bgColor1, -1)); //  Bottom left.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos4, bgColor1, -1)); //  Bottom right.
+	m_backgroundVAO->m_vertexCount += 4;
+
+	// Indices.
+	m_backgroundVAO->m_indexCPU.insert(m_backgroundVAO->m_indexCPU.end(), { 0,1,2,2,3,0 });
+	m_backgroundVAO->m_indexCount += 6;
+
+	// Data will be set on the first resize.
+	m_backgroundVAO->queryBufferResize();
 }
 
 void Scene::create3DBackground() 

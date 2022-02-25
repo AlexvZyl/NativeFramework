@@ -21,7 +21,7 @@ void Application::buildDocks()
 	ImGuiDockNode* dockNode = nullptr;
 
 	// Ribbon dock.
-	m_ribbonPanelID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.035f, NULL, &m_scenePanelID);
+	m_ribbonPanelID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.0375f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_ribbonPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
 						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
