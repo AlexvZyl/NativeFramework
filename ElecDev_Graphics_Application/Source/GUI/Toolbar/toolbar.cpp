@@ -114,7 +114,7 @@ void Toolbar::onRender()
 
     if(ImGui::BeginMenu("Tools"))
     {
-        if (ImGui::Checkbox("Renderer Info", &app.m_profilerActive))
+        if (ImGui::Checkbox(" Renderer Info", &app.m_profilerActive))
         {
             static std::string statsName;
             if (app.m_profilerActive)
@@ -131,7 +131,7 @@ void Toolbar::onRender()
        
         // Style editor.
         static bool style = false;
-        if (ImGui::Checkbox("Style Editor", &style)) 
+        if (ImGui::Checkbox(" Style Editor", &style)) 
         {
             static std::string styleLayernName;
             if (style)
@@ -148,7 +148,7 @@ void Toolbar::onRender()
 
         // ImGui demo window.
         static bool demo = false;
-        if (ImGui::Checkbox("Demo Window", &demo))
+        if (ImGui::Checkbox(" Demo Window", &demo))
         {
             static std::string demoLayerName;
             if (demo)
