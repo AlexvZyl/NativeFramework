@@ -287,9 +287,9 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 	}
 
 	// Reduce capacity.
-	else if (m_vertexCount < (m_vertexBufferSize - (1.5 * m_bufferIncrementSize)))
+	else if (m_vertexCount < (m_vertexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
 	{
-		while (m_vertexCount < (m_vertexBufferSize - (1.5 * m_bufferIncrementSize)))
+		while (m_vertexCount < (m_vertexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
 			m_vertexBufferSize -= m_bufferIncrementSize;
 		// Calculate IBO size based on index/vertex ratio.
 		m_indexBufferSize = (int)((float)m_vertexBufferSize * ((float)m_indexCount / (float)m_vertexCount));
