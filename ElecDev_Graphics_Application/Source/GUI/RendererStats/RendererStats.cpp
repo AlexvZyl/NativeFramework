@@ -34,7 +34,7 @@ void RendererStats::onRender()
 	// ----------------- //
 
 	ImGui::PushID("ProfilerResults");
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::CollapsingHeader("Profiler"))
 	{
 		// Setup table
@@ -52,12 +52,15 @@ void RendererStats::onRender()
 			ImGui::TableSetColumnIndex(1);
 			ImGui::Text("%.3f", result.msTime);
 		}
-		app.m_profilerResults.clear();
-
 		// Done.
 		ImGui::EndTable();
 	}
 	ImGui::PopID();
+
+	// Clear profiler results.
+	app.m_profilerResults.reserve(app.m_profilerResults.size());
+	app.m_profilerResults.shrink_to_fit();
+	app.m_profilerResults.clear();
 
 	// ----------- //
 	//  S C E N E  //
@@ -65,7 +68,7 @@ void RendererStats::onRender()
 
 	ImGui::Separator();
 		
-	ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::CollapsingHeader("Scene"))
 	{
 		if (scene)

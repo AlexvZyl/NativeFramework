@@ -16,26 +16,29 @@
 
 void Application::onRenderInit()
 {
-	PROFILE_SCOPE("Render Init");
-
 	// Clear buffers.
 	Renderer::clear();
 
-	// Feed inputs to ImGUI, start new frame.
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	{
+		PROFILE_SCOPE("ImGui NewFrame");
+		// Feed inputs to ImGUI, start new frame.
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 
-	// Enable docking in main viewport.
-	// Do we really have to call this every frame?
-	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
+		// Enable docking in main viewport.
+		// Do we really have to call this every frame?
+		m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
 
-	// Push custom font.
-	ImGui::PushFont(m_defaultFont);
+		// Push custom font.
+		ImGui::PushFont(m_defaultFont);
+	}
 }
 
 void Application::onRender()
 {	
+	PROFILE_SCOPE("Frametime");
+
 	// Init.
 	onRenderInit();
 
@@ -45,30 +48,34 @@ void Application::onRender()
 	dispatchEvents();
 
 	// Render the layers.
-	{
-		PROFILE_SCOPE("Render Layers");
-		// The order is not important since dear imgui handles that.
-		for (auto& [name, layer] : m_layerStack->getLayers())
-			layer->onRender();
-	}
+	renderLayers();
 
 	// Cleanup.
 	onRenderCleanup();
 }
 
+void Application::renderLayers() 
+{
+	// The order is not important since dear imgui handles that.
+	for (auto& [name, layer] : m_layerStack->getLayers())
+		layer->onRender();
+}
+
 void Application::onRenderCleanup()
 {
+	// Set viewport.
+	int display_w, display_h;
+	glfwGetFramebufferSize(m_window, &display_w, &display_h);
+	Renderer::setViewport(glm::vec2(display_w, display_h));
+
 	{
-		PROFILE_SCOPE("Render Cleanup");
+		PROFILE_SCOPE("ImGui Draw");
 
 		// Pop custom font.
 		ImGui::PopFont();
 
-		// Rendering
+		// ImGui rendering.
 		ImGui::Render();
-		int display_w, display_h;
-		glfwGetFramebufferSize(m_window, &display_w, &display_h);
-		Renderer::setViewport(glm::vec2(display_w, display_h));
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// Update and Render additional Platform Windows
@@ -81,13 +88,11 @@ void Application::onRenderCleanup()
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-
-		// Push commands to the GPU.
-		Renderer::finish();
 	}
 
 	{
 		PROFILE_SCOPE("Swap Buffers");
+
 		// Swap the window buffers.
 		glfwSwapBuffers(m_window);
 	}

@@ -114,11 +114,10 @@ void Toolbar::onRender()
 
     if(ImGui::BeginMenu("Tools"))
     {
-        static bool stats = false;
-        if (ImGui::Checkbox("Renderer Info", &stats))
+        if (ImGui::Checkbox("Renderer Info", &app.m_profilerActive))
         {
             static std::string statsName;
-            if (stats)
+            if (app.m_profilerActive)
             {
                 auto* layer = Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Right, 0, false);
                 statsName = layer->getName();
@@ -128,7 +127,6 @@ void Toolbar::onRender()
                 Lumen::getApp().queuePopLayer(statsName);
             }
         }   
-        
         ImGui::Separator();
        
         // Style editor.

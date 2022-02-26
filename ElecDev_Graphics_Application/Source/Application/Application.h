@@ -120,6 +120,7 @@ public:
 
 	// The results from the profiler.
 	std::vector<ProfileResult> m_profilerResults;
+	bool m_profilerActive = false;
 
 private:
 
@@ -180,6 +181,8 @@ private:
 	void onRenderInit();
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
+	// Render the Lumen layers.
+	void renderLayers();
 	// Renders the initial frame that is required for the dock builder.
 	void buildDocks();
 	// Set the ImGUI theme.

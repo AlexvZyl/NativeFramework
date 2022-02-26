@@ -17,7 +17,7 @@
 
 void Application::dispatchEvents()
 {
-	PROFILE_SCOPE("Events Dispatcher");
+	PROFILE_SCOPE("Dispatch Events");
 
 	// Pop the layers queued from the render loop.
 	// Dispatched here so that they do not get GLFW events.
