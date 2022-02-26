@@ -67,10 +67,8 @@ void ComponentEditor::onRender()
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 		if (ImGui::CollapsingHeader("Ports"))
 		{
-			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg
-											    | ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 250));
-
 			// Setup table.
+			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 			ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
 			ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
@@ -237,9 +235,9 @@ void ComponentEditor::onRender()
 			else height = 300;
 
 			// Setup table.
-			ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollX
+			ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable
 													 | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-													 | ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(0, height));
+													 | ImGuiTableFlags_Borders, ImVec2(0, height));
 
 			// Setup header.
 			ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
