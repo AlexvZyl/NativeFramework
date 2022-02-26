@@ -340,31 +340,32 @@ void Cable::followPort(Port* movedPort)
 	}
 }
 
-void Cable::setColour(glm::vec4 colour)
+void Cable::setColour(glm::vec4 colour, bool save)
 {
-	m_colour = colour;
+	if(save) m_colour = colour;
 	for (int i = 0; i < m_lines.size(); i++) 
 	{
 		LineSegment* line = m_lines[i];
-		line->setColor(m_colour);
+		line->setColor(colour);
 	}
 	for (int i = 0; i < m_nodes.size(); i++) 
 	{
 		Circle* circ = m_nodes[i];
-		circ->setColor(m_colour);
+		circ->setColor(colour);
 	}
 }
 
 void Cable::highlight()
 {
-	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f });
+	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f }, false);
 }
 
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 {
 	// Add code to move necessary primatives around.
 	// Move line segment if user grabs a line.
-	if (m_activeLine) {
+	if (m_activeLine) 
+	{
 		// First check that we are not moving the first or last line. At the monemt this is not supported, as it requires the line segments to be added.
 		// This should be fixed in the future.
 		auto it = std::find_if(begin(m_lines), end(m_lines), [&](LineSegment* current)
@@ -432,7 +433,7 @@ void Cable::setActivePrimitive(Entity* primative)
 
 void Cable::unhighlight()
 {
-	setColour(glm::vec4{ 0.4f, 0.4f, 0.5f, 1.0f });
+	setColour(m_colour);
 }
 
 //==============================================================================================================================================//

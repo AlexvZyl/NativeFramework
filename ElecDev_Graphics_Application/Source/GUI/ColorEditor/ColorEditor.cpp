@@ -35,7 +35,10 @@ void ColorEditor::onRender()
 	if (component)
 		color = &component->shapeColour;
 	else if (cable)
+	{
 		color = &cable->m_colour;
+		cable->setColour(*color, false);
+	}
 
 	// Open color editor.
 	if (color)
@@ -43,8 +46,16 @@ void ColorEditor::onRender()
 		ImGui::SameLine();
 		if (ImGui::ColorPicker4("##ColorEditor", &color->r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
 		{
-			if (component) component->shape->setColor(*color);
-			if (cable) cable->setColour(*color);
+			if (component)
+			{
+				component->shape->m_colour = *color;
+				component->shape->setColor(*color);
+			}
+			if (cable)
+			{
+				cable->m_colour = *color;
+				cable->setColour(*color);
+			}
 		}
 	}
 	else 
