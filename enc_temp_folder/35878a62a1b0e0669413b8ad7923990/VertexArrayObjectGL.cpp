@@ -361,6 +361,7 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::syncPrimitives()
 {
+	// Could there be a situation where a removed primitive is set to be synced?
 	// Update the primitives' vertex data.
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
 	for (PrimitivePtr* primitive : m_primitivesToSync)

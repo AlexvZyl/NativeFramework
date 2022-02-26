@@ -35,6 +35,7 @@ void Primitive<VertexType>::wipeGPU()
 	// Clear metadata.
 	m_vertexBufferPos = NULL;
 	m_indexBufferPos = NULL;
+	m_primitiveBufferPos = NULL;
 	m_vertexCount = 0;
 	m_indexCount = 0;
 }
@@ -42,7 +43,7 @@ void Primitive<VertexType>::wipeGPU()
 template<typename VertexType>
 void Primitive<VertexType>::syncWithGPU() 
 {
-	m_VAO->syncPrimitive(this);
+	m_VAO->syncPrimitiveVertexData(this);
 }
 
 //=============================================================================================================================================//

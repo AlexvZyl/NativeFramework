@@ -62,7 +62,7 @@ public:
 	//  V A R I A B L E S  //
 	// ------------------- //
 
-	VertexArrayObject<VertexType>* m_VAO;			// Pointer to the VAO that the entity is drawn to.
+	VertexArrayObject<VertexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
