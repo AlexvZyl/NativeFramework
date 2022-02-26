@@ -20,6 +20,7 @@
 #include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
+#include "Utilities/Profiler/Profiler.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -51,6 +52,8 @@ Scene* Renderer::getScene()
 
 void Renderer::renderScene() 
 {
+	PROFILE_SCOPE("Draw Scene");
+
 	if	    (m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
 
@@ -60,6 +63,8 @@ void Renderer::renderScene()
 
 void Renderer::renderScene(Scene* scene)
 {
+	PROFILE_SCOPE("Draw Scene");
+
 	if	    (scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
 
