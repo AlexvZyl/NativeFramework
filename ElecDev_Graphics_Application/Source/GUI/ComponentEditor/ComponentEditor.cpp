@@ -37,6 +37,8 @@ void ComponentEditor::onRender()
 {
 	Application& app = Lumen::getApp();
 
+	if (!app.m_guiState->design_engine) return;
+
 	// Fetch all the component names.
 	auto& numComponents = app.m_guiState->design_engine->m_circuit->m_components;
 	auto& numCables = app.m_guiState->design_engine->m_circuit->m_cables;

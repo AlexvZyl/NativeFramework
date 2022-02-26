@@ -32,6 +32,8 @@ Design2DEngine::~Design2DEngine()
 	m_activeComponent = nullptr;
 	m_activeCable = nullptr;
 	m_circuit.reset();
+	if (Lumen::getApp().m_guiState->design_engine == this)
+		Lumen::getApp().m_guiState->design_engine = nullptr;
 }
 
 //=============================================================================================================================================//
