@@ -95,7 +95,6 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			m_currentEntityID = getEntityID(event.mousePosition);
 			setActiveComponent(m_currentEntityID);
 
-
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", DockPanel::Floating)->getGui();
 			glm::vec2 pos = {

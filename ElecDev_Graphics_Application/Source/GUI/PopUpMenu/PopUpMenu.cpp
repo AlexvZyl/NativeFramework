@@ -13,6 +13,7 @@
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
+#include "GUI/ColorEditor/ColorEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -67,7 +68,7 @@ void PopUpMenu::onRender()
     // --------------------- //
     
     // Render menu items.
-    if (m_engine->m_activeComponent == nullptr)
+    if (!m_engine->m_activeComponent && !m_engine->m_activeCable)
     {
         if (ImGui::MenuItem("Place component", "P"))
         {   
@@ -82,7 +83,7 @@ void PopUpMenu::onRender()
     //  C O M P O N E N T  //
     // ------------------- //
 
-    else if (m_engine->m_activeComponent)
+    else if (m_engine->m_activeComponent || m_engine->m_activeCable)
     {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
@@ -90,6 +91,18 @@ void PopUpMenu::onRender()
             // defocus event, which removes the popup event.
             app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
         }
+        if (ImGui::MenuItem("Color Editor"))
+        {
+            ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
+            glm::vec2 localMousePos = getMousePosition();
+            glm::vec2 pos = {
+
+                localMousePos.x + m_contentRegionPosition.x,
+                localMousePos.y + m_contentRegionPosition.y
+            };
+            editor->m_initialPosition = pos;
+        }
+        
         //if (ImGui::MenuItem("Edit Ports", "P"))
         //{
         //    // Remove popup.
