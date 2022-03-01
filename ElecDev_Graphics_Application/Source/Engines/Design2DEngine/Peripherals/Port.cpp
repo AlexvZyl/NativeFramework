@@ -12,6 +12,7 @@
 #include "Circuit.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/RendererGL.h"
+#include <iostream>
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -68,6 +69,10 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C", this);
+	}
+	else {
+		//This should never happen. Print a warning!
+		std::cout << "Invalid port offset";
 	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
