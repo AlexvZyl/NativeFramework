@@ -206,7 +206,7 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 	// Remove from primitives to sync.
 	if (primitive->m_queuedForSync) 
 	{
-		for (int i = 0; i < m_primitivesToSync.size() - 1; i++)
+		for (int i = 0; i < m_primitivesToSync.size(); i++)
 		{
 			if (m_primitivesToSync[i] == primitive)
 			{

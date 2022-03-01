@@ -22,14 +22,14 @@ unsigned EntityManager::generateEID(Entity* entity)
 	// Check to see if there are any freed (recycled) ID's.
 	if (!freeIDs.size()) 
 	{
-		entityLog.insert(std::pair<unsigned, Entity*>(++lastID, entity));
+		entityLog.insert({ ++lastID, entity });
 		return lastID;
 	}
 	else  // Recycle ID's.
 	{
 		unsigned freeID = freeIDs.back();
 		freeIDs.pop_back();
-		entityLog.insert(std::pair<unsigned, Entity*>(freeID, entity));
+		entityLog.insert({ freeID, entity });
 		return freeID;
 	}
 }
@@ -86,7 +86,6 @@ unsigned EntityManager::peakNextID()
 		return freeIDs.back();
 	}
 }
-
 
 //==============================================================================================================================================//
 //  EOF.																																		//
