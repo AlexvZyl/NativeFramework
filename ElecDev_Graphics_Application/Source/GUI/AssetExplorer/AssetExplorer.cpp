@@ -41,8 +41,8 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 void AssetExplorer::begin()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0.f, 10.f});
-	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.f);
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
+	ImGui::PushStyleColor(ImGuiCol_Button, {0.f, 0.f, 0.f, 0.f});
 	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
 }
 
@@ -160,7 +160,7 @@ void AssetExplorer::end()
 	ImGui::End();
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
+	ImGui::PopStyleColor();
 }
 
 //==============================================================================================================================================//
