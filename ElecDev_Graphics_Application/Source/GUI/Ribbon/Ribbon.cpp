@@ -42,6 +42,7 @@ void Ribbon::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2,2));
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.f, 0.f, 0.04f, 1.00f));
+    ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
@@ -49,21 +50,41 @@ void Ribbon::begin()
 
 void Ribbon::onRender()
 {
-    // -------------- //
-    //  B U T T O N S //
-    // -------------- //
+    // ----------------------------------- //
+    //  C O M P O N E N T   B U I L D E R  //
+    // ----------------------------------- //
 
-    // Add design engine.
+    // Button.
     if (ImGui::ImageButton((void*)m_componentIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
         
     }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Component builder");
+        ImGui::EndTooltip();
+    }
 
-    // Add design engine.
+    // --------------------------------- //
+    //  C I R C U I T   D E S I G N E R  //
+    // --------------------------------- //
+
+    // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
         Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Circuit Designer");
+        ImGui::EndTooltip();
+    }
+
+    ImGui::Separator();
 }
 
 void Ribbon::end() 
@@ -72,6 +93,7 @@ void Ribbon::end()
     // Pop Window rounding.
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
     ImGui::PopStyleColor();
 }
 

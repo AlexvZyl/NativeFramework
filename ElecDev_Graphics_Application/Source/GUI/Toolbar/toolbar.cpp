@@ -31,6 +31,10 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texWidth = textureBM.bmWidth;
     m_texHeight = textureBM.bmHeight;
     m_texID = loadBitmapToGL(textureBM);
+
+    m_colour = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+    float scale = 2.f;
+    m_colour *= scale;
 }
 
 /*=======================================================================================================================================*/
@@ -42,7 +46,7 @@ void Toolbar::begin()
     // Style.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
-    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.05f, 0.05f, 0.05f, 1.00f));
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, m_colour);
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
 }
@@ -53,8 +57,10 @@ void Toolbar::onRender()
     Application& app = Lumen::getApp();
     
     // Draw the image.
-    static float textureSize = ImGui::GetFont()->FontSize + 2 * TOOLBAR_PADDING - 5;
+    static float textureSize = 2 * TOOLBAR_PADDING - 3;
+    ImGui::SetCursorPosY(m_contentRegionPosition.y+3);
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::SetCursorPosY(m_contentRegionPosition.y);
 
     // --------- //
     //  F I L E  //
