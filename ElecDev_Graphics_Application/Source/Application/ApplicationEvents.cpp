@@ -214,7 +214,7 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
+		if (path.size())
 		{
 			// Find engine.
 			Design2DEngine* saveEngine = reinterpret_cast<Design2DEngine*>(event.engine);
@@ -250,7 +250,7 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	{
 		// Check if operation did not fail.
 		// This should be handled differently!
-		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
+		if (path.size())
 		{
 			// Load file into Lumen.
 			loadFromYAML(path);

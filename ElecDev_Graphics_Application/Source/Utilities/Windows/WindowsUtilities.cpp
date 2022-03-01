@@ -11,13 +11,14 @@
 //  Executable.																																   //
 //=============================================================================================================================================//
 
-std::string getExecutableLocation()
+std::string getExecutableLocation(bool removeBackslash)
 {
     char pathWindows[100];
     GetModuleFileNameA(getCurrentModule(), pathWindows, 100);
     std::string path = pathWindows;
     path.erase(path.length()-4, 4);                     // Remove '.exe'.
     while (path.back() != '\\') { path.pop_back(); }    // Remove exe name.
+    if (removeBackslash) path.pop_back();
     return path;
 }
 
@@ -46,7 +47,7 @@ HMODULE getCurrentModule()
 std::string selectFolder(std::string root)
 {
     // Default location.
-    if (root.length()) { root = getExecutableLocation(); }
+    if (!root.length()) { root = getExecutableLocation(); }
 
     // Stores the results of the windows calls.
     HRESULT hResult;
@@ -72,7 +73,7 @@ std::string selectFolder(std::string root)
     // Display.
     hResult = dialog->Show(GetConsoleWindow());
     // Return if operation cancelled.
-    if (hResult == 0x800704c7) { return "OPERATION_CANCELLED"; } // This number might change.
+    if (hResult == 0x800704c7) { return ""; } // This number might change.
    
     // Get the selected folder.
     IShellItem* resultSI;
@@ -80,7 +81,7 @@ std::string selectFolder(std::string root)
     LPWSTR resultWindowsWS;
     hResult = resultSI->GetDisplayName(SIGDN_FILESYSPATH, &resultWindowsWS);
     // If no file was loaded, return.
-    if (!resultWindowsWS) { return "FOLDER_EMPTY"; }
+    if (!resultWindowsWS) { return ""; }
     std::wstring resultW = resultWindowsWS;
     hResult = resultSI->Release();
 
@@ -142,7 +143,7 @@ std::string selectFile(std::string title, std::string root, std::string defaultF
     // Display.
     hResult = dialog->Show(GetConsoleWindow());
     // Return if operation cancelled.
-    if (hResult == 0x800704c7) { return "OPERATION_CANCELLED"; } // This number might change.
+    if (hResult == 0x800704c7) { return """"; } // This number might change.
 
     // Get the selected folder.
     IShellItem* resultSI;
@@ -150,7 +151,7 @@ std::string selectFile(std::string title, std::string root, std::string defaultF
     LPWSTR resultWindowsWS;
     hResult = resultSI->GetDisplayName(SIGDN_FILESYSPATH, &resultWindowsWS);
     // If no file was loaded, return.
-    if (!resultWindowsWS) { return "FOLDER_EMPTY"; }
+    if (!resultWindowsWS) { return ""; }
     std::wstring resultW = resultWindowsWS;
     hResult = resultSI->Release();
 

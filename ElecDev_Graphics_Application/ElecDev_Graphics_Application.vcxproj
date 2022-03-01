@@ -984,6 +984,7 @@
     <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Icons\panda.bmp" />
+    <Image Include="Source\Resources\Icons\ReloadIcon.png" />
     <Image Include="Source\Resources\Textures\CircuitCircle.jpg" />
     <Image Include="Source\Resources\Textures\circuitTree.png" />
     <Image Include="Source\Resources\Icons\component.png" />

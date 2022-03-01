@@ -169,7 +169,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_Button] = ImVec4(0.10f, 0.10f, 0.12f, 1.00f);
 	colors[ImGuiCol_ButtonHovered] = ImVec4(0.30f, 0.30f, 0.37f, 1.00f);
 	colors[ImGuiCol_ButtonActive] = ImVec4(0.44f, 0.44f, 0.57f, 1.00f);
-	colors[ImGuiCol_Header] = ImVec4(0.27f, 0.27f, 0.30f, 1.00f);
+	colors[ImGuiCol_Header] = ImVec4(0.24f, 0.24f, 0.27f, 1.00f);
 	colors[ImGuiCol_HeaderHovered] = ImVec4(0.35f, 0.35f, 0.41f, 1.00f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 	colors[ImGuiCol_Separator] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);

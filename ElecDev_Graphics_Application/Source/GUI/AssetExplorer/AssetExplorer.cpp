@@ -12,12 +12,14 @@
 //  Statics.																																	//
 //==============================================================================================================================================//
 
-std::string AssetExplorer::s_directory = getExecutableLocation();
+std::string AssetExplorer::s_startingDirectory = getExecutableLocation(true);
+std::filesystem::path AssetExplorer::m_currentDirectory;
 unsigned AssetExplorer::s_fileIcon = NULL;
 unsigned AssetExplorer::s_folderIcon = NULL;
 unsigned AssetExplorer::s_circuitFileIcon = NULL;
 unsigned AssetExplorer::s_leftArrowIcon = NULL;
 unsigned AssetExplorer::s_componentFileIcon = NULL;
+unsigned AssetExplorer::s_reloadIcon = NULL;
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -26,16 +28,14 @@ unsigned AssetExplorer::s_componentFileIcon = NULL;
 AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	: GuiElementCore(name, imguiWindowFlags)
 {
-	// Remove '\'
-	std::string temp = s_directory;
-	temp.pop_back();
-	m_currentDirectory = temp;
+	m_currentDirectory = s_startingDirectory;
 	// Load resources.
 	s_fileIcon = loadBitmapToGL(loadImageFromResource(FILE_ICON));
 	s_folderIcon = loadBitmapToGL(loadImageFromResource(FOLDER_ICON));
 	s_circuitFileIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
 	s_leftArrowIcon = loadBitmapToGL(loadImageFromResource(LEFT_ARROW_ICON));
 	s_componentFileIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
+	s_reloadIcon = loadBitmapToGL(loadImageFromResource(RELOAD_ICON));
 }
 
 void AssetExplorer::begin()
@@ -52,10 +52,25 @@ void AssetExplorer::onRender()
 	 
 	// Current directory.
 	static glm::vec2 headerSize(20, 20);
-	ImGui::Button(m_currentDirectory.string().c_str(), {0, headerSize.y});
 	// Move up.
 	if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
 		m_currentDirectory = m_currentDirectory.parent_path();
+	ImGui::SameLine();
+	ImGui::Text("  ");
+	ImGui::SameLine();
+	if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
+	{
+	}
+	ImGui::SameLine();
+	ImGui::Text("  ");
+	ImGui::SameLine();
+	if(ImGui::Button(m_currentDirectory.string().c_str(), {0, headerSize.y + 7.f}))
+	{
+		std::string newDirectory = selectFolder(m_currentDirectory.string());
+		if(newDirectory.size())
+			m_currentDirectory = newDirectory;
+	}
+
 	ImGui::Separator();
 
 	// Create icon columns.

@@ -235,7 +235,7 @@ GLFWwindow* Application::glfwInitWindow()
         /* Log error here. */ 
     }
     // Enable MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 2);
+    glfwWindowHint(GLFW_SAMPLES, 8);
     // Remove decorations.
     //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);
