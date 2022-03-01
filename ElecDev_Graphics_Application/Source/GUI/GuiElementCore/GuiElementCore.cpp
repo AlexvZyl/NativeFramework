@@ -107,7 +107,7 @@ void GuiElementCore::dispatchEvents()
 //  Events.																																		//
 //==============================================================================================================================================//
 
-bool GuiElementCore::isHovered() 
+bool GuiElementCore::isHovered()
 {
 	// If the window exists.
 	if (m_imguiWindow)

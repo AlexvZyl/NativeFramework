@@ -58,6 +58,20 @@ void GraphicsScene::onRender()
 {
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+	if (ImGui::BeginDragDropTarget())
+	{
+		// Testing.
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring wPath(path);
+			std::string sPath;
+			sPath.insert(sPath.end(), wPath.begin(), wPath.end());
+			//FileDropEvent event(sPath);
+			//Lumen::getApp().logEvent<FileDropEvent>(event);
+			ImGui::EndDragDropTarget();
+		}
+	}
 }
 
 void GraphicsScene::end()

@@ -29,6 +29,8 @@ void RendererStats::onRender()
 	Scene* scene = Renderer::getScene();
 	Application& app = Lumen::getApp();
 
+	ImGui::Separator();
+
 	// ----------------- //
 	//  P R O F I L E R  //
 	// ----------------- //
@@ -37,6 +39,8 @@ void RendererStats::onRender()
 	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 	if (ImGui::CollapsingHeader("Profiler"))
 	{
+		// Enable profiler.
+		app.m_profilerActive = true;
 		// Setup table
 		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
@@ -55,12 +59,47 @@ void RendererStats::onRender()
 		// Done.
 		ImGui::EndTable();
 	}
+	else 
+	{
+		// Disable profiler.
+		app.m_profilerActive = false;
+	}
 	ImGui::PopID();
 
-	// Clear profiler results.
-	app.m_profilerResults.reserve(app.m_profilerResults.size());
-	app.m_profilerResults.shrink_to_fit();
-	app.m_profilerResults.clear();
+	// ----------------- //
+	//  R E N D E R E R  //
+	// ----------------- //
+
+	ImGui::Separator();
+	
+	ImGui::PushID("RendererData");
+	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+	if (ImGui::CollapsingHeader("Renderer"))
+	{
+		// Setup table
+		ImGui::BeginTable("RendererTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
+		ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableHeadersRow();
+
+		// Draw calls.
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("Draw Calls");
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("%d", app.m_rendererData.drawCalls);
+
+		// Draw calls.
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("Render Passes");
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("%d", app.m_rendererData.renderPasses);
+
+		// Done.
+		ImGui::EndTable();
+	}
+	ImGui::PopID();
 
 	// ----------- //
 	//  S C E N E  //
@@ -301,12 +340,21 @@ void RendererStats::onRender()
 			ImGui::Text("No active scene.");
 		}
 	}
+
+	ImGui::Separator();
 }
 
 void RendererStats::end()
 {
 	ImGui::PopItemWidth();
 	ImGui::End();
+
+	// Clear profiler results.
+	Application& app = Lumen::getApp();
+	app.m_profilerResults.reserve(app.m_profilerResults.size());
+	app.m_profilerResults.shrink_to_fit();
+	app.m_profilerResults.clear();
+	app.m_rendererData.reset();
 }
 
 //=======================================================================================================================================//

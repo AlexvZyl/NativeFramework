@@ -32,29 +32,8 @@ Ribbon::Ribbon(std::string name, int windowFlags)
                         |   ImGuiWindowFlags_NoDecoration
                         |   ImGuiWindowFlags_NoResize;        
 
-    // Load texture 1. 
-    static BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
-    image1_width = texture1BM.bmWidth;
-    image1_height = texture1BM.bmHeight;
-    image1_texture = loadBitmapToGL(texture1BM);
-
-    // Load texture 2.
-    static BITMAP texture2BM = loadImageFromResource(COMPONENT_PNG);
-    image2_width = texture2BM.bmWidth;
-    image2_height = texture2BM.bmHeight;
-    image2_texture = loadBitmapToGL(texture2BM);
-
-    // Load texture 3.
-    static BITMAP texture3BM = loadImageFromResource(DRAW_CIRCUIT_BUCKETS_PNG);
-    image3_width = texture3BM.bmWidth;
-    image3_height = texture3BM.bmHeight;
-    image3_texture = loadBitmapToGL(texture3BM);
-
-    // Load texture 4. 
-    static BITMAP texture4BM = loadImageFromResource(CIRCUIT_CIRCLE_JPEG);
-    image4_width = texture4BM.bmWidth;
-    image4_height = texture4BM.bmHeight;
-    image4_texture = loadBitmapToGL(texture4BM);
+    m_circuitIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
+    m_componentIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 }
 
 void Ribbon::begin()
@@ -63,6 +42,7 @@ void Ribbon::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2,2));
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.f, 0.f, 0.04f, 1.00f));
+    ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
@@ -70,36 +50,41 @@ void Ribbon::begin()
 
 void Ribbon::onRender()
 {
-    // -------------- //
-    //  B U T T O N S //
-    // -------------- //
+    // ----------------------------------- //
+    //  C O M P O N E N T   B U I L D E R  //
+    // ----------------------------------- //
 
-    // Draw MCC.
-    if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30)))
+    // Button.
+    if (ImGui::ImageButton((void*)m_componentIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
-
+        
     }
-
-    // Block diagram.
-    if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
+    // Tooltip.
+    if (ImGui::IsItemHovered())
     {
-
-    }
- 
-    // Circuit bucket.
-    if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
-    { 
-        // Testing.
-        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::Left);
-        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::Right);
-        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::Bottom);
+        ImGui::BeginTooltip();
+        ImGui::Text("Component builder");
+        ImGui::EndTooltip();
     }
 
-    // Add design engine.
-    if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 
+    // --------------------------------- //
+    //  C I R C U I T   D E S I G N E R  //
+    // --------------------------------- //
+
+    // Button.
+    if (ImGui::ImageButton((void*)m_circuitIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
         Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Circuit Designer");
+        ImGui::EndTooltip();
+    }
+
+    ImGui::Separator();
 }
 
 void Ribbon::end() 
@@ -108,6 +93,7 @@ void Ribbon::end()
     // Pop Window rounding.
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
     ImGui::PopStyleColor();
 }
 

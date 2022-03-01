@@ -77,13 +77,12 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 	YAML::Node circuitInfo = yamlNode["Circuit Info"];
 
 	// Create the circuit for the engine. 
-	Circuit circuit(circuitInfo["Label"].as<std::string>(),
-					circuitInfo["Type"].as<std::string>());
+	std::shared_ptr<Circuit> circuit = std::make_shared<Circuit>(circuitInfo["Label"].as<std::string>(),
+																 circuitInfo["Type"].as<std::string>());
 	
 	// Create an engine with the circuit.
-	Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit.m_label)->getEngine();
-	engine->m_circuit.reset();
-	engine->m_circuit = std::make_shared<Circuit>(std::move(circuit));
+	Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit->m_label)->getEngine();
+	engine->m_circuit = circuit;
 
 	// -------------------- //
 	// C O M P O N E N T S  //

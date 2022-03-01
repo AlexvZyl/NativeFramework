@@ -61,6 +61,14 @@
 #define ICON_PNG 239			// GLFW icon.
 #define CIRCUIT_CIRCLE_JPEG 238	// Circle circuit for design engine button.
 //-------------------------------------------------------------------------------------------------
+//  File system.
+#define FILE_ICON 231
+#define FOLDER_ICON 230
+#define CIRCUIT_FILE_ICON 229
+#define LEFT_ARROW_ICON 228
+#define COMPONENT_FILE_ICON 227
+#define RELOAD_ICON 226
+//-------------------------------------------------------------------------------------------------
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */

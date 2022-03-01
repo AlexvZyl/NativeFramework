@@ -34,6 +34,7 @@ public:
 	// Destructor.
 	inline virtual ~EngineLayer() 
 	{
+		// Bind the scene so that primitives can be removed.
 		Renderer::bindScene(m_engine->m_scene.get());
 	};
 

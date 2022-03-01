@@ -4,38 +4,25 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include <Windows.h>
-#include <glad/glad.h>
-#include <imgui/imgui.h>
-#include <string>
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "Resources/ResourceHandler.h"
 
 //==============================================================================================================================================//
-//  Ribbon.																																		//
+//  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class Ribbon : public GuiElementCore
+class SceneHierarchy : public GuiElementCore
 {
-
 public:
-	
+
 	// Constructor.
-	Ribbon(std::string name, int windowFlags);
+	SceneHierarchy(std::string name, int imguiWindowFlags);
+	// Destructor.
+	inline virtual ~SceneHierarchy() = default;
 
 	// Rendering.
 	virtual void begin() override;
 	virtual void onRender() override;
 	virtual void end() override;
-
-private:
-
-	// -------- //
-	//  D A T A //
-	// -------- //
-
-	unsigned m_circuitIcon = NULL;
-	unsigned m_componentIcon = NULL;
 };
 
 //==============================================================================================================================================//

@@ -252,10 +252,11 @@ void ComponentEditor::onRender()
 			toRemove.reserve(1);
 
 			// Table.
+			int keyCount = 0;
 			for (auto& [key, val] : dataDict)
 			{
 				// ID.
-				ImGui::PushID((int)key.c_str());
+				ImGui::PushID(keyCount++);
 
 				// Selectable.
 				bool isOpen = true;
@@ -274,7 +275,9 @@ void ComponentEditor::onRender()
 				// Remove button.
 				ImGui::PushItemWidth(-1);
 				if (ImGui::Button("Remove"))
+				{
 					toRemove.push_back(key);
+				}
 				ImGui::PopItemWidth();
 				// ID.
 				ImGui::PopID();
