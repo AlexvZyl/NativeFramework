@@ -299,7 +299,7 @@ Circle* Renderer::addCircle2D(const glm::vec2& center, float radius, const glm::
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent) });
-	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<Circle*>(m_scene->m_primitives.at(id).get());
 }
 
 LineSegment* Renderer::addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness, const glm::vec4& colour, Entity* parent)
