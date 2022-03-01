@@ -55,14 +55,13 @@ void Design2DEngine::deleteActiveComponent()
 
 void Design2DEngine::deleteActiveCable()
 {
-	if (m_activeCable)
+	if (!m_activeCable) return;
+
+	auto iterator = std::find(m_circuit->m_cables.begin(), m_circuit->m_cables.end(), m_activeCable);
+	if (iterator != m_circuit->m_cables.end())
 	{
-		auto iterator = std::find(m_circuit->m_cables.begin(), m_circuit->m_cables.end(), m_activeCable);
-		if (iterator != m_circuit->m_cables.end())
-		{
-			m_circuit->m_cables.erase(iterator);
-			m_activeCable = nullptr;
-		}
+		m_circuit->m_cables.erase(iterator);
+		m_activeCable = nullptr;
 	}
 }
 

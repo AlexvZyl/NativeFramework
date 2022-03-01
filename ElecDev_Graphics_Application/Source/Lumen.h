@@ -9,6 +9,14 @@
 #define VERTEX_BUFFER_INCREMENTS 1000
 #define VERTEX_BUFFER_REDUCTION_SCALE 1.25
 #define MAX_VERTEX_BUFFER_SIZE 10000
+#define GUI_INDENT_WIDTH 15
+
+//==============================================================================================================================================//
+//  Macros.																																		//
+//==============================================================================================================================================//
+
+#define LUMEN_DRAW_CALL()   Lumen::getApp().m_rendererData.drawCall();
+#define LUMEN_RENDER_PASS() Lumen::getApp().m_rendererData.renderPass();
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//

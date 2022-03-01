@@ -20,7 +20,7 @@ void Application::onRenderInit()
 	Renderer::clear();
 
 	{
-		PROFILE_SCOPE("ImGui NewFrame");
+		LUMEN_PROFILE_SCOPE("ImGui NewFrame");
 		// Feed inputs to ImGUI, start new frame.
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -37,7 +37,7 @@ void Application::onRenderInit()
 
 void Application::onRender()
 {	
-	PROFILE_SCOPE("Frametime");
+	LUMEN_PROFILE_SCOPE("Frametime");
 
 	// Init.
 	onRenderInit();
@@ -69,7 +69,7 @@ void Application::onRenderCleanup()
 	Renderer::setViewport(glm::vec2(display_w, display_h));
 
 	{
-		PROFILE_SCOPE("ImGui Draw");
+		LUMEN_PROFILE_SCOPE("ImGui Draw");
 
 		// Pop custom font.
 		ImGui::PopFont();
@@ -91,7 +91,7 @@ void Application::onRenderCleanup()
 	}
 
 	{
-		PROFILE_SCOPE("Swap Buffers");
+		LUMEN_PROFILE_SCOPE("Swap Buffers");
 
 		// Swap the window buffers.
 		glfwSwapBuffers(m_window);

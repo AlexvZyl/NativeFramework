@@ -26,9 +26,10 @@ class Layer;
 class ImFont;
 
 struct GLFWwindow;
+struct RendererData;
 
 //==============================================================================================================================================//
-//  Dock types.																																	//
+//  Data.																																		//
 //==============================================================================================================================================//
 
 enum class DockPanel 
@@ -121,6 +122,7 @@ public:
 	// The results from the profiler.
 	std::vector<ProfileResult> m_profilerResults;
 	bool m_profilerActive = false;
+	RendererData m_rendererData;
 
 private:
 
@@ -242,6 +244,7 @@ GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel do
 	dockLayerToPanel(newName, dockPanel);
 	// Return the layer.
 	return ptr;
+	return nullptr;
 }
 
 template<class LayerType>

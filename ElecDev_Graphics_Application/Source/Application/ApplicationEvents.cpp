@@ -17,7 +17,7 @@
 
 void Application::dispatchEvents()
 {
-	PROFILE_SCOPE("Dispatch Events");
+	LUMEN_PROFILE_SCOPE("Dispatch Events");
 
 	// Pop the layers queued from the render loop.
 	// Dispatched here so that they do not get GLFW events.
@@ -131,6 +131,9 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 {
 	// Ensure change actually ocurred.
 	if (newLayer == m_focusedLayer) return;
+
+	// Let ImGui set focus in this case.
+	if (!newLayer && ImGui::GetItemID()) return;
 
 	// Create a defocus event.
 	if (m_focusedLayer)

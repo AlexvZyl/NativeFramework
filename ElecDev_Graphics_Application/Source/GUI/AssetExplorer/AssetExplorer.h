@@ -4,24 +4,22 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include <Windows.h>
-#include <glad/glad.h>
-#include <imgui/imgui.h>
-#include <string>
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "Resources/ResourceHandler.h"
+#include <filesystem>
 
 //==============================================================================================================================================//
-//  Ribbon.																																		//
+//  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class Ribbon : public GuiElementCore
+class AssetExplorer : public GuiElementCore
 {
-
 public:
-	
+
+
 	// Constructor.
-	Ribbon(std::string name, int windowFlags);
+	AssetExplorer(std::string name, int imguiWindowFlags);
+	// Destructor.
+	inline virtual ~AssetExplorer() = default;
 
 	// Rendering.
 	virtual void begin() override;
@@ -30,12 +28,17 @@ public:
 
 private:
 
-	// -------- //
-	//  D A T A //
-	// -------- //
+	// The directory to open.
+	static std::string s_directory;
 
-	unsigned m_circuitIcon = NULL;
-	unsigned m_componentIcon = NULL;
+	static unsigned s_folderIcon;
+	static unsigned s_fileIcon;
+	static unsigned s_circuitFileIcon;
+	static unsigned s_leftArrowIcon;
+	static unsigned s_componentFileIcon;
+	glm::vec4 m_buttonColor;
+	glm::vec4 m_borderColor;
+	std::filesystem::path m_currentDirectory;
 };
 
 //==============================================================================================================================================//

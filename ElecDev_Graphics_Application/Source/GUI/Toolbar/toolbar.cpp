@@ -8,12 +8,14 @@
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Lumen.h"
-#include "GUI/RendererStats/RendererStats.h"
 #include "Application/Application.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "GUI/RendererStats/RendererStats.h"
+#include "GUI/AssetExplorer/AssetExplorer.h"
 #include "GUI/ImGuiDemoWindow/ImGuiDebugWindow.h"
+#include "GUI/SceneHierarchy/SceneHierarchy.h"
 #include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
@@ -114,19 +116,56 @@ void Toolbar::onRender()
 
     if(ImGui::BeginMenu("Tools"))
     {
-        if (ImGui::Checkbox(" Renderer Info", &app.m_profilerActive))
+        // Renderer info.
+        static bool profilerState = false;
+        if (ImGui::Checkbox(" Renderer Info", &profilerState))
         {
             static std::string statsName;
-            if (app.m_profilerActive)
+            if (profilerState)
             {
-                auto* layer = Lumen::getApp().pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Right, 0, false);
+                auto* layer = app.pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Right, 0, false);
                 statsName = layer->getName();
+                app.m_profilerActive = true;
             }
             else 
             {
-                Lumen::getApp().queuePopLayer(statsName);
+                app.m_profilerActive = false;
+                app.queuePopLayer(statsName);
             }
         }   
+
+        // Scene hierarchy.
+        static bool sceneHierarchy = false;
+        if (ImGui::Checkbox(" Scene Hierarchy", &sceneHierarchy))
+        {
+            static std::string sceneHierarchyname;
+            if (sceneHierarchy)
+            {
+                auto* layer = app.pushGuiLayer<SceneHierarchy>("Scene Hierarchy", DockPanel::Right, 0, false);
+                sceneHierarchyname = layer->getName();
+            }
+            else
+            {
+                app.queuePopLayer(sceneHierarchyname);
+            }
+        }
+
+        // Scene hierarchy.
+        static bool assetExplorer = false;
+        if (ImGui::Checkbox(" Asset Explorer", &assetExplorer))
+        {
+            static std::string assetExplorerName;
+            if (assetExplorer)
+            {
+                auto* layer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
+                assetExplorerName = layer->getName();
+            }
+            else
+            {
+                app.queuePopLayer(assetExplorerName);
+            }
+        }
+
         ImGui::Separator();
        
         // Style editor.
@@ -136,13 +175,13 @@ void Toolbar::onRender()
             static std::string styleLayernName;
             if (style)
             {
-                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Style Editor", DockPanel::Floating, 0, false);
+                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Style Editor", DockPanel::Floating, 0, false);
                 layer->getGui()->showStyleEditor = true;
                 styleLayernName = layer->getName();
             }
             else
             {
-                Lumen::getApp().queuePopLayer(styleLayernName);
+                app.queuePopLayer(styleLayernName);
             }
         }
 
@@ -153,13 +192,13 @@ void Toolbar::onRender()
             static std::string demoLayerName;
             if (demo)
             {
-                auto* layer = Lumen::getApp().pushGuiLayer<ImGuiDebugWindow>("Demo Window", DockPanel::Floating, 0, false);
+                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Demo Window", DockPanel::Floating, 0, false);
                 layer->getGui()->showDemoWindow = true;
                 demoLayerName = layer->getName();
             }
             else
             {
-                Lumen::getApp().queuePopLayer(demoLayerName);
+                app.queuePopLayer(demoLayerName);
             }
         }
         ImGui::EndMenu();

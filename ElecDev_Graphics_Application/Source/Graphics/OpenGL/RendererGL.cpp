@@ -21,6 +21,8 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -52,24 +54,28 @@ Scene* Renderer::getScene()
 
 void Renderer::renderScene() 
 {
-	PROFILE_SCOPE("Draw Scene");
+	LUMEN_PROFILE_SCOPE("Draw Scene");
 
 	if	    (m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
 
 	//  Resolve the MSAA.
 	m_scene->m_FBO->renderFromMSAA();
+
+	LUMEN_RENDER_PASS();
 }
 
 void Renderer::renderScene(Scene* scene)
 {
-	PROFILE_SCOPE("Draw Scene");
+	LUMEN_PROFILE_SCOPE("Draw Scene");
 
 	if	    (scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
 
 	//  Resolve the MSAA.
 	scene->m_FBO->renderFromMSAA();
+
+	LUMEN_RENDER_PASS();
 }
 	
 //==============================================================================================================================================//

@@ -13,6 +13,7 @@
 #include "OpenGL/Primitives/Primitive.h"
 #include "Graphics/Entities/Entity.h"
 #include "Lumen.h"
+#include "Application/Application.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -57,6 +58,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 template <typename VertexType>
 void VertexArrayObject<VertexType>::render()
 {
+	// Checks before render.
 	if (!m_vertexBufferSynced)	syncVertexBuffer();
 	if (!m_indexBufferSynced)	syncIndexBuffer();
 	if (!m_primitivesSynced)	syncPrimitives();
@@ -66,6 +68,8 @@ void VertexArrayObject<VertexType>::render()
 	GLCall(glBindVertexArray(m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
 	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
+	
+	LUMEN_DRAW_CALL();
 }
 
 template <typename VertexType>
@@ -199,19 +203,6 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 	for (int i = indexPos; i < m_indexCount; i++)
 		m_indexCPU[i] -= vertexCount;
 
-	// Remove primitive.
-	m_primitives.erase(m_primitives.begin() + primitiveIndex);
-	m_primitives.shrink_to_fit();
-
-	// Change metadata of primitives that sit after the popped primitive.
-	for (int i = primitiveIndex; i < m_primitives.size(); i++)
-	{
-		PrimitivePtr* primitive = m_primitives[i];
-		primitive->m_indexBufferPos -= indexCount;
-		primitive->m_vertexBufferPos -= vertexCount;
-		primitive->m_primitiveBufferPos -= 1;
-	}
-
 	// Remove from primitives to sync.
 	if (primitive->m_queuedForSync) 
 	{
@@ -225,11 +216,25 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 		}
 	}
 
+	// Remove primitive.
+	m_primitives.erase(m_primitives.begin() + primitiveIndex);
+	m_primitives.shrink_to_fit();
 	// Reserve data for the sync vector.
 	m_primitivesToSync.reserve(m_primitives.size());  // This is not the best solution.
 
+	// Change metadata of primitives that sit after the popped primitive.
+	for (int i = primitiveIndex; i < m_primitives.size(); i++)
+	{
+		PrimitivePtr* primitive = m_primitives[i];
+		primitive->m_indexBufferPos -= indexCount;
+		primitive->m_vertexBufferPos -= vertexCount;
+		primitive->m_primitiveBufferPos -= 1;
+	}
+
 	// Check for resize.
 	// TODO: We do not need to reload all of the data.
+	// We only have to reload data that sits after the removed primitive.
+	// FreeLists will make this easier as well.
 	if (!queryBufferResize()) 
 	{
 		m_indexBufferSynced = false;

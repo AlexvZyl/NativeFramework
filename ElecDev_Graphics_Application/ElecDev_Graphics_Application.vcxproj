@@ -261,6 +261,7 @@
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\External\GLAD\src\glad.c" />
     <ClCompile Include="Source\Graphics\Vulkan\README.md" />
+    <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
     <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
@@ -270,6 +271,7 @@
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
     <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
+    <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
@@ -702,6 +704,7 @@
     <ClInclude Include="Source\Engines\Design2DEngine\Design2DEngine.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Component2D.h" />
     <ClInclude Include="Source\Application\GuiState.h" />
+    <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
@@ -711,6 +714,7 @@
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
     <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
+    <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Lumen.h" />
@@ -970,9 +974,14 @@
     <Image Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
+    <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
+    <Image Include="Source\Resources\Icons\ComponentFileIcon.png" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />
     <Image Include="Source\Resources\Icons\circuitIcon.bmp" />
     <Image Include="Source\Resources\Icons\circuitImage.png" />
+    <Image Include="Source\Resources\Icons\FileIcon.png" />
+    <Image Include="Source\Resources\Icons\FolderIcon.png" />
+    <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Icons\panda.bmp" />
     <Image Include="Source\Resources\Textures\CircuitCircle.jpg" />

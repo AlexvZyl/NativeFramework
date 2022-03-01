@@ -59,7 +59,6 @@ std::string selectFolder(std::string root)
     hResult = dialog->SetTitle((LPCWSTR)title);
     hResult = dialog->SetOptions(FOS_PICKFOLDERS | FOS_FORCEFILESYSTEM | FOS_PATHMUSTEXIST);
 
-
     // Set target folder at the .exe location.
     // This default location changes as the user uses the explorer (TBC).
     std::wstring exeLocationW = std::wstring(root.begin(), root.end());

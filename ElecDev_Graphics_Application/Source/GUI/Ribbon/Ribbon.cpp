@@ -32,29 +32,8 @@ Ribbon::Ribbon(std::string name, int windowFlags)
                         |   ImGuiWindowFlags_NoDecoration
                         |   ImGuiWindowFlags_NoResize;        
 
-    // Load texture 1. 
-    static BITMAP texture1BM = loadImageFromResource(DRAW_MCC_PNG);
-    image1_width = texture1BM.bmWidth;
-    image1_height = texture1BM.bmHeight;
-    image1_texture = loadBitmapToGL(texture1BM);
-
-    // Load texture 2.
-    static BITMAP texture2BM = loadImageFromResource(COMPONENT_PNG);
-    image2_width = texture2BM.bmWidth;
-    image2_height = texture2BM.bmHeight;
-    image2_texture = loadBitmapToGL(texture2BM);
-
-    // Load texture 3.
-    static BITMAP texture3BM = loadImageFromResource(DRAW_CIRCUIT_BUCKETS_PNG);
-    image3_width = texture3BM.bmWidth;
-    image3_height = texture3BM.bmHeight;
-    image3_texture = loadBitmapToGL(texture3BM);
-
-    // Load texture 4. 
-    static BITMAP texture4BM = loadImageFromResource(CIRCUIT_CIRCLE_JPEG);
-    image4_width = texture4BM.bmWidth;
-    image4_height = texture4BM.bmHeight;
-    image4_texture = loadBitmapToGL(texture4BM);
+    m_circuitIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
+    m_componentIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 }
 
 void Ribbon::begin()
@@ -74,29 +53,14 @@ void Ribbon::onRender()
     //  B U T T O N S //
     // -------------- //
 
-    // Draw MCC.
-    if (ImGui::ImageButton((void*)image1_texture, ImVec2(30, 30)))
+    // Add design engine.
+    if (ImGui::ImageButton((void*)m_componentIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
-
-    }
-
-    // Block diagram.
-    if (ImGui::ImageButton((void*)image2_texture, ImVec2(30, 30)))
-    {
-
-    }
- 
-    // Circuit bucket.
-    if (ImGui::ImageButton((void*)image3_texture, ImVec2(30, 30))) 
-    { 
-        // Testing.
-        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Left Panel", DockPanel::Left);
-        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Right Panel", DockPanel::Right);
-        //Lumen::getApp().pushGuiLayer<ComponentEditor>("Testing Bottom Panel", DockPanel::Bottom);
+        
     }
 
     // Add design engine.
-    if (ImGui::ImageButton((void*)image4_texture, ImVec2(30, 30))) 
+    if (ImGui::ImageButton((void*)m_circuitIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
         Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }
