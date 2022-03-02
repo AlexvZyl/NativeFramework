@@ -11,6 +11,8 @@
 #include "External/Misc/ConsoleColor.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
@@ -290,6 +292,9 @@ void Text::generateText(const std::string& text)
 
 	// Write data to VAO.
 	m_VAO->pushPrimitive(this, vertices, indices);
+
+	// Restore cursor start.
+	m_cursorStart = m_trackedCenter;
 }
 
 //=============================================================================================================================================//
@@ -328,7 +333,34 @@ void Text::setLayer(float layer)
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.position.z = layer;
 
+	m_trackedCenter.z = layer;
+	m_cursorStart.z = layer;
+
 	syncWithGPU();
+}
+
+void Text::translate(const glm::vec3& translation) 
+{
+	Primitive::translate(translation);
+	m_cursorStart = m_trackedCenter;
+}
+
+void Text::translate(const glm::vec2& translation)
+{
+	Primitive::translate(translation);
+	m_cursorStart = m_trackedCenter;
+}
+
+void Text::translateTo(const glm::vec3& position)
+{
+	Primitive::translateTo(position);
+	m_cursorStart = m_trackedCenter;
+}
+
+void Text::translateTo(const glm::vec2& position)
+{
+	Primitive::translateTo(position);
+	m_cursorStart = m_trackedCenter;
 }
 
 //=============================================================================================================================================//

@@ -89,7 +89,7 @@ public:
 	//Translates the entity in the XY plane, keeping the same Z value.
 	virtual void translateTo(const glm::vec2& position);
 	// Rotates the entity by the given vector and center point.
-	virtual void rotate(const glm::vec3& rotation);
+	virtual void rotate(float degrees, const glm::vec3& rotateNormal = {0.f, 0.f, 1.});
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
 	

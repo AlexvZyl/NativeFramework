@@ -67,13 +67,11 @@ Component2D::Component2D(Circuit* parent)
 	highlight();
 
 	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
-
 	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber",		"From(Circuit Database)"));
 	dataDict.insert(std::pair<std::string, std::string>("Metric", "1"));
 	dataDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
 	dataDict.insert(std::pair<std::string, std::string>("Unit", "ea"));
 	dataDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
-
 }
 
 Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
