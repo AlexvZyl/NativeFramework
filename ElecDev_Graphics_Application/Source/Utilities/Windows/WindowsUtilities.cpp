@@ -143,7 +143,7 @@ std::string selectFile(std::string title, std::string root, std::string defaultF
     // Display.
     hResult = dialog->Show(GetConsoleWindow());
     // Return if operation cancelled.
-    if (hResult == 0x800704c7) { return """"; } // This number might change.
+    if (hResult == 0x800704c7) { return ""; } // This number might change.
 
     // Get the selected folder.
     IShellItem* resultSI;

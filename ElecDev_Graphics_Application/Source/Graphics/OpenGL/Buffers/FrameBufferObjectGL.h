@@ -64,8 +64,7 @@ public:
 	// Clears the render attachment of the FBO.
 	void clearRender();
 	// Return the ID of the entity at the pixel coordinates.
-	unsigned int getEntityID(glm::vec2& pixelCoords);
-
+	unsigned int getEntityID(const glm::vec2& pixelCoords);
 
 	// Initialise the color, depth and stencil attachments.
 	void initAttachments(int width, int height);
@@ -73,7 +72,6 @@ public:
 	void deleteResources();
 	// Create and init the attachments (usually after a delete)
 	void createResources(int width, int height);
-
 
 private:
 

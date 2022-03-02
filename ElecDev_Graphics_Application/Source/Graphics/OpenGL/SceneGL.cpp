@@ -84,11 +84,10 @@ unsigned Scene::getRenderTexture()
 	return m_FBO->getRenderTexture(); 
 }
 
-unsigned Scene::getEntityID(glm::vec2& pixelCoords)
+unsigned Scene::getEntityID(const glm::vec2& pixelCoords)
 {
 	// Adjust the pixel coords.
-	glm::vec2 pixelCoordsTemp = { pixelCoords[0], m_camera->m_viewportVec[3] - pixelCoords[1] };
-	return m_FBO->getEntityID(pixelCoordsTemp);
+	return m_FBO->getEntityID({pixelCoords.x, m_camera->m_viewportVec[3] - pixelCoords.y});
 }
 
 void Scene::deleteGPUResources() 
@@ -110,7 +109,7 @@ glm::vec3 Scene::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
 	return m_camera->pixelCoordsToWorldCoords(pixelCoords);
 }
 
-glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2]) 
+glm::vec3 Scene::pixelCoordsToCameraCoords(const glm::vec2& pixelCoords) 
 { 
 	return m_camera->pixelCoordsToCameraCoords(pixelCoords); 
 }

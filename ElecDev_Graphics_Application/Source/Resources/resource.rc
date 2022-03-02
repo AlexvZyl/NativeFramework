@@ -86,6 +86,7 @@ CIRCUIT_FILE_ICON				RCDATA						"Icons\\CircuitFileIcon.png"
 LEFT_ARROW_ICON					RCDATA						"Icons\\LeftArrowIcon.png"
 COMPONENT_FILE_ICON				RCDATA						"Icons\\ComponentFileIcon.png"
 RELOAD_ICON						RCDATA						"Icons\\ReloadIcon.png"
+LOAD_FILE_ICON					RCDATA						"Icons\\LoadFileIcon.png"
 //-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources

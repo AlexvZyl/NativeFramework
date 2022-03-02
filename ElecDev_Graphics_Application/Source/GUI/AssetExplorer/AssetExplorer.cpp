@@ -52,18 +52,27 @@ void AssetExplorer::onRender()
 	 
 	// Current directory.
 	static glm::vec2 headerSize(20, 20);
-	// Move up.
+
+	// Move up button.
 	if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
 		m_currentDirectory = m_currentDirectory.parent_path();
+
+	// Spacing.
 	ImGui::SameLine();
 	ImGui::Text("  ");
 	ImGui::SameLine();
-	if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
-	{
-	}
-	ImGui::SameLine();
-	ImGui::Text("  ");
-	ImGui::SameLine();
+
+	//// Reload button.
+	//if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
+	//{
+	//}
+
+	//// Spacing.
+	//ImGui::SameLine();
+	//ImGui::Text("  ");
+	//ImGui::SameLine();
+
+	// Current directory button.
 	if(ImGui::Button(m_currentDirectory.string().c_str(), {0, headerSize.y + 7.f}))
 	{
 		std::string newDirectory = selectFolder(m_currentDirectory.string());
@@ -74,7 +83,7 @@ void AssetExplorer::onRender()
 	ImGui::Separator();
 
 	// Create icon columns.
-	float iconSize = 100;
+	float iconSize = 90;
 	float padding = 7;
 	float cellSize = iconSize + 2 * padding;
 	int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
