@@ -15,10 +15,19 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
-	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);  //  Is this correct?
 	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
+	// Find centre.
+	float xTot = 0, yTot = 0, zTot = 0;
+	for (auto& vec : vertices)
+	{
+		xTot += vec.x;
+		yTot += vec.y;
+		zTot += vec.z;
+	}
+	m_trackedCenter = {xTot/m_vertexCount, yTot/m_vertexCount, zTot/m_vertexCount}; 
+
 	std::vector<VertexData> vertexVector;
 	vertexVector.reserve(m_vertexCount);
 	std::vector<unsigned> indices;

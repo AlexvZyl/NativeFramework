@@ -7,6 +7,10 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/RendererGL.h"
 #include "OpenGL/Primitives/Vertex.h"
+#include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 //=============================================================================================================================================//
 //  Constructor.																															   //
@@ -94,8 +98,18 @@ void Primitive<VertexType>::translateTo(const glm::vec2& position)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::rotate(const glm::vec3& rotation)
+void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotateNormal)
 {
+	glm::mat4 transform = glm::translate(glm::mat4(1.f), m_trackedCenter);
+	transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
+	transform = glm::translate(transform, -m_trackedCenter);
+	
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		glm::vec4 rotated = transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f);
+		m_VAO->m_vertexCPU[i].data.position = glm::vec3(rotated.x, rotated.y, rotated.z);
+	}
+
 	syncWithGPU();
 }
 
