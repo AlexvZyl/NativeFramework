@@ -18,7 +18,7 @@ public:
 	// Contructor.
 	Base2DEngine();
 	// Destructor.
-	virtual ~Base2DEngine() = default;
+	virtual ~Base2DEngine() override = default;
 
 	// ------------- //
 	//  E V E N T S  //

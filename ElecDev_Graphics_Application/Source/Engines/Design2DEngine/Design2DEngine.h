@@ -38,7 +38,7 @@ public:
 	// Constructor
 	Design2DEngine();
 	// Destructor.
-	~Design2DEngine();
+	virtual ~Design2DEngine() override;
 	
 	// ------------------ //
 	//  V A R I A B L E S //

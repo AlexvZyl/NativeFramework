@@ -35,6 +35,8 @@ public:
 
 	// Constructor.
 	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 16);
+	// Destructor.
+	virtual ~Scene();
 	// Set the MSAA samples.
 	void setMSAA(unsigned samples);
 	// Handle events.

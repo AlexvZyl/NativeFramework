@@ -10,6 +10,7 @@
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
+#include "OpenGL/RendererGL.h"
 #include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
@@ -29,6 +30,11 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
 	// Background.
 	createDefaultBackground();
+}
+
+Scene::~Scene() 
+{
+	Renderer::doneSceneDestruction();
 }
 
 //==============================================================================================================================================//
