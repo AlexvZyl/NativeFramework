@@ -34,6 +34,7 @@ private:
 	//  D A T A //
 	// -------- //
 
+	unsigned m_loadFileIcon = NULL;
 	unsigned m_circuitIcon = NULL;
 	unsigned m_componentIcon = NULL;
 };

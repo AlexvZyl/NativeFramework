@@ -1006,6 +1006,7 @@
     <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
     <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
     <Image Include="Source\Resources\Icons\ReloadIcon.png" />
+    <Image Include="Source\Resources\Icons\LoadFileIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -33,7 +33,7 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texID = loadBitmapToGL(textureBM);
 
     m_colour = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
-    float scale = 2.f;
+    float scale = 1.25f;
     m_colour *= scale;
 }
 
@@ -72,8 +72,11 @@ void Toolbar::onRender()
         {
             // Create a load event.
             std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-            FileLoadEvent event(path);
-            app.logEvent<FileLoadEvent>(event);
+            if (path.size())
+            {
+                FileLoadEvent event(path);
+                app.logEvent<FileLoadEvent>(event);
+            }
         }
         ImGui::Separator();
         if (ImGui::MenuItem("Close", "Ctrl+W"))

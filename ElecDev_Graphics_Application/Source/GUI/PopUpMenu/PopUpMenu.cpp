@@ -139,9 +139,11 @@ void PopUpMenu::onRender()
     {
         // Create and log load event.
         std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-        FileLoadEvent event(path);
-        app.logEvent<FileLoadEvent>(event);
-        
+        if (path.size())
+        {
+            FileLoadEvent event(path);
+            app.logEvent<FileLoadEvent>(event);
+        }
         // Remove popup.
         app.queuePopLayer(m_name);
     }
@@ -149,9 +151,11 @@ void PopUpMenu::onRender()
     {
         // Create and log save event.
         std::string path = selectFile("Lumen Save Circuit", "", m_engine->m_circuit->m_label, "Save");
-        FileSaveEvent event(path, m_engine);
-        app.logEvent<FileSaveEvent>(event);
-
+        if (path.size())
+        {
+            FileSaveEvent event(path, m_engine);
+            app.logEvent<FileSaveEvent>(event);
+        }
         // Remove popup.
         app.queuePopLayer(m_name);
     }

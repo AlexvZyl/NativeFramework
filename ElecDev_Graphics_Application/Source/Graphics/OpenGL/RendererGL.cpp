@@ -30,6 +30,7 @@
 
 std::map<std::string, std::unique_ptr<Shader>> Renderer::m_shaders;
 Scene* Renderer::m_scene = nullptr;
+Scene* Renderer::m_storedScene = nullptr;
 std::unique_ptr<Font> Renderer::m_defaultFont = nullptr;
 std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
 
@@ -76,6 +77,29 @@ void Renderer::renderScene(Scene* scene)
 	scene->m_FBO->renderFromMSAA();
 
 	LUMEN_RENDER_PASS();
+}
+
+void Renderer::initSceneDestruction(Scene* scene) 
+{
+	// Store current scene.
+	m_storedScene = m_scene;
+	// Bind scene to be destroyed.
+	m_scene = scene;
+}
+
+void Renderer::doneSceneDestruction() 
+{
+	// Restore scene.
+	if (m_scene != m_storedScene)
+	{
+		m_scene = m_storedScene;
+	}
+	else
+	{
+		m_scene = nullptr;
+	}
+	// Remove stored scene.
+	m_storedScene = nullptr;
 }
 	
 //==============================================================================================================================================//
