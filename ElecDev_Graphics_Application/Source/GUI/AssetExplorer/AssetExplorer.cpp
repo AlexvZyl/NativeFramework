@@ -50,13 +50,18 @@ void AssetExplorer::onRender()
 {
 	// TODO:  We do not have to check this each frame.
 	 
+	static ImGuiTextFilter filter;
+
 	// Current directory.
 	static glm::vec2 headerSize(20, 20);
 
 	// Move up button.
 	if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
+	{
 		m_currentDirectory = m_currentDirectory.parent_path();
-
+		filter.Clear();
+	}
+	
 	// Spacing.
 	ImGui::SameLine();
 	ImGui::Text("  ");
@@ -76,17 +81,19 @@ void AssetExplorer::onRender()
 	if(ImGui::Button(m_currentDirectory.string().c_str(), {0, headerSize.y + 7.f}))
 	{
 		std::string newDirectory = selectFolder(m_currentDirectory.string());
-		if(newDirectory.size())
+		if (newDirectory.size())
+		{
 			m_currentDirectory = newDirectory;
+			filter.Clear();
+		}
 	}
 
 	// Filter.
 	ImGui::SameLine();
 	float filterSize = 400;
-	ImGui::SetCursorPosX(m_contentRegionPosition.x + m_contentRegionSize.x - filterSize);
+	ImGui::SetCursorPosX(m_contentRegionSize.x - filterSize);
 	ImGui::Text("Search: ");
 	ImGui::SameLine();
-	static ImGuiTextFilter filter;
 	filter.Draw("##AssetExplorerSearch", filterSize);
 	ImGui::Separator();
 
