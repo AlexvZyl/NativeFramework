@@ -62,11 +62,11 @@ void AssetExplorer::onRender()
 	ImGui::Text("  ");
 	ImGui::SameLine();
 
+	// TODO:  Add to prevent loading files every frame.
 	//// Reload button.
 	//if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
 	//{
 	//}
-
 	//// Spacing.
 	//ImGui::SameLine();
 	//ImGui::Text("  ");
@@ -80,6 +80,14 @@ void AssetExplorer::onRender()
 			m_currentDirectory = newDirectory;
 	}
 
+	// Filter.
+	ImGui::SameLine();
+	float filterSize = 400;
+	ImGui::SetCursorPosX(m_contentRegionPosition.x + m_contentRegionSize.x - filterSize);
+	ImGui::Text("Search: ");
+	ImGui::SameLine();
+	static ImGuiTextFilter filter;
+	filter.Draw("##AssetExplorerSearch", filterSize);
 	ImGui::Separator();
 
 	// Create icon columns.
@@ -94,6 +102,9 @@ void AssetExplorer::onRender()
 	int directoryCount = 0;
 	for (auto& p : std::filesystem::directory_iterator(m_currentDirectory))
 	{
+		// Filter.
+		if (!filter.PassFilter(p.path().stem().string().c_str())) continue;;
+
 		ImGui::PushID(directoryCount++);
 
 		// Directories.
@@ -103,6 +114,7 @@ void AssetExplorer::onRender()
 			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered()) 
 			{
 				m_currentDirectory /= p.path().filename();
+				filter.Clear();
 			}
 			ImGui::TextWrapped(p.path().filename().string().c_str());
 		}

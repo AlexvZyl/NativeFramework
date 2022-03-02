@@ -33,7 +33,8 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texID = loadBitmapToGL(textureBM);
 
     m_colour = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
-    float scale = 1.25f;
+    //float scale = 1.25f;
+    float scale = 1.85f;
     m_colour *= scale;
 }
 
