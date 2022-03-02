@@ -48,16 +48,9 @@ public:
 	// Currently the text box layer is automatically set to be right behind the text.
 	virtual void setLayer(float layer) override;
 
-	// Override translation functions so that we can keep track of the cursor position.
-	virtual void translate(const glm::vec3& translation) override;
-	virtual void translate(const glm::vec2& translation) override;
-	virtual void translateTo(const glm::vec3& position) override;
-	virtual void translateTo(const glm::vec2& position) override;
-
 private:
 
 	// Data.
-	glm::vec3 m_cursorStart = { 0.f, 0.f, 0.f };
 	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
 	Font* m_font = nullptr;
 	float m_textScale = 1;
