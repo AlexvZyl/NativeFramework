@@ -116,6 +116,7 @@ void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotateNormal)
 template<typename VertexType>
 void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal)
 {
+	// Can this be optimised?
 	glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);
 	transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
 	transform = glm::translate(transform, -rotatePoint);
