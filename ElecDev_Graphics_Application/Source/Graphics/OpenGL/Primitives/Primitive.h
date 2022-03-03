@@ -90,6 +90,8 @@ public:
 	virtual void translateTo(const glm::vec2& position);
 	// Rotates the entity by the given vector and center point.
 	virtual void rotate(float degrees, const glm::vec3& rotateNormal = {0.f, 0.f, 1.});
+	// Rotates the entity by the given vector and provided point.
+	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
 	

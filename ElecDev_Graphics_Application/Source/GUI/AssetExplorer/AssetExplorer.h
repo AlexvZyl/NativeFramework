@@ -35,14 +35,19 @@ private:
 	static std::string s_startingDirectory;
 	static std::filesystem::path m_currentDirectory;
 
+	// Icons.
 	static unsigned s_folderIcon;
 	static unsigned s_fileIcon;
 	static unsigned s_circuitFileIcon;
 	static unsigned s_leftArrowIcon;
 	static unsigned s_componentFileIcon;
 	static unsigned s_reloadIcon;
-	glm::vec4 m_buttonColor;
-	glm::vec4 m_borderColor;
+
+	// Reload the files in the current directory.
+	void loadDirectories();
+	// The directories to be displayed.
+	std::vector<std::filesystem::directory_entry> m_directories;
+
 };
 
 //==============================================================================================================================================//

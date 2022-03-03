@@ -36,6 +36,7 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	s_leftArrowIcon = loadBitmapToGL(loadImageFromResource(LEFT_ARROW_ICON));
 	s_componentFileIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 	s_reloadIcon = loadBitmapToGL(loadImageFromResource(RELOAD_ICON));
+	loadDirectories();
 }
 
 void AssetExplorer::begin()
@@ -60,6 +61,7 @@ void AssetExplorer::onRender()
 	{
 		m_currentDirectory = m_currentDirectory.parent_path();
 		filter.Clear();
+		loadDirectories();
 	}
 	
 	// Spacing.
@@ -85,6 +87,7 @@ void AssetExplorer::onRender()
 		{
 			m_currentDirectory = newDirectory;
 			filter.Clear();
+			loadDirectories();
 		}
 	}
 
@@ -107,7 +110,7 @@ void AssetExplorer::onRender()
 
 	// Display contents.
 	int directoryCount = 0;
-	for (auto& p : std::filesystem::directory_iterator(m_currentDirectory))
+	for (auto& p : m_directories)
 	{
 		// Filter.
 		if (!filter.PassFilter(p.path().stem().string().c_str())) continue;;
@@ -122,6 +125,7 @@ void AssetExplorer::onRender()
 			{
 				m_currentDirectory /= p.path().filename();
 				filter.Clear();
+				loadDirectories();
 			}
 			ImGui::TextWrapped(p.path().filename().string().c_str());
 		}
@@ -189,6 +193,13 @@ void AssetExplorer::end()
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 	ImGui::PopStyleColor();
+}
+
+void AssetExplorer::loadDirectories() 
+{
+	m_directories.clear();
+	for (auto& p : std::filesystem::directory_iterator(m_currentDirectory))
+		m_directories.push_back(p);
 }
 
 //==============================================================================================================================================//

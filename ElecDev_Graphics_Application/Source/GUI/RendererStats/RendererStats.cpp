@@ -48,14 +48,58 @@ void RendererStats::onRender()
 		ImGui::TableHeadersRow();
 
 		// Log results in table.
+		float renderLayersTime = 0;
+		float renderScenesTime = 0;
+		float imGuiTime = 0;
 		for (auto& result : app.m_profilerResults)
 		{
+			// Keep track of these values to track imgui calls time.
+			if (result.name == "Render Layers")
+			{
+				renderLayersTime = result.msTime;
+				continue;
+			}
+			else if (result.name == "ImGui Draw")
+			{
+				imGuiTime += result.msTime;
+				continue;
+			}
+			else if (result.name == "ImGui NewFrame")
+			{
+				imGuiTime += result.msTime;
+				continue;
+			}
+			else if (result.name == "Draw Scene")
+			{
+				renderScenesTime += result.msTime;
+				continue;
+			}
+
 			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
 			ImGui::TableSetColumnIndex(0);
 			ImGui::Text(result.name);
 			ImGui::TableSetColumnIndex(1);
 			ImGui::Text("%.3f", result.msTime);
 		}
+
+		// Rendering scenes.
+		if (renderScenesTime)
+		{
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text("Draw Scenes");
+			ImGui::TableSetColumnIndex(1);
+			ImGui::Text("%.3f", renderScenesTime);
+		}
+
+		// ImGui overhead (Drawing, calling functions, new frame).
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("ImGui Overhead");
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
+
 		// Done.
 		ImGui::EndTable();
 	}
