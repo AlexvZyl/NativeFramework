@@ -41,9 +41,6 @@ int main(int, char**)
     //  R E N D E R I N G   P I P E L I N E  //
     // ------------------------------------- //
 
-    // Set waiting for events.
-    bool wait = false;
-
     // FPS cap settings.
     double fps = 60;
     double targetFrameTime = 1 / fps;
@@ -51,12 +48,15 @@ int main(int, char**)
     double currTime = 0;
     double prevTime = 0;
 
+    // Waiting for events.
+    bool wait = false;
+
     // [MAIN LOOP].
     while (!application.shouldWindowClose())
     {
         // Event checking.
-        if (wait) { glfwWaitEvents(); }   // App only runs when events occur.
-        else      { glfwPollEvents(); }   // App runs continuously.
+        if (wait) glfwWaitEventsTimeout(targetFrameTime * 4);
+        else      glfwPollEvents();
      
         // Frametime calculations.
         currTime = glfwGetTime();

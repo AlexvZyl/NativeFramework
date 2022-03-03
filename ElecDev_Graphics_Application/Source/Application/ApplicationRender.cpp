@@ -56,6 +56,8 @@ void Application::onRender()
 
 void Application::renderLayers() 
 {
+	LUMEN_PROFILE_SCOPE("Render Layers");
+
 	// The order is not important since dear imgui handles that.
 	for (auto& [name, layer] : m_layerStack->getLayers())
 		layer->onRender();
