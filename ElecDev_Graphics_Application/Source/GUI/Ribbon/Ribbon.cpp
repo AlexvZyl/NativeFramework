@@ -53,13 +53,14 @@ void Ribbon::begin()
 void Ribbon::onRender()
 {
     Application& app = Lumen::getApp();
+    static glm::vec2 buttonSize(30,30); 
 
     // ------------------- //
     //  L O A D   F I L E  //
     // ------------------- //
 
     // Button.
-    if (ImGui::ImageButton((void*)m_loadFileIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
+    if (ImGui::ImageButton((void*)m_loadFileIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         // Create and log load event.
         std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
@@ -84,7 +85,7 @@ void Ribbon::onRender()
     // ----------------------------------- //
 
     // Button.
-    if (ImGui::ImageButton((void*)m_componentIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
+    if (ImGui::ImageButton((void*)m_componentIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         
     }
@@ -101,7 +102,7 @@ void Ribbon::onRender()
     // --------------------------------- //
 
     // Button.
-    if (ImGui::ImageButton((void*)m_circuitIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
+    if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }

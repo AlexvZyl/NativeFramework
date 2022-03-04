@@ -228,7 +228,7 @@ void Toolbar::onRender()
         // Timeout slider.
         if (app.m_waitForEvents)
         {
-            ImGui::Text("Idle:  ");
+            ImGui::Text("Idle: ");
             ImGui::SameLine();
             if (ImGui::SliderFloat("##EventsTimeout", &timeoutFPS, 10, app.m_targetFPS, "%.0f", ImGuiSliderFlags_AlwaysClamp))
             {
