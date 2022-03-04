@@ -224,15 +224,15 @@ void Toolbar::onRender()
     {
         // Wait or Poll GLFW events.
         ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
+        static float timeoutFPS = 1.f / app.m_eventsTimeout;
         // Timeout slider.
         if (app.m_waitForEvents)
         {
-            static float timeout = 1.f / app.m_eventsTimeout;
-            ImGui::Text("Timeout: ");
+            ImGui::Text("Idle:  ");
             ImGui::SameLine();
-            if (ImGui::SliderFloat("##EventsTimeout", &timeout, 10, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+            if (ImGui::SliderFloat("##EventsTimeout", &timeoutFPS, 10, app.m_targetFPS, "%.0f", ImGuiSliderFlags_AlwaysClamp))
             {
-                app.m_eventsTimeout = 1.f / timeout;
+                app.m_eventsTimeout = 1.f / timeoutFPS;
             }
         }
 
@@ -240,12 +240,21 @@ void Toolbar::onRender()
 
         // FPS cap.
         static float fps = app.m_targetFPS;
-        ImGui::Text("FPS:       ");
+        ImGui::Text("FPS:");
         ImGui::SameLine();
         if (ImGui::SliderFloat("##TargetFPS", &fps, 10, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
         {
+            // Scale timeout FPS with FPS if at max.
+            if (app.m_targetFPS == timeoutFPS)
+                timeoutFPS = fps;
+
+            // Update fps.
             app.m_targetFPS = fps;
             app.m_targetFrameTime = 1 / app.m_targetFPS;
+
+            // Reduce timeout fps if larger than target.
+            if (timeoutFPS > fps)
+                timeoutFPS == fps;
         }
 
         // End.
