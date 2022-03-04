@@ -146,7 +146,7 @@ private:
 	bool m_waitForEvents = true;
 	double m_totalFrameTime = 0;
 	double m_currentFrameTime = 0;
-	double m_eventsTimeout = (1.f / m_targetFPS) * 2;
+	double m_eventsTimeout = m_targetFrameTime;
 	// Update the current frame time.
 	void updateFrametime();
 	// Checks if the frame has to be started based on the frametime.
