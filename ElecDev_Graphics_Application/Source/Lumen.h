@@ -44,7 +44,7 @@ private:
 	Lumen() = default;
 
 	// The singleton application.
-	static Application* applicationSingleton;
+	static Application* s_applicationSingleton;
 
 };
 

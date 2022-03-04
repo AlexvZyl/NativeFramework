@@ -9,7 +9,7 @@
 //  Statics.																																	//
 //==============================================================================================================================================//
 
-Application* Lumen::applicationSingleton = nullptr;
+Application* Lumen::s_applicationSingleton = nullptr;
 
 //==============================================================================================================================================//
 //  Lumen Namespace implementations.																											//
@@ -17,12 +17,12 @@ Application* Lumen::applicationSingleton = nullptr;
 
 void Lumen::setApp(Application* app) 
 {
-	applicationSingleton = app;
+	s_applicationSingleton = app;
 }
 
 Application& Lumen::getApp() 
 {
-	return *applicationSingleton;
+	return *s_applicationSingleton;
 }
 
 //==============================================================================================================================================//

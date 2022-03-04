@@ -44,7 +44,7 @@ void RendererStats::onRender()
 		// Setup table
 		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Time (ms)", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("Time (ms/frame)", ImGuiTableColumnFlags_WidthStretch);
 		ImGui::TableHeadersRow();
 
 		// Log results in table.

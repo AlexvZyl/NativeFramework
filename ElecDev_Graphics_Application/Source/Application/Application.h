@@ -134,10 +134,6 @@ private:
 
 	// The window containing the application.
 	GLFWwindow* m_window;
-	// A pointer to the application instance.
-	// For use with Lumen::getApp()
-	// HAS TO BE SINGLETON!
-	static Application* m_instance;
 
 	// --------- //
 	//  L O O P  //
@@ -150,7 +146,7 @@ private:
 	bool m_waitForEvents = true;
 	double m_totalFrameTime = 0;
 	double m_currentFrameTime = 0;
-	double m_eventsTimeout = (1.f / m_targetFPS) * 3;
+	double m_eventsTimeout = (1.f / m_targetFPS) * 2;
 	// Update the current frame time.
 	void updateFrametime();
 	// Checks if the frame has to be started based on the frametime.
