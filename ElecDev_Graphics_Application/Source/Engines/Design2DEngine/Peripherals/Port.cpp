@@ -47,28 +47,30 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 		m_position = PortPosition::TOP;
 		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "T", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
+		title->rotate(-90);
 	}	
 	else if (m_offset.y < -0.099) 
 	{//bottom
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "U", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
+		title->rotate(90);
 	}
 	else if (m_offset.x > 0.099) 
 	{//right
 		m_position = PortPosition::RIGHT;
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C");
 	}
 	else if (m_offset.x < -0.099) 
 	{//left
 		m_position = PortPosition::LEFT;
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
 	}
 	else {
 		//This should never happen. Print a warning!
