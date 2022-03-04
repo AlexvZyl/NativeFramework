@@ -11,6 +11,46 @@
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
+//  Main loop.																																	//
+//==============================================================================================================================================//
+
+void Application::run()
+{
+	// Main loop.
+	while (m_isRunning)
+	{
+		// Events.
+		if (m_waitForEvents) glfwWaitEventsTimeout(m_eventsTimeout);
+		else				 glfwPollEvents();
+
+		// Frametime.
+		updateFrametime();
+
+		// Render frame.
+		if (startFrame())
+		{
+			m_totalFrameTime = 0;
+			onRender();
+		}
+	}
+}
+
+void Application::updateFrametime() 
+{
+	static double previousTime = 0;
+	static double currentTime = 0;
+	
+	currentTime = glfwGetTime();
+	m_totalFrameTime += currentTime - previousTime;
+	previousTime = currentTime;
+}
+
+bool Application::startFrame() 
+{
+	return m_totalFrameTime >= m_targetFrameTime;
+}
+
+//==============================================================================================================================================//
 //  Rendering.																																	//
 //==============================================================================================================================================//
 

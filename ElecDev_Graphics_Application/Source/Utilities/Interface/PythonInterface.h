@@ -16,7 +16,7 @@ class GUIHandler;
 class GraphicsHandler;
 
 /*=======================================================================================================================================*/
-/* Data Types.                                                                                                                             */
+/* Data Types.                                                                                                                          */
 /*=======================================================================================================================================*/
 
 struct InputQueue
@@ -24,8 +24,7 @@ struct InputQueue
     //Constructor
     InputQueue(std::string command, std::string parameters)
         : command(command), parameters(parameters)
-    {
-    }
+    {}
     std::string command;
     std::string parameters;
 };

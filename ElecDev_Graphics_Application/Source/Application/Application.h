@@ -55,6 +55,9 @@ public:
 	// Constructor.
 	Application(GLFWwindow* window);
 
+	// Run the application;
+	void run();
+
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
@@ -95,9 +98,9 @@ public:
 	template <typename EventType>
 	void logEvent(Event& event);
 	// Should the app close?
-	bool shouldWindowClose();
+	bool isRunning();
 	// Close the app.
-	void closeWindow();
+	void stopRunning();
 	// Get the GLFW window.
 	GLFWwindow* getWindow();
 
@@ -127,6 +130,7 @@ public:
 private:
 
 	friend class LayerStack;
+	friend class Toolbar;
 
 	// The window containing the application.
 	GLFWwindow* m_window;
@@ -134,6 +138,23 @@ private:
 	// For use with Lumen::getApp()
 	// HAS TO BE SINGLETON!
 	static Application* m_instance;
+
+	// --------- //
+	//  L O O P  //
+	// --------- //
+
+	// Is the app running.
+	bool m_isRunning = true;
+	double m_targetFPS = 60.f;
+	double m_targetFrameTime = 1.f / m_targetFPS;
+	bool m_waitForEvents = true;
+	double m_totalFrameTime = 0;
+	double m_currentFrameTime = 0;
+	double m_eventsTimeout = (1.f / m_targetFPS) * 3;
+	// Update the current frame time.
+	void updateFrametime();
+	// Checks if the frame has to be started based on the frametime.
+	bool startFrame();
 
 	// ------------- //
 	//  L A Y E R S  //
@@ -172,8 +193,6 @@ private:
 	void onFileLoadEvent(FileLoadEvent& event);
 	// Save files.
 	void onFileSaveEvent(FileSaveEvent& event);
-	// Should the app close?
-	bool m_shouldWindowClose = false;
 	
 	// ------------------- //
 	//  R E N D E R I N G  //

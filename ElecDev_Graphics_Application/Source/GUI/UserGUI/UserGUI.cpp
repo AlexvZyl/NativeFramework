@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <cfenv>
-#include "../Utilities/PythonInterface/PythonInterface.h"
+#include "../Utilities/Interface/PythonInterface.h"
 #include <iterator>
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui/imgui_internal.h>

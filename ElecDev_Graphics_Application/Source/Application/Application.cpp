@@ -82,14 +82,14 @@ void Application::shutdown()
 	std::cout << blue << "\n\n[LUMEN] [INFO] : " << white << "Program terminated." << std::endl;
 }
 
-bool Application::shouldWindowClose()
+bool Application::isRunning()
 {
-	return m_shouldWindowClose;
+	return m_isRunning;
 }
 
-void Application::closeWindow() 
+void Application::stopRunning() 
 {
-	m_shouldWindowClose = true;
+	m_isRunning = false;
 }
 
 GLFWwindow* Application::getWindow()

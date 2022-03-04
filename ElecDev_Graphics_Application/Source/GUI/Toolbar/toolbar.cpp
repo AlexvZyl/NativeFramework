@@ -82,7 +82,7 @@ void Toolbar::onRender()
         ImGui::Separator();
         if (ImGui::MenuItem("Close", "Ctrl+W"))
         {
-            Lumen::getApp().closeWindow();
+            Lumen::getApp().stopRunning();
         }
 
         ImGui::EndMenu();
@@ -211,6 +211,44 @@ void Toolbar::onRender()
                 app.queuePopLayer(demoLayerName);
             }
         }
+
+        // End.
+        ImGui::EndMenu();
+    }
+
+    // ----------------- //
+    //  S E T T I N G S  //
+    // ----------------- //
+
+    if (ImGui::BeginMenu("Serttings"))
+    {
+        // Wait or Poll GLFW events.
+        ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
+        // Timeout slider.
+        if (app.m_waitForEvents)
+        {
+            static float timeout = 1.f / app.m_eventsTimeout;
+            ImGui::Text("Timeout: ");
+            ImGui::SameLine();
+            if (ImGui::SliderFloat("##EventsTimeout", &timeout, 1, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+            {
+                app.m_eventsTimeout = 1.f / timeout;
+            }
+        }
+
+        ImGui::Separator();
+
+        // FPS cap.
+        static float fps = app.m_targetFPS;
+        ImGui::Text("FPS:       ");
+        ImGui::SameLine();
+        if (ImGui::SliderFloat("##TargetFPS", &fps, 1, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+        {
+            app.m_targetFPS = fps;
+            app.m_targetFrameTime = 1 / app.m_targetFPS;
+        }
+
+        // End.
         ImGui::EndMenu();
     }
 };

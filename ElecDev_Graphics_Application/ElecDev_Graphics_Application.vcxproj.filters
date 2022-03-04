@@ -94,7 +94,6 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
-    <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
@@ -121,6 +120,8 @@
     <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
+    <ClCompile Include="Source\Utilities\Interface\ExternalInterface.cpp" />
+    <ClCompile Include="Source\Utilities\Interface\PythonInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -473,7 +474,6 @@
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\Application\GuiState.h" />
-    <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
@@ -785,6 +785,9 @@
     <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
+    <ClInclude Include="Source\Utilities\Interface\ExternalInterface.h" />
+    <ClInclude Include="Source\Utilities\Interface\PythonInterface.h" />
+    <ClInclude Include="Source\Preprocessor.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

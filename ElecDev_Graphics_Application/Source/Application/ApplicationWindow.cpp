@@ -185,7 +185,7 @@ void Application::glfwInitCallbacks()
 
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
         {
-            Lumen::getApp().closeWindow();
+            Lumen::getApp().stopRunning();
         });
 }
 
