@@ -4,7 +4,7 @@
 //  Defines.																																	//
 //==============================================================================================================================================//
 
-#define TOOLBAR_PADDING 10
+#define TOOLBAR_PADDING 7
 #define RIBBON_HEIGHT 40
 #define VERTEX_BUFFER_INCREMENTS 1000
 #define VERTEX_BUFFER_REDUCTION_SCALE 1.25

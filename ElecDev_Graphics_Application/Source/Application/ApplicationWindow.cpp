@@ -227,15 +227,15 @@ GLFWwindow* Application::glfwInitWindow()
     //  G L F W   S E T U P  //
     // --------------------- //
 
+    // Enable MSAA.
+    glfwWindowHint(GLFW_SAMPLES, 8);
     // Create GLFW window.
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "", NULL, NULL);
     // Error.
     if (window == NULL) 
     { 
         /* Log error here. */ 
     }
-    // Enable MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 8);
     // Remove decorations.
     //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);
@@ -250,7 +250,7 @@ GLFWwindow* Application::glfwInitWindow()
     icon.height = bitmap.bmHeight;
     icon.width = bitmap.bmWidth;
     // Set icon.
-    glfwSetWindowIcon(window, 1, &icon);
+    //glfwSetWindowIcon(window, 1, &icon);
 
     // --------------------------- //
     //  O P E N G L   L O A D E R  //

@@ -16,12 +16,21 @@
 
 void Application::run()
 {
+	double waitRemainingTime = 0;
+
 	// Main loop.
 	while (m_isRunning)
 	{
-		// Events.
-		if (m_waitForEvents) glfwWaitEventsTimeout(m_eventsTimeout - m_totalFrameTime);
-		else				 glfwPollEvents();
+		// Wait events.
+		if (m_waitForEvents)
+		{
+			// Ensure remaining time is positive.
+			waitRemainingTime = m_eventsTimeout - m_totalFrameTime;
+			if(waitRemainingTime > 0)
+				glfwWaitEventsTimeout(waitRemainingTime);
+		}
+		// Poll.
+		else glfwPollEvents();
 
 		// Frametime.
 		updateFrametime();

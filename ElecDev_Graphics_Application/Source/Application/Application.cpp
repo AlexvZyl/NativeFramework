@@ -166,7 +166,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_Header] = ImVec4(0.16f, 0.16f, 0.20f, 1.00f);
 	colors[ImGuiCol_HeaderHovered] = ImVec4(0.35f, 0.35f, 0.41f, 1.00f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-	colors[ImGuiCol_Separator] = ImVec4(0.16f, 0.16f, 0.19f, 1.00f);
+	colors[ImGuiCol_Separator] = ImVec4(0.14f, 0.14f, 0.17f, 1.00f);
 	colors[ImGuiCol_SeparatorHovered] = ImVec4(0.00f, 0.63f, 0.64f, 1.00f);
 	colors[ImGuiCol_SeparatorActive] = ImVec4(0.00f, 0.98f, 1.00f, 0.83f);
 	colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);

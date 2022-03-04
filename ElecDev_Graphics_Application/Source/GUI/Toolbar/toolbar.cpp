@@ -34,7 +34,7 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 
     m_colour = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
     //float scale = 1.25f;
-    float scale = 1.85f;
+    float scale = 1.9f;
     m_colour *= scale;
 }
 
@@ -42,11 +42,12 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 /* Rendering                                                                                                                             */
 /*=======================================================================================================================================*/
 
-void Toolbar::begin() 
+void Toolbar::begin()
 {
     // Style.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0.f, TOOLBAR_PADDING});
     ImGui::PushStyleColor(ImGuiCol_MenuBarBg, m_colour);
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
@@ -58,8 +59,8 @@ void Toolbar::onRender()
     Application& app = Lumen::getApp();
     
     // Draw the image.
-    static float textureSize = 2 * TOOLBAR_PADDING - 3;
-    ImGui::SetCursorPosY(m_contentRegionPosition.y+3);
+    static float textureSize = 2 * TOOLBAR_PADDING + ImGui::GetFont()->FontSize - 11.f;
+    ImGui::SetCursorPosY(m_contentRegionPosition.y+6);
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
     ImGui::SetCursorPosY(m_contentRegionPosition.y);
 
@@ -224,13 +225,13 @@ void Toolbar::onRender()
     {
         // Wait or Poll GLFW events.
         ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
-        static float timeoutFPS = 1.f / app.m_eventsTimeout;
+        static int timeoutFPS = (int)(1.f / app.m_eventsTimeout);
         // Timeout slider.
         if (app.m_waitForEvents)
         {
             ImGui::Text("Idle: ");
             ImGui::SameLine();
-            if (ImGui::SliderFloat("##EventsTimeout", &timeoutFPS, 10, app.m_targetFPS, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+            if (ImGui::SliderInt("##EventsTimeout", &timeoutFPS, 10, app.m_targetFPS, "%.0f", ImGuiSliderFlags_AlwaysClamp))
             {
                 app.m_eventsTimeout = 1.f / timeoutFPS;
             }
@@ -239,10 +240,10 @@ void Toolbar::onRender()
         ImGui::Separator();
 
         // FPS cap.
-        static float fps = app.m_targetFPS;
+        static int fps = (int)app.m_targetFPS;
         ImGui::Text("FPS:");
         ImGui::SameLine();
-        if (ImGui::SliderFloat("##TargetFPS", &fps, 10, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+        if (ImGui::SliderInt("##TargetFPS", &fps, 10, 144, "%d", ImGuiSliderFlags_AlwaysClamp))
         {
             // Scale timeout FPS with FPS if at max.
             if (app.m_targetFPS == timeoutFPS)
@@ -257,6 +258,13 @@ void Toolbar::onRender()
                 timeoutFPS == fps;
         }
 
+        ImGui::Separator();
+
+        // Window decorations.
+        static bool windowDecorations = true;
+        if (ImGui::Checkbox("Window Decorations", &windowDecorations))
+            glfwSetWindowAttrib(app.getWindow(), GLFW_DECORATED, windowDecorations);
+      
         // End.
         ImGui::EndMenu();
     }
@@ -267,6 +275,7 @@ void Toolbar::end()
     // End.
     ImGui::EndMainMenuBar();
     // Style.
+    ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor();

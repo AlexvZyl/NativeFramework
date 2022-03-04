@@ -141,12 +141,12 @@ private:
 
 	// Is the app running.
 	bool m_isRunning = true;
+	bool m_waitForEvents = true;
 	double m_targetFPS = 60.f;
 	double m_targetFrameTime = 1.f / m_targetFPS;
-	bool m_waitForEvents = true;
 	double m_totalFrameTime = 0;
 	double m_currentFrameTime = 0;
-	double m_eventsTimeout = m_targetFrameTime;
+	double m_eventsTimeout = m_targetFrameTime * 2;
 	// Update the current frame time.
 	void updateFrametime();
 	// Checks if the frame has to be started based on the frametime.

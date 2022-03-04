@@ -14,11 +14,18 @@ std::vector<ExternalFunctionCall> ExternalInterface::s_commandQueue;
 void ExternalInterface::inputThread()
 {
 	std::string input;
-	//while(true)
-	//{
-	//	//input = std::cin.get();
-	//	std::cout << "\nPassed the input reading.";
-	//}
+	while(true)
+	{
+		// Read input.
+		std::getline(std::cin, input);
+
+		// Start parsing.
+		if (input == "&[LUMEN][START_INTERFACE]")
+		{
+			std::cout << "Starting input reading.";
+			std::cout << "Stopped input reading.";
+		}
+	}
 }
 
 void ExternalInterface::parseInputString(std::string& input)
