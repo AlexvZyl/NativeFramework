@@ -31,8 +31,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		float pixelCoordsf[2] = { pixelCoords.x, pixelCoords.y };
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoordsf);
+		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		if (designerState == COMPONENT_PLACE)
@@ -96,7 +95,6 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			m_currentEntityID = getEntityID(event.mousePosition);
 			setActiveComponent(m_currentEntityID);
 
-
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", DockPanel::Floating)->getGui();
 			glm::vec2 pos = {
@@ -130,8 +128,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	uint64_t eventID = event.ID;
 
 	glm::vec2 coords = event.mousePosition;
-	float coordsf[2] = { coords.x, coords.y };
-	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(coordsf);
+	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(coords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == COMPONENT_PLACE)
 	{
@@ -145,10 +142,12 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		m_hoveredID = getEntityID(coords);
 		auto lastHoveredPort = m_hoveredPort;
 		m_hoveredPort = getPort(m_hoveredID);
-		if (m_hoveredPort != lastHoveredPort && m_hoveredPort)
+		if (m_hoveredPort != lastHoveredPort)
 		{
 			if (m_hoveredPort)   m_hoveredPort->showAttachIndicator();
-			else if (lastHoveredPort) lastHoveredPort->hideAttachIndicator();
+			else if (lastHoveredPort) {
+					lastHoveredPort->hideAttachIndicator();
+			}
 		}
 
 		if (designerState == CABLE_PLACE)
@@ -201,8 +200,7 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
-		float pixelCoordsf[] = { pixelCoords.x, pixelCoords.y };
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoordsf);
+		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		switch (event.key)
@@ -233,6 +231,8 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 					deleteActiveCable();
 				}
 				break;
+
+			// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
 }

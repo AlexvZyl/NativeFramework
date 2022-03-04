@@ -9,6 +9,7 @@
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Utilities/Profiler/Profiler.h"
 
 //==============================================================================================================================================//
 //  Layer event dispatching.																													//
@@ -16,6 +17,8 @@
 
 void Application::dispatchEvents()
 {
+	LUMEN_PROFILE_SCOPE("Dispatch Events");
+
 	// Pop the layers queued from the render loop.
 	// Dispatched here so that they do not get GLFW events.
 	popLayers();
@@ -129,11 +132,8 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	// Ensure change actually ocurred.
 	if (newLayer == m_focusedLayer) return;
 
-	// There are some cases where imgui thinks the layer not being hovered,
-	// but that might be because another item (that still belongs to the layer)
-	// is focused.  In these cases we do not want to defocus.
-	// If there is no item under the mouse the ID will be 0.
-	if (newLayer==nullptr && ImGui::GetHoveredID()) return;
+	// Let ImGui set focus in this case.
+	if (!newLayer && ImGui::GetItemID()) return;
 
 	// Create a defocus event.
 	if (m_focusedLayer)
@@ -214,7 +214,7 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
+		if (path.size())
 		{
 			// Find engine.
 			Design2DEngine* saveEngine = reinterpret_cast<Design2DEngine*>(event.engine);
@@ -250,7 +250,7 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	{
 		// Check if operation did not fail.
 		// This should be handled differently!
-		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
+		if (path.size())
 		{
 			// Load file into Lumen.
 			loadFromYAML(path);

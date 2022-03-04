@@ -268,7 +268,7 @@ void FrameBufferObject::clearRender()
 	GLCall(glClearTexImage(m_renderColorTextureID, 0, GL_RGBA, GL_FLOAT, 0)); // Clear color attachment.
 }
 
-unsigned int FrameBufferObject::getEntityID(glm::vec2& pixelCoords) 
+unsigned int FrameBufferObject::getEntityID(const glm::vec2& pixelCoords) 
 {
 	if (m_resourcesDeleted) return -1;
 

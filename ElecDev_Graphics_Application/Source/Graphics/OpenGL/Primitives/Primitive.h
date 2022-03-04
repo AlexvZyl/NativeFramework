@@ -62,7 +62,7 @@ public:
 	//  V A R I A B L E S  //
 	// ------------------- //
 
-	VertexArrayObject<VertexType>* m_VAO;			// Pointer to the VAO that the entity is drawn to.
+	VertexArrayObject<VertexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
@@ -89,7 +89,9 @@ public:
 	//Translates the entity in the XY plane, keeping the same Z value.
 	virtual void translateTo(const glm::vec2& position);
 	// Rotates the entity by the given vector and center point.
-	virtual void rotate(const glm::vec3& rotation);
+	virtual void rotate(float degrees, const glm::vec3& rotateNormal = {0.f, 0.f, 1.});
+	// Rotates the entity by the given vector and provided point.
+	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
 	

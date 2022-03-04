@@ -12,6 +12,7 @@
 #include "Circuit.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/RendererGL.h"
+#include <iostream>
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -32,7 +33,6 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 	body = Renderer::addCircle2D(centre, 0.01f, bodyColour, 1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 0.011f, borderColour, 1.0f, 0.01f, this);
 	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
-
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -70,6 +70,10 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C", this);
 	}
+	else {
+		//This should never happen. Print a warning!
+		std::cout << "Invalid port offset";
+	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
 	setLayer(portLayer);
@@ -81,7 +85,7 @@ Port::~Port()
 {
 	// If a port is removed, we need to find and destroy any linked cables.
 	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
-	for (Cable* cable : m_cables) 
+	for (Cable* cable : m_cables)
 	{
 		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr<Cable> current)
 			{
@@ -89,7 +93,7 @@ Port::~Port()
 			});
 
 		// Check that the cable is in the list.
-		if (toRemove != cableList.end()) 
+		if (toRemove != cableList.end())
 		{
 			cableList.erase(toRemove);
 		}
@@ -136,7 +140,7 @@ Port& Port::operator=(const Port& t)
 
 void Port::setLayer(float layer)
 {
-  portLayer = layer;
+	portLayer = layer;
 	body->setLayer(layer);
 	border->setLayer(layer);
 	attachmentIndicator->setLayer(layer + 0.001f);
@@ -157,9 +161,9 @@ void Port::unhighlight()
 
 void Port::setOffset(const glm::vec2& offset)
 {
-	//move port to new offset (trust the math)
+	// Move port to new offset (trust the math).
 	moveTo(centre - m_offset - m_offset + offset);
-	//update internal offset
+	// Update internal offset.
 	m_offset = offset;
 }
 
@@ -200,7 +204,7 @@ void Port::hideAttachIndicator()
 	if (m_cables.empty()) 
 	{
 		indicatorColour.a = 0.f;
-	attachmentIndicator->setColor(indicatorColour);
+		attachmentIndicator->setColor(indicatorColour);
 	}
 }
 

@@ -34,6 +34,32 @@ class VertexArrayObjectPtr;
 struct Font;
 
 //==============================================================================================================================================//
+//  Data.																																		//
+//==============================================================================================================================================//
+
+struct RendererData 
+{
+	unsigned drawCalls = 0;
+	unsigned renderPasses = 0;
+
+	void drawCall() 
+	{
+		drawCalls++;
+	}
+
+	void renderPass() 
+	{
+		renderPasses++;
+	}
+
+	void reset() 
+	{
+		drawCalls = 0;
+		renderPasses = 0;
+	}
+};
+
+//==============================================================================================================================================//
 //  Renderer Class.																																//
 //==============================================================================================================================================//
 
@@ -74,6 +100,10 @@ public:
 	static void renderScene(Scene* scene);
 	// Unbind the scene.
 	static void unbindScene();
+	// Prepare for scene destruction.
+	static void initSceneDestruction(Scene* scene);
+	// Done with scene destruction.
+	static void doneSceneDestruction();
 
 	// --------------------------- //
 	//  2 D   P R I M I T I V E S  //
@@ -154,6 +184,8 @@ private:
 
 	// The scene rendered to.
 	static Scene* m_scene;
+	// Scene stored when another scene is being destroyed.
+	static Scene* m_storedScene;
 	// Render a scene with a 2D camera.
 	static void render2DScene(Scene* scene);
 	// Render a scene with a 3D camera.
@@ -176,7 +208,6 @@ private:
 	// For example, when FBO resources are deleted, instead of rendering
 	// a black texture, we render these senes.
 	static std::unique_ptr<Scene> m_default2DScene;
-
 };
 
 //==============================================================================================================================================//

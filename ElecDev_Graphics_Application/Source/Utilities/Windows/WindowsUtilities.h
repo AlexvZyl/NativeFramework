@@ -17,7 +17,7 @@ Helper functions related to windows, file handling etc.
 //=============================================================================================================================================//
 
 // Returns the location of the executable as a string.
-std::string getExecutableLocation();
+std::string getExecutableLocation(bool removeBackslash = false);
 
 // Return the current module for resource loading (from the .exe).
 HMODULE getCurrentModule();

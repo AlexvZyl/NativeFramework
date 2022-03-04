@@ -20,6 +20,9 @@
 #include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
+#include "Utilities/Profiler/Profiler.h"
+#include "Lumen.h"
+#include "Application/Application.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -27,6 +30,7 @@
 
 std::map<std::string, std::unique_ptr<Shader>> Renderer::m_shaders;
 Scene* Renderer::m_scene = nullptr;
+Scene* Renderer::m_storedScene = nullptr;
 std::unique_ptr<Font> Renderer::m_defaultFont = nullptr;
 std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
 
@@ -51,20 +55,51 @@ Scene* Renderer::getScene()
 
 void Renderer::renderScene() 
 {
+	LUMEN_PROFILE_SCOPE("Draw Scene");
+
 	if	    (m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
 	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
 
 	//  Resolve the MSAA.
 	m_scene->m_FBO->renderFromMSAA();
+
+	LUMEN_RENDER_PASS();
 }
 
 void Renderer::renderScene(Scene* scene)
 {
+	LUMEN_PROFILE_SCOPE("Draw Scene");
+
 	if	    (scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(scene); }
 	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
 
 	//  Resolve the MSAA.
 	scene->m_FBO->renderFromMSAA();
+
+	LUMEN_RENDER_PASS();
+}
+
+void Renderer::initSceneDestruction(Scene* scene) 
+{
+	// Store current scene.
+	m_storedScene = m_scene;
+	// Bind scene to be destroyed.
+	m_scene = scene;
+}
+
+void Renderer::doneSceneDestruction() 
+{
+	// Restore scene.
+	if (m_scene != m_storedScene)
+	{
+		m_scene = m_storedScene;
+	}
+	else
+	{
+		m_scene = nullptr;
+	}
+	// Remove stored scene.
+	m_storedScene = nullptr;
 }
 	
 //==============================================================================================================================================//
@@ -273,35 +308,35 @@ Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, Entity
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, m_scene->m_trianglesVAO.get(), parent)});
-	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<Polygon2D*>(m_scene->m_primitives.at(id).get());
 }
 
 Polygon2D* Renderer::addPolygon2DClear(const std::vector<glm::vec3>& vertices, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, m_scene->m_linesVAO.get(), parent) });
-	return dynamic_cast<Polygon2D*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<Polygon2D*>(m_scene->m_primitives.at(id).get());
 }
 
 Circle* Renderer::addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent) 
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent)});
-	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<Circle*>(m_scene->m_primitives.at(id).get());
 }
 
 Circle* Renderer::addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<Circle>(m_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent) });
-	return dynamic_cast<Circle*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<Circle*>(m_scene->m_primitives.at(id).get());
 }
 
 LineSegment* Renderer::addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness, const glm::vec4& colour, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	m_scene->m_primitives.insert({ id, std::make_unique<LineSegment>(start, end, m_scene->m_trianglesVAO.get(), parent, thickness, colour) });
-	return dynamic_cast<LineSegment*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<LineSegment*>(m_scene->m_primitives.at(id).get());
 }
 
 Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment, const std::string& verticalAlignment, Entity* parent)
@@ -310,7 +345,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	m_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
 				       										  m_scene->m_texturedTrianglesVAO.get(), m_defaultFont.get(),
 				       										  parent, horizontalAlignment, verticalAlignment)});
-	return dynamic_cast<Text*>(m_scene->m_primitives[id].get());
+	return dynamic_cast<Text*>(m_scene->m_primitives.at(id).get());
 }
 
 //==============================================================================================================================================//

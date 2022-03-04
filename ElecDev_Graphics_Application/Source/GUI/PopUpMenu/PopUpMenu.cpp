@@ -13,6 +13,7 @@
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
+#include "GUI/ColorEditor/ColorEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -21,10 +22,9 @@
 PopUpMenu::PopUpMenu(std::string name, int imguiWindowFlags)
     : GuiElementCore(name, imguiWindowFlags)
 {
-    m_imguiWindowFlags  |= ImGuiWindowFlags_NoDecoration
-                        | ImGuiWindowFlags_NoMove
-                        | ImGuiWindowFlags_NoDocking
-                        | ImGuiWindowFlags_AlwaysAutoResize;
+    m_imguiWindowFlags |= ImGuiWindowFlags_NoDecoration
+        | ImGuiWindowFlags_NoMove
+        | ImGuiWindowFlags_NoDocking;
 }
 
 PopUpMenu::~PopUpMenu() 
@@ -68,7 +68,7 @@ void PopUpMenu::onRender()
     // --------------------- //
     
     // Render menu items.
-    if (m_engine->m_activeComponent == nullptr)
+    if (!m_engine->m_activeComponent && !m_engine->m_activeCable)
     {
         if (ImGui::MenuItem("Place component", "P"))
         {   
@@ -83,7 +83,7 @@ void PopUpMenu::onRender()
     //  C O M P O N E N T  //
     // ------------------- //
 
-    else if (m_engine->m_activeComponent)
+    else if (m_engine->m_activeComponent || m_engine->m_activeCable)
     {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
@@ -91,6 +91,18 @@ void PopUpMenu::onRender()
             // defocus event, which removes the popup event.
             app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
         }
+        if (ImGui::MenuItem("Color Editor"))
+        {
+            ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
+            glm::vec2 localMousePos = getMousePosition();
+            glm::vec2 pos = {
+
+                localMousePos.x + m_contentRegionPosition.x,
+                localMousePos.y + m_contentRegionPosition.y
+            };
+            editor->m_initialPosition = pos;
+        }
+        
         //if (ImGui::MenuItem("Edit Ports", "P"))
         //{
         //    // Remove popup.
@@ -127,9 +139,11 @@ void PopUpMenu::onRender()
     {
         // Create and log load event.
         std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-        FileLoadEvent event(path);
-        app.logEvent<FileLoadEvent>(event);
-        
+        if (path.size())
+        {
+            FileLoadEvent event(path);
+            app.logEvent<FileLoadEvent>(event);
+        }
         // Remove popup.
         app.queuePopLayer(m_name);
     }
@@ -137,9 +151,11 @@ void PopUpMenu::onRender()
     {
         // Create and log save event.
         std::string path = selectFile("Lumen Save Circuit", "", m_engine->m_circuit->m_label, "Save");
-        FileSaveEvent event(path, m_engine);
-        app.logEvent<FileSaveEvent>(event);
-
+        if (path.size())
+        {
+            FileSaveEvent event(path, m_engine);
+            app.logEvent<FileSaveEvent>(event);
+        }
         // Remove popup.
         app.queuePopLayer(m_name);
     }

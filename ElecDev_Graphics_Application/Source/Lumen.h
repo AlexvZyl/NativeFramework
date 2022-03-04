@@ -4,10 +4,19 @@
 //  Defines.																																	//
 //==============================================================================================================================================//
 
-#define TOOLBAR_PADDING 6
+#define TOOLBAR_PADDING 10
 #define RIBBON_HEIGHT 40
-#define VERTEX_BUFFER_INCREMENTS 100
+#define VERTEX_BUFFER_INCREMENTS 1000
+#define VERTEX_BUFFER_REDUCTION_SCALE 1.25
 #define MAX_VERTEX_BUFFER_SIZE 10000
+#define GUI_INDENT_WIDTH 15
+
+//==============================================================================================================================================//
+//  Macros.																																		//
+//==============================================================================================================================================//
+
+#define LUMEN_DRAW_CALL()   Lumen::getApp().m_rendererData.drawCall();
+#define LUMEN_RENDER_PASS() Lumen::getApp().m_rendererData.renderPass();
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -35,7 +44,7 @@ private:
 	Lumen() = default;
 
 	// The singleton application.
-	static Application* s_applicationSingleton;
+	static Application* applicationSingleton;
 
 };
 

@@ -23,6 +23,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable>& cable)
 	//emitter << YAML::Key << "Title1 pos" << YAML::Value << cable->m_title1->m_trackedCenter;
 	//emitter << YAML::Key << "Title2 pos" << YAML::Value << cable->m_title2->m_trackedCenter;
 	emitter << YAML::Key << "Title" << YAML::Value << cable->m_titleString;
+	emitter << YAML::Key << "Dictionary" << YAML::Value << cable->cableDict;
 
 	// Nodes.
 	emitter << YAML::Key << "Nodes" << YAML::Value;

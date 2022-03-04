@@ -10,6 +10,7 @@
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
+#include "OpenGL/RendererGL.h"
 #include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
@@ -29,6 +30,11 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
 	// Background.
 	createDefaultBackground();
+}
+
+Scene::~Scene() 
+{
+	Renderer::doneSceneDestruction();
 }
 
 //==============================================================================================================================================//
@@ -84,19 +90,18 @@ unsigned Scene::getRenderTexture()
 	return m_FBO->getRenderTexture(); 
 }
 
-unsigned Scene::getEntityID(glm::vec2& pixelCoords)
+unsigned Scene::getEntityID(const glm::vec2& pixelCoords)
 {
 	// Adjust the pixel coords.
-	glm::vec2 pixelCoordsTemp = { pixelCoords[0], m_camera->m_viewportVec[3] - pixelCoords[1] };
-	return m_FBO->getEntityID(pixelCoordsTemp);
+	return m_FBO->getEntityID({pixelCoords.x, m_camera->m_viewportVec[3] - pixelCoords.y});
 }
 
-void Scene::deleteFrameBufferResources() 
+void Scene::deleteGPUResources() 
 {
 	m_FBO->deleteResources();
 }
 
-void Scene::createFrameBufferResources() 
+void Scene::recreateGPUResources() 
 {
 	m_FBO->createResources(m_camera->m_viewportVec[2], m_camera->m_viewportVec[3]);
 }
@@ -105,17 +110,12 @@ void Scene::createFrameBufferResources()
 //  Coordinates.																															    //
 //==============================================================================================================================================//
 
-glm::vec3 Scene::pixelCoordsToWorldCoords(float pixelCoords[2])  
-{ 
-	return m_camera->pixelCoordsToWorldCoords(pixelCoords);  
-}
-
 glm::vec3 Scene::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
 {
 	return m_camera->pixelCoordsToWorldCoords(pixelCoords);
 }
 
-glm::vec3 Scene::pixelCoordsToCameraCoords(float pixelCoords[2]) 
+glm::vec3 Scene::pixelCoordsToCameraCoords(const glm::vec2& pixelCoords) 
 { 
 	return m_camera->pixelCoordsToCameraCoords(pixelCoords); 
 }

@@ -38,7 +38,7 @@ public:
 	// Constructor
 	EngineCore();
 	// Destructor.
-	virtual ~EngineCore() = default;
+	inline virtual ~EngineCore() = default;
 
 	// ---------- //
 	//  S C E N E //
@@ -105,7 +105,7 @@ public:
 	// --------- //
 
 	// Stores the previous mouse event information.
-	float m_prevMouseEventPixelCoords[2] = { NULL, NULL };		
+	glm::vec2 m_prevMouseEventPixelCoords = { NULL, NULL };		
 	// Stores the vector that goes into the world.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
 	// Set the name elements of the engine.

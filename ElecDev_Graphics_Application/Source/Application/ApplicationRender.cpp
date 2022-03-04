@@ -19,21 +19,26 @@ void Application::onRenderInit()
 	// Clear buffers.
 	Renderer::clear();
 
-	// Feed inputs to ImGUI, start new frame.
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	{
+		LUMEN_PROFILE_SCOPE("ImGui NewFrame");
+		// Feed inputs to ImGUI, start new frame.
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 
-	// Enable docking in main viewport.
-	// Do we really have to call this every frame?
-	m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
+		// Enable docking in main viewport.
+		// Do we really have to call this every frame?
+		m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
 
-	// Push custom font.
-	ImGui::PushFont(m_defaultFont);
+		// Push custom font.
+		ImGui::PushFont(m_defaultFont);
+	}
 }
 
 void Application::onRender()
 {	
+	LUMEN_PROFILE_SCOPE("Frametime");
+
 	// Init.
 	onRenderInit();
 
@@ -42,48 +47,57 @@ void Application::onRender()
 	// is updated.
 	dispatchEvents();
 
-	// Render all of the layers.
-	// The order is not important since dear imgui handles that.
-	for (auto& [name, layer] : m_layerStack->getLayers())
-		layer->onRender();
-
-#ifdef _DEBUG
-	//ImGui::ShowStyleEditor();
-	//ImGui::ShowDemoWindow();
-#endif
+	// Render the layers.
+	renderLayers();
 
 	// Cleanup.
 	onRenderCleanup();
 }
 
+void Application::renderLayers() 
+{
+	LUMEN_PROFILE_SCOPE("Render Layers");
+
+	// The order is not important since dear imgui handles that.
+	for (auto& [name, layer] : m_layerStack->getLayers())
+		layer->onRender();
+}
+
 void Application::onRenderCleanup()
 {
-	// Pop custom font.
-	ImGui::PopFont();
-
-	// Rendering
-	ImGui::Render();
+	// Set viewport.
 	int display_w, display_h;
 	glfwGetFramebufferSize(m_window, &display_w, &display_h);
 	Renderer::setViewport(glm::vec2(display_w, display_h));
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	// Update and Render additional Platform Windows
-	// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
-		GLFWwindow* backup_current_context = glfwGetCurrentContext();
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-		glfwMakeContextCurrent(backup_current_context);
+		LUMEN_PROFILE_SCOPE("ImGui Draw");
+
+		// Pop custom font.
+		ImGui::PopFont();
+
+		// ImGui rendering.
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		// Update and Render additional Platform Windows
+		// (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+		//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
 	}
 
-	// Push commands to the GPU.
-	Renderer::finish();
+	{
+		LUMEN_PROFILE_SCOPE("Swap Buffers");
 
-	// Swap the window buffers.
-	glfwSwapBuffers(m_window);
+		// Swap the window buffers.
+		glfwSwapBuffers(m_window);
+	}
 }
 
 //==============================================================================================================================================//

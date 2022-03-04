@@ -59,10 +59,9 @@ public:
 	// ----------------------- //
 
 	// Calculate the world coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
 	// Calculate the camera coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
+	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& pixelCoords);
 
 	// ----------------- //
 	//  M A T R I C E S  //

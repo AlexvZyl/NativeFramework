@@ -35,6 +35,8 @@ public:
 
 	// Constructor.
 	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 16);
+	// Destructor.
+	virtual ~Scene();
 	// Set the MSAA samples.
 	void setMSAA(unsigned samples);
 	// Handle events.
@@ -46,19 +48,18 @@ public:
 	// Returns the viewport dimensions.
 	glm::vec4& getViewport();
 	// Calculate the world coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToWorldCoords(float pixelCoords[2]);
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
 	// Calculate the camera coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToCameraCoords(float pixelCoords[2]);
+	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& pixelCoords);
 	// Returns the ID of the entity at the coordinates.
-	unsigned getEntityID(glm::vec2& pixelCoords);
+	unsigned getEntityID(const glm::vec2& pixelCoords);
 	// Resizes the scene based on a viewport change.
 	void resize(int width, int heigth);
 
 	// Delete the resources to save on VRAM.
-	void deleteFrameBufferResources();
+	void deleteGPUResources();
 	// Recreate the resources once it has been deleted.
-	void createFrameBufferResources();
+	void recreateGPUResources();
 
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
@@ -71,6 +72,7 @@ private:
 	// Friends.
 	friend class Renderer;
 	friend class Shader;
+	friend class RendererStats;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();

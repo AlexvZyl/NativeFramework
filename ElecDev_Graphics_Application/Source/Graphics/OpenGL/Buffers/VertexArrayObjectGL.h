@@ -85,7 +85,11 @@ public:
 	void popPrimitive(PrimitivePtr* primitive);
 	// Sets the primitive to be synced with the GPU.
 	// Should be called after CPU data changed.
-	void syncPrimitive(PrimitivePtr* primitive);
+	void syncPrimitiveVertexData(PrimitivePtr* primitive);
+	// Sync the IBO data of the primitive.
+	void syncPrimitiveIndexData(PrimitivePtr* primitive);
+	// Sync the vertex & index data.
+	void syncPrimitiveData(PrimitivePtr* primitive);
 
 	// This is in public so that primitives can manuipulate their
 	// own vertices.  There should be a better way to handle this...
@@ -98,6 +102,7 @@ private:
 
 	friend class Scene;
 	friend class FrameBufferObject;
+	friend class RendererStats;
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
@@ -118,8 +123,6 @@ private:
 	void wipeGPU();
 	// Wipes all of the data (CPU and GPU).
 	void wipeAll();
-	// Sync the IBO data of the primitive.
-	void syncPrimitiveIndexData(PrimitivePtr* primitive);
 };
 
 //=============================================================================================================================================//

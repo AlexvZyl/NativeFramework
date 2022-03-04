@@ -73,6 +73,7 @@ void EngineCore::onDefocusEvent(LayerEvent& event)
 void EngineCore::onHoverEvent(LayerEvent& event)
 {
 	m_isHovered = true;
+	//m_prevMouseEventPixelCoords = getMousePosition();
 }
 
 void EngineCore::onDehoverEvent(LayerEvent& event)

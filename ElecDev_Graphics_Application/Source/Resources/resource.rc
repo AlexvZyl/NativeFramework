@@ -79,6 +79,15 @@ ARIAL_NORMAL_PNG 				RCDATA						"Fonts\\Arial-Normal-2048\\Arial-Normal-2048.pn
 ARIAL_NORMAL_JSON				TEXTFILE					"Fonts\\Arial-Normal-2048\\Arial-Normal-2048.json"
 ARIAL_NORMAL_TTF 				FONT						"Fonts\\Arial-Normal-2048\\Arial-Normal.ttf"
 //-------------------------------------------------------------------------------------------------
+// File system.
+FILE_ICON						RCDATA						"Icons\\FileIcon.png"
+FOLDER_ICON						RCDATA						"Icons\\FolderIcon.png"
+CIRCUIT_FILE_ICON				RCDATA						"Icons\\CircuitFileIcon.png"
+LEFT_ARROW_ICON					RCDATA						"Icons\\LeftArrowIcon.png"
+COMPONENT_FILE_ICON				RCDATA						"Icons\\ComponentFileIcon.png"
+RELOAD_ICON						RCDATA						"Icons\\ReloadIcon.png"
+LOAD_FILE_ICON					RCDATA						"Icons\\LoadFileIcon.png"
+//-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources
 

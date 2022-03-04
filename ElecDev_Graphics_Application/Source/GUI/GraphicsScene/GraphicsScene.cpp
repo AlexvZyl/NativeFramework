@@ -49,9 +49,6 @@ void GraphicsScene::onEvent(Event& event)
 
 void GraphicsScene::begin()
 {
-	// Setup.
-	ImGui::SetNextWindowSize(ImVec2(400,400), ImGuiCond_Once);
-
 	// Adjust window padding.
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
@@ -61,6 +58,20 @@ void GraphicsScene::onRender()
 {
 	m_engine->onRender();
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+	if (ImGui::BeginDragDropTarget())
+	{
+		// Testing.
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
+		{
+			const wchar_t* path = (const wchar_t*)payload->Data;
+			std::wstring wPath(path);
+			std::string sPath;
+			sPath.insert(sPath.end(), wPath.begin(), wPath.end());
+			//FileDropEvent event(sPath);
+			//Lumen::getApp().logEvent<FileDropEvent>(event);
+			ImGui::EndDragDropTarget();
+		}
+	}
 }
 
 void GraphicsScene::end()
@@ -74,15 +85,15 @@ void GraphicsScene::onRenderStateChange(bool newState)
 	// Need to start using the attachments.
 	if (newState)
 	{
-		m_engine->m_scene->createFrameBufferResources();
+		m_engine->m_scene->recreateGPUResources();
 		// Reassign FBO.
-		m_textureID = (void*) m_engine->getRenderTexture();
+		m_textureID = (void*)m_engine->getRenderTexture();
 	}
 
 	// Have no use for the attachments.
 	else
 	{
-		m_engine->m_scene->deleteFrameBufferResources();
+		m_engine->m_scene->deleteGPUResources();
 		// The FBO has been destroyed.
 		//m_textureID = (void*)Renderer::getDefault2DSceneTexture();
 		m_textureID = nullptr;	

@@ -12,6 +12,7 @@
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
 #include "imgui_internal.h"
+#include "Utilities/Profiler/Profiler.h"
 
 // TO BE DEPRECATED.
 #include "GuiState.h"
@@ -25,9 +26,10 @@ class Layer;
 class ImFont;
 
 struct GLFWwindow;
+struct RendererData;
 
 //==============================================================================================================================================//
-//  Dock types.																																	//
+//  Data.																																		//
 //==============================================================================================================================================//
 
 enum class DockPanel 
@@ -66,10 +68,10 @@ public:
 
 	// Push an engine onto the layerstack.
 	template<typename EngineType>
-	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  DockPanel dockPanel = DockPanel::Scene, int imguiWindowFlags = 0);
+	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  DockPanel dockPanel = DockPanel::Scene, int imguiWindowFlags = 0, bool focus = true);
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
-	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, DockPanel dockPanel = DockPanel::Floating, int imguiWindowFlags = 0);
+	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, DockPanel dockPanel = DockPanel::Floating, int imguiWindowFlags = 0, bool focus = true);
 	// Pop a layer from the layerstack using the pointer.
 	void queuePopLayer(Layer* layer);
 	// Pop a layer from the layerstack using the layer name.
@@ -112,6 +114,15 @@ public:
 
 	// TO BE DEPRECATED!
 	std::unique_ptr<GUIState> m_guiState;
+
+	// ----------------- //
+	//  P R O F I L E R  //
+	// ----------------- //
+
+	// The results from the profiler.
+	std::vector<ProfileResult> m_profilerResults;
+	bool m_profilerActive = false;
+	RendererData m_rendererData;
 
 private:
 
@@ -172,6 +183,8 @@ private:
 	void onRenderInit();
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
+	// Render the Lumen layers.
+	void renderLayers();
 	// Renders the initial frame that is required for the dock builder.
 	void buildDocks();
 	// Set the ImGUI theme.
@@ -204,13 +217,14 @@ void Application::logEvent(Event& event)
 }
 
 template<typename EngineType>
-EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags)
+EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
 	EngineLayer<EngineType>* ptr = m_layerStack->getLayer<EngineLayer<EngineType>>(newName);
-	onFocusedLayerChange(ptr);
+	if(focus)
+		onFocusedLayerChange(ptr);
 	// Dock the layer.
 	dockLayerToPanel(newName, dockPanel);
 	// Return the layer.
@@ -218,17 +232,19 @@ EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, Doc
 }
 
 template<typename GuiType>
-GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags)
+GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
 	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(layer);
 	GuiLayer<GuiType>* ptr = m_layerStack->getLayer<GuiLayer<GuiType>>(newName);
-	onFocusedLayerChange(ptr);
+	if(focus)
+		onFocusedLayerChange(ptr);
 	// Dock the layer.
 	dockLayerToPanel(newName, dockPanel);
 	// Return the layer.
 	return ptr;
+	return nullptr;
 }
 
 template<class LayerType>

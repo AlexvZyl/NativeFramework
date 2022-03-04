@@ -34,7 +34,7 @@ public:
 	// Destructor.
 	inline virtual ~EngineLayer() 
 	{
-		Renderer::bindScene(m_engine->m_scene.get());
+		Renderer::initSceneDestruction(m_engine->m_scene.get());
 	};
 
 	// Set the name of the elements.

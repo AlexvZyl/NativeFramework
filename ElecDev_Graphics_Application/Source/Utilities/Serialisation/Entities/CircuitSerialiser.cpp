@@ -77,13 +77,12 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 	YAML::Node circuitInfo = yamlNode["Circuit Info"];
 
 	// Create the circuit for the engine. 
-	Circuit circuit(circuitInfo["Label"].as<std::string>(),
-					circuitInfo["Type"].as<std::string>());
+	std::shared_ptr<Circuit> circuit = std::make_shared<Circuit>(circuitInfo["Label"].as<std::string>(),
+																 circuitInfo["Type"].as<std::string>());
 	
 	// Create an engine with the circuit.
-	Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit.m_label)->getEngine();
-	engine->m_circuit.reset();
-	engine->m_circuit = std::make_shared<Circuit>(std::move(circuit));
+	Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit->m_label)->getEngine();
+	engine->m_circuit = circuit;
 
 	// -------------------- //
 	// C O M P O N E N T S  //
@@ -200,16 +199,25 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 		Port* startPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["Start port"].as<unsigned>()]));
 		Port* endPort = dynamic_cast<Port*>(EntityManager::getEntity(idTable[cableNode["End port"].as<unsigned>()]));
 
-		//Get the title details
+		// Get the title details.
 		std::string titleString = cableNode["Title"].as<std::string>();
 		//glm::vec3 title1pos = { cableNode["Title1 pos"][0].as<float>(), cableNode["Title1 pos"][1].as<float>(), cableNode["Title1 pos"][2].as<float>() };
 		//glm::vec3 title2pos = { cableNode["Title2 pos"][0].as<float>(), cableNode["Title2 pos"][1].as<float>(), cableNode["Title2 pos"][2].as<float>() };
-		// 1Create cable.
+		// Create cable.
 		std::shared_ptr<Cable> cable = std::make_shared<Cable>(startPort,
 															   nodeVector,
 															   endPort,
 															   engine->m_circuit.get(), titleString);
 		cable->unhighlight();
+
+		// Dictionary.
+		cable->cableDict.clear();
+		YAML::Node componentDict = cableNode["Dictionary"];
+		for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
+		{
+			cable->cableDict.insert({ it->first.as<std::string>(), it->second.as<std::string>() });
+		}
+
 		// Add cable to circuit.
 		engine->m_circuit->m_cables.push_back(cable);
 	}
