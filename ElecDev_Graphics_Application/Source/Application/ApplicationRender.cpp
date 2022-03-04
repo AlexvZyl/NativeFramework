@@ -20,7 +20,7 @@ void Application::run()
 	while (m_isRunning)
 	{
 		// Events.
-		if (m_waitForEvents) glfwWaitEventsTimeout(m_eventsTimeout);
+		if (m_waitForEvents) glfwWaitEventsTimeout(m_eventsTimeout - m_totalFrameTime);
 		else				 glfwPollEvents();
 
 		// Frametime.
@@ -31,8 +31,12 @@ void Application::run()
 		{
 			m_totalFrameTime = 0;
 			onRender();
+			updateFrametime();
 		}
 	}
+
+	// Cleanup.
+	shutdown();
 }
 
 void Application::updateFrametime() 

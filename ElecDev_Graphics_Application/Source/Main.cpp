@@ -10,7 +10,7 @@
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 
 //==============================================================================================================================================//
-//  Entry.																																	    //
+//  Entrypoint.																																	//
 //==============================================================================================================================================//
 
 int main(int, char**)
@@ -21,7 +21,7 @@ int main(int, char**)
     // Initialise the renderer.
     Renderer::initialise();
 
-    // Create Application instance inside window.
+    // Create an application instance inside GLFW window.
     Application application(window);
 
     // Start interface thread.
@@ -32,7 +32,6 @@ int main(int, char**)
 
     // Cleanup.
     externalInput.join();
-    application.shutdown();
     return 0;
 }
 

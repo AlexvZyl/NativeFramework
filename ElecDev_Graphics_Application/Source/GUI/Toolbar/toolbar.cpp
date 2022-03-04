@@ -220,7 +220,7 @@ void Toolbar::onRender()
     //  S E T T I N G S  //
     // ----------------- //
 
-    if (ImGui::BeginMenu("Serttings"))
+    if (ImGui::BeginMenu("Settings"))
     {
         // Wait or Poll GLFW events.
         ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
@@ -230,7 +230,7 @@ void Toolbar::onRender()
             static float timeout = 1.f / app.m_eventsTimeout;
             ImGui::Text("Timeout: ");
             ImGui::SameLine();
-            if (ImGui::SliderFloat("##EventsTimeout", &timeout, 1, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+            if (ImGui::SliderFloat("##EventsTimeout", &timeout, 10, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
             {
                 app.m_eventsTimeout = 1.f / timeout;
             }
@@ -242,7 +242,7 @@ void Toolbar::onRender()
         static float fps = app.m_targetFPS;
         ImGui::Text("FPS:       ");
         ImGui::SameLine();
-        if (ImGui::SliderFloat("##TargetFPS", &fps, 1, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
+        if (ImGui::SliderFloat("##TargetFPS", &fps, 10, 144, "%.0f", ImGuiSliderFlags_AlwaysClamp))
         {
             app.m_targetFPS = fps;
             app.m_targetFrameTime = 1 / app.m_targetFPS;
