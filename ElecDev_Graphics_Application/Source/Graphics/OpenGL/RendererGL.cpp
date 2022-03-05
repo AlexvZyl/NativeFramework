@@ -352,6 +352,15 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 //  Setup.																																		//
 //==============================================================================================================================================//
 
+
+void Renderer::shutdown()
+{
+	m_shaders.clear();
+	m_default2DScene.reset();
+	m_defaultFont.reset();
+	FrameBufferObject::m_shader.reset();
+}
+
 void Renderer::initialise()
 {
 	// OpenGL settings.

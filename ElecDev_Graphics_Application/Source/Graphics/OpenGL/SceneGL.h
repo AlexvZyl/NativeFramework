@@ -105,6 +105,13 @@ private:
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;
 	// FBO.
 	std::unique_ptr<FrameBufferObject> m_FBO;
+	
+	// --------------------- //
+	//  B A C K G R O U N D  //
+	// --------------------- //
+
+	float m_colorScaleDark = 1.0f;
+	float m_colorScaleLight = 3.f;
 };
 
 //==============================================================================================================================================//

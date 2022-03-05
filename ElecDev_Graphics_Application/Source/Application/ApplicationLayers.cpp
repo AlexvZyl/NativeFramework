@@ -36,12 +36,12 @@ void Application::buildDocks()
 	// Right Panel.
 	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton;
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Bottom Panel.
 	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.35f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton;
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Scene dock.
 	dockNode = ImGui::DockBuilderGetNode(m_scenePanelID);

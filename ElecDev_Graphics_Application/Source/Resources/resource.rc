@@ -87,6 +87,8 @@ LEFT_ARROW_ICON					RCDATA						"Icons\\LeftArrowIcon.png"
 COMPONENT_FILE_ICON				RCDATA						"Icons\\ComponentFileIcon.png"
 RELOAD_ICON						RCDATA						"Icons\\ReloadIcon.png"
 LOAD_FILE_ICON					RCDATA						"Icons\\LoadFileIcon.png"
+SETTINGS_ICON					RCDATA						"Icons\\SettingsIcon.png"
+USER_ICON					RCDATA						"Icons\\UserIcon.png"
 //-------------------------------------------------------------------------------------------------
 
 #endif    // English (United States) resources

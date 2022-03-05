@@ -236,8 +236,6 @@ GLFWwindow* Application::glfwInitWindow()
     { 
         /* Log error here. */ 
     }
-    // Remove decorations.
-    //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);
     // VSync (0 = disabled).
     glfwSwapInterval(0);
@@ -250,7 +248,7 @@ GLFWwindow* Application::glfwInitWindow()
     icon.height = bitmap.bmHeight;
     icon.width = bitmap.bmWidth;
     // Set icon.
-    //glfwSetWindowIcon(window, 1, &icon);
+    glfwSetWindowIcon(window, 1, &icon);
 
     // --------------------------- //
     //  O P E N G L   L O A D E R  //

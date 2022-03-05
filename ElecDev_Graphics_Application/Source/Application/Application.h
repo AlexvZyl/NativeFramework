@@ -53,7 +53,7 @@ class Application
 public:
 
 	// Constructor.
-	Application(GLFWwindow* window);
+	Application();
 
 	// Run the application;
 	void run();
@@ -130,7 +130,7 @@ public:
 private:
 
 	friend class LayerStack;
-	friend class Toolbar;
+	friend class SettingsWidget;
 
 	// The window containing the application.
 	GLFWwindow* m_window;

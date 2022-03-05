@@ -130,7 +130,7 @@ void GuiElementCore::onContentRegionMoveEvent(WindowEvent& event)
 void GuiElementCore::detectContentRegionResize() 
 {
 	// Get the current content region size.
-	glm::vec2 contentRegionSize = m_imguiWindow->ContentRegionRect.GetSize();
+	glm::vec2 contentRegionSize = m_imguiWindow->WorkRect.GetSize();
 	// If the content region resized pass an event.
 	if (m_contentRegionSize.x != contentRegionSize.x || m_contentRegionSize.y != contentRegionSize.y)
 	{
@@ -142,7 +142,7 @@ void GuiElementCore::detectContentRegionResize()
 void GuiElementCore::detectContentRegionMove()
 {
 	// Get window current position.
-	glm::vec2 contentRegionPos = m_imguiWindow->ContentRegionRect.Min;
+	glm::vec2 contentRegionPos = m_imguiWindow->WorkRect.Min;
 	// Check if the window has moved.
 	if(m_contentRegionPosition.x != contentRegionPos.x || m_contentRegionPosition.y != contentRegionPos.y)
 	{

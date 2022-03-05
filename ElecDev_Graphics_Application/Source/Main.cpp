@@ -2,12 +2,12 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "OpenGL/RendererGL.h"
 #include "Preprocessor.h"
 #include "Application/Application.h"
 #include "Utilities/Interface/ExternalInterface.h"
-#include <thread>
 #include "External/GLFW/Includes/GLFW/glfw3.h"
+#include <thread>
+
 
 //==============================================================================================================================================//
 //  Entrypoint.																																	//
@@ -15,23 +15,19 @@
 
 int main(int, char**)
 {
-    // Window, OpenGL context, GLAD.
-    GLFWwindow* window = Application::glfwInitWindow();
-
-    // Initialise the renderer.
+    // Initialisation.
+    Application application;
     Renderer::initialise();
-
-    // Create an application instance inside GLFW window.
-    Application application(window);
-
-    // Start interface thread.
     std::thread externalInput(ExternalInterface::inputThread);
 
-    // Run the application.
+    // Main loop.
     application.run();
 
     // Cleanup.
     externalInput.join();
+    Renderer::shutdown();
+    application.shutdown();
+
     return 0;
 }
 

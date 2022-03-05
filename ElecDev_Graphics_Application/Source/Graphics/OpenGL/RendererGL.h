@@ -67,6 +67,9 @@ static class Renderer
 {
 public:
 
+	// Clears resources.
+	static void shutdown();
+
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //

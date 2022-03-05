@@ -25,6 +25,10 @@ void ExternalInterface::inputThread()
 			std::cout << "Starting input reading.";
 			std::cout << "Stopped input reading.";
 		}
+		else 
+		{
+			std::cout << "Reading\n";
+		}
 	}
 }
 

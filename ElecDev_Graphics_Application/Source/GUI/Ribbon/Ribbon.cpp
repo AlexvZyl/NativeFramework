@@ -20,6 +20,7 @@
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "Utilities/Windows/WindowsUtilities.h"
+#include "GUI/SettingsWidget/SettingsWidget.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -36,6 +37,8 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     m_circuitIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
     m_componentIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
     m_loadFileIcon = loadBitmapToGL(loadImageFromResource(LOAD_FILE_ICON));
+    m_settingsIcon = loadBitmapToGL(loadImageFromResource(SETTINGS_ICON));
+    m_userIcon = loadBitmapToGL(loadImageFromResource(USER_ICON));
 }
 
 void Ribbon::begin()
@@ -115,6 +118,50 @@ void Ribbon::onRender()
     }
 
     ImGui::Separator();
+
+    ////
+    ////  NB: THIS SECTION RENDERS FROM THE BOTTOM UP!
+    ////
+    ImGuiStyle& style = ImGui::GetStyle();
+    float cursorPosY = 0;
+    
+    // ----------------- //
+    //  S E T T I N G S  //
+    // ----------------- //
+
+    cursorPosY = m_contentRegionSize.y - (buttonSize.y + style.FramePadding.y * 4);
+    ImGui::SetCursorPosY(cursorPosY);
+    // Button.
+    if (ImGui::ImageButton((void*)m_settingsIcon, buttonSize, { 0, 1 }, { 1, 0 }))
+    {
+        app.pushGuiLayer<SettingsWidget>("Settings", DockPanel::Floating);
+    }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Settings");
+        ImGui::EndTooltip();
+    }
+
+    // --------------- //
+    //  P R O F I L E  //
+    // --------------- //
+
+    cursorPosY -= (buttonSize.y + style.FramePadding.y * 2 + style.ItemSpacing.y * 2);
+    ImGui::SetCursorPosY(cursorPosY);
+    // Button.
+    if (ImGui::ImageButton((void*)m_userIcon, buttonSize, { 0, 1 }, { 1, 0 }))
+    {
+
+    }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Profile");
+        ImGui::EndTooltip();
+    }
 }
 
 void Ribbon::end() 

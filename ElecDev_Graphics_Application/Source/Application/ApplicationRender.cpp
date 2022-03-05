@@ -16,12 +16,10 @@
 
 void Application::run()
 {
-	double waitRemainingTime = 0;
-
 	// Main loop.
+	double waitRemainingTime = 0;
 	while (m_isRunning)
 	{
-		// Wait events.
 		if (m_waitForEvents)
 		{
 			// Ensure remaining time is positive.
@@ -29,23 +27,19 @@ void Application::run()
 			if(waitRemainingTime > 0)
 				glfwWaitEventsTimeout(waitRemainingTime);
 		}
-		// Poll.
 		else glfwPollEvents();
 
-		// Frametime.
 		updateFrametime();
 
-		// Render frame.
 		if (startFrame())
 		{
+			// Set the frametime 0 at the start of the frame so that the
+			// wait for events do not go over the fps.
 			m_totalFrameTime = 0;
 			onRender();
 			updateFrametime();
 		}
 	}
-
-	// Cleanup.
-	shutdown();
 }
 
 void Application::updateFrametime() 
@@ -74,6 +68,7 @@ void Application::onRenderInit()
 
 	{
 		LUMEN_PROFILE_SCOPE("ImGui NewFrame");
+
 		// Feed inputs to ImGUI, start new frame.
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();

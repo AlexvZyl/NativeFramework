@@ -122,6 +122,7 @@
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
     <ClCompile Include="Source\Utilities\Interface\ExternalInterface.cpp" />
     <ClCompile Include="Source\Utilities\Interface\PythonInterface.cpp" />
+    <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -788,6 +789,7 @@
     <ClInclude Include="Source\Utilities\Interface\ExternalInterface.h" />
     <ClInclude Include="Source\Utilities\Interface\PythonInterface.h" />
     <ClInclude Include="Source\Preprocessor.h" />
+    <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -1010,6 +1012,8 @@
     <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
     <Image Include="Source\Resources\Icons\ReloadIcon.png" />
     <Image Include="Source\Resources\Icons\LoadFileIcon.png" />
+    <Image Include="Source\Resources\Icons\SettingsIcon.png" />
+    <Image Include="Source\Resources\Icons\UserIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -50,7 +50,7 @@ Component2D::Component2D(Circuit* parent)
 
 	// Main shape.
 	shape = Renderer::addPolygon2D(vertices, this);
-	shape->setColor(shapeColour);
+	shape->setColor({shapeColour.r, shapeColour.g, shapeColour.b, 0.5f});
 	shape->setLayer(0.001f);//temp fix
 	// Component border.
 	border = Renderer::addPolygon2DClear(vertices, this);
@@ -140,8 +140,6 @@ void Component2D::place(const glm::vec2& pos)
 	// Ensure the component is at the desired position.
 	moveTo(pos);
 	setLayer(0.0f);
-	shapeColour = { 0.f, 0.f, 1.f, 0.5f };
-	titleColour = { 0.f, 0.f, 0.f, 1.0f };
 	shape->setColor(shapeColour);
 	title->setColor(titleColour);
 	// Move to placement layer.
