@@ -78,7 +78,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseMoveEvent event(glm::vec2(cursorX, cursorY), eventID);
+            MouseMoveEvent event({ cursorX, cursorY }, eventID);
             Lumen::getApp().logEvent<MouseMoveEvent>(event);
 
             // Pass event to ImGUI.
@@ -110,7 +110,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseScrollEvent event(glm::vec2(cursorX, cursorY), yoffset, eventID);
+            MouseScrollEvent event({ cursorX, cursorY }, yoffset, eventID);
             Lumen::getApp().logEvent<MouseScrollEvent>(event);
 
             // Pass event to ImGUI.
@@ -145,7 +145,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            KeyEvent event(key, eventID, glm::vec2(cursorX, cursorY));
+            KeyEvent event(key, eventID, { cursorX, cursorY });
             Lumen::getApp().logEvent<KeyEvent>(event);
 
             // Pass event to ImGUI.
@@ -175,7 +175,7 @@ void Application::glfwInitCallbacks()
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
         {
             // Create and log event.
-            WindowEvent event(glm::vec2(width, height), EventType_Application | EventType_WindowResize);
+            WindowEvent event({ width, height }, EventType_Application | EventType_WindowResize);
             Lumen::getApp().logEvent<WindowEvent>(event);
         });
 
