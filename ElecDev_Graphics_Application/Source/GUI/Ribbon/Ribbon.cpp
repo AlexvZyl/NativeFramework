@@ -116,11 +116,11 @@ void Ribbon::onRender()
         ImGui::Text("Circuit Designer");
         ImGui::EndTooltip();
     }
-
+    
     ImGui::Separator();
 
     ////
-    ////  NB: THIS SECTION RENDERS FROM THE BOTTOM UP!
+    ////  NB: THIS SECTION RENDERS FROM THE BOTTOM UP!  Still needs some work...
     ////
     ImGuiStyle& style = ImGui::GetStyle();
     float cursorPosY = 0;

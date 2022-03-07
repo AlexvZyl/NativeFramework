@@ -2,32 +2,24 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Application/Application.h"
-#include "Utilities/Platform/Preprocessor.h"
-#include "Utilities/Interface/ExternalInterface.h"
-#include "Utilities/Platform/Thread.h"
-#include "External/GLFW/Includes/GLFW/glfw3.h"
+#include "WebSocket.h"
+#include <Windows.h>
+#include <websocket.h>
 
 //==============================================================================================================================================//
-//  Entrypoint.																																	//
+//  Functions.																																	//
 //==============================================================================================================================================//
 
-int main(int, char**)
+WebSocket::WebSocket() 
 {
-    // Initialisation.
-    Application application;
-    Renderer::initialise();
+	
+}
 
-    // Main loop.
-    application.run();
-
-    // Cleanup.
-    Renderer::shutdown();
-    application.shutdown();
-
-    return 0;
+WebSocket::~WebSocket() 
+{
+	
 }
 
 //==============================================================================================================================================//
-//  EOF.																																	    //
+//  EOF.																																		//
 //==============================================================================================================================================//

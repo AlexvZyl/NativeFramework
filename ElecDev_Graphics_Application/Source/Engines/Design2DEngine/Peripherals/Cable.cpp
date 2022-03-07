@@ -96,7 +96,6 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 {
 	m_startPort = startPort;
 	m_endPort = endPort;
-	m_colour = { 0.4f, 0.4f, 0.5f, 1.0f };
 
 	m_titleString = titleString;
 
@@ -279,7 +278,7 @@ void Cable::attach(Port* endPort)
 		// Line is already perpendicular, so we can extend to the port.
 		extendSegment(m_endPort->centre);
 	}
-	setColour(glm::vec4{ 0.4f, 0.4f, 0.5f, 1.0f });
+	setColour(m_colour);
 	endPort->attachCable(this);
 }
 

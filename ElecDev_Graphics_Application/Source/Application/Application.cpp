@@ -25,6 +25,8 @@
 
 Application::Application() 
 {
+	std::cout << "[LUMEN] [INFO] : Application started!";
+
 	// Create GLFW window.
 	m_window = Application::glfwInitWindow();
 
@@ -54,7 +56,13 @@ Application::Application()
 	auto* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::Fixed)->getGui();
 	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
 	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
-	
+
+	std::cout << "\n[LUMEN] [SOCKET] : 5000\n";
+
+
+	// Flush the buffer after the app has started.
+	// This allows external programs (python server) to read.
+	std::cout.flush();
 }
 
 void Application::shutdown() 
