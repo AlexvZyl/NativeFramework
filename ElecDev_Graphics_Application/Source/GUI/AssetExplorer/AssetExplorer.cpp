@@ -56,6 +56,11 @@ void AssetExplorer::onRender()
 		m_clearFilterOnFrameStart = false;
 		filter.Clear();
 	}
+	if (m_reloadDirectories)
+	{
+		loadDirectories();
+		m_reloadDirectories = false;
+	}
 
 	// Header size.
 	static glm::vec2 headerSize(20, 20);
@@ -96,10 +101,11 @@ void AssetExplorer::onRender()
 		}
 	}
 
-	// Filter.
+	// Search bar.
 	ImGui::SameLine();
 	float filterSize = 250;
 	ImGui::SetCursorPosX(m_contentRegionSize.x - filterSize);
+	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
 	ImGui::Text("Search: ");
 	ImGui::SameLine();
 	filter.Draw("##AssetExplorerSearch", filterSize);
@@ -130,7 +136,7 @@ void AssetExplorer::onRender()
 			{
 				m_currentDirectory /= p.path().filename();
 				m_clearFilterOnFrameStart = true;
-				loadDirectories();
+				m_reloadDirectories = true;
 			}
 		}
 		// Files.

@@ -32,7 +32,9 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texHeight = textureBM.bmHeight;
     m_texID = loadBitmapToGL(textureBM);
 
-    m_colour = { 0.18f, 0.18f, 0.22f, 1.00f };
+    m_colour = { 0.21f, 0.21f, 0.23f, 1.00f };
+    //ImGui::GetStyle().Colors[ImGuiCol_Separator] = m_colour;
+
 }
 
 /*=======================================================================================================================================*/

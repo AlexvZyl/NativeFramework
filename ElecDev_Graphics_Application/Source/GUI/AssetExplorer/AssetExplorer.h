@@ -50,6 +50,8 @@ private:
 
 	// Used to make filter clearing more elegant.
 	bool m_clearFilterOnFrameStart = false;
+	// Reload the directories at the start of rendering.
+	bool m_reloadDirectories = false;
 
 };
 

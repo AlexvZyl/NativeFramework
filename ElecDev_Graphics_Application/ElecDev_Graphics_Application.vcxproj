@@ -723,6 +723,7 @@
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
+    <ClInclude Include="Source\Utilities\Thread\Thread.h" />
     <ClInclude Include="Source\Utilities\Interface\PythonInterface.h" />
     <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />

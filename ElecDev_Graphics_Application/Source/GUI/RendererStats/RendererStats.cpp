@@ -41,6 +41,7 @@ void RendererStats::onRender()
 	{
 		// Enable profiler.
 		app.m_profilerActive = true;
+
 		// Setup table
 		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
@@ -102,11 +103,20 @@ void RendererStats::onRender()
 
 		// Done.
 		ImGui::EndTable();
+
+		// Clear profiler results.
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
 	}
 	else 
 	{
 		// Disable profiler.
 		app.m_profilerActive = false;
+		// Clear profiler results.
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
 	}
 	ImGui::PopID();
 
@@ -142,6 +152,12 @@ void RendererStats::onRender()
 
 		// Done.
 		ImGui::EndTable();
+
+		app.m_rendererData.reset();
+	}
+	else 
+	{
+		app.m_rendererData.reset();
 	}
 	ImGui::PopID();
 
@@ -392,13 +408,6 @@ void RendererStats::end()
 {
 	ImGui::PopItemWidth();
 	ImGui::End();
-
-	// Clear profiler results.
-	Application& app = Lumen::getApp();
-	app.m_profilerResults.reserve(app.m_profilerResults.size());
-	app.m_profilerResults.shrink_to_fit();
-	app.m_profilerResults.clear();
-	app.m_rendererData.reset();
 }
 
 //=======================================================================================================================================//

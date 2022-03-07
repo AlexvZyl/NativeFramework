@@ -2,34 +2,26 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Preprocessor.h"
-#include "Application/Application.h"
-#include "Utilities/Interface/ExternalInterface.h"
-#include "External/GLFW/Includes/GLFW/glfw3.h"
-#include "Utilities/Thread/Thread.h"
+#include <thread>
 
 //==============================================================================================================================================//
-//  Entrypoint.																																	//
+//  Windows.																																	//
 //==============================================================================================================================================//
 
-int main(int, char**)
+#if defined(_WIN32)|| defined (_WIN64) || defined(__CYGWIN__)
+
+#include <Windows.h>
+
+void lumenTerminateThread(std::thread& thread) 
 {
-    // Initialisation.
-    Application application;
-    Renderer::initialise();
-    std::thread externalInput(ExternalInterface::inputThread);
-
-    // Main loop.
-    application.run();
-
-    // Cleanup.
-    lumenTerminateThread(externalInput);
-    Renderer::shutdown();
-    application.shutdown();
-
-    return 0;
+	std::thread::native_handle_type threadHandle = thread.native_handle();
+	DWORD exitCode = 0;
+	thread.detach();
+	TerminateThread(threadHandle, exitCode);
 }
 
+#endif
+
 //==============================================================================================================================================//
-//  EOF.																																	    //
+//  EOF.																																		//
 //==============================================================================================================================================//
