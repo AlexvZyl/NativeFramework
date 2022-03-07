@@ -46,7 +46,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseButtonEvent event(glm::vec2(cursorX, cursorY), eventID);
+            MouseButtonEvent event({ cursorX, cursorY }, eventID);
             Lumen::getApp().logEvent<MouseButtonEvent>(event);
 
             // Pass event to ImGUI.
