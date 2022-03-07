@@ -199,12 +199,8 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		// This should be handled differently!
-		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
-		{
-			// Load file into Lumen.
+		if (path.size())
 			loadFromYAML(path);
-		}
 	}
 }
 
@@ -249,12 +245,8 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		// This should be handled differently!
 		if (path.size())
-		{
-			// Load file into Lumen.
 			loadFromYAML(path);
-		}
 	}
 }
 
