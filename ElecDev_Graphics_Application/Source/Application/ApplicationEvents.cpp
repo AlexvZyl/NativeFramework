@@ -213,7 +213,7 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 		if (path.size())
 		{
 			// Find engine.
-			Design2DEngine* saveEngine = reinterpret_cast<Design2DEngine*>(event.engine);
+			Design2DEngine* saveEngine = dynamic_cast<Design2DEngine*>(event.engine);
 
 			// Check if file is added to the save event.
 			if (path.find(".lmct") != std::string::npos ||
