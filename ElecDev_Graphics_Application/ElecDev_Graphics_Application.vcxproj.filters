@@ -788,9 +788,9 @@
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
     <ClInclude Include="Source\Utilities\Interface\ExternalInterface.h" />
     <ClInclude Include="Source\Utilities\Interface\PythonInterface.h" />
-    <ClInclude Include="Source\Preprocessor.h" />
+    <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
-    <ClInclude Include="Source\Utilities\Thread\Thread.h" />
+    <ClInclude Include="Source\Utilities\Platform\Thread.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

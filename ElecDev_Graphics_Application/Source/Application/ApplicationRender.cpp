@@ -36,7 +36,7 @@ void Application::run()
 			// Set the frametime 0 at the start of the frame so that the
 			// wait for events do not go over the fps.
 			m_totalFrameTime = 0;
-			onRender();
+			renderFrame();
 			updateFrametime();
 		}
 	}
@@ -83,30 +83,31 @@ void Application::onRenderInit()
 	}
 }
 
-void Application::onRender()
+void Application::renderFrame()
 {	
 	LUMEN_PROFILE_SCOPE("Frametime");
 
-	// Init.
+	// Init.  Called before onUpdate so that 
+	// ImGui::NewFrame() can be called.
 	onRenderInit();
 
 	// Dispatch the events to the layers before we render them.
 	// Has to be called after the init so all of the ImGui data
 	// is updated.
-	dispatchEvents();
+	onUpdate();
 
 	// Render the layers.
-	renderLayers();
+	onRender();
 
 	// Cleanup.
 	onRenderCleanup();
 }
 
-void Application::renderLayers() 
+void Application::onRender()
 {
 	LUMEN_PROFILE_SCOPE("Render Layers");
 
-	// The order is not important since dear imgui handles that.
+	// The order is not important, since dear imgui handles that.
 	for (auto& [name, layer] : m_layerStack->getLayers())
 		layer->onRender();
 }

@@ -15,11 +15,11 @@
 //  Layer event dispatching.																													//
 //==============================================================================================================================================//
 
-void Application::dispatchEvents()
+void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("Dispatch Events");
 
-	// Pop the layers queued from the render loop.
+	// Pop the layers queued from the previous frame's rendering.
 	// Dispatched here so that they do not get GLFW events.
 	popLayers();
 
@@ -68,7 +68,7 @@ void Application::dispatchEvents()
 	}
 
 	// Pop layers that are queued from GLFW events.
-	// We pop them here so that they do not get dispatched for events.
+	// We pop them here so that they do not get dispatched for onUpdate.
 	popLayers();
 
 	// Dispatch the events that are handled by the layers.
@@ -79,7 +79,7 @@ void Application::dispatchEvents()
 	// due to how resizing works when windows are docked.  They do not necessarily
 	// come into focus, missing the resize event.
 	for (auto& [name, layer] : m_layerStack->getLayers())
-		layer->dispatchEvents();
+		layer->onUpdate();
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	m_eventLog->clear();
@@ -168,7 +168,6 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 
 void Application::onEvent(Event& event)
 {
-	
 	uint64_t eventID = event.ID;
 	
 	// Window events.																	 

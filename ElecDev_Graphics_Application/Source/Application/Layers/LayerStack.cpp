@@ -15,7 +15,7 @@
 //  Layer management.																															//
 //==============================================================================================================================================//
 
-std::map<std::string, std::unique_ptr<Layer>>& LayerStack::getLayers()
+std::unordered_map<std::string, std::unique_ptr<Layer>>& LayerStack::getLayers()
 {
 	return m_layers;
 }

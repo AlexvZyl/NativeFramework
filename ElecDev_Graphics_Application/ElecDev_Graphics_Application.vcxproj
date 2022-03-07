@@ -601,7 +601,7 @@
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
-    <ClInclude Include="Source\Preprocessor.h" />
+    <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
@@ -723,7 +723,7 @@
     <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
-    <ClInclude Include="Source\Utilities\Thread\Thread.h" />
+    <ClInclude Include="Source\Utilities\Platform\Thread.h" />
     <ClInclude Include="Source\Utilities\Interface\PythonInterface.h" />
     <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />

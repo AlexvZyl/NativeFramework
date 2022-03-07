@@ -32,7 +32,7 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texHeight = textureBM.bmHeight;
     m_texID = loadBitmapToGL(textureBM);
 
-    m_colour = { 0.21f, 0.21f, 0.23f, 1.00f };
+    m_colour = { 0.18f, 0.18f, 0.20f, 1.00f };
     //ImGui::GetStyle().Colors[ImGuiCol_Separator] = m_colour;
 
 }
@@ -72,9 +72,9 @@ void Toolbar::onRender()
 
     if (ImGui::BeginMenu("File"))
     {
+        // Load file.
         if (ImGui::MenuItem("Load...", "Ctrl+O"))
         {
-            // Create a load event.
             std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
             if (path.size())
             {
@@ -82,11 +82,12 @@ void Toolbar::onRender()
                 app.logEvent<FileLoadEvent>(event);
             }
         }
+
         ImGui::Separator();
+
+        // Close.
         if (ImGui::MenuItem("Close", "Ctrl+W"))
-        {
             Lumen::getApp().stopRunning();
-        }
 
         ImGui::EndMenu();
     }
@@ -164,18 +165,18 @@ void Toolbar::onRender()
         }
 
         // Scene hierarchy.
-        static bool assetExplorer = false;
+        static bool assetExplorer = true;
         if (ImGui::Checkbox(" Asset Explorer", &assetExplorer))
         {
             static std::string assetExplorerName;
             if (assetExplorer)
             {
-                auto* layer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
-                assetExplorerName = layer->getName();
+                m_assetExplorerLayer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
             }
             else
             {
-                app.queuePopLayer(assetExplorerName);
+                app.queuePopLayer(m_assetExplorerLayer);
+                m_assetExplorerLayer = nullptr;
             }
         }
 

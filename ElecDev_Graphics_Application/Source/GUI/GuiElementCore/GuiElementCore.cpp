@@ -75,7 +75,7 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 }
 
-void GuiElementCore::dispatchEvents()
+void GuiElementCore::onUpdate()
 {
 	// Get window if it does not exist.
 	if (!m_imguiWindow)

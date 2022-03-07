@@ -15,17 +15,8 @@
 #include "GUI/Toolbar/toolbar.h"
 #include "Lumen.h"
 #include "OpenGL/RendererGL.h"
-
-// Testing.
-#include "GUI/ComponentEditor/ComponentEditor.h"
-#include "GUI/GraphicsScene/GraphicsScene.h"
-#include "Engines/EngineCore/EngineCore.h"
-#include "OpenGL/SceneGL.h"
-#include "Graphics/Camera/Camera.h"
+#include "GUI/AssetExplorer/AssetExplorer.h"
 #include "Application/Layers/GuiLayer.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Base2DEngine/Base2DEngine.h"
-
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -60,8 +51,10 @@ Application::Application()
 	buildDocks();
 
 	// Create the main GUI layers.
-	pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::Fixed);
+	auto* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::Fixed)->getGui();
+	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
 	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
+	
 }
 
 void Application::shutdown() 
@@ -156,7 +149,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.08f, 1.00f);
 	colors[ImGuiCol_Border] = ImVec4(0.14f, 0.14f, 0.19f, 1.00f);
 	colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-	colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+	colors[ImGuiCol_FrameBg] = ImVec4(0.12f, 0.12f, 0.15f, 1.00f);
 	colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 	colors[ImGuiCol_TitleBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
@@ -184,9 +177,9 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 	colors[ImGuiCol_Tab] = ImVec4(0.13f, 0.16f, 0.24f, 1.00f);
 	colors[ImGuiCol_TabHovered] = ImVec4(0.24f, 0.32f, 0.52f, 1.00f);
-	colors[ImGuiCol_TabActive] = ImVec4(0.19f, 0.26f, 0.44f, 1.00f);
+	colors[ImGuiCol_TabActive] = ImVec4(0.17f, 0.26f, 0.50f, 1.00f);
 	colors[ImGuiCol_TabUnfocused] = ImVec4(0.13f, 0.16f, 0.24f, 1.00f);
-	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.19f, 0.26f, 0.44f, 1.00f);
+	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.17f, 0.26f, 0.50f, 1.00f);
 	colors[ImGuiCol_DockingPreview] = ImVec4(0.49f, 0.64f, 0.98f, 1.00f);
 	colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.10f, 0.10f, 0.12f, 1.00f);
 	colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);

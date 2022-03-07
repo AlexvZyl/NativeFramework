@@ -22,12 +22,16 @@ void ExternalInterface::inputThread()
 		// Start parsing.
 		if (input == "&[LUMEN][START_INTERFACE]")
 		{
-			std::cout << "Starting input reading.";
-			std::cout << "Stopped input reading.";
+			std::cout << "Starting read of input commands.\n";
+
+
+			std::cout << "Stopped read of input commands.\n.";
+			input.clear();
 		}
 		else 
 		{
-			std::cout << "Reading\n";
+			std::cout << "Read input, not responding.\n";
+			input.clear();
 		}
 	}
 }

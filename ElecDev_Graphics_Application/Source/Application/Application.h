@@ -63,7 +63,7 @@ public:
 	// ------------------- //
 
 	// Renders the next frame.
-	void onRender();
+	void renderFrame();
 	
 	// ------------- //
 	//  L A Y E R S  //
@@ -91,7 +91,7 @@ public:
 	// ------------- //
 
 	// Handles all of the events in the event log.
-	void dispatchEvents();
+	void onUpdate();
 	// Handle events specifically for the Application layer.
 	void onEvent(Event& event);
 	// Log the event in the event log.
@@ -199,7 +199,7 @@ private:
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
 	// Render the Lumen layers.
-	void renderLayers();
+	void onRender();
 	// Renders the initial frame that is required for the dock builder.
 	void buildDocks();
 	// Set the ImGUI theme.

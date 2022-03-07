@@ -172,12 +172,12 @@ void RendererStats::onRender()
 	{
 		if (scene)
 		{
+			// Calculate memory usage.
 			float linesMem = (sizeof(VertexData) * (float)scene->m_linesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_linesVAO->m_indexBufferSize) / 1000000;
 			float trianglesMem = (sizeof(VertexData) * (float)scene->m_trianglesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_trianglesVAO->m_indexBufferSize) / 1000000;
 			float texturesMem = (sizeof(VertexDataTextured) * (float)scene->m_texturedTrianglesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_texturedTrianglesVAO->m_indexBufferSize) / 1000000;
 			float circlesMem = (sizeof(VertexDataCircle) * (float)scene->m_circlesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_circlesVAO->m_indexBufferSize) / 1000000;
 			float totalMem = linesMem + trianglesMem + texturesMem + circlesMem;
-
 			ImGui::Text("Total VAO VRAM Usage : %.3f MB", totalMem);
 
 			// ---------- //
@@ -408,6 +408,17 @@ void RendererStats::end()
 {
 	ImGui::PopItemWidth();
 	ImGui::End();
+
+	// Make sure the data is cleared, since it is not being 
+	// cleared in this case.
+	Application& app = Lumen::getApp();
+	if (!app.m_profilerActive)
+	{
+		app.m_rendererData.reset();
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
+	}
 }
 
 //=======================================================================================================================================//
