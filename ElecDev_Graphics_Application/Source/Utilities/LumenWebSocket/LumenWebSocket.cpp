@@ -1,24 +1,38 @@
-#pragma once
-
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-
+#include <iostream>
+#include <thread>
+#include "LumenWebSocket.h"
 
 //==============================================================================================================================================//
-//  Web Socket Class.																															//
+//  Functions.																																	//
 //==============================================================================================================================================//
 
-class WebSocket 
+using tcp = boost::asio::ip::tcp;
+
+LumenWebSocket::LumenWebSocket(std::string& ip, int port)
+	: m_port(port)
 {
-	// Constructor.
-	WebSocket();
+	// Create connection and context.
+	m_socketAddress = boost::asio::ip::make_address(ip);
+	boost::asio::io_context ioContext{ 1 };
+	tcp::acceptor acceptor{ ioContext, {m_socketAddress, m_port} };
 
-	// Destructor.
-	~WebSocket();
+	while (true)
+	{
+		tcp::socket socket{ ioContext };
+		acceptor.accept(socket);
+		std::cout << "Socket Accepted.\n";
+	}
 
-};
+}
+
+LumenWebSocket::~LumenWebSocket()
+{
+	
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

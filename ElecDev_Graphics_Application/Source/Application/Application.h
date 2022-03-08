@@ -4,17 +4,18 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include <memory>
 #include <iostream>
 #include <vector>
+#include "Utilities/Profiler/Profiler.h"
 #include "Application/Events/EventLog.h"
 #include "Application/Layers/LayerStack.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
 #include "imgui_internal.h"
-#include "Utilities/Profiler/Profiler.h"
 
-// TO BE DEPRECATED.
+// TO BE DEPRECATED?
 #include "GuiState.h"
 
 //==============================================================================================================================================//
@@ -24,6 +25,7 @@
 class EventLog;
 class Layer;
 class ImFont;
+class LumenWebSocket;
 
 struct GLFWwindow;
 struct RendererData;
@@ -206,6 +208,12 @@ private:
 	void setGuiTheme();
 	// The default font used.
 	ImFont* m_defaultFont = nullptr;
+
+	// --------------------- //
+	//  C O N N E C T I O N  //
+	// --------------------- //
+
+	std::unique_ptr<LumenWebSocket> m_webSocket;
 
 	// --------------------- //
 	//  D O C K   N O D E S  //

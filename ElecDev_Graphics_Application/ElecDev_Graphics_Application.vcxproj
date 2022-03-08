@@ -290,7 +290,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
-    <ClCompile Include="Source\Utilities\WebSocket\WebSocket.cpp" />
+    <ClCompile Include="Source\Utilities\LumenWebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -807,7 +807,7 @@
     <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
     <ClInclude Include="Source\Utilities\Interface\ExternalInterface.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
-    <ClInclude Include="Source\Utilities\WebSocket\WebSocket.h" />
+    <ClInclude Include="Source\Utilities\LumenWebSocket\LumenWebSocket.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
   </ItemGroup>
   <ItemGroup>

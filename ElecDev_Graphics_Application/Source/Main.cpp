@@ -2,11 +2,10 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Utilities/LumenWebSocket/LumenWebSocket.h"
 #include "Application/Application.h"
 #include "Utilities/Platform/Preprocessor.h"
-#include "Utilities/Interface/ExternalInterface.h"
-#include "Utilities/Platform/Thread.h"
-#include "External/GLFW/Includes/GLFW/glfw3.h"
+#include "OpenGL/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Entrypoint.																																	//

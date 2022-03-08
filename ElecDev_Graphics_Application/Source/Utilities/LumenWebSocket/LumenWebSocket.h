@@ -1,24 +1,31 @@
+#pragma once
+
 //==============================================================================================================================================//
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "WebSocket.h"
-#include <Windows.h>
-#include <websocket.h>
+#include "boost/beast/core.hpp"
+#include "boost/beast/websocket.hpp"
+#include <string>
 
 //==============================================================================================================================================//
-//  Functions.																																	//
+//  Web Socket Class.																															//
 //==============================================================================================================================================//
 
-WebSocket::WebSocket() 
+class LumenWebSocket 
 {
-	
-}
+public:
 
-WebSocket::~WebSocket() 
-{
-	
-}
+	// Constructor.
+	LumenWebSocket(std::string& ip, int port);
+	// Destructor.
+	~LumenWebSocket();
+
+	// IP of the web socket.
+	boost::asio::ip::address m_socketAddress;
+	// The port the socket connected to.
+	int m_port = NULL;
+};
 
 //==============================================================================================================================================//
 //  EOF.																																		//

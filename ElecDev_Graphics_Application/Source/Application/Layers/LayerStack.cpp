@@ -2,7 +2,6 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-//#include <integer>
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "Application/Layers/LayerStack.h"

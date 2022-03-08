@@ -9,14 +9,13 @@
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
-#include "External/Misc/ConsoleColor.h"
 #include "Resources/ResourceHandler.h"
 #include "GUI/Ribbon/Ribbon.h"
 #include "GUI/Toolbar/toolbar.h"
 #include "Lumen.h"
-#include "OpenGL/RendererGL.h"
 #include "GUI/AssetExplorer/AssetExplorer.h"
 #include "Application/Layers/GuiLayer.h"
+#include "External/Misc/ConsoleColor.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -57,8 +56,11 @@ Application::Application()
 	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
 	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
 
-	std::cout << "\n[LUMEN] [SOCKET] : 5000\n";
-
+	// Create web socket.
+	std::string ip = "127.0.0.1";
+	int port = 8083;
+	m_webSocket = std::make_unique<LumenWebSocket>(ip, port);
+	std::cout << "[LUMEN] [WEBSOCKET] : Connected to '" << ip << ":" << std::to_string(port) << "'.\n";
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
