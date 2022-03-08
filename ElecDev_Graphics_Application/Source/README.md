@@ -392,7 +392,7 @@ void MyGui::end()
     // Ends the ImGui window.
     ImGui::End();
     // Pop the style that was pushed with begin().
-    ImGui::PopStyleVar(ImGuiStyleVar_WindowPadding);
+    ImGui::PopStyleVar();
 }
 ```
 
