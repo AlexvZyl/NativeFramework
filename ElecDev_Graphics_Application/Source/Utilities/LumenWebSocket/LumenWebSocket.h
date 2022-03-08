@@ -17,14 +17,18 @@ class LumenWebSocket
 public:
 
 	// Constructor.
-	LumenWebSocket(std::string& ip, int port);
+	LumenWebSocket(std::string& ip, unsigned short port);
 	// Destructor.
 	~LumenWebSocket();
 
-	// IP of the web socket.
+	// Function that listens to web socket.
+	static void listener(LumenWebSocket* socket);
+
+private:
+
 	boost::asio::ip::address m_socketAddress;
-	// The port the socket connected to.
-	int m_port = NULL;
+	unsigned short m_port = NULL;
+	std::thread m_listenerThread;
 };
 
 //==============================================================================================================================================//

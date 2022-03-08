@@ -2,7 +2,6 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Utilities/LumenWebSocket/LumenWebSocket.h"
 #include "Application/Application.h"
 #include "Utilities/Platform/Preprocessor.h"
 #include "OpenGL/RendererGL.h"
@@ -22,7 +21,6 @@ int main(int, char**)
 
     // Cleanup.
     Renderer::shutdown();
-    application.shutdown();
 
     return 0;
 }

@@ -7,13 +7,11 @@
 #include <memory>
 #include <iostream>
 #include <vector>
-#include "Utilities/Profiler/Profiler.h"
 #include "Application/Events/EventLog.h"
-#include "Application/Layers/LayerStack.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
-#include "imgui_internal.h"
+#include "imgui/imgui_internal.h"
 
 // TO BE DEPRECATED?
 #include "GuiState.h"
@@ -26,9 +24,11 @@ class EventLog;
 class Layer;
 class ImFont;
 class LumenWebSocket;
+class LayerStack;
 
 struct GLFWwindow;
 struct RendererData;
+struct ProfileResult;
 
 //==============================================================================================================================================//
 //  Data.																																		//
@@ -56,6 +56,9 @@ public:
 
 	// Constructor.
 	Application();
+
+	// Destructor.
+	~Application();
 
 	// Run the application;
 	void run();
@@ -112,13 +115,11 @@ public:
 
 	// Sets up the GLFW window and OpenGL context.
 	static GLFWwindow* glfwInitWindow();
-	// Close the application.
-	void shutdown();
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
 
 	// TO BE DEPRECATED!
-	std::unique_ptr<GUIState> m_guiState;
+	std::unique_ptr<GUIState> m_guiState = nullptr;
 
 	// ----------------- //
 	//  P R O F I L E R  //
@@ -135,7 +136,7 @@ private:
 	friend class SettingsWidget;
 
 	// The window containing the application.
-	GLFWwindow* m_window;
+	GLFWwindow* m_window = nullptr;
 
 	// --------- //
 	//  L O O P  //
@@ -159,7 +160,7 @@ private:
 	// ------------- //
 	
 	// The layers in the application.
-	std::unique_ptr<LayerStack> m_layerStack;
+	std::unique_ptr<LayerStack> m_layerStack = nullptr;
 	// The layer that has the most recent interaction.
 	Layer* m_focusedLayer = nullptr;
 	// The layer that the mouse is hovering over.
@@ -213,7 +214,7 @@ private:
 	//  C O N N E C T I O N  //
 	// --------------------- //
 
-	std::unique_ptr<LumenWebSocket> m_webSocket;
+	std::unique_ptr<LumenWebSocket> m_webSocket = nullptr;
 
 	// --------------------- //
 	//  D O C K   N O D E S  //

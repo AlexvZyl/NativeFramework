@@ -2,6 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Utilities/LumenWebSocket/LumenWebSocket.h"
 #include <iostream>
 #include <memory>
 #include "Application/Application.h"
@@ -13,6 +14,7 @@
 #include "GUI/Ribbon/Ribbon.h"
 #include "GUI/Toolbar/toolbar.h"
 #include "Lumen.h"
+#include "Utilities/Profiler/Profiler.h"
 #include "GUI/AssetExplorer/AssetExplorer.h"
 #include "Application/Layers/GuiLayer.h"
 #include "External/Misc/ConsoleColor.h"
@@ -58,16 +60,15 @@ Application::Application()
 
 	// Create web socket.
 	std::string ip = "127.0.0.1";
-	int port = 8083;
+	unsigned short port = 8083;
 	m_webSocket = std::make_unique<LumenWebSocket>(ip, port);
-	std::cout << "[LUMEN] [WEBSOCKET] : Connected to '" << ip << ":" << std::to_string(port) << "'.\n";
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
 	std::cout.flush();
 }
 
-void Application::shutdown() 
+Application::~Application()
 {
 	m_layerStack->getLayers().clear();
 

@@ -8,6 +8,7 @@
 #include "imgui/imgui_internal.h"
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
+#include "Utilities/Profiler/Profiler.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
