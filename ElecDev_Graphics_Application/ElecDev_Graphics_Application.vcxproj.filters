@@ -125,6 +125,7 @@
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\Utilities\Interface\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Application\API\Graphics.cpp" />
+    <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">

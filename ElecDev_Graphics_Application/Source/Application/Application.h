@@ -12,6 +12,7 @@
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "imgui/notify/imgui_notify.h"
 
 // TO BE DEPRECATED?
 #include "GuiState.h"
@@ -43,6 +44,14 @@ enum class DockPanel
 	Bottom,		// The bottom panel.
 	Scene,		// The main scene panel where the graphics are displayed.
 	Ribbon		// The left ribbon that holds the buttons.
+};
+
+enum class NotificationType
+{
+	Success,
+	Warning,
+	Error,
+	Info,
 };
 
 //==============================================================================================================================================//
@@ -129,6 +138,13 @@ public:
 	std::vector<ProfileResult> m_profilerResults;
 	bool m_profilerActive = false;
 	RendererData m_rendererData;
+
+	// --------------------------- //
+	//  N O T I F I C A T I O N S  //
+	// --------------------------- //
+
+	// Push a notification on top in Lumen.
+	void pushNotification(NotificationType type, int msTime, const std::string& content, const std::string& title = "");
 
 private:
 

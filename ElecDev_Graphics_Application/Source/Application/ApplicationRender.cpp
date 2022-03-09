@@ -9,6 +9,7 @@
 #include "Application/Application.h"
 #include "OpenGL/RendererGL.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "imgui/notify/imgui_notify.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -111,6 +112,13 @@ void Application::onRender()
 	// The order is not important, since dear imgui handles that.
 	for (auto& [name, layer] : m_layerStack->getLayers())
 		layer->onRender();
+
+	// Push notificatons.
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f); 
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f)); 
+	ImGui::RenderNotifications();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
 }
 
 void Application::onRenderCleanup()

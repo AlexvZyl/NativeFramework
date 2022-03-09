@@ -10,6 +10,7 @@
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
+#include "imgui/notify/imgui_notify.h"
 #include "Resources/ResourceHandler.h"
 #include "GUI/Ribbon/Ribbon.h"
 #include "GUI/Toolbar/toolbar.h"
@@ -59,8 +60,6 @@ Application::Application()
 	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
 
 	// Create web socket.
-	std::string ip = "127.0.0.1";
-	unsigned short port = 8083;
 	m_webSocket = std::make_unique<LumenWebSocket>();
 	// Allow socket to setup.
 	Sleep(10);
@@ -68,6 +67,7 @@ Application::Application()
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
 	std::cout.flush();
+	pushNotification(NotificationType::Info, 3000, "Shaders compiled", "Renderer");
 }
 
 Application::~Application()
@@ -224,6 +224,9 @@ void Application::setGuiTheme()
 	void* fontPtr = getFontResourceMemoryLocation(ARIAL_NORMAL_TTF);
 	unsigned fontSize = getFontResourceSize(ARIAL_NORMAL_TTF);
 	m_defaultFont = io.Fonts->AddFontFromMemoryTTF(fontPtr, fontSize, 16.f, &imFontConfig);
+
+	// Init notify.
+	ImGui::MergeIconsWithLatestFont(16.f, false);
 }
 
 //==============================================================================================================================================//

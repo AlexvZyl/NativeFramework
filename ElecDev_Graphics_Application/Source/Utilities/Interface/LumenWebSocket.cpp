@@ -39,17 +39,25 @@ void LumenWebSocket::listener(LumenWebSocket* socket)
 	socket->m_port = acceptor.local_endpoint().port();
 
 	// Log connection.
-	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << socket->m_socketAddress << ":" << std::to_string(socket->m_port) << "'.";
+	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << socket->m_socketAddress << ":" << socket->m_port << "'.";
+
+	std::string address = socket->m_socketAddress.to_string();
+	std::string portNum = std::to_string(socket->m_port);
+	std::string connectionMsg = "Connected to 'ws://" + address + ":" + portNum + "'.";
+	Lumen::getApp().pushNotification(NotificationType::Info, 4000, connectionMsg, "Websocket");
 
 	// Create connection.
 	tcp::socket webSocket{ ioContext };
 	acceptor.accept(webSocket);
-	std::cout << blue << "\n[LUMEN] [WEBSOCKET] :" << white << " Connection established.\n";
+	std::cout << blue << "\n[LUMEN] [WEBSOCKET] :" << white << " Connection established.";
 
 	// Handshake.
 	boost::beast::websocket::stream<tcp::socket> ws { std::move(webSocket) };
 	ws.accept();
 	std::cout << blue << "[LUMEN] [WEBSOCKET] :" << white << " Handshake successful.\n";
+
+	// Notify.
+	Lumen::getApp().pushNotification(NotificationType::Info, 3000, "Websocket connection esstablished.");
 
 	// Read from socket.
 	while (true) 
