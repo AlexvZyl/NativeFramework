@@ -794,6 +794,11 @@
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
     <ClInclude Include="Source\Utilities\Interface\LumenWebSocket.h" />
+    <ClInclude Include="External\imgui-notify\example\src\imgui_notify.h" />
+    <ClInclude Include="External\imgui\imgui_notify.h" />
+    <ClInclude Include="External\imgui\notify\imgui_notify.h" />
+    <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
+    <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

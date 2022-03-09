@@ -581,6 +581,7 @@
     <ClInclude Include="External\glm\glm\vec3.hpp" />
     <ClInclude Include="External\glm\glm\vec4.hpp" />
     <ClInclude Include="External\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="External\imgui-notify\example\src\imgui_notify.h" />
     <ClInclude Include="External\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="External\imgui\backends\imgui_impl_opengl2.h" />
     <ClInclude Include="External\imgui\backends\imgui_impl_opengl3.h" />
@@ -589,10 +590,14 @@
     <ClInclude Include="External\imgui\imconfig.h" />
     <ClInclude Include="External\imgui\imgui.h" />
     <ClInclude Include="External\imgui\imgui_internal.h" />
+    <ClInclude Include="External\imgui\imgui_notify.h" />
     <ClInclude Include="External\imgui\imstb_rectpack.h" />
     <ClInclude Include="External\imgui\imstb_textedit.h" />
     <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="External\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="External\imgui\notify\imgui_notify.h" />
+    <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
+    <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\implot\implot.h" />
     <ClInclude Include="External\implot\implot_internal.h" />
     <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
