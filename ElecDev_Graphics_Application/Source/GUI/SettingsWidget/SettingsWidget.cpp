@@ -2,8 +2,8 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Utilities/Interface/LumenWebSocket.h"
 #include "SettingsWidget.h"
-#include "Lumen.h"
 #include "Application/Application.h"
 #include "GLFW/glfw3.h"
 
@@ -64,8 +64,16 @@ void SettingsWidget::onRender()
 
     // Window decorations.
     static bool windowDecorations = true;
-    if (ImGui::Checkbox("Window Decorations", &windowDecorations))
+    if (ImGui::Checkbox("  Window Decorations", &windowDecorations))
         glfwSetWindowAttrib(app.getWindow(), GLFW_DECORATED, windowDecorations);
+
+    ImGui::Separator();
+
+    // Display websocket information.
+    std::string websocketInfo = "Websocket:  ";
+    websocketInfo += "ws://";
+    websocketInfo += app.m_webSocket->m_socketAddress.to_string() + ":" + std::to_string(app.m_webSocket->m_port);
+    ImGui::Text(websocketInfo.c_str());
 }
 
 void SettingsWidget::end()

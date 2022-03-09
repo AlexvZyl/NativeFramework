@@ -34,14 +34,12 @@ class ExternalInterface
 {
 public:
 
-	// Function that reads input from the pipe.
-	static void inputThread();
-
 	// Parse a input string and create a function call.
 	static void parseInputString(std::string& input);
 
 	// Construct a call.
 	static void pushFunctionCall(std::string& function, std::vector<std::string>& parameters);
+
 	// Copy a call.
 	static void pushFunctionCall(ExternalFunctionCall& call);
 
@@ -55,6 +53,14 @@ private:
 
 	// Private Constructor.
 	inline ExternalInterface() = default;
+
+	// Seperates all of the functions inside the input.
+	static std::vector<std::string> seperateFunctions(const std::string& input);
+
+	// Parsing data.
+	static std::string LUMEN_INTERFACE_START;
+	static std::string LUMEN_INTERFACE_END;
+	static std::string LUMEN_INTERFACE_FUNCTION_SEPARATOR;
 };
 
 //==============================================================================================================================================//

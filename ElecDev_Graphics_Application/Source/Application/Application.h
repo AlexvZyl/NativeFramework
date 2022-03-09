@@ -13,6 +13,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/notify/imgui_notify.h"
+#include "Lumen.h"
 
 // TO BE DEPRECATED?
 #include "GuiState.h"

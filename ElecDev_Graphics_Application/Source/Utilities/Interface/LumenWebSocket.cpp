@@ -7,8 +7,8 @@
 #include "LumenWebSocket.h"
 #include "External/Misc/ConsoleColor.h"
 #include "Utilities/Platform/Thread.h"
-#include "Lumen.h"
 #include "Application/Application.h"
+#include "Utilities/Interface/ExternalInterface.h"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
@@ -44,7 +44,7 @@ void LumenWebSocket::listener(LumenWebSocket* socket)
 	std::string address = socket->m_socketAddress.to_string();
 	std::string portNum = std::to_string(socket->m_port);
 	std::string connectionMsg = "Connected to 'ws://" + address + ":" + portNum + "'.";
-	Lumen::getApp().pushNotification(NotificationType::Info, 4000, connectionMsg, "Websocket");
+	Lumen::getApp().pushNotification(NotificationType::Info, 5000, connectionMsg, "Websocket");
 
 	// Create connection.
 	tcp::socket webSocket{ ioContext };
@@ -57,19 +57,17 @@ void LumenWebSocket::listener(LumenWebSocket* socket)
 	std::cout << blue << "[LUMEN] [WEBSOCKET] :" << white << " Handshake successful.\n";
 
 	// Notify.
-	Lumen::getApp().pushNotification(NotificationType::Info, 3000, "Websocket connection esstablished.");
+	Lumen::getApp().pushNotification(NotificationType::Info, 5000, "Connection established.", "Websocket");
 
 	// Read from socket.
 	while (true) 
 	{
 		boost::beast::flat_buffer buffer;
 		ws.read(buffer);
+		if (!buffer.size()) continue;
 		std::string input = boost::beast::buffers_to_string(buffer.cdata());
 		std::cout << input << "\n";
-		if (input.find("Terminate") != std::string::npos )
-		{
-			Lumen::getApp().stopRunning();
-		}
+		ExternalInterface::parseInputString(input);
 	}
 }
 

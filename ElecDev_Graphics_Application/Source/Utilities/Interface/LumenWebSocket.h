@@ -24,8 +24,7 @@ public:
 	// Function that listens to web socket.
 	static void listener(LumenWebSocket* socket);
 
-private:
-
+	// Data.
 	boost::asio::ip::address m_socketAddress;
 	int m_port = NULL;
 	std::thread m_listenerThread;

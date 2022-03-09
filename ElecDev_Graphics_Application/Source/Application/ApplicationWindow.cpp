@@ -231,6 +231,7 @@ GLFWwindow* Application::glfwInitWindow()
     glfwWindowHint(GLFW_SAMPLES, 8);
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "", NULL, NULL);
+    glfwSetTime(0);
     // Error.
     if (window == NULL) 
     { 

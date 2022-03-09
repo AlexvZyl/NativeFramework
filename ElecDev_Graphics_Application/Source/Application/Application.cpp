@@ -28,23 +28,20 @@
 Application::Application() 
 {
 	std::cout << blue << "[LUMEN] [INFO] :" << white << " Application started!";
-
+	
 	// Create GLFW window.
 	m_window = Application::glfwInitWindow();
 
 	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
-	// Reset glfw time an application start.	
-	glfwSetTime(0);
-
-	// NOTE: TO BE DEPRECATED!
-	m_guiState = std::make_unique<GUIState>();
-
 	// Events & Layers.
 	Application::glfwInitCallbacks();
 	m_layerStack = std::make_unique<LayerStack>();
 	m_eventLog = std::make_unique<EventLog>();
+
+	// NOTE: TO BE DEPRECATED!
+	m_guiState = std::make_unique<GUIState>();
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 
@@ -67,7 +64,7 @@ Application::Application()
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
 	std::cout.flush();
-	pushNotification(NotificationType::Info, 3000, "Shaders compiled", "Renderer");
+	pushNotification(NotificationType::Info, 4000, "Shaders compiled", "Renderer");
 }
 
 Application::~Application()
