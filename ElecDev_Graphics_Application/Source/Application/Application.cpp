@@ -2,7 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Utilities/LumenWebSocket/LumenWebSocket.h"
+#include "Utilities/Interface/LumenWebSocket.h"
 #include <iostream>
 #include <memory>
 #include "Application/Application.h"
@@ -26,7 +26,7 @@
 
 Application::Application() 
 {
-	std::cout << "[LUMEN] [INFO] : Application started!";
+	std::cout << blue << "[LUMEN] [INFO] :" << white << " Application started!";
 
 	// Create GLFW window.
 	m_window = Application::glfwInitWindow();
@@ -61,7 +61,9 @@ Application::Application()
 	// Create web socket.
 	std::string ip = "127.0.0.1";
 	unsigned short port = 8083;
-	m_webSocket = std::make_unique<LumenWebSocket>(ip, port);
+	m_webSocket = std::make_unique<LumenWebSocket>();
+	// Allow socket to setup.
+	Sleep(10);
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.

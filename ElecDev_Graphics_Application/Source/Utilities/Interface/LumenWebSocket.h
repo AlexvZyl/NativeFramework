@@ -17,7 +17,7 @@ class LumenWebSocket
 public:
 
 	// Constructor.
-	LumenWebSocket(std::string& ip, unsigned short port);
+	LumenWebSocket(const std::string& ip = "127.0.0.1");
 	// Destructor.
 	~LumenWebSocket();
 
@@ -27,7 +27,7 @@ public:
 private:
 
 	boost::asio::ip::address m_socketAddress;
-	unsigned short m_port = NULL;
+	int m_port = NULL;
 	std::thread m_listenerThread;
 };
 

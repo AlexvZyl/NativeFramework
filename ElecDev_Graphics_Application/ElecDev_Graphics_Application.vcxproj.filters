@@ -123,7 +123,8 @@
     <ClCompile Include="Source\Utilities\Interface\ExternalInterface.cpp" />
     <ClCompile Include="Source\Utilities\Interface\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
-    <ClCompile Include="Source\Utilities\LumenWebSocket\LumenWebSocket.cpp" />
+    <ClCompile Include="Source\Utilities\Interface\LumenWebSocket.cpp" />
+    <ClCompile Include="Source\Application\API\Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -792,7 +793,7 @@
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
-    <ClInclude Include="Source\Utilities\LumenWebSocket\LumenWebSocket.h" />
+    <ClInclude Include="Source\Utilities\Interface\LumenWebSocket.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

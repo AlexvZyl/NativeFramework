@@ -16,17 +16,13 @@
 
 using tcp = boost::asio::ip::tcp;
 
-LumenWebSocket::LumenWebSocket(std::string& ip, unsigned short port)
-	: m_port(port) 
+LumenWebSocket::LumenWebSocket(const std::string& ip)
 {
 	// Create connection and context.
 	m_socketAddress = boost::asio::ip::make_address(ip);
 	
 	// Start listener thread.
 	m_listenerThread = std::thread(LumenWebSocket::listener, this);
-
-	// Log connection.
-	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << ip << ":" << std::to_string(port) << "'.\n";
 }
 
 LumenWebSocket::~LumenWebSocket()
@@ -38,7 +34,12 @@ void LumenWebSocket::listener(LumenWebSocket* socket)
 {
 	// Setup socket.
 	boost::asio::io_context ioContext{ 1 };
-	tcp::acceptor acceptor{ ioContext, {socket->m_socketAddress, socket->m_port} };
+	// Assign to port 0 so that OS supplied an open port.
+	tcp::acceptor acceptor{ ioContext, {socket->m_socketAddress, 0} };
+	socket->m_port = acceptor.local_endpoint().port();
+
+	// Log connection.
+	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << socket->m_socketAddress << ":" << std::to_string(socket->m_port) << "'.";
 
 	// Create connection.
 	tcp::socket webSocket{ ioContext };
@@ -48,7 +49,7 @@ void LumenWebSocket::listener(LumenWebSocket* socket)
 	// Handshake.
 	boost::beast::websocket::stream<tcp::socket> ws { std::move(webSocket) };
 	ws.accept();
-	std::cout << blue << "\n[LUMEN] [WEBSOCKET] :" << white << " Handshake successful.\n";
+	std::cout << blue << "[LUMEN] [WEBSOCKET] :" << white << " Handshake successful.\n";
 
 	// Read from socket.
 	while (true) 
