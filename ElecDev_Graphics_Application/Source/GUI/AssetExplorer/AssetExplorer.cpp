@@ -111,93 +111,98 @@ void AssetExplorer::onRender()
 	filter.Draw("##AssetExplorerSearch", filterSize);
 	ImGui::Separator();
 
-	// Create icon columns.
-	float iconSize = 75;
-	float padding = 7;
-	float cellSize = iconSize + 2 * padding;
-	int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
-	if (columns <= 0) columns = 1;
-	ImGui::Columns(columns, 0, false);
-
-	// Display contents.
-	int directoryCount = 0;
-	for (auto& p : m_directories)
+	if (ImGui::BeginChild("##AssetExplorerChild"))
 	{
-		// Filter.
-		if (!filter.PassFilter(p.path().stem().string().c_str())) continue;;
 
-		ImGui::PushID(directoryCount++);
+		// Create icon columns.
+		float iconSize = 75;
+		float padding = 7;
+		float cellSize = iconSize + 2 * padding;
+		int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
+		if (columns <= 0) columns = 1;
+		ImGui::Columns(columns, 0, false);
 
-		// Directories.
-		if (p.is_directory())
+		// Display contents.
+		int directoryCount = 0;
+		for (auto& p : m_directories)
 		{
-			ImGui::ImageButton((void*)s_folderIcon, {iconSize, iconSize}, { 0, 1 }, { 1, 0 });
-			if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered()) 
-			{
-				m_currentDirectory /= p.path().filename();
-				m_clearFilterOnFrameStart = true;
-				m_reloadDirectories = true;
-			}
-		}
-		// Files.
-		else 
-		{
-			// ----------------- //
-			//  C I R C U I T S  //
-			// ----------------- //
+			// Filter.
+			if (!filter.PassFilter(p.path().stem().string().c_str())) continue;;
 
-			if (p.path().extension() == ".lmct")
+			ImGui::PushID(directoryCount++);
+
+			// Directories.
+			if (p.is_directory())
 			{
-				ImGui::ImageButton((void*)s_circuitFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
+				ImGui::ImageButton((void*)s_folderIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
-					std::string item = p.path().string();
-					FileDropEvent event(item);
-					Lumen::getApp().logEvent<FileDropEvent>(event);
+					m_currentDirectory /= p.path().filename();
+					m_clearFilterOnFrameStart = true;
+					m_reloadDirectories = true;
 				}
 			}
-
-			// --------------------- //
-			//  C O M P O N E N T S  //
-			// --------------------- //
-
-			else if (p.path().extension() == ".lmcp")
+			// Files.
+			else
 			{
-				ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
-				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+				// ----------------- //
+				//  C I R C U I T S  //
+				// ----------------- //
+
+				if (p.path().extension() == ".lmct")
 				{
-					// Open component builder.
+					ImGui::ImageButton((void*)s_circuitFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						std::string item = p.path().string();
+						FileDropEvent event(item);
+						Lumen::getApp().logEvent<FileDropEvent>(event);
+					}
 				}
-				// File drag & drop.
-				if (ImGui::BeginDragDropSource())
+
+				// --------------------- //
+				//  C O M P O N E N T S  //
+				// --------------------- //
+
+				else if (p.path().extension() == ".lmcp")
 				{
-					const wchar_t* itemPath = p.path().c_str();
-					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
-					ImGui::EndDragDropSource();
+					ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						// Open component builder.
+					}
+					// File drag & drop.
+					if (ImGui::BeginDragDropSource())
+					{
+						const wchar_t* itemPath = p.path().c_str();
+						ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
+						ImGui::EndDragDropSource();
+					}
+				}
+
+				// ----------- //
+				//  O T H E R  //
+				// ----------- //
+
+				else
+				{
+					ImGui::ImageButton((void*)s_fileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 				}
 			}
 
-			// ----------- //
-			//  O T H E R  //
-			// ----------- //
+			// The button label applied to all icons.
+			std::string filename = p.path().filename().string().c_str();
+			glm::vec2 stringSize = ImGui::CalcTextSize(filename.c_str());
+			if (stringSize.x < cellSize)
+				ImGui::SetCursorPosX(ImGui::GetCursorPos().x + (cellSize / 2) - (stringSize.x / 2));
+			ImGui::TextWrapped(filename.c_str());
 
-			else 
-			{
-				ImGui::ImageButton((void*)s_fileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
-			}
+			// End.
+			ImGui::NextColumn();
+			ImGui::PopID();
 		}
-
-		// The button label applied to all icons.
-		std::string filename = p.path().filename().string().c_str();
-		glm::vec2 stringSize = ImGui::CalcTextSize(filename.c_str());
-		if (stringSize.x < cellSize)
-			ImGui::SetCursorPosX(ImGui::GetCursorPos().x + (cellSize / 2) - (stringSize.x / 2));
-		ImGui::TextWrapped(filename.c_str());
-
-		// End.
-		ImGui::NextColumn();
-		ImGui::PopID();
 	}
+	ImGui::EndChild();
 
 	// Done with icons.
 	ImGui::Columns(1);
