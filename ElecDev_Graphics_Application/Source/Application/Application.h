@@ -38,13 +38,15 @@ struct ProfileResult;
 
 enum class DockPanel 
 {
-	Fixed,		// These panels are handled manually.
 	Floating,	// Undocked windows.
 	Left,		// The left panel.
 	Right,		// The right panel.
 	Bottom,		// The bottom panel.
 	Scene,		// The main scene panel where the graphics are displayed.
-	Ribbon		// The left ribbon that holds the buttons.
+
+	// DO NOT USE!  Internal use only.
+	Ribbon,		// The left ribbon that holds the buttons).
+	Fixed,		// These panels are handled manually).
 };
 
 enum class NotificationType
@@ -247,6 +249,7 @@ private:
 	ImGuiID m_bottomPanelID = NULL;
 	ImGuiID m_scenePanelID = NULL;
 	ImGuiID m_ribbonPanelID = NULL;
+	ImGuiID m_bottomBarID = NULL;
 };
 
 //==============================================================================================================================================//

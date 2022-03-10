@@ -18,7 +18,7 @@
 
 void Application::onUpdate()
 {
-	LUMEN_PROFILE_SCOPE("Dispatch Events");
+	LUMEN_PROFILE_SCOPE("Layers OnUpdate");
 
 	// Pop the layers queued from the previous frame's rendering.
 	// Dispatched here so that they do not get GLFW events.
@@ -103,7 +103,7 @@ Layer* Application::findHoveredLayer()
 
 void Application::imguiOnUpdate() 
 {
-	LUMEN_PROFILE_SCOPE("ImGuiOnUpdate");
+	LUMEN_PROFILE_SCOPE("ImGui OnUpdate");
 
 	// Pass events to ImGui.
 	// Thess events are called here so that ImGui is not hammered with more that one per frame.

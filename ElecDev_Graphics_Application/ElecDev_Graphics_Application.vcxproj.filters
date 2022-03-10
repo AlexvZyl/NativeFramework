@@ -126,6 +126,7 @@
     <ClCompile Include="Source\Utilities\Interface\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Application\API\Graphics.cpp" />
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
+    <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -800,6 +801,7 @@
     <ClInclude Include="External\imgui\notify\imgui_notify.h" />
     <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
+    <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

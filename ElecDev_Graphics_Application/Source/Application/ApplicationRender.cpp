@@ -151,11 +151,6 @@ void Application::onRenderCleanup()
 	}
 
 	{
-		LUMEN_PROFILE_SCOPE("Flush");
-		Renderer::flush();
-	}
-
-	{
 		LUMEN_PROFILE_SCOPE("Swap Buffers");
 		glfwSwapBuffers(m_window);
 	}

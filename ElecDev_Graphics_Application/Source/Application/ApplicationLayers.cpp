@@ -33,6 +33,14 @@ void Application::buildDocks()
 	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
+	// Bottom Bar.
+	m_bottomBarID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.03f, NULL, &m_scenePanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_bottomBarID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
+						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
+						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
+						 | ImGuiDockNodeFlags_NoTabBar;
+
 	// Right Panel.
 	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
@@ -96,16 +104,16 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 		ImGui::DockBuilderDockWindow(name.c_str(), m_bottomPanelID);
 		break;
 
-	case DockPanel::Ribbon:
-		ImGui::DockBuilderDockWindow(name.c_str(), m_ribbonPanelID);
-		break;
-
 	case DockPanel::Floating:
 		// Do not dock, maybe move to a specific position.
 		break;
 
 	case DockPanel::Fixed:
 		// These have to be handled manually.
+		break;
+
+	case DockPanel::Ribbon:
+		ImGui::DockBuilderDockWindow(name.c_str(), m_ribbonPanelID);
 		break;
 
 	default:

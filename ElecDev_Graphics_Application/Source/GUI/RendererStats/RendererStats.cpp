@@ -55,33 +55,31 @@ void RendererStats::onRender()
 		for (auto& result : app.m_profilerResults)
 		{
 			// Keep track of these values to track imgui calls time.
-			if (result.name == "Render Layers")
-			{
-				renderLayersTime = result.msTime;
-				continue;
-			}
-			else if (result.name == "ImGui Draw")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-			else if (result.name == "ImGui NewFrame")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-			else if (result.name == "Draw Scene")
+			// Drawing scenes.
+			if (result.name == "Draw Scene")
 			{
 				renderScenesTime += result.msTime;
 				continue;
 			}
-			else if (result.name == "ImGuiOnUpdate")
+			// Rendering all of the layers.
+			else if (result.name == "Render Layers")
+			{
+				renderLayersTime = result.msTime;
+				continue;
+			}
+
+#ifdef PROFILE_IMGUI_OVERHEAD
+			// ImGui functions.
+			else if (result.name == "ImGui NewFrame" ||
+					 result.name == "ImGuiOnUpdate"  ||
+					 result.name == "ImGui Draw"     )
 			{
 				imGuiTime += result.msTime;
 				continue;
 			}
+#endif
 
-			// Log the scope.
+			// Log the scope time.
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			ImGui::TableSetColumnIndex(0);
@@ -100,12 +98,14 @@ void RendererStats::onRender()
 			ImGui::Text("%.3f", renderScenesTime);
 		}
 
+#ifdef PROFILE_IMGUI_OVERHEAD
 		// ImGui overhead (Drawing, calling functions, new frame).
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("ImGui Overhead");
 		ImGui::TableSetColumnIndex(1);
 		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
+#endif
 
 		// Done.
 		ImGui::EndTable();

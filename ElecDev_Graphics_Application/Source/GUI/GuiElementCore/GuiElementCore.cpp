@@ -9,6 +9,7 @@
 #include "imgui/imgui_internal.h"
 #include "Application/Application.h"
 #include "Lumen.h"
+#include "Utilities/Profiler/Profiler.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -41,13 +42,7 @@ void GuiElementCore::updateRenderState()
 
 void GuiElementCore::onEvent(Event& event)
 {
-
 	if (event.isConsumed()) return;
-
-#ifdef _DEBUG
-	// Log the event.
-	std::cout << m_name << ": " << event.ID << "\n";
-#endif
 
 	uint64_t eventID = event.ID;
 
@@ -61,7 +56,7 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_WindowResize) { onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 
-	// Do not pass the events below if the layer is collapsed.
+	// Do not pass the events below if the layer is not to be rendered.
 	else if (!shouldRender()) return;
 
 	// Mouse events.

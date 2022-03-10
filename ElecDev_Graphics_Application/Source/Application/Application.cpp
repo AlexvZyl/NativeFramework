@@ -7,6 +7,7 @@
 #include <memory>
 #include "Application/Application.h"
 #include "Application/Layers/Layer.h"
+#include "Application/Layers/GuiLayer.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
@@ -14,10 +15,10 @@
 #include "Resources/ResourceHandler.h"
 #include "GUI/Ribbon/Ribbon.h"
 #include "GUI/Toolbar/toolbar.h"
+#include "GUI/AssetExplorer/AssetExplorer.h"
+#include "GUI/BottomBar/BottomBar.h"
 #include "Lumen.h"
 #include "Utilities/Profiler/Profiler.h"
-#include "GUI/AssetExplorer/AssetExplorer.h"
-#include "Application/Layers/GuiLayer.h"
 #include "External/Misc/ConsoleColor.h"
 #include "GLFW/glfw3.h"
 
@@ -54,7 +55,8 @@ Application::Application()
 	// Create the main GUI layers.
 	auto* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::Fixed)->getGui();
 	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
-	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
+	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon, 0, false);
+	pushGuiLayer<BottomBar>("Bottom Bar", DockPanel::Fixed, 0, false);
 
 	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();
