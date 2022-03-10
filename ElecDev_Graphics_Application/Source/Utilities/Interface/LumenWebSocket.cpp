@@ -22,7 +22,7 @@ LumenWebSocket::LumenWebSocket(const std::string& ip)
 	m_socketAddress = boost::asio::ip::make_address(ip);
 	
 	// Start listener thread.
-	m_listenerThread = std::thread(LumenWebSocket::listener, this);
+	m_listenerThread = std::thread(&LumenWebSocket::listener, this);
 }
 
 LumenWebSocket::~LumenWebSocket()
@@ -30,19 +30,19 @@ LumenWebSocket::~LumenWebSocket()
 	lumenTerminateThread(m_listenerThread);
 }
 
-void LumenWebSocket::listener(LumenWebSocket* socket) 
+void LumenWebSocket::listener() 
 {
 	// Setup socket.
 	boost::asio::io_context ioContext{ 1 };
 	// Assign to port 0 so that OS supplied an open port.
-	tcp::acceptor acceptor{ ioContext, {socket->m_socketAddress, 0} };
-	socket->m_port = acceptor.local_endpoint().port();
+	tcp::acceptor acceptor{ ioContext, {m_socketAddress, 0} };
+	m_port = acceptor.local_endpoint().port();
 
 	// Log connection.
-	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << socket->m_socketAddress << ":" << socket->m_port << "'.";
+	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << m_socketAddress << ":" << m_port << "'.";
 
-	std::string address = socket->m_socketAddress.to_string();
-	std::string portNum = std::to_string(socket->m_port);
+	std::string address = m_socketAddress.to_string();
+	std::string portNum = std::to_string(m_port);
 	std::string connectionMsg = "Connected to 'ws://" + address + ":" + portNum + "'.";
 	Lumen::getApp().pushNotification(NotificationType::Info, 5000, connectionMsg, "Websocket");
 
@@ -66,7 +66,6 @@ void LumenWebSocket::listener(LumenWebSocket* socket)
 		ws.read(buffer);
 		if (!buffer.size()) continue;
 		std::string input = boost::beast::buffers_to_string(buffer.cdata());
-		std::cout << input << "\n";
 		ExternalInterface::parseInputString(input);
 	}
 }

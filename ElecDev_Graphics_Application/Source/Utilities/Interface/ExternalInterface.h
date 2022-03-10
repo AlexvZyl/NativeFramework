@@ -55,7 +55,11 @@ private:
 	inline ExternalInterface() = default;
 
 	// Seperates all of the functions inside the input.
+	// Functions should be seperated by LUMEN_INTERFACE_FUNCTION_SEPARATOR.
 	static std::vector<std::string> seperateFunctions(const std::string& input);
+
+	// Create a ExternalFunctionCall from the string and add it to the queue.
+	static void generateExternalFunctionCall(const std::string& input);
 
 	// Parsing data.
 	static std::string LUMEN_INTERFACE_START;

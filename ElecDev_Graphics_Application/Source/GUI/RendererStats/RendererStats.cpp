@@ -75,7 +75,13 @@ void RendererStats::onRender()
 				renderScenesTime += result.msTime;
 				continue;
 			}
+			else if (result.name == "ImGuiOnUpdate")
+			{
+				imGuiTime += result.msTime;
+				continue;
+			}
 
+			// Log the scope.
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			ImGui::TableSetColumnIndex(0);

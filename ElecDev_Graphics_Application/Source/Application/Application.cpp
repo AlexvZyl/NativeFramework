@@ -56,19 +56,18 @@ Application::Application()
 	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
 	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon);
 
-	// Create web socket.
+	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();
-	// Allow socket to setup.
 	Sleep(10);
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
 	std::cout.flush();
-	pushNotification(NotificationType::Info, 4000, "Shaders compiled", "Renderer");
 }
 
 Application::~Application()
 {
+	// Clear layers.
 	m_layerStack->getLayers().clear();
 
 	// ImGUI cleanup.
@@ -76,7 +75,7 @@ Application::~Application()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
-	// Close application.
+	// GLFW cleanup.
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
 

@@ -73,8 +73,8 @@ MouseMoveEvent::MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID
 //  M O U S E   S C R O L L  //
 // ------------------------- //
 
-MouseScrollEvent::MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, uint64_t ID)
-	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset) 
+MouseScrollEvent::MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, uint64_t ID)
+	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset), xOffset(xOffset)
 {}
 
 //==============================================================================================================================================//

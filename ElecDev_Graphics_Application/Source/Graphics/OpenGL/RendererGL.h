@@ -86,8 +86,10 @@ public:
 	static void remove(Primitive<VertexDataCircle>* primitive);
 	// Clear the rendering context.
 	static void clear();
-	// Push command to the GPU.
+	// Force the GPU commands.
 	static void finish();
+	// Flush the GPU commands.
+	static void flush();
 
 	// ------------- //
 	//  S C E N E S  //

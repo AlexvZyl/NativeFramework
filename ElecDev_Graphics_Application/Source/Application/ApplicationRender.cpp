@@ -89,6 +89,10 @@ void Application::renderFrame()
 {	
 	LUMEN_PROFILE_SCOPE("Frametime");
 
+	// Update imgui states before starting new frame.
+	// These states are controlled by Lumen.
+	imguiOnUpdate();
+
 	// Init.  Called before onUpdate so that 
 	// ImGui::NewFrame() can be called.
 	onRenderInit();
@@ -114,11 +118,7 @@ void Application::onRender()
 		layer->onRender();
 
 	// Push notificatons.
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f); 
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f)); 
 	ImGui::RenderNotifications();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleVar();
 }
 
 void Application::onRenderCleanup()
@@ -151,9 +151,12 @@ void Application::onRenderCleanup()
 	}
 
 	{
-		LUMEN_PROFILE_SCOPE("Swap Buffers");
+		LUMEN_PROFILE_SCOPE("Flush");
+		Renderer::flush();
+	}
 
-		// Swap the window buffers.
+	{
+		LUMEN_PROFILE_SCOPE("Swap Buffers");
 		glfwSwapBuffers(m_window);
 	}
 }

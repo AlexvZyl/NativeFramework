@@ -209,6 +209,9 @@ private:
 	void onFileLoadEvent(FileLoadEvent& event);
 	// Save files.
 	void onFileSaveEvent(FileSaveEvent& event);
+	// Update the ImGui state.
+	// Lumen controls some of the state changes (for optimisation).
+	void imguiOnUpdate();
 	
 	// ------------------- //
 	//  R E N D E R I N G  //

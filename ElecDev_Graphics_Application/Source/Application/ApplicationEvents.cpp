@@ -10,6 +10,7 @@
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "imgui/backends/imgui_impl_glfw.h"
 
 //==============================================================================================================================================//
 //  Layer event dispatching.																													//
@@ -98,6 +99,18 @@ Layer* Application::findHoveredLayer()
 	}
 	// No layer is found.
 	return nullptr;
+}
+
+void Application::imguiOnUpdate() 
+{
+	LUMEN_PROFILE_SCOPE("ImGuiOnUpdate");
+
+	// Pass events to ImGui.
+	// Thess events are called here so that ImGui is not hammered with more that one per frame.
+	if (m_eventLog->mouseScroll)
+		ImGui_ImplGlfw_ScrollCallback(m_window, m_eventLog->mouseScroll->xOffset, m_eventLog->mouseScroll->yOffset);
+	if (m_eventLog->mouseMove)
+		ImGui_ImplGlfw_CursorPosCallback(m_window, m_eventLog->mouseMove->mousePosition.x, m_eventLog->mouseMove->mousePosition.y);
 }
 
 //==============================================================================================================================================//

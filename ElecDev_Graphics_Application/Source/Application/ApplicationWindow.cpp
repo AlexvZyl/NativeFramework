@@ -80,9 +80,6 @@ void Application::glfwInitCallbacks()
             // Log event.
             MouseMoveEvent event({ cursorX, cursorY }, eventID);
             Lumen::getApp().logEvent<MouseMoveEvent>(event);
-
-            // Pass event to ImGUI.
-            ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
         });
 
     // ------------------------- //
@@ -110,11 +107,8 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseScrollEvent event({ cursorX, cursorY }, yoffset, eventID);
+            MouseScrollEvent event({ cursorX, cursorY }, yoffset, xoffset, eventID);
             Lumen::getApp().logEvent<MouseScrollEvent>(event);
-
-            // Pass event to ImGUI.
-            ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
         });
 
     // ------- //
@@ -197,9 +191,9 @@ GLFWwindow* Application::glfwInitWindow()
 {
     // Setup window.
     glfwSetErrorCallback([](int error, const char* description)
-    {
-        fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
-    });
+        {
+            fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
+        });
     // Error.
     if (!glfwInit()) { /* Log error here. */ }
 

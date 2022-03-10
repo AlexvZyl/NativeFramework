@@ -22,7 +22,7 @@ public:
 	~LumenWebSocket();
 
 	// Function that listens to web socket.
-	static void listener(LumenWebSocket* socket);
+	void listener();
 
 	// Data.
 	boost::asio::ip::address m_socketAddress;

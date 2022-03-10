@@ -411,6 +411,11 @@ void Renderer::finish()
 	GLCall(glFinish());
 }
 
+void Renderer::flush() 
+{
+	GLCall(glFlush());
+}
+
 void Renderer::enable(unsigned attribute)
 {
 	GLCall(glEnable(attribute));

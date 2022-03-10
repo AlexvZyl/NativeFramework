@@ -36,9 +36,11 @@ void ExternalInterface::parseInputString(std::string& input)
 		return;
 	}
 	
+	// Generate function calls.
+	for (auto& command : functionsStrings)
+		generateExternalFunctionCall(command);
 
-
-
+	// Log success.
 	Lumen::getApp().pushNotification(NotificationType::Success, 3000, "Parsed command string.", "Interface");
 }
 
@@ -79,6 +81,12 @@ std::vector<std::string> ExternalInterface::seperateFunctions(const std::string&
 
 	return functionsStrings;
 }
+
+void ExternalInterface::generateExternalFunctionCall(const std::string& input)
+{
+
+}
+
 
 void ExternalInterface::pushFunctionCall(std::string& function, std::vector<std::string>& parameters)
 {
