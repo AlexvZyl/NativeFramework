@@ -14,9 +14,7 @@
 //  Forward Declerations.																														//
 //==============================================================================================================================================//
 
-template <typename VertexType>
-class Primitive;
-
+class PrimitivePtr;
 class Scene;
 class Polygon2DTextured;
 class Circle;
@@ -39,20 +37,14 @@ struct Font;
 
 struct RendererData 
 {
+	// Data.
 	unsigned drawCalls = 0;
 	unsigned renderPasses = 0;
 
-	void drawCall() 
-	{
-		drawCalls++;
-	}
-
-	void renderPass() 
-	{
-		renderPasses++;
-	}
-
-	void reset() 
+	// Methods.
+	inline void drawCall()	 { drawCalls++; }
+	inline void renderPass() { renderPasses++; }
+	inline void reset() 
 	{
 		drawCalls = 0;
 		renderPasses = 0;
@@ -79,13 +71,9 @@ public:
 	// Use the font provided.
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
-	static void remove(Primitive<VertexData>* primitive);
-	// Remove the primitive from the scene.
-	static void remove(Primitive<VertexDataTextured>* primitive);
-	// Remove the primitive from the scene.
-	static void remove(Primitive<VertexDataCircle>* primitive);
+	static void remove(PrimitivePtr* primitive);
 	// Clear the rendering context.
-	static void clear();
+	static void clearColor();
 	// Force the GPU commands.
 	static void finish();
 	// Flush the GPU commands.
@@ -154,6 +142,11 @@ public:
 	// Get the default 2D scene texture.
 	static unsigned getDefault2DSceneTexture();
 
+	// --------------- //
+	//  B U F F E R S  //
+	// --------------- //
+
+	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
 	
 private:
 

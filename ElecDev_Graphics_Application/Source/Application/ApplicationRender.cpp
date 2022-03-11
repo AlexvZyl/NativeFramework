@@ -7,7 +7,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "Application/Application.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "imgui/notify/imgui_notify.h"
 #include "GLFW/glfw3.h"
@@ -66,7 +66,7 @@ bool Application::startFrame()
 void Application::onRenderInit()
 {
 	// Clear buffers.
-	Renderer::clear();
+	Renderer::clearColor();
 
 	{
 		LUMEN_PROFILE_SCOPE("ImGui NewFrame");
@@ -77,7 +77,6 @@ void Application::onRenderInit()
 		ImGui::NewFrame();
 
 		// Enable docking in main viewport.
-		// Do we really have to call this every frame?
 		m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
 
 		// Push custom font.
@@ -90,7 +89,7 @@ void Application::renderFrame()
 	LUMEN_PROFILE_SCOPE("Frametime");
 
 	// Update imgui states before starting new frame.
-	// These states are controlled by Lumen.
+	// These states are controlled by Lumen for optimistaion.
 	imguiOnUpdate();
 
 	// Init.  Called before onUpdate so that 

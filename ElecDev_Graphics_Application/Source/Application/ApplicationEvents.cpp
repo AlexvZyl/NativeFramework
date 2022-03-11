@@ -37,11 +37,11 @@ void Application::onUpdate()
 	}
 	
 	// Dispatch GLFW events.
-	for (std::unique_ptr<Event>& event : m_eventLog->events)
+	for (auto& event : m_eventLog->events)
 	{
 		uint64_t eventID = event->ID;
 
-		// Application specific are dispatched explicitly (since it is not a part of the layers).
+		// Application events are dispatched explicitly (since it is not a part of the layers).
 		if (eventID == EventType_Application)
 		{
 			Application::onEvent(*event.get()); 

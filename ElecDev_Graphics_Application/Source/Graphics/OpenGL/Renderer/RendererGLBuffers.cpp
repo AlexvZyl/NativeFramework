@@ -2,29 +2,27 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Application/Application.h"
-#include "Utilities/Platform/Preprocessor.h"
+#include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "OpenGL/ErrorHandlerGL.h"
+#include "Application/Application.h"
+#include "Lumen.h"
 
 //==============================================================================================================================================//
-//  Entrypoint.																																	//
+//  Functions.																																	//
 //==============================================================================================================================================//
 
-int main(int, char**)
+void Renderer::drawBufferIndexed(VertexArrayObjectPtr* vao)
 {
-    // Initialisation.
-    Application application;
-    Renderer::initialise();
+	if (!vao->preRenderChecks()) return;
 
-    // Main loop.
-    application.run();
+	GLCall(glBindVertexArray(vao->m_VAOID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vao->m_IBOID));
+	GLCall(glDrawElements(vao->m_bufferType, vao->m_indexCount, GL_UNSIGNED_INT, 0));
 
-    // Cleanup.
-    Renderer::shutdown();
-
-    return 0;
+	LUMEN_DRAW_CALL();
 }
 
 //==============================================================================================================================================//
-//  EOF.																																	    //
+//  EOF.																																		//
 //==============================================================================================================================================//

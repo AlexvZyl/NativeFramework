@@ -61,6 +61,9 @@ public:
 	// Recreate the resources once it has been deleted.
 	void recreateGPUResources();
 
+	// Update the scene.
+	void onUpdate();
+
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
 
@@ -92,8 +95,6 @@ private:
 	glm::mat4* getViewMatrix();
 	// Return the projection matrix.
 	glm::mat4* getProjectionMatrix();
-	// Upadate the matrices of the camera.
-	void updateCamera();
 
 	// Map containing all of the textures used in the scene.
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;

@@ -14,7 +14,7 @@
 #include "External/Misc/ConsoleColor.h"
 #include "Circuit.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //

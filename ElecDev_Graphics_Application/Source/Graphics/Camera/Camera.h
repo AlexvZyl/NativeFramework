@@ -32,7 +32,7 @@ public:
 	// Constructor.
 	Camera(CameraType cameraType, int width, int height);
 	// Updates the camera view matrix.
-	void updateCamera();
+	void onUpdate();
 	// Handles the passed event.
 	void onEvent(Event& event);
 	// Set the size of the viewport.

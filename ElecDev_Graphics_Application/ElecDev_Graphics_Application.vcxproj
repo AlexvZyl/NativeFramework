@@ -187,7 +187,7 @@
     <ClCompile Include="External\implot\implot.cpp" />
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
-    <ClCompile Include="Source\Application\API\Graphics.cpp" />
+    <ClCompile Include="Source\API\GraphicsAPI.cpp" />
     <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
@@ -235,7 +235,10 @@
     <ClCompile Include="Source\External\YAML-CPP\Source\tag.cpp" />
     <ClCompile Include="Source\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\TexturedQuad.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Circuit.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\LineSegment.cpp" />
@@ -602,6 +605,7 @@
     <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\implot\implot.h" />
     <ClInclude Include="External\implot\implot_internal.h" />
+    <ClInclude Include="Source\API\GraphicsAPI.h" />
     <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
     <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\Application\Layers\LayerStack.h" />
@@ -676,7 +680,7 @@
     <ClInclude Include="Source\Graphics\Camera\Camera.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\TexturedQuad.h" />
     <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\RendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Renderer\RendererGL.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Circuit.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\LineSegment.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Cable.h" />

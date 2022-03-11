@@ -4,7 +4,7 @@
 
 #include "Cable.h"
 #include "Circuit.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 
 

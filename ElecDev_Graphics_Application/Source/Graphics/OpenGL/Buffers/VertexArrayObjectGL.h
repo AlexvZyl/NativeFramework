@@ -28,8 +28,13 @@ public:
 	
 protected:
 
+	friend class Renderer;
+
 	// Constructor.
 	VertexArrayObjectPtr(GLenum type) : m_bufferType(type) {}
+
+	// Methods.
+	inline virtual bool preRenderChecks() = 0;
 
 	// Data.
 	GLenum m_bufferType = 0;						// Data type used in this VAO.	
@@ -103,6 +108,7 @@ private:
 	friend class Scene;
 	friend class FrameBufferObject;
 	friend class RendererStats;
+	friend class Renderer;
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
@@ -123,6 +129,8 @@ private:
 	void wipeGPU();
 	// Wipes all of the data (CPU and GPU).
 	void wipeAll();
+	// Checks if buffer should resize, sync and render.
+	bool preRenderChecks();
 };
 
 //=============================================================================================================================================//

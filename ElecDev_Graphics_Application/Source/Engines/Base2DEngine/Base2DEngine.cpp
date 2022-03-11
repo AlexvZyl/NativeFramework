@@ -6,7 +6,7 @@
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Camera/Camera.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Costructor & Destructor.																												   //

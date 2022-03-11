@@ -10,7 +10,7 @@
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Events/Events.h"
 #include "imgui/imgui.h"
 
@@ -52,9 +52,9 @@ glm::mat4* Scene::getProjectionMatrix()
 	return &m_camera->m_projectionMatrix; 
 }
 
-void Scene::updateCamera() 
+void Scene::onUpdate() 
 { 
-	m_camera->updateCamera(); 
+	m_camera->onUpdate(); 
 }
 
 glm::vec4& Scene::getViewport() 

@@ -12,7 +12,7 @@ and notify the user via the terminal interface.
 
 #include <iostream>
 #include <memory>
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"

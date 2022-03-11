@@ -74,7 +74,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGL.cpp" />
     <ClCompile Include="Source\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.cpp" />
@@ -124,9 +124,12 @@
     <ClCompile Include="Source\Utilities\Interface\PythonInterface.cpp" />
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\Utilities\Interface\LumenWebSocket.cpp" />
-    <ClCompile Include="Source\Application\API\Graphics.cpp" />
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
+    <ClCompile Include="Source\API\GraphicsAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -462,7 +465,7 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\RendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Renderer\RendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
     <ClInclude Include="Source\Graphics\Camera\Camera.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
@@ -802,6 +805,7 @@
     <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
     <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
+    <ClInclude Include="Source\API\GraphicsAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

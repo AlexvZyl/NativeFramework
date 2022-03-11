@@ -5,7 +5,7 @@
 #include "RendererStats.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "Utilities/Profiler/Profiler.h"

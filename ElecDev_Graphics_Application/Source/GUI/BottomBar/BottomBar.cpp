@@ -31,7 +31,7 @@ void BottomBar::begin()
 void BottomBar::onRender()
 {
     ImGui::SetCursorPos({8.f, 0.f});
-    ImGui::Text("v0.0.1");
+    ImGui::Text("v0.1");
 }
 
 void BottomBar::end()
