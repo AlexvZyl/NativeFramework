@@ -14,7 +14,7 @@
 
 void Renderer::drawBufferIndexed(VertexArrayObjectPtr* vao)
 {
-	if (!vao->preRenderChecks()) return;
+	if (!vao->onDrawCall()) return;
 
 	GLCall(glBindVertexArray(vao->m_VAOID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vao->m_IBOID));

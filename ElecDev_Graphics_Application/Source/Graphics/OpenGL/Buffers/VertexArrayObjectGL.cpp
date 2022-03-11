@@ -56,7 +56,7 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 //=============================================================================================================================================//
 
 template <typename VertexType>
-bool VertexArrayObject<VertexType>::preRenderChecks()
+bool VertexArrayObject<VertexType>::onDrawCall()
 {
 	if (!m_vertexBufferSynced)	syncVertexBuffer();
 	if (!m_indexBufferSynced)	syncIndexBuffer();

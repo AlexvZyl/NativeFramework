@@ -52,47 +52,43 @@ void Renderer::doneSceneDestruction()
 
 void Renderer::renderScene()
 {
-	LUMEN_PROFILE_SCOPE("Draw Scene");
-
-	if		(m_scene->m_camera->m_type == CameraType::Standard2D) { render2DScene(m_scene); }
-	else if (m_scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(m_scene); }
-	else	 return;
-
-	//  Resolve the MSAA.
-	m_scene->m_FBO->renderFromMSAA();
-
-	LUMEN_RENDER_PASS();
+	Renderer::renderScene(m_scene);
 }
 
 void Renderer::renderScene(Scene* scene)
 {
-	LUMEN_PROFILE_SCOPE("Draw Scene");
+	LUMEN_PROFILE_SCOPE("Render Scene");
 
-	if		(scene->m_camera->m_type == CameraType::Standard2D)	{ render2DScene(scene); }
-	else if (scene->m_camera->m_type == CameraType::Standard3D) { render3DScene(scene); }
-	else	 return;
+	// 2D Pipeline.
+	if (scene->m_camera->m_type == CameraType::Standard2D)	
+	{ 
+		Renderer::geometryPass2D(scene); 
+	}
+
+	// 3D Pipeline.
+	else if (scene->m_camera->m_type == CameraType::Standard3D) 
+	{ 
+		Renderer::geometryPass3D(scene);
+	}
+
+	// Nothing to render.
+	else return;
 
 	//  Resolve the MSAA.
 	scene->m_FBO->renderFromMSAA();
-
-	LUMEN_RENDER_PASS();
 }
 
-void Renderer::render2DScene(Scene* scene)
+void Renderer::geometryPass2D(Scene* scene)
 {
+	LUMEN_RENDER_PASS();
+
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
 
-	// Enable blending.
 	Renderer::enable(GL_BLEND);
-	// Set vewport for the ImGUI context.
 	Renderer::setViewport(scene->getViewport());
-
-	// Update camera.
 	scene->onUpdate();
-
-	// Render to framebuffer.
 	scene->bindFBO();
 	scene->clearFBO();
 
@@ -134,27 +130,21 @@ void Renderer::render2DScene(Scene* scene)
 	//  C L E A N U P  //
 	// --------------- //
 
-	// Stop rendering to the current FBO.
 	scene->unbindFBO();
-	// Disable blending.
 	Renderer::disable(GL_BLEND);
 }
 
-void Renderer::render3DScene(Scene* scene)
+void Renderer::geometryPass3D(Scene* scene)
 {
+	LUMEN_RENDER_PASS();
+
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
 
-	// Enable blending.
 	Renderer::enable(GL_BLEND);
-	// Set viewport for the ImGUI context.
 	Renderer::setViewport(scene->getViewport());
-
-	// Update camera.
 	scene->onUpdate();
-
-	// Render to framebuffer.
 	scene->bindFBO();
 	scene->clearFBO();
 
@@ -198,9 +188,7 @@ void Renderer::render3DScene(Scene* scene)
 	//  C L E A N U P  //
 	// --------------- //
 
-	// Stop rendering to the current FBO.
 	scene->unbindFBO();
-	// Disable blending.
 	Renderer::disable(GL_BLEND);
 }
 
@@ -212,7 +200,7 @@ void Renderer::generateDefaultScenes()
 {
 	m_default2DScene = std::make_unique<Scene>(CameraType::Standard2D, 900, 900, 1);
 	// Render the scene once so that the background can be generated.
-	Renderer::render2DScene(m_default2DScene.get());
+	Renderer::renderScene(m_default2DScene.get());
 	m_default2DScene->m_FBO->renderFromMSAA();
 }
 

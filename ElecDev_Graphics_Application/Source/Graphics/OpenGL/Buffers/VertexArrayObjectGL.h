@@ -34,7 +34,7 @@ protected:
 	VertexArrayObjectPtr(GLenum type) : m_bufferType(type) {}
 
 	// Methods.
-	inline virtual bool preRenderChecks() = 0;
+	inline virtual bool onDrawCall() = 0;
 
 	// Data.
 	GLenum m_bufferType = 0;						// Data type used in this VAO.	
@@ -130,7 +130,7 @@ private:
 	// Wipes all of the data (CPU and GPU).
 	void wipeAll();
 	// Checks if buffer should resize, sync and render.
-	bool preRenderChecks();
+	virtual bool onDrawCall() override;
 };
 
 //=============================================================================================================================================//

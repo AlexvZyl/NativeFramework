@@ -185,9 +185,9 @@ private:
 	// Scene stored when another scene is being destroyed.
 	static Scene* m_storedScene;
 	// Render a scene with a 2D camera.
-	static void render2DScene(Scene* scene);
+	static void geometryPass2D(Scene* scene);
 	// Render a scene with a 3D camera.
-	static void render3DScene(Scene* scene);
+	static void geometryPass3D(Scene* scene);
 
 	// ------------------ //
 	//  V A R I A B L E S  //
