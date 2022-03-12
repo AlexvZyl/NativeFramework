@@ -20,6 +20,9 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("Layers OnUpdate");
 
+	// Execute the Lua scripts.
+	executeLuaScriptQueue();
+
 	// Pop the layers queued from the previous frame's rendering.
 	// Dispatched here so that they do not get GLFW events.
 	popLayers();

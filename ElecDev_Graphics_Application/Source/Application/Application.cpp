@@ -2,7 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Utilities/Interface/LumenWebSocket.h"
+#include "Utilities/WebSocket/LumenWebSocket.h"
 #include <iostream>
 #include <memory>
 #include "Application/Application.h"
@@ -19,6 +19,7 @@
 #include "GUI/BottomBar/BottomBar.h"
 #include "Lumen.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "Utilities/Lua/LuaInterpreter.h"
 #include "External/Misc/ConsoleColor.h"
 #include "GLFW/glfw3.h"
 
@@ -98,6 +99,26 @@ void Application::stopRunning()
 GLFWwindow* Application::getWindow()
 {
 	return m_window;
+}
+
+//==============================================================================================================================================//
+//  Lua																																			//
+//==============================================================================================================================================//
+
+void Application::executeLuaScriptQueue() 
+{
+	if (!m_luaScripts.size()) return;
+
+	for (auto& script : m_luaScripts)
+	{
+		luaExecuteScript(script);
+	}
+	m_luaScripts.clear();
+}
+
+void Application::pushLuaScript(const std::string& script)
+{
+	m_luaScripts.push_back(script);
 }
 
 //==============================================================================================================================================//
@@ -182,15 +203,15 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 	colors[ImGuiCol_Separator] = ImVec4(0.18f, 0.18f, 0.21f, 1.00f);
 	colors[ImGuiCol_SeparatorHovered] = ImVec4(0.24f, 0.31f, 0.49f, 1.00f);
-	colors[ImGuiCol_SeparatorActive] = ImVec4(0.38f, 0.48f, 0.74f, 1.00f);
+	colors[ImGuiCol_SeparatorActive] = ImVec4(0.36f, 0.52f, 0.90f, 1.00f);
 	colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 	colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 	colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 	colors[ImGuiCol_Tab] = ImVec4(0.13f, 0.16f, 0.24f, 1.00f);
 	colors[ImGuiCol_TabHovered] = ImVec4(0.24f, 0.32f, 0.52f, 1.00f);
-	colors[ImGuiCol_TabActive] = ImVec4(0.17f, 0.26f, 0.50f, 1.00f);
+	colors[ImGuiCol_TabActive] = ImVec4(0.36f, 0.52f, 0.90f, 1.00f);
 	colors[ImGuiCol_TabUnfocused] = ImVec4(0.13f, 0.16f, 0.24f, 1.00f);
-	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.17f, 0.26f, 0.50f, 1.00f);
+	colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.36f, 0.52f, 0.90f, 1.00f);
 	colors[ImGuiCol_DockingPreview] = ImVec4(0.49f, 0.64f, 0.98f, 1.00f);
 	colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.10f, 0.10f, 0.12f, 1.00f);
 	colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);

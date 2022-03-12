@@ -105,8 +105,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;;$(SolutionDir)ElecDev_Graphics_Application\External\lua\Windows</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,8 +127,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;;$(SolutionDir)ElecDev_Graphics_Application\External\lua\Windows</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,8 +146,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;C:\Languages\Python_3.10.0\libs</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;C:\Languages\Python_3.10.0\libs;$(SolutionDir)ElecDev_Graphics_Application\External\lua\Windows</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -168,8 +168,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)ElecDev_Graphics_Application\Source\External\GLFW\Libraries;;$(SolutionDir)ElecDev_Graphics_Application\External\lua\Windows</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;lua54.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -187,7 +187,7 @@
     <ClCompile Include="External\implot\implot.cpp" />
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
-    <ClCompile Include="Source\API\GraphicsAPI.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI.cpp" />
     <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
@@ -280,15 +280,12 @@
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
-    <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
-    <ClCompile Include="Source\Utilities\Interface\PythonInterface.cpp" />
     <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Text.cpp" />
     <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
-    <ClCompile Include="Source\Utilities\Interface\ExternalInterface.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
@@ -296,7 +293,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
-    <ClCompile Include="Source\Utilities\Interface\LumenWebSocket.cpp" />
+    <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -605,7 +602,12 @@
     <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\implot\implot.h" />
     <ClInclude Include="External\implot\implot_internal.h" />
-    <ClInclude Include="Source\API\GraphicsAPI.h" />
+    <ClInclude Include="External\lua\Windows\include\lauxlib.h" />
+    <ClInclude Include="External\lua\Windows\include\lua.h" />
+    <ClInclude Include="External\lua\Windows\include\lua.hpp" />
+    <ClInclude Include="External\lua\Windows\include\luaconf.h" />
+    <ClInclude Include="External\lua\Windows\include\lualib.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaAPI.h" />
     <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
     <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\Application\Layers\LayerStack.h" />
@@ -615,6 +617,7 @@
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
@@ -734,11 +737,9 @@
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
-    <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
-    <ClInclude Include="Source\Utilities\Interface\PythonInterface.h" />
     <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
@@ -818,12 +819,12 @@
     <ClInclude Include="Source\GUI\toolbar.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Text.h" />
     <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
-    <ClInclude Include="Source\Utilities\Interface\ExternalInterface.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
-    <ClInclude Include="Source\Utilities\Interface\LumenWebSocket.h" />
+    <ClInclude Include="Source\Utilities\WebSocket\LumenWebSocket.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="External\lua\Windows\lua54.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib" />
     <Library Include="Source\External\GLFW\Libraries\glfw3_mt.lib" />

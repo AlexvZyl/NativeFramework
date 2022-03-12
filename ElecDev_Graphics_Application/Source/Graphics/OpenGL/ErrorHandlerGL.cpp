@@ -21,8 +21,6 @@
 // Clear the error flags.
 void glClearErrors()
 {
-	static int errorCount;
-	errorCount = 0;
 	while (glGetError() != GL_NO_ERROR);
 }
 

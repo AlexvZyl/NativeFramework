@@ -8,7 +8,7 @@
 #include "External/Misc/ConsoleColor.h"
 #include "Utilities/Platform/Thread.h"
 #include "Application/Application.h"
-#include "Utilities/Interface/ExternalInterface.h"
+#include "Utilities/Lua/LuaInterpreter.h"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
@@ -32,6 +32,8 @@ LumenWebSocket::~LumenWebSocket()
 
 void LumenWebSocket::listener() 
 {
+	Application& app = Lumen::getApp();
+
 	// Setup socket.
 	boost::asio::io_context ioContext{ 1 };
 	// Assign to port 0 so that OS supplied an open port.
@@ -44,7 +46,7 @@ void LumenWebSocket::listener()
 	std::string address = m_socketAddress.to_string();
 	std::string portNum = std::to_string(m_port);
 	std::string connectionMsg = "Connected to 'ws://" + address + ":" + portNum + "'.";
-	Lumen::getApp().pushNotification(NotificationType::Info, 5000, connectionMsg, "Websocket");
+	app.pushNotification(NotificationType::Info, 5000, connectionMsg, "Websocket");
 
 	// Create connection.
 	tcp::socket webSocket{ ioContext };
@@ -57,7 +59,7 @@ void LumenWebSocket::listener()
 	std::cout << blue << "[LUMEN] [WEBSOCKET] :" << white << " Handshake successful.\n";
 
 	// Notify.
-	Lumen::getApp().pushNotification(NotificationType::Info, 5000, "Connection established.", "Websocket");
+	app.pushNotification(NotificationType::Info, 5000, "Connection established.", "Websocket");
 
 	// Read from socket.
 	while (true) 
@@ -66,7 +68,8 @@ void LumenWebSocket::listener()
 		ws.read(buffer);
 		if (!buffer.size()) continue;
 		std::string input = boost::beast::buffers_to_string(buffer.cdata());
-		ExternalInterface::parseInputString(input);
+		Lumen::getApp().pushNotification(NotificationType::Info, 5000, "Received input...", "Websocket");
+		app.pushLuaScript(input);
 	}
 }
 

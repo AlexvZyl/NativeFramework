@@ -149,8 +149,25 @@ public:
 	// Push a notification on top in Lumen.
 	void pushNotification(NotificationType type, int msTime, const std::string& content, const std::string& title = "");
 
+	// ------- //
+	//  L U A  //
+	// ------- //
+
+	// Execute the scripts in the queue.
+	void executeLuaScriptQueue();
+	// Add a Lua script to the queue.
+	void pushLuaScript(const std::string& script);
+
 private:
 
+	// Queue of scipts to be executed.
+	std::vector<std::string> m_luaScripts;
+
+	// --------------- //
+	//  G E N E R A L  //
+	// --------------- //
+
+	// Friends.
 	friend class LayerStack;
 	friend class SettingsWidget;
 

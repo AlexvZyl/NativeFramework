@@ -2,14 +2,35 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "API/GraphicsAPI.h"
+#include "Utilities/Lua/LuaAPI.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "OpenGL/SceneGL.h"
+#include "Application/Application.h"
+#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Lumen.h"
 
 //==============================================================================================================================================//
 //  2D Drawing.																																	//
 //==============================================================================================================================================//
 
+int lua_beginScene2D(lua_State* luaState) 
+{
+	// Get variables.
+	std::string name = lua_tostring(luaState, 1);
 
+	// Create engine with new scene.
+	Lumen::getApp().pushEngineLayer<Base2DEngine>(name);
+
+	return 1;
+}
+
+int lua_drawLine2D(lua_State* state) 
+{
+
+	//Renderer::addLineSegment2D(vertex1, vertex2, thickness, color);
+
+	return 1;
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

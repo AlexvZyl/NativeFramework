@@ -1,18 +1,35 @@
 #pragma once
 
 //==============================================================================================================================================//
-//  IOnclues.																																	//
+//  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "glm/glm.hpp"
+#include <vector>
+#include <string>
+#include "Utilities/Lua/LuaAPI.h"
+#include "lua/Windows/include/lua.hpp"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
 //==============================================================================================================================================//
 
-void beginScene();
-void drawLine(const glm::vec2& vertex1, const glm::vec2& vertex2, const glm::vec4& color);
+inline void luaLoadLumenFunctions(lua_State* luaState)
+{
+	lua_register(luaState, "BeginScene2D", lua_beginScene2D);
+	lua_register(luaState, "DrawLine2D", lua_drawLine2D);
+}
 
+inline void luaExecuteScript(const std::string& script) 
+{
+	// Create Lua VM.
+	lua_State* luaState = luaL_newstate();
+
+	// Load the Lumen API.
+	luaLoadLumenFunctions(luaState);
+
+	// Execute the code.
+	luaL_dostring(luaState, script.c_str());
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

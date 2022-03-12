@@ -2,7 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Utilities/Interface/LumenWebSocket.h"
+#include "Utilities/WebSocket/LumenWebSocket.h"
 #include "SettingsWidget.h"
 #include "Application/Application.h"
 #include "GLFW/glfw3.h"
