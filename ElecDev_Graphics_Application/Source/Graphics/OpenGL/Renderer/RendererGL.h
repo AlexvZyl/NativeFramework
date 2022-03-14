@@ -104,6 +104,8 @@ public:
 
 	// Add a filled 2D polygon.
 	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
+	// Add a filled 2D polygon with color.
+	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
 	static Polygon2D* addPolygon2DClear(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
 	// Add a circle.

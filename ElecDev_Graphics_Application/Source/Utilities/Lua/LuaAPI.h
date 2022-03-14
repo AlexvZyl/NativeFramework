@@ -16,7 +16,7 @@
 //		 will then be bound for the renderer.
 
 
-// All vertives should be passed as tables (x, y) for 2D and (x, y, z) for 3D.
+// All vertices should be passed as tables {x, y, z}.
 
 // ---------------------------------
 //// Begin a new scene inside Lumen.
@@ -31,6 +31,11 @@
 // DrawLine2D(vertex1, vertex2, thickness, color)
 // ---------------------------------
 
+// ---------------------------------
+//// Draw a Quad. 
+//
+// DrawQuad2D(vertex1, vertex2, color)
+// ---------------------------------
 
 //==============================================================================================================================================//
 //  Functions.																																	//
@@ -40,10 +45,13 @@
 // If you are using the Lua API you do not need to worry about this section.
 
 // Create a new window with a scene.
-int lua_beginScene2D(lua_State* luaState);
+int lua_BeginScene2D(lua_State* L);
 
 // Add a line to the scene.
-int lua_drawLine2D(lua_State* luaState);
+int lua_DrawLine2D(lua_State* L);
+
+// Add a quad to the scene.
+int lua_DrawQuad2D(lua_State* L);
 
 //==============================================================================================================================================//
 //  EOF.																																		//

@@ -35,6 +35,7 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 
 Scene::~Scene() 
 {
+	m_primitives.clear();
 	Renderer::doneSceneDestruction();
 }
 
@@ -76,7 +77,7 @@ void Scene::bindFBO()
 	m_FBO->bind();
 }
 
-void Scene:: clearFBO()
+void Scene::clearFBO()
 {
 	m_FBO->clear();
 }

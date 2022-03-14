@@ -257,7 +257,9 @@ GLFWwindow* Application::glfwInitWindow()
     }
 
     // Log OpenGL version.
-    std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
+    std::string msg = "Loaded OpenGL version '";
+    std::string version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+    Lumen::getApp().pushNotification(NotificationType::Info, 4000, msg + version + "'.", "Renderer");
 
     // ----------------------------------------- //
     //  I M G U I   &   O P E N G L   S E T U P  // 

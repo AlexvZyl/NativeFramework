@@ -28,11 +28,6 @@ void EngineCore::onRender()
 	Renderer::renderScene(m_scene.get());
 }
 
-EngineCore::EngineCore() 
-{
-	Renderer::bindScene(m_scene.get());
-}
-
 unsigned EngineCore::getRenderTexture() 
 { 
 	return m_scene->getRenderTexture(); 

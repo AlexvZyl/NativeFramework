@@ -7,6 +7,7 @@ from threading import Thread
 from queue import Queue, Empty
 import sys
 import time
+from gevent import sleep
 
 import websocket
 
@@ -22,7 +23,8 @@ def enqueue_output(out, queue):
     out.close()
 
 # Start Lumen & thread.
-process = Popen("..\\Binaries\\Executables\\x64\\Release\\Lumen.exe", stdout = PIPE, text = True, close_fds=ON_POSIX)
+process = Popen("C:\\Lumen\\Binaries\\Executables\\x64\\Release\\Lumen.exe", stdout = PIPE, text = True, close_fds=ON_POSIX)
+sleep(1)
 q = Queue()
 t = Thread(target=enqueue_output, args=(process.stdout, q))
 t.start()
@@ -30,13 +32,14 @@ t.start()
 # Find socket output from Lumen.
 lumenSocketIDString = "[LUMEN] [WEBSOCKET]"
 line = ""
-while(True):
+search = True
+while(search):
     try:    line = q.get()
     except  Empty: pass
     else:
         # Check if Socket ID is found.
         if(line.find(lumenSocketIDString) != -1):
-            break
+            search = False
 
 print(line)
 # t.join()
@@ -54,8 +57,15 @@ port = 8083
 url = "ws://127.0.0.1:8083"
 
 # Connect to socket.
-wsConnection = websocket.create_connection(url)
-wsConnection.send("Terminate")
+# wsConnection = websocket.create_connection(url)
+
+# Open Lua script.
+file = open("QuadColor.lua")
+script = file.read()
+
+# wsConnection.send()
+
+file.close()
 
 # ------- #
 #  E O F  #

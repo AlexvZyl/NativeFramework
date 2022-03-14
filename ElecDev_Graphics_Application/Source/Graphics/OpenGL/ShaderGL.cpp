@@ -192,7 +192,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
         else
         {
             // Print success message.
-            std::cout << blue << "\n[OPENGL] [INFO] : " << white << type << " shader linked succesfully.";
+            //std::cout << blue << "\n[OPENGL] [INFO] : " << white << type << " shader linked succesfully.";
         }
     }
 }

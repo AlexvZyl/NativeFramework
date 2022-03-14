@@ -40,9 +40,6 @@ void LumenWebSocket::listener()
 	tcp::acceptor acceptor{ ioContext, {m_socketAddress, 0} };
 	m_port = acceptor.local_endpoint().port();
 
-	// Log connection.
-	std::cout << blue << "\n[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << m_socketAddress << ":" << m_port << "'.";
-
 	std::string address = m_socketAddress.to_string();
 	std::string portNum = std::to_string(m_port);
 	std::string connectionMsg = "Connected to 'ws://" + address + ":" + portNum + "'.";
@@ -68,7 +65,7 @@ void LumenWebSocket::listener()
 		ws.read(buffer);
 		if (!buffer.size()) continue;
 		std::string input = boost::beast::buffers_to_string(buffer.cdata());
-		Lumen::getApp().pushNotification(NotificationType::Info, 5000, "Received input...", "Websocket");
+		//Lumen::getApp().pushNotification(NotificationType::Info, 5000, "Received input...", "Websocket");
 		app.pushLuaScript(input);
 	}
 }

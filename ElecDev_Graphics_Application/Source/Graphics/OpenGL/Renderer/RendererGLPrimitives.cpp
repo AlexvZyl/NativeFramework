@@ -35,6 +35,13 @@ Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, Entity
 	return dynamic_cast<Polygon2D*>(m_scene->m_primitives.at(id).get());
 }
 
+Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent)
+{
+	Polygon2D* polygon = Renderer::addPolygon2D(vertices, parent);
+	polygon->setColor(color);
+	return polygon;
+}
+
 Polygon2D* Renderer::addPolygon2DClear(const std::vector<glm::vec3>& vertices, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();

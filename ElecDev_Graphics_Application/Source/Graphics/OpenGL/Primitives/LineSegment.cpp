@@ -17,8 +17,8 @@ LineSegment::LineSegment(const glm::vec2& start, const glm::vec2& end, VertexArr
 		{
 			glm::vec3(start - thickness * (m_perpendicular::member), 0.f),
 			glm::vec3(start + thickness * (m_perpendicular::member), 0.f),
-			glm::vec3(end + thickness * (m_perpendicular::member), 0.f),
-			glm::vec3(end - thickness * (m_perpendicular::member), 0.f)
+			glm::vec3(end   + thickness * (m_perpendicular::member), 0.f),
+			glm::vec3(end   - thickness * (m_perpendicular::member), 0.f)
 		},
 		VAO, parent)
 {

@@ -29,8 +29,6 @@
 
 Application::Application() 
 {
-	std::cout << blue << "[LUMEN] [INFO] :" << white << " Application started!";
-	
 	// Create GLFW window.
 	m_window = Application::glfwInitWindow();
 
@@ -61,7 +59,9 @@ Application::Application()
 
 	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();
-	Sleep(10);
+	Sleep(50);  // Give the thread time to start.
+	//std::cout << blue << "[LUMEN] [WEBET] : " << white << " Connected to:" << m_webSocket->m_port << "'.";
+	std::cout << blue << "[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << m_webSocket->m_socketAddress << ":" << m_webSocket->m_port << "'.";
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
@@ -111,7 +111,7 @@ void Application::executeLuaScriptQueue()
 
 	for (auto& script : m_luaScripts)
 	{
-		luaExecuteScript(script);
+		lua_ExecuteScript(script);
 	}
 	m_luaScripts.clear();
 }
