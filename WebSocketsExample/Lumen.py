@@ -9,7 +9,7 @@ def BeginScript():
     global __script
     __script = ""
 
-def EndScript():
+def ClearScript():
     global __script
     __script = ""
 
@@ -27,16 +27,17 @@ def BeginScene2D(name):
 def DrawQuad2D(vertex1, vertex2, color):
     __AddFunction("DrawQuad2D", (__Table(vertex1), __Table(vertex2), __Table(color)))
 
+def DrawLine2D(vertex1, vertex2, thickness, color):
+    __AddFunction("DrawLine2D", (__Table(vertex1), __Table(vertex2), thickness, __Table(color)))
+
 # ------------------- #
 #  U T I L I T I E S  #
 # ------------------- #
 
-# Return and clear the generated script.
+# Return the generated script.
 def GetScript():
     global __script
-    copy = __script
-    __script = ""
-    return copy
+    return __script
 
 # --------------- #
 #  P R I V A T E  #
@@ -67,8 +68,8 @@ def __AddLine(line):
 def __AddFunction(function, parameters):
     line = function + "("
     for p in parameters:
-        line += p + ","
-    line = line[:-1] + ")"
+        line += str(p) + ", "
+    line = line[:-2] + ")"
     __AddLine(line)
 
 # ------- #

@@ -1,9 +1,12 @@
-import LumenLua as LL
+from Lumen import *
 
-LL.BeginScript()
+BeginScript()
 
-LL.BeginScene2D("Testing Scene")
-LL.DrawQuad2D((0,0,0), (1,1,1), (0,0,0,1))
-print(LL.GetScript())
+BeginScene2D("Testing Scene")
+DrawQuad2D((0,0,0), (1,1,1), (0,0,0,1))
+DrawLine2D((0,0,0), (1,1,1), 0.1, (0,0,0,1))
+print(GetScript())
 
-LL.EndScript()
+ClearScript()
+
+
