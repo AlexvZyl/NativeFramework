@@ -31,10 +31,8 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texWidth = textureBM.bmWidth;
     m_texHeight = textureBM.bmHeight;
     m_texID = loadBitmapToGL(textureBM);
-
-    m_colour = { 34.f / 255.f, 34.f / 255.f, 41.f / 255.f, 1.00f };
-    //ImGui::GetStyle().Colors[ImGuiCol_Separator] = m_colour;
-
+    //m_colour = { 34.f / 255.f, 34.f / 255.f, 41.f / 255.f, 1.00f };
+    m_colour = ImGui::GetStyle().Colors[ImGuiCol_Separator];
 }
 
 /*=======================================================================================================================================*/
@@ -44,7 +42,7 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 void Toolbar::begin()
 {
     // Used to get a nice color.
-    //m_colour = ImGui::GetStyle().Colors[ImGuiCol_Separator];
+    m_colour = ImGui::GetStyle().Colors[ImGuiCol_Separator];
 
     // Style.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
