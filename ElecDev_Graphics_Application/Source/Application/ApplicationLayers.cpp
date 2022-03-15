@@ -3,6 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Dock builder.																																//
@@ -117,7 +118,7 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 		break;
 
 	default:
-		std::cout << yellow << "\n[IMGUI] [WARN]: " << white << "Invalid docking configuration!\n";
+		LUMEN_LOG_WARN("Invalid docking configuration.", "IMGUI")
 		break;
 	}
 }

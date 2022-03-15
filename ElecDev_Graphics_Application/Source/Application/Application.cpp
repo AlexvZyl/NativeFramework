@@ -22,6 +22,7 @@
 #include "Utilities/Lua/LuaInterpreter.h"
 #include "External/Misc/ConsoleColor.h"
 #include "GLFW/glfw3.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Setup																																		//
@@ -29,6 +30,8 @@
 
 Application::Application() 
 {
+	LUMEN_LOG_INFO("Application started!", "");
+
 	// Create GLFW window.
 	m_window = Application::glfwInitWindow();
 
@@ -58,10 +61,7 @@ Application::Application()
 	pushGuiLayer<BottomBar>("Bottom Bar", DockPanel::Fixed, 0, false);
 
 	// Create web socket and give some time to setup.
-	m_webSocket = std::make_unique<LumenWebSocket>();
-	Sleep(50);  // Give the thread time to start.
-	//std::cout << blue << "[LUMEN] [WEBET] : " << white << " Connected to:" << m_webSocket->m_port << "'.";
-	std::cout << blue << "[LUMEN] [WEBSOCKET] : " << white << " Connected to '" << m_webSocket->m_socketAddress << ":" << m_webSocket->m_port << "'.";
+	//m_webSocket = std::make_unique<LumenWebSocket>();
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.
@@ -83,7 +83,7 @@ Application::~Application()
 	glfwTerminate();
 
 	// Log termination.
-	std::cout << blue << "\n\n[LUMEN] [INFO] : " << white << "Program terminated." << std::endl;
+	LUMEN_LOG_INFO("Program terminated.", "");
 }
 
 bool Application::isRunning()

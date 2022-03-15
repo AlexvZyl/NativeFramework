@@ -28,6 +28,7 @@ public:
 	boost::asio::ip::address m_socketAddress;
 	int m_port = NULL;
 	std::thread m_listenerThread;
+	std::unique_ptr<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> m_webSocket;
 };
 
 //==============================================================================================================================================//

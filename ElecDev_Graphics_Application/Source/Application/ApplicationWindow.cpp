@@ -13,6 +13,7 @@
 #include "OpenGL/ErrorHandlerGL.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Callbacks.																																	//
@@ -192,7 +193,7 @@ GLFWwindow* Application::glfwInitWindow()
     // Setup window.
     glfwSetErrorCallback([](int error, const char* description)
         {
-            fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
+            LUMEN_LOG_ERROR(error + description, "GLFW");
         });
     // Error.
     if (!glfwInit()) { /* Log error here. */ }
@@ -252,8 +253,7 @@ GLFWwindow* Application::glfwInitWindow()
     // Load OpenGL functions using GLAD.
     if(!gladLoadGL())
     {
-        // Log error.
-        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white, " Failed to initialize OpenGL loader!\n");
+        LUMEN_LOG_ERROR("Failed to initialize OpenGL loader", "");
     }
 
     // Log OpenGL version.

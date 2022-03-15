@@ -11,6 +11,7 @@
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "imgui/backends/imgui_impl_glfw.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Layer event dispatching.																													//
@@ -22,6 +23,9 @@ void Application::onUpdate()
 
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
+
+	// Log messages.
+	Logger::flushQueue();
 
 	// Pop the layers queued from the previous frame's rendering.
 	// Dispatched here so that they do not get GLFW events.

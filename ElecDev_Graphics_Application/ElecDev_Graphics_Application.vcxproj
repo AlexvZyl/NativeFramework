@@ -187,6 +187,7 @@
     <ClCompile Include="External\implot\implot.cpp" />
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
+    <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI.cpp" />
     <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
@@ -282,7 +283,6 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
-    <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Text.cpp" />
     <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
@@ -740,7 +740,7 @@
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
-    <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
+    <ClInclude Include="Source\Utilities\Logger\Logger.h" />
     <ClInclude Include="Source\External\Boost\Includes\bind.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp" />
     <ClInclude Include="Source\External\Boost\Includes\bind\arg.hpp" />

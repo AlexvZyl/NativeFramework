@@ -7,7 +7,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine.cpp" />
     <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine.cpp" />
     <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine_Events.cpp" />
@@ -127,6 +126,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
+    <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -358,7 +358,7 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
-    <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
+    <ClInclude Include="Source\Utilities\Logger\Logger.h" />
     <ClInclude Include="Source\Engines\Base2DEngine\Base2DEngine.h" />
     <ClInclude Include="Source\Engines\Base3DEngine\Base3DEngine.h" />
     <ClInclude Include="Source\Engines\EngineCore\EngineCore.h" />
