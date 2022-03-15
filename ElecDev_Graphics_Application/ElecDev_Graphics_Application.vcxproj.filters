@@ -121,6 +121,8 @@
     <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner_Events.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -785,6 +787,7 @@
     <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

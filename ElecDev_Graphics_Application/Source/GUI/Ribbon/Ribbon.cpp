@@ -20,6 +20,7 @@
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "Utilities/Windows/WindowsUtilities.h"
+#include "Engines/Design2DEngine/ComponentDesigner.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -86,13 +87,13 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_componentIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
     {
-        
+        //Lumen::getApp().pushGuiLayer<ComponentDesigner>("Component Designer", DockPanel::Left);
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
     {
         ImGui::BeginTooltip();
-        ImGui::Text("Component builder");
+        ImGui::Text("Component designer");
         ImGui::EndTooltip();
     }
 
