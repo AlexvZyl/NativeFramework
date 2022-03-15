@@ -76,6 +76,7 @@ private:
 	friend class Renderer;
 	friend class Shader;
 	friend class RendererStats;
+	friend class BackgroundColorEditor;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();

@@ -63,7 +63,7 @@ void AssetExplorer::onRender()
 	}
 
 	// Header size.
-	static glm::vec2 headerSize(20, 20);
+	static glm::vec2 headerSize(22, 22);
 
 	// Move up button.
 	if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
@@ -104,14 +104,13 @@ void AssetExplorer::onRender()
 	// Search bar.
 	ImGui::SameLine();
 	float filterSize = 250;
-	ImGui::SetCursorPosX(m_contentRegionSize.x - filterSize);
+	ImGui::SetCursorPosX(m_contentRegionSize.x - filterSize - ImGui::CalcTextSize("Search: ").x);
 	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
 	ImGui::Text("Search: ");
 	ImGui::SameLine();
 	filter.Draw("##AssetExplorerSearch", filterSize);
-	ImGui::Separator();
 
-	if (ImGui::BeginChild("##AssetExplorerChild"))
+	if (ImGui::BeginChild("##AssetExplorerChild", {0,0}, true))
 	{
 
 		// Create icon columns.

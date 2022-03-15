@@ -16,10 +16,7 @@ BottomBar::BottomBar(std::string name, int windowFlags)
     m_imguiWindowFlags |= ImGuiWindowFlags_NoMove
                        | ImGuiWindowFlags_NoDecoration
                        | ImGuiWindowFlags_NoResize;
-    //m_color = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
-    //m_color /= 1.5f;
-    //m_color.a = 1.f;
-    m_color = { 5.f / 255.f, 5.f / 255.f, 13.f / 255.f, 1.00f };
+    m_color = ImGui::GetStyle().Colors[ImGuiCol_Separator];
 }
 
 void BottomBar::begin()

@@ -29,15 +29,12 @@ void RendererStats::onRender()
 	Scene* scene = Renderer::getScene();
 	Application& app = Lumen::getApp();
 
-	ImGui::Separator();
-
 	// ----------------- //
 	//  P R O F I L E R  //
 	// ----------------- //
 
 	ImGui::PushID("ProfilerResults");
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::CollapsingHeader("Profiler"))
+	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 5.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		// Enable profiler.
 		app.m_profilerActive = true;
@@ -71,8 +68,8 @@ void RendererStats::onRender()
 #ifdef PROFILE_IMGUI_OVERHEAD
 			// ImGui functions.
 			else if (result.name == "ImGui NewFrame" ||
-					 result.name == "ImGuiOnUpdate"  ||
-					 result.name == "ImGui Draw"     )
+				result.name == "ImGuiOnUpdate" ||
+				result.name == "ImGui Draw")
 			{
 				imGuiTime += result.msTime;
 				continue;
@@ -109,13 +106,12 @@ void RendererStats::onRender()
 
 		// Done.
 		ImGui::EndTable();
-
 		// Clear profiler results.
 		app.m_profilerResults.reserve(app.m_profilerResults.size());
 		app.m_profilerResults.shrink_to_fit();
 		app.m_profilerResults.clear();
 	}
-	else 
+	else
 	{
 		// Disable profiler.
 		app.m_profilerActive = false;
@@ -125,17 +121,16 @@ void RendererStats::onRender()
 		app.m_profilerResults.clear();
 	}
 
+	
+	ImGui::EndChild();
 	ImGui::PopID();
 
 	// ----------------- //
 	//  R E N D E R E R  //
 	// ----------------- //
 
-	ImGui::Separator();
-	
 	ImGui::PushID("RendererData");
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::CollapsingHeader("Renderer"))
+	if (ImGui::BeginChild("Child", { 0, 72.f }, true))
 	{
 		// Setup table
 		ImGui::BeginTable("RendererTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
@@ -162,20 +157,20 @@ void RendererStats::onRender()
 
 		app.m_rendererData.reset();
 	}
-	else 
+	else
 	{
 		app.m_rendererData.reset();
 	}
+	
+	ImGui::EndChild();
 	ImGui::PopID();
 
 	// ----------- //
 	//  S C E N E  //
 	// ----------- //
 
-	ImGui::Separator();
-		
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::CollapsingHeader("Scene"))
+	ImGui::PushID("Scene");
+	if (ImGui::BeginChild("Child", { 0, 0 }, true))
 	{
 		if (scene)
 		{
@@ -192,7 +187,7 @@ void RendererStats::onRender()
 			// ---------- //
 
 			ImGui::PushID("LinesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Lines VAO"))
 			{
 				// Setup table
@@ -245,7 +240,7 @@ void RendererStats::onRender()
 			// ------------------ //
 
 			ImGui::PushID("TrianglesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Triangles VAO"))
 			{
 				// Setup table
@@ -299,7 +294,7 @@ void RendererStats::onRender()
 			// ----------------- //
 
 			ImGui::PushID("TexturesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Textures VAO"))
 			{
 				// Setup table
@@ -353,7 +348,7 @@ void RendererStats::onRender()
 			// --------------- //
 
 			ImGui::PushID("CirclesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Circles VAO"))
 			{
 				// Setup table
@@ -402,13 +397,14 @@ void RendererStats::onRender()
 			}
 			ImGui::PopID();
 		}
-		else 
+		else
 		{
 			ImGui::Text("No active scene.");
 		}
+		
 	}
-
-	ImGui::Separator();
+	ImGui::EndChild();
+	ImGui::PopID();
 }
 
 void RendererStats::end()
