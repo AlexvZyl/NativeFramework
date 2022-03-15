@@ -27,8 +27,6 @@ void ComponentEditor::begin()
 	// Place editor at correct position.
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The wondow size should be set dynamically
-	ImVec4 newCol = ImVec4(0.05f, 0.05f, 0.07f, 0.9f);
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, newCol);
 	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
@@ -423,7 +421,6 @@ void ComponentEditor::onRender()
 
 void ComponentEditor::end()
 {
-	ImGui::PopStyleColor();
 	ImGui::End();
 }
 
