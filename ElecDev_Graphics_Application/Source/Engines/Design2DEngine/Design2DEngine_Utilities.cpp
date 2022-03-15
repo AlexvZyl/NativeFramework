@@ -6,7 +6,7 @@
 #include "Design2DEngine.h"
 #include "Peripherals/Component2D.h"
 #include "Peripherals/Circuit.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "Graphics/Entities/EntityManager.h"

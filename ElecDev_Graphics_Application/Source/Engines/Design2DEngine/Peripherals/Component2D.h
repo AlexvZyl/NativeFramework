@@ -57,7 +57,7 @@ public:
 	std::vector<glm::vec3> vertices2;
 
 	// Colour attributes.
-	glm::vec4 shapeColour = { 0.5f, 0.5f, 0.9f, 0.5f };
+	glm::vec4 shapeColour = { 14.f/255.f, 63.f/255.f, 174.f/255.f, 1.f };
 	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
 
 	//title

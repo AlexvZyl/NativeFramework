@@ -160,10 +160,11 @@ class MouseScrollEvent : public MouseEvent
 public:
 
 	// Constructor with mouse position.
-	MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, uint64_t ID);
+	MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, uint64_t ID);
 
 	// How much the mouse wheel scrolled.
 	float yOffset = 0;
+	float xOffset = 0;
 };
 
 //==============================================================================================================================================//

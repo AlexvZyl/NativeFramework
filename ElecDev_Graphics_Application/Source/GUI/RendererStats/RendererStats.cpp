@@ -5,7 +5,7 @@
 #include "RendererStats.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "Utilities/Profiler/Profiler.h"
@@ -41,10 +41,11 @@ void RendererStats::onRender()
 	{
 		// Enable profiler.
 		app.m_profilerActive = true;
+
 		// Setup table
 		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Time (ms)", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("Time (ms/frame)", ImGuiTableColumnFlags_WidthStretch);
 		ImGui::TableHeadersRow();
 
 		// Log results in table.
@@ -54,27 +55,31 @@ void RendererStats::onRender()
 		for (auto& result : app.m_profilerResults)
 		{
 			// Keep track of these values to track imgui calls time.
-			if (result.name == "Render Layers")
-			{
-				renderLayersTime = result.msTime;
-				continue;
-			}
-			else if (result.name == "ImGui Draw")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-			else if (result.name == "ImGui NewFrame")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-			else if (result.name == "Draw Scene")
+			// Drawing scenes.
+			if (result.name == "Draw Scene")
 			{
 				renderScenesTime += result.msTime;
 				continue;
 			}
+			// Rendering all of the layers.
+			else if (result.name == "App OnRender")
+			{
+				renderLayersTime = result.msTime;
+				continue;
+			}
 
+#ifdef PROFILE_IMGUI_OVERHEAD
+			// ImGui functions.
+			else if (result.name == "ImGui NewFrame" ||
+					 result.name == "ImGuiOnUpdate"  ||
+					 result.name == "ImGui Draw"     )
+			{
+				imGuiTime += result.msTime;
+				continue;
+			}
+#endif
+
+			// Log the scope time.
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			ImGui::TableSetColumnIndex(0);
@@ -93,21 +98,33 @@ void RendererStats::onRender()
 			ImGui::Text("%.3f", renderScenesTime);
 		}
 
+#ifdef PROFILE_IMGUI_OVERHEAD
 		// ImGui overhead (Drawing, calling functions, new frame).
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("ImGui Overhead");
 		ImGui::TableSetColumnIndex(1);
 		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
+#endif
 
 		// Done.
 		ImGui::EndTable();
+
+		// Clear profiler results.
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
 	}
 	else 
 	{
 		// Disable profiler.
 		app.m_profilerActive = false;
+		// Clear profiler results.
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
 	}
+
 	ImGui::PopID();
 
 	// ----------------- //
@@ -142,6 +159,12 @@ void RendererStats::onRender()
 
 		// Done.
 		ImGui::EndTable();
+
+		app.m_rendererData.reset();
+	}
+	else 
+	{
+		app.m_rendererData.reset();
 	}
 	ImGui::PopID();
 
@@ -156,12 +179,12 @@ void RendererStats::onRender()
 	{
 		if (scene)
 		{
+			// Calculate memory usage.
 			float linesMem = (sizeof(VertexData) * (float)scene->m_linesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_linesVAO->m_indexBufferSize) / 1000000;
 			float trianglesMem = (sizeof(VertexData) * (float)scene->m_trianglesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_trianglesVAO->m_indexBufferSize) / 1000000;
 			float texturesMem = (sizeof(VertexDataTextured) * (float)scene->m_texturedTrianglesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_texturedTrianglesVAO->m_indexBufferSize) / 1000000;
 			float circlesMem = (sizeof(VertexDataCircle) * (float)scene->m_circlesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_circlesVAO->m_indexBufferSize) / 1000000;
 			float totalMem = linesMem + trianglesMem + texturesMem + circlesMem;
-
 			ImGui::Text("Total VAO VRAM Usage : %.3f MB", totalMem);
 
 			// ---------- //
@@ -393,12 +416,16 @@ void RendererStats::end()
 	ImGui::PopItemWidth();
 	ImGui::End();
 
-	// Clear profiler results.
+	// Make sure the data is cleared, since it is not being 
+	// cleared in this case.
 	Application& app = Lumen::getApp();
-	app.m_profilerResults.reserve(app.m_profilerResults.size());
-	app.m_profilerResults.shrink_to_fit();
-	app.m_profilerResults.clear();
-	app.m_rendererData.reset();
+	if (!app.m_profilerActive)
+	{
+		app.m_rendererData.reset();
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
+	}
 }
 
 //=======================================================================================================================================//

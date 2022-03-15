@@ -5,7 +5,7 @@
 /*=======================================================================================================================================*/
 
 #include "ComponentEditor.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Application.h"	
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"

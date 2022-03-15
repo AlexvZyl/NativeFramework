@@ -6,7 +6,7 @@
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Camera/Camera.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //=============================================================================================================================================//
 //  Costructor & Destructor.																												   //
@@ -16,8 +16,9 @@
 Base2DEngine::Base2DEngine() 
 	: EngineCore()
 {
-	// Create scene.
+	// Create and bind a 2D scene.
 	m_scene = std::make_unique<Scene>(CameraType::Standard2D, 500, 500);
+	Renderer::bindScene(m_scene.get());
 };
 
 //=============================================================================================================================================//

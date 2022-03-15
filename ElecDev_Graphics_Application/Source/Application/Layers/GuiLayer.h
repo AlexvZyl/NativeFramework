@@ -38,7 +38,7 @@ public:
 
 	virtual void onEvent(Event& event) override;
 	virtual void onRender() override;
-	virtual void dispatchEvents() override;
+	virtual void onUpdate() override;
 	virtual void setName(std::string newName) override;
 	virtual std::string getName() override;
 	virtual bool isHovered() override;
@@ -158,10 +158,10 @@ void GuiLayer<GuiType>::onRender()
 }
 
 template<class GuiType>
-void GuiLayer<GuiType>::dispatchEvents()
+void GuiLayer<GuiType>::onUpdate()
 {
 	// Dispatch the GUI window events.
-	m_guiElement->dispatchEvents();
+	m_guiElement->onUpdate();
 }
 
 template<class GuiType>

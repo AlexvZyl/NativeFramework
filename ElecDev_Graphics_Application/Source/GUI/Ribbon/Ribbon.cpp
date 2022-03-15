@@ -20,6 +20,7 @@
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "Utilities/Windows/WindowsUtilities.h"
+#include "GUI/SettingsWidget/SettingsWidget.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -36,6 +37,8 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     m_circuitIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
     m_componentIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
     m_loadFileIcon = loadBitmapToGL(loadImageFromResource(LOAD_FILE_ICON));
+    m_settingsIcon = loadBitmapToGL(loadImageFromResource(SETTINGS_ICON));
+    m_userIcon = loadBitmapToGL(loadImageFromResource(USER_ICON));
 }
 
 void Ribbon::begin()
@@ -53,13 +56,14 @@ void Ribbon::begin()
 void Ribbon::onRender()
 {
     Application& app = Lumen::getApp();
+    static glm::vec2 buttonSize(30,30); 
 
     // ------------------- //
     //  L O A D   F I L E  //
     // ------------------- //
 
     // Button.
-    if (ImGui::ImageButton((void*)m_loadFileIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
+    if (ImGui::ImageButton((void*)m_loadFileIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         // Create and log load event.
         std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
@@ -84,7 +88,7 @@ void Ribbon::onRender()
     // ----------------------------------- //
 
     // Button.
-    if (ImGui::ImageButton((void*)m_componentIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
+    if (ImGui::ImageButton((void*)m_componentIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         
     }
@@ -101,7 +105,7 @@ void Ribbon::onRender()
     // --------------------------------- //
 
     // Button.
-    if (ImGui::ImageButton((void*)m_circuitIcon, ImVec2(30, 30), { 0, 1 }, { 1, 0 }))
+    if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Creator", DockPanel::Left);
     }
@@ -112,8 +116,52 @@ void Ribbon::onRender()
         ImGui::Text("Circuit Designer");
         ImGui::EndTooltip();
     }
-
+    
     ImGui::Separator();
+
+    ////
+    ////  NB: THIS SECTION RENDERS FROM THE BOTTOM UP!  Still needs some work...
+    ////
+    ImGuiStyle& style = ImGui::GetStyle();
+    float cursorPosY = 0;
+    
+    // ----------------- //
+    //  S E T T I N G S  //
+    // ----------------- //
+
+    cursorPosY = m_contentRegionSize.y - (buttonSize.y + style.FramePadding.y * 4);
+    ImGui::SetCursorPosY(cursorPosY);
+    // Button.
+    if (ImGui::ImageButton((void*)m_settingsIcon, buttonSize, { 0, 1 }, { 1, 0 }))
+    {
+        app.pushGuiLayer<SettingsWidget>("Settings", DockPanel::Floating);
+    }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Settings");
+        ImGui::EndTooltip();
+    }
+
+    // --------------- //
+    //  P R O F I L E  //
+    // --------------- //
+
+    cursorPosY -= (buttonSize.y + style.FramePadding.y * 2 + style.ItemSpacing.y * 2);
+    ImGui::SetCursorPosY(cursorPosY);
+    // Button.
+    if (ImGui::ImageButton((void*)m_userIcon, buttonSize, { 0, 1 }, { 1, 0 }))
+    {
+
+    }
+    // Tooltip.
+    if (ImGui::IsItemHovered())
+    {
+        ImGui::BeginTooltip();
+        ImGui::Text("Profile");
+        ImGui::EndTooltip();
+    }
 }
 
 void Ribbon::end() 

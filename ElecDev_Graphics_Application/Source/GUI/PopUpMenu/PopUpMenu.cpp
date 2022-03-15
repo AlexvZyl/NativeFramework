@@ -49,7 +49,7 @@ void PopUpMenu::setEngine(Design2DEngine* engine)
 void PopUpMenu::begin() 
 {
     // Place at mouse position.
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4, 4));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6, 6));
     ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y));
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }

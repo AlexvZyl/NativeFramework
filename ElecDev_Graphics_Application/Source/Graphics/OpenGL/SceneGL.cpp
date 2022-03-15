@@ -10,8 +10,9 @@
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Events/Events.h"
+#include "imgui/imgui.h"
 
 //==============================================================================================================================================//
 //  Constructor & Destructor.																													//
@@ -34,6 +35,7 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 
 Scene::~Scene() 
 {
+	m_primitives.clear();
 	Renderer::doneSceneDestruction();
 }
 
@@ -51,9 +53,9 @@ glm::mat4* Scene::getProjectionMatrix()
 	return &m_camera->m_projectionMatrix; 
 }
 
-void Scene::updateCamera() 
+void Scene::onUpdate() 
 { 
-	m_camera->updateCamera(); 
+	m_camera->onUpdate(); 
 }
 
 glm::vec4& Scene::getViewport() 
@@ -75,7 +77,7 @@ void Scene::bindFBO()
 	m_FBO->bind();
 }
 
-void Scene:: clearFBO()
+void Scene::clearFBO()
 {
 	m_FBO->clear();
 }
@@ -149,13 +151,18 @@ void Scene::create2DBackground()
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_backgroundVAO->setBufferIncrementSize(4);
 
+	// Make the background color a lighter version of the GUI background.
+	/*glm::vec4 guiBackground = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+	glm::vec4 colorDark = guiBackground * m_colorScaleDark;
+	glm::vec4 colorLight = guiBackground * m_colorScaleLight;*/
+
 	// Assign background data.
 	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 1.f);
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
 	glm::vec3 pos1(1.0f, 1.0f, 0.99f);
-	glm::vec3 pos2(-1.0f, 1.0f, 0.99);
-	glm::vec3 pos3(-1.0f, -1.0f, 0.99);
-	glm::vec3 pos4(1.0f, -1.0f, 0.99);
+	glm::vec3 pos2(-1.0f, 1.0f, 0.99f);
+	glm::vec3 pos3(-1.0f, -1.0f, 0.99f);
+	glm::vec3 pos4(1.0f, -1.0f, 0.99f);
 
 	// Vertices.
 	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos1, bgColor2, -1)); //  Top right.

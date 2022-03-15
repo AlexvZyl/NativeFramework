@@ -4,9 +4,9 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Lumen.h"
 #include "Application/Application.h"
 #include "Lumen.h"
+#include "Profiler.h"
 
 //==============================================================================================================================================//
 //  Timer.																																		//
@@ -15,7 +15,9 @@
 Timer::Timer(const char* name)
 	: m_name(name)
 {
-	if (Lumen::getApp().m_profilerActive)
+	// Save profiler state on timer start.
+	m_profilerActiveOnStart = Lumen::getApp().m_profilerActive;
+	if (m_profilerActiveOnStart)
 	{
 		// Start the timer.
 		m_startPoint = std::chrono::high_resolution_clock::now();
@@ -30,7 +32,8 @@ Timer::~Timer()
 // Stop the timer.
 void Timer::stop()
 {
-	if (Lumen::getApp().m_profilerActive)
+	// Check if the profiler is still active.
+	if (Lumen::getApp().m_profilerActive && m_profilerActiveOnStart)
 	{
 		// Get end time.
 		auto endTimePoint = std::chrono::high_resolution_clock::now();
@@ -42,6 +45,11 @@ void Timer::stop()
 
 		// Add result to be displayed.
 		Lumen::getApp().m_profilerResults.push_back(ProfileResult(m_name, duration));
+	}
+	else 
+	{
+		// Add null result.
+		Lumen::getApp().m_profilerResults.push_back(ProfileResult(m_name, 0));
 	}
 }
 

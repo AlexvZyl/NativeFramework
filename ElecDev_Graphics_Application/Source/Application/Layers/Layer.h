@@ -22,7 +22,7 @@ public:
 
 	// Dispatch the ImGUI events, if there are elements
 	// in the layer that has to do this.
-	inline virtual void dispatchEvents() = 0; 
+	inline virtual void onUpdate() = 0; 
 
 	// Set the name of all the elements in the layer.
 	inline virtual void setName(std::string newName) = 0;
@@ -30,7 +30,7 @@ public:
 	// Get the name of the layer.
 	inline virtual std::string getName() = 0;
 
-	// Checks if the layer is hovered.
+	// Checks if the layer is hovered.`
 	inline virtual bool isHovered() = 0;
 
 	// Focus the layer.

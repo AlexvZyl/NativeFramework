@@ -3,6 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Dock builder.																																//
@@ -33,15 +34,23 @@ void Application::buildDocks()
 	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
 
+	// Bottom Bar.
+	m_bottomBarID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.03f, NULL, &m_scenePanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_bottomBarID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
+						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
+						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
+						 | ImGuiDockNodeFlags_NoTabBar;
+
 	// Right Panel.
 	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton;
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Bottom Panel.
-	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.35f, NULL, &m_scenePanelID);
+	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton;
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Scene dock.
 	dockNode = ImGui::DockBuilderGetNode(m_scenePanelID);
@@ -96,10 +105,6 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 		ImGui::DockBuilderDockWindow(name.c_str(), m_bottomPanelID);
 		break;
 
-	case DockPanel::Ribbon:
-		ImGui::DockBuilderDockWindow(name.c_str(), m_ribbonPanelID);
-		break;
-
 	case DockPanel::Floating:
 		// Do not dock, maybe move to a specific position.
 		break;
@@ -108,8 +113,12 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 		// These have to be handled manually.
 		break;
 
+	case DockPanel::Ribbon:
+		ImGui::DockBuilderDockWindow(name.c_str(), m_ribbonPanelID);
+		break;
+
 	default:
-		std::cout << yellow << "\n[IMGUI] [WARN]: " << white << "Invalid docking configuration!\n";
+		LUMEN_LOG_WARN("Invalid docking configuration.", "IMGUI")
 		break;
 	}
 }

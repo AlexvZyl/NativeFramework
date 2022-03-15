@@ -5,7 +5,7 @@
 #include <vector>
 #include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "glm/gtx/rotate_vector.hpp"
 #include "glm/gtc/matrix_transform.hpp"

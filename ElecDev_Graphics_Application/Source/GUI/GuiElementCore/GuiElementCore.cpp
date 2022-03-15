@@ -9,6 +9,7 @@
 #include "imgui/imgui_internal.h"
 #include "Application/Application.h"
 #include "Lumen.h"
+#include "Utilities/Profiler/Profiler.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -41,13 +42,7 @@ void GuiElementCore::updateRenderState()
 
 void GuiElementCore::onEvent(Event& event)
 {
-
 	if (event.isConsumed()) return;
-
-#ifdef _DEBUG
-	// Log the event.
-	std::cout << m_name << ": " << event.ID << "\n";
-#endif
 
 	uint64_t eventID = event.ID;
 
@@ -61,7 +56,7 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_WindowResize) { onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 
-	// Do not pass the events below if the layer is collapsed.
+	// Do not pass the events below if the layer is not to be rendered.
 	else if (!shouldRender()) return;
 
 	// Mouse events.
@@ -75,7 +70,7 @@ void GuiElementCore::onEvent(Event& event)
 	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 }
 
-void GuiElementCore::dispatchEvents()
+void GuiElementCore::onUpdate()
 {
 	// Get window if it does not exist.
 	if (!m_imguiWindow)
@@ -111,7 +106,7 @@ bool GuiElementCore::isHovered()
 {
 	// If the window exists.
 	if (m_imguiWindow)
-		return ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows, m_imguiWindow);
+		return ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows | ImGuiHoveredFlags_DockHierarchy, m_imguiWindow);
 
 	// Window does not exist yet.
 	return false;
@@ -130,7 +125,7 @@ void GuiElementCore::onContentRegionMoveEvent(WindowEvent& event)
 void GuiElementCore::detectContentRegionResize() 
 {
 	// Get the current content region size.
-	glm::vec2 contentRegionSize = m_imguiWindow->ContentRegionRect.GetSize();
+	glm::vec2 contentRegionSize = m_imguiWindow->WorkRect.GetSize();
 	// If the content region resized pass an event.
 	if (m_contentRegionSize.x != contentRegionSize.x || m_contentRegionSize.y != contentRegionSize.y)
 	{
@@ -142,7 +137,7 @@ void GuiElementCore::detectContentRegionResize()
 void GuiElementCore::detectContentRegionMove()
 {
 	// Get window current position.
-	glm::vec2 contentRegionPos = m_imguiWindow->ContentRegionRect.Min;
+	glm::vec2 contentRegionPos = m_imguiWindow->WorkRect.Min;
 	// Check if the window has moved.
 	if(m_contentRegionPosition.x != contentRegionPos.x || m_contentRegionPosition.y != contentRegionPos.y)
 	{
