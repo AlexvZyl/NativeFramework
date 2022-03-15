@@ -110,7 +110,7 @@ void Application::renderFrame()
 
 void Application::onRender()
 {
-	LUMEN_PROFILE_SCOPE("Render Layers");
+	LUMEN_PROFILE_SCOPE("App OnRender");
 
 	// The order is not important, since dear imgui handles that.
 	for (auto& [name, layer] : m_layerStack->getLayers())

@@ -62,7 +62,7 @@ void RendererStats::onRender()
 				continue;
 			}
 			// Rendering all of the layers.
-			else if (result.name == "Render Layers")
+			else if (result.name == "App OnRender")
 			{
 				renderLayersTime = result.msTime;
 				continue;
@@ -124,6 +124,7 @@ void RendererStats::onRender()
 		app.m_profilerResults.shrink_to_fit();
 		app.m_profilerResults.clear();
 	}
+
 	ImGui::PopID();
 
 	// ----------------- //

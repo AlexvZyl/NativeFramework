@@ -105,7 +105,7 @@ class LumenInstance:
         t.start()
 
         # Find socket output from Lumen.
-        lumenSocketIDString = "[LUMEN] [WEBSOCKET]"
+        lumenSocketIDString = "[LUMEN] [WEBSOCKET] : Connected to '"
         line = ""
         search = True
         while(search):
@@ -116,22 +116,20 @@ class LumenInstance:
                 if(line.find(lumenSocketIDString) != -1):
                     search = False
 
-        print(line)
+        # For some reason these wont close?
         # t.join()
         # q.join()
-        # For some reason these wont close...
 
         # Find the port Lumen connected to in the string.
         # Hard coded for now, but this will be contained in 'line'.
-        localhost = "127.0.0.1"
-        port = 8083
-        url = "ws://" + localhost + ":" + port
+        url = line.replace(lumenSocketIDString, "")
+        url = url.replace("'.\n", "")
 
         # Connect to socket.
         self.__webSocket = websocket.create_connection(url)
 
     def ExecuteScript(self, script):
-        self.__webSocket.send(script)
+        self.__webSocket.send(script.Get())
 
     def Shutdown(self):
         print("Shutdown")

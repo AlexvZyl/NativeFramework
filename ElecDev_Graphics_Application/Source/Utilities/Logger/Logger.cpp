@@ -6,6 +6,7 @@
 #include "External/Misc/ConsoleColor.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include <sstream>
 
 //==============================================================================================================================================//
 //  Logger Functions.																															//
@@ -18,10 +19,10 @@ void Logger::pushMessage(LoggerMessage& msg)
 
 void Logger::flushQueue()
 {
-	Application& app = Lumen::getApp();
-
 	// Return if nothing to log.
 	if (!s_messageQueue.size())return;
+
+	Application& app = Lumen::getApp();
 
 	// Log all of the messages.
 	for (auto& msg : s_messageQueue)
@@ -72,16 +73,16 @@ void Logger::flushQueue()
 		case LoggerLevel::Error:
 			if (!msg.title.size()) msg.title = "ERROR";
 			std::cout << red << "[LUMEN] [" << msg.title << "] : " << white << msg.content << "\n";
-			app.pushNotification(NotificationType::Error, 5000, msg.content, msg.title);
+			app.pushNotification(NotificationType::Error, 10000, msg.content, msg.title);
 			break;
 		}
 	}
 
+	std::cout.flush();
 	// Clear queue.
 	Logger::clear();
 }
 
-// Clear all of the messgages in the queue.
 void Logger::clear()
 {
 	s_messageQueue.clear();

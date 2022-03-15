@@ -16,7 +16,7 @@ class LumenWebSocket
 {
 public:
 
-	// Constructor.
+	// Constructor.  Default to local host and get open port from OS.
 	LumenWebSocket(const std::string& ip = "127.0.0.1");
 	// Destructor.
 	~LumenWebSocket();

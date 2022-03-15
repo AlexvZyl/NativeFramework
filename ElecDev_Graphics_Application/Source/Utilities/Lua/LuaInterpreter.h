@@ -9,6 +9,7 @@
 #include "Utilities/Lua/LuaAPI.h"
 #include "lua/Windows/include/lua.hpp"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
@@ -37,11 +38,12 @@ inline void lua_ExecuteScript(const std::string& script)
 	if (msg == LUA_OK)
 	{
 		app.pushNotification(NotificationType::Success, 5000, "Script executed.", "Lua Interpreter");
+		LUMEN_LOG_SUCCESS("Script executed.", "LUA");
 	}
 	else 
 	{
 		std::string errorMsg = lua_tostring(L, -1);
-		app.pushNotification(NotificationType::Error, 15000, errorMsg, "Lua Interpreter");
+		LUMEN_LOG_ERROR(errorMsg, "LUA");
 	}
 }
 

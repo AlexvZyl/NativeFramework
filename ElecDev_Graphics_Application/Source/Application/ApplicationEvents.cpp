@@ -19,7 +19,7 @@
 
 void Application::onUpdate()
 {
-	LUMEN_PROFILE_SCOPE("Layers OnUpdate");
+	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();

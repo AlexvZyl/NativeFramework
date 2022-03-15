@@ -61,7 +61,7 @@ Application::Application()
 	pushGuiLayer<BottomBar>("Bottom Bar", DockPanel::Fixed, 0, false);
 
 	// Create web socket and give some time to setup.
-	//m_webSocket = std::make_unique<LumenWebSocket>();
+	m_webSocket = std::make_unique<LumenWebSocket>();
 
 	// Flush the buffer after the app has started.
 	// This allows external programs (python server) to read.

@@ -253,13 +253,14 @@ GLFWwindow* Application::glfwInitWindow()
     // Load OpenGL functions using GLAD.
     if(!gladLoadGL())
     {
-        LUMEN_LOG_ERROR("Failed to initialize OpenGL loader", "");
+        LUMEN_LOG_ERROR("Failed to initialize OpenGL loader", "GLAD");
     }
 
     // Log OpenGL version.
     std::string msg = "Loaded OpenGL version '";
     std::string version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
     Lumen::getApp().pushNotification(NotificationType::Info, 4000, msg + version + "'.", "Renderer");
+    LUMEN_LOG_INFO(msg + version + "'.", "");
 
     // ----------------------------------------- //
     //  I M G U I   &   O P E N G L   S E T U P  // 

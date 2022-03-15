@@ -31,88 +31,77 @@ struct LoggerMessage
 //  Macros.																																	   //
 //=============================================================================================================================================//
 
+//  NOTE: The title string can be an empty string, the default title will then be used.
+//		  Errors are also pushed as notifications.
+
 // ----------- //
 //  D E B U G  //
-// ----------- //
+// ----------- //	
 
-//#define LUMEN_LOG_DEBUG(contentStr)				\
-//	LoggerMessage msg;							\
-//	msg.content = contentStr;					\
-//	msg.level = LoggerLevel::Debug;				\
-//	Logger::pushMessage(msg);		
-
+#ifdef _DEBUG										
 #define LUMEN_LOG_DEBUG(contentStr, titleStr)	\
-	LoggerMessage msg;							\
-	msg.content = contentStr;					\
-	msg.title = titleStr;						\
-	msg.level = LoggerLevel::Debug;				\
-	Logger::pushMessage(msg);				
+{												\
+	LoggerMessage loggerMessage;				\
+	loggerMessage.content = contentStr;			\
+	loggerMessage.title = titleStr;				\
+	loggerMessage.level = LoggerLevel::Debug;	\
+	Logger::pushMessage(loggerMessage);			\
+}		
+#else
+#define LUMEN_LOG_DEBUG(contentStr, titleStr)	
+#endif
 
 // --------- //
 //  I N F O  //
 // --------- //
 
-/*#define LUMEN_LOG_INFO(contentStr)				\
-	LoggerMessage msg;							\
-	msg.content = contentStr;					\
-	Logger::pushMessage(msg);	*/	
-
 #define LUMEN_LOG_INFO(contentStr, titleStr)	\
-	LoggerMessage msg;							\
-	msg.content = contentStr;					\
-	msg.title = titleStr;						\
-	Logger::pushMessage(msg);				
+{												\
+	LoggerMessage loggerMessage;				\
+	loggerMessage.content = contentStr;			\
+	loggerMessage.title = titleStr;				\
+	loggerMessage.level = LoggerLevel::Info;	\
+	Logger::pushMessage(loggerMessage);			\
+}
 
 // --------------- //
 //  S U C C E S S  //
 // --------------- //
 
-//#define LUMEN_LOG_SUCCESS(contentStr)			\
-//	LoggerMessage msg;							\
-//	msg.content = contentStr;					\
-//	msg.level = LoggerLevel::Success;			\
-//	Logger::pushMessage(msg);		
-
 #define LUMEN_LOG_SUCCESS(contentStr, titleStr)	\
-	LoggerMessage msg;							\
-	msg.content = contentStr;					\
-	msg.title = titleStr;						\
-	msg.level = LoggerLevel::Success;			\
-	Logger::pushMessage(msg);			
+{												\
+	LoggerMessage loggerMessage;				\
+	loggerMessage.content = contentStr;			\
+	loggerMessage.title = titleStr;				\
+	loggerMessage.level = LoggerLevel::Success;	\
+	Logger::pushMessage(loggerMessage);			\
+}
 
 // --------------- //
 //  W A R N I N G  //
-// --------------- //
-
-//#define LUMEN_LOG_WARN(contentStr)				\
-//	LoggerMessage msg;							\
-//	msg.content = contentStr;					\
-//	msg.level = LoggerLevel::Warning;			\
-//	Logger::pushMessage(msg);		
+// --------------- //	
 
 #define LUMEN_LOG_WARN(contentStr, titleStr)	\
-	LoggerMessage msg;							\
-	msg.content = contentStr;					\
-	msg.title = titleStr;						\
-	msg.level = LoggerLevel::Warning;			\
-	Logger::pushMessage(msg);			
+{												\
+	LoggerMessage loggerMessage;				\
+	loggerMessage.content = contentStr;			\
+	loggerMessage.title = titleStr;				\
+	loggerMessage.level = LoggerLevel::Warning;	\
+	Logger::pushMessage(loggerMessage);			\
+}
 
 // ----------- //
 //  E R R O R  //
-// ----------- //
-
-//#define LUMEN_LOG_ERROR(contentStr)				\
-//	LoggerMessage msg;							\
-//	msg.content = contentStr;					\
-//	msg.level = LoggerLevel::Error;				\
-//	Logger::pushMessage(msg);		
+// ----------- //	
 
 #define LUMEN_LOG_ERROR(contentStr, titleStr)	\
-	LoggerMessage msg;							\
-	msg.content = contentStr;					\
-	msg.title = titleStr;						\
-	msg.level = LoggerLevel::Error;				\
-	Logger::pushMessage(msg);	
+{												\
+	LoggerMessage loggerMessage;				\
+	loggerMessage.content = contentStr;			\
+	loggerMessage.title = titleStr;				\
+	loggerMessage.level = LoggerLevel::Error;	\
+	Logger::pushMessage(loggerMessage);			\
+}
 
 //=============================================================================================================================================//
 //  Functions.																																   //
