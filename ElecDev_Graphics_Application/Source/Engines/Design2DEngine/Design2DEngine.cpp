@@ -10,7 +10,7 @@ This is where the interactive 2D design engine is implemented.
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Camera/Camera.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
 #include "Lumen.h"
 #include "Application/Application.h"

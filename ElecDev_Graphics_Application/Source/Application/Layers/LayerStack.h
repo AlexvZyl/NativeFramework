@@ -5,7 +5,7 @@
 //==============================================================================================================================================//
 
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -38,7 +38,7 @@ public:
 	// It should be done in the following frame.
 
 	// Get the layers contained in the stack.
-	std::map<std::string, std::unique_ptr<Layer>>& getLayers();
+	std::unordered_map<std::string, std::unique_ptr<Layer>>& getLayers();
 
 	// Retrieve the layer from the dictionary.
 	template<class LayerType>
@@ -46,8 +46,8 @@ public:
 
 private:
 
-	// Vector containing all of the layers.
-	std::map<std::string, std::unique_ptr<Layer>> m_layers;
+	// Map containing all of the layers.
+	std::unordered_map<std::string, std::unique_ptr<Layer>> m_layers;
 	// Layers that are queued for removal.
 	std::vector<Layer*> m_layerPopQueue;
 

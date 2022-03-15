@@ -7,7 +7,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utilities\Logging\LogHandler.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine.cpp" />
     <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine.cpp" />
     <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine_Events.cpp" />
@@ -74,7 +73,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\RendererGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGL.cpp" />
     <ClCompile Include="Source\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.cpp" />
@@ -94,8 +93,6 @@
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
-    <ClCompile Include="Source\Utilities\PythonInterface\PythonInterface.cpp" />
-    <ClCompile Include="Source\GUI\UserGUI\UserGUI.cpp" />
     <ClCompile Include="Source\Lumen.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\TexturedQuad.cpp" />
@@ -123,6 +120,15 @@
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner_Events.cpp" />
+    <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
+    <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
+    <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
+    <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
+    <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -354,7 +360,7 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\External\Misc\ConsoleColor.h" />
-    <ClInclude Include="Source\Utilities\Logging\LogHandler.h" />
+    <ClInclude Include="Source\Utilities\Logger\Logger.h" />
     <ClInclude Include="Source\Engines\Base2DEngine\Base2DEngine.h" />
     <ClInclude Include="Source\Engines\Base3DEngine\Base3DEngine.h" />
     <ClInclude Include="Source\Engines\EngineCore\EngineCore.h" />
@@ -458,7 +464,7 @@
     <ClInclude Include="Source\External\YAML-CPP\Source\tag.h" />
     <ClInclude Include="Source\External\YAML-CPP\Source\token.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\RendererGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Renderer\RendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
     <ClInclude Include="Source\Graphics\Camera\Camera.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
@@ -475,8 +481,6 @@
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\Application\GuiState.h" />
-    <ClInclude Include="Source\Utilities\PythonInterface\PythonInterface.h" />
-    <ClInclude Include="Source\GUI\UserGUI\UserGUI.h" />
     <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\TexturedQuad.h" />
@@ -788,6 +792,23 @@
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />
+    <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
+    <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
+    <ClInclude Include="Source\Utilities\Platform\Thread.h" />
+    <ClInclude Include="Source\Utilities\WebSocket\LumenWebSocket.h" />
+    <ClInclude Include="External\imgui-notify\example\src\imgui_notify.h" />
+    <ClInclude Include="External\imgui\imgui_notify.h" />
+    <ClInclude Include="External\imgui\notify\imgui_notify.h" />
+    <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
+    <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
+    <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaAPI.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
+    <ClInclude Include="External\lua\Windows\include\lauxlib.h" />
+    <ClInclude Include="External\lua\Windows\include\lua.h" />
+    <ClInclude Include="External\lua\Windows\include\lua.hpp" />
+    <ClInclude Include="External\lua\Windows\include\luaconf.h" />
+    <ClInclude Include="External\lua\Windows\include\lualib.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
@@ -799,6 +820,7 @@
     <Library Include="Source\External\GLFW\Libraries\glfw3dll.lib">
       <Filter>Source</Filter>
     </Library>
+    <Library Include="External\lua\Windows\lua54.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Resources\Shaders\GLSL\basicShader.glsl">
@@ -1010,6 +1032,8 @@
     <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
     <Image Include="Source\Resources\Icons\ReloadIcon.png" />
     <Image Include="Source\Resources\Icons\LoadFileIcon.png" />
+    <Image Include="Source\Resources\Icons\SettingsIcon.png" />
+    <Image Include="Source\Resources\Icons\UserIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

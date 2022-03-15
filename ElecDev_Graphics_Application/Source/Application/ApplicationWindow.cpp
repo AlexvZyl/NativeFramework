@@ -13,6 +13,7 @@
 #include "OpenGL/ErrorHandlerGL.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Callbacks.																																	//
@@ -46,7 +47,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseButtonEvent event(glm::vec2(cursorX, cursorY), eventID);
+            MouseButtonEvent event({ cursorX, cursorY }, eventID);
             Lumen::getApp().logEvent<MouseButtonEvent>(event);
 
             // Pass event to ImGUI.
@@ -78,11 +79,8 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseMoveEvent event(glm::vec2(cursorX, cursorY), eventID);
+            MouseMoveEvent event({ cursorX, cursorY }, eventID);
             Lumen::getApp().logEvent<MouseMoveEvent>(event);
-
-            // Pass event to ImGUI.
-            ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
         });
 
     // ------------------------- //
@@ -110,11 +108,8 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseScrollEvent event(glm::vec2(cursorX, cursorY), yoffset, eventID);
+            MouseScrollEvent event({ cursorX, cursorY }, yoffset, xoffset, eventID);
             Lumen::getApp().logEvent<MouseScrollEvent>(event);
-
-            // Pass event to ImGUI.
-            ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
         });
 
     // ------- //
@@ -145,7 +140,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            KeyEvent event(key, eventID, glm::vec2(cursorX, cursorY));
+            KeyEvent event(key, eventID, { cursorX, cursorY });
             Lumen::getApp().logEvent<KeyEvent>(event);
 
             // Pass event to ImGUI.
@@ -175,7 +170,7 @@ void Application::glfwInitCallbacks()
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
         {
             // Create and log event.
-            WindowEvent event(glm::vec2(width, height), EventType_Application | EventType_WindowResize);
+            WindowEvent event({ width, height }, EventType_Application | EventType_WindowResize);
             Lumen::getApp().logEvent<WindowEvent>(event);
         });
 
@@ -185,7 +180,7 @@ void Application::glfwInitCallbacks()
 
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
         {
-            Lumen::getApp().closeWindow();
+            Lumen::getApp().stopRunning();
         });
 }
 
@@ -197,9 +192,9 @@ GLFWwindow* Application::glfwInitWindow()
 {
     // Setup window.
     glfwSetErrorCallback([](int error, const char* description)
-    {
-        fprintf(stderr, (const char*)red, "\n\n[GLFW] [ERROR] : ", (const char*)white, "%d: %s\n", error, description);
-    });
+        {
+            LUMEN_LOG_ERROR(error + description, "GLFW");
+        });
     // Error.
     if (!glfwInit()) { /* Log error here. */ }
 
@@ -227,17 +222,16 @@ GLFWwindow* Application::glfwInitWindow()
     //  G L F W   S E T U P  //
     // --------------------- //
 
+    // Enable MSAA.
+    glfwWindowHint(GLFW_SAMPLES, 8);
     // Create GLFW window.
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "", NULL, NULL);
+    glfwSetTime(0);
     // Error.
     if (window == NULL) 
     { 
         /* Log error here. */ 
     }
-    // Enable MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 8);
-    // Remove decorations.
-    //glfwSetWindowAttrib(window, GLFW_DECORATED, GLFW_FALSE);
     glfwMakeContextCurrent(window);
     // VSync (0 = disabled).
     glfwSwapInterval(0);
@@ -259,12 +253,14 @@ GLFWwindow* Application::glfwInitWindow()
     // Load OpenGL functions using GLAD.
     if(!gladLoadGL())
     {
-        // Log error.
-        fprintf(stderr, (const char*)red, "\n\n[OPENGL] [ERROR] : ", (const char*)white, " Failed to initialize OpenGL loader!\n");
+        LUMEN_LOG_ERROR("Failed to initialize OpenGL loader", "GLAD");
     }
 
     // Log OpenGL version.
-    std::cout << blue << "\n[OPENGL] [INFO] : " << white << "Loaded OpenGL version " << glGetString(GL_VERSION) << ".";
+    std::string msg = "Loaded OpenGL version '";
+    std::string version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+    Lumen::getApp().pushNotification(NotificationType::Info, 4000, msg + version + "'.", "Renderer");
+    LUMEN_LOG_INFO(msg + version + "'.", "");
 
     // ----------------------------------------- //
     //  I M G U I   &   O P E N G L   S E T U P  // 

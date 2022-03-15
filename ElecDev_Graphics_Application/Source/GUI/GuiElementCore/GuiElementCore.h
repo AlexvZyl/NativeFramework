@@ -51,7 +51,7 @@ public:
 	// End the ImGUI widget.
 	inline virtual void end() = 0;
 	// Updates the data related to the gui element.
-	virtual void dispatchEvents();
+	virtual void onUpdate();
 	// Should the gui element render, based on certain flags.
 	bool shouldRender();
 	// Update the render state.

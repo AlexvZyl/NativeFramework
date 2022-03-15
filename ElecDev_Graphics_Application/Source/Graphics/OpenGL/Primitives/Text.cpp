@@ -9,7 +9,7 @@
 #include "OpenGL/Primitives/Text.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "External/Misc/ConsoleColor.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"

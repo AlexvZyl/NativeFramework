@@ -48,6 +48,11 @@ private:
 	// The directories to be displayed.
 	std::vector<std::filesystem::directory_entry> m_directories;
 
+	// Used to make filter clearing more elegant.
+	bool m_clearFilterOnFrameStart = false;
+	// Reload the directories at the start of rendering.
+	bool m_reloadDirectories = false;
+
 };
 
 //==============================================================================================================================================//

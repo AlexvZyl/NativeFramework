@@ -4,17 +4,18 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include <memory>
 #include <iostream>
 #include <vector>
 #include "Application/Events/EventLog.h"
-#include "Application/Layers/LayerStack.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
-#include "imgui_internal.h"
-#include "Utilities/Profiler/Profiler.h"
+#include "imgui/imgui_internal.h"
+#include "imgui/notify/imgui_notify.h"
+#include "Lumen.h"
 
-// TO BE DEPRECATED.
+// TO BE DEPRECATED?
 #include "GuiState.h"
 
 //==============================================================================================================================================//
@@ -24,9 +25,12 @@
 class EventLog;
 class Layer;
 class ImFont;
+class LumenWebSocket;
+class LayerStack;
 
 struct GLFWwindow;
 struct RendererData;
+struct ProfileResult;
 
 //==============================================================================================================================================//
 //  Data.																																		//
@@ -34,13 +38,23 @@ struct RendererData;
 
 enum class DockPanel 
 {
-	Fixed,		// These panels are handled manually.
 	Floating,	// Undocked windows.
 	Left,		// The left panel.
 	Right,		// The right panel.
 	Bottom,		// The bottom panel.
 	Scene,		// The main scene panel where the graphics are displayed.
-	Ribbon		// The left ribbon that holds the buttons.
+
+	// DO NOT USE!  Internal use only.
+	Ribbon,		// The left ribbon that holds the buttons).
+	Fixed,		// These panels are handled manually).
+};
+
+enum class NotificationType
+{
+	Success,
+	Warning,
+	Error,
+	Info,
 };
 
 //==============================================================================================================================================//
@@ -53,14 +67,20 @@ class Application
 public:
 
 	// Constructor.
-	Application(GLFWwindow* window);
+	Application();
+
+	// Destructor.
+	~Application();
+
+	// Run the application;
+	void run();
 
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
 
 	// Renders the next frame.
-	void onRender();
+	void renderFrame();
 	
 	// ------------- //
 	//  L A Y E R S  //
@@ -88,16 +108,16 @@ public:
 	// ------------- //
 
 	// Handles all of the events in the event log.
-	void dispatchEvents();
+	void onUpdate();
 	// Handle events specifically for the Application layer.
 	void onEvent(Event& event);
 	// Log the event in the event log.
 	template <typename EventType>
 	void logEvent(Event& event);
 	// Should the app close?
-	bool shouldWindowClose();
+	bool isRunning();
 	// Close the app.
-	void closeWindow();
+	void stopRunning();
 	// Get the GLFW window.
 	GLFWwindow* getWindow();
 
@@ -107,13 +127,11 @@ public:
 
 	// Sets up the GLFW window and OpenGL context.
 	static GLFWwindow* glfwInitWindow();
-	// Close the application.
-	void shutdown();
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
 
 	// TO BE DEPRECATED!
-	std::unique_ptr<GUIState> m_guiState;
+	std::unique_ptr<GUIState> m_guiState = nullptr;
 
 	// ----------------- //
 	//  P R O F I L E R  //
@@ -124,23 +142,61 @@ public:
 	bool m_profilerActive = false;
 	RendererData m_rendererData;
 
+	// --------------------------- //
+	//  N O T I F I C A T I O N S  //
+	// --------------------------- //
+
+	// Push a notification on top in Lumen.
+	void pushNotification(NotificationType type, int msTime, const std::string& content, const std::string& title = "");
+
+	// ------- //
+	//  L U A  //
+	// ------- //
+
+	// Execute the scripts in the queue.
+	void executeLuaScriptQueue();
+	// Add a Lua script to the queue.
+	void pushLuaScript(const std::string& script);
+
 private:
 
+	// Queue of scipts to be executed.
+	std::vector<std::string> m_luaScripts;
+
+	// --------------- //
+	//  G E N E R A L  //
+	// --------------- //
+
+	// Friends.
 	friend class LayerStack;
+	friend class SettingsWidget;
 
 	// The window containing the application.
-	GLFWwindow* m_window;
-	// A pointer to the application instance.
-	// For use with Lumen::getApp()
-	// HAS TO BE SINGLETON!
-	static Application* m_instance;
+	GLFWwindow* m_window = nullptr;
+
+	// --------- //
+	//  L O O P  //
+	// --------- //
+
+	// Is the app running.
+	bool m_isRunning = true;
+	bool m_waitForEvents = true;
+	double m_targetFPS = 60.f;
+	double m_targetFrameTime = 1.f / m_targetFPS;
+	double m_totalFrameTime = 0;
+	double m_currentFrameTime = 0;
+	double m_eventsTimeout = m_targetFrameTime * 2;
+	// Update the current frame time.
+	void updateFrametime();
+	// Checks if the frame has to be started based on the frametime.
+	bool startFrame();
 
 	// ------------- //
 	//  L A Y E R S  //
 	// ------------- //
 	
 	// The layers in the application.
-	std::unique_ptr<LayerStack> m_layerStack;
+	std::unique_ptr<LayerStack> m_layerStack = nullptr;
 	// The layer that has the most recent interaction.
 	Layer* m_focusedLayer = nullptr;
 	// The layer that the mouse is hovering over.
@@ -172,8 +228,9 @@ private:
 	void onFileLoadEvent(FileLoadEvent& event);
 	// Save files.
 	void onFileSaveEvent(FileSaveEvent& event);
-	// Should the app close?
-	bool m_shouldWindowClose = false;
+	// Update the ImGui state.
+	// Lumen controls some of the state changes (for optimisation).
+	void imguiOnUpdate();
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -184,13 +241,19 @@ private:
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
 	// Render the Lumen layers.
-	void renderLayers();
+	void onRender();
 	// Renders the initial frame that is required for the dock builder.
 	void buildDocks();
 	// Set the ImGUI theme.
 	void setGuiTheme();
 	// The default font used.
 	ImFont* m_defaultFont = nullptr;
+
+	// --------------------- //
+	//  C O N N E C T I O N  //
+	// --------------------- //
+
+	std::unique_ptr<LumenWebSocket> m_webSocket = nullptr;
 
 	// --------------------- //
 	//  D O C K   N O D E S  //
@@ -203,6 +266,7 @@ private:
 	ImGuiID m_bottomPanelID = NULL;
 	ImGuiID m_scenePanelID = NULL;
 	ImGuiID m_ribbonPanelID = NULL;
+	ImGuiID m_bottomBarID = NULL;
 };
 
 //==============================================================================================================================================//

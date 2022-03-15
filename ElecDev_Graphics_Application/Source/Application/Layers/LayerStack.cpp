@@ -2,7 +2,6 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-//#include <integer>
 #include <iostream>
 #include "External/Misc/ConsoleColor.h"
 #include "Application/Layers/LayerStack.h"
@@ -15,7 +14,7 @@
 //  Layer management.																															//
 //==============================================================================================================================================//
 
-std::map<std::string, std::unique_ptr<Layer>>& LayerStack::getLayers()
+std::unordered_map<std::string, std::unique_ptr<Layer>>& LayerStack::getLayers()
 {
 	return m_layers;
 }

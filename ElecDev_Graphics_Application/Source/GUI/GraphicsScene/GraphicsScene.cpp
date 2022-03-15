@@ -13,7 +13,7 @@
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Application/Application.h"
 #include "Lumen.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Constructor.																																//

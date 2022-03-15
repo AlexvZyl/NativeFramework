@@ -42,7 +42,7 @@ public:
     std::unordered_map<std::string, std::string> cableDict;
 
     float m_thickness = 0.005f;
-    glm::vec4 m_colour = { 0.5f, 0.5f, 0.5f, 0.2f };
+    glm::vec4 m_colour = { 50.f / 255.f, 50.f / 255.f, 50.f / 255.f, 1.f };
     //std::vector<glm::vec2> m_vertices;
     std::vector<LineSegment*> m_lines;
     std::vector<Circle*> m_nodes;

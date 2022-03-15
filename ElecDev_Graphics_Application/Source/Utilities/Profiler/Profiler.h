@@ -44,6 +44,7 @@ private:
 
 	const char* m_name = nullptr;
 	std::chrono::time_point<std::chrono::high_resolution_clock> m_startPoint;
+	bool m_profilerActiveOnStart = false;
 };
 
 //==============================================================================================================================================//

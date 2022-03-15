@@ -6,10 +6,11 @@
 #include <glad/glad.h>
 #include "Resources/ResourceHandler.h"
 #include "External/Misc/ConsoleColor.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
-#include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/ShaderGL.h"
 
 //=============================================================================================================================================//
@@ -321,7 +322,7 @@ void FrameBufferObject::renderFromMSAA()
 	// Update the data in the shader.
 	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
 	m_shader->setIntArray("textureSize", viewport, 2);
-	m_renderVAO->render();													  
+	Renderer::drawBufferIndexed(m_renderVAO.get());
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));							  
 }
 

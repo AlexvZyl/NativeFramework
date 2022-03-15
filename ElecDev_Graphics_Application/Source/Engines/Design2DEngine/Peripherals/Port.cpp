@@ -11,7 +11,7 @@
 #include "Cable.h"
 #include "Circuit.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
 
 //==============================================================================================================================================//
