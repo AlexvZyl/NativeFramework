@@ -62,7 +62,9 @@ void RendererStats::onRender()
 			else if (result.name == "App OnRender")
 			{
 				renderLayersTime = result.msTime;
+#ifdef PROFILE_IMGUI_OVERHEAD
 				continue;
+#endif
 			}
 
 #ifdef PROFILE_IMGUI_OVERHEAD

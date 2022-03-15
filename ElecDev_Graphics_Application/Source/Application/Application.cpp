@@ -267,18 +267,23 @@ void Application::setGuiTheme()
 	//  L O A D I N G   F O N T  //
 	// ------------------------- //
 
-	// Tell imgui that it does not own the font memory data.
-	ImFontConfig imFontConfig;
-	imFontConfig.FontDataOwnedByAtlas = false;
+	if (first)
+	{
+		first = false;
 
-	ImGuiIO& io = ImGui::GetIO();
-	// Load the font from the .exe memory.
-	void* fontPtr = getFontResourceMemoryLocation(ARIAL_NORMAL_TTF);
-	unsigned fontSize = getFontResourceSize(ARIAL_NORMAL_TTF);
-	m_defaultFont = io.Fonts->AddFontFromMemoryTTF(fontPtr, fontSize, 16.f, &imFontConfig);
+		// Tell imgui that it does not own the font memory data.
+		ImFontConfig imFontConfig;
+		imFontConfig.FontDataOwnedByAtlas = false;
 
-	// Init notify.
-	ImGui::MergeIconsWithLatestFont(16.f, false);
+		ImGuiIO& io = ImGui::GetIO();
+		// Load the font from the .exe memory.
+		void* fontPtr = getFontResourceMemoryLocation(ARIAL_NORMAL_TTF);
+		unsigned fontSize = getFontResourceSize(ARIAL_NORMAL_TTF);
+		m_defaultFont = io.Fonts->AddFontFromMemoryTTF(fontPtr, fontSize, 16.f, &imFontConfig);
+
+		// Init notify.
+		ImGui::MergeIconsWithLatestFont(16.f, false);
+	}
 }
 
 //==============================================================================================================================================//

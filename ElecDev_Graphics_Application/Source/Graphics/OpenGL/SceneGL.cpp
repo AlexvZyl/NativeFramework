@@ -149,10 +149,10 @@ void Scene::create2DBackground()
 	
 	// Create the VAO.
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_backgroundVAO->setBufferIncrementSize(4);
+	m_backgroundVAO->setBufferIncrementSize(5);
 
 	// Assign background data.
-	glm::vec4 bgColor2((float)222 / 255, (float)255 / 255, (float)255 / 255, 1.f);
+	glm::vec4 bgColor2((float)217 / 255, (float)250 / 255, (float)255 / 255, 1.f);
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
 	//glm::vec4 defaultCol((float)92 / 255, (float)95 / 255, (float)103 / 255, 1.f);
 	glm::vec4 defaultCol((float)62 / 255, (float)62 / 255, (float)66 / 255, 1.f);
@@ -160,6 +160,7 @@ void Scene::create2DBackground()
 	glm::vec3 pos2(-1.0f, 1.0f, 0.99f);
 	glm::vec3 pos3(-1.0f, -1.0f, 0.99f);
 	glm::vec3 pos4(1.0f, -1.0f, 0.99f);
+	glm::vec3 pos5(0.0f, 0.0f, 0.99f);
 
 	// Vertices.
 	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos1, defaultCol, -1)); //  Top right.
