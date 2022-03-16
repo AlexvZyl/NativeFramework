@@ -269,7 +269,16 @@ void ComponentEditor::onRender()
 				ImGui::PopItemWidth();
 				ImGui::TableSetColumnIndex(1);
 				ImGui::PushItemWidth(-1);
-				ImGui::InputText("##Input", &val);
+
+				if (activeComponent)
+				{
+					ImGui::InputText("##Input", &activeComponent->dataDict[key]);
+				}
+				else
+				{
+					ImGui::InputText("##Input", &activeCable->cableDict[key]);
+				}
+				
 				ImGui::PopItemWidth();
 				ImGui::TableSetColumnIndex(2);
 				// Remove button.
@@ -305,8 +314,8 @@ void ComponentEditor::onRender()
 		//     FROM SELECTION    //
 		// --------------------- //
 
-		const char* fromSelection[] = { "Circuit Database", "Motor Database", "Cable Database" };
-		std::string from = "FROM(";
+		const char* fromSelection[] = { "Circuit Database", "Motor Database", "CableData" };
+		std::string from = "From(";
 		std::string end = ")";
 
 		ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -345,11 +354,11 @@ void ComponentEditor::onRender()
 			{
 				if (activeComponent) 
 				{
-					activeComponent->dataDict[buffer[fromSelector]] = "Size()";
+					activeComponent->dataDict[buffer[fromSelector]] = "size()";
 				}
 				else 
 				{
-					activeCable->cableDict[buffer[fromSelector]] = "Size()";
+					activeCable->cableDict[buffer[fromSelector]] = "size()";
 				}
 			}
 		}
@@ -385,7 +394,13 @@ void ComponentEditor::onRender()
 					comparisonValue = forwardBracket + comparisonValue + backwardBracket;
 				}
 				ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
-				dataDict[buffer[ifSelector]] = ifString;
+				if (activeComponent)
+				{
+					activeComponent->dataDict[buffer[combineSelector]] = ifString;
+				}
+				else {
+					activeCable->cableDict[buffer[combineSelector]] = ifString;
+				}
 			}
 		}
 

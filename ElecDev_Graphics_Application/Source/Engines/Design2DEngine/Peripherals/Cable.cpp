@@ -33,7 +33,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	cableDict.insert(std::pair<std::string, std::string>("CableTAG", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("IndoorTermCount", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("OutdoorTermCount", "From(Circuit Database)"));
-	cableDict.insert(std::pair<std::string, std::string>("CableSize", "Size()"));
+	cableDict.insert(std::pair<std::string, std::string>("CableSize", "size()"));
 	cableDict.insert(std::pair<std::string, std::string>("CoreCount", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("Metal", "From(Circuit Database)"));
 	cableDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
