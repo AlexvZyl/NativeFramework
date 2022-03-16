@@ -48,15 +48,26 @@ void ComponentEditor::onRender()
 		numCom++;
 	}
 
+	for (auto& key : numCables)
+	{
+		componentNames[numCom] = key->m_titleString.c_str();
+		numCom++;
+	}
+
 	// Fetch active elements.
 	Component2D* activeComponent = app.m_guiState->design_engine->m_activeComponent.get();
 	Cable* activeCable = app.m_guiState->design_engine->m_activeCable.get();
+
+	std::string activeTitleString;
 
 	// Check that the active component exists. Close if not.
 	if (activeComponent)
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
+
+		activeTitleString = activeComponent->titleString;
+
 		if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 			activeComponent->title->updateText(activeComponent->titleString);
 
@@ -64,7 +75,7 @@ void ComponentEditor::onRender()
 		ImGui::SameLine();
 		ImGui::InputText("##Equipment Type", &activeComponent->equipType);
 
-		if (ImGui::BeginChild("PortsChild", {0, m_contentRegionSize.y / 4.5f}, true))
+		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))
 		{
 			// Setup table.
 			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
@@ -161,7 +172,7 @@ void ComponentEditor::onRender()
 			{
 				if (ImGui::Button("New Port"))
 					addingPort = true;
-			}			
+			}
 		}
 		ImGui::EndChild();
 	}
@@ -170,6 +181,7 @@ void ComponentEditor::onRender()
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
+		activeTitleString = activeCable->m_titleString;
 		if (ImGui::InputText("##ComponentName", &activeCable->m_titleString))
 		{
 			activeCable->m_title1->updateText(activeCable->m_titleString);
@@ -177,6 +189,17 @@ void ComponentEditor::onRender()
 		}
 		ImGui::Text(" Type:\t Cable");
 	}
+
+	if (equipmentSelector == -1) {
+		for (int num = 0; num < numCom; num++) {
+			equipmentSelector = num;
+			if (componentNames[num] == activeTitleString) {
+				break;
+			}
+		}
+	}
+
+
 
 	// --------------------- //
 	//  D A T A   T A B L E  //
@@ -193,12 +216,14 @@ void ComponentEditor::onRender()
 			else if (activeCable) dataDict = activeCable->cableDict;
 
 			const char* buffer[100];
+			const char* possibleInformation[100];
 			int numKeys = 0;
 
 			if (activeComponent)
 			{
 				for (auto& [key, val] : activeComponent->dataDict)
 				{
+					possibleInformation[numKeys] = key.c_str();
 					buffer[numKeys] = key.c_str();
 					numKeys++;
 				}
@@ -207,9 +232,18 @@ void ComponentEditor::onRender()
 			{
 				for (auto& [key, val] : activeCable->cableDict)
 				{
+					possibleInformation[numKeys] = key.c_str();
 					buffer[numKeys] = key.c_str();
 					numKeys++;
 				}
+			}
+
+			const char* additionalInformation[] = {"TierNumber", "BucketNumber", "MCC"};
+
+			for (int i = 0; i < IM_ARRAYSIZE(additionalInformation); i++)
+			{
+				possibleInformation[numKeys] = additionalInformation[i];
+				numKeys++;
 			}
 
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -347,11 +381,11 @@ void ComponentEditor::onRender()
 				{
 					if (activeComponent)
 					{
-						activeComponent->dataDict[buffer[fromSelector]] = "size()";
+						activeComponent->dataDict[buffer[sizeSelector]] = "size()";
 					}
 					else
 					{
-						activeCable->cableDict[buffer[fromSelector]] = "size()";
+						activeCable->cableDict[buffer[sizeSelector]] = "size()";
 					}
 				}
 			}
@@ -370,8 +404,8 @@ void ComponentEditor::onRender()
 			if (ImGui::CollapsingHeader("IF"))
 			{
 				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
+				ImGui::Combo("select component##if2", &equipmentSelector, componentNames, numCom);
 				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, dataDict.size());
-				ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
 				ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
 				ImGui::InputText("##Comparison Value", &comparisonValue);
 				ImGui::InputText("##True Statement", &trueStatement);
@@ -386,13 +420,14 @@ void ComponentEditor::onRender()
 					{
 						comparisonValue = forwardBracket + comparisonValue + backwardBracket;
 					}
+					ifString += componentNames[equipmentSelector] + '->';
 					ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
 					if (activeComponent)
 					{
-						activeComponent->dataDict[buffer[combineSelector]] = ifString;
+						activeComponent->dataDict[buffer[ifSelector]] = ifString;
 					}
 					else {
-						activeCable->cableDict[buffer[combineSelector]] = ifString;
+						activeCable->cableDict[buffer[ifSelector]] = ifString;
 					}
 				}
 			}
@@ -415,7 +450,9 @@ void ComponentEditor::onRender()
 				ImGui::InputText("##Combine String", &combineTextString);
 				if (ImGui::Button("Insert Combine function"))
 				{
-					combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
+					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) {
+						combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
+					}
 					combineText += combineTextString + end;
 					if (activeComponent)
 					{
@@ -428,7 +465,7 @@ void ComponentEditor::onRender()
 			}
 		}
 	}
-	ImGui::PopID(); 
+	ImGui::PopID();
 	ImGui::EndChild();
 }
 
