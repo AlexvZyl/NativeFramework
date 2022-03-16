@@ -982,8 +982,7 @@
     <None Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.json" />
     <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
-    <None Include="Source\Resources\Shaders\GLSL\backgroundShader2D.glsl" />
-    <None Include="Source\Resources\Shaders\GLSL\backgroundShader3D.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\backgroundShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\basicShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\circleShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\staticTextureShader.glsl" />

@@ -196,7 +196,10 @@ GLFWwindow* Application::glfwInitWindow()
             LUMEN_LOG_ERROR(error + description, "GLFW");
         });
     // Error.
-    if (!glfwInit()) { /* Log error here. */ }
+    if (!glfwInit()) 
+    { 
+        LUMEN_LOG_ERROR("Could not initialise GLFW.", "GLFW");
+    }
 
     // ----------------------------- //
     //  O P E N G L   V E R S I O N  //
@@ -230,7 +233,7 @@ GLFWwindow* Application::glfwInitWindow()
     // Error.
     if (window == NULL) 
     { 
-        /* Log error here. */ 
+        LUMEN_LOG_ERROR("Could not create GLFW window.", "GLFW");
     }
     glfwMakeContextCurrent(window);
     // VSync (0 = disabled).

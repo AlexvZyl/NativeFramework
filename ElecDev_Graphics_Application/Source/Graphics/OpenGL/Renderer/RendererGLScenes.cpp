@@ -100,8 +100,10 @@ void Renderer::geometryPass2D(Scene* scene)
 	Shader* shader = nullptr;
 
 	// Draw background.
-	m_shaders["BackgroundShader2D"]->bind();
+	m_shaders["BackgroundShader"]->bind();
+	Renderer::setDepthFunc(GL_EQUAL);
 	Renderer::drawBufferIndexed(scene->m_backgroundVAO.get());
+	Renderer::setDepthFunc(GL_LESS);
 
 	// Draw basic primitives.
 	shader = m_shaders["BasicShader"].get();
@@ -156,7 +158,7 @@ void Renderer::geometryPass3D(Scene* scene)
 	Shader* shader = nullptr;
 
 	// Draw background.
-	m_shaders["BackgroundShader3D"]->bind();
+	m_shaders["BackgroundShader"]->bind();
 	Renderer::setDepthFunc(GL_EQUAL);
 	Renderer::drawBufferIndexed(scene->m_backgroundVAO.get());
 	Renderer::setDepthFunc(GL_LESS);
