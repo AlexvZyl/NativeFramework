@@ -53,7 +53,8 @@ void ComponentEditor::onRender()
 	Cable* activeCable = app.m_guiState->design_engine->m_activeCable.get();
 
 	// Check that the active component exists. Close if not.
-	if (activeComponent)
+	ImGui::PushID("CompGeneral");
+	if(activeComponent)
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
@@ -64,7 +65,7 @@ void ComponentEditor::onRender()
 		ImGui::SameLine();
 		ImGui::InputText("##Equipment Type", &activeComponent->equipType);
 
-		if (ImGui::BeginChild("PortsChild", {0, m_contentRegionSize.y / 4.5f}, true))
+		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))
 		{
 			// Setup table.
 			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
@@ -161,10 +162,11 @@ void ComponentEditor::onRender()
 			{
 				if (ImGui::Button("New Port"))
 					addingPort = true;
-			}			
+			}
 		}
 		ImGui::EndChild();
 	}
+
 	// Cable properties.
 	if (activeCable)
 	{
@@ -177,6 +179,8 @@ void ComponentEditor::onRender()
 		}
 		ImGui::Text(" Type:\t Cable");
 	}
+
+	ImGui::PopID();
 
 	// --------------------- //
 	//  D A T A   T A B L E  //
@@ -422,8 +426,8 @@ void ComponentEditor::onRender()
 			}
 		}
 	}
-	ImGui::PopID(); 
 	ImGui::EndChild();
+	ImGui::PopID();
 }
 
 void ComponentEditor::end()
