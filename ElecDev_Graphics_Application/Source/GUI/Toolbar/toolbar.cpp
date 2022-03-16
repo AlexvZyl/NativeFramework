@@ -16,6 +16,7 @@
 #include "GUI/AssetExplorer/AssetExplorer.h"
 #include "GUI/ImGuiDemoWindow/ImGuiDebugWindow.h"
 #include "GUI/SceneHierarchy/SceneHierarchy.h"
+#include "GUI/BackgroundColorEditor/BackgroundColorEditor.h"
 #include <GLFW/glfw3.h>
 
 /*=======================================================================================================================================*/
@@ -31,22 +32,19 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
     m_texWidth = textureBM.bmWidth;
     m_texHeight = textureBM.bmHeight;
     m_texID = loadBitmapToGL(textureBM);
-
-    m_colour = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
-    //float scale = 1.25f;
-    float scale = 1.85f;
-    m_colour *= scale;
+    m_colour = ImGui::GetStyle().Colors[ImGuiCol_Separator];
 }
 
 /*=======================================================================================================================================*/
 /* Rendering                                                                                                                             */
 /*=======================================================================================================================================*/
 
-void Toolbar::begin() 
+void Toolbar::begin()
 {
     // Style.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0.f, TOOLBAR_PADDING});
     ImGui::PushStyleColor(ImGuiCol_MenuBarBg, m_colour);
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
@@ -58,8 +56,8 @@ void Toolbar::onRender()
     Application& app = Lumen::getApp();
     
     // Draw the image.
-    static float textureSize = 2 * TOOLBAR_PADDING - 3;
-    ImGui::SetCursorPosY(m_contentRegionPosition.y+3);
+    static float textureSize = 2 * TOOLBAR_PADDING + ImGui::GetFont()->FontSize - 11.f;
+    ImGui::SetCursorPosY(m_contentRegionPosition.y+6);
     ImGui::Image((void*)m_texID, ImVec2(textureSize, textureSize), ImVec2(0, 1), ImVec2(1, 0));
     ImGui::SetCursorPosY(m_contentRegionPosition.y);
 
@@ -69,9 +67,9 @@ void Toolbar::onRender()
 
     if (ImGui::BeginMenu("File"))
     {
+        // Load file.
         if (ImGui::MenuItem("Load...", "Ctrl+O"))
         {
-            // Create a load event.
             std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
             if (path.size())
             {
@@ -79,11 +77,12 @@ void Toolbar::onRender()
                 app.logEvent<FileLoadEvent>(event);
             }
         }
+
         ImGui::Separator();
+
+        // Close.
         if (ImGui::MenuItem("Close", "Ctrl+W"))
-        {
-            Lumen::getApp().closeWindow();
-        }
+            Lumen::getApp().stopRunning();
 
         ImGui::EndMenu();
     }
@@ -161,18 +160,18 @@ void Toolbar::onRender()
         }
 
         // Scene hierarchy.
-        static bool assetExplorer = false;
+        static bool assetExplorer = true;
         if (ImGui::Checkbox(" Asset Explorer", &assetExplorer))
         {
             static std::string assetExplorerName;
             if (assetExplorer)
             {
-                auto* layer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
-                assetExplorerName = layer->getName();
+                m_assetExplorerLayer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
             }
             else
             {
-                app.queuePopLayer(assetExplorerName);
+                app.queuePopLayer(m_assetExplorerLayer);
+                m_assetExplorerLayer = nullptr;
             }
         }
 
@@ -211,6 +210,15 @@ void Toolbar::onRender()
                 app.queuePopLayer(demoLayerName);
             }
         }
+
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Add BGCE"))
+        {
+            app.pushGuiLayer<BackgroundColorEditor>("BGCE", DockPanel::Floating);
+        }
+
+        // End.
         ImGui::EndMenu();
     }
 };
@@ -220,6 +228,7 @@ void Toolbar::end()
     // End.
     ImGui::EndMainMenuBar();
     // Style.
+    ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor();

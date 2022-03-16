@@ -5,7 +5,7 @@
 #include "RendererStats.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "Utilities/Profiler/Profiler.h"
@@ -29,22 +29,20 @@ void RendererStats::onRender()
 	Scene* scene = Renderer::getScene();
 	Application& app = Lumen::getApp();
 
-	ImGui::Separator();
-
 	// ----------------- //
 	//  P R O F I L E R  //
 	// ----------------- //
 
 	ImGui::PushID("ProfilerResults");
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::CollapsingHeader("Profiler"))
+	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 5.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		// Enable profiler.
 		app.m_profilerActive = true;
+
 		// Setup table
 		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Time (ms)", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableSetupColumn("Time (ms/frame)", ImGuiTableColumnFlags_WidthStretch);
 		ImGui::TableHeadersRow();
 
 		// Log results in table.
@@ -54,27 +52,33 @@ void RendererStats::onRender()
 		for (auto& result : app.m_profilerResults)
 		{
 			// Keep track of these values to track imgui calls time.
-			if (result.name == "Render Layers")
-			{
-				renderLayersTime = result.msTime;
-				continue;
-			}
-			else if (result.name == "ImGui Draw")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-			else if (result.name == "ImGui NewFrame")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-			else if (result.name == "Draw Scene")
+			// Drawing scenes.
+			if (result.name == "Draw Scene")
 			{
 				renderScenesTime += result.msTime;
 				continue;
 			}
+			// Rendering all of the layers.
+			else if (result.name == "App OnRender")
+			{
+				renderLayersTime = result.msTime;
+#ifdef PROFILE_IMGUI_OVERHEAD
+				continue;
+#endif
+			}
 
+#ifdef PROFILE_IMGUI_OVERHEAD
+			// ImGui functions.
+			else if (result.name == "ImGui NewFrame" ||
+				result.name == "ImGuiOnUpdate" ||
+				result.name == "ImGui Draw")
+			{
+				imGuiTime += result.msTime;
+				continue;
+			}
+#endif
+
+			// Log the scope time.
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			ImGui::TableSetColumnIndex(0);
@@ -93,32 +97,42 @@ void RendererStats::onRender()
 			ImGui::Text("%.3f", renderScenesTime);
 		}
 
+#ifdef PROFILE_IMGUI_OVERHEAD
 		// ImGui overhead (Drawing, calling functions, new frame).
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("ImGui Overhead");
 		ImGui::TableSetColumnIndex(1);
 		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
+#endif
 
 		// Done.
 		ImGui::EndTable();
+		// Clear profiler results.
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
 	}
-	else 
+	else
 	{
 		// Disable profiler.
 		app.m_profilerActive = false;
+		// Clear profiler results.
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
 	}
+
+	
+	ImGui::EndChild();
 	ImGui::PopID();
 
 	// ----------------- //
 	//  R E N D E R E R  //
 	// ----------------- //
 
-	ImGui::Separator();
-	
 	ImGui::PushID("RendererData");
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::CollapsingHeader("Renderer"))
+	if (ImGui::BeginChild("Child", { 0, 72.f }, true))
 	{
 		// Setup table
 		ImGui::BeginTable("RendererTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
@@ -142,26 +156,32 @@ void RendererStats::onRender()
 
 		// Done.
 		ImGui::EndTable();
+
+		app.m_rendererData.reset();
 	}
+	else
+	{
+		app.m_rendererData.reset();
+	}
+	
+	ImGui::EndChild();
 	ImGui::PopID();
 
 	// ----------- //
 	//  S C E N E  //
 	// ----------- //
 
-	ImGui::Separator();
-		
-	ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-	if (ImGui::CollapsingHeader("Scene"))
+	ImGui::PushID("Scene");
+	if (ImGui::BeginChild("Child", { 0, 0 }, true))
 	{
 		if (scene)
 		{
+			// Calculate memory usage.
 			float linesMem = (sizeof(VertexData) * (float)scene->m_linesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_linesVAO->m_indexBufferSize) / 1000000;
 			float trianglesMem = (sizeof(VertexData) * (float)scene->m_trianglesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_trianglesVAO->m_indexBufferSize) / 1000000;
 			float texturesMem = (sizeof(VertexDataTextured) * (float)scene->m_texturedTrianglesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_texturedTrianglesVAO->m_indexBufferSize) / 1000000;
 			float circlesMem = (sizeof(VertexDataCircle) * (float)scene->m_circlesVAO->m_vertexBufferSize + sizeof(unsigned) * (float)scene->m_circlesVAO->m_indexBufferSize) / 1000000;
 			float totalMem = linesMem + trianglesMem + texturesMem + circlesMem;
-
 			ImGui::Text("Total VAO VRAM Usage : %.3f MB", totalMem);
 
 			// ---------- //
@@ -169,7 +189,7 @@ void RendererStats::onRender()
 			// ---------- //
 
 			ImGui::PushID("LinesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Lines VAO"))
 			{
 				// Setup table
@@ -222,7 +242,7 @@ void RendererStats::onRender()
 			// ------------------ //
 
 			ImGui::PushID("TrianglesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Triangles VAO"))
 			{
 				// Setup table
@@ -276,7 +296,7 @@ void RendererStats::onRender()
 			// ----------------- //
 
 			ImGui::PushID("TexturesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Textures VAO"))
 			{
 				// Setup table
@@ -330,7 +350,7 @@ void RendererStats::onRender()
 			// --------------- //
 
 			ImGui::PushID("CirclesVAORendererStats");
-			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Circles VAO"))
 			{
 				// Setup table
@@ -379,13 +399,14 @@ void RendererStats::onRender()
 			}
 			ImGui::PopID();
 		}
-		else 
+		else
 		{
 			ImGui::Text("No active scene.");
 		}
+		
 	}
-
-	ImGui::Separator();
+	ImGui::EndChild();
+	ImGui::PopID();
 }
 
 void RendererStats::end()
@@ -393,12 +414,16 @@ void RendererStats::end()
 	ImGui::PopItemWidth();
 	ImGui::End();
 
-	// Clear profiler results.
+	// Make sure the data is cleared, since it is not being 
+	// cleared in this case.
 	Application& app = Lumen::getApp();
-	app.m_profilerResults.reserve(app.m_profilerResults.size());
-	app.m_profilerResults.shrink_to_fit();
-	app.m_profilerResults.clear();
-	app.m_rendererData.reset();
+	if (!app.m_profilerActive)
+	{
+		app.m_rendererData.reset();
+		app.m_profilerResults.reserve(app.m_profilerResults.size());
+		app.m_profilerResults.shrink_to_fit();
+		app.m_profilerResults.clear();
+	}
 }
 
 //=======================================================================================================================================//

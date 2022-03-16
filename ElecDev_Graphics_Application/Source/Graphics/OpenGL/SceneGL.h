@@ -61,6 +61,9 @@ public:
 	// Recreate the resources once it has been deleted.
 	void recreateGPUResources();
 
+	// Update the scene.
+	void onUpdate();
+
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
 
@@ -73,6 +76,7 @@ private:
 	friend class Renderer;
 	friend class Shader;
 	friend class RendererStats;
+	friend class BackgroundColorEditor;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();
@@ -92,8 +96,6 @@ private:
 	glm::mat4* getViewMatrix();
 	// Return the projection matrix.
 	glm::mat4* getProjectionMatrix();
-	// Upadate the matrices of the camera.
-	void updateCamera();
 
 	// Map containing all of the textures used in the scene.
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
@@ -105,6 +107,13 @@ private:
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;
 	// FBO.
 	std::unique_ptr<FrameBufferObject> m_FBO;
+	
+	// --------------------- //
+	//  B A C K G R O U N D  //
+	// --------------------- //
+
+	float m_colorScaleDark = 1.0f;
+	float m_colorScaleLight = 3.f;
 };
 
 //==============================================================================================================================================//

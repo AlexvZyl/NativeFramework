@@ -56,20 +56,14 @@ VertexArrayObject<VertexType>::~VertexArrayObject()
 //=============================================================================================================================================//
 
 template <typename VertexType>
-void VertexArrayObject<VertexType>::render()
+bool VertexArrayObject<VertexType>::onDrawCall()
 {
-	// Checks before render.
 	if (!m_vertexBufferSynced)	syncVertexBuffer();
 	if (!m_indexBufferSynced)	syncIndexBuffer();
 	if (!m_primitivesSynced)	syncPrimitives();
-	if (!m_vertexCount)			return;
-	if (!m_indexCount)			return;
-	// Render.
-	GLCall(glBindVertexArray(m_VAOID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
-	GLCall(glDrawElements(m_bufferType, m_indexCount, GL_UNSIGNED_INT, 0));
-	
-	LUMEN_DRAW_CALL();
+	if (!m_vertexCount)			return false;
+	if (!m_indexCount)			return false;
+	return true;
 }
 
 template <typename VertexType>

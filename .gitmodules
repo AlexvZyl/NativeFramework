@@ -1,9 +1,9 @@
-[submodule "ElecDev_Graphics_Application/External/imgui"]
-	path = ElecDev_Graphics_Application/External/imgui
-	url = https://github.com/Alex-vZyl/imgui
 [submodule "ElecDev_Graphics_Application/External/glm"]
 	path = ElecDev_Graphics_Application/External/glm
 	url = https://github.com/Alex-vZyl/glm
 [submodule "ElecDev_Graphics_Application/External/implot"]
 	path = ElecDev_Graphics_Application/External/implot
 	url = https://github.com/Alex-vZyl/implot
+[submodule "ElecDev_Graphics_Application/External/imgui"]
+	path = ElecDev_Graphics_Application/External/imgui
+	url = https://github.com/Alex-vZyl/imgui

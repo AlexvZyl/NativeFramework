@@ -18,19 +18,17 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Clear the error flags.
 void glClearErrors()
 {
 	while (glGetError() != GL_NO_ERROR);
 }
 
-// Check the error that occured.
-bool  glCheckError(const char* function, const char* file, int line)
+bool glCheckError(const char* function, const char* file, int line)
 {
 	while (GLenum error = glGetError())
 	{
 		// Print the error.
-		std::cout	<< red << "\n\n[OPENGL] [ERROR] \n"
+		std::cout	<< red << "\n[OPENGL] [ERROR] \n"
 					<<		    "[HEX CODE]       : "	<< white << std::hex << error << std::dec << "\n"
 					<< red <<   "[FILE]		 : "		<< white << file << "\n"
 					<< red <<   "[LINE]		 : "		<< white << line << "\n"

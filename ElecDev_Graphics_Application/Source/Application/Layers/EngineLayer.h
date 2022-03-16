@@ -6,7 +6,7 @@
 
 #include "GUI/GraphicsScene/GraphicsScene.h"
 #include "Application/Layers/GuiLayer.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  GUI Layer.																																	//

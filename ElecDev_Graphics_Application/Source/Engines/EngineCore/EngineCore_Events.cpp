@@ -4,7 +4,7 @@
 
 #include "Engines/EngineCore/EngineCore.h"
 #include "Application/Events/Events.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 
 //==============================================================================================================================================//

@@ -13,7 +13,7 @@
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Application/Application.h"
 #include "Lumen.h"
-#include "OpenGL/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Constructor.																																//
@@ -21,7 +21,9 @@
 
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
-{}
+{
+	m_windowCol = ImGui::GetStyle().Colors[ImGuiCol_Separator];
+}
 
 void GraphicsScene::setEngine(EngineCore* engine)
 {
@@ -50,6 +52,7 @@ void GraphicsScene::onEvent(Event& event)
 void GraphicsScene::begin()
 {
 	// Adjust window padding.
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, m_windowCol);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
@@ -78,6 +81,7 @@ void GraphicsScene::end()
 {
 	ImGui::End();
 	ImGui::PopStyleVar();
+	ImGui::PopStyleColor();
 }
 
 void GraphicsScene::onRenderStateChange(bool newState)

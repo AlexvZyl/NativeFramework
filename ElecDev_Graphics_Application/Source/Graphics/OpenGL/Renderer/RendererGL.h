@@ -14,9 +14,7 @@
 //  Forward Declerations.																														//
 //==============================================================================================================================================//
 
-template <typename VertexType>
-class Primitive;
-
+class PrimitivePtr;
 class Scene;
 class Polygon2DTextured;
 class Circle;
@@ -39,20 +37,14 @@ struct Font;
 
 struct RendererData 
 {
+	// Data.
 	unsigned drawCalls = 0;
 	unsigned renderPasses = 0;
 
-	void drawCall() 
-	{
-		drawCalls++;
-	}
-
-	void renderPass() 
-	{
-		renderPasses++;
-	}
-
-	void reset() 
+	// Methods.
+	inline void drawCall()	 { drawCalls++; }
+	inline void renderPass() { renderPasses++; }
+	inline void reset() 
 	{
 		drawCalls = 0;
 		renderPasses = 0;
@@ -67,6 +59,9 @@ static class Renderer
 {
 public:
 
+	// Clears resources.
+	static void shutdown();
+
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //
@@ -76,15 +71,13 @@ public:
 	// Use the font provided.
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
-	static void remove(Primitive<VertexData>* primitive);
-	// Remove the primitive from the scene.
-	static void remove(Primitive<VertexDataTextured>* primitive);
-	// Remove the primitive from the scene.
-	static void remove(Primitive<VertexDataCircle>* primitive);
+	static void remove(PrimitivePtr* primitive);
 	// Clear the rendering context.
-	static void clear();
-	// Push command to the GPU.
+	static void clearColor();
+	// Force the GPU commands.
 	static void finish();
+	// Flush the GPU commands.
+	static void flush();
 
 	// ------------- //
 	//  S C E N E S  //
@@ -111,6 +104,8 @@ public:
 
 	// Add a filled 2D polygon.
 	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
+	// Add a filled 2D polygon with color.
+	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
 	static Polygon2D* addPolygon2DClear(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
 	// Add a circle.
@@ -149,6 +144,11 @@ public:
 	// Get the default 2D scene texture.
 	static unsigned getDefault2DSceneTexture();
 
+	// --------------- //
+	//  B U F F E R S  //
+	// --------------- //
+
+	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
 	
 private:
 
@@ -187,9 +187,9 @@ private:
 	// Scene stored when another scene is being destroyed.
 	static Scene* m_storedScene;
 	// Render a scene with a 2D camera.
-	static void render2DScene(Scene* scene);
+	static void geometryPass2D(Scene* scene);
 	// Render a scene with a 3D camera.
-	static void render3DScene(Scene* scene);
+	static void geometryPass3D(Scene* scene);
 
 	// ------------------ //
 	//  V A R I A B L E S  //

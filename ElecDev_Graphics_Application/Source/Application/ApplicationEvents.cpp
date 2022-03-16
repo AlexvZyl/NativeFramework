@@ -10,16 +10,26 @@
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Layer event dispatching.																													//
 //==============================================================================================================================================//
 
-void Application::dispatchEvents()
+void Application::onUpdate()
 {
-	LUMEN_PROFILE_SCOPE("Dispatch Events");
+	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
-	// Pop the layers queued from the render loop.
+	Application::setGuiTheme();
+
+	// Execute the Lua scripts.
+	executeLuaScriptQueue();
+
+	// Log messages.
+	Logger::flushQueue();
+
+	// Pop the layers queued from the previous frame's rendering.
 	// Dispatched here so that they do not get GLFW events.
 	popLayers();
 
@@ -36,11 +46,11 @@ void Application::dispatchEvents()
 	}
 	
 	// Dispatch GLFW events.
-	for (std::unique_ptr<Event>& event : m_eventLog->events)
+	for (auto& event : m_eventLog->events)
 	{
 		uint64_t eventID = event->ID;
 
-		// Application specific are dispatched explicitly (since it is not a part of the layers).
+		// Application events are dispatched explicitly (since it is not a part of the layers).
 		if (eventID == EventType_Application)
 		{
 			Application::onEvent(*event.get()); 
@@ -68,7 +78,7 @@ void Application::dispatchEvents()
 	}
 
 	// Pop layers that are queued from GLFW events.
-	// We pop them here so that they do not get dispatched for events.
+	// We pop them here so that they do not get dispatched for onUpdate.
 	popLayers();
 
 	// Dispatch the events that are handled by the layers.
@@ -79,7 +89,7 @@ void Application::dispatchEvents()
 	// due to how resizing works when windows are docked.  They do not necessarily
 	// come into focus, missing the resize event.
 	for (auto& [name, layer] : m_layerStack->getLayers())
-		layer->dispatchEvents();
+		layer->onUpdate();
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	m_eventLog->clear();
@@ -98,6 +108,18 @@ Layer* Application::findHoveredLayer()
 	}
 	// No layer is found.
 	return nullptr;
+}
+
+void Application::imguiOnUpdate() 
+{
+	LUMEN_PROFILE_SCOPE("ImGui OnUpdate");
+
+	// Pass events to ImGui.
+	// Thess events are called here so that ImGui is not hammered with more that one per frame.
+	if (m_eventLog->mouseScroll)
+		ImGui_ImplGlfw_ScrollCallback(m_window, m_eventLog->mouseScroll->xOffset, m_eventLog->mouseScroll->yOffset);
+	if (m_eventLog->mouseMove)
+		ImGui_ImplGlfw_CursorPosCallback(m_window, m_eventLog->mouseMove->mousePosition.x, m_eventLog->mouseMove->mousePosition.y);
 }
 
 //==============================================================================================================================================//
@@ -168,7 +190,6 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 
 void Application::onEvent(Event& event)
 {
-	
 	uint64_t eventID = event.ID;
 	
 	// Window events.																	 
@@ -199,12 +220,8 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		// This should be handled differently!
-		if (path != "OPERATION_CANCELLED" && path != "FOLDER_EMPTY")
-		{
-			// Load file into Lumen.
+		if (path.size())
 			loadFromYAML(path);
-		}
 	}
 }
 
@@ -217,7 +234,7 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 		if (path.size())
 		{
 			// Find engine.
-			Design2DEngine* saveEngine = reinterpret_cast<Design2DEngine*>(event.engine);
+			Design2DEngine* saveEngine = dynamic_cast<Design2DEngine*>(event.engine);
 
 			// Check if file is added to the save event.
 			if (path.find(".lmct") != std::string::npos ||
@@ -249,12 +266,8 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		// This should be handled differently!
 		if (path.size())
-		{
-			// Load file into Lumen.
 			loadFromYAML(path);
-		}
 	}
 }
 
