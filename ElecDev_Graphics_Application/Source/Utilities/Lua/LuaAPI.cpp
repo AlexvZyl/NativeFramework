@@ -6,6 +6,7 @@
 #include "Utilities/Lua/LuaAPI.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "OpenGL/Primitives/Polygon.h"
 #include "Application/Application.h"
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Lumen.h"
@@ -116,6 +117,61 @@ int lua_DrawQuad2D(lua_State* L)
 	return 1;
 }
 
+int lua_DrawRotatedQuad2D(lua_State* L)
+{
+	int stackIndex = 1;
+	std::vector<float> result;
+
+	// Rotation.
+	float degrees = lua_GetNumberAndPop<float>(L);
+
+	// Color.
+	lua_GetTableEntriesAndPop<float>(L, result, 4);
+	glm::vec4 color = {
+		result[0],
+		result[1],
+		result[2],
+		result[3]
+	};
+
+	// Vertex 2.
+	lua_GetTableEntriesAndPop<float>(L, result, 3);
+	glm::vec3 vertex2 = {
+		result[0],
+		result[1],
+		result[2]
+	};
+
+	// Vertex 1.
+	lua_GetTableEntriesAndPop<float>(L, result, 3);
+	glm::vec3 vertex1 = {
+		result[0],
+		result[1],
+		result[2]
+	};
+
+	// Construct the vertices.
+	std::vector<glm::vec3> vertices;
+	vertices.reserve(4);
+	vertices.emplace_back(vertex1);
+	vertices.emplace_back(glm::vec3(
+		vertex1.x,
+		vertex2.y,
+		vertex1.z
+	));
+	vertices.emplace_back(vertex2);
+	vertices.emplace_back(glm::vec3(
+		vertex2.x,
+		vertex1.y,
+		vertex2.z
+	));
+
+	// Draw the rotated polygon.
+	Polygon2D* poly =  Renderer::addPolygon2D(vertices, color);
+	poly->rotate(degrees);
+
+	return 1;
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

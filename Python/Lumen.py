@@ -46,6 +46,9 @@ class LumenScript:
     def DrawQuad2D(self, vertex1, vertex2, color):
         self.__AddFunction("DrawQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color)))
 
+    def DrawRotatedQuad2D(self, vertex1, vertex2, color, rotation):
+        self.__AddFunction("DrawRotatedQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color), rotation))
+
     def DrawLine2D(self, vertex1, vertex2, thickness, color):
         self.__AddFunction("DrawLine2D", (PTable(vertex1), PTable(vertex2), thickness, PTable(color)))
 
@@ -90,18 +93,20 @@ class LumenInstance:
 
         # Set the path.
         self.__executablePath = executablePath
+        self.__running = True
 
         # Non blocking read setup.
         ON_POSIX = 'posix' in sys.builtin_module_names
         def enqueue_output(out, queue):
-            for line in iter(out.readline, b''):
-                queue.put(line)
-            out.close()
+            while self.__running:
+                for line in iter(out.readline, b''):
+                    queue.put(line)
+                    break
 
         # Start Lumen & thread.
-        process = Popen(self.__executablePath, stdout = PIPE, text = True, close_fds=ON_POSIX)
+        self.__process = Popen(self.__executablePath, stdout = PIPE, text = True, close_fds=ON_POSIX)
         q = Queue()
-        t = Thread(target=enqueue_output, args=(process.stdout, q))
+        t = Thread(target=enqueue_output, args=(self.__process.stdout, q))
         t.start()
 
         # Find socket output from Lumen.
@@ -117,8 +122,10 @@ class LumenInstance:
                     search = False
 
         # For some reason these wont close?
-        # t.join()
+        # FIX!!
+        # self.__running = False
         # q.join()
+        # t.join()
 
         # Find the port Lumen connected to in the string.
         # Hard coded for now, but this will be contained in 'line'.
@@ -132,7 +139,8 @@ class LumenInstance:
         self.__webSocket.send(script.Get())
 
     def Shutdown(self):
-        print("Shutdown")
+        self.__webSocket.close()
+        self.__process = None
 
 # ------- #
 #  E O F  #

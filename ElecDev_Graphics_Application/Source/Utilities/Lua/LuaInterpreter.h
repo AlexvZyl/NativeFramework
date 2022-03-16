@@ -17,9 +17,10 @@
 
 inline void lua_LoadLumenFunctions(lua_State* L)
 {
-	lua_register(L, "BeginScene2D", lua_BeginScene2D);
-	lua_register(L, "DrawLine2D",	lua_DrawLine2D);
-	lua_register(L, "DrawQuad2D",	lua_DrawQuad2D);
+	lua_register(L, "BeginScene2D",			lua_BeginScene2D);
+	lua_register(L, "DrawLine2D",			lua_DrawLine2D);
+	lua_register(L, "DrawQuad2D",			lua_DrawQuad2D);
+	lua_register(L, "DrawRotatedQuad2D",	lua_DrawRotatedQuad2D);
 }
 
 inline void lua_ExecuteScript(const std::string& script) 

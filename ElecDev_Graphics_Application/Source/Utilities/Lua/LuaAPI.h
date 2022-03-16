@@ -44,14 +44,10 @@
 // FOR INTERNAL USE ONLY!  
 // If you are using the Lua API you do not need to worry about this section.
 
-// Create a new window with a scene.
 int lua_BeginScene2D(lua_State* L);
-
-// Add a line to the scene.
 int lua_DrawLine2D(lua_State* L);
-
-// Add a quad to the scene.
 int lua_DrawQuad2D(lua_State* L);
+int lua_DrawRotatedQuad2D(lua_State* L);
 
 //==============================================================================================================================================//
 //  EOF.																																		//
