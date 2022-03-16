@@ -22,6 +22,12 @@ public:
 	virtual void onRender() override;
 	virtual void end() override;
 
+private:
+
+	// Set the color based on the latest notification.
+	void getNotificationColour();
+
+	glm::vec4 m_defaultColor;
 	glm::vec4 m_color;
 };
 

@@ -61,7 +61,8 @@ void ComponentEditor::onRender()
 	std::string activeTitleString;
 
 	// Check that the active component exists. Close if not.
-	if (activeComponent)
+	ImGui::PushID("CompGeneral");
+	if(activeComponent)
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
@@ -176,6 +177,7 @@ void ComponentEditor::onRender()
 		}
 		ImGui::EndChild();
 	}
+
 	// Cable properties.
 	if (activeCable)
 	{
@@ -200,6 +202,7 @@ void ComponentEditor::onRender()
 	}
 
 
+	ImGui::PopID();
 
 	// --------------------- //
 	//  D A T A   T A B L E  //
@@ -465,8 +468,8 @@ void ComponentEditor::onRender()
 			}
 		}
 	}
-	ImGui::PopID();
 	ImGui::EndChild();
+	ImGui::PopID();
 }
 
 void ComponentEditor::end()
