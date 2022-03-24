@@ -9,10 +9,23 @@ from subprocess import PIPE, Popen
 from threading import Thread
 from queue import Queue, Empty
 import sys
-import time
-from gevent import sleep
-
 import websocket
+
+# --------------------------------------- #
+#  P A R A M E T E R   F U N C T I O N S  #
+# --------------------------------------- #
+
+# Turn the parameter into a string.
+def PString(parameter):
+    return "\"" + parameter + "\""
+
+# Turn the parameter into a Lua table.
+def  PTable(parameters):
+    string = "{"
+    for p in parameters:
+        string += str(p) + ","
+    return string[:-1] + "}"
+
 
 # ------------------------- #
 #  L U M E N   S C R I P T  #
@@ -46,8 +59,23 @@ class LumenScript:
     def DrawQuad2D(self, vertex1, vertex2, color):
         self.__AddFunction("DrawQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color)))
 
+    def DrawRotatedQuad2D(self, vertex1, vertex2, color, degrees):
+        self.__AddFunction("DrawRotatedQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color), degrees))
+
     def DrawLine2D(self, vertex1, vertex2, thickness, color):
         self.__AddFunction("DrawLine2D", (PTable(vertex1), PTable(vertex2), thickness, PTable(color)))
+
+    def DrawText2D(self, text, position, color, scale, horizontalAlignment, verticalAlignment):
+        self.__AddFunction("DrawText2D", (PString(text), PTable(position), PTable(color), scale, PString(horizontalAlignment), PString(verticalAlignment)))
+
+    def DrawRotatedText2D(self, text, position, color, scale, horizontalAlignment, verticalAlignment, degrees):
+        self.__AddFunction("DrawRotatedText2D", (PString(text), PTable(position), PTable(color), scale, PString(horizontalAlignment), PString(verticalAlignment), degrees))
+
+    def DrawCircle2D(self, center, radius, color, thickness, fade):
+        self.__AddFunction("DrawCircle2D", (PTable(center), radius, PTable(color), thickness, fade))
+
+    def DrawTriangle2D(self, vertex1, vertex2, vertex3, color):
+        self.__AddFunction("DrawTriangle2D", (PTable(vertex1), PTable(vertex2), PTable(vertex3), PTable(color)))
 
     # --------------- # 
     #  P R I V A T E  #
@@ -65,21 +93,6 @@ class LumenScript:
         line = line[:-2] + ")"
         self.__AddLine(line)
 
-# --------------------------------------- #
-#  P A R A M E T E R   F U N C T I O N S  #
-# --------------------------------------- #
-
-# Turn the parameter into a string.
-def PString(parameter):
-    return "\"" + parameter + "\""
-
-# Turn the parameter into a Lua table.
-def  PTable(parameters):
-    string = "{"
-    for p in parameters:
-        string += str(p) + ","
-    return string[:-1] + "}"
-
 # ---------------------------- #
 #  L U M E N   I N ST A N C E  #
 # ---------------------------- #
@@ -90,18 +103,20 @@ class LumenInstance:
 
         # Set the path.
         self.__executablePath = executablePath
+        self.__running = True
 
         # Non blocking read setup.
         ON_POSIX = 'posix' in sys.builtin_module_names
         def enqueue_output(out, queue):
-            for line in iter(out.readline, b''):
-                queue.put(line)
-            out.close()
+            while self.__running:
+                for line in iter(out.readline, b''):
+                    queue.put(line)
+                    break
 
         # Start Lumen & thread.
-        process = Popen(self.__executablePath, stdout = PIPE, text = True, close_fds=ON_POSIX)
+        self.__process = Popen(self.__executablePath, stdout = PIPE, text = True, close_fds=ON_POSIX)
         q = Queue()
-        t = Thread(target=enqueue_output, args=(process.stdout, q))
+        t = Thread(target=enqueue_output, args=(self.__process.stdout, q))
         t.start()
 
         # Find socket output from Lumen.
@@ -117,8 +132,10 @@ class LumenInstance:
                     search = False
 
         # For some reason these wont close?
-        # t.join()
+        # FIX!!
+        # self.__running = False
         # q.join()
+        # t.join()
 
         # Find the port Lumen connected to in the string.
         # Hard coded for now, but this will be contained in 'line'.
@@ -132,7 +149,8 @@ class LumenInstance:
         self.__webSocket.send(script.Get())
 
     def Shutdown(self):
-        print("Shutdown")
+        self.__webSocket.close()
+        self.__process = None
 
 # ------- #
 #  E O F  #

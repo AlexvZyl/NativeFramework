@@ -21,7 +21,9 @@
 
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
-{}
+{
+	m_windowCol = ImGui::GetStyle().Colors[ImGuiCol_Separator];
+}
 
 void GraphicsScene::setEngine(EngineCore* engine)
 {
@@ -50,7 +52,7 @@ void GraphicsScene::onEvent(Event& event)
 void GraphicsScene::begin()
 {
 	// Adjust window padding.
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 

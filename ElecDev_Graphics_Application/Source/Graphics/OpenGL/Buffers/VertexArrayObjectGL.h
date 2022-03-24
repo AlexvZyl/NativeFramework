@@ -109,6 +109,7 @@ private:
 	friend class FrameBufferObject;
 	friend class RendererStats;
 	friend class Renderer;
+	friend class BackgroundColorEditor;
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //

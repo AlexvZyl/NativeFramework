@@ -5,30 +5,28 @@
 //==============================================================================================================================================//
 
 #include "GUI/GuiElementCore/GuiElementCore.h"
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
-//  Ribbon.																																		//
+//  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class BottomBar : public GuiElementCore
+class BackgroundColorEditor : public GuiElementCore
 {
 public:
 
 	// Constructor.
-	BottomBar(std::string name, int windowFlags);
+	BackgroundColorEditor(std::string name, int imguiWindowFlags);
+	// Destructor.
+	inline virtual ~BackgroundColorEditor() = default;
 
 	// Rendering.
 	virtual void begin() override;
 	virtual void onRender() override;
 	virtual void end() override;
 
-private:
+	glm::vec2 m_initialPosition;
 
-	// Set the color based on the latest notification.
-	void getNotificationColour();
-
-	glm::vec4 m_defaultColor;
-	glm::vec4 m_color;
 };
 
 //==============================================================================================================================================//

@@ -60,8 +60,7 @@ void Renderer::loadDefaultFont()
 void Renderer::compileShaders()
 {
 	// Renderer shaders.
-	m_shaders.insert({ "BackgroundShader2D" , std::make_unique<Shader>(BACKGROUND_SHADER_2D) });
-	m_shaders.insert({ "BackgroundShader3D" , std::make_unique<Shader>(BACKGROUND_SHADER_3D) });
+	m_shaders.insert({ "BackgroundShader"	, std::make_unique<Shader>(BACKGROUND_SHADER) });
 	m_shaders.insert({ "BasicShader"        , std::make_unique<Shader>(BASIC_SHADER) });
 	m_shaders.insert({ "TextureShader"      , std::make_unique<Shader>(TEXTURE_SHADER) });
 	m_shaders.insert({ "CircleShader"       , std::make_unique<Shader>(CIRCLE_SHADER) });
