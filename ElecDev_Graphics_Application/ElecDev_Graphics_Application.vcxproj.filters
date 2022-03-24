@@ -122,12 +122,14 @@
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
-    <ClCompile Include="Source\Utilities\Lua\LuaAPI.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_ImGui.cpp" />
+    <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -800,7 +802,7 @@
     <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
     <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
-    <ClInclude Include="Source\Utilities\Lua\LuaAPI.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
     <ClInclude Include="External\lua\Windows\include\lauxlib.h" />
     <ClInclude Include="External\lua\Windows\include\lua.h" />
@@ -808,6 +810,9 @@
     <ClInclude Include="External\lua\Windows\include\luaconf.h" />
     <ClInclude Include="External\lua\Windows\include\lualib.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
+    <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
+    <ClInclude Include="Source\Graphics\Renderer.h" />
+    <ClInclude Include="Source\Utilities\WebSocket\BoostWebsocket.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

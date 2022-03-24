@@ -29,50 +29,29 @@ void Logger::flushQueue()
 	{
 		switch (msg.level)
 		{
-
-		// ----------- //
-		//  D E B U G  //
-		// ----------- //
-
 		case LoggerLevel::Debug:
-			if (!msg.title.size()) msg.title = "DEBUG";
-			std::cout << white << "[LUMEN] [" << msg.title << "] : " << white << msg.content << "\n";
+			if (!msg.title.size()) msg.title = "Debug";
+			std::cout << white << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
 			break;
-
-		// --------- //
-		//  I N F O  //
-		// --------- //
 
 		case LoggerLevel::Info:
-			if (!msg.title.size()) msg.title = "INFO";
-			std::cout << blue << "[LUMEN] [" << msg.title << "] : " << white << msg.content << "\n";
+			if (!msg.title.size()) msg.title = "Info";
+			std::cout << blue << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
 			break;
-
-		// --------------- //
-		//  S U C C E S S  //
-		// --------------- //
 
 		case LoggerLevel::Success:
-			if (!msg.title.size()) msg.title = "SUCCESS";
-			std::cout << green << "[LUMEN] [" << msg.title << "] : " << white << msg.content << "\n";
+			if (!msg.title.size()) msg.title = "Success";
+			std::cout << green << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
 			break;
-
-		// --------------- //
-		//  W A R N I N G  //
-		// --------------- //
 
 		case LoggerLevel::Warning:
-			if (!msg.title.size()) msg.title = "WARN";
-			std::cout << yellow << "[LUMEN] [" << msg.title << "] : " << white << msg.content << "\n";
+			if (!msg.title.size()) msg.title = "Warning";
+			std::cout << yellow << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
 			break;
 
-		// ----------- //
-		//  E R R O R  //
-		// ----------- //
-
 		case LoggerLevel::Error:
-			if (!msg.title.size()) msg.title = "ERROR";
-			std::cout << red << "[LUMEN] [" << msg.title << "] : " << white << msg.content << "\n";
+			if (!msg.title.size()) msg.title = "Error";
+			std::cout << red << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
 			app.pushNotification(NotificationType::Error, 10000, msg.content, msg.title);
 			break;
 		}

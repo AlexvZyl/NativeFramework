@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Utilities/Lua/LuaInterpreter.h"
-#include "Utilities/Lua/LuaAPI.h"
+#include "Utilities/Lua/LuaAPI/LuaAPI.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Polygon.h"
@@ -206,6 +206,8 @@ int lua_DrawTriangle2D(lua_State* L)
 
 	// Draw.
 	Renderer::addPolygon2D(vertices, color);
+
+	return 1;
 }
 
 //==============================================================================================================================================//

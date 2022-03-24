@@ -323,7 +323,7 @@ void FrameBufferObject::renderFromMSAA()
 	int viewport[2] = { (int)m_viewport.x, (int)m_viewport.y };
 	m_shader->setIntArray("textureSize", viewport, 2);
 	Renderer::drawBufferIndexed(m_renderVAO.get());
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));							  
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));	
 }
 
 //=============================================================================================================================================//

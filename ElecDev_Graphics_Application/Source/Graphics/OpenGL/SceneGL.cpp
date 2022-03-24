@@ -155,7 +155,7 @@ void Scene::create2DBackground()
 	glm::vec4 bgColor2((float)217 / 255, (float)250 / 255, (float)255 / 255, 1.f);
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
 	//glm::vec4 defaultCol((float)92 / 255, (float)95 / 255, (float)103 / 255, 1.f);
-	glm::vec4 defaultCol((float)62 / 255, (float)62 / 255, (float)68 / 255, 1.f);
+	glm::vec4 defaultCol((float)66 / 255, (float)66 / 255, (float)68 / 255, 1.f);
 	glm::vec3 pos1(1.0f, 1.0f, 0.f);
 	glm::vec3 pos2(-1.0f, 1.0f, 0.f);
 	glm::vec3 pos3(-1.0f, -1.0f, 0.f);

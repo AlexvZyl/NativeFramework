@@ -9,19 +9,32 @@
 #define VERTEX_BUFFER_REDUCTION_SCALE 1.25
 #define MAX_VERTEX_BUFFER_SIZE 10000  // Unused atm.
 #define GUI_INDENT_WIDTH 15  // Rather use ImGui::PushStyleVar()?
+#define FPS_FRAME_COUNT 60
+//#define PROFILE_IMGUI_OVERHEAD
+#define LUMEN_PROFILING_FUNCTIONS
 
 //==============================================================================================================================================//
 //  Macros.																																		//
 //==============================================================================================================================================//
 
-#define LUMEN_DRAW_CALL()   Lumen::getApp().m_rendererData.drawCall();
-#define LUMEN_RENDER_PASS() Lumen::getApp().m_rendererData.renderPass();
+#ifdef LUMEN_PROFILING_FUNCTIONS
+
+	#define LUMEN_DRAW_CALL()   Lumen::getApp().m_rendererData.drawCall();
+	#define LUMEN_RENDER_PASS() Lumen::getApp().m_rendererData.renderPass();
+
+#else
+
+	#define LUMEN_DRAW_CALL()   
+	#define LUMEN_RENDER_PASS() 
+
+#endif
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
 class Application;
+class ScriptGui;
 
 //==============================================================================================================================================//
 //  Lumen.																																		//
@@ -37,13 +50,21 @@ public:
 	// Get the singleton Lumen is using.
 	static Application& getApp();
 
+	// Set the active script GUI.
+	static void setAvtiveScriptGui(ScriptGui* gui);
+	// Get the active script gui.
+	static ScriptGui* getActiveScriptGui();
+
 private:
 
 	// No instantiations.
-	Lumen() = default;
+	inline Lumen() = default;
 
 	// The singleton application.
-	static Application* s_applicationSingleton;
+	inline static Application* s_applicationSingleton = nullptr;
+
+	// The active ScriptGui.  Used for callbacks.
+	inline static ScriptGui* s_activeScriptGui = nullptr;
 
 };
 

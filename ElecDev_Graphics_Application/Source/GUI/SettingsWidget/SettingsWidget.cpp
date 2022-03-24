@@ -2,6 +2,8 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "boost/beast/core.hpp"
+#include "boost/beast/websocket.hpp"
 #include "Utilities/WebSocket/LumenWebSocket.h"
 #include "SettingsWidget.h"
 #include "Application/Application.h"
@@ -72,7 +74,7 @@ void SettingsWidget::onRender()
     // Display websocket information.
     std::string websocketInfo = "Websocket:  ";
     websocketInfo += "ws://";
-    websocketInfo += app.m_webSocket->m_socketAddress.to_string() + ":" + std::to_string(app.m_webSocket->m_port);
+    websocketInfo += app.m_webSocket->m_socketAddress->to_string() + ":" + std::to_string(app.m_webSocket->m_port);
     ImGui::Text(websocketInfo.c_str());
 }
 

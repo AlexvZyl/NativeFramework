@@ -4,55 +4,63 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Utilities/WebSocket/BoostWebsocket.h"
+#include "GUI/GuiElementCore/GuiElementCore.h"
 #include <memory>
-#include <string>
-#include <thread>
+#include <boost/asio.hpp>
+#include <boost/asio/ts/buffer.hpp>
+#include <boost/asio/ts/internet.hpp>
+
+namespace asio = boost::asio;
+using asio_websocket = boost::asio::ip::tcp::socket;
+using asio_ioc = asio::io_context;
+using boost_error_code = boost::system::error_code;
+using asio_endpoint = asio::ip::tcp::endpoint;
 
 //==============================================================================================================================================//
-//  Forward Declarations.																														//
+//  Forward declerations.																														//
 //==============================================================================================================================================//
 
-namespace boost {
-	namespace asio {
-		namespace ip {
-
-			class address;
-
-		};
-	};
-};
-
-using boost_ip_address = boost::asio::ip::address;
+struct lua_State;
 
 //==============================================================================================================================================//
-//  Web Socket Class.																															//
+//  Script GUI.																																	//
 //==============================================================================================================================================//
 
-class LumenWebSocket 
+class ScriptGui : public GuiElementCore
 {
 public:
 
-	// Constructor.  Default to local host and get open port from OS.
-	LumenWebSocket(const std::string& ip = "127.0.0.1");
+	// Constructor.
+	ScriptGui(std::string name, int windowFlags);
 	// Destructor.
-	~LumenWebSocket();
+	~ScriptGui();
 
-	// Function that listens to web socket.
-	void listener();
+	// Rendering.
+	virtual void begin() override;
+	virtual void onRender() override;
+	virtual void end() override;
 
-	// Data.
-	std::unique_ptr<boost_ip_address> m_socketAddress = nullptr;
-	int m_port = NULL;
-	std::thread m_listenerThread;
+	// Set the websocket the GUI callbacks to.
+	void connectWebSocket(std::string& host, std::string& port);
+
+	// Set the script that defines the gui.
+	void setSctipt(std::string& script);
+
+	// Send a callback message over the web socket.
+	void callbackMessage(std::string& message);
 
 private:
 
-	// Websocket message types.
-	inline static const char* LUA_EXECUTABLE_SCRIPT = "LUA_EXECUTABLE_SCRIPT";
-	inline static const char* LUA_SCRIPT_GUI = "LUA_SCRIPT_GUI";
+	// The websocket that the GUI callbacks to.
+	std::unique_ptr<basic_boost_websocket> m_webSocket;
+	std::unique_ptr<asio_ioc> m_ioContext;
 
-	// Create a Lumen GUI.
-	static void createGuiFromScript(std::string& script); 
+	// The Lua Script that defines the GUI.
+	std::string m_script;
+
+	// Lua VM that the script is executed in.
+	lua_State* m_luaState = nullptr;
 };
 
 //==============================================================================================================================================//

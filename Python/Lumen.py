@@ -5,11 +5,13 @@
 #  I M P O R T S  #
 # --------------- #
 
+import asyncio
 from subprocess import PIPE, Popen
-from threading import Thread
+from threading import Thread, local
 from queue import Queue, Empty
 import sys
 import websocket
+import websockets
 
 # --------------------------------------- #
 #  P A R A M E T E R   F U N C T I O N S  #
@@ -26,72 +28,120 @@ def  PTable(parameters):
         string += str(p) + ","
     return string[:-1] + "}"
 
+# --------------------------------------- #
+#  L U M E N   S C R I P T   E N T I T Y  #
+# --------------------------------------- #
+
+class _LumenScriptEntity:
+
+    def __init__(self):
+        self._script = ""
+        self._newLine = "\n"
+
+    # Return the generated script.
+    def GetLua(self):
+        return self._script
+
+    # Add a line to the script.
+    def _AddLine(self, line):
+        self._script += line + self._newLine
+
+    # Add a function with the parameters to the script.
+    def _AddFunction(self, function, parameters):
+        line = function + "("
+        for p in parameters:
+            line += str(p) + ", "
+        line = line[:-2] + ")"
+        self._AddLine(line)
 
 # ------------------------- #
 #  L U M E N   S C R I P T  #
 # ------------------------- #
 
-class LumenScript:
+class LumenScript(_LumenScriptEntity):
 
     def __init__(self):
-        self.__script = ""
-        self.__newLine = "\n"
+        _LumenScriptEntity.__init__(self)
+        self._AddLine("-- LUA_EXECUTABLE_SCRIPT")
 
-    # Clear the script.
     def Clear(self):
-        self.__script = ""
-
-    # Return the generated script.
-    def Get(self):
-        return self.__script
+        self._script = ""
+        self._AddLine("-- LUA_EXECUTABLE_SCRIPT")
 
     # ------------- #
     #  S C E N E S  #
     # ------------- #
 
     def BeginScene2D(self, name):
-        self.__AddFunction("BeginScene2D", (PString(name),))
+        self._AddFunction("BeginScene2D", (PString(name),))
 
     # --------------------- #
     #  P R I M I T I V E S  #
     # --------------------- #
 
     def DrawQuad2D(self, vertex1, vertex2, color):
-        self.__AddFunction("DrawQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color)))
+        self._AddFunction("DrawQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color)))
 
     def DrawRotatedQuad2D(self, vertex1, vertex2, color, degrees):
-        self.__AddFunction("DrawRotatedQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color), degrees))
+        self._AddFunction("DrawRotatedQuad2D", (PTable(vertex1), PTable(vertex2), PTable(color), degrees))
 
     def DrawLine2D(self, vertex1, vertex2, thickness, color):
-        self.__AddFunction("DrawLine2D", (PTable(vertex1), PTable(vertex2), thickness, PTable(color)))
+        self._AddFunction("DrawLine2D", (PTable(vertex1), PTable(vertex2), thickness, PTable(color)))
 
     def DrawText2D(self, text, position, color, scale, horizontalAlignment, verticalAlignment):
-        self.__AddFunction("DrawText2D", (PString(text), PTable(position), PTable(color), scale, PString(horizontalAlignment), PString(verticalAlignment)))
+        self._AddFunction("DrawText2D", (PString(text), PTable(position), PTable(color), scale, PString(horizontalAlignment), PString(verticalAlignment)))
 
     def DrawRotatedText2D(self, text, position, color, scale, horizontalAlignment, verticalAlignment, degrees):
-        self.__AddFunction("DrawRotatedText2D", (PString(text), PTable(position), PTable(color), scale, PString(horizontalAlignment), PString(verticalAlignment), degrees))
+        self._AddFunction("DrawRotatedText2D", (PString(text), PTable(position), PTable(color), scale, PString(horizontalAlignment), PString(verticalAlignment), degrees))
 
     def DrawCircle2D(self, center, radius, color, thickness, fade):
-        self.__AddFunction("DrawCircle2D", (PTable(center), radius, PTable(color), thickness, fade))
+        self._AddFunction("DrawCircle2D", (PTable(center), radius, PTable(color), thickness, fade))
 
     def DrawTriangle2D(self, vertex1, vertex2, vertex3, color):
-        self.__AddFunction("DrawTriangle2D", (PTable(vertex1), PTable(vertex2), PTable(vertex3), PTable(color)))
+        self._AddFunction("DrawTriangle2D", (PTable(vertex1), PTable(vertex2), PTable(vertex3), PTable(color)))
 
-    # --------------- # 
-    #  P R I V A T E  #
-    # --------------- # 
+# ------------------- #
+#  L U M E N   G U I  #
+# ------------------- #
 
-    # Add a line to the script.
-    def __AddLine(self, line):
-        self.__script += line + self.__newLine
+class LumenGui(_LumenScriptEntity):
 
-    # Add a function with the parameters to the script.
-    def __AddFunction(self, function, parameters):
-        line = function + "("
-        for p in parameters:
-            line += str(p) + ", "
-        line = line[:-2] + ")"
-        self.__AddLine(line)
+    def __init__(self, guiName):
+
+        _LumenScriptEntity.__init__(self)
+        self._AddLine("-- LUA_SCRIPT_GUI")
+        self._AddLine("-- Gui Name: '" + guiName + "'.")
+        # Used to set the server message callback function.
+        self.ServerHandler = 0
+
+        # Generate server data.
+        self.host = "127.0.0.1"
+        self.port = 8000
+        self._AddLine("-- Websocket: '" + self.host + ":" + str(self.port) + "'.")
+
+    def StartServer(self, LumenInstance):
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        start_server = websockets.serve(self.LumenGuiServer, self.host, self.port)
+
+        asyncio.get_event_loop().run_until_complete(start_server)
+        LumenInstance.ExecuteScript(self)
+        asyncio.get_event_loop().run_forever()
+        
+    async def LumenGuiServer(self, websocket, path):
+        async for message in websocket:
+            self.ServerHandler(message)
+
+    # ----------------------------- #
+    #  G U I   C O M P O N E N T S  #
+    # ----------------------------- #
+
+    def Button(self, label, size):
+        self._AddFunction("ImGui_Button", (PString(label), PTable(size)))
+
+    def Text(self, text):
+        self._AddFunction("ImGui_Text", (PString(text),))
 
 # ---------------------------- #
 #  L U M E N   I N ST A N C E  #
@@ -101,56 +151,50 @@ class LumenInstance:
 
     def __init__(self, executablePath):
 
-        # Set the path.
-        self.__executablePath = executablePath
-        self.__running = True
+        self._executablePath = executablePath
+        self._running = True
 
         # Non blocking read setup.
         ON_POSIX = 'posix' in sys.builtin_module_names
         def enqueue_output(out, queue):
-            while self.__running:
+            while self._running:
                 for line in iter(out.readline, b''):
                     queue.put(line)
                     break
 
-        # Start Lumen & thread.
-        self.__process = Popen(self.__executablePath, stdout = PIPE, text = True, close_fds=ON_POSIX)
+        # Start Lumen & thread for reading.
+        self._process = Popen(self._executablePath, stdout = PIPE, text = True, close_fds=ON_POSIX)
         q = Queue()
-        t = Thread(target=enqueue_output, args=(self.__process.stdout, q))
+        t = Thread(target=enqueue_output, args=(self._process.stdout, q))
         t.start()
 
         # Find socket output from Lumen.
-        lumenSocketIDString = "[LUMEN] [WEBSOCKET] : Connected to '"
+        lumenSocketIDString = "[Lumen] [Websocket] : Connected to '"
         line = ""
         search = True
         while(search):
             try:    line = q.get()
             except  Empty: pass
             else:
-                # Check if Socket ID is found.
                 if(line.find(lumenSocketIDString) != -1):
                     search = False
 
-        # For some reason these wont close?
-        # FIX!!
-        # self.__running = False
+        # For some reason these wont close? FIX!!
+        # self._running = False
         # q.join()
         # t.join()
 
-        # Find the port Lumen connected to in the string.
-        # Hard coded for now, but this will be contained in 'line'.
+        # Find and connect to port.
         url = line.replace(lumenSocketIDString, "")
         url = url.replace("'.\n", "")
-
-        # Connect to socket.
-        self.__webSocket = websocket.create_connection(url)
+        self._webSocket = websocket.create_connection(url)
 
     def ExecuteScript(self, script):
-        self.__webSocket.send(script.Get())
+        self._webSocket.send(script.GetLua())
 
     def Shutdown(self):
-        self.__webSocket.close()
-        self.__process = None
+        self._webSocket.close()
+        self._process = None
 
 # ------- #
 #  E O F  #
