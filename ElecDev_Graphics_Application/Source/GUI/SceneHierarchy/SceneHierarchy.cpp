@@ -29,7 +29,7 @@ void SceneHierarchy::onRender()
 	Application& app = Lumen::getApp();
 
 	// Check for active engine.
-	Design2DEngine* engine = app.m_guiState->design_engine;
+	Design2DEngine* engine = app.getActiveEngine<Design2DEngine>();
 	if (!engine)
 	{
 		ImGui::Text("No active engine.");
@@ -100,7 +100,7 @@ void SceneHierarchy::onRender()
 				if (ImGui::Button("Set Active"))
 				{
 					app.m_guiState->active_component = nullptr;
-					app.m_guiState->design_engine->m_activeComponent = nullptr;
+					engine->m_activeComponent = nullptr;
 					engine->setActiveCable(cable->m_entityID);
 				}
 			}

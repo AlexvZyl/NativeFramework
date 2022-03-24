@@ -38,7 +38,7 @@ public:
 	// Constructor
 	inline EngineCore() = default;
 	// Destructor.
-	inline virtual ~EngineCore() = default;
+	virtual ~EngineCore();
 
 	// ---------- //
 	//  S C E N E //
