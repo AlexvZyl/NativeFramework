@@ -27,11 +27,13 @@ void BackgroundColorEditor::begin()
 void BackgroundColorEditor::onRender()
 {
 	Application& app = Lumen::getApp();
-	Scene* scene = nullptr;
 
-	if (app.m_guiState->design_engine)
+	// Get the active scene from the engine.
+	EngineCore* engine = app.getActiveEngine();
+	Scene* scene = nullptr;
+	if (engine)
 	{
-		scene = app.m_guiState->design_engine->m_scene.get();
+		scene = engine->m_scene.get();
 	}
 
 	// Open color editor.
