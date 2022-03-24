@@ -114,18 +114,32 @@ class LumenGui(_LumenScriptEntity):
         # Used to set the server message callback function.
         self.ServerHandler = 0
 
-        # Generate server data.
-        self.host = "127.0.0.1"
-        self.port = 8000
-        self._AddLine("-- Websocket: '" + self.host + ":" + str(self.port) + "'.")
+       
 
     def StartServer(self, LumenInstance):
 
+        # Start server.
+        self.host = "127.0.0.1"
+        self.port = 0
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         start_server = websockets.serve(self.LumenGuiServer, self.host, self.port, ping_interval=None)
-
         asyncio.get_event_loop().run_until_complete(start_server)
+
+        # We provide the port as 0, so the OS gives an open port.
+        # This is the only way I could find the port that it connects to.
+        # It is VERY hacky, since the API does not allow for this.
+        laddrString =  str(start_server.ws_server.sockets[0])
+        index = laddrString.index("laddr")
+        laddrString = laddrString[index:]
+        laddrString = laddrString.replace("laddr=('", "")
+        laddrString = laddrString.replace(str(self.host), "")
+        laddrString = laddrString.replace("', ", "")
+        laddrString = laddrString.replace(")>", "")
+        self.port = laddrString
+        
+        # Write url to script.
+        self._AddLine("-- Websocket: '" + self.host + ":" + self.port + "'.")
         LumenInstance.ExecuteScript(self)
         asyncio.get_event_loop().run_forever()
         
