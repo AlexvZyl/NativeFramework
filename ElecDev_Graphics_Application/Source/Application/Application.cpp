@@ -101,6 +101,16 @@ GLFWwindow* Application::getWindow()
 	return m_window;
 }
 
+void Application::setActiveEngine(EngineCore* engine) 
+{
+	m_activeEngine = engine;
+}
+
+EngineCore* Application::getActiveEngine()
+{
+	return m_activeEngine;
+}
+
 //==============================================================================================================================================//
 //  Lua																																			//
 //==============================================================================================================================================//

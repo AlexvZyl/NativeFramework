@@ -53,4 +53,4 @@ print(imgui.GetLua())
 imgui.StartServer(instance)
 
 # Stop instance (this will close Lumen).
-# instance.Shutdown()
+instance.Shutdown()

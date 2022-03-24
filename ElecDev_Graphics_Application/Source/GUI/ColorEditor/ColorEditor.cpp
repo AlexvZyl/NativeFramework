@@ -27,8 +27,16 @@ void ColorEditor::begin()
 void ColorEditor::onRender()
 {
 	Application& app = Lumen::getApp();
-	Component2D* component = app.m_guiState->design_engine->m_activeComponent.get();
-	Cable* cable = app.m_guiState->design_engine->m_activeCable.get();
+
+	// Get active elements.
+	Design2DEngine* engine = app.getActiveEngine<Design2DEngine>();
+	Component2D* component = nullptr;
+	Cable* cable = nullptr;
+	if (engine)
+	{
+		component = engine->m_activeComponent.get();
+		cable = engine->m_activeCable.get();
+	}
 
 	// Set the color to be edited.
 	glm::vec4* color = nullptr;

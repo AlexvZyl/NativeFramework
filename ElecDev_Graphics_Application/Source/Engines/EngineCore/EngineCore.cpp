@@ -28,6 +28,15 @@ void EngineCore::onRender()
 	Renderer::renderScene(m_scene.get());
 }
 
+EngineCore::~EngineCore() 
+{
+	Application& app = Lumen::getApp();
+	if (this == app.getActiveEngine())
+	{
+		app.setActiveEngine(nullptr);
+	}
+}
+
 unsigned EngineCore::getRenderTexture() 
 { 
 	return m_scene->getRenderTexture(); 
