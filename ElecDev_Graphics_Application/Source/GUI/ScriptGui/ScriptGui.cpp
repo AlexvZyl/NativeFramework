@@ -114,16 +114,6 @@ void ScriptGui::callbackMessage(std::string& message)
         return;
     }
 
-    // Wait for write.
-    //m_webSocket->wait   wait(m_webSocket->wait_write, ec);
-
-    // Check for errors.
-    /*if (ec)
-    {
-        LUMEN_LOG_ERROR("On callback wait for write: " + ec.message(), "Script Gui Socket");
-        ec.clear();
-    }*/
-
     // Write to socket.
     boost::asio::const_buffer data(message.data(), message.size());
     size_t bytes = m_webSocket->write(data, ec);

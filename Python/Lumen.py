@@ -123,7 +123,7 @@ class LumenGui(_LumenScriptEntity):
 
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        start_server = websockets.serve(self.LumenGuiServer, self.host, self.port)
+        start_server = websockets.serve(self.LumenGuiServer, self.host, self.port, ping_interval=None)
 
         asyncio.get_event_loop().run_until_complete(start_server)
         LumenInstance.ExecuteScript(self)
