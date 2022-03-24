@@ -206,7 +206,6 @@ int lua_DrawTriangle2D(lua_State* L)
 
 	// Draw.
 	Renderer::addPolygon2D(vertices, color);
-
 	return 1;
 }
 

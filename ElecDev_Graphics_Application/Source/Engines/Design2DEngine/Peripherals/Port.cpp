@@ -85,19 +85,22 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 
 Port::~Port()
 {
-	// If a port is removed, we need to find and destroy any linked cables.
-	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
-	for (Cable* cable : m_cables)
-	{
-		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr<Cable> current)
-			{
-				return current.get() == cable;
-			});
-
-		// Check that the cable is in the list.
-		if (toRemove != cableList.end())
+	//check if port is in a circuit
+	if (dynamic_cast<Circuit*>(m_parent->m_parent) != nullptr) {
+		// If a port is removed, we need to find and destroy any linked cables.
+		auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
+		for (Cable* cable : m_cables)
 		{
-			cableList.erase(toRemove);
+			auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr<Cable> current)
+				{
+					return current.get() == cable;
+				});
+
+			// Check that the cable is in the list.
+			if (toRemove != cableList.end())
+			{
+				cableList.erase(toRemove);
+			}
 		}
 	}
 

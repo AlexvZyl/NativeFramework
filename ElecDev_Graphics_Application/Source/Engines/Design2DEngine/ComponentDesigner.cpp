@@ -3,5 +3,6 @@
 
 ComponentDesigner::ComponentDesigner():Base2DEngine()
 {
-	m_Component = std::make_shared<Component2D>(Component2D(nullptr));
+	m_activeComponent = std::make_shared<Component2D>(nullptr);
+	m_activeComponent->place(glm::vec2(0.f));
 }

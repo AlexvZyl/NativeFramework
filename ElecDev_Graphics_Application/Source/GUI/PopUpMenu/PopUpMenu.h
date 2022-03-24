@@ -11,7 +11,7 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class Design2DEngine;
+class Base2DEngine;
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -30,7 +30,7 @@ public:
 	void setInitialPosition(glm::vec2& pos);
 
 	// Set the engine that the popup is in.
-	void setEngine(Design2DEngine* engine);
+	void setEngine(Base2DEngine* engine);
 
 	// Rendering.
 	virtual void begin() override;
@@ -43,7 +43,7 @@ private:
 	glm::vec2 m_initialPos = { 0,0 };
 
 	// The engine that the popup is in.
-	Design2DEngine* m_engine = nullptr;
+	Base2DEngine* m_engine = nullptr;
 
 	// We need to close the popup on a defocus.
 	virtual void onDefocusEvent(LayerEvent& event) override;

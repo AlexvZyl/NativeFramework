@@ -9,7 +9,7 @@ protected:
 
 public:
 
-    std::shared_ptr<Component2D> m_Component;
+    std::shared_ptr<Component2D> m_activeComponent;
     //Constructor
     ComponentDesigner();
 

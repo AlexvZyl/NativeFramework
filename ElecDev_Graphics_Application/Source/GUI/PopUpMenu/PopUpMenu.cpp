@@ -14,6 +14,7 @@
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "GUI/ColorEditor/ColorEditor.h"
+#include "Engines/Design2DEngine/ComponentDesigner.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -40,7 +41,7 @@ void PopUpMenu::setInitialPosition(glm::vec2& pos)
     m_initialPos = pos;
 }
 
-void PopUpMenu::setEngine(Design2DEngine* engine)
+void PopUpMenu::setEngine(Base2DEngine* engine)
 {
     m_engine = engine;
 }
@@ -65,98 +66,108 @@ void PopUpMenu::onRender()
     // --------------------- //
     //  B A C K G R O U N D  //
     // --------------------- //
-    
-    // Render menu items.
-    if (!m_engine->m_activeComponent && !m_engine->m_activeCable)
-    {
-        if (ImGui::MenuItem("Place component", "P"))
-        {   
-            // Place a dummy component.
-            m_engine->ComponentPlaceMode();
+    if (dynamic_cast<Design2DEngine*>(m_engine)) {
+        Design2DEngine* design_engine = dynamic_cast<Design2DEngine*>(m_engine);
+        // Render menu items.
+        if (!design_engine->m_activeComponent && !design_engine->m_activeCable)
+        {
+            if (ImGui::MenuItem("Place component", "P"))
+            {
+                // Place a dummy component.
+                design_engine->ComponentPlaceMode();
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+        }
+
+        // ------------------- //
+        //  C O M P O N E N T  //
+        // ------------------- //
+
+        else if (design_engine->m_activeComponent || design_engine->m_activeCable)
+        {
+            if (ImGui::MenuItem("Component Editor", "E"))
+            {
+                // Pushing this GUI layer defocuses the popup, causing a 
+                // defocus event, which removes the popup event.
+                app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
+            }
+            if (ImGui::MenuItem("Color Editor"))
+            {
+                ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
+                glm::vec2 localMousePos = getMousePosition();
+                glm::vec2 pos = {
+
+                    localMousePos.x + m_contentRegionPosition.x,
+                    localMousePos.y + m_contentRegionPosition.y
+                };
+                editor->m_initialPosition = pos;
+            }
+
+            //if (ImGui::MenuItem("Edit Ports", "P"))
+            //{
+            //    // Remove popup.
+            //    Lumen::getApp().queuePopLayer(m_name);
+            //}
+            /*if (ImGui::MenuItem("Add Cable", "C"))
+            {
+                //
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }*/
+            if (ImGui::MenuItem("Remove component", "DEL"))
+            {
+                design_engine->deleteActiveComponent();
+
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+        }
+        ImGui::Separator();
+
+        // --------------- //
+        //  D E F A U L T  //
+        // --------------- //
+
+        if (ImGui::MenuItem("Circuit Editor..."))
+        {
+            CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Right)->getGui();
+            editor->setEngine(design_engine);
+            editor->setActiveEngineTracking(true);
+        }
+
+        if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
+        {
+            // Create and log load event.
+            std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
+            if (path.size())
+            {
+                FileLoadEvent event(path);
+                app.logEvent<FileLoadEvent>(event);
+            }
+            // Remove popup.
+            app.queuePopLayer(m_name);
+        }
+        if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
+        {
+            // Create and log save event.
+            std::string path = selectFile("Lumen Save Circuit", "", design_engine->m_circuit->m_label, "Save");
+            if (path.size())
+            {
+                FileSaveEvent event(path, design_engine);
+                app.logEvent<FileSaveEvent>(event);
+            }
             // Remove popup.
             app.queuePopLayer(m_name);
         }
     }
-
-    // ------------------- //
-    //  C O M P O N E N T  //
-    // ------------------- //
-
-    else if (m_engine->m_activeComponent || m_engine->m_activeCable)
-    {
+    else if (dynamic_cast<ComponentDesigner*>(m_engine)) {
         if (ImGui::MenuItem("Component Editor", "E"))
         {
             // Pushing this GUI layer defocuses the popup, causing a 
             // defocus event, which removes the popup event.
             app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
         }
-        if (ImGui::MenuItem("Color Editor"))
-        {
-            ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
-            glm::vec2 localMousePos = getMousePosition();
-            glm::vec2 pos = {
-
-                localMousePos.x + m_contentRegionPosition.x,
-                localMousePos.y + m_contentRegionPosition.y
-            };
-            editor->m_initialPosition = pos;
-        }
-        
-        //if (ImGui::MenuItem("Edit Ports", "P"))
-        //{
-        //    // Remove popup.
-        //    Lumen::getApp().queuePopLayer(m_name);
-        //}
-        /*if (ImGui::MenuItem("Add Cable", "C"))
-        {
-            //
-            // Remove popup.
-            app.queuePopLayer(m_name);
-        }*/
-        if (ImGui::MenuItem("Remove component", "DEL"))
-        {
-            m_engine->deleteActiveComponent();
-
-            // Remove popup.
-            app.queuePopLayer(m_name);
-        }
-    }
-    ImGui::Separator();
-
-    // --------------- //
-    //  D E F A U L T  //
-    // --------------- //
-
-    if (ImGui::MenuItem("Circuit Editor..."))
-    {
-        CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Right)->getGui();
-        editor->setEngine(m_engine);
-        editor->setActiveEngineTracking(true);
-    }
-
-    if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
-    {
-        // Create and log load event.
-        std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-        if (path.size())
-        {
-            FileLoadEvent event(path);
-            app.logEvent<FileLoadEvent>(event);
-        }
-        // Remove popup.
-        app.queuePopLayer(m_name);
-    }
-    if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
-    {
-        // Create and log save event.
-        std::string path = selectFile("Lumen Save Circuit", "", m_engine->m_circuit->m_label, "Save");
-        if (path.size())
-        {
-            FileSaveEvent event(path, m_engine);
-            app.logEvent<FileSaveEvent>(event);
-        }
-        // Remove popup.
-        app.queuePopLayer(m_name);
     }
 }
 
