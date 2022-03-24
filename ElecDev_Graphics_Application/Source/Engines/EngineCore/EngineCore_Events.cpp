@@ -4,8 +4,10 @@
 
 #include "Engines/EngineCore/EngineCore.h"
 #include "Application/Events/Events.h"
+#include "Application/Application.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "Lumen.h"
 
 //==============================================================================================================================================//
 //  On Event.																																	//
@@ -59,6 +61,7 @@ void EngineCore::onFocusEvent(LayerEvent& event)
 {
 	m_isFocused = true;
 	Renderer::bindScene(m_scene.get());
+	Lumen::getApp().setActiveEngine(this);
 }
 
 void EngineCore::onDefocusEvent(LayerEvent& event)

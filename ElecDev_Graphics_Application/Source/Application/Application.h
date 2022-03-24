@@ -158,6 +158,15 @@ public:
 	// Add a Lua script to the queue.
 	void pushLuaScript(const std::string& script);
 
+	// Set the active engine.
+	void setActiveEngine(EngineCore* engine);
+	// Get the base pointer active engine.
+	EngineCore* getActiveEngine();
+	// Get the active engine of a specific type.
+	// Returns nullptr if it is not the same type.
+	template<class EngineType>
+	EngineType* getActiveEngine();
+
 private:
 
 	// Queue of scipts to be executed.
@@ -173,6 +182,9 @@ private:
 
 	// The window containing the application.
 	GLFWwindow* m_window = nullptr;
+
+	// The active engine.
+	EngineCore* m_activeEngine = nullptr;
 
 	// --------- //
 	//  L O O P  //
@@ -331,6 +343,12 @@ EngineLayer<EngineType>* Application::getEngineLayer(EngineCore* engine)
 	}
 	// Engine not found.
 	return nullptr;
+}
+
+template<class EngineType>
+EngineType* Application::getActiveEngine() 
+{
+	return dynamic_cast<EngineType*>(m_activeEngine);
 }
 
 //==============================================================================================================================================//

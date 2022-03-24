@@ -69,7 +69,6 @@ struct GUIState
 	bool placingComponent = false;
 
 	//Design Engine
-	Design2DEngine* design_engine = NULL;
 	Component2D* active_component = NULL;
 	Cable* active_cable = nullptr;
 

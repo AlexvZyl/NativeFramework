@@ -35,11 +35,13 @@ void ComponentEditor::onRender()
 {
 	Application& app = Lumen::getApp();
 
-	if (!app.m_guiState->design_engine) return;
+	Design2DEngine* engine = app.getActiveEngine<Design2DEngine>();
+	if (!engine) return;
 
 	// Fetch all the component names.
-	auto& numComponents = app.m_guiState->design_engine->m_circuit->m_components;
-	auto& numCables = app.m_guiState->design_engine->m_circuit->m_cables;
+
+	auto& numComponents = engine->m_circuit->m_components;
+	auto& numCables = engine->m_circuit->m_cables;
 	const char* componentNames[100];
 	int numCom = 0;
 	for (auto& key : numComponents)
@@ -49,8 +51,8 @@ void ComponentEditor::onRender()
 	}
 
 	// Fetch active elements.
-	Component2D* activeComponent = app.m_guiState->design_engine->m_activeComponent.get();
-	Cable* activeCable = app.m_guiState->design_engine->m_activeCable.get();
+	Component2D* activeComponent = engine->m_activeComponent.get();
+	Cable* activeCable = engine->m_activeCable.get();
 
 	// Check that the active component exists. Close if not.
 	ImGui::PushID("CompGeneral");

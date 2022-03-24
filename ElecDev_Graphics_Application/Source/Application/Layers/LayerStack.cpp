@@ -42,12 +42,6 @@ void LayerStack::popLayers()
 		if (layer == hoveredLayer) app.m_hoveredLayer = nullptr;
 		if (layer == focusedLayer)
 		{
-			// Check if design engine was removed.
-			// TODO: Thas to be a better way to handle this.
-			auto* engineLayer = dynamic_cast<EngineLayer<Design2DEngine>*>(focusedLayer);
-			if (engineLayer)
-				app.m_guiState->design_engine = nullptr;
-
 			// Reset.
 			app.m_focusedLayer = nullptr;
 			ImGui::SetWindowFocus(NULL);
