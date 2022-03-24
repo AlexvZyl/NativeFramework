@@ -1,8 +1,9 @@
 # Imports.
-from Lumen import LumenScript, LumenInstance
+from Lumen import LumenScript, LumenInstance, LumenGui
 
 # Create Lumen program instance.
-instance = LumenInstance("C:\\Lumen\\Binaries\\Executables\\x64\\Release\\Lumen.exe")
+# instance = LumenInstance("C:\\Lumen\\Binaries\\Executables\\x64\\Release\\Lumen.exe")
+instance = LumenInstance("C:\\Lumen\\Binaries\\Executables\\x64\\Debug\\Lumen.exe")
 
 # Create a script.
 script = LumenScript()
@@ -17,8 +18,7 @@ script.DrawText2D("Testing Text (L, B)", (0,0,0.99), (0,0,0,1), 0.1, "L", "B")
 script.DrawRotatedText2D("Testing Rotated Text (C, B)", (0.5,0.5,0.99), (0,0,0,1), 0.05, "C", "B", 30)
 script.DrawCircle2D((0.5,0.5,0.999), 0.1, (0,1,1,0.6), 1, 0.001)
 script.DrawTriangle2D((1,1,0.99), (1,0,0.99), (1.4, 0.5, 0.99), (1,1,1,0.7))
-
-print(script.Get())
+print(script.GetLua())
 
 # Execute the first script and clear so that we can use it again.
 instance.ExecuteScript(script)
@@ -28,10 +28,29 @@ script.Clear()
 script.BeginScene2D("Another Test")
 script.DrawQuad2D((2,2,2), (3,3,3), (1,0,0,1))
 script.DrawLine2D((2,1,4), (2,2,1), 0.1, (1,0,0,1))
+print(script.GetLua())
 
 # Execute second script and clear it.
 instance.ExecuteScript(script)
 script.Clear()
+
+# Create a Lumen Gui.
+imgui = LumenGui("Testing Gui")
+
+# Setup the server handler.
+def MyServerHandler(message):
+    print("MyServerHandler: " + message)
+    # Handle the message...
+
+# Set the specific gui's handler.
+imgui.ServerHandler = MyServerHandler
+
+# Create gui script.
+imgui.Text("Testing Text")
+imgui.Button("Testing Button", (0,0))
+print(imgui.GetLua())
+# Start gui inside the Lumen instance.
+imgui.StartServer(instance)
 
 # Stop instance (this will close Lumen).
 instance.Shutdown()

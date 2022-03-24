@@ -4,6 +4,7 @@
 
 #include "EntityManager.h"
 #include <iostream>
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Static inits.																																//
@@ -20,7 +21,7 @@ std::unordered_map<unsigned, Entity*> EntityManager::entityLog = std::unordered_
 unsigned EntityManager::generateEID(Entity* entity)
 {
 	// Check to see if there are any freed (recycled) ID's.
-	if (!freeIDs.size()) 
+	if (!freeIDs.size())  
 	{
 		entityLog.insert({ ++lastID, entity });
 		return lastID;
@@ -54,7 +55,7 @@ Entity* EntityManager::getEntity(unsigned EID)
 {
 	if ((EID == 0) || (EID == -1)) 
 	{
-		std::cout << "\nEntities with ID = -1 or 0 are not managed by the entity manager.";
+		LUMEN_LOG_WARN("Entities with ID = -1 or 0 are not managed by the entity manager.", "ENTITY MANAGER");
 		return nullptr;
 	}
 	if (entityLog.contains(EID))
@@ -63,7 +64,7 @@ Entity* EntityManager::getEntity(unsigned EID)
 	}
 	else 
 	{
-		std::cout << "\nInvalid eID.";
+		LUMEN_LOG_WARN("Invalid entity ID.", "ENTITY MANAGER");
 		return nullptr;
 	}
 }

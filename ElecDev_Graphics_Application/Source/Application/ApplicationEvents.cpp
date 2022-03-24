@@ -21,7 +21,7 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
-	Application::setGuiTheme();
+	//Application::setGuiTheme();
 
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();

@@ -58,19 +58,18 @@ void RendererStats::onRender()
 				renderScenesTime += result.msTime;
 				continue;
 			}
+
+#ifdef PROFILE_IMGUI_OVERHEAD
 			// Rendering all of the layers.
 			else if (result.name == "App OnRender")
 			{
 				renderLayersTime = result.msTime;
-#ifdef PROFILE_IMGUI_OVERHEAD
 				continue;
-#endif
 			}
 
-#ifdef PROFILE_IMGUI_OVERHEAD
 			// ImGui functions.
 			else if (result.name == "ImGui NewFrame" ||
-				result.name == "ImGuiOnUpdate" ||
+				result.name == "ImGui OnUpdate" ||
 				result.name == "ImGui Draw")
 			{
 				imGuiTime += result.msTime;
@@ -87,6 +86,15 @@ void RendererStats::onRender()
 			ImGui::Text("%.3f", result.msTime);
 		}
 
+#ifdef PROFILE_IMGUI_OVERHEAD
+		// ImGui overhead (Drawing, calling functions, new frame).
+		ImGui::TableNextRow();
+		ImGui::TableSetColumnIndex(0);
+		ImGui::Text("ImGui Overhead");
+		ImGui::TableSetColumnIndex(1);
+		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
+#endif
+
 		// Rendering scenes.
 		if (renderScenesTime)
 		{
@@ -96,15 +104,6 @@ void RendererStats::onRender()
 			ImGui::TableSetColumnIndex(1);
 			ImGui::Text("%.3f", renderScenesTime);
 		}
-
-#ifdef PROFILE_IMGUI_OVERHEAD
-		// ImGui overhead (Drawing, calling functions, new frame).
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0);
-		ImGui::Text("ImGui Overhead");
-		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
-#endif
 
 		// Done.
 		ImGui::EndTable();
@@ -122,7 +121,6 @@ void RendererStats::onRender()
 		app.m_profilerResults.shrink_to_fit();
 		app.m_profilerResults.clear();
 	}
-
 	
 	ImGui::EndChild();
 	ImGui::PopID();
@@ -156,7 +154,6 @@ void RendererStats::onRender()
 
 		// Done.
 		ImGui::EndTable();
-
 		app.m_rendererData.reset();
 	}
 	else

@@ -6,7 +6,7 @@
 
 #include <vector>
 #include <string>
-#include "Utilities/Lua/LuaAPI.h"
+#include "Utilities/Lua/LuaAPI/LuaAPI.h"
 #include "lua/Windows/include/lua.hpp"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
@@ -17,6 +17,7 @@
 
 inline void lua_LoadLumenFunctions(lua_State* L)
 {
+	// 2D Drawing.
 	lua_register(L, "BeginScene2D",			lua_BeginScene2D);
 	lua_register(L, "DrawLine2D",			lua_DrawLine2D);
 	lua_register(L, "DrawQuad2D",			lua_DrawQuad2D);
@@ -25,19 +26,30 @@ inline void lua_LoadLumenFunctions(lua_State* L)
 	lua_register(L, "DrawRotatedText2D",	lua_DrawRotatedText2D);
 	lua_register(L, "DrawCircle2D",			lua_DrawCircle2D);
 	lua_register(L, "DrawTriangle2D",		lua_DrawTriangle2D);
+
+	// ImGui.
+	lua_register(L, "ImGui_Text",			lua_imgui_Text);
+	lua_register(L, "ImGui_Button",			lua_imgui_Button);
 }
 
-inline void lua_ExecuteScript(const std::string& script) 
+inline lua_State* lua_CreateNewLuaState() 
 {
-	Application& app = Lumen::getApp();
-
 	// Create Lua VM.
 	lua_State* L = luaL_newstate();
 	lua_LoadLumenFunctions(L);
 	luaL_openlibs(L);
+	return L;
+}
 
+inline void lua_ExecuteScript(lua_State* L, const std::string& script, bool notify = false)
+{
 	// Execute the code.
 	int msg = luaL_dostring(L, script.c_str());
+
+	// Do not notify.
+	if (!notify) return;
+
+	Application& app = Lumen::getApp();
 
 	// OK.
 	if (msg == LUA_OK)
