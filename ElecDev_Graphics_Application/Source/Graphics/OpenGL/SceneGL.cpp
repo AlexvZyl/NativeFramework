@@ -185,10 +185,10 @@ void Scene::create3DBackground()
 //  Events.																																		//
 //==============================================================================================================================================//
 
-void Scene::resize(int width, int height) 
+void Scene::resize(const glm::vec2& size) 
 {
-	m_camera->resize(width, height);
-	m_FBO->resize(width, height);
+	m_camera->resize((int)size.x, (int)size.y);
+	m_FBO->resize((int)size.x, (int)size.y);
 }
 
 void Scene::onEvent(Event& event) 

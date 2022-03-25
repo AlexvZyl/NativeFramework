@@ -13,6 +13,7 @@
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
@@ -74,6 +75,8 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			}
 			else m_activeCable->addSegment(screenCoords);
 		}
+
+		LUMEN_LOG_DEBUG(std::to_string(getEntityID(event.mousePosition)), "Design Engine EID");
 	}
 
 	// ----------------------- //
@@ -167,12 +170,9 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		}
 	}
 
+	// Store state.
 	m_lastDragPos = screenCoords;
-
-	#ifdef _DEBUG
-		m_currentEntityID = getEntityID(coords);
-		std::cout << m_currentEntityID << std::endl;
-	#endif
+	m_currentEntityID = getEntityID(coords);
 }
 
 //==============================================================================================================================================//
@@ -234,6 +234,18 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 
 			// --------------------------------------------------------------------------------------------------------------- //
 		}
+	}
+}
+
+//==============================================================================================================================================//
+//  Files.																																		//
+//==============================================================================================================================================//
+
+void Design2DEngine::onFileDropEvent(FileDropEvent& event) 
+{
+	for (auto& path : event.fileData)
+	{
+		LUMEN_LOG_DEBUG(path, "FileDropEvent");
 	}
 }
 
