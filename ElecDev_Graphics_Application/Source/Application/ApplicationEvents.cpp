@@ -8,6 +8,7 @@
 #include "Layers/LayerStack.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "imgui/backends/imgui_impl_glfw.h"
@@ -228,27 +229,53 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 		if (path.size())
 		{
 			// Find engine.
-			Design2DEngine* saveEngine = dynamic_cast<Design2DEngine*>(event.engine);
+			Design2DEngine* designEngine = dynamic_cast<Design2DEngine*>(event.engine);
+			ComponentDesigner* component_designer = dynamic_cast<ComponentDesigner*>(event.engine);
+			if (designEngine) {
 
-			// Check if file is added to the save event.
-			if (path.find(".lmct") != std::string::npos ||
-				path.find(".yml") != std::string::npos ||
-				path.find(".yaml") != std::string::npos)
-			{
-				// Move the file onto a new string.
-				std::string file;
-				while (path.back() != '\\')
+				// Check if file is added to the save event.
+				if (path.find(".lmct") != std::string::npos ||
+					path.find(".yml") != std::string::npos ||
+					path.find(".yaml") != std::string::npos)
 				{
-					file.push_back(path.back());
-					path.pop_back();
+					// Move the file onto a new string.
+					std::string file;
+					while (path.back() != '\\')
+					{
+						file.push_back(path.back());
+						path.pop_back();
+					}
+					std::reverse(file.begin(), file.end());
+					saveToYAML(designEngine->m_circuit, path, file);
 				}
-				std::reverse(file.begin(), file.end());
-				saveToYAML(saveEngine->m_circuit, path, file);
+				else
+				{
+					std::string empty = "";
+					saveToYAML(designEngine->m_circuit, path, empty);
+				}
 			}
-			else
-			{
-				std::string empty = "";
-				saveToYAML(saveEngine->m_circuit, path, empty);
+			else if (component_designer) {
+
+				// Check if file is added to the save event.
+				if (path.find(".lmcp") != std::string::npos ||
+					path.find(".yml") != std::string::npos ||
+					path.find(".yaml") != std::string::npos)
+				{
+					// Move the file onto a new string.
+					std::string file;
+					while (path.back() != '\\')
+					{
+						file.push_back(path.back());
+						path.pop_back();
+					}
+					std::reverse(file.begin(), file.end());
+					saveToYAML(component_designer->m_activeComponent, path, file);
+				}
+				else
+				{
+					std::string empty = "";
+					saveToYAML(component_designer->m_activeComponent, path, empty);
+				}
 			}
 		}
 	}

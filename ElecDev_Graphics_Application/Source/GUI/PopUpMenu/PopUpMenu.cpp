@@ -162,11 +162,24 @@ void PopUpMenu::onRender()
         }
     }
     else if (dynamic_cast<ComponentDesigner*>(m_engine)) {
+        Component2D* active_component = (dynamic_cast<ComponentDesigner*>(m_engine))->m_activeComponent.get();
         if (ImGui::MenuItem("Component Editor", "E"))
         {
             // Pushing this GUI layer defocuses the popup, causing a 
             // defocus event, which removes the popup event.
             app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
+        }
+        if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
+        {
+            // Create and log save event.
+            std::string path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
+            if (path.size())
+            {
+                FileSaveEvent event(path, dynamic_cast<ComponentDesigner*>(m_engine));
+                app.logEvent<FileSaveEvent>(event);
+            }
+            // Remove popup.
+            app.queuePopLayer(m_name);
         }
     }
 }

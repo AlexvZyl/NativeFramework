@@ -86,6 +86,73 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, std::string& directory, std::
 	yamlStream.close();
 }
 
+void saveToYAML(std::shared_ptr<Component2D>& component, std::string& directory, std::string& filename)
+{
+	std::string labelTemp;
+	// Check if file name supplied.
+	if (filename.length())
+	{
+		// Remove extensions from the file name.
+		if (filename.find(".yml") != std::string::npos) { filename.erase(filename.length() - 4, 4); }
+		else if (filename.find(".yaml") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
+		else if (filename.find(".lmct") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
+		// Change circuit name to the file name.
+		labelTemp = component->equipType;
+		component->equipType = filename;
+	}
+
+	// --------- //
+	//  F I L E  //
+	// --------- //
+
+	// Begin File.
+	YAML::Emitter yamlEmitter;
+	yamlEmitter << YAML::BeginMap;
+
+	yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
+	yamlEmitter << YAML::BeginMap;
+	yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
+	yamlEmitter << YAML::Key << "Type" << YAML::Value << "Component";
+	yamlEmitter << YAML::EndMap;
+
+	// Serialise circuit.
+	yamlEmitter << component;
+
+	// Restore current (in Lumen) circuit name.
+	if (filename.length())
+		component->equipType = labelTemp;
+
+	// --------- //
+	//  S A V E  //
+	// --------- //
+
+	// Make sure directory has backslash.
+	if (directory.back() != '\\') { directory.push_back('\\'); }
+
+	std::string file;
+	// If filename was not supplied, create from circuit.
+	if (!filename.length())
+	{
+		file = directory + component->equipType + ".lmcp";
+	}
+	// Use supplied filename.
+	else
+	{
+		std::string ext = ".lmcp";
+		filename.insert(filename.end(), ext.begin(), ext.end());
+		// Set file name;
+		file = directory + filename;
+	}
+
+	// End YAML.
+	yamlEmitter << YAML::EndMap;
+	// Save file.
+	std::ofstream yamlStream;
+	yamlStream.open(file);
+	yamlStream << yamlEmitter.c_str();
+	yamlStream.close();
+}
+
 //=============================================================================================================================================//
 //  Deserialisation.		  																												   //
 //=============================================================================================================================================//
