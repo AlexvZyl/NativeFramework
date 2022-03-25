@@ -119,9 +119,12 @@ void Application::executeLuaScriptQueue()
 {
 	if (!m_luaScripts.size()) return;
 
+	// Execute Lua scripts.
 	for (auto& script : m_luaScripts)
 	{
-		lua_ExecuteScript(script);
+		lua_State* L = lua_CreateNewLuaState();
+		lua_ExecuteScript(L, script, true);
+		lua_close(L);
 	}
 	m_luaScripts.clear();
 }
@@ -137,16 +140,18 @@ void Application::pushLuaScript(const std::string& script)
 
 void Application::setGuiTheme()
 {
+	// Used for initial setup.
 	static bool first = true;
 
 	// ----------- //
 	//  S T Y L E  //
 	// ----------- //
 
-	ImGuiStyle& style = ImGui::GetStyle();
 
 	if (first)
 	{
+		ImGuiStyle& style = ImGui::GetStyle();
+
 		ImGui::StyleColorsDark();
 		style.ItemSpacing = ImVec2(12, 6);
 		style.ItemInnerSpacing = ImVec2(8, 4);

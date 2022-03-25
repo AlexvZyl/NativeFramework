@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Utilities/Lua/LuaInterpreter.h"
-#include "Utilities/Lua/LuaAPI.h"
+#include "Utilities/Lua/LuaAPI/LuaAPI.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Polygon.h"

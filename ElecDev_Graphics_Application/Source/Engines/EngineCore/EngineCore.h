@@ -20,6 +20,7 @@ class MouseScrollEvent;
 class KeyEvent;
 class WindowEvent;
 class LayerEvent;
+class FileDropEvent;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -99,6 +100,9 @@ public:
 	virtual void onDefocusEvent(LayerEvent& event);
 	virtual void onHoverEvent(LayerEvent& event);
 	virtual void onDehoverEvent(LayerEvent& event);
+
+	// Files.
+	inline virtual void onFileDropEvent(FileDropEvent& event) {};
 
 	// --------- //
 	//  D A T A  //

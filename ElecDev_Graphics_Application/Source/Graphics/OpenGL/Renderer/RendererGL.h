@@ -186,9 +186,13 @@ private:
 	static Scene* m_scene;
 	// Scene stored when another scene is being destroyed.
 	static Scene* m_storedScene;
-	// Render a scene with a 2D camera.
+	// The 2D Rendering pipeline.
+	static void renderingPipeline2D(Scene* scene);
+	// Render a 2D scene's gemeometry.
 	static void geometryPass2D(Scene* scene);
-	// Render a scene with a 3D camera.
+	// The 3D Rendering pipeline.
+	static void renderingPipeline3D(Scene* scene);
+	// Render a 3D scene's gemeometry.
 	static void geometryPass3D(Scene* scene);
 
 	// ------------------ //

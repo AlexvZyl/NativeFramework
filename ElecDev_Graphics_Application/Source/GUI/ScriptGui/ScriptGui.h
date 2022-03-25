@@ -4,56 +4,63 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include <memory>
+#include "Utilities/WebSocket/BoostWebsocket.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
-#include "Engines/EngineCore/EngineCore.h"
+#include <memory>
+#include <boost/asio.hpp>
+#include <boost/asio/ts/buffer.hpp>
+#include <boost/asio/ts/internet.hpp>
+
+namespace asio = boost::asio;
+using asio_websocket = boost::asio::ip::tcp::socket;
+using asio_ioc = asio::io_context;
+using boost_error_code = boost::system::error_code;
+using asio_endpoint = asio::ip::tcp::endpoint;
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class EngineCore;
-class Event;
+struct lua_State;
 
 //==============================================================================================================================================//
-//  Graphics Scene.																																//
+//  Script GUI.																																	//
 //==============================================================================================================================================//
 
-class GraphicsScene : public GuiElementCore
+class ScriptGui : public GuiElementCore
 {
 public:
 
 	// Constructor.
-	GraphicsScene(std::string name, int windowFlags);
+	ScriptGui(std::string name, int windowFlags);
 	// Destructor.
-	virtual ~GraphicsScene() = default;
+	~ScriptGui();
 
-	// Rendering functions.
+	// Rendering.
 	virtual void begin() override;
 	virtual void onRender() override;
 	virtual void end() override;
 
-	// Override the on event so that we pass it to the engine.
-	virtual void onEvent(Event& event) override;
+	// Set the websocket the GUI callbacks to.
+	void connectWebSocket(std::string& host, std::string& port);
 
-	// Event handler for when the render state changes.
-	virtual void onRenderStateChange(bool newState) override;
+	// Set the script that defines the gui.
+	void setSctipt(std::string& script);
 
-	// Set the texture that the graphics window will render.
-	void setEngine(EngineCore* engine);
-	// Get the engine inside the graphics scene.
-	EngineCore* getEngine();
+	// Send a callback message over the web socket.
+	void callbackMessage(std::string& message);
 
 private:
 
-	// Rendering texture data.
-	void* m_textureID = nullptr;
-	// The engine that belongs to the window.
-	EngineCore* m_engine = nullptr;
+	// The websocket that the GUI callbacks to.
+	std::unique_ptr<basic_boost_websocket> m_webSocket;
+	std::unique_ptr<asio_ioc> m_ioContext;
 
-	// Content region events.  These need to be passed onto the engine.
-	virtual void onContentRegionResizeEvent(WindowEvent& event) override;
-	virtual void onContentRegionMoveEvent(WindowEvent& event) override;
+	// The Lua Script that defines the GUI.
+	std::string m_script;
+
+	// Lua VM that the script is executed in.
+	lua_State* m_luaState = nullptr;
 };
 
 //==============================================================================================================================================//

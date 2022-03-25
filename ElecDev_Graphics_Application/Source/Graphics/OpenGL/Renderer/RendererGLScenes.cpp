@@ -9,6 +9,7 @@
 #include "Graphics/Camera/Camera.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  General.																																	//
@@ -50,6 +51,10 @@ void Renderer::doneSceneDestruction()
 //  Rendering.																																	//
 //==============================================================================================================================================//
 
+// --------------- //
+//  G E N E R A L  //
+// --------------- //
+
 void Renderer::renderScene()
 {
 	Renderer::renderScene(m_scene);
@@ -59,22 +64,33 @@ void Renderer::renderScene(Scene* scene)
 {
 	LUMEN_PROFILE_SCOPE("Render Scene");
 
-	// 2D Pipeline.
-	if (scene->m_camera->m_type == CameraType::Standard2D)	
-	{ 
-		Renderer::geometryPass2D(scene); 
+	// Dispatch pipeline.
+	switch (scene->m_camera->m_type)
+	{
+		case CameraType::Standard2D:
+			renderingPipeline2D(scene);
+			break;
+
+		case CameraType::Standard3D:
+			renderingPipeline3D(scene);
+			break;
+
+		default:
+			LUMEN_LOG_WARN("Scene has unknown camera type.", "Renderer");
+			return;
 	}
+}
 
-	// 3D Pipeline.
-	else if (scene->m_camera->m_type == CameraType::Standard3D) 
-	{ 
-		Renderer::geometryPass3D(scene);
-	}
+// ----------------------- //
+//  2 D   P I P E L I N E  //
+// ----------------------- //
 
-	// Nothing to render.
-	else return;
+void Renderer::renderingPipeline2D(Scene* scene) 
+{
+	Renderer::geometryPass2D(scene);
 
-	//  Resolve the MSAA.
+	// Resolve the MSAA.
+	LUMEN_RENDER_PASS();
 	scene->m_FBO->renderFromMSAA();
 }
 
@@ -134,6 +150,19 @@ void Renderer::geometryPass2D(Scene* scene)
 
 	scene->unbindFBO();
 	Renderer::disable(GL_BLEND);
+}
+
+// ----------------------- //
+//  3 D   P I P E L I N E  //
+// ----------------------- //
+
+void Renderer::renderingPipeline3D(Scene* scene)
+{
+	Renderer::geometryPass3D(scene);
+
+	// Resolve the MSAA.
+	LUMEN_RENDER_PASS();
+	scene->m_FBO->renderFromMSAA();
 }
 
 void Renderer::geometryPass3D(Scene* scene)
