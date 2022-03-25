@@ -95,7 +95,7 @@ void saveToYAML(std::shared_ptr<Component2D>& component, std::string& directory,
 		// Remove extensions from the file name.
 		if (filename.find(".yml") != std::string::npos) { filename.erase(filename.length() - 4, 4); }
 		else if (filename.find(".yaml") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
-		else if (filename.find(".lmct") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
+		else if (filename.find(".lmcp") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
 		// Change circuit name to the file name.
 		labelTemp = component->equipType;
 		component->equipType = filename;
@@ -115,8 +115,9 @@ void saveToYAML(std::shared_ptr<Component2D>& component, std::string& directory,
 	yamlEmitter << YAML::Key << "Type" << YAML::Value << "Component";
 	yamlEmitter << YAML::EndMap;
 
+
 	// Serialise circuit.
-	yamlEmitter << component;
+	yamlEmitter << YAML::Key << "Component" << YAML::Value << component;
 
 	// Restore current (in Lumen) circuit name.
 	if (filename.length())
@@ -164,6 +165,10 @@ void loadFromYAML(std::string& path)
 
 	// Deserialise the circuit into the engine.
 	if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+	{
+		deserialiseCircuit(yamlFile);
+	}
+	else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
 	{
 		deserialiseCircuit(yamlFile);
 	}

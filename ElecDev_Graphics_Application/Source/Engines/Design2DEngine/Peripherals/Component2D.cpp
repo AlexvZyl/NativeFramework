@@ -80,6 +80,47 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	moveTo(centreCoords);
 }
 
+Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityType::COMPONENT, parent)
+{
+
+	// ----------- //
+	//  S E T U P  //
+	// ----------- //
+
+	// Create vertices.
+	centre = glm::vec2(0.0f, 0.0f);
+	vertices.reserve(4);
+	vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
+	vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
+	vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
+	vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+
+	// --------------------- //
+	//  P R I M I T I V E S  //
+	// --------------------- //
+
+	// Main shape.
+	shape = Renderer::addPolygon2D(vertices, this);
+	shape->setColor({ shapeColour.r, shapeColour.g, shapeColour.b, 0.5f });
+	shape->setLayer(0.001f);//temp fix
+	// Component border.
+	border = Renderer::addPolygon2DClear(vertices, this);
+	border->setColor(borderColour);
+	border->setLayer(componentLayer + borderLayerOffset);
+	// Component title.
+	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
+	titleString = "Component " + std::to_string(componentID++);
+	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
+	highlight();
+
+	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
+	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber", "From(Circuit Database)"));
+	dataDict.insert(std::pair<std::string, std::string>("Metric", "1"));
+	dataDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
+	dataDict.insert(std::pair<std::string, std::string>("Unit", "ea"));
+	dataDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
+}
+
 Component2D::~Component2D() 
 {
 	Renderer::remove(shape);

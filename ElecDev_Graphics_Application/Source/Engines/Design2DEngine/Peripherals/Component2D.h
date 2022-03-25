@@ -11,7 +11,7 @@
 #include "Port.h"
 #include <unordered_map>
 #include "Graphics/Entities/Entity.h"
-
+#include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
@@ -94,6 +94,8 @@ public:
 	Component2D(Circuit* parent);
 	// Creates a generic component centred at the specified coordinates.
 	Component2D(const glm::vec2& centreCoords, Circuit* parent);
+	//Creates a component from a .lmcp file definition
+	Component2D(YAML::Node& lmcpFile, Circuit* parent);
 
 	// Deconstructor.s
 	~Component2D();
