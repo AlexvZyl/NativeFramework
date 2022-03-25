@@ -54,7 +54,7 @@ public:
 	// Returns the ID of the entity at the coordinates.
 	unsigned getEntityID(const glm::vec2& pixelCoords);
 	// Resizes the scene based on a viewport change.
-	void resize(int width, int heigth);
+	void resize(const glm::vec2& size);
 
 	// Delete the resources to save on VRAM.
 	void deleteGPUResources();

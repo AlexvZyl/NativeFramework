@@ -22,6 +22,7 @@ ScriptGui::ScriptGui(std::string name, int windowFlags)
 
 ScriptGui::~ScriptGui() 
 {
+    // Close websocket.
     boost_error_code ec;
     boost::beast::websocket::close_reason cr("Lumen GUI shutdown.");
     m_webSocket->close(cr, ec);
@@ -33,6 +34,7 @@ ScriptGui::~ScriptGui()
         ec.clear();
     }
 
+    // Close Lua.
     lua_close(m_luaState);
 }
 
