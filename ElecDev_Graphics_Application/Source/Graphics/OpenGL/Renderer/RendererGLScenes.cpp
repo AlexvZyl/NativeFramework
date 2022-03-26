@@ -94,11 +94,10 @@ void Renderer::backgroundPass(Scene* scene)
 
 	// Setup.
 	Renderer::enable(GL_DEPTH_TEST);
-	Renderer::disable(GL_BLEND);
 	
 	// Draw background.
 	s_shaders["BackgroundShader"]->bind();
-	Renderer::setDepthFunc(GL_EQUAL);
+	Renderer::setDepthFunc(GL_ALWAYS);
 	Renderer::drawBufferIndexed(scene->m_backgroundVAO.get());
 	Renderer::setDepthFunc(GL_LESS);
 }
@@ -175,15 +174,25 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	//  S E T U P  //
 	// ----------- //
 
-	Renderer::disable(GL_DEPTH_TEST);
-	Renderer::disable(GL_BLEND);
+	Renderer::enable(GL_DEPTH_TEST);
+	Renderer::enable(GL_BLEND);
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 
 	// ------------------- //
 	//  R E N D E R I N G  //
 	// ------------------- //
-	
+
 	// The shader used in rendering.
 	Shader* shader = nullptr;
+
+	if (Renderer::s_pipelineControls["Background"])
+	{
+		// Draw background.
+		s_shaders["OutlineBackgroundShader"]->bind();
+		Renderer::setDepthFunc(GL_ALWAYS);
+		Renderer::drawBufferIndexed(scene->m_backgroundVAO.get());
+		Renderer::setDepthFunc(GL_LESS);
+	}
 
 	// Draw basic primitives.
 	shader = s_shaders["OutlineShader"].get();
@@ -208,15 +217,22 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 
-	// Post processing.
+	// Render outline with post processing.
+	Renderer::setDepthFunc(GL_ALWAYS);
 	if (Renderer::s_pipelineControls["OutlinePostProc"]) 
 	{
-		
+		shader = s_shaders["OutlinePostProc"].get();
+		shader->bind();
+		shader->setFloat("width", scene->getViewport()[2]);
+		shader->setFloat("height", scene->getViewport()[3]);
+		Renderer::drawTextureOverFBOAttachment(scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, shader);
 	}
-
-	// Render outline texture onto scene.
-	Renderer::enable(GL_BLEND);
-	Renderer::drawTextureOverViewport(scene->m_FBO->m_outlineColorTextureID);
+	// Render outline texture directly.
+	else
+	{
+		Renderer::drawTextureOverFBOAttachment(scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, s_shaders["StaticTextureShader"].get());
+	}
+	Renderer::setDepthFunc(GL_LESS);
 }
 
 // ----------------------- //

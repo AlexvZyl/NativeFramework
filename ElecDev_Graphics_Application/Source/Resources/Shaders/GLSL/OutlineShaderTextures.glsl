@@ -87,5 +87,5 @@ void main()
 	if(textureColor.a == 0.0f)
 		discard;
 
-	o_outline = vec4(1.f, 1.f, 1.f, f_outline);
+	o_outline = vec4(vec3(textureColor), f_outline);
 }

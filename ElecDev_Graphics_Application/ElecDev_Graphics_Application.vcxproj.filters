@@ -996,6 +996,8 @@
     <None Include="Source\Resources\Shaders\GLSL\OutlineShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\OutlineShaderTextures.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\OutlineShaderCircle.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlinePostProcessing.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineBackgroundShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">

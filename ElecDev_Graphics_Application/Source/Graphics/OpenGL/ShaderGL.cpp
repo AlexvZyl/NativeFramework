@@ -22,10 +22,6 @@
 //  Functions.
 //----------------------------------------------------------------------------------------------------------------------
 
-// Default.
-Shader::Shader() {}
-
-// Constructor generates the shaders.
 Shader::Shader(unsigned int shaderID)
     : m_rendererID(0)
 {
@@ -131,9 +127,7 @@ void Shader::compileShader(std::string& vShaderCode, std::string& gShaderCode, s
 
     // Link shader.
     GLCall(glLinkProgram(m_rendererID));
-
-    // For some reason this throws erros, I do not know why?  It seems to work.
-    //checkCompileErrors(m_rendererID, "Program");
+    checkCompileErrors(m_rendererID, "Program");
 }
 
 void Shader::bind()
@@ -194,7 +188,7 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type)
 {
     int success;
     char infoLog[1024];
-    if (type != "PROGRAM")
+    if (type != "Program")
     {
         GLCall( glGetShaderiv(shader, GL_COMPILE_STATUS, &success) );
         if (!success)

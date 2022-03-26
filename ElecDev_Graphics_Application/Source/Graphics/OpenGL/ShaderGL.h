@@ -24,7 +24,6 @@ public:
     unsigned int m_rendererID;
 
     // Contructors.
-    Shader();
     Shader(unsigned int shaderID);
     // Destructor.
     ~Shader();

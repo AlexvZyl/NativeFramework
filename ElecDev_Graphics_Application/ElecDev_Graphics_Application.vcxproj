@@ -991,6 +991,8 @@
     <None Include="Source\Resources\Shaders\GLSL\backgroundShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\basicShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\circleShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineBackgroundShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlinePostProcessing.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\OutlineShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\OutlineShaderCircle.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\OutlineShaderTextures.glsl" />

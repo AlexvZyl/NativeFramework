@@ -167,7 +167,7 @@ private:
 	static void drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive);
 
 	// Textures.
-	static void drawTextureOverViewport(unsigned texture);
+	static void drawTextureOverFBOAttachment(unsigned texture, unsigned attachment, Shader* shader);
 	static std::unique_ptr<VertexArrayObject<VertexDataTextured>> s_unitQuad;
 	static void createUnitQuad();
 

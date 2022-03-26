@@ -64,6 +64,8 @@ CIRCLE_SHADER					TEXTFILE					"Shaders\\GLSL\\circleShader.glsl"
 OUTLINE_SHADER					TEXTFILE					"Shaders\\GLSL\\OutlineShader.glsl"
 OUTLINE_SHADER_TEXTURES			TEXTFILE					"Shaders\\GLSL\\OutlineShaderTextures.glsl"
 OUTLINE_SHADER_CIRCLE			TEXTFILE					"Shaders\\GLSL\\OutlineShaderCircle.glsl"
+OUTLINE_SHADER_POSTPROC			TEXTFILE					"Shaders\\GLSL\\OutlinePostProcessing.glsl"
+OUTLINE_SHADER_BACKGROUND		TEXTFILE					"Shaders\\GLSL\\OutlineBackgroundShader.glsl"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 COMPONENT_PNG					RCDATA						"Icons\\component.png"

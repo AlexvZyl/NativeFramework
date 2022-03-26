@@ -77,12 +77,22 @@ void Renderer::compileShaders()
 	s_shaders.insert({ "OutlineShaderTextures"	, std::make_unique<Shader>(OUTLINE_SHADER_TEXTURES) });
 	s_shaders.insert({ "OutlineShaderCircle"	, std::make_unique<Shader>(OUTLINE_SHADER_CIRCLE) });
 	s_shaders.insert({ "StaticTextureShader"	, std::make_unique<Shader>(STATIC_TEXTURE_SHADER) });
+	s_shaders.insert({ "OutlineBackgroundShader", std::make_unique<Shader>(OUTLINE_SHADER_BACKGROUND) });
+	s_shaders.insert({ "OutlinePostProc"		, std::make_unique<Shader>(OUTLINE_SHADER_POSTPROC) });
+
+	Shader* shader;
+	int samplers[1] = { 0 };
 
 	// Setup static shader samplers.
-	Shader* shader = s_shaders["StaticTextureShader"].get();
+	shader = s_shaders["StaticTextureShader"].get();
 	shader->bind();
-	int samplers[1] = { 0 };
 	GLCall(auto loc = glGetUniformLocation(shader->m_rendererID, "f_textures"));
+	GLCall(glUniform1iv(loc, 1, samplers));
+
+	// Set post processing samplers.
+	shader = s_shaders["OutlinePostProc"].get();
+	shader->bind();
+	GLCall(loc = glGetUniformLocation(shader->m_rendererID, "f_textures"));
 	GLCall(glUniform1iv(loc, 1, samplers));
 }
 

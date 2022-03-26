@@ -15,13 +15,11 @@ void main()
 #shader fragment
 #version 450 core
 
-layout(location = 0) out vec4 o_color;
-layout(location = 1) out uint o_entityID;
+layout(location = 2) out vec4 o_outline;
 
 in vec4 f_color;
 
 void main()
 {
-	o_color = f_color;
-	o_entityID = -1;
+	o_outline = vec4(vec3(f_color), 0.0f);
 };
