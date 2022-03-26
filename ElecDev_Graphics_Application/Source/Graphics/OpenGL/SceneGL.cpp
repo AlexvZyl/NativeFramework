@@ -12,16 +12,18 @@
 #include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Events/Events.h"
+#include "OpenGL/Renderer/RendererGL.h"
 #include "imgui/imgui.h"
+#include "OpenGL/ErrorHandlerGL.h"
 
 //==============================================================================================================================================//
 //  Constructor & Destructor.																													//
 //==============================================================================================================================================//
 
-Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamples) 
+Scene::Scene(CameraType cameraType, float width, float height) 
 {
 	// FBO.
-	m_FBO					= std::make_unique<FrameBufferObject>(width, height, msaaSamples);
+	m_FBO					= std::make_unique<FrameBufferObject>(width, height);
 	// Camera.
 	m_camera				= std::make_unique<Camera>(cameraType, width, height);
 	// VAO's.
@@ -72,17 +74,16 @@ void Scene::setViewport(int width, int height)
 //  FBO Methods.																															    //	
 //==============================================================================================================================================//
 
-void Scene::bindFBO() 
-{	
-	m_FBO->bind();
-}
-
-void Scene::clearFBO()
+void Scene::onRenderInit() 
 {
+	m_FBO->bind();
 	m_FBO->clear();
+	onUpdate();
+	Renderer::setViewport(getViewport());
+	m_FBO->setDrawBuffers();
 }
 
-void Scene::unbindFBO() 
+void Scene::onRenderCleanup() 
 {
 	m_FBO->unbind();
 }

@@ -34,11 +34,9 @@ class Scene
 public:
 
 	// Constructor.
-	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 16);
+	Scene(CameraType cameraType, float width, float height);
 	// Destructor.
 	virtual ~Scene();
-	// Set the MSAA samples.
-	void setMSAA(unsigned samples);
 	// Handle events.
 	void onEvent(Event& event);
 	// Returns the rendered texture.
@@ -55,6 +53,9 @@ public:
 	unsigned getEntityID(const glm::vec2& pixelCoords);
 	// Resizes the scene based on a viewport change.
 	void resize(const glm::vec2& size);
+
+	void onRenderInit();
+	void onRenderCleanup();
 
 	// Delete the resources to save on VRAM.
 	void deleteGPUResources();
@@ -85,13 +86,6 @@ private:
 	// Creates a default 3D background.
 	void create3DBackground();
 
-	// Binds the FBO.
-	void bindFBO();
-	// Clears the FBO.
-	void clearFBO();
-	// Unbinds the FBO.
-	void unbindFBO();
-
 	// Return the view matrix of the scene camera.
 	glm::mat4* getViewMatrix();
 	// Return the projection matrix.
@@ -107,13 +101,6 @@ private:
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;
 	// FBO.
 	std::unique_ptr<FrameBufferObject> m_FBO;
-	
-	// --------------------- //
-	//  B A C K G R O U N D  //
-	// --------------------- //
-
-	float m_colorScaleDark = 1.0f;
-	float m_colorScaleLight = 3.f;
 };
 
 //==============================================================================================================================================//

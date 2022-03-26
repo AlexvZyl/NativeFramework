@@ -123,13 +123,14 @@
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLDraw.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_ImGui.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -849,7 +850,7 @@
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
     <None Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.json" />
-    <None Include="Source\Resources\Shaders\GLSL\staticTextureShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\StaticTextureShader.glsl" />
     <None Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.json" />
     <None Include="Source\DOCS.md" />
     <None Include="Source\Graphics\OpenGL\README.md" />
@@ -992,6 +993,9 @@
     <None Include="External\glm\glm\gtx\vector_angle.inl" />
     <None Include="External\glm\glm\gtx\vector_query.inl" />
     <None Include="External\glm\glm\gtx\wrap.inl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineShaderTextures.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineShaderCircle.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Source\Resources\Textures\circuitTree.png">

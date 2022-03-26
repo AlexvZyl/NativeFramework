@@ -9,6 +9,7 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <map>
+#include <unordered_map>
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -28,6 +29,9 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class VertexArrayObjectPtr;
+
+template<typename VertexType>
+class VertexArrayObject;
 
 struct Font;
 
@@ -78,6 +82,8 @@ public:
 	static void finish();
 	// Flush the GPU commands.
 	static void flush();
+	// Controls what gets rendered in the pipeline.
+	inline static std::unordered_map<std::string, bool> s_pipelineControls;
 
 	// ------------- //
 	//  S C E N E S  //
@@ -144,18 +150,26 @@ public:
 	// Get the default 2D scene texture.
 	static unsigned getDefault2DSceneTexture();
 
-	// --------------- //
-	//  B U F F E R S  //
-	// --------------- //
-
-	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
-	
 private:
 
 	friend class Application;
+	friend class Scene;
 
 	// Prevent instances from being created.
 	Renderer() {}
+
+	// --------------- //
+	//  D R A W I N G  //
+	// --------------- //
+
+	// Buffers.
+	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
+	static void drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive);
+
+	// Textures.
+	static void drawTextureOverViewport(unsigned texture);
+	static std::unique_ptr<VertexArrayObject<VertexDataTextured>> s_unitQuad;
+	static void createUnitQuad();
 
 	// ------------------- //
 	//  U T I L I T I E S  //
@@ -183,26 +197,30 @@ private:
 	// ------------- //
 
 	// The scene rendered to.
-	static Scene* m_scene;
+	static Scene* s_scene;
 	// Scene stored when another scene is being destroyed.
-	static Scene* m_storedScene;
+	static Scene* s_storedScene;
 	// The 2D Rendering pipeline.
 	static void renderingPipeline2D(Scene* scene);
 	// Render a 2D scene's gemeometry.
 	static void geometryPass2D(Scene* scene);
+	// Render the object outlining.
+	static void objectOutliningPass2D(Scene* scene);
 	// The 3D Rendering pipeline.
 	static void renderingPipeline3D(Scene* scene);
 	// Render a 3D scene's gemeometry.
 	static void geometryPass3D(Scene* scene);
+	// Draw the scene background.
+	static void backgroundPass(Scene* scene);
 
-	// ------------------ //
+	// ------------------- //
 	//  V A R I A B L E S  //
-	// ------------------ //
+	// ------------------- //
 
 	// The default font used in the scenes.
-	static std::unique_ptr<Font> m_defaultFont;
+	static std::unique_ptr<Font> s_defaultFont;
 	// Shaders used by the renderer.
-	static std::map<std::string, std::unique_ptr<Shader>> m_shaders;
+	static std::map<std::string, std::unique_ptr<Shader>> s_shaders;
 
 	// ---------------------------- //
 	// D E F A U L T   S C E N E S  //

@@ -133,6 +133,8 @@ void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotatePoint, 
 template<typename VertexType>
 void Primitive<VertexType>::scale(const glm::vec3& scaling)
 {
+	// ...
+
 	syncWithGPU();
 }
 
@@ -174,6 +176,24 @@ void Primitive<VertexType>::setContext(GUIState* guiState)
 {
 	//guiState->clickedZone.primative = true;
 	if (m_parent) m_parent->setContext();
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::outline(float scale)
+{
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.outline = scale;
+
+	syncWithGPU();
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::removeOutline()
+{
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.outline = 0.f;
+
+	syncWithGPU();
 }
 
 //=============================================================================================================================================//

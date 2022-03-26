@@ -59,8 +59,11 @@ ICON_PNG						RCDATA						"Icons\\circuitImage.png"
 BASIC_SHADER					TEXTFILE					"Shaders\\GLSL\\basicShader.glsl"
 BACKGROUND_SHADER				TEXTFILE					"Shaders\\GLSL\\backgroundShader.glsl"
 TEXTURE_SHADER					TEXTFILE					"Shaders\\GLSL\\textureShader.glsl"
-STATIC_TEXTURE_SHADER			TEXTFILE					"Shaders\\GLSL\\staticTextureShader.glsl"
+STATIC_TEXTURE_SHADER			TEXTFILE					"Shaders\\GLSL\\StaticTextureShader.glsl"
 CIRCLE_SHADER					TEXTFILE					"Shaders\\GLSL\\circleShader.glsl"
+OUTLINE_SHADER					TEXTFILE					"Shaders\\GLSL\\OutlineShader.glsl"
+OUTLINE_SHADER_TEXTURES			TEXTFILE					"Shaders\\GLSL\\OutlineShaderTextures.glsl"
+OUTLINE_SHADER_CIRCLE			TEXTFILE					"Shaders\\GLSL\\OutlineShaderCircle.glsl"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 COMPONENT_PNG					RCDATA						"Icons\\component.png"

@@ -92,6 +92,10 @@ public:
 	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
+	// Outline the primitive by the given scale.
+	virtual void outline(float scale);
+	// Remove the outline.
+	virtual void removeOutline();
 	
 	// --------------------- //
 	//  A T T R I B U T E S  //

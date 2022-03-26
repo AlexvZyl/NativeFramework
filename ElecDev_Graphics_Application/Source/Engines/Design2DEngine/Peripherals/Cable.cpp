@@ -357,6 +357,20 @@ void Cable::setColour(glm::vec4 colour, bool save)
 void Cable::highlight()
 {
 	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f }, false);
+
+	for (int i = 0; i < m_lines.size(); i++)
+	{
+		LineSegment* line = m_lines[i];
+		line->outline(1.0f);
+	}
+	for (int i = 0; i < m_nodes.size(); i++)
+	{
+		Circle* circ = m_nodes[i];
+		circ->outline(1.f);
+	}
+
+	m_title1->outline(1.f);
+	m_title2->outline(1.f);
 }
 
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
@@ -433,6 +447,19 @@ void Cable::setActivePrimitive(Entity* primative)
 void Cable::unhighlight()
 {
 	setColour(m_colour);
+
+	for (int i = 0; i < m_lines.size(); i++)
+	{
+		LineSegment* line = m_lines[i];
+		line->removeOutline();
+	}
+	for (int i = 0; i < m_nodes.size(); i++)
+	{
+		Circle* circ = m_nodes[i];
+		circ->removeOutline();
+	}
+	m_title1->removeOutline();
+	m_title2->removeOutline();
 }
 
 //==============================================================================================================================================//

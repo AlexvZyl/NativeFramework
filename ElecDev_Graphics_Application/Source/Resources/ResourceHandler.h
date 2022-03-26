@@ -38,6 +38,9 @@
 #define TEXTURE_SHADER 250
 #define STATIC_TEXTURE_SHADER 235
 #define CIRCLE_SHADER 237
+#define OUTLINE_SHADER 200
+#define OUTLINE_SHADER_TEXTURES 201
+#define OUTLINE_SHADER_CIRCLE 202
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 #define COMPONENT_PNG 249				

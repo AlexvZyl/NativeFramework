@@ -187,7 +187,8 @@ void Component2D::highlight()
 	
 	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->highlight();
-	
+
+	outline(1.f);
 }
 
 void Component2D::unhighlight()
@@ -206,7 +207,16 @@ void Component2D::unhighlight()
 	
 	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->unhighlight();
-	
+
+
+	removeOutline();
+}
+
+void Component2D::removeOutline() 
+{
+	shape->removeOutline();
+	border->removeOutline();
+	title->removeOutline();
 }
 
 unsigned Component2D::addPort(int side, PortType type, const std::string& name)
@@ -334,6 +344,13 @@ void Component2D::translateTitle(glm::vec2 translation)
 {
 	titleOffset += translation;
 	title->translate(translation);
+}
+
+void Component2D::outline(float scale) 
+{
+	shape->outline(scale);
+	border->outline(scale);
+	title->outline(scale);
 }
 
 //void Component2D::destroy()

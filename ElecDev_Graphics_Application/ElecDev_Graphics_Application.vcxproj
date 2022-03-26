@@ -187,6 +187,7 @@
     <ClCompile Include="External\implot\implot.cpp" />
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
@@ -239,7 +240,7 @@
     <ClCompile Include="Source\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\TexturedQuad.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLBuffers.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLDraw.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
@@ -990,7 +991,10 @@
     <None Include="Source\Resources\Shaders\GLSL\backgroundShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\basicShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\circleShader.glsl" />
-    <None Include="Source\Resources\Shaders\GLSL\staticTextureShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineShader.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineShaderCircle.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\OutlineShaderTextures.glsl" />
+    <None Include="Source\Resources\Shaders\GLSL\StaticTextureShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\textureShader.glsl" />
   </ItemGroup>
   <ItemGroup>
