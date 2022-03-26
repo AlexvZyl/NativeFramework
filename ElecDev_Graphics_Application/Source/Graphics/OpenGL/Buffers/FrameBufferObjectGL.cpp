@@ -180,9 +180,7 @@ void FrameBufferObject::clear()
 { 
 	if (m_resourcesDeleted) return;
 
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
-	GLCall(glClearTexImage(m_colorTextureID, 0, GL_RGBA, GL_FLOAT, 0));
-	GLCall(glClearTexImage(m_outlineColorTextureID, 0, GL_RGBA, GL_FLOAT, 0));
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
 }
 
 unsigned int FrameBufferObject::getEntityID(const glm::vec2& pixelCoords) 

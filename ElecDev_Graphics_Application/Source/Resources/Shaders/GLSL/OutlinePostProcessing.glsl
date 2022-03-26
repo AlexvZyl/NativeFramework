@@ -32,6 +32,8 @@ in float f_texID;
 float xIncrements = 1.0f / width;  
 float yIncrements = 1.0f / height;  
 
+const float sobelMin = 0.75f;
+
 vec2 offsets[9] = vec2[9]
 (
     vec2(-xIncrements,  yIncrements),    vec2( 0.0f,  yIncrements),     vec2( xIncrements,  yIncrements),
@@ -76,8 +78,12 @@ void main()
         o_color = vec4(0.f, 0.f, 0.f, 0.f);
         return;
     }
+    else if(sobelValue <= sobelMin)
+    {
+        o_color = vec4(sobelMin, sobelMin, sobelMin, 1.f);
+    }
     else
     {
-        o_color = vec4(1.f, 1.f, 1.f, 1.f);
+        o_color = vec4(sobelValue, sobelValue, sobelValue, 1.f);
     }
 }
