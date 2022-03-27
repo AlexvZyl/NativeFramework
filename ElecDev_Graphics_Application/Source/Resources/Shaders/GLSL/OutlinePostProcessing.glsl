@@ -32,7 +32,8 @@ in float f_texID;
 float xIncrements = 1.0f / width;  
 float yIncrements = 1.0f / height;  
 
-const float sobelMin = 0.75f;
+const float sobelMax = 0.75f;
+const float sobelMin = 0.1f;
 
 vec2 offsets[9] = vec2[9]
 (
@@ -55,9 +56,9 @@ float yKernel[9] = float[9]
      1,  2,  1
 );
 
-float greyScale(vec3 color)
+float greyScale(vec4 color)
 {
-    return (color.r + color.g + color.b ) / 3.f;
+    return (color.r + color.g + color.b + color.a ) / 4.f;
 }
 
 void main()
@@ -67,8 +68,8 @@ void main()
     for(int i=0; i<9; i++)
     {
         vec4 fragColor = texture(f_textures[int(f_texID)], f_texCoord.st + offsets[i]);
-        xValue += greyScale(vec3(fragColor) * xKernel[i]);
-        yValue += greyScale(vec3(fragColor) * yKernel[i]);
+        xValue += greyScale(fragColor * xKernel[i]);
+        yValue += greyScale(fragColor * yKernel[i]);
     }
 
     float sobelValue = sqrt( (xValue*xValue) + (yValue*yValue));
@@ -78,9 +79,13 @@ void main()
         o_color = vec4(0.f, 0.f, 0.f, 0.f);
         return;
     }
+    else if(sobelValue <= sobelMax && sobelValue >= sobelMin)
+    {
+        o_color = vec4(sobelMax, sobelMax, sobelMax, 1.f);
+    }
     else if(sobelValue <= sobelMin)
     {
-        o_color = vec4(sobelMin, sobelMin, sobelMin, 1.f);
+        o_color = vec4(0.f, 0.f, 0.f, 0.f);
     }
     else
     {

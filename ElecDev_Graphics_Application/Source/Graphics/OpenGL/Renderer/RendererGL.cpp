@@ -44,7 +44,7 @@ void Renderer::initialise()
 	GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
 	GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
-	GLCall(glClearColor(1.f, 0.0f, 1.0f, 1.0f));				// Set the color to which OpenGL clears.
+	Renderer::setClearColor(Renderer::baseColor);
 
 	// Compiles the shaders used by the renderer and the FBO.
 	Renderer::compileShaders();
@@ -211,6 +211,11 @@ void Renderer::setViewport(const glm::vec2& viewport)
 void Renderer::setViewport(const glm::vec4& viewport)
 {
 	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
+}
+
+void Renderer::setClearColor(const glm::vec4& color) 
+{
+	GLCall(glClearColor(color.r, color.g, color.b, color.a));
 }
 
 //==============================================================================================================================================//

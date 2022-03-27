@@ -150,10 +150,12 @@ public:
 	// Get the default 2D scene texture.
 	static unsigned getDefault2DSceneTexture();
 
+
 private:
 
 	friend class Application;
 	friend class Scene;
+	friend class FrameBufferObject;
 
 	// Prevent instances from being created.
 	Renderer() {}
@@ -191,6 +193,7 @@ private:
 	static void setViewport(const glm::vec2& viewport);
 	// Sets the OpenGL viewport.  Does not assume a start from (0,0).
 	static void setViewport(const glm::vec4& viewport);
+	static void setClearColor(const glm::vec4& color);
 
 	// ------------- //
 	//  S C E N E S  //
@@ -221,6 +224,9 @@ private:
 	static std::unique_ptr<Font> s_defaultFont;
 	// Shaders used by the renderer.
 	static std::map<std::string, std::unique_ptr<Shader>> s_shaders;
+	// The default background color.
+	inline static glm::vec4 backgroundColor = { (float)66 / 255, (float)66 / 255, (float)68 / 255, 1.f };
+	inline static glm::vec4 baseColor = { 1.f, 0.f, 1.f, 1.f };
 
 	// ---------------------------- //
 	// D E F A U L T   S C E N E S  //
