@@ -64,7 +64,7 @@ int lua_imgui_Separator(lua_State* L)
 int lua_imgui_Combo(lua_State* L) 
 {
 	// Contains the state for all of the comboboxes.
-	static std::unordered_map<std::string, int> comboItems;
+	static std::unordered_map<std::string, int> comboItems;  // How to clear this?
 
 	// Get data.
 	int maxHeightInItems = lua_GetNumberAndPop<int>(L);
@@ -92,8 +92,7 @@ int lua_imgui_Combo(lua_State* L)
 	}
 	memory[index++] = nullTerminator;
 
-	// Store item.
-	// This does not store the item if it already exists.
+	// Store item. This does not store the item if it already exists.
 	comboItems.insert({label, initialItem });
 	// Get item.
 	int* currentItem = &comboItems[label];
@@ -108,6 +107,55 @@ int lua_imgui_Combo(lua_State* L)
 	}
 	free((void*)memory);
 	return selected;
+}
+
+int lua_imgui_Checkbox(lua_State* L) 
+{
+	// Contains the state for all of the checkboxes.
+	static std::unordered_map<std::string, bool> checkboxStates;  // How to clear this?
+
+	// Get data.
+	bool state = lua_GetBooleanAndPop(L);
+	std::string label = lua_GetStringAndPop(L);
+
+	// Store item. This does not store the item if it already exists.
+	checkboxStates.insert({ label,  state});
+	bool* currentState = &checkboxStates[label];
+
+	// Render.
+	if (ImGui::Checkbox(label.c_str(), currentState)) 
+	{
+		std::string msg = "[Checkbox] " + label + " : " + std::to_string(*currentState) + ".";
+		Lumen::getActiveScriptGui()->callbackMessage(msg);
+		return 1;
+	}
+
+	return 0;
+}
+
+int lua_imgui_InputText(lua_State* L) 
+{
+	// Contains the state for all of the input text.
+	static std::unordered_map<std::string, std::string> inputTextEntries;  // How to clear this?
+
+	// Get data.
+	std::string initialText = lua_GetStringAndPop(L);
+	std::string label = lua_GetStringAndPop(L);
+
+	// Store item. This does not store the item if it already exists.
+	inputTextEntries.insert({ label, initialText });
+	// Get data.
+	std::string* currentEntry = &inputTextEntries[label];
+	
+	// Render.
+	if (ImGui::InputText(label.c_str(), currentEntry)) 
+	{
+		std::string msg = "[InputText] " + label + " : " + *currentEntry;
+		Lumen::getActiveScriptGui()->callbackMessage(msg);
+		return 1;
+	}
+
+	return 0;
 }
 
 //==============================================================================================================================================//

@@ -54,7 +54,8 @@ int lua_imgui_Button(lua_State* L);
 int lua_imgui_SameLine(lua_State* L);
 int lua_imgui_Separator(lua_State* L);
 int lua_imgui_Combo(lua_State* L);
-
+int lua_imgui_Checkbox(lua_State* L);
+int lua_imgui_InputText(lua_State* L);
 
 //==============================================================================================================================================//
 //  EOF.																																		//

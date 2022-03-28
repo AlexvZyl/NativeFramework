@@ -34,6 +34,12 @@ def PStringTable(parameters):
         string += PString(str(p)) + ","
     return string[:-1] + "}"
 
+def PBool(parameter):
+    if(parameter):
+        return "true"
+    else:
+        return "false"
+
 # --------------------------------------- #
 #  L U M E N   S C R I P T   E N T I T Y  #
 # --------------------------------------- #
@@ -173,6 +179,12 @@ class LumenGui(_LumenScriptEntity):
 
     def Combo(self, label, currentItem, items, totalItems, maxHeight):
         self._AddFunction("ImGui_Combo", (PString(label), currentItem, PStringTable(items), totalItems, maxHeight))
+
+    def Checkbox(self, label, state):
+        self._AddFunction("ImGui_Checkbox", (PString(label), PBool(state)))
+
+    def InputText(self, label, initialText):
+        self._AddFunction("ImGui_InputText", (PString(label), PString(initialText)))
 
 # ---------------------------- #
 #  L U M E N   I N ST A N C E  #

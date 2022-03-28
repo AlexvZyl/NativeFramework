@@ -65,6 +65,16 @@ imgui.Combo("ComboboxTest", 0, ("Test0", "Test1", "Test2", "Test3", "Test4", "Te
 
 imgui.Separator()
 
+imgui.Checkbox("Checkbox 1 True", True)
+imgui.Checkbox("Checkbox 2 False", False)
+
+imgui.Separator()
+
+imgui.InputText("Input Text 1", "Initial Entry")
+imgui.InputText("Input Text 2", "")
+
+imgui.Separator()
+
 # Start gui inside the Lumen instance.
 imgui.StartServer(instance)
 

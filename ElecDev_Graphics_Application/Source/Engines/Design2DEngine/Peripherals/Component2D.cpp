@@ -258,7 +258,8 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 														&portsNorth,
 														&portsSouth};
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) 
+	{
 		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
 
 		auto port_to_remove = std::find(begin(portsSide), end(portsSide), port);

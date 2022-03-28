@@ -33,6 +33,8 @@ inline void lua_LoadLumenFunctions(lua_State* L)
 	lua_register(L, "ImGui_SameLine",		lua_imgui_SameLine);
 	lua_register(L, "ImGui_Separator",		lua_imgui_Separator);
 	lua_register(L, "ImGui_Combo",			lua_imgui_Combo);
+	lua_register(L, "ImGui_Checkbox",		lua_imgui_Checkbox);
+	lua_register(L, "ImGui_InputText",		lua_imgui_InputText);
 }
 
 inline lua_State* lua_CreateNewLuaState() 
@@ -116,6 +118,13 @@ inline void lua_GetStringTableAndPop(lua_State* L, std::vector<std::string>& dat
 	}
 	// Pop the table from the stack.
 	lua_pop(L, 1);
+}
+
+inline bool lua_GetBooleanAndPop(lua_State* L) 
+{
+	bool result = lua_toboolean(L, -1);
+	lua_pop(L, 1);
+	return result;
 }
 
 //==============================================================================================================================================//
