@@ -39,16 +39,16 @@ void Renderer::drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsign
 //  Textures.																																	//
 //==============================================================================================================================================//
 
-void Renderer::drawTextureOverFBOAttachment(unsigned texture, unsigned attachment, Shader* shader) 
+void Renderer::drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader) 
 {
 	shader->bind();
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	GLCall(glBindTexture(GL_TEXTURE_2D, texture));
 	GLenum drawBuffers[1] = { attachment };
-	GLCall(glNamedFramebufferDrawBuffers(s_scene->m_FBO->m_frameBufferID, 1, drawBuffers));
+	GLCall(glNamedFramebufferDrawBuffers(FBO->m_frameBufferID, 1, drawBuffers));
 	Renderer::drawBufferIndexed(s_unitQuad.get());
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-	s_scene->m_FBO->setDrawBuffers();
+	FBO->setDrawBuffers();
 }
 
 //==============================================================================================================================================//

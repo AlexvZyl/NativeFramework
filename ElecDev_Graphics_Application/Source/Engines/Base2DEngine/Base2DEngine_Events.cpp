@@ -49,6 +49,8 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 {
+	EngineCore::onMouseMoveEvent(event);
+
 	uint64_t eventID = event.ID;
 
 	// Find current click in world coords.

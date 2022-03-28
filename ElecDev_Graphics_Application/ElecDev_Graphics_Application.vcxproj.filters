@@ -131,6 +131,7 @@
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_ImGui.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -814,6 +815,7 @@
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\Utilities\WebSocket\BoostWebsocket.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

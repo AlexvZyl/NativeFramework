@@ -5,12 +5,13 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/ShaderGL.h"
+#include "OpenGL/ErrorHandlerGL.h"
+#include "OpenGL/Primitives/Grid.h"
 #include "Lumen.h"
 #include "Graphics/Camera/Camera.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
-#include "OpenGL/ErrorHandlerGL.h"
 
 //==============================================================================================================================================//
 //  General.																																	//
@@ -102,6 +103,29 @@ void Renderer::backgroundPass(Scene* scene)
 	Renderer::setDepthFunc(GL_LESS);
 }
 
+void Renderer::gridPass(Scene* scene) 
+{
+	LUMEN_RENDER_PASS();
+
+	// Setup.
+	Renderer::enable(GL_DEPTH_TEST);
+	Renderer::enable(GL_BLEND);
+
+	// Setup shader.
+	Shader* shader = s_shaders["BasicShader"].get();
+	shader->bind();
+	shader->setMat4("viewMatrix", scene->getViewMatrix());
+	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());	
+
+	// Draw grid.	
+	Grid* grid = scene->m_grid.get();
+	Renderer::setDepthFunc(GL_ALWAYS);
+	Renderer::drawBufferIndexed(grid->m_fineVAO.get());
+	Renderer::drawBufferIndexed(grid->m_coarseVAO.get());
+	Renderer::drawBufferIndexed(grid->m_originVAO.get());
+	Renderer::setDepthFunc(GL_LESS);
+}
+
 // ----------------------- //
 //  2 D   P I P E L I N E  //
 // ----------------------- //
@@ -111,6 +135,16 @@ void Renderer::renderingPipeline2D(Scene* scene)
 	if (Renderer::s_pipelineControls["Background"])
 	{
 		Renderer::backgroundPass(scene);
+	}
+	
+	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
+	{
+		scene->m_grid->visibleHelperCircle();
+		Renderer::gridPass(scene);
+	}
+	else 
+	{
+		scene->m_grid->hideHelperCircle();
 	}
 
 	if (Renderer::s_pipelineControls["Geometry"])
@@ -216,12 +250,12 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 		shader->bind();
 		shader->setFloat("width", scene->getViewport()[2]);
 		shader->setFloat("height", scene->getViewport()[3]);
-		Renderer::drawTextureOverFBOAttachment(scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, shader);
+		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, shader);
 	}
 	// Render outline texture directly.
 	else
 	{
-		Renderer::drawTextureOverFBOAttachment(scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, s_shaders["StaticTextureShader"].get());
+		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, s_shaders["StaticTextureShader"].get());
 	}
 	Renderer::setDepthFunc(GL_LESS);
 }

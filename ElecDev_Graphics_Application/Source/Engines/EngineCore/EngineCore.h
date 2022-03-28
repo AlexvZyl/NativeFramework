@@ -86,7 +86,7 @@ public:
 
 	// Mouse events.
 	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) = 0;
-	inline virtual void onMouseMoveEvent(MouseMoveEvent& event) = 0;
+	inline virtual void onMouseMoveEvent(MouseMoveEvent& event);
 	inline virtual void onMouseScrollEvent(MouseScrollEvent& event) = 0;
 
 	// Key events.
@@ -129,6 +129,8 @@ public:
 	// ----------------------------- //
 
 public:
+
+	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.
