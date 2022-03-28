@@ -28,6 +28,18 @@ def  PTable(parameters):
         string += str(p) + ","
     return string[:-1] + "}"
 
+def PStringTable(parameters):
+    string = "{"
+    for p in parameters:
+        string += PString(str(p)) + ","
+    return string[:-1] + "}"
+
+def PBool(parameter):
+    if(parameter):
+        return "true"
+    else:
+        return "false"
+
 # --------------------------------------- #
 #  L U M E N   S C R I P T   E N T I T Y  #
 # --------------------------------------- #
@@ -140,6 +152,8 @@ class LumenGui(_LumenScriptEntity):
         
         # Write url to script.
         self._AddLine("-- Websocket: '" + self.host + ":" + self.port + "'.")
+        print(self.GetLua())
+
         LumenInstance.ExecuteScript(self)
         asyncio.get_event_loop().run_forever()
         
@@ -156,6 +170,21 @@ class LumenGui(_LumenScriptEntity):
 
     def Text(self, text):
         self._AddFunction("ImGui_Text", (PString(text),))
+
+    def SameLine(self, offset):
+        self._AddFunction("ImGui_SameLine", (offset,))
+
+    def Separator(self):
+        self._AddFunction("ImGui_Separator", (0,))
+
+    def Combo(self, label, currentItem, items, totalItems, maxHeight):
+        self._AddFunction("ImGui_Combo", (PString(label), currentItem, PStringTable(items), totalItems, maxHeight))
+
+    def Checkbox(self, label, state):
+        self._AddFunction("ImGui_Checkbox", (PString(label), PBool(state)))
+
+    def InputText(self, label, initialText):
+        self._AddFunction("ImGui_InputText", (PString(label), PString(initialText)))
 
 # ---------------------------- #
 #  L U M E N   I N ST A N C E  #

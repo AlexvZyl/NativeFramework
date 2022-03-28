@@ -120,4 +120,7 @@ public:
 	//move the title text relative to the component
 	void translateTitle(glm::vec2 translation);
 	//void destroy();
+
+	void enableOutline();
+	void disableOutline();
 };

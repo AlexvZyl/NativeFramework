@@ -62,13 +62,15 @@ public:
 		struct {
 			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
 			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
+			float outline = 0.f;
 		}data;
-		float rawData[7];
+		float rawData[8];
 	};
 
 	// Pointers to the data.
 	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
 	glm::vec4* color = &data.color;							// Color of the vertex.
+	float* outline = &data.outline;							
 
 	// Constructor.
 	VertexData(const glm::vec3& pos, const glm::vec4& clr, unsigned int eID);
@@ -109,9 +111,10 @@ public:
 			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
 			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
 			glm::vec2 textureCoords = { 0.f,0.f };			// Position
+			float outline = 0.f;
 			float textureID = 0.f;
 		}data;
-		float rawData[10];
+		float rawData[11];
 	};
 
 	// Pointers to the data.
@@ -119,6 +122,7 @@ public:
 	glm::vec4* color = &data.color;							// Color of the vertex.
 	glm::vec2* textureCoords = &data.textureCoords;			// Position
 	float* textureID = &data.textureID;
+	float* outline = &data.outline;
 
 	// Constructor.
 	VertexDataTextured(const glm::vec3& pos, const glm::vec4& color, const glm::vec2& texCoords, float texID, unsigned int eID);
@@ -160,10 +164,11 @@ public:
 			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
 			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
 			glm::vec2 localCoords = { 0.f,0.f };			// Position
+			float outline = 0.f;
 			float thickness = 0.f;
 			float fade = 0.f;
 		}data;
-		float rawData[11];
+		float rawData[12];
 	};
 
 	// Pointers to the data.
@@ -172,6 +177,7 @@ public:
 	glm::vec2* localCoords = &data.localCoords;		// Position
 	float* thickness = &data.thickness;
 	float* fade = &data.fade;
+	float* outline = &data.outline;
 
 	// Constructors.
 	VertexDataCircle(const glm::vec3& Position, const glm::vec2& local, const glm::vec4& Color, float Thickness, float Fade, unsigned int eID);

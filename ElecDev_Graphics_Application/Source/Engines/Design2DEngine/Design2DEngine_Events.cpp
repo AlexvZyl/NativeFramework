@@ -86,14 +86,15 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
 
-		//Switch out of any placement state
-		if (designerState == COMPONENT_PLACE || designerState == CABLE_PLACE) {
+		// Switch out of any placement state.
+		if (designerState == COMPONENT_PLACE || designerState == CABLE_PLACE) 
+		{
 			m_activeComponent = nullptr;
 			m_activeCable = nullptr;
 			designerState = ENTITY_SELECT;
 		}
-		else {
-
+		else 
+		{
 			// Update current entity ID.
 			m_currentEntityID = getEntityID(event.mousePosition);
 			setActiveComponent(m_currentEntityID);
@@ -147,8 +148,10 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		m_hoveredPort = getPort(m_hoveredID);
 		if (m_hoveredPort != lastHoveredPort)
 		{
-			if (m_hoveredPort)   m_hoveredPort->showAttachIndicator();
-			else if (lastHoveredPort) {
+			if (m_hoveredPort)   
+				m_hoveredPort->showAttachIndicator();
+			else if (lastHoveredPort) 
+			{
 					lastHoveredPort->hideAttachIndicator();
 			}
 		}

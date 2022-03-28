@@ -36,6 +36,9 @@ Circle::Circle(VertexArrayObject<VertexDataCircle>* VAO, const glm::vec3& center
 
 	// Add to VAO.
 	m_VAO->pushPrimitive(this, vertices, indices);
+
+	// FIX!  Why must this be here?
+	//removeOutline();
 } 
 
 Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)

@@ -9,27 +9,31 @@ layout(location = 3) in uint v_entityID;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
+out float f_outline;
 out vec4 f_color;
-flat out uint f_entityID;
 
 void main()
 {
+	f_outline = v_outline;
+	if(v_outline == 0.0f)
+		return;
+
 	f_color = v_color;
-    gl_Position = projectionMatrix * viewMatrix * vec4(v_pos, 1.0);
-	f_entityID = v_entityID;
+    gl_Position = projectionMatrix * viewMatrix * vec4(v_pos, 1.0f);
 }
 
 #shader fragment
 #version 450 core
 
-layout(location = 0) out vec4 o_color;
-layout(location = 1) out uint o_entityID;
+layout(location = 2) out vec4 o_outline;
 
+in float f_outline;
 in vec4 f_color;
-flat in uint f_entityID;
 
 void main()
 {
-	o_color = f_color;
-	o_entityID = f_entityID;
+	if(f_outline == 0.0f)
+		discard;
+
+	o_outline = vec4(vec3(f_color), f_outline);
 };

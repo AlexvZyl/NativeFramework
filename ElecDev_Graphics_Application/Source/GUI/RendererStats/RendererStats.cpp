@@ -130,7 +130,7 @@ void RendererStats::onRender()
 	// ----------------- //
 
 	ImGui::PushID("RendererData");
-	if (ImGui::BeginChild("Child", { 0, 72.f }, true))
+	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 5.f }, true))
 	{
 		// Setup table
 		ImGui::BeginTable("RendererTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
@@ -155,6 +155,12 @@ void RendererStats::onRender()
 		// Done.
 		ImGui::EndTable();
 		app.m_rendererData.reset();
+
+		// Pipeline.
+		for (auto& [key, value] : Renderer::s_pipelineControls)
+		{
+			ImGui::Checkbox(key.c_str(), &value);
+		}
 	}
 	else
 	{

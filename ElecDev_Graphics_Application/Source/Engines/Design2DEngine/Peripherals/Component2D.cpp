@@ -187,7 +187,8 @@ void Component2D::highlight()
 	
 	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->highlight();
-	
+
+	enableOutline();
 }
 
 void Component2D::unhighlight()
@@ -206,7 +207,16 @@ void Component2D::unhighlight()
 	
 	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->unhighlight();
-	
+
+
+	disableOutline();
+}
+
+void Component2D::disableOutline()
+{
+	shape->disableOutline();
+	border->disableOutline();
+	title->disableOutline();
 }
 
 unsigned Component2D::addPort(int side, PortType type, const std::string& name)
@@ -248,7 +258,8 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 														&portsNorth,
 														&portsSouth};
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) 
+	{
 		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
 
 		auto port_to_remove = std::find(begin(portsSide), end(portsSide), port);
@@ -334,6 +345,13 @@ void Component2D::translateTitle(glm::vec2 translation)
 {
 	titleOffset += translation;
 	title->translate(translation);
+}
+
+void Component2D::enableOutline() 
+{
+	shape->enableOutline();
+	border->enableOutline();
+	title->enableOutline();
 }
 
 //void Component2D::destroy()
