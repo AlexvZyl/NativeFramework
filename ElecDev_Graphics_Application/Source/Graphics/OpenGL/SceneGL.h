@@ -25,6 +25,8 @@ class Event;
 
 enum class CameraType;
 
+class Grid;
+
 //==============================================================================================================================================//
 //  Scene Class																																	//
 //==============================================================================================================================================//
@@ -68,7 +70,12 @@ public:
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
 
+	// The grid drawn on the scene.
+	std::unique_ptr<Grid> m_grid;
+
 private:
+
+	friend class EngineCore;
 
 	// Map containing all of the different primitives.
 	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;

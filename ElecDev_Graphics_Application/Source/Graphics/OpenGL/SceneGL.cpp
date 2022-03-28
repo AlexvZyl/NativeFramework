@@ -11,10 +11,11 @@
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Renderer/RendererGL.h"
-#include "Application/Events/Events.h"
 #include "OpenGL/Renderer/RendererGL.h"
-#include "imgui/imgui.h"
 #include "OpenGL/ErrorHandlerGL.h"
+#include "OpenGL/Primitives/Grid.h"
+#include "Application/Events/Events.h"
+#include "imgui/imgui.h"
 
 //==============================================================================================================================================//
 //  Constructor & Destructor.																													//
@@ -33,10 +34,13 @@ Scene::Scene(CameraType cameraType, float width, float height)
 	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
 	// Background.
 	createDefaultBackground();
+	Renderer::bindScene(this);
+	m_grid = std::make_unique<Grid>();
 }
 
 Scene::~Scene() 
 {
+	m_grid.reset();
 	m_primitives.clear();
 	Renderer::doneSceneDestruction();
 }

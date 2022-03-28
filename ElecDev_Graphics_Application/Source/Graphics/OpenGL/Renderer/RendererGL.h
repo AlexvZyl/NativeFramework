@@ -169,7 +169,7 @@ private:
 	static void drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive);
 
 	// Textures.
-	static void drawTextureOverFBOAttachment(unsigned texture, unsigned attachment, Shader* shader);
+	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
 	static std::unique_ptr<VertexArrayObject<VertexDataTextured>> s_unitQuad;
 	static void createUnitQuad();
 
@@ -193,7 +193,10 @@ private:
 	static void setViewport(const glm::vec2& viewport);
 	// Sets the OpenGL viewport.  Does not assume a start from (0,0).
 	static void setViewport(const glm::vec4& viewport);
+	// Set the clear color.
 	static void setClearColor(const glm::vec4& color);
+	// Set the line width (in pixels) of a GL_LINE.
+	static void setLineSize(int size);
 
 	// ------------- //
 	//  S C E N E S  //
@@ -215,6 +218,8 @@ private:
 	static void geometryPass3D(Scene* scene);
 	// Draw the scene background.
 	static void backgroundPass(Scene* scene);
+	// Render the grid.
+	static void gridPass(Scene* scene);
 
 	// ------------------- //
 	//  V A R I A B L E S  //

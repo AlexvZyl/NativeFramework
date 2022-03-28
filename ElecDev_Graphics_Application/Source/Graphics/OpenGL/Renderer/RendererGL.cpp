@@ -56,6 +56,7 @@ void Renderer::initialise()
 	s_pipelineControls.insert({ "Geometry"			, true });
 	s_pipelineControls.insert({ "Outline"			, true });
 	s_pipelineControls.insert({ "OutlinePostProc"   , true });
+	s_pipelineControls.insert({ "Grid"				, true });
 
 	// Used for texture rendering.
 	Renderer::createUnitQuad();
@@ -216,6 +217,11 @@ void Renderer::setViewport(const glm::vec4& viewport)
 void Renderer::setClearColor(const glm::vec4& color) 
 {
 	GLCall(glClearColor(color.r, color.g, color.b, color.a));
+}
+
+void Renderer::setLineSize(int size) 
+{
+	GLCall(glLineWidth((float)size));
 }
 
 //==============================================================================================================================================//

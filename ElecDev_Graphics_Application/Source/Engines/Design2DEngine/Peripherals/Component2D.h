@@ -51,8 +51,8 @@ public:
 	std::unordered_map<std::string, std::string> dataDict;
 
 	// Component shape attributes.
-	float height = 0.1f;
-	float width = 0.1f;
+	float height = 0.08;
+	float width = 0.08f;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> vertices2;
 
@@ -62,7 +62,7 @@ public:
 
 	//title
 	static Font titleFont;
-	glm::vec2 titleOffset = glm::vec2(0.f, -0.15f);
+	glm::vec2 titleOffset = glm::vec2(0.f, -0.11f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	std::string titleString;
 	float titleSize = 0.035f;
