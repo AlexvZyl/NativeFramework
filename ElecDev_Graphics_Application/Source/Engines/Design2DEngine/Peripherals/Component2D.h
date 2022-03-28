@@ -121,6 +121,6 @@ public:
 	void translateTitle(glm::vec2 translation);
 	//void destroy();
 
-	void outline(float scale);
-	void removeOutline();
+	void enableOutline();
+	void disableOutline();
 };

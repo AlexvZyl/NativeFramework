@@ -32,8 +32,8 @@ in float f_texID;
 float xIncrements = 1.0f / width;  
 float yIncrements = 1.0f / height;  
 
-const float sobelMax = 0.75f;
-const float sobelMin = 0.1f;
+const float sobelMax = 0.9f;
+const float sobelMin = 0.01f;
 
 vec2 offsets[9] = vec2[9]
 (
@@ -58,7 +58,7 @@ float yKernel[9] = float[9]
 
 float greyScale(vec4 color)
 {
-    return (color.r + color.g + color.b + color.a ) / 4.f;
+    return (color.r + color.g + color.b + 2 * color.a ) / 5.f;
 }
 
 void main()

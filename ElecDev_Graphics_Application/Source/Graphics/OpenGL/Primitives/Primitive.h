@@ -93,9 +93,9 @@ public:
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
 	// Outline the primitive by the given scale.
-	virtual void outline(float scale);
+	virtual void enableOutline();
 	// Remove the outline.
-	virtual void removeOutline();
+	virtual void disableOutline();
 	
 	// --------------------- //
 	//  A T T R I B U T E S  //

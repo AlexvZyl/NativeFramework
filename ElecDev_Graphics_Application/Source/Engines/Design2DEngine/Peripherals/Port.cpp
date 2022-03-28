@@ -151,18 +151,18 @@ void Port::highlight()
 {
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border->setColor(borderColour);
-	border->outline(1.f);
-	body->outline(1.f);
-	title->outline(1.f);
+	border->enableOutline();
+	body->enableOutline();
+	title->enableOutline();
 }
 
 void Port::unhighlight()
 {
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
-	border->removeOutline();
-	body->removeOutline();
-	title->removeOutline();
+	border->disableOutline();
+	body->disableOutline();
+	title->disableOutline();
 }
 
 void Port::setOffset(const glm::vec2& offset)

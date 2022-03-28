@@ -179,16 +179,16 @@ void Primitive<VertexType>::setContext(GUIState* guiState)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::outline(float scale)
+void Primitive<VertexType>::enableOutline()
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.outline = scale;
+		m_VAO->m_vertexCPU[i].data.outline = 1.0f;
 
 	syncWithGPU();
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::removeOutline()
+void Primitive<VertexType>::disableOutline()
 {
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.outline = 0.f;

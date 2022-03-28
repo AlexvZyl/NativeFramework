@@ -185,15 +185,6 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	// The shader used in rendering.
 	Shader* shader = nullptr;
 
-	if (Renderer::s_pipelineControls["Background"])
-	{
-		// Draw background.
-		s_shaders["OutlineBackgroundShader"]->bind();
-		Renderer::setDepthFunc(GL_ALWAYS);
-		Renderer::drawBufferIndexed(scene->m_backgroundVAO.get());
-		Renderer::setDepthFunc(GL_LESS);
-	}
-
 	// Draw basic primitives.
 	shader = s_shaders["OutlineShader"].get();
 	shader->bind();

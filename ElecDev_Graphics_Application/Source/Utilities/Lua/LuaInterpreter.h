@@ -30,6 +30,9 @@ inline void lua_LoadLumenFunctions(lua_State* L)
 	// ImGui.
 	lua_register(L, "ImGui_Text",			lua_imgui_Text);
 	lua_register(L, "ImGui_Button",			lua_imgui_Button);
+	lua_register(L, "ImGui_SameLine",		lua_imgui_SameLine);
+	lua_register(L, "ImGui_Separator",		lua_imgui_Separator);
+	lua_register(L, "ImGui_Combo",			lua_imgui_Combo);
 }
 
 inline lua_State* lua_CreateNewLuaState() 
@@ -98,6 +101,21 @@ inline std::string lua_GetStringAndPop(lua_State* L)
 	std::string result = lua_tostring(L, -1);
 	lua_pop(L, 1);
 	return result;
+}
+
+inline void lua_GetStringTableAndPop(lua_State* L, std::vector<std::string>& data, int count) 
+{
+	// Get the table entries.
+	for (int i = 0; i < count; i++) 
+	{
+		lua_pushinteger(L, i + 1);
+		lua_gettable(L, -2);
+		const char* item = lua_tostring(L, -1);
+		data.push_back(item);
+		lua_pop(L, 1);
+	}
+	// Pop the table from the stack.
+	lua_pop(L, 1);
 }
 
 //==============================================================================================================================================//

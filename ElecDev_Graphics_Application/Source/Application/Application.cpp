@@ -176,7 +176,7 @@ void Application::setGuiTheme()
 
 		// Spacing.
 		style.ItemInnerSpacing = ImVec2(1.f, 1.f);
-		style.ItemSpacing = {5.f, 2.f};
+		style.ItemSpacing = {5.f, 4.f};
 
 		// Padding.
 		style.DisplaySafeAreaPadding = ImVec2(0.f, 0.f);

@@ -1,0 +1,3 @@
+﻿Build started...
+1>------ Build started: Project: Lumen, Configuration: Debug x64 ------
+1>Application.cpp
