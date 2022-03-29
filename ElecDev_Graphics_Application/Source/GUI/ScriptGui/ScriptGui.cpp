@@ -136,6 +136,24 @@ void ScriptGui::callbackMessage(std::string& message)
     }
 }
 
+void ScriptGui::awaitNewScript() 
+{
+    std::thread([&]() 
+        {
+            bool listen = true;
+            while (listen)
+            {
+                boost::beast::flat_buffer buffer;
+                m_webSocket->read(buffer);
+                if (!buffer.size()) continue;
+                std::string input = boost::beast::buffers_to_string(buffer.cdata());
+                LUMEN_LOG_ERROR("Received new script.", "DEBUG");
+                m_script = input;
+                listen = false;
+            }
+        });
+}
+
 //==============================================================================================================================================//
 //  EOF.																																	    //
 //==============================================================================================================================================//

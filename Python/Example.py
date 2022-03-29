@@ -42,6 +42,14 @@ def MyServerHandler(message):
     print("MyServerHandler: " + message)
     # Handle the message...
 
+    # Work in progress.
+    # Use this to clear and write a new script.
+    # if(True):
+    #     imgui.Clear()
+    #     imgui.Text("This is a new GUI.")
+    #     print(imgui.GetLua())
+    #     imgui.NewScript()
+
 # Set the specific gui's handler.
 imgui.ServerHandler = MyServerHandler
 
@@ -76,7 +84,21 @@ imgui.InputText("Input Text 2", "")
 
 imgui.Separator()
 
+dictionary = {
+    "Key1"  : "Value1",
+    "Key2"  : 2,
+    3       : 3,
+    4       : "Value4"
+}
+
+imgui.Table("Table Label", 150, dictionary)
+
+imgui.Separator()
+
 imgui.CloseButton("Submit", (100, 30))
+
+# Work in progress.
+# imgui.ClearAwaitScriptButton("Clear Await", (100, 30))
 
 imgui.Separator()
 

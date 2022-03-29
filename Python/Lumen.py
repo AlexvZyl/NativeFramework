@@ -19,26 +19,32 @@ import websockets
 
 # Turn the parameter into a string.
 def PString(parameter):
-    return "\"" + parameter + "\""
+    return "\"" + str(parameter) + "\""
 
 # Turn the parameter into a Lua table.
 def  PTable(parameters):
-    string = "{"
+    string = "{ "
     for p in parameters:
-        string += str(p) + ","
-    return string[:-1] + "}"
+        string += str(p) + ", "
+    return string[:-2] + " }"
 
 def PStringTable(parameters):
-    string = "{"
+    string = "{ "
     for p in parameters:
-        string += PString(str(p)) + ","
-    return string[:-1] + "}"
+        string += PString(str(p)) + ", "
+    return string[:-2] + " }"
 
 def PBool(parameter):
     if(parameter):
         return "true"
     else:
         return "false"
+
+def PDict(parameter):
+    string = "{ "
+    for key, value in parameter.items():
+        string += "[" + PString(key) + "] = " + PString(value) + ", "
+    return string[:-2] + " }"
 
 # --------------------------------------- #
 #  L U M E N   S C R I P T   E N T I T Y  #
@@ -66,6 +72,9 @@ class _LumenScriptEntity:
         line = line[:-2] + ")"
         self._AddLine(line)
 
+    def Clear(self):
+        self._script = ""
+
 # ------------------------- #
 #  L U M E N   S C R I P T  #
 # ------------------------- #
@@ -77,7 +86,7 @@ class LumenScript(_LumenScriptEntity):
         self._AddLine("-- LUA_EXECUTABLE_SCRIPT")
 
     def Clear(self):
-        self._script = ""
+        _LumenScriptEntity.Clear(self)
         self._AddLine("-- LUA_EXECUTABLE_SCRIPT")
 
     # ------------- #
@@ -126,7 +135,10 @@ class LumenGui(_LumenScriptEntity):
         # Used to set the server message callback function.
         self.ServerHandler = 0
 
-       
+    def Clear(self):
+        _LumenScriptEntity.Clear(self)
+        self._AddLine("-- LUA_SCRIPT_GUI")
+        self._AddLine("-- Websocket: '" + self.host + ":" + self.port + "'.")
 
     def StartServer(self, LumenInstance):
 
@@ -161,6 +173,13 @@ class LumenGui(_LumenScriptEntity):
         async for message in websocket:
             self.ServerHandler(message)
 
+    def NewScript(self):
+        # Connect to websocket.
+        url = "ws://" + self.host + ":" + self.port
+        newWebSocket = websocket.create_connection(url)
+        newWebSocket.send(self.GetLua())
+        newWebSocket.close()
+
     # ----------------------------- #
     #  G U I   C O M P O N E N T S  #
     # ----------------------------- #
@@ -170,6 +189,9 @@ class LumenGui(_LumenScriptEntity):
 
     def CloseButton(self, label, size):
         self._AddFunction("ImGui_CloseButton", (PString(label), PTable(size)))
+
+    def ClearAwaitScriptButton(self, label, size):
+        self._AddFunction("ImGui_ClearAwaitScriptButton", (PString(label), PTable(size)))
 
     def Text(self, text):
         self._AddFunction("ImGui_Text", (PString(text),))
@@ -188,6 +210,9 @@ class LumenGui(_LumenScriptEntity):
 
     def InputText(self, label, initialText):
         self._AddFunction("ImGui_InputText", (PString(label), PString(initialText)))
+
+    def Table(self, label, height, dict):
+        self._AddFunction("ImGui_Table", (PString(label), height, PDict(dict)))
 
 # ---------------------------- #
 #  L U M E N   I N ST A N C E  #
