@@ -61,7 +61,8 @@ imgui.Button("Sameline button", (0,0))
 
 imgui.Separator()
 
-imgui.Combo("ComboboxTest", 0, ("Test0", "Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7"), 8, 4)
+# If you make the last parameter -1 imgui wil display all of the entries.
+imgui.Combo("ComboboxTest", 0, ("Test0", "Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7"), 8, 4) 
 
 imgui.Separator()
 

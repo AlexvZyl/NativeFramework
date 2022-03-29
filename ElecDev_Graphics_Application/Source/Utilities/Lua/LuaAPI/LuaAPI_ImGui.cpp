@@ -101,7 +101,7 @@ int lua_imgui_Combo(lua_State* L)
 	bool selected = false;
 	if (ImGui::Combo(label.c_str(), currentItem, zeroSeperatedString, maxHeightInItems))
 	{
-		std::string msg = "[Combo] " + label + " : Item " + std::to_string(*currentItem) + ".";
+		std::string msg = "[Combo] " + label + " : Item " + items[*currentItem] + ".";
 		Lumen::getActiveScriptGui()->callbackMessage(msg);
 		selected = true;
 	}
