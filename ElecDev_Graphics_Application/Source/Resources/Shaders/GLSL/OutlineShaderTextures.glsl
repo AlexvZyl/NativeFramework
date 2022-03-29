@@ -15,27 +15,29 @@ out vec4 f_color;
 out vec2 f_texCoord;
 out float f_texID;
 flat out uint f_entityID;
+out float f_outline;
 
 void main()
 {
+	f_outline = v_outline;
+	if(v_outline == 0.0f)
+		return;
+
 	f_color =v_color;
 	f_texCoord = v_texCoord;
 	f_texID = v_texID;
 	gl_Position = projectionMatrix * viewMatrix * vec4(pos, 1.0);
-	f_entityID = v_entityID;
 }
 
 #shader fragment
 #version 450 core
 
-layout(location = 0) out vec4 o_color;
-layout(location = 1) out uint o_entityID;
 layout(location = 2) out vec4 o_outline;
 
 in vec4 f_color;
 in vec2 f_texCoord;
 in float f_texID;
-flat in uint f_entityID;
+in float f_outline;
 
 const float width = 0.4;
 const float edge = 0.2;
@@ -50,13 +52,18 @@ float median(float r, float g, float b) {
 
 void main()
 {
+	if(f_outline == 0.0f)
+		discard;
+
+	vec4 textureColor;
+
 	// Get the texture ID.
 	int index = int(f_texID);
 
 	// Render object without texture.
 	if (index == 0)
 	{
-		o_color = f_color;
+		textureColor = f_color;
 	}
 	// Render MSDF text.
 	else if (index == 1)
@@ -68,15 +75,17 @@ void main()
 		float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
 		if (opacity < 0.1)
 			discard;
-		o_color.rgb = f_color.rgb;
-		o_color.a = opacity;
+		textureColor.rgb = f_color.rgb;
+		textureColor.a = opacity;
 	}
 	// Render normal textured entities.
 	else 
 	{
-		o_color = texture(f_textures[index], f_texCoord);
+		textureColor = texture(f_textures[index], f_texCoord);
 	}
 
-	// Output the entity ID.
-	o_entityID = f_entityID;
+	if(textureColor.a == 0.0f)
+		discard;
+
+	o_outline = vec4(vec3(textureColor), f_outline);
 }

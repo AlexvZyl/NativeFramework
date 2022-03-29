@@ -26,6 +26,8 @@ ScriptGui::~ScriptGui()
     boost_error_code ec;
     boost::beast::websocket::close_reason cr("Lumen GUI shutdown.");
     m_webSocket->close(cr, ec);
+    m_webSocket.reset();
+    m_ioContext.reset();
 
     // Check for errors.
     if (ec)
@@ -132,6 +134,24 @@ void ScriptGui::callbackMessage(std::string& message)
         LUMEN_LOG_ERROR("On callback: " + ec.message(), "Script Gui Socket");
         ec.clear();
     }
+}
+
+void ScriptGui::awaitNewScript() 
+{
+    std::thread([&]() 
+        {
+            bool listen = true;
+            while (listen)
+            {
+                boost::beast::flat_buffer buffer;
+                m_webSocket->read(buffer);
+                if (!buffer.size()) continue;
+                std::string input = boost::beast::buffers_to_string(buffer.cdata());
+                LUMEN_LOG_ERROR("Received new script.", "DEBUG");
+                m_script = input;
+                listen = false;
+            }
+        });
 }
 
 //==============================================================================================================================================//

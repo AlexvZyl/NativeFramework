@@ -25,6 +25,8 @@ class Event;
 
 enum class CameraType;
 
+class Grid;
+
 //==============================================================================================================================================//
 //  Scene Class																																	//
 //==============================================================================================================================================//
@@ -34,11 +36,9 @@ class Scene
 public:
 
 	// Constructor.
-	Scene(CameraType cameraType, float width, float height, unsigned msaaSamples = 16);
+	Scene(CameraType cameraType, float width, float height);
 	// Destructor.
 	virtual ~Scene();
-	// Set the MSAA samples.
-	void setMSAA(unsigned samples);
 	// Handle events.
 	void onEvent(Event& event);
 	// Returns the rendered texture.
@@ -56,6 +56,9 @@ public:
 	// Resizes the scene based on a viewport change.
 	void resize(const glm::vec2& size);
 
+	void onRenderInit();
+	void onRenderCleanup();
+
 	// Delete the resources to save on VRAM.
 	void deleteGPUResources();
 	// Recreate the resources once it has been deleted.
@@ -67,7 +70,12 @@ public:
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
 
+	// The grid drawn on the scene.
+	std::unique_ptr<Grid> m_grid;
+
 private:
+
+	friend class EngineCore;
 
 	// Map containing all of the different primitives.
 	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
@@ -85,13 +93,6 @@ private:
 	// Creates a default 3D background.
 	void create3DBackground();
 
-	// Binds the FBO.
-	void bindFBO();
-	// Clears the FBO.
-	void clearFBO();
-	// Unbinds the FBO.
-	void unbindFBO();
-
 	// Return the view matrix of the scene camera.
 	glm::mat4* getViewMatrix();
 	// Return the projection matrix.
@@ -107,13 +108,6 @@ private:
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;
 	// FBO.
 	std::unique_ptr<FrameBufferObject> m_FBO;
-	
-	// --------------------- //
-	//  B A C K G R O U N D  //
-	// --------------------- //
-
-	float m_colorScaleDark = 1.0f;
-	float m_colorScaleLight = 3.f;
 };
 
 //==============================================================================================================================================//

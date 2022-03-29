@@ -58,7 +58,7 @@ Component2D::Component2D(Circuit* parent)
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
-	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
+	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
 	std::string textString = equipType + std::string(": ") + titleString;
 	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
@@ -69,7 +69,7 @@ Component2D::Component2D(Circuit* parent)
 	highlight();
 
 	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
-	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber",		"From(Circuit Database)"));
+	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber", "From(Circuit Database)"));
 	dataDict.insert(std::pair<std::string, std::string>("Metric", "1"));
 	dataDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
 	dataDict.insert(std::pair<std::string, std::string>("Unit", "ea"));
@@ -288,7 +288,8 @@ void Component2D::highlight()
 	
 	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->highlight();
-	
+
+	enableOutline();
 }
 
 void Component2D::unhighlight()
@@ -307,7 +308,16 @@ void Component2D::unhighlight()
 	
 	for (int i = 0; i < portsSouth.size(); i++) 
 		portsSouth[i]->unhighlight();
-	
+
+
+	disableOutline();
+}
+
+void Component2D::disableOutline()
+{
+	shape->disableOutline();
+	border->disableOutline();
+	title->disableOutline();
 }
 
 unsigned Component2D::addPort(int side, PortType type, const std::string& name)
@@ -349,7 +359,8 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 														&portsNorth,
 														&portsSouth};
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 4; i++) 
+	{
 		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
 
 		auto port_to_remove = std::find(begin(portsSide), end(portsSide), port);
@@ -452,6 +463,11 @@ PortType Component2D::getPortType(YAML::Node node)
 	if (node["Type"].as<std::string>() == "PORT_IN") { return PortType::PORT_IN; }
 	else if (node["Type"].as<std::string>() == "PORT_OUT") { return PortType::PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
+void Component2D::enableOutline() 
+{
+	shape->enableOutline();
+	border->enableOutline();
+	title->enableOutline();
 }
 
 //void Component2D::destroy()

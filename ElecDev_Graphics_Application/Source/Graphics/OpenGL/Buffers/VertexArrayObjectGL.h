@@ -110,6 +110,7 @@ private:
 	friend class RendererStats;
 	friend class Renderer;
 	friend class BackgroundColorEditor;
+	friend class Grid;
 
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //

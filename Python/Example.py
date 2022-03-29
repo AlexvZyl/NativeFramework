@@ -42,15 +42,68 @@ def MyServerHandler(message):
     print("MyServerHandler: " + message)
     # Handle the message...
 
+    # Work in progress.
+    # Use this to clear and write a new script.
+    # if(True):
+    #     imgui.Clear()
+    #     imgui.Text("This is a new GUI.")
+    #     print(imgui.GetLua())
+    #     imgui.NewScript()
+
 # Set the specific gui's handler.
 imgui.ServerHandler = MyServerHandler
 
 # Create gui script.
+imgui.Separator()
+
 imgui.Text("Testing Text")
 imgui.Button("Testing Button", (0,0))
-print(imgui.GetLua())
+imgui.Text("Some more text.")
+imgui.Button("Sized button", (200,0))
+
+imgui.Separator()
+
+imgui.Text("Text before button:")
+imgui.SameLine(0)
+imgui.Button("Sameline button", (0,0))
+
+imgui.Separator()
+
+# If you make the last parameter -1 imgui wil display all of the entries.
+imgui.Combo("ComboboxTest", 0, ("Test0", "Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7"), 8, 4) 
+
+imgui.Separator()
+
+imgui.Checkbox("Checkbox 1 True", True)
+imgui.Checkbox("Checkbox 2 False", False)
+
+imgui.Separator()
+
+imgui.InputText("Input Text 1", "Initial Entry")
+imgui.InputText("Input Text 2", "")
+
+imgui.Separator()
+
+dictionary = {
+    "Key1"  : "Value1",
+    "Key2"  : 2,
+    3       : 3,
+    4       : "Value4"
+}
+
+imgui.Table("Table Label", 150, dictionary)
+
+imgui.Separator()
+
+imgui.CloseButton("Submit", (100, 30))
+
+# Work in progress.
+# imgui.ClearAwaitScriptButton("Clear Await", (100, 30))
+
+imgui.Separator()
+
 # Start gui inside the Lumen instance.
 imgui.StartServer(instance)
 
 # Stop instance (this will close Lumen).
-instance.Shutdown()
+# instance.Shutdown()

@@ -158,7 +158,7 @@ void PopUpMenu::onRender()
                 app.logEvent<FileSaveEvent>(event);
             }
             // Remove popup.
-            app.queuePopLayer(m_name);
+            app.queuePopLayer(m_layer);
         }
     }
     else if (dynamic_cast<ComponentDesigner*>(m_engine)) {
@@ -197,7 +197,7 @@ void PopUpMenu::end()
 
 void PopUpMenu::onDefocusEvent(LayerEvent& event) 
 {
-    Lumen::getApp().queuePopLayer(m_name);
+    Lumen::getApp().queuePopLayer(m_layer);
 }
 
 /*=======================================================================================================================================*/

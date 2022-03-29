@@ -385,250 +385,261 @@ void ComponentEditor::onRender()
 
 		ImGui::PopID();
 
-		// --------------------- //
-		//  D A T A   T A B L E  //
-		// --------------------- //
+	// --------------------- //
+	//  D A T A   T A B L E  //
+	// --------------------- //
 
-		ImGui::PushID("CompEdChildData");
-		if (ImGui::BeginChild("DataChild", { 0,0 }, true))
+	ImGui::PushID("CompEdChildData");
+	if (ImGui::BeginChild("DataChild", { 0,0 }, true))
+	{
+
+		if (activeComponent || activeCable)
 		{
+			std::unordered_map<std::string, std::string> dataDict;
+			if (activeComponent) dataDict = activeComponent->dataDict;
+			else if (activeCable) dataDict = activeCable->cableDict;
 
-			if (activeComponent || activeCable)
+			const char* buffer[100];
+			int numKeys = 0;
+
+			if (activeComponent)
 			{
-				std::unordered_map<std::string, std::string> dataDict;
-				if (activeComponent) dataDict = activeComponent->dataDict;
-				else if (activeCable) dataDict = activeCable->cableDict;
-
-				const char* buffer[100];
-				int numKeys = 0;
-
-				if (activeComponent)
+				for (auto& [key, val] : activeComponent->dataDict)
 				{
-					for (auto& [key, val] : activeComponent->dataDict)
-					{
-						buffer[numKeys] = key.c_str();
-						numKeys++;
-					}
+					buffer[numKeys] = key.c_str();
+					numKeys++;
 				}
-				else if (activeCable)
+			}
+			else if (activeCable)
+			{
+				for (auto& [key, val] : activeCable->cableDict)
 				{
-					for (auto& [key, val] : activeCable->cableDict)
-					{
-						buffer[numKeys] = key.c_str();
-						numKeys++;
-					}
+					buffer[numKeys] = key.c_str();
+					numKeys++;
 				}
+			}
 
-				ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-				if (ImGui::CollapsingHeader("Data Automation"))
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+			if (ImGui::CollapsingHeader("Data Automation"))
+			{
+				// Add dict entry.
+				static std::string entryToAdd;
+				ImGui::Text("Add an attribute to the dictionary:");
+				ImGui::InputText("##DictEntry", &entryToAdd);
+				ImGui::SameLine();
+				if (ImGui::Button("Add"))
 				{
-					// Add dict entry.
-					static std::string entryToAdd;
-					ImGui::Text("Add an attribute to the dictionary:");
-					ImGui::InputText("##DictEntry", &entryToAdd);
-					ImGui::SameLine();
-					if (ImGui::Button("Add"))
+					if (activeComponent)
 					{
-						if (activeComponent)
-						{
-							activeComponent->dataDict.insert({ entryToAdd, "From(Circuit Database)" });
-						}
-						else
-						{
-							activeCable->cableDict.insert({ entryToAdd, "From(Circuit Database)" });
-						}
-						entryToAdd = "";
+						activeComponent->dataDict.insert({ entryToAdd, "From(Circuit Database)" });
 					}
-
-					// Dimension of Table
-					int height;
-					if (numKeys < 10) height = 50 + 27 * (numKeys - 1);
-					else height = 300;
-
-					// Setup table.
-					ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable
-						| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
-						| ImGuiTableFlags_Borders, ImVec2(0, height));
-
-					// Setup header.
-					ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
-					ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
-					ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
-					ImGui::TableHeadersRow();
-
-					// Store entries to be removed.
-					static std::vector<std::string> toRemove;
-					toRemove.reserve(1);
-
-					// Table.
-					int keyCount = 0;
-					for (auto& [key, val] : dataDict)
+					else
 					{
-						// ID.
-						ImGui::PushID(keyCount++);
-
-						// Selectable.
-						bool isOpen = true;
-						ImGui::TableNextRow();
-
-						// Dict data.
-						ImGui::TableSetColumnIndex(0);
-						ImGui::PushItemWidth(-1);
-						ImGui::Text(key.c_str());
-						ImGui::PopItemWidth();
-						ImGui::TableSetColumnIndex(1);
-						ImGui::PushItemWidth(-1);
-						ImGui::InputText("##Input", &val);
-						ImGui::PopItemWidth();
-						ImGui::TableSetColumnIndex(2);
-						// Remove button.
-						ImGui::PushItemWidth(-1);
-						if (ImGui::Button("Remove"))
-						{
-							toRemove.push_back(key);
-						}
-						ImGui::PopItemWidth();
-						// ID.
-						ImGui::PopID();
+						activeCable->cableDict.insert({ entryToAdd, "From(Circuit Database)" });
 					}
-
-					// Cleanup table.
-					ImGui::EndTable();
-
-					// Remove entries.
-					for (auto& key : toRemove)
-					{
-						if (activeComponent)
-						{
-							activeComponent->dataDict.erase(key);
-						}
-						else
-						{
-							activeCable->cableDict.erase(key);
-						}
-					}
-					toRemove.clear();
+					entryToAdd = "";
 				}
 
-				// --------------------- //
-				//     FROM SELECTION    //
-				// --------------------- //
+				// Dimension of Table
+				int height;
+				if (numKeys < 10) height = 50 + 27 * (numKeys - 1);
+				else height = 300;
 
-				const char* fromSelection[] = { "Circuit Database", "Motor Database", "Cable Database" };
-				std::string from = "FROM(";
-				std::string end = ")";
+				// Setup table.
+				ImGui::BeginTable("Columns to specify", 3, ImGuiTableFlags_Resizable
+					| ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
+					| ImGuiTableFlags_Borders, ImVec2(0, height));
 
-				ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-				if (ImGui::CollapsingHeader("From"))
+				// Setup header.
+				ImGui::TableSetupColumn("Attribute", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableSetupColumn("Function", ImGuiTableColumnFlags_WidthStretch);
+				ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
+				ImGui::TableHeadersRow();
+
+				// Store entries to be removed.
+				static std::vector<std::string> toRemove;
+				toRemove.reserve(1);
+
+				// Table.
+				int keyCount = 0;
+				for (auto& [key, val] : dataDict)
 				{
-					// int* typeval2 = (int*)&dataDict;
-					ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict.size());
+					// ID.
+					ImGui::PushID(keyCount++);
 
-					ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
-					// ImGui::Text("Hello World");
+					// Selectable.
+					bool isOpen = true;
+					ImGui::TableNextRow();
 
-					if (ImGui::Button("Insert From function"))
+					// Dict data.
+					ImGui::TableSetColumnIndex(0);
+					ImGui::PushItemWidth(-1);
+					ImGui::Text(key.c_str());
+					ImGui::PopItemWidth();
+					ImGui::TableSetColumnIndex(1);
+					ImGui::PushItemWidth(-1);
+					ImGui::InputText("##Input", &val);
+					ImGui::PopItemWidth();
+					ImGui::TableSetColumnIndex(2);
+					// Remove button.
+					ImGui::PushItemWidth(-1);
+					if (ImGui::Button("Remove"))
 					{
-						from += fromSelection[databaseSelector] + end;
-						if (activeComponent)
-						{
-							activeComponent->dataDict[buffer[fromSelector]] = from;
-						}
-						else
-						{
-							activeCable->cableDict[buffer[fromSelector]] = from;
-						}
+						toRemove.push_back(key);
 					}
+					ImGui::PopItemWidth();
+					// ID.
+					ImGui::PopID();
 				}
 
-				// ------------ //
-				//     SIZE     //
-				// ------------ //
+				// Cleanup table.
+				ImGui::EndTable();
 
-				ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-				if (ImGui::CollapsingHeader("Size"))
+				// Remove entries.
+				for (auto& key : toRemove)
 				{
-					ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict.size());
-					// ImGui::Text(std::to_string(typeval3).c_str());
-					if (ImGui::Button("Insert Size function"))
+					if (activeComponent)
 					{
-						if (activeComponent)
-						{
-							activeComponent->dataDict[buffer[fromSelector]] = "Size()";
-						}
-						else
-						{
-							activeCable->cableDict[buffer[fromSelector]] = "Size()";
-						}
+						activeComponent->dataDict.erase(key);
+					}
+					else
+					{
+						activeCable->cableDict.erase(key);
 					}
 				}
+				toRemove.clear();
+			}
 
-				// --------------------- //
-				//      IF STATEMENT     //
-				// --------------------- //
+			// --------------------- //
+			//     FROM SELECTION    //
+			// --------------------- //
 
-				// This should be the number of components of a specific type or the names of the components
-				std::string ifString = "IF(";
-				std::string forwardBracket = "[";
-				std::string backwardBracket = "]";
-				std::string comma = ",";
+			const char* fromSelection[] = { "Circuit Database", "Motor Database", "CableData" };
+			std::string from = "From(";
+			std::string end = ")";
 
-				ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-				if (ImGui::CollapsingHeader("IF"))
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+			if (ImGui::CollapsingHeader("From"))
+			{
+				// int* typeval2 = (int*)&dataDict;
+				ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict.size());
+
+				ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
+				// ImGui::Text("Hello World");
+
+				if (ImGui::Button("Insert From function"))
 				{
-					ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
-					ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, dataDict.size());
-					ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
-					ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
-					ImGui::InputText("##Comparison Value", &comparisonValue);
-					ImGui::InputText("##True Statement", &trueStatement);
-					ImGui::InputText("##False Statement", &falseStatement);
-					if (ImGui::Button("Insert IF function"))
+					from += fromSelection[databaseSelector] + end;
+					if (activeComponent)
 					{
-						if (trueStatement.find(comma) != std::string::npos)
-						{
-							trueStatement = forwardBracket + trueStatement + backwardBracket;
-						}
-						if (comparisonValue.find(comma) != std::string::npos)
-						{
-							comparisonValue = forwardBracket + comparisonValue + backwardBracket;
-						}
-						ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
-						dataDict[buffer[ifSelector]] = ifString;
+						activeComponent->dataDict[buffer[fromSelector]] = from;
+					}
+					else
+					{
+						activeCable->cableDict[buffer[fromSelector]] = from;
 					}
 				}
+			}
 
-				// --------------------- //
-				//      COMBINE TEXT     //
-				// --------------------- //
+			// ------------ //
+			//     SIZE     //
+			// ------------ //
 
-				// This should be the number of components of a specific type or the names of the components.
-				std::string combineText = "combine_text(";
-				std::string plusString = "+";
-				ImGui::SetNextItemOpen(false, ImGuiCond_Once);
-				if (ImGui::CollapsingHeader("Combine Text"))
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+			if (ImGui::CollapsingHeader("Size"))
+			{
+				ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict.size());
+				// ImGui::Text(std::to_string(typeval3).c_str());
+				if (ImGui::Button("Insert Size function"))
 				{
-					ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
-					if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, dataDict.size()))
+					if (activeComponent)
 					{
-						combineTextString += buffer[combineSelectorVariable] + plusString;
+						activeComponent->dataDict[buffer[sizeSelector]] = "size()";
 					}
-					ImGui::InputText("##Combine String", &combineTextString);
-					if (ImGui::Button("Insert Combine function"))
+					else
 					{
+						activeCable->cableDict[buffer[sizeSelector]] = "size()";
+					}
+				}
+			}
+
+			// --------------------- //
+			//      IF STATEMENT     //
+			// --------------------- //
+
+			// This should be the number of components of a specific type or the names of the components
+			std::string ifString = "IF(";
+			std::string forwardBracket = "[";
+			std::string backwardBracket = "]";
+			std::string comma = ",";
+			std::string equipmentInfo;
+			std::string pointer = "->";
+
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+			if (ImGui::CollapsingHeader("IF"))
+			{
+				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Somponent##if2", &equipmentSelector, componentNames, numCom);
+				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, possibleInformation, posKeys);
+				ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
+				ImGui::InputText("##Comparison Value", &comparisonValue);
+				ImGui::InputText("##True Statement", &trueStatement);
+				ImGui::InputText("##False Statement", &falseStatement);
+				if (ImGui::Button("Insert IF function"))
+				{
+					if (trueStatement.find(comma) != std::string::npos)
+					{
+						trueStatement = forwardBracket + trueStatement + backwardBracket;
+					}
+					if (comparisonValue.find(comma) != std::string::npos)
+					{
+						comparisonValue = forwardBracket + comparisonValue + backwardBracket;
+					}
+
+					ifString += componentNames[equipmentSelector] + pointer + possibleInformation[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
+					if (activeComponent)
+					{
+						activeComponent->dataDict[buffer[ifSelector]] = ifString;
+					}
+					else {
+						activeCable->cableDict[buffer[ifSelector]] = ifString;
+					}
+				}
+			}
+
+			// --------------------- //
+			//      COMBINE TEXT     //
+			// --------------------- //
+
+			// This should be the number of components of a specific type or the names of the components.
+			std::string combineText = "combine_text(";
+			std::string plusString = "+";
+			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+			if (ImGui::CollapsingHeader("Combine Text"))
+			{
+				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
+				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, possibleInformation, posKeys))
+				{
+					combineTextString += possibleInformation[combineSelectorVariable] + plusString;
+				}
+				ImGui::InputText("##Combine String", &combineTextString);
+				if (ImGui::Button("Insert Combine function"))
+				{
+					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) {
 						combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
-						combineText += combineTextString + end;
-						if (activeComponent)
-						{
-							activeComponent->dataDict[buffer[combineSelector]] = combineText;
-						}
-						else {
-							activeCable->cableDict[buffer[combineSelector]] = combineText;
-						}
+					}
+					combineText += combineTextString + end;
+					if (activeComponent)
+					{
+						activeComponent->dataDict[buffer[combineSelector]] = combineText;
+					}
+					else {
+						activeCable->cableDict[buffer[combineSelector]] = combineText;
 					}
 				}
 			}
 		}
+	}
 		ImGui::EndChild();
 		ImGui::PopID();
 	}

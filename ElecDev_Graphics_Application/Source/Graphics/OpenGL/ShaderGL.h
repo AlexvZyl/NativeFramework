@@ -24,7 +24,6 @@ public:
     unsigned int m_rendererID;
 
     // Contructors.
-    Shader();
     Shader(unsigned int shaderID);
     // Destructor.
     ~Shader();
@@ -55,7 +54,7 @@ private:
     // Used to get the shader matrix locations.
     int getUniformLocation(const std::string& name);
     // Function that compiles the shader program.
-    void compileShader(const char* vShaderCode, const char* fShaderCode);
+    void compileShader(std::string& vShaderCode, std::string& gShaderCode, std::string& fShaderCode);
     // Utility function for checking shader compilation/linking errors.
     void checkCompileErrors(unsigned int shader, std::string type);
 

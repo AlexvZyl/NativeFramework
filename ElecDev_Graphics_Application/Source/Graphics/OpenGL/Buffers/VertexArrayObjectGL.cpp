@@ -391,10 +391,12 @@ void VertexArrayObject<VertexType>::wipeCPU()
 	m_vertexCPU.clear();
 	m_vertexCPU.shrink_to_fit();
 	m_vertexCount = 0;
+	m_vertexBufferSize = 0;
 	// Clear index data.
 	m_indexCPU.clear();
 	m_indexCPU.shrink_to_fit();
 	m_indexCount = 0;
+	m_indexBufferSize = 0;
 	// Clear primitives.
 	m_primitives.clear();
 	m_primitives.shrink_to_fit();
@@ -414,6 +416,9 @@ void VertexArrayObject<VertexType>::wipeAll()
 {
 	wipeCPU();
 	wipeGPU();
+	m_primitivesSynced = true;
+	m_indexBufferSynced = true;
+	m_vertexBufferSynced = true;
 }
 
 //=============================================================================================================================================//

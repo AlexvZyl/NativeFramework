@@ -62,6 +62,7 @@ GuiLayer<GuiType>::GuiLayer(std::string name, int imguiWindowFlags)
 {
 	// Create GUI element.
 	m_guiElement = std::make_unique<GuiType>(name, imguiWindowFlags);
+	m_guiElement->m_layer = this;
 }
 
 template<class GuiType>
