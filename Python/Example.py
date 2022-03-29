@@ -76,6 +76,10 @@ imgui.InputText("Input Text 2", "")
 
 imgui.Separator()
 
+imgui.CloseButton("Submit", (100, 30))
+
+imgui.Separator()
+
 # Start gui inside the Lumen instance.
 imgui.StartServer(instance)
 

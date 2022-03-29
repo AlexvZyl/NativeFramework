@@ -42,6 +42,30 @@ int lua_imgui_Button(lua_State* L)
 	return 0;
 }
 
+int lua_imgui_CloseButton(lua_State* L) 
+{
+	// Get data.
+	glm::vec2 size(0.f);
+	lua_GetTableAndPop<float>(L, &size[0], 2);
+	std::string text = lua_GetStringAndPop(L);
+
+	// Render.
+	if (ImGui::Button(text.c_str(), size))
+	{
+		Application& app = Lumen::getApp();
+		// Press occurred.
+		std::string msg = "[CloseButton] " + text + " : Pressed.";
+		ScriptGui* gui = Lumen::getActiveScriptGui();
+		gui->callbackMessage(msg);
+		app.queuePopLayer(gui->m_layer);
+		return 1;
+	}
+
+	// Press did not occur.
+	return 0;
+}
+
+
 int lua_imgui_SameLine(lua_State* L) 
 {
 	// Get data.

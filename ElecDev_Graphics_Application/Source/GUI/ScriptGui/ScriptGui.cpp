@@ -26,6 +26,8 @@ ScriptGui::~ScriptGui()
     boost_error_code ec;
     boost::beast::websocket::close_reason cr("Lumen GUI shutdown.");
     m_webSocket->close(cr, ec);
+    m_webSocket.reset();
+    m_ioContext.reset();
 
     // Check for errors.
     if (ec)
