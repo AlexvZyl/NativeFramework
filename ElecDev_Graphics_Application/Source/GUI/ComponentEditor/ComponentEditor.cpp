@@ -44,15 +44,28 @@ void ComponentEditor::onRender()
 	auto& numCables = engine->m_circuit->m_cables;
 	const char* componentNames[100];
 	int numCom = 0;
+	
 	for (auto& key : numComponents)
 	{
 		componentNames[numCom] = key->titleString.c_str();
 		numCom++;
 	}
 
+	int numEquip = numCom;
+
+	for (auto& key : numCables)
+	{
+		componentNames[numCom] = key->m_titleString.c_str();
+		numCom++;
+	}
+
+	int numCable = numCom;
+
 	// Fetch active elements.
 	Component2D* activeComponent = engine->m_activeComponent.get();
 	Cable* activeCable = engine->m_activeCable.get();
+
+	std::string activeTitleString;
 
 	// Check that the active component exists. Close if not.
 	ImGui::PushID("CompGeneral");
@@ -60,6 +73,9 @@ void ComponentEditor::onRender()
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
+
+		activeTitleString = activeComponent->titleString;
+
 		if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 			activeComponent->title->updateText(activeComponent->titleString);
 
@@ -174,12 +190,63 @@ void ComponentEditor::onRender()
 	{
 		ImGui::Text(" Name:\t");
 		ImGui::SameLine();
+		activeTitleString = activeCable->m_titleString;
 		if (ImGui::InputText("##ComponentName", &activeCable->m_titleString))
 		{
 			activeCable->m_title1->updateText(activeCable->m_titleString);
 			activeCable->m_title2->updateText(activeCable->m_titleString);
 		}
 		ImGui::Text(" Type:\t Cable");
+	}
+
+	// Get the current component as the initial selection for the data selection
+
+	if (equipmentSelector == -1) {
+		for (int num = 0; num < numCom; num++) {
+			equipmentSelector = num;
+			if (componentNames[num] == activeTitleString) {
+				break;
+			}
+		}
+	}
+
+	const char* possibleInformation[100];
+
+	int posKeys = 0;
+
+	if (equipmentSelector < numEquip) {
+		for (auto& key : numComponents)
+		{
+			if (key->titleString.c_str() == componentNames[equipmentSelector]) {
+				for (auto& [key2, val] : key->dataDict)
+				{
+					possibleInformation[posKeys] = key2.c_str();
+					posKeys++;
+				}
+				break;
+			}
+		}
+	}
+	else {
+		for (auto& key : numCables)
+		{
+			if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {
+				for (auto& [key2, val] : key->cableDict)
+				{
+					possibleInformation[posKeys] = key2.c_str();
+					posKeys++;
+				}
+				break;
+			}
+		}
+	}
+
+	const char* additionalInformation[] = { "TierNumber", "BucketNumber", "MCC" };
+
+	for (int i = 0; i < IM_ARRAYSIZE(additionalInformation); i++)
+	{
+		possibleInformation[posKeys] = additionalInformation[i];
+		posKeys++;
 	}
 
 	ImGui::PopID();
@@ -313,8 +380,8 @@ void ComponentEditor::onRender()
 			//     FROM SELECTION    //
 			// --------------------- //
 
-			const char* fromSelection[] = { "Circuit Database", "Motor Database", "Cable Database" };
-			std::string from = "FROM(";
+			const char* fromSelection[] = { "Circuit Database", "Motor Database", "CableData" };
+			std::string from = "From(";
 			std::string end = ")";
 
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -353,11 +420,11 @@ void ComponentEditor::onRender()
 				{
 					if (activeComponent)
 					{
-						activeComponent->dataDict[buffer[fromSelector]] = "Size()";
+						activeComponent->dataDict[buffer[sizeSelector]] = "size()";
 					}
 					else
 					{
-						activeCable->cableDict[buffer[fromSelector]] = "Size()";
+						activeCable->cableDict[buffer[sizeSelector]] = "size()";
 					}
 				}
 			}
@@ -371,13 +438,15 @@ void ComponentEditor::onRender()
 			std::string forwardBracket = "[";
 			std::string backwardBracket = "]";
 			std::string comma = ",";
+			std::string equipmentInfo;
+			std::string pointer = "->";
 
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("IF"))
 			{
 				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
-				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, dataDict.size());
-				ImGui::Combo("Select Equipment##IF2", &equipmentSelector, componentNames, numCom);
+				ImGui::Combo("Select Somponent##if2", &equipmentSelector, componentNames, numCom);
+				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, possibleInformation, posKeys);
 				ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
 				ImGui::InputText("##Comparison Value", &comparisonValue);
 				ImGui::InputText("##True Statement", &trueStatement);
@@ -392,8 +461,15 @@ void ComponentEditor::onRender()
 					{
 						comparisonValue = forwardBracket + comparisonValue + backwardBracket;
 					}
-					ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
-					dataDict[buffer[ifSelector]] = ifString;
+
+					ifString += componentNames[equipmentSelector] + pointer + possibleInformation[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
+					if (activeComponent)
+					{
+						activeComponent->dataDict[buffer[ifSelector]] = ifString;
+					}
+					else {
+						activeCable->cableDict[buffer[ifSelector]] = ifString;
+					}
 				}
 			}
 
@@ -408,14 +484,16 @@ void ComponentEditor::onRender()
 			if (ImGui::CollapsingHeader("Combine Text"))
 			{
 				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
-				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, dataDict.size()))
+				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, possibleInformation, posKeys))
 				{
-					combineTextString += buffer[combineSelectorVariable] + plusString;
+					combineTextString += possibleInformation[combineSelectorVariable] + plusString;
 				}
 				ImGui::InputText("##Combine String", &combineTextString);
 				if (ImGui::Button("Insert Combine function"))
 				{
-					combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
+					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) {
+						combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
+					}
 					combineText += combineTextString + end;
 					if (activeComponent)
 					{

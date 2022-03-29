@@ -30,7 +30,7 @@ private:
 	int comparatorSelector = 0;
 	int ifSelector = 0;
 	int ifSelector2 = 0;
-	int equipmentSelector = 0;
+	int equipmentSelector = -1;
 	int combineSelector = 0;
 	int combineSelectorVariable = 0;
 	const char* comparatorSelection[6] = { "==", "!=", "<=", ">=", "<", ">" };

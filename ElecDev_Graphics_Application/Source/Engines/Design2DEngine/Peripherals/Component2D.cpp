@@ -57,7 +57,7 @@ Component2D::Component2D(Circuit* parent)
 	border->setColor(borderColour);
 	border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
-	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
+	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
 	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
@@ -67,7 +67,7 @@ Component2D::Component2D(Circuit* parent)
 	highlight();
 
 	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
-	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber",		"From(Circuit Database)"));
+	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber", "From(Circuit Database)"));
 	dataDict.insert(std::pair<std::string, std::string>("Metric", "1"));
 	dataDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
 	dataDict.insert(std::pair<std::string, std::string>("Unit", "ea"));
