@@ -35,6 +35,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	emitter << YAML::Key << "Title" << YAML::Value;
 	emitter << YAML::BeginMap;
 		emitter << YAML::Key << "String" << YAML::Value << comp->titleString;
+		emitter << YAML::Key << "EquipType" << YAML::Value << comp->equipType;
 		emitter << YAML::Key << "Size" << YAML::Value << comp->titleSize;
 		emitter << YAML::Key << "Offset" << YAML::Value << comp->titleOffset;
 		emitter << YAML::Key << "Colour" << YAML::Value << comp->titleColour;

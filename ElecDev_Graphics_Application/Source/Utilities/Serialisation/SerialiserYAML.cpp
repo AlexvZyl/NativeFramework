@@ -170,7 +170,14 @@ void loadFromYAML(std::string& path)
 	}
 	else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
 	{
-		deserialiseCircuit(yamlFile);
+		//deserialiseCircuit(yamlFile);
+		if (Lumen::getApp().getActiveEngine<Design2DEngine>()) {
+			//Handle component import
+		}
+		else {
+			//Open component in component designer
+			
+		}
 	}
 }
 

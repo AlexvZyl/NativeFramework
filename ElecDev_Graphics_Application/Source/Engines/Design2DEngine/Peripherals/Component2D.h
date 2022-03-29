@@ -94,7 +94,7 @@ public:
 	Component2D(Circuit* parent);
 	// Creates a generic component centred at the specified coordinates.
 	Component2D(const glm::vec2& centreCoords, Circuit* parent);
-	//Creates a component from a .lmcp file definition
+	// Creates a component from a .lmcp file definition
 	Component2D(YAML::Node& lmcpFile, Circuit* parent);
 
 	// Deconstructor.s
@@ -121,5 +121,10 @@ public:
 	void updatePortPositions();
 	//move the title text relative to the component
 	void translateTitle(glm::vec2 translation);
+	//updates the Component label
+	void updateText();
+
+private:
+	PortType getPortType(YAML::Node node);
 	//void destroy();
 };

@@ -15,6 +15,7 @@
 #include "Circuit.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "Utilities/Logger/Logger.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -59,7 +60,8 @@ Component2D::Component2D(Circuit* parent)
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre+titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
+	std::string textString = equipType + std::string(": ") + titleString;
+	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
 	addPort(0, PortType::PORT_IN, "LX1");
@@ -82,6 +84,17 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 
 Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityType::COMPONENT, parent)
 {
+
+	//check that the node is from a .lmcp file
+	if (lmcpFile["Lumen File Info"]["Type"].as<std::string>() != "Component") {
+		LUMEN_LOG_ERROR("Components can only be constructed from a .lmcp file.", "Component2D");
+	}
+	YAML::Node componentNode = lmcpFile["Component"];
+	shapeColour = glm::vec4(componentNode["Shape"]["Colour"][0].as<float>(),
+							componentNode["Shape"]["Colour"][1].as<float>(),
+							componentNode["Shape"]["Colour"][2].as<float>(),
+							componentNode["Shape"]["Colour"][3].as<float>());
+
 
 	// ----------- //
 	//  S E T U P  //
@@ -109,16 +122,63 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 	border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
-	titleString = "Component " + std::to_string(componentID++);
+	titleString = componentNode["Title"]["String"].as<std::string>();
+	equipType = componentNode["Title"]["EquipType"].as<std::string>();
+	std::string textString = equipType + std::string(": ") + titleString;
+	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
 	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
-	highlight();
 
-	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
-	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber", "From(Circuit Database)"));
-	dataDict.insert(std::pair<std::string, std::string>("Metric", "1"));
-	dataDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
-	dataDict.insert(std::pair<std::string, std::string>("Unit", "ea"));
-	dataDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
+	//Load dictionary.
+	YAML::Node componentDict = componentNode["Dictionary"];
+	for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
+	{
+		dataDict.insert({ it->first.as<std::string>(), it->second.as<std::string>() });
+	}
+
+	// ----------- //
+	//  P O R T S  //
+	// ----------- //
+
+	// Load the ports.
+	YAML::Node portList = componentNode["Ports"];
+
+	// East ports.
+	YAML::Node eastPortList = portList["East Ports"];
+	for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	}
+	// West ports.
+	YAML::Node westPortList = portList["West Ports"];
+	for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	}
+	// West ports.
+	YAML::Node northPortList = portList["North Ports"];
+	for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	}
+	// South ports.
+	YAML::Node southPortList = portList["South Ports"];
+	for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+
+	}
 }
 
 Component2D::~Component2D() 
@@ -375,6 +435,23 @@ void Component2D::translateTitle(glm::vec2 translation)
 {
 	titleOffset += translation;
 	title->translate(translation);
+}
+
+void Component2D::updateText()
+{
+	std::string textString = equipType + std::string(": ") + titleString;
+	title->updateText(textString);
+}
+
+//=============================================================================================================================================//
+//  Utilities.				     																											   //
+//=============================================================================================================================================//
+
+PortType Component2D::getPortType(YAML::Node node)
+{
+	if (node["Type"].as<std::string>() == "PORT_IN") { return PortType::PORT_IN; }
+	else if (node["Type"].as<std::string>() == "PORT_OUT") { return PortType::PORT_OUT; }
+	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
 }
 
 //void Component2D::destroy()
