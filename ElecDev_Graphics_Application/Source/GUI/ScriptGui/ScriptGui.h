@@ -50,14 +50,17 @@ public:
 	// Send a callback message over the web socket.
 	void callbackMessage(std::string& message);
 
+	// Tells the GUI to get a new script.
+	void awaitNewScript();
+
+	// The Lua Script that defines the GUI.
+	std::string m_script;
+
 private:
 
 	// The websocket that the GUI callbacks to.
 	std::unique_ptr<basic_boost_websocket> m_webSocket;
 	std::unique_ptr<asio_ioc> m_ioContext;
-
-	// The Lua Script that defines the GUI.
-	std::string m_script;
 
 	// Lua VM that the script is executed in.
 	lua_State* m_luaState = nullptr;

@@ -31,6 +31,8 @@ inline void lua_LoadLumenFunctions(lua_State* L)
 	lua_register(L, "ImGui_Text",			lua_imgui_Text);
 	lua_register(L, "ImGui_Button",			lua_imgui_Button);
 	lua_register(L, "ImGui_CloseButton",	lua_imgui_CloseButton);
+	lua_register(L, "ImGui_ClearAwaitScriptButton",	
+											lua_imgui_ClearAwaitScriptButton);
 	lua_register(L, "ImGui_SameLine",		lua_imgui_SameLine);
 	lua_register(L, "ImGui_Separator",		lua_imgui_Separator);
 	lua_register(L, "ImGui_Combo",			lua_imgui_Combo);
