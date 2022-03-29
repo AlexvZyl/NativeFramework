@@ -21,9 +21,7 @@
 
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
-{
-	m_windowCol = ImGui::GetStyle().Colors[ImGuiCol_Separator];
-}
+{}
 
 void GraphicsScene::setEngine(EngineCore* engine)
 {
@@ -52,26 +50,26 @@ void GraphicsScene::onEvent(Event& event)
 void GraphicsScene::begin()
 {
 	// Adjust window padding.
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, m_windowCol);
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(1.f, 1.f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
 void GraphicsScene::onRender() 
 {
 	m_engine->onRender();
+	if (!m_textureID) return;
 	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
 	if (ImGui::BeginDragDropTarget())
 	{
-		// Testing.
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
 		{
+			// Pass FileDropEvent to engine.
 			const wchar_t* path = (const wchar_t*)payload->Data;
 			std::wstring wPath(path);
 			std::string sPath;
 			sPath.insert(sPath.end(), wPath.begin(), wPath.end());
-			//FileDropEvent event(sPath);
-			//Lumen::getApp().logEvent<FileDropEvent>(event);
+			FileDropEvent event(sPath);
+			Lumen::getApp().getActiveEngine()->onEvent(event);
 			ImGui::EndDragDropTarget();
 		}
 	}
@@ -81,25 +79,21 @@ void GraphicsScene::end()
 {
 	ImGui::End();
 	ImGui::PopStyleVar();
-	ImGui::PopStyleColor();
 }
 
 void GraphicsScene::onRenderStateChange(bool newState)
 {
-	// Need to start using the attachments.
+	// Create FBO resources.
 	if (newState)
 	{
 		m_engine->m_scene->recreateGPUResources();
-		// Reassign FBO.
 		m_textureID = (void*)m_engine->getRenderTexture();
 	}
 
-	// Have no use for the attachments.
+	// Destroy FBO resources.
 	else
 	{
 		m_engine->m_scene->deleteGPUResources();
-		// The FBO has been destroyed.
-		//m_textureID = (void*)Renderer::getDefault2DSceneTexture();
 		m_textureID = nullptr;	
 	}
 }

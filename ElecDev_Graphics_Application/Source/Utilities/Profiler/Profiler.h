@@ -51,7 +51,15 @@ private:
 //  Macro.																																		//
 //==============================================================================================================================================//
 
-#define LUMEN_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
+#ifdef LUMEN_PROFILING_FUNCTIONS
+
+	#define LUMEN_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
+
+#else
+
+	#define LUMEN_PROFILE_SCOPE(name)
+
+#endif
 
 //==============================================================================================================================================//
 //  EOF.																																		//

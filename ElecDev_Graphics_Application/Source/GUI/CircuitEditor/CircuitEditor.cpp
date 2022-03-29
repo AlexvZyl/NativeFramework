@@ -26,9 +26,11 @@ void CircuitEditor::begin()
 
 void CircuitEditor::onRender() 
 {
+	Application& app = Lumen::getApp();
+
 	// Get the active engine.
-	if(m_trackActiveEngine)
-		m_engine = Lumen::getApp().m_guiState->design_engine;
+	if (m_trackActiveEngine)
+		m_engine = app.getActiveEngine<Design2DEngine>();
 
 	// --------------- //
 	//  C R E A T O R  //
@@ -41,7 +43,6 @@ void CircuitEditor::onRender()
 		ImGui::InputText("##circuitName", &m_circuitNameOnCreation);
 		if (ImGui::Button("Create Circuit##CircuitCreatorButton"))
 		{
-			Application& app = Lumen::getApp();
 			app.pushEngineLayer<Design2DEngine>(m_circuitNameOnCreation);
 			app.queuePopLayer(m_name);
 		}

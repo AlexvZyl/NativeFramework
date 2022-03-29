@@ -4,8 +4,9 @@
 layout(location = 0) in vec3 pos;
 layout(location = 1) in vec4 v_color;
 layout(location = 2) in vec2 v_texCoord;
-layout(location = 3) in float v_texID;
-layout(location = 4) in uint v_entityID;
+layout(location = 3) in float v_outline;
+layout(location = 4) in float v_texID;
+layout(location = 5) in uint v_entityID;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
@@ -29,6 +30,7 @@ void main()
 
 layout(location = 0) out vec4 o_color;
 layout(location = 1) out uint o_entityID;
+layout(location = 2) out vec4 o_outline;
 
 in vec4 f_color;
 in vec2 f_texCoord;
@@ -39,7 +41,6 @@ const float width = 0.4;
 const float edge = 0.2;
 
 uniform float screenPxRange;
-
 uniform sampler2D f_textures[32];
 
 // Utility function for MSDF rendering.

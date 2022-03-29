@@ -6,18 +6,22 @@
 #include "Application/Application.h"
 
 //==============================================================================================================================================//
-//  Statics.																																	//
-//==============================================================================================================================================//
-
-Application* Lumen::s_applicationSingleton = nullptr;
-
-//==============================================================================================================================================//
 //  Lumen Namespace implementations.																											//
 //==============================================================================================================================================//
 
 void Lumen::setApp(Application* app) 
 {
 	s_applicationSingleton = app;
+}
+
+void Lumen::setAvtiveScriptGui(ScriptGui* gui) 
+{
+	s_activeScriptGui = gui;
+}
+
+ScriptGui* Lumen::getActiveScriptGui() 
+{
+	return s_activeScriptGui;
 }
 
 Application& Lumen::getApp() 

@@ -5,9 +5,10 @@
 layout(location = 0) in vec3 v_pos;
 layout(location = 1) in vec4 v_color;
 layout(location = 2) in vec2 v_localCoords;
-layout(location = 3) in float v_thickness;
-layout(location = 4) in float v_fade;
-layout(location = 5) in uint v_entityID;
+layout(location = 3) in float v_outline;
+layout(location = 4) in float v_thickness;
+layout(location = 5) in float v_fade;
+layout(location = 6) in uint v_entityID;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
@@ -22,19 +23,15 @@ struct VertexOutput
 
 // Output.
 flat out uint f_entityID;
-layout(location = 1) out VertexOutput Output;
+layout(location = 2) out VertexOutput Output;
 
 void main()
 {
-    // Pass circle shader data.
     Output.LocalPosition = v_localCoords;
     Output.Color         = v_color;
     Output.Thickness     = v_thickness;
     Output.Fade          = v_fade;
-
-    // Pass position.
     gl_Position = projectionMatrix * viewMatrix * vec4(v_pos, 1.0);
-    // Pass colour.
     f_entityID = v_entityID;
 }
 
@@ -51,7 +48,8 @@ struct VertexOutput
 
 // Input.
 flat in uint f_entityID;
-layout(location = 1) in VertexOutput Input;
+layout(location = 2) in VertexOutput Input;
+
 // Output.
 layout(location = 0) out vec4 o_color;
 layout(location = 1) out uint o_entityID;

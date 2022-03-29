@@ -52,10 +52,8 @@ private:
 	EngineCore* m_engine = nullptr;
 
 	// Content region events.  These need to be passed onto the engine.
-	virtual void onContentRegionResizeEvent(WindowEvent& event);
-	virtual void onContentRegionMoveEvent(WindowEvent& event);
-
-	glm::vec4 m_windowCol;
+	virtual void onContentRegionResizeEvent(WindowEvent& event) override;
+	virtual void onContentRegionMoveEvent(WindowEvent& event) override;
 };
 
 //==============================================================================================================================================//

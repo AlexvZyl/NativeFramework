@@ -33,7 +33,6 @@ PopUpMenu::~PopUpMenu()
     Lumen::getApp().m_guiState->clickedZone.component = false;
     Lumen::getApp().m_guiState->clickedZone.primative= false;
     Lumen::getApp().m_guiState->clickedZone.port = false;
-    Lumen::getApp().m_guiState->popUpMenu = false;
 }
 
 void PopUpMenu::setInitialPosition(glm::vec2& pos) 
@@ -46,10 +45,10 @@ void PopUpMenu::setEngine(Design2DEngine* engine)
     m_engine = engine;
 }
 
-void PopUpMenu::begin() 
+void PopUpMenu::begin()
 {
-    // Place at mouse position.
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6, 6));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 8.f, 5.f });
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 6.f, 6.f });
     ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y));
     ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
@@ -164,6 +163,7 @@ void PopUpMenu::onRender()
 void PopUpMenu::end() 
 {
     ImGui::End();
+    ImGui::PopStyleVar();
     ImGui::PopStyleVar();
 }
 

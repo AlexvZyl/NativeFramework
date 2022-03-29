@@ -2,6 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Utilities/Logger/Logger.h"
 #include "Port.h"
 #include "Component2D.h"
 #include "OpenGL/Primitives/Polygon.h"
@@ -42,28 +43,28 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 
 	float textMargin = 0.015;
 	//infer the port position from the offset, and set the title
-	if (m_offset.y > 0.099) 
+	if (m_offset.y > 0.078) 
 	{//top
 		m_position = PortPosition::TOP;
 		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "T", this);
 	}	
-	else if (m_offset.y < -0.099) 
+	else if (m_offset.y < -0.078) 
 	{//bottom
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "U", this);
 	}
-	else if (m_offset.x > 0.099) 
+	else if (m_offset.x > 0.078) 
 	{//right
 		m_position = PortPosition::RIGHT;
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C", this);
 	}
-	else if (m_offset.x < -0.099) 
+	else if (m_offset.x < -0.078) 
 	{//left
 		m_position = PortPosition::LEFT;
 		titleOffset = glm::vec2{ textMargin, 0.0f };
@@ -72,7 +73,7 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 	}
 	else {
 		//This should never happen. Print a warning!
-		std::cout << "Invalid port offset";
+		LUMEN_LOG_ERROR("Invalid port offset.", "Design Engine");
 	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
@@ -151,12 +152,18 @@ void Port::highlight()
 {
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border->setColor(borderColour);
+	border->enableOutline();
+	body->enableOutline();
+	title->enableOutline();
 }
 
 void Port::unhighlight()
 {
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
+	border->disableOutline();
+	body->disableOutline();
+	title->disableOutline();
 }
 
 void Port::setOffset(const glm::vec2& offset)

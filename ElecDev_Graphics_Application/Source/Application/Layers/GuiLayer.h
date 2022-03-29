@@ -160,7 +160,6 @@ void GuiLayer<GuiType>::onRender()
 template<class GuiType>
 void GuiLayer<GuiType>::onUpdate()
 {
-	// Dispatch the GUI window events.
 	m_guiElement->onUpdate();
 }
 

@@ -21,7 +21,7 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
-	Application::setGuiTheme();
+	//Application::setGuiTheme();
 
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
@@ -170,12 +170,6 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 		LayerEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
 		newLayer->focus();
-
-		// TODO: MAKE THIS MORE ELEGANT.
-		// Store engine.
-		auto* layer = dynamic_cast<EngineLayer<Design2DEngine>*>(newLayer);
-		if (layer)
-			m_guiState->design_engine = layer->getEngine();
 	}
 	// No layer is being hovered.
 	else ImGui::SetWindowFocus(NULL);

@@ -45,6 +45,7 @@ void Toolbar::begin()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.f);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0.f, TOOLBAR_PADDING});
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {14.f, 14.f});
     ImGui::PushStyleColor(ImGuiCol_MenuBarBg, m_colour);
     // Begin.
     m_isOpen = ImGui::BeginMainMenuBar();
@@ -52,6 +53,8 @@ void Toolbar::begin()
 
 void Toolbar::onRender()
 {
+    static glm::vec2 dropdownItemSpacing = {4.f, 4.f};
+
     // Get the app.
     Application& app = Lumen::getApp();
     
@@ -68,6 +71,7 @@ void Toolbar::onRender()
     if (ImGui::BeginMenu("File"))
     {
         // Load file.
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, dropdownItemSpacing);
         if (ImGui::MenuItem("Load...", "Ctrl+O"))
         {
             std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
@@ -85,6 +89,7 @@ void Toolbar::onRender()
             Lumen::getApp().stopRunning();
 
         ImGui::EndMenu();
+        ImGui::PopStyleVar();
     }
 
     // --------- //
@@ -93,6 +98,8 @@ void Toolbar::onRender()
 
     if (ImGui::BeginMenu("Edit"))
     {
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, dropdownItemSpacing);
+
         if (ImGui::MenuItem("Undo", "CTRL+Z", false, false))
         {
 
@@ -117,6 +124,8 @@ void Toolbar::onRender()
 
         }
         ImGui::EndMenu();
+
+        ImGui::PopStyleVar();
     }
 
     // ----------- //
@@ -125,6 +134,8 @@ void Toolbar::onRender()
 
     if(ImGui::BeginMenu("Tools"))
     {
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, dropdownItemSpacing);
+
         // Renderer info.
         static bool profilerState = false;
         if (ImGui::Checkbox(" Renderer Info", &profilerState))
@@ -220,6 +231,8 @@ void Toolbar::onRender()
 
         // End.
         ImGui::EndMenu();
+
+        ImGui::PopStyleVar();
     }
 };
 
@@ -228,6 +241,7 @@ void Toolbar::end()
     // End.
     ImGui::EndMainMenuBar();
     // Style.
+    ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();
     ImGui::PopStyleVar();

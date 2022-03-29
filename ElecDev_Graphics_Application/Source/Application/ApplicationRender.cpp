@@ -117,7 +117,9 @@ void Application::onRender()
 		layer->onRender();
 
 	// Push notificatons.
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8.f, 8.f});
 	ImGui::RenderNotifications();
+	ImGui::PopStyleVar();
 }
 
 void Application::onRenderCleanup()

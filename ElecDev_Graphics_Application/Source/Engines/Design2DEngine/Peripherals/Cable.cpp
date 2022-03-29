@@ -305,7 +305,8 @@ void Cable::followPort(Port* movedPort)
 		break;
 	}
 
-	if (movedPort == m_endPort) {
+	if (movedPort == m_endPort) 
+	{
 		extendSegment(movedPort->centre);
 		m_title2->translateTo(titlePos);
 	}
@@ -357,6 +358,20 @@ void Cable::setColour(glm::vec4 colour, bool save)
 void Cable::highlight()
 {
 	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f }, false);
+
+	for (int i = 0; i < m_lines.size(); i++)
+	{
+		LineSegment* line = m_lines[i];
+		line->enableOutline();
+	}
+	for (int i = 0; i < m_nodes.size(); i++)
+	{
+		Circle* circ = m_nodes[i];
+		circ->enableOutline();
+	}
+
+	m_title1->enableOutline();
+	m_title2->enableOutline();
 }
 
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
@@ -433,6 +448,19 @@ void Cable::setActivePrimitive(Entity* primative)
 void Cable::unhighlight()
 {
 	setColour(m_colour);
+
+	for (int i = 0; i < m_lines.size(); i++)
+	{
+		LineSegment* line = m_lines[i];
+		line->disableOutline();
+	}
+	for (int i = 0; i < m_nodes.size(); i++)
+	{
+		Circle* circ = m_nodes[i];
+		circ->disableOutline();
+	}
+	m_title1->disableOutline();
+	m_title2->disableOutline();
 }
 
 //==============================================================================================================================================//

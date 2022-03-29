@@ -4,8 +4,10 @@
 
 #include "Engines/EngineCore/EngineCore.h"
 #include "Application/Events/Events.h"
+#include "Application/Application.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "Lumen.h"
 
 //==============================================================================================================================================//
 //  On Event.																																	//
@@ -18,26 +20,28 @@ void EngineCore::onEvent(Event& event)
 	uint64_t eventID = event.ID;
 
 	// Mouse events.
-
 	if		(eventID == EventType_MousePress)	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
-	else if (eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event));		}
-	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event));	}
+	else if (eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
+	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
 
 	// Key events.
-	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event));					}
-	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event));					}
+	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 
 	// Window events.
 	else if (eventID == EventType_WindowResize) { onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 
 	// Layer events.
-	else if (eventID == EventType_Focus)		{ onFocusEvent(dynamic_cast<LayerEvent&>(event));				}
-	else if (eventID == EventType_Defocus)		{ onDefocusEvent(dynamic_cast<LayerEvent&>(event));				}
-	else if (eventID == EventType_Hover)		{ onHoverEvent(dynamic_cast<LayerEvent&>(event));				}
-	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event));				}
+	else if (eventID == EventType_Focus)		{ onFocusEvent(dynamic_cast<LayerEvent&>(event)); }
+	else if (eventID == EventType_Defocus)		{ onDefocusEvent(dynamic_cast<LayerEvent&>(event)); }
+	else if (eventID == EventType_Hover)		{ onHoverEvent(dynamic_cast<LayerEvent&>(event)); }
+	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event)); }
 
-	// Pass the event on to the scene, since the scene contains the camera.
+	// File events.
+	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
+
+	// Pass event to scene (sometimes the scene has to respond to events).
 	m_scene->onEvent(event);
 }
 
@@ -47,8 +51,7 @@ void EngineCore::onEvent(Event& event)
 
 void EngineCore::onWindowResizeEvent(WindowEvent& event)
 {
-	glm::vec2 eventSize = event.windowData;
-	m_scene->resize((int)eventSize.x, (int)eventSize.y);
+	m_scene->resize(event.windowData);
 }
 
 //==============================================================================================================================================//
@@ -59,6 +62,7 @@ void EngineCore::onFocusEvent(LayerEvent& event)
 {
 	m_isFocused = true;
 	Renderer::bindScene(m_scene.get());
+	Lumen::getApp().setActiveEngine(this);
 }
 
 void EngineCore::onDefocusEvent(LayerEvent& event)

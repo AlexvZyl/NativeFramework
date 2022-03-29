@@ -2,10 +2,13 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "boost/beast/core.hpp"
+#include "boost/beast/websocket.hpp"
 #include "Utilities/WebSocket/LumenWebSocket.h"
 #include "SettingsWidget.h"
 #include "Application/Application.h"
 #include "GLFW/glfw3.h"
+#include "OpenGL/Primitives/Grid.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -72,8 +75,27 @@ void SettingsWidget::onRender()
     // Display websocket information.
     std::string websocketInfo = "Websocket:  ";
     websocketInfo += "ws://";
-    websocketInfo += app.m_webSocket->m_socketAddress.to_string() + ":" + std::to_string(app.m_webSocket->m_port);
+    websocketInfo += app.m_webSocket->m_socketAddress->to_string() + ":" + std::to_string(app.m_webSocket->m_port);
     ImGui::Text(websocketInfo.c_str());
+
+    // Edit scene grid settings.
+    EngineCore* engine = app.getActiveEngine();
+    static int newGridCount = 10;
+    if (engine) 
+    {
+        ImGui::Separator();
+        int gridLines = engine->m_scene->m_grid->getTotalCoarseLines();
+        std::string gridCount = "Scene current grid lines: " + std::to_string(gridLines);
+        ImGui::Text(gridCount.c_str());
+        ImGui::Text("New Grid Count: ");
+        ImGui::SameLine();
+        ImGui::SliderInt("##SceneGridLines", &newGridCount, 1, 100);
+        if (ImGui::Button("Update Grid"))
+        {
+            engine->m_scene->m_grid->destroyGrid().setTotalCoarseLines(newGridCount).createGrid();
+        }
+        ImGui::Separator();
+    }
 }
 
 void SettingsWidget::end()

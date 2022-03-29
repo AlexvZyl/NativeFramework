@@ -4,9 +4,25 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "boost/beast/core.hpp"
-#include "boost/beast/websocket.hpp"
+#include <memory>
 #include <string>
+#include <thread>
+
+//==============================================================================================================================================//
+//  Forward Declarations.																														//
+//==============================================================================================================================================//
+
+namespace boost {
+	namespace asio {
+		namespace ip {
+
+			class address;
+
+		};
+	};
+};
+
+using boost_ip_address = boost::asio::ip::address;
 
 //==============================================================================================================================================//
 //  Web Socket Class.																															//
@@ -25,10 +41,18 @@ public:
 	void listener();
 
 	// Data.
-	boost::asio::ip::address m_socketAddress;
+	std::unique_ptr<boost_ip_address> m_socketAddress = nullptr;
 	int m_port = NULL;
 	std::thread m_listenerThread;
-	std::unique_ptr<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> m_webSocket;
+
+private:
+
+	// Websocket message types.
+	inline static const char* LUA_EXECUTABLE_SCRIPT = "LUA_EXECUTABLE_SCRIPT";
+	inline static const char* LUA_SCRIPT_GUI = "LUA_SCRIPT_GUI";
+
+	// Create a Lumen GUI.
+	static void createGuiFromScript(std::string& script); 
 };
 
 //==============================================================================================================================================//

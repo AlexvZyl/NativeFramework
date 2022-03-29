@@ -20,6 +20,7 @@ class MouseScrollEvent;
 class KeyEvent;
 class WindowEvent;
 class LayerEvent;
+class FileDropEvent;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -38,7 +39,7 @@ public:
 	// Constructor
 	inline EngineCore() = default;
 	// Destructor.
-	inline virtual ~EngineCore() = default;
+	virtual ~EngineCore();
 
 	// ---------- //
 	//  S C E N E //
@@ -85,7 +86,7 @@ public:
 
 	// Mouse events.
 	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) = 0;
-	inline virtual void onMouseMoveEvent(MouseMoveEvent& event) = 0;
+	inline virtual void onMouseMoveEvent(MouseMoveEvent& event);
 	inline virtual void onMouseScrollEvent(MouseScrollEvent& event) = 0;
 
 	// Key events.
@@ -99,6 +100,9 @@ public:
 	virtual void onDefocusEvent(LayerEvent& event);
 	virtual void onHoverEvent(LayerEvent& event);
 	virtual void onDehoverEvent(LayerEvent& event);
+
+	// Files.
+	inline virtual void onFileDropEvent(FileDropEvent& event) {};
 
 	// --------- //
 	//  D A T A  //
@@ -125,6 +129,8 @@ public:
 	// ----------------------------- //
 
 public:
+
+	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.

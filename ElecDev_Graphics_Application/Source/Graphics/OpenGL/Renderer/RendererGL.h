@@ -9,6 +9,7 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <map>
+#include <unordered_map>
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -28,6 +29,9 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class VertexArrayObjectPtr;
+
+template<typename VertexType>
+class VertexArrayObject;
 
 struct Font;
 
@@ -78,6 +82,8 @@ public:
 	static void finish();
 	// Flush the GPU commands.
 	static void flush();
+	// Controls what gets rendered in the pipeline.
+	inline static std::unordered_map<std::string, bool> s_pipelineControls;
 
 	// ------------- //
 	//  S C E N E S  //
@@ -115,7 +121,7 @@ public:
 	// Add a singular line segment.
 	static LineSegment* addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Add a 2D text string.
-	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale,const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
+	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
 	
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
@@ -144,18 +150,28 @@ public:
 	// Get the default 2D scene texture.
 	static unsigned getDefault2DSceneTexture();
 
-	// --------------- //
-	//  B U F F E R S  //
-	// --------------- //
 
-	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
-	
 private:
 
 	friend class Application;
+	friend class Scene;
+	friend class FrameBufferObject;
 
 	// Prevent instances from being created.
 	Renderer() {}
+
+	// --------------- //
+	//  D R A W I N G  //
+	// --------------- //
+
+	// Buffers.
+	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
+	static void drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive);
+
+	// Textures.
+	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
+	static std::unique_ptr<VertexArrayObject<VertexDataTextured>> s_unitQuad;
+	static void createUnitQuad();
 
 	// ------------------- //
 	//  U T I L I T I E S  //
@@ -177,28 +193,45 @@ private:
 	static void setViewport(const glm::vec2& viewport);
 	// Sets the OpenGL viewport.  Does not assume a start from (0,0).
 	static void setViewport(const glm::vec4& viewport);
+	// Set the clear color.
+	static void setClearColor(const glm::vec4& color);
+	// Set the line width (in pixels) of a GL_LINE.
+	static void setLineSize(int size);
 
 	// ------------- //
 	//  S C E N E S  //
 	// ------------- //
 
 	// The scene rendered to.
-	static Scene* m_scene;
+	static Scene* s_scene;
 	// Scene stored when another scene is being destroyed.
-	static Scene* m_storedScene;
-	// Render a scene with a 2D camera.
+	static Scene* s_storedScene;
+	// The 2D Rendering pipeline.
+	static void renderingPipeline2D(Scene* scene);
+	// Render a 2D scene's gemeometry.
 	static void geometryPass2D(Scene* scene);
-	// Render a scene with a 3D camera.
+	// Render the object outlining.
+	static void objectOutliningPass2D(Scene* scene);
+	// The 3D Rendering pipeline.
+	static void renderingPipeline3D(Scene* scene);
+	// Render a 3D scene's gemeometry.
 	static void geometryPass3D(Scene* scene);
+	// Draw the scene background.
+	static void backgroundPass(Scene* scene);
+	// Render the grid.
+	static void gridPass(Scene* scene);
 
-	// ------------------ //
+	// ------------------- //
 	//  V A R I A B L E S  //
-	// ------------------ //
+	// ------------------- //
 
 	// The default font used in the scenes.
-	static std::unique_ptr<Font> m_defaultFont;
+	static std::unique_ptr<Font> s_defaultFont;
 	// Shaders used by the renderer.
-	static std::map<std::string, std::unique_ptr<Shader>> m_shaders;
+	static std::map<std::string, std::unique_ptr<Shader>> s_shaders;
+	// The default background color.
+	inline static glm::vec4 backgroundColor = { (float)66 / 255, (float)66 / 255, (float)68 / 255, 1.f };
+	inline static glm::vec4 baseColor = { 1.f, 0.f, 1.f, 1.f };
 
 	// ---------------------------- //
 	// D E F A U L T   S C E N E S  //

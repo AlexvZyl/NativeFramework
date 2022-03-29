@@ -13,6 +13,7 @@
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
@@ -36,7 +37,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 		if (designerState == COMPONENT_PLACE)
 		{
-			m_activeComponent->place(screenCoords);
+			m_activeComponent->place(getNearestGridVertex(screenCoords));
 			m_circuit->m_components.insert(m_circuit->m_components.end(), m_activeComponent);
 			designerState = ENTITY_SELECT;
 		}
@@ -72,8 +73,10 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 				m_activeCable = nullptr;
 				designerState = ENTITY_SELECT;
 			}
-			else m_activeCable->addSegment(screenCoords);
+			else m_activeCable->addSegment(getNearestGridVertex(screenCoords));
 		}
+
+		LUMEN_LOG_DEBUG(std::to_string(getEntityID(event.mousePosition)), "Design Engine EID");
 	}
 
 	// ----------------------- //
@@ -83,14 +86,15 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
 
-		//Switch out of any placement state
-		if (designerState == COMPONENT_PLACE || designerState == CABLE_PLACE) {
+		// Switch out of any placement state.
+		if (designerState == COMPONENT_PLACE || designerState == CABLE_PLACE) 
+		{
 			m_activeComponent = nullptr;
 			m_activeCable = nullptr;
 			designerState = ENTITY_SELECT;
 		}
-		else {
-
+		else 
+		{
 			// Update current entity ID.
 			m_currentEntityID = getEntityID(event.mousePosition);
 			setActiveComponent(m_currentEntityID);
@@ -133,7 +137,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	if (designerState == COMPONENT_PLACE)
 	{
 		// Move the component.
-		m_activeComponent->moveTo(screenCoords);
+		m_activeComponent->moveTo(getNearestGridVertex(screenCoords));
 	}
 	else
 	{
@@ -144,8 +148,10 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		m_hoveredPort = getPort(m_hoveredID);
 		if (m_hoveredPort != lastHoveredPort)
 		{
-			if (m_hoveredPort)   m_hoveredPort->showAttachIndicator();
-			else if (lastHoveredPort) {
+			if (m_hoveredPort)   
+				m_hoveredPort->showAttachIndicator();
+			else if (lastHoveredPort) 
+			{
 					lastHoveredPort->hideAttachIndicator();
 			}
 		}
@@ -153,7 +159,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		if (designerState == CABLE_PLACE)
 		{
 			m_currentEntityID = getEntityID(coords);
-			if (m_activeCable.get()) m_activeCable->extendSegment(screenCoords);
+			if (m_activeCable.get()) m_activeCable->extendSegment(getNearestGridVertex(screenCoords));
 		}
 		else if (designerState == ENTITY_SELECT)
 		{
@@ -161,18 +167,15 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 			{
 				//User is dragging a component.
 				glm::vec2 translation = screenCoords - m_lastDragPos;
-				if (m_activeComponent.get()) m_activeComponent->move(translation);
-				if (m_activeCable.get())     m_activeCable->moveActivePrimitiveTo(screenCoords);
+				if (m_activeComponent.get()) m_activeComponent->moveTo(getNearestGridVertex(screenCoords));
+				if (m_activeCable.get())     m_activeCable->moveActivePrimitiveTo(getNearestGridVertex(screenCoords));
 			}
 		}
 	}
 
+	// Store state.
 	m_lastDragPos = screenCoords;
-
-	#ifdef _DEBUG
-		m_currentEntityID = getEntityID(coords);
-		std::cout << m_currentEntityID << std::endl;
-	#endif
+	m_currentEntityID = getEntityID(coords);
 }
 
 //==============================================================================================================================================//
@@ -234,6 +237,18 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 
 			// --------------------------------------------------------------------------------------------------------------- //
 		}
+	}
+}
+
+//==============================================================================================================================================//
+//  Files.																																		//
+//==============================================================================================================================================//
+
+void Design2DEngine::onFileDropEvent(FileDropEvent& event) 
+{
+	for (auto& path : event.fileData)
+	{
+		LUMEN_LOG_DEBUG(path, "FileDropEvent");
 	}
 }
 

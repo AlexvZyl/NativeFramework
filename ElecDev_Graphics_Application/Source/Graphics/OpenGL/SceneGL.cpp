@@ -11,6 +11,9 @@
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
+#include "OpenGL/ErrorHandlerGL.h"
+#include "OpenGL/Primitives/Grid.h"
 #include "Application/Events/Events.h"
 #include "imgui/imgui.h"
 
@@ -18,10 +21,10 @@
 //  Constructor & Destructor.																													//
 //==============================================================================================================================================//
 
-Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamples) 
+Scene::Scene(CameraType cameraType, float width, float height) 
 {
 	// FBO.
-	m_FBO					= std::make_unique<FrameBufferObject>(width, height, msaaSamples);
+	m_FBO					= std::make_unique<FrameBufferObject>(width, height);
 	// Camera.
 	m_camera				= std::make_unique<Camera>(cameraType, width, height);
 	// VAO's.
@@ -31,10 +34,13 @@ Scene::Scene(CameraType cameraType, float width, float height, unsigned msaaSamp
 	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
 	// Background.
 	createDefaultBackground();
+	Renderer::bindScene(this);
+	m_grid = std::make_unique<Grid>();
 }
 
 Scene::~Scene() 
 {
+	m_grid.reset();
 	m_primitives.clear();
 	Renderer::doneSceneDestruction();
 }
@@ -72,17 +78,16 @@ void Scene::setViewport(int width, int height)
 //  FBO Methods.																															    //	
 //==============================================================================================================================================//
 
-void Scene::bindFBO() 
-{	
-	m_FBO->bind();
-}
-
-void Scene::clearFBO()
+void Scene::onRenderInit() 
 {
+	m_FBO->bind();
 	m_FBO->clear();
+	onUpdate();
+	Renderer::setViewport(getViewport());
+	m_FBO->setDrawBuffers();
 }
 
-void Scene::unbindFBO() 
+void Scene::onRenderCleanup() 
 {
 	m_FBO->unbind();
 }
@@ -155,18 +160,16 @@ void Scene::create2DBackground()
 	glm::vec4 bgColor2((float)217 / 255, (float)250 / 255, (float)255 / 255, 1.f);
 	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
 	//glm::vec4 defaultCol((float)92 / 255, (float)95 / 255, (float)103 / 255, 1.f);
-	glm::vec4 defaultCol((float)62 / 255, (float)62 / 255, (float)68 / 255, 1.f);
-	glm::vec3 pos1(1.0f, 1.0f, 0.99f);
-	glm::vec3 pos2(-1.0f, 1.0f, 0.99f);
-	glm::vec3 pos3(-1.0f, -1.0f, 0.99f);
-	glm::vec3 pos4(1.0f, -1.0f, 0.99f);
-	glm::vec3 pos5(0.0f, 0.0f, 0.99f);
+	glm::vec3 pos1(1.0f, 1.0f, 0.f);
+	glm::vec3 pos2(-1.0f, 1.0f, 0.f);
+	glm::vec3 pos3(-1.0f, -1.0f, 0.f);
+	glm::vec3 pos4(1.0f, -1.0f, 0.f);
 
 	// Vertices.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos1, defaultCol, -1)); //  Top right.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos2, defaultCol, -1)); //  Top left.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos3, defaultCol, -1)); //  Bottom left.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos4, defaultCol, -1)); //  Bottom right.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos1, Renderer::backgroundColor, -1)); //  Top right.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos2, Renderer::backgroundColor, -1)); //  Top left.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos3, Renderer::backgroundColor, -1)); //  Bottom left.
+	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos4, Renderer::backgroundColor, -1)); //  Bottom right.
 	m_backgroundVAO->m_vertexCount += 4;
 
 	// Indices.
@@ -186,10 +189,10 @@ void Scene::create3DBackground()
 //  Events.																																		//
 //==============================================================================================================================================//
 
-void Scene::resize(int width, int height) 
+void Scene::resize(const glm::vec2& size) 
 {
-	m_camera->resize(width, height);
-	m_FBO->resize(width, height);
+	m_camera->resize((int)size.x, (int)size.y);
+	m_FBO->resize((int)size.x, (int)size.y);
 }
 
 void Scene::onEvent(Event& event) 

@@ -14,6 +14,7 @@ and notify the user via the terminal interface.
 #include <memory>
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "OpenGL/Primitives/Grid.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "Lumen.h"
@@ -26,6 +27,15 @@ and notify the user via the terminal interface.
 void EngineCore::onRender()
 {
 	Renderer::renderScene(m_scene.get());
+}
+
+EngineCore::~EngineCore() 
+{
+	Application& app = Lumen::getApp();
+	if (this == app.getActiveEngine())
+	{
+		app.setActiveEngine(nullptr);
+	}
 }
 
 unsigned EngineCore::getRenderTexture() 
@@ -44,6 +54,11 @@ float EngineCore::deltaTime()
 	m_deltaTime = currentFrame - m_lastFrame;
 	m_lastFrame = currentFrame;
 	return m_deltaTime;
+}
+
+glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords) 
+{
+	return m_scene->m_grid->getClosestGridVertex(coords);
 }
 
 //=============================================================================================================================================//
@@ -70,6 +85,15 @@ glm::vec2 EngineCore::getMousePosition()
 		cursorY - m_contentRegionPos.y
 	};
 	return cursorPos;
+}
+
+//=============================================================================================================================================//
+//  Events.																																	   //
+//=============================================================================================================================================//
+
+void EngineCore::onMouseMoveEvent(MouseMoveEvent& event) 
+{
+	m_scene->m_grid->updateHelperCircle(m_scene->pixelCoordsToWorldCoords(getMousePosition()));
 }
 
 //=============================================================================================================================================//
