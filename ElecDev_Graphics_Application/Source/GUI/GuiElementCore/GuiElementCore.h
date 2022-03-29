@@ -116,6 +116,9 @@ public:
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.
 	glm::vec2 getMousePosition();
+
+	// The layer that the GUI belongs to.
+	Layer* m_layer;
 };
 
 //==============================================================================================================================================//

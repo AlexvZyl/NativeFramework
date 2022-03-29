@@ -168,6 +168,9 @@ class LumenGui(_LumenScriptEntity):
     def Button(self, label, size):
         self._AddFunction("ImGui_Button", (PString(label), PTable(size)))
 
+    def CloseButton(self, label, size):
+        self._AddFunction("ImGui_CloseButton", (PString(label), PTable(size)))
+
     def Text(self, text):
         self._AddFunction("ImGui_Text", (PString(text),))
 

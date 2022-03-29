@@ -74,7 +74,7 @@ void PopUpMenu::onRender()
             // Place a dummy component.
             m_engine->ComponentPlaceMode();
             // Remove popup.
-            app.queuePopLayer(m_name);
+            app.queuePopLayer(m_layer);
         }
     }
 
@@ -118,7 +118,7 @@ void PopUpMenu::onRender()
             m_engine->deleteActiveComponent();
 
             // Remove popup.
-            app.queuePopLayer(m_name);
+            app.queuePopLayer(m_layer);
         }
     }
     ImGui::Separator();
@@ -144,7 +144,7 @@ void PopUpMenu::onRender()
             app.logEvent<FileLoadEvent>(event);
         }
         // Remove popup.
-        app.queuePopLayer(m_name);
+        app.queuePopLayer(m_layer);
     }
     if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
     {
@@ -156,7 +156,7 @@ void PopUpMenu::onRender()
             app.logEvent<FileSaveEvent>(event);
         }
         // Remove popup.
-        app.queuePopLayer(m_name);
+        app.queuePopLayer(m_layer);
     }
 }
 
@@ -173,7 +173,7 @@ void PopUpMenu::end()
 
 void PopUpMenu::onDefocusEvent(LayerEvent& event) 
 {
-    Lumen::getApp().queuePopLayer(m_name);
+    Lumen::getApp().queuePopLayer(m_layer);
 }
 
 /*=======================================================================================================================================*/
