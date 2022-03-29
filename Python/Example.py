@@ -98,7 +98,7 @@ imgui.Separator()
 imgui.CloseButton("Submit", (100, 30))
 
 # Work in progress.
-# imgui.ClearAwaitScriptButton("Clear Await", (100, 30))
+imgui.ClearAwaitScriptButton("Clear Await", (100, 30))
 
 imgui.Separator()
 

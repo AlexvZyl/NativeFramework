@@ -138,7 +138,7 @@ void ScriptGui::callbackMessage(std::string& message)
 
 void ScriptGui::awaitNewScript() 
 {
-    std::thread([&]() 
+    m_listenerThread = std::thread([&]() 
         {
             bool listen = true;
             while (listen)
@@ -151,6 +151,7 @@ void ScriptGui::awaitNewScript()
                 m_script = input;
                 listen = false;
             }
+            m_listenerThread.join();
         });
 }
 
