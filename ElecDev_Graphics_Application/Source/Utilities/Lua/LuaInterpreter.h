@@ -36,6 +36,7 @@ inline void lua_LoadLumenFunctions(lua_State* L)
 	lua_register(L, "ImGui_Combo",			lua_imgui_Combo);
 	lua_register(L, "ImGui_Checkbox",		lua_imgui_Checkbox);
 	lua_register(L, "ImGui_InputText",		lua_imgui_InputText);
+	lua_register(L, "ImGui_Table",			lua_imgui_Table);
 }
 
 inline lua_State* lua_CreateNewLuaState() 
@@ -126,6 +127,21 @@ inline bool lua_GetBooleanAndPop(lua_State* L)
 	bool result = lua_toboolean(L, -1);
 	lua_pop(L, 1);
 	return result;
+}
+
+inline void lua_GetDictAndPop(lua_State* L, std::map<std::string, std::string>& dict)
+{
+	// First key.
+	lua_pushnil(L);
+	// Get dict entries.
+	while(lua_next(L, -2) != 0)
+	{
+		// Get key & value.
+		dict.insert({lua_tostring(L, -2), lua_tostring(L, -1)});
+		lua_pop(L, 1);
+	}
+	// Pop dict.
+	lua_pop(L, 1);
 }
 
 //==============================================================================================================================================//

@@ -182,6 +182,55 @@ int lua_imgui_InputText(lua_State* L)
 	return 0;
 }
 
+int lua_imgui_Table(lua_State* L) 
+{
+	static std::unordered_map<
+		std::string,
+		std::map<std::string, std::string>
+	> tableData;
+
+	// Get data.
+	std::map<std::string, std::string> dict;
+	lua_GetDictAndPop(L, dict);
+	float height = lua_GetNumberAndPop<float>(L);
+	std::string label = lua_GetStringAndPop(L);
+
+	// Store and get data.
+	tableData.insert({label, dict});
+	std::map<std::string, std::string>& currentDict = tableData[label];
+
+	// Render table.
+	ImGui::PushID(label.c_str());
+	if (ImGui::BeginChild("Child", {0.f, height}, true))
+	{
+		// Setup table.
+		ImGui::BeginTable("Table", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
+		ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
+		ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch);
+		ImGui::TableHeadersRow();
+		ImGui::PushItemWidth(-1);
+		for (auto& [key, value] : currentDict)
+		{
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text(key.c_str());
+			ImGui::TableNextColumn();
+			std::string id = "##" + key;
+			if (ImGui::InputText(id.c_str(), &value))
+			{
+				std::string msg = "[Table] " + label + " : [Key] " + key + " [Value] " + value;
+				Lumen::getActiveScriptGui()->callbackMessage(msg);
+			}
+		}
+		ImGui::PopItemWidth();
+		ImGui::EndTable();
+	}
+	ImGui::EndChild();
+	ImGui::PopID();
+
+	return 1;
+}
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

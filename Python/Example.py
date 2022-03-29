@@ -76,6 +76,17 @@ imgui.InputText("Input Text 2", "")
 
 imgui.Separator()
 
+dictionary = {
+    "Key1"  : "Value1",
+    "Key2"  : 2,
+    3       : 3,
+    4       : "Value4"
+}
+
+imgui.Table("Table Label", 200, dictionary)
+
+imgui.Separator()
+
 imgui.CloseButton("Submit", (100, 30))
 
 imgui.Separator()

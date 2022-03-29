@@ -19,26 +19,33 @@ import websockets
 
 # Turn the parameter into a string.
 def PString(parameter):
-    return "\"" + parameter + "\""
+    return "\"" + str(parameter) + "\""
 
 # Turn the parameter into a Lua table.
 def  PTable(parameters):
-    string = "{"
+    string = "{ "
     for p in parameters:
-        string += str(p) + ","
-    return string[:-1] + "}"
+        string += str(p) + ", "
+    return string[:-2] + " }"
 
 def PStringTable(parameters):
-    string = "{"
+    string = "{ "
     for p in parameters:
-        string += PString(str(p)) + ","
-    return string[:-1] + "}"
+        string += PString(str(p)) + ", "
+    return string[:-2] + " }"
 
 def PBool(parameter):
     if(parameter):
         return "true"
     else:
         return "false"
+
+def PDict(parameter):
+    string = "{ "
+    for key, value in parameter.items():
+        string += "[" + PString(key) + "] = " + PString(value) + ", "
+    return string[:-2] + " }"
+
 
 # --------------------------------------- #
 #  L U M E N   S C R I P T   E N T I T Y  #
@@ -126,8 +133,6 @@ class LumenGui(_LumenScriptEntity):
         # Used to set the server message callback function.
         self.ServerHandler = 0
 
-       
-
     def StartServer(self, LumenInstance):
 
         # Start server.
@@ -188,6 +193,9 @@ class LumenGui(_LumenScriptEntity):
 
     def InputText(self, label, initialText):
         self._AddFunction("ImGui_InputText", (PString(label), PString(initialText)))
+
+    def Table(self, label, height, dict):
+        self._AddFunction("ImGui_Table", (PString(label), height, PDict(dict)))
 
 # ---------------------------- #
 #  L U M E N   I N ST A N C E  #
