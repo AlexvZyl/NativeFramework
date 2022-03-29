@@ -42,17 +42,22 @@ void ComponentEditor::onRender()
 	auto& numCables = app.m_guiState->design_engine->m_circuit->m_cables;
 	const char* componentNames[100];
 	int numCom = 0;
+	
 	for (auto& key : numComponents)
 	{
 		componentNames[numCom] = key->titleString.c_str();
 		numCom++;
 	}
 
+	int numEquip = numCom;
+
 	for (auto& key : numCables)
 	{
 		componentNames[numCom] = key->m_titleString.c_str();
 		numCom++;
 	}
+
+	int numCable = numCom;
 
 	// Fetch active elements.
 	Component2D* activeComponent = app.m_guiState->design_engine->m_activeComponent.get();
@@ -192,6 +197,8 @@ void ComponentEditor::onRender()
 		ImGui::Text(" Type:\t Cable");
 	}
 
+	// Get the current component as the initial selection for the data selection
+
 	if (equipmentSelector == -1) {
 		for (int num = 0; num < numCom; num++) {
 			equipmentSelector = num;
@@ -201,6 +208,44 @@ void ComponentEditor::onRender()
 		}
 	}
 
+	const char* possibleInformation[100];
+
+	int posKeys = 0;
+
+	if (equipmentSelector < numEquip) {
+		for (auto& key : numComponents)
+		{
+			if (key->titleString.c_str() == componentNames[equipmentSelector]) {
+				for (auto& [key2, val] : key->dataDict)
+				{
+					possibleInformation[posKeys] = key2.c_str();
+					posKeys++;
+				}
+				break;
+			}
+		}
+	}
+	else {
+		for (auto& key : numCables)
+		{
+			if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {
+				for (auto& [key2, val] : key->cableDict)
+				{
+					possibleInformation[posKeys] = key2.c_str();
+					posKeys++;
+				}
+				break;
+			}
+		}
+	}
+
+	const char* additionalInformation[] = { "TierNumber", "BucketNumber", "MCC" };
+
+	for (int i = 0; i < IM_ARRAYSIZE(additionalInformation); i++)
+	{
+		possibleInformation[posKeys] = additionalInformation[i];
+		posKeys++;
+	}
 
 	ImGui::PopID();
 
@@ -219,14 +264,12 @@ void ComponentEditor::onRender()
 			else if (activeCable) dataDict = activeCable->cableDict;
 
 			const char* buffer[100];
-			const char* possibleInformation[100];
 			int numKeys = 0;
 
 			if (activeComponent)
 			{
 				for (auto& [key, val] : activeComponent->dataDict)
 				{
-					possibleInformation[numKeys] = key.c_str();
 					buffer[numKeys] = key.c_str();
 					numKeys++;
 				}
@@ -235,18 +278,9 @@ void ComponentEditor::onRender()
 			{
 				for (auto& [key, val] : activeCable->cableDict)
 				{
-					possibleInformation[numKeys] = key.c_str();
 					buffer[numKeys] = key.c_str();
 					numKeys++;
 				}
-			}
-
-			const char* additionalInformation[] = {"TierNumber", "BucketNumber", "MCC"};
-
-			for (int i = 0; i < IM_ARRAYSIZE(additionalInformation); i++)
-			{
-				possibleInformation[numKeys] = additionalInformation[i];
-				numKeys++;
 			}
 
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
@@ -402,13 +436,15 @@ void ComponentEditor::onRender()
 			std::string forwardBracket = "[";
 			std::string backwardBracket = "]";
 			std::string comma = ",";
+			std::string equipmentInfo;
+			std::string pointer = "->";
 
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("IF"))
 			{
 				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
-				ImGui::Combo("select component##if2", &equipmentSelector, componentNames, numCom);
-				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, buffer, dataDict.size());
+				ImGui::Combo("Select Somponent##if2", &equipmentSelector, componentNames, numCom);
+				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, possibleInformation, posKeys);
 				ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
 				ImGui::InputText("##Comparison Value", &comparisonValue);
 				ImGui::InputText("##True Statement", &trueStatement);
@@ -423,8 +459,8 @@ void ComponentEditor::onRender()
 					{
 						comparisonValue = forwardBracket + comparisonValue + backwardBracket;
 					}
-					ifString += componentNames[equipmentSelector] + '->';
-					ifString += buffer[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
+
+					ifString += componentNames[equipmentSelector] + pointer + possibleInformation[ifSelector2] + comma + comparatorSelection[comparatorSelector] + comma + comparisonValue + comma + trueStatement + comma + falseStatement + end;
 					if (activeComponent)
 					{
 						activeComponent->dataDict[buffer[ifSelector]] = ifString;
@@ -446,9 +482,9 @@ void ComponentEditor::onRender()
 			if (ImGui::CollapsingHeader("Combine Text"))
 			{
 				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
-				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, buffer, dataDict.size()))
+				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, possibleInformation, posKeys))
 				{
-					combineTextString += buffer[combineSelectorVariable] + plusString;
+					combineTextString += possibleInformation[combineSelectorVariable] + plusString;
 				}
 				ImGui::InputText("##Combine String", &combineTextString);
 				if (ImGui::Button("Insert Combine function"))
