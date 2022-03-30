@@ -7,6 +7,8 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "OpenGL/Primitives/Primitive.h"
+#include <earcut.hpp/include/mapbox/earcut.hpp>
+
 
 //=============================================================================================================================================//
 //  Forward dclerations.																													   //
@@ -27,6 +29,8 @@ public:
 	
 	// Constructors.
 	Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent);
+	// Add a vertex to the polygon.
+	void addVertex(const glm::vec3& vertex);
 };
 
 //=============================================================================================================================================//
