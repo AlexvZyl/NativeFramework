@@ -52,6 +52,7 @@ void EngineCore::onEvent(Event& event)
 void EngineCore::onWindowResizeEvent(WindowEvent& event)
 {
 	m_scene->resize(event.windowData);
+	m_contentRegionSize = event.windowData;
 }
 
 //==============================================================================================================================================//

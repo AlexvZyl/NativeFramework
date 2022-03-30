@@ -136,12 +136,8 @@ public:
 	// (0,0) is in the top left.
 	glm::vec2 getMousePosition();
 
-	// Set content region size.
-	void setContentRegionSize(const glm::vec2& size);
 	// Set content region pos.
 	void setContentRegionPos(const glm::vec2& pos);
-
-protected:
 
 	// The graphics window size.
 	glm::vec2 m_contentRegionSize = { 0,0 };
