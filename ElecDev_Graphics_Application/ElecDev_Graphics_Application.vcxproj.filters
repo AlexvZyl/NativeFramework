@@ -820,6 +820,7 @@
     <ClInclude Include="Source\Utilities\WebSocket\BoostWebsocket.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
+    <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
