@@ -7,6 +7,6 @@
 [submodule "ElecDev_Graphics_Application/External/imgui"]
 	path = ElecDev_Graphics_Application/External/imgui
 	url = https://github.com/Alex-vZyl/imgui
-[submodule "ElecDev_Graphics_Application/External/earcut.hpp"]
-	path = ElecDev_Graphics_Application/External/earcut.hpp
+[submodule "ElecDev_Graphics_Application/External/earcut"]
+	path = ElecDev_Graphics_Application/External/earcut
 	url = https://github.com/mapbox/earcut.hpp
