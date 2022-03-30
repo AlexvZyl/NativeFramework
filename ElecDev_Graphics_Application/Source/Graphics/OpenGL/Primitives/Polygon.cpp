@@ -70,6 +70,26 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	m_VAO->pushPrimitive(this, vertexVector, indices);
 }
 
+void Polygon2D::pushVertex(VertexData& vertex) 
+{
+	// Create new vertex vector.
+	std::vector<VertexData> currentVertices;
+	// Copy the existing vertices.
+	currentVertices.reserve(m_vertexCount + 1);
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		currentVertices.emplace_back(m_VAO->m_vertexCPU[i]);
+
+	// Add new vertex.
+	currentVertices.emplace_back(vertex);
+
+	// Pop and push the primitive.
+	m_VAO->popPrimitive(this);
+	m_vertexCount++;
+	std::vector<unsigned> indices;  // Do tesselation here.
+	m_indexCount = indices.size();
+	m_VAO->pushPrimitive(this, currentVertices, indices);
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//
