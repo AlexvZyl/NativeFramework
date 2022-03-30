@@ -77,7 +77,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	{
 		if (m_activeLine) {
 			//update the line end position
-			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
+			m_activeLine->translateToVertexAtIndex(m_activeLine->m_vertexCount-1, getNearestGridVertex(screenCoords));
 		}
 	}
 }
