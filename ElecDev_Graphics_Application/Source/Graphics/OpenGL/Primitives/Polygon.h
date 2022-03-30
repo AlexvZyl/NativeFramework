@@ -29,8 +29,9 @@ public:
 	
 	// Constructors.
 	Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent);
-	// Add a vertex to the polygon.
-	void addVertex(const glm::vec3& vertex);
+
+	// Adds a new vertex and handles the required manipulation of data.
+	void pushVertex(VertexData& vertex);
 };
 
 //=============================================================================================================================================//

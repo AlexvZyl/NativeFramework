@@ -174,7 +174,6 @@ template <typename VertexType>
 void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 {
 	// Primitive data.
-	// Gotta keep dat cache HOT
 	unsigned vertexCount = primitive->m_vertexCount;
 	unsigned vertexPos = primitive->m_vertexBufferPos;
 	unsigned indexCount = primitive->m_indexCount;

@@ -70,11 +70,6 @@ void EngineCore::setContentRegionPos(const glm::vec2& pos)
 	m_contentRegionPos = pos;
 }
 
-void EngineCore::setContentRegionSize(const glm::vec2& size)
-{
-	m_contentRegionSize = size;
-}
-
 glm::vec2 EngineCore::getMousePosition()
 {
 	// Get the cursor position.
