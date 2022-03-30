@@ -89,7 +89,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	m_VAO->pushPrimitive(this, vertexVector, indices);
 }
 
-void Polygon2D::pushVertex(glm::vec3& vertex) 
+void Polygon2D::pushVertex(const glm::vec3& vertex) 
 {
 	// Create new vertex vector.
 	std::vector<VertexData> currentVertices;
@@ -98,10 +98,11 @@ void Polygon2D::pushVertex(glm::vec3& vertex)
 	currentVertices.reserve(m_vertexCount + 1);
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++) {
 		currentVertices.emplace_back(m_VAO->m_vertexCPU[i]);
-		vertices.emplace_back(&(currentVertices.back().position));
+		vertices.emplace_back((currentVertices.back().data.position));
 	}
 	// Add new vertex.
 	currentVertices.emplace_back(VertexData(vertex, m_colour, m_entityID));
+	vertices.emplace_back(vertex);
 
 	// Pop and push the primitive.
 	m_VAO->popPrimitive(this);

@@ -22,13 +22,20 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 
 		if (designerState == CompDesignState::DRAW_POLY)
 		{
-			m_activePoly->addVertex(WorldCoords);
+
+			if (!m_activeComponent) {
+				m_activeComponent->addPoly({ getNearestGridVertex(screenCoords) });
+				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
+			}
+			else {
+				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
+			}
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
 			if (!m_activeLine) {
 				//start new line
-				m_activeLine = m_activeComponent->addLine(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords));
+				m_activeLine = m_activeComponent->addLine(getNearestGridVertex(screenCoords), { 0.f, 0.f });
 			}
 			else {
 				//end the line
@@ -65,7 +72,6 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
 		//Move the back vertex
-		//m_activePoly->addVertex(WorldCoords);
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
 	{
@@ -103,7 +109,7 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 		case GLFW_KEY_P:
 			//Add new polygon
 			designerState = CompDesignState::DRAW_POLY;
-			m_activePoly = m_activeComponent->addPoly(std::vector<glm::vec2>());
+			m_activePoly = nullptr;
 			break;
 
 		case GLFW_KEY_L:

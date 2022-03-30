@@ -478,7 +478,7 @@ Circle* Component2D::addCircle(glm::vec2 centre)
 
 LineSegment* Component2D::addLine(glm::vec2 start, glm::vec2 end)
 {
-	m_lines.emplace_back(Renderer::addLineSegment2D(vertices[1], vertices[2], 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
+	m_lines.emplace_back(Renderer::addLineSegment2D(start, end, 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
 	return m_lines.back();
 }
 
