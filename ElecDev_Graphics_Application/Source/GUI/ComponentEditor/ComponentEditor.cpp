@@ -350,16 +350,31 @@ void ComponentEditor::onRender()
 			numCom++;
 		}
 
+		int numEquip = numCom;
+
+		for (auto& key : numCables)
+		{
+			componentNames[numCom] = key->m_titleString.c_str();
+			numCom++;
+		}
+
+		int numCable = numCom;
+
 		// Fetch active elements.
 		Component2D* activeComponent = design_engine->m_activeComponent.get();
 		Cable* activeCable = design_engine->m_activeCable.get();
+
+		std::string activeTitleString;
 
 		// Check that the active component exists. Close if not.
 		ImGui::PushID("CompGeneral");
 		if (activeComponent)
 		{
 			ImGui::Text(" Name:\t");
-			ImGui::SameLine();
+			ImGui::SameLine();\
+
+			activeTitleString = activeComponent->titleString;
+
 			if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
 				activeComponent->title->updateText(activeComponent->titleString);
 
@@ -375,12 +390,63 @@ void ComponentEditor::onRender()
 		{
 			ImGui::Text(" Name:\t");
 			ImGui::SameLine();
+			activeTitleString = activeCable->m_titleString;
 			if (ImGui::InputText("##ComponentName", &activeCable->m_titleString))
 			{
 				activeCable->m_title1->updateText(activeCable->m_titleString);
 				activeCable->m_title2->updateText(activeCable->m_titleString);
 			}
 			ImGui::Text(" Type:\t Cable");
+		}
+
+		// Get the current component as the initial selection for the data selection
+
+		if (equipmentSelector == -1) {
+			for (int num = 0; num < numCom; num++) {
+				equipmentSelector = num;
+				if (componentNames[num] == activeTitleString) {
+					break;
+				}
+			}
+		}
+
+		const char* possibleInformation[100];
+
+		int posKeys = 0;
+
+		if (equipmentSelector < numEquip) {
+			for (auto& key : numComponents)
+			{
+				if (key->titleString.c_str() == componentNames[equipmentSelector]) {
+					for (auto& [key2, val] : key->dataDict)
+					{
+						possibleInformation[posKeys] = key2.c_str();
+						posKeys++;
+					}
+					break;
+				}
+			}
+		}
+		else {
+			for (auto& key : numCables)
+			{
+				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {
+					for (auto& [key2, val] : key->cableDict)
+					{
+						possibleInformation[posKeys] = key2.c_str();
+						posKeys++;
+					}
+					break;
+				}
+			}
+		}
+
+		const char* additionalInformation[] = { "TierNumber", "BucketNumber", "MCC" };
+
+		for (int i = 0; i < IM_ARRAYSIZE(additionalInformation); i++)
+		{
+			possibleInformation[posKeys] = additionalInformation[i];
+			posKeys++;
 		}
 
 		ImGui::PopID();
