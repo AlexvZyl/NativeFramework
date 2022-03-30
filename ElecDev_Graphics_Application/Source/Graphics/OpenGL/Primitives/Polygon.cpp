@@ -89,22 +89,26 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	m_VAO->pushPrimitive(this, vertexVector, indices);
 }
 
-void Polygon2D::pushVertex(VertexData& vertex) 
+void Polygon2D::pushVertex(glm::vec3& vertex) 
 {
 	// Create new vertex vector.
 	std::vector<VertexData> currentVertices;
+	std::vector<glm::vec3> vertices;
 	// Copy the existing vertices.
 	currentVertices.reserve(m_vertexCount + 1);
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++) {
 		currentVertices.emplace_back(m_VAO->m_vertexCPU[i]);
-
+		vertices.emplace_back(&(currentVertices.back().position));
+	}
 	// Add new vertex.
-	currentVertices.emplace_back(vertex);
+	currentVertices.emplace_back(VertexData(vertex, m_colour, m_entityID));
 
 	// Pop and push the primitive.
 	m_VAO->popPrimitive(this);
 	m_vertexCount++;
-	std::vector<unsigned> indices;  // Do tesselation here.
+	std::vector < std::vector<glm::vec3>> vertices_with_holes;
+	vertices_with_holes.push_back(vertices);
+	std::vector<unsigned> indices = mapbox::earcut<unsigned>(vertices_with_holes);
 	m_indexCount = indices.size();
 	m_VAO->pushPrimitive(this, currentVertices, indices);
 }
