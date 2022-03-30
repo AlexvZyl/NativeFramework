@@ -81,7 +81,9 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 	border->setColor(borderColour);
 	setLayer(portLayer);
 
-	highlight();
+	if (parent->m_highlighted) {
+		highlight();
+	}
 }
 
 Port::~Port()

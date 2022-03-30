@@ -39,11 +39,12 @@ Component2D::Component2D(Circuit* parent)
 
 	// Create vertices.
 	centre = glm::vec2(0.0f, 0.0f);
-	vertices.reserve(4);
+	vertices.reserve(5);
 	vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
 	vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
 	vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
-	vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x - width/2, centre.y + height/2, 0.0f));
 
 	// --------------------- //
 	//  P R I M I T I V E S  //
@@ -64,8 +65,8 @@ Component2D::Component2D(Circuit* parent)
 	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
-	addPort(0, PortType::PORT_IN, "LX1");
-	addPort(1, PortType::PORT_OUT, "RX1");
+	//addPort(0, PortType::PORT_IN, "LX1");
+	//addPort(1, PortType::PORT_OUT, "RX1");
 	highlight();
 
 	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
@@ -274,6 +275,7 @@ void Component2D::setContext(GUIState* guiState)
 
 void Component2D::highlight()
 {
+	m_highlighted = true;
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border->setColor(borderColour);
 
@@ -294,6 +296,7 @@ void Component2D::highlight()
 
 void Component2D::unhighlight()
 {
+	m_highlighted = false;
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
 
@@ -454,6 +457,31 @@ void Component2D::updateText()
 	title->updateText(textString);
 }
 
+Polygon2D* Component2D::addPoly(std::vector<glm::vec2> vertices)
+{
+
+	std::vector<glm::vec3> vertices3;
+	for (glm::vec2 vertex : vertices) {
+		vertices3.push_back(glm::vec3(vertex, 0.f));
+	}
+	m_polygons.emplace_back(Renderer::addPolygon2D(vertices3, this));
+	m_polygons.back()->setColor(shapeColour);
+	m_polygons.back()->setLayer(0.001f);//temp fix
+	return m_polygons.back();
+}
+
+Circle* Component2D::addCircle(glm::vec2 centre)
+{
+	m_circles.emplace_back(Renderer::addCircle2D(centre, 0.f, shapeColour, 1.0f, 0.f, this));
+	return m_circles.back();
+}
+
+LineSegment* Component2D::addLine(glm::vec2 start, glm::vec2 end)
+{
+	m_lines.emplace_back(Renderer::addLineSegment2D(vertices[1], vertices[2], 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
+	return m_lines.back();
+}
+
 //=============================================================================================================================================//
 //  Utilities.				     																											   //
 //=============================================================================================================================================//
@@ -463,7 +491,10 @@ PortType Component2D::getPortType(YAML::Node node)
 	if (node["Type"].as<std::string>() == "PORT_IN") { return PortType::PORT_IN; }
 	else if (node["Type"].as<std::string>() == "PORT_OUT") { return PortType::PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
-void Component2D::enableOutline() 
+}
+
+
+void Component2D::enableOutline()
 {
 	shape->enableOutline();
 	border->enableOutline();

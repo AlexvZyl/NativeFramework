@@ -28,6 +28,7 @@ class VertexDataTextured;
 class VertexDataCircle;
 class Circuit;
 class Scene;
+class LineSegment;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -38,6 +39,10 @@ class Component2D : public Entity
 public:
 
 	// Shape and edge data.
+	std::vector<Polygon2D*> m_polygons;
+	std::vector<LineSegment*> m_lines;
+	std::vector<Circle*> m_circles;
+
 	Polygon2D* shape;
 	Polygon2D* border;
 	Text* title;
@@ -59,6 +64,7 @@ public:
 	// Colour attributes.
 	glm::vec4 shapeColour = { 14.f/255.f, 63.f/255.f, 174.f/255.f, 1.f };
 	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
+	bool m_highlighted = false;
 
 	//title
 	static Font titleFont;
@@ -123,6 +129,11 @@ public:
 	void translateTitle(glm::vec2 translation);
 	//updates the Component label
 	void updateText();
+	//Adds a new polygon to the polygon list
+	Polygon2D* addPoly(std::vector<glm::vec2> vertices);
+	Circle* addCircle(glm::vec2 centre);
+	LineSegment* addLine(glm::vec2 start, glm::vec2 end);
+	
 
 private:
 	PortType getPortType(YAML::Node node);
