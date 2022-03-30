@@ -7,7 +7,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "OpenGL/Primitives/Primitive.h"
-#include <earcut.hpp/include/mapbox/earcut.hpp>
+#include <earcut/include/mapbox/earcut.hpp>
 
 
 //=============================================================================================================================================//

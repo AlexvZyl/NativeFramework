@@ -197,6 +197,41 @@ void Primitive<VertexType>::disableOutline()
 }
 
 //=============================================================================================================================================//
+//  Vertex.																																	   //
+//=============================================================================================================================================//
+
+template<typename VertexType>
+void Primitive<VertexType>::translateVertexAtIndex(unsigned index, const glm::vec3& translation) 
+{
+	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position += translation;
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::translateVertexAtIndex(unsigned index, const glm::vec2& translation) 
+{
+	translateVertexAtIndex(index, {translation.x, translation.y, 0.f});
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::translateToVertexAtIndex(unsigned index, const glm::vec3& position)
+{
+	glm::vec3* currentPosition = &m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position;
+	*currentPosition += (position - *currentPosition);
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::translateToVertexAtIndex(unsigned index, const glm::vec2& position)
+{
+	translateToVertexAtIndex(index, { position.x, position.y, 0.f });
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::setVertexColorAtIndex(unsigned index, const glm::vec4& color) 
+{
+	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.color += color;
+}
+
+//=============================================================================================================================================//
 //  Instantiations.																															   //
 //=============================================================================================================================================//
 

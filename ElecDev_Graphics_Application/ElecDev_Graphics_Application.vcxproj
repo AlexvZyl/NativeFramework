@@ -305,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
+    <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />
     <ClInclude Include="External\glm\glm\common.hpp" />
     <ClInclude Include="External\glm\glm\detail\compute_common.hpp" />
