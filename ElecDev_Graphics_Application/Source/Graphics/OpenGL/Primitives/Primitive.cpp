@@ -204,6 +204,7 @@ template<typename VertexType>
 void Primitive<VertexType>::translateVertexAtIndex(unsigned index, const glm::vec3& translation) 
 {
 	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position += translation;
+	syncWithGPU();
 }
 
 template<typename VertexType>
@@ -217,6 +218,7 @@ void Primitive<VertexType>::translateToVertexAtIndex(unsigned index, const glm::
 {
 	glm::vec3* currentPosition = &m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position;
 	*currentPosition += (position - *currentPosition);
+	syncWithGPU();
 }
 
 template<typename VertexType>
@@ -229,6 +231,7 @@ template<typename VertexType>
 void Primitive<VertexType>::setVertexColorAtIndex(unsigned index, const glm::vec4& color) 
 {
 	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.color += color;
+	syncWithGPU();
 }
 
 //=============================================================================================================================================//
