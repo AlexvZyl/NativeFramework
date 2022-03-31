@@ -109,6 +109,9 @@ public:
 	virtual void translateToVertexAtIndex(unsigned index, const glm::vec2& position);
 	// Set color.
 	virtual void setVertexColorAtIndex(unsigned index, const glm::vec4& color);
+	// Getting nearest vertex.
+	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec3& position);
+	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec2& position);
 	
 	// --------------------- //
 	//  A T T R I B U T E S  //

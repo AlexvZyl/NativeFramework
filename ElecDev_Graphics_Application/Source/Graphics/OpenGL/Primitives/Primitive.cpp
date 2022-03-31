@@ -230,8 +230,35 @@ void Primitive<VertexType>::translateToVertexAtIndex(unsigned index, const glm::
 template<typename VertexType>
 void Primitive<VertexType>::setVertexColorAtIndex(unsigned index, const glm::vec4& color) 
 {
-	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.color += color;
+	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.color = color;
 	syncWithGPU();
+}
+
+template<typename VertexType>
+std::tuple<VertexType*, float> Primitive<VertexType>::getNearestVertex(const glm::vec3& position)
+{
+	float minDistance = 0.f;
+	VertexType* closestVertex;
+	// Calculate the first vertex' distance.
+	minDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[m_vertexBufferPos].data.position));
+	closestVertex = &m_VAO->m_vertexCPU[m_vertexBufferPos];
+	// Find if any of the vertices are closer.
+	for (int i = m_vertexBufferPos+1; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		float currentDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[i].data.position));
+		if (currentDistance > minDistance)
+			continue;
+		closestVertex = &m_VAO->m_vertexCPU[i];
+		minDistance = currentDistance;
+	}
+	// Return the closes vertex, alongside the distance in world coordinates.
+	return { closestVertex, minDistance };
+}
+
+template<typename VertexType>
+std::tuple<VertexType*, float> Primitive<VertexType>::getNearestVertex(const glm::vec2& position)
+{
+	return getNearestVertex({position.x, position.y, 0.f});
 }
 
 //=============================================================================================================================================//
