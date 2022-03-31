@@ -62,57 +62,72 @@ void AssetExplorer::onRender()
 		m_reloadDirectories = false;
 	}
 
-	// Header size.
 	static glm::vec2 headerSize(22, 22);
 
-	// Move up button.
-	if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
+	// Buttons.
+	if (ImGui::BeginChild("AssetButtons", { 115, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
-		m_currentDirectory = m_currentDirectory.parent_path();
-		m_clearFilterOnFrameStart = true;
-		loadDirectories();
-	}
-	
-	// Spacing.
-	ImGui::SameLine();
-	ImGui::Text("  ");
-	ImGui::SameLine();
-
-	// Reload button.
-	if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
-	{
-		loadDirectories();
-	}
-
-	// Spacing.
-	ImGui::SameLine();
-	ImGui::Text("  ");
-	ImGui::SameLine();
-
-	// Current directory button.
-	if(ImGui::Button(m_currentDirectory.string().c_str(), {0, headerSize.y + 7.f}))
-	{
-		std::string newDirectory = selectFolder(m_currentDirectory.string());
-		if (newDirectory.size())
+		// Move back button.
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
 		{
-			m_currentDirectory = newDirectory;
+			m_currentDirectory = m_currentDirectory.parent_path();
 			m_clearFilterOnFrameStart = true;
 			loadDirectories();
 		}
+
+		ImGui::SameLine();
+
+		// Move forward button.
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
+		{
+		}
+
+		ImGui::SameLine();
+
+		// Reload button.
+		if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
+		{
+			loadDirectories();
+		}
 	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	// Current directory.
+	if (ImGui::BeginChild("Dirctory", { m_contentRegionSize.x / 2.25f, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	{
+		ImGui::SetScrollX(ImGui::GetScrollMaxX());
+		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
+		{
+			std::string newDirectory = selectFolder(m_currentDirectory.string());
+			if (newDirectory.size())
+			{
+				m_currentDirectory = newDirectory;
+				m_clearFilterOnFrameStart = true;
+				loadDirectories();
+			}
+		}
+	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
 
 	// Search bar.
-	ImGui::SameLine();
-	float filterSize = 250;
-	ImGui::SetCursorPosX(m_contentRegionSize.x - filterSize - ImGui::CalcTextSize("Search: ").x);
-	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
-	ImGui::Text("Search: ");
-	ImGui::SameLine();
-	filter.Draw("##AssetExplorerSearch", filterSize);
+	if (ImGui::BeginChild("SearchBar", { 0.f, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	{
+		static float textSize = ImGui::CalcTextSize("Search: ").x;
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 6.f);
+		ImGui::Text("Search: ");
+		ImGui::SameLine();
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.f);
+		filter.Draw("##AssetExplorerSearch", ImGui::GetWindowContentRegionWidth() - textSize);
+	}
+	ImGui::EndChild();
 
+	// Files & Folders.
 	if (ImGui::BeginChild("##AssetExplorerChild", {0,0}, true))
 	{
-
 		// Create icon columns.
 		float iconSize = 75;
 		float padding = 7;
