@@ -23,13 +23,17 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		if (designerState == CompDesignState::DRAW_POLY)
 		{
 
-			if (!m_activePoly) {
+			if (!m_activePoly)
+			{
 				m_activePoly = m_activeComponent->addPoly({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) });
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
-			else {
+			else
+			{
 				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
+			// Example!
+			auto [vertexPtr, distance] = m_activePoly->getNearestVertex(screenCoords);
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
