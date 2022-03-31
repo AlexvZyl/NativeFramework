@@ -88,6 +88,8 @@ public:
 	void pushPrimitive(PrimitivePtr* primitive, const std::vector<VertexType>& vertices, const std::vector<unsigned>& indices);
 	// Remove the primitive from the VAO.
 	void popPrimitive(PrimitivePtr* primitive);
+	// Update the a priitive's indices
+	void updateIndices(PrimitivePtr* primitive, const std::vector<unsigned>& indices);
 	// Sets the primitive to be synced with the GPU.
 	// Should be called after CPU data changed.
 	void syncPrimitiveVertexData(PrimitivePtr* primitive);

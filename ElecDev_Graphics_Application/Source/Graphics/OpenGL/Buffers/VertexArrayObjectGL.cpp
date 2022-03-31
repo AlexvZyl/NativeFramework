@@ -235,6 +235,72 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 	}
 }
 
+template<class VertexType>
+void VertexArrayObject<VertexType>::updateIndices(PrimitivePtr* primitive, const std::vector<unsigned>& indices)
+{
+	// Primitive data.
+	unsigned vertexCount = primitive->m_vertexCount;
+	unsigned vertexPos = primitive->m_vertexBufferPos;
+	unsigned indexCount = primitive->m_indexCount;
+	unsigned indexPos = primitive->m_indexBufferPos;
+	unsigned primitiveIndex = primitive->m_primitiveBufferPos;
+
+	//Check if new index list is the same length
+	if (std::size(indices) == indexCount) {
+		for (unsigned i = 0; i < indexCount; i++) {
+			m_indexCPU.at(indexPos + i) = indices[i] + vertexPos;
+		}
+	}
+	else {
+		//handle new index list resize
+
+		//handle situations where the number of indices is decreasing
+		if (indices.size() < indexCount) {
+			for (unsigned i = 0; i < indices.size(); i++) {
+				m_indexCPU.at(indexPos + i) = indices[i] + vertexPos;
+			}
+
+			// Remove extra indices.
+			if (indexCount)
+				m_indexCPU.erase(m_indexCPU.begin() + indexPos + indices.size(), m_indexCPU.begin() + indexPos + indexCount);
+		}
+
+		//handle situations where the number of indices is increasing
+		else {
+			for (unsigned i = 0; i < indexCount; i++) {
+				m_indexCPU.at(indexPos + i) = indices[i] + vertexPos;
+			}
+			
+			//add in additional indices
+			for (unsigned i = indexCount; i < indices.size(); i++) {
+				m_indexCPU.emplace(m_indexCPU.begin() + indexPos + i, indices[i] + vertexPos);
+			}
+
+		}
+		//change the index count
+		m_indexCount -= indexCount - indices.size();
+
+		// Change metadata of primitives that sit after the popped primitive.
+		for (int i = primitiveIndex + 1; i < m_primitives.size(); i++)
+		{
+			PrimitivePtr* primitive = m_primitives[i];
+			primitive->m_indexBufferPos -= indexCount - indices.size();
+		}
+
+		//update the current primitive metadata
+		primitive->m_indexCount = indices.size();
+	}
+
+	// Check for resize.
+	// TODO: We do not need to reload all of the data.
+	// We only have to reload data that sits after the removed primitive.
+	// FreeLists will make this easier as well.
+	if (!queryBufferResize())
+	{
+		m_indexBufferSynced = false;
+	}
+}
+
 template <typename VertexType>
 void VertexArrayObject<VertexType>::syncPrimitiveData(PrimitivePtr* primitive)
 {

@@ -114,6 +114,43 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 	m_VAO->pushPrimitive(this, currentVertices, indices);
 }
 
+void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
+{
+	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position += translation;
+	updateIndices();
+	syncWithGPU();
+}
+
+void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+{
+	translateVertexAtIndex(index, { translation.x, translation.y, 0.f });
+}
+
+void Polygon2D::translateToVertexAtIndex(unsigned index, const glm::vec3& position)
+{
+	glm::vec3* currentPosition = &m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position;
+	*currentPosition += (position - *currentPosition);
+	updateIndices();
+	syncWithGPU();
+}
+
+void Polygon2D::translateToVertexAtIndex(unsigned index, const glm::vec2& position)
+{
+	translateToVertexAtIndex(index, { position.x, position.y, 0.f });
+}
+
+void Polygon2D::updateIndices()
+{
+	std::vector<glm::vec3> vertices;
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++) {
+		vertices.emplace_back((m_VAO->m_vertexCPU[i].data.position));
+	}
+	std::vector < std::vector<glm::vec3>> vertices_with_holes;
+	vertices_with_holes.push_back(vertices);
+	std::vector<unsigned> indices = mapbox::earcut<unsigned>(vertices_with_holes);
+	m_VAO->updateIndices(this, indices);
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

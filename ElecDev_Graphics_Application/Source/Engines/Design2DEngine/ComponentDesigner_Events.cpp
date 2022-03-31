@@ -23,9 +23,9 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		if (designerState == CompDesignState::DRAW_POLY)
 		{
 
-			if (!m_activeComponent) {
-				m_activeComponent->addPoly({ getNearestGridVertex(screenCoords) });
-				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
+			if (!m_activePoly) {
+				m_activePoly = m_activeComponent->addPoly({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) });
+				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else {
 				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
@@ -72,12 +72,15 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
 		//Move the back vertex
+		if (m_activePoly) {
+			m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount-1, getNearestGridVertex(screenCoords));
+		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
 	{
 		if (m_activeLine) {
 			//update the line end position
-			m_activeLine->translateToVertexAtIndex(m_activeLine->m_vertexCount-1, getNearestGridVertex(screenCoords));
+			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 		}
 	}
 }
