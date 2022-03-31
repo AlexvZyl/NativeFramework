@@ -12,13 +12,47 @@ ComponentDesigner::ComponentDesigner():Base2DEngine()
 
 void ComponentDesigner::renderDesignPalette() 
 {
-
-	ImGui::Button("Lines");
-	ImGui::Button("Polygon");
+	if (ImGui::MenuItem("Polygon", "P", &m_polygon))
+	{
+		clearStates();
+		m_polygon = true;
+	}
 
 	ImGui::SameLine();
 	ImGui::Separator();
 	ImGui::SameLine();
 
-	ImGui::Button("Delete");
+	if (ImGui::MenuItem("Lines", "L", &m_lines))
+	{
+		clearStates();
+		m_lines = true;
+	}
+
+	if(ImGui::BeginMenu("Line Settings..."))
+	{
+		ImGui::MenuItem("Test1");
+		ImGui::MenuItem("Test2");
+		ImGui::MenuItem("Test3");
+		ImGui::EndMenu();
+	}
+
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+
+	if (ImGui::MenuItem("Ports", "", &m_lines))
+	{
+		clearStates();
+		m_lines = true;
+	}
+
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+
+	if (ImGui::MenuItem("Delete", "Del", &m_delete))
+	{
+		clearStates();
+		m_ports = true;
+	}
 }

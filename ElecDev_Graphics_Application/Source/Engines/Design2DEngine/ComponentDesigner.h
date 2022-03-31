@@ -10,8 +10,7 @@ enum class CompDesignState
     DRAW_CIRCLE
 };
 
-class ComponentDesigner :
-    public Base2DEngine
+class ComponentDesigner : public Base2DEngine
 {
 protected:
     
@@ -34,7 +33,19 @@ public:
     // Key events.
     virtual void onKeyEvent(KeyEvent& event) override;
 
+    // Design palette.
     virtual void renderDesignPalette() override;
-
+    // Buttons state.
+    bool m_polygon = false;
+    bool m_lines = false;
+    bool m_delete = false;
+    bool m_ports = false;
+    inline void clearStates() 
+    {
+        m_polygon = false;
+        m_lines = false;
+        m_delete = false;
+        m_ports = false;
+    }
 };
 

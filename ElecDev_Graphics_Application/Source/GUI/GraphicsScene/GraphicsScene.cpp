@@ -56,6 +56,7 @@ void GraphicsScene::begin()
 {
 	// Adjust window padding.
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
@@ -65,15 +66,22 @@ void GraphicsScene::onRender()
 	// Design palette.
 	if (m_engine->hasDesignPalette())
 	{
+		// Setup style.
+		ImGui::PopStyleVar();
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
 		ImGui::PushID(m_name.c_str());
+		// Render palette.
 		if (ImGui::BeginMenuBar()) 
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
 			m_engine->renderDesignPalette();
 			ImGui::EndMenuBar();
+			ImGui::PopStyleVar();
 		}
+		// Clear style.
 		ImGui::PopID();
 		ImGui::PopStyleColor();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	}
 
 	// Render engine scene.
@@ -102,6 +110,7 @@ void GraphicsScene::onRender()
 void GraphicsScene::end()
 {
 	ImGui::End();
+	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 }

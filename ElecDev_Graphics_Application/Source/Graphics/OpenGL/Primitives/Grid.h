@@ -101,16 +101,6 @@ public:
 		hideHelperCircle();
 		return *this;
 	}
-	inline Grid& hideHelperCircle() 
-	{
-		m_helperCircle->setColor({ 0.f, 0.f, 0.f, 0.f, });
-		return *this;
-	}
-	inline Grid& visibleHelperCircle() 
-	{
-		m_helperCircle->setColor(m_helperCircleColor);
-		return *this;
-	}
 
 	// Getters.
 	inline int getFinePixelSize()			{ return m_coarseGridPixelSize; }
@@ -161,6 +151,18 @@ private:
 
 	// Circle used to identify active vertex.
 	Circle* m_helperCircle = nullptr;
+
+	// Internal utility functions.
+	inline Grid& hideHelperCircle()
+	{
+		m_helperCircle->setColor({ 0.f, 0.f, 0.f, 0.f, });
+		return *this;
+	}
+	inline Grid& visibleHelperCircle()
+	{
+		m_helperCircle->setColor(m_helperCircleColor);
+		return *this;
+	}
 };
 
 //=============================================================================================================================================//
