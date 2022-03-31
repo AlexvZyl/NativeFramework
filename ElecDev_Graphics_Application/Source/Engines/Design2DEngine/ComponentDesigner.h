@@ -34,5 +34,7 @@ public:
     // Key events.
     virtual void onKeyEvent(KeyEvent& event) override;
 
+    virtual void renderDesignPalette() override;
+
 };
 

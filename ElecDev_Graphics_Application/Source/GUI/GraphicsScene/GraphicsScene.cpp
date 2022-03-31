@@ -25,7 +25,7 @@
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {
-	m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+	m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_MenuBar;
 }
 
 void GraphicsScene::setEngine(EngineCore* engine)
@@ -62,11 +62,27 @@ void GraphicsScene::begin()
 
 void GraphicsScene::onRender() 
 {
-	ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 1.f);
+	// Design palette.
+	if (m_engine->hasDesignPalette())
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+		ImGui::PushID(m_name.c_str());
+		if (ImGui::BeginMenuBar()) 
+		{
+			m_engine->renderDesignPalette();
+			ImGui::EndMenuBar();
+		}
+		ImGui::PopID();
+		ImGui::PopStyleColor();
+	}
 
+	// Render engine scene.
+	ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 1.f);
 	m_engine->onRender();
 	if (!m_textureID) return;
 	ImGui::Image(m_textureID, { m_engine->m_contentRegionSize.x + 1.f, m_engine->m_contentRegionSize.y +1.f }, ImVec2(0, 1), ImVec2(1, 0));
+
+	// Receive dropped files.
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 

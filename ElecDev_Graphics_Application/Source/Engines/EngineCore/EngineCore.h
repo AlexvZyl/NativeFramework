@@ -123,6 +123,9 @@ public:
 	bool m_isHovered = false;
 	// Is the engine focused?
 	bool m_isFocused = false;
+	
+	inline bool hasDesignPalette() { return m_hasDesignPalette; }
+	virtual void renderDesignPalette() {};
 
 	// ----------------------------- //
 	//  C O N T E N T   R E G I O N  //
@@ -143,6 +146,9 @@ public:
 	glm::vec2 m_contentRegionSize = { 0,0 };
 	// The graphics window position in the window.
 	glm::vec2 m_contentRegionPos = { 0, 0 };
+
+	// Does the engine have a design palette?
+	bool m_hasDesignPalette = true;
 };
 
 //=============================================================================================================================================//
