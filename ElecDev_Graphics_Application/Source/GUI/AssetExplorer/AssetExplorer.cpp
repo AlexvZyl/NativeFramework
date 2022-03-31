@@ -62,10 +62,11 @@ void AssetExplorer::onRender()
 		m_reloadDirectories = false;
 	}
 
+	static float buttonsWidth = 115.f;
 	static glm::vec2 headerSize(22, 22);
 
 	// Buttons.
-	if (ImGui::BeginChild("AssetButtons", { 115, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("AssetButtons", { buttonsWidth, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		// Move back button.
 		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
@@ -95,7 +96,7 @@ void AssetExplorer::onRender()
 	ImGui::SameLine();
 
 	// Current directory.
-	if (ImGui::BeginChild("Dirctory", { m_contentRegionSize.x / 2.25f, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 1.75f, 41 }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::SetScrollX(ImGui::GetScrollMaxX());
 		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
