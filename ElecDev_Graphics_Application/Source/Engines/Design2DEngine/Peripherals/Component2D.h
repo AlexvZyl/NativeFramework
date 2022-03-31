@@ -130,9 +130,9 @@ public:
 	//updates the Component label
 	void updateText();
 	//Adds a new polygon to the polygon list
-	Polygon2D* addPoly(std::vector<glm::vec2> vertices);
-	Circle* addCircle(glm::vec2 centre);
-	LineSegment* addLine(glm::vec2 start, glm::vec2 end);
+	 Polygon2D* addPoly(std::vector<glm::vec2> vertices);
+	void addCircle(Circle*);
+	void addLine(LineSegment*);
 	
 
 private:
