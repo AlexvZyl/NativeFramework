@@ -43,7 +43,13 @@ def PBool(parameter):
 def PDict(parameter):
     string = "{ "
     for key, value in parameter.items():
-        string += "[" + PString(key) + "] = " + PString(value) + ", "
+        string += "[" + PString(key) + "] = { "
+        if(hasattr(value, "__iter__") and not isinstance(value, str)):
+            for item in value:
+                string += PString(item) + ", "
+            string = string[:-2] + " }, "
+        else:
+            string += PString(value) + " }, "
     return string[:-2] + " }"
 
 # --------------------------------------- #
@@ -202,8 +208,8 @@ class LumenGui(_LumenScriptEntity):
     def Separator(self):
         self._AddFunction("ImGui_Separator", (0,))
 
-    def Combo(self, label, currentItem, items, totalItems, maxHeight):
-        self._AddFunction("ImGui_Combo", (PString(label), currentItem, PStringTable(items), totalItems, maxHeight))
+    def Combo(self, label, currentItem, items, maxHeight):
+        self._AddFunction("ImGui_Combo", (PString(label), currentItem, PStringTable(items), maxHeight))
 
     def Checkbox(self, label, state):
         self._AddFunction("ImGui_Checkbox", (PString(label), PBool(state)))

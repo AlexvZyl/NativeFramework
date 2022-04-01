@@ -51,6 +51,8 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string
 
 // Serialise a circuit to a YAML file.
 void saveToYAML(std::shared_ptr<Circuit>& circuit, std::string& path, std::string& fileName);
+// Serialise a component to a YAML file
+void saveToYAML(std::shared_ptr<Component2D>& component, std::string& path, std::string& fileName);
 // Load a circuit from a YAML file.
 void loadFromYAML(std::string& path);
 

@@ -64,6 +64,9 @@ private:
 
 	// Lua VM that the script is executed in.
 	lua_State* m_luaState = nullptr;
+
+	// Thread used for listening.
+	std::thread m_listenerThread;
 };
 
 //==============================================================================================================================================//

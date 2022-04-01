@@ -64,6 +64,7 @@ public:
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
+	VertexType* m_vertices;							// Pointer to the first vertex in memory.
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -74,9 +75,9 @@ public:
 	// Destructor.
 	~Primitive();
 
-	// ----------------- //
-	//  M O V E M E N T  //
-	// ----------------- //
+	// ------------------- //
+	//  P R I M I T I V E  //
+	// ------------------- //
 
 	// Translate the entity by the given vector.
 	virtual void translate(const glm::vec3& translation);
@@ -96,6 +97,22 @@ public:
 	virtual void enableOutline();
 	// Remove the outline.
 	virtual void disableOutline();
+
+	// ------------- //
+	//  V E R T E X  //
+	// ------------- //
+
+	// Translation.
+	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation);
+	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation);
+	// Translate to.
+	virtual void translateToVertexAtIndex(unsigned index, const glm::vec3& position);
+	virtual void translateToVertexAtIndex(unsigned index, const glm::vec2& position);
+	// Set color.
+	virtual void setVertexColorAtIndex(unsigned index, const glm::vec4& color);
+	// Getting nearest vertex.
+	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec3& position);
+	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec2& position);
 	
 	// --------------------- //
 	//  A T T R I B U T E S  //

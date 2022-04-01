@@ -118,6 +118,8 @@
     <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner_Events.cpp" />
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
@@ -794,6 +796,7 @@
     <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
@@ -816,6 +819,8 @@
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\Utilities\WebSocket\BoostWebsocket.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
+    <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
+    <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

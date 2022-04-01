@@ -7,6 +7,7 @@
 #include "Lumen.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"
+#include "imgui/notify/notify_icons_define.h"
 
 //==============================================================================================================================================//
 //  Statics.																																	//
@@ -42,7 +43,7 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 void AssetExplorer::begin()
 {
 	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0.f, 10.f});
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {2.f, 10.f});
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
 	ImGui::PushStyleColor(ImGuiCol_Button, {0.f, 0.f, 0.f, 0.f});
 }
@@ -62,57 +63,118 @@ void AssetExplorer::onRender()
 		m_reloadDirectories = false;
 	}
 
-	// Header size.
+	static float buttonsWidth = 119.f;
+	static float headerHeight = 41.f;
 	static glm::vec2 headerSize(22, 22);
 
-	// Move up button.
-	if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
+	// Buttons.
+	if (ImGui::BeginChild("AssetButtons", { buttonsWidth, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
-		m_currentDirectory = m_currentDirectory.parent_path();
-		m_clearFilterOnFrameStart = true;
-		loadDirectories();
-	}
-	
-	// Spacing.
-	ImGui::SameLine();
-	ImGui::Text("  ");
-	ImGui::SameLine();
-
-	// Reload button.
-	if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
-	{
-		loadDirectories();
-	}
-
-	// Spacing.
-	ImGui::SameLine();
-	ImGui::Text("  ");
-	ImGui::SameLine();
-
-	// Current directory button.
-	if(ImGui::Button(m_currentDirectory.string().c_str(), {0, headerSize.y + 7.f}))
-	{
-		std::string newDirectory = selectFolder(m_currentDirectory.string());
-		if (newDirectory.size())
+		// Move back button.
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
 		{
-			m_currentDirectory = newDirectory;
-			m_clearFilterOnFrameStart = true;
+			if (m_currentDirectory != m_currentDirectory.parent_path())
+			{
+				m_pathHistory.push_back(m_currentDirectory);
+				m_currentDirectory = m_currentDirectory.parent_path();
+				loadDirectories();
+			}
+		}
+
+		ImGui::SameLine();
+
+		// Move forward button.
+		ImGui::PushID("FAB");
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
+		{
+			if (m_pathHistory.size())
+			{
+				m_currentDirectory = m_pathHistory.back();
+				m_pathHistory.pop_back();
+				loadDirectories();
+			}
+		}
+		ImGui::PopID();
+
+		ImGui::SameLine();
+
+		// Reload button.
+		if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
+		{
 			loadDirectories();
 		}
 	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	// Current directory.
+	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	{
+		ImGui::SetScrollX(ImGui::GetScrollMaxX());
+		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
+		{
+			std::string newDirectory = selectFolder(m_currentDirectory.string());
+			if (newDirectory.size())
+			{
+				m_pathHistory.push_back(m_currentDirectory);
+				m_currentDirectory = newDirectory;
+				m_clearFilterOnFrameStart = true;
+				loadDirectories();
+			}
+		}
+	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	// Actions bar.
+	static bool addFolder = false;
+	if (ImGui::BeginChild("Actions", {50.f, headerHeight}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	{
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 3.f);
+		ImGui::SetWindowFontScale(1.2f);
+		if (ImGui::Button(ICON_FA_FOLDER_PLUS))
+		{
+			addFolder = true;
+		}
+		ImGui::SetWindowFontScale(1.f);
+	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
+
+	// Filter options.
+	if (ImGui::BeginChild("AssetFilter", { 140.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	{
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
+		if (ImGui::Checkbox(" .lmcp ", &m_displayComponents))
+			loadDirectories();
+		ImGui::SameLine();
+		if (ImGui::Checkbox(" .lmct ", &m_displayCircuits))
+			loadDirectories();
+	}
+	ImGui::EndChild();
+
+	ImGui::SameLine();
 
 	// Search bar.
-	ImGui::SameLine();
-	float filterSize = 250;
-	ImGui::SetCursorPosX(m_contentRegionSize.x - filterSize - ImGui::CalcTextSize("Search: ").x);
-	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
-	ImGui::Text("Search: ");
-	ImGui::SameLine();
-	filter.Draw("##AssetExplorerSearch", filterSize);
+	if (ImGui::BeginChild("SearchBar", { 0.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	{
+		static float textSize = ImGui::CalcTextSize("Search: ").x;
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 6.f);
+		ImGui::Text("Search: ");
+		ImGui::SameLine();
+		ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 3.f);
+		filter.Draw("##AssetExplorerSearch", ImGui::GetWindowContentRegionWidth() - textSize);
+	}
+	ImGui::EndChild();
 
+	// Files & Folders.
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 5.f, 5.f });
 	if (ImGui::BeginChild("##AssetExplorerChild", {0,0}, true))
 	{
-
 		// Create icon columns.
 		float iconSize = 75;
 		float padding = 7;
@@ -126,16 +188,20 @@ void AssetExplorer::onRender()
 		for (auto& p : m_directories)
 		{
 			// Filter.
-			if (!filter.PassFilter(p.path().stem().string().c_str())) continue;;
+			if (!filter.PassFilter(p.path().stem().string().c_str())) continue;
 
 			ImGui::PushID(directoryCount++);
 
-			// Directories.
+			// --------------- //
+			//  F O L D E R S  //
+			// --------------- //
+
 			if (p.is_directory())
 			{
 				ImGui::ImageButton((void*)s_folderIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
+					m_pathHistory.push_back(p);
 					m_currentDirectory /= p.path().filename();
 					m_clearFilterOnFrameStart = true;
 					m_reloadDirectories = true;
@@ -202,9 +268,26 @@ void AssetExplorer::onRender()
 		}
 	}
 	ImGui::EndChild();
+	ImGui::PopStyleVar();
 
 	// Done with icons.
 	ImGui::Columns(1);
+
+	// Open popup.
+	if (addFolder)
+	{
+		ImGui::OpenPopup("Add Folder##AFPOPUP");
+		addFolder = false;
+	}
+	// Write to popup.
+	if (ImGui::BeginPopup("AddFolderPopup", ImGuiPopupFlags_NoOpenOverExistingPopup))
+	{
+		if (ImGui::Button("Add"))
+		{
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 }
 
 void AssetExplorer::end()
@@ -219,7 +302,39 @@ void AssetExplorer::loadDirectories()
 {
 	m_directories.clear();
 	for (auto& p : std::filesystem::directory_iterator(m_currentDirectory))
+	{
+		// Check for file extensions.
+		bool shouldDisplay = false;
+		std::string extension = p.path().extension().string();
+		// Do not dispay these files.
+		if (p.path().filename().string()[0] == '.')
+		{
+			continue;
+		}
+		// We always want to render folders.
+		else if (!extension.size())
+		{
+			shouldDisplay = true;
+		}
+		// Check if the file type should be rendred.
+		else if (m_displayComponents && extension == ".lmcp")
+		{
+			shouldDisplay = true;
+		}
+		else if (m_displayCircuits && extension == ".lmct")
+		{
+			shouldDisplay = true;
+		}
+		// If no flags are set we want to display.
+		else if (!m_displayCircuits && !m_displayComponents)
+		{
+			shouldDisplay = true;
+		}
+
+		if (!shouldDisplay) continue;
+
 		m_directories.push_back(p);
+	}
 }
 
 //==============================================================================================================================================//

@@ -45,6 +45,24 @@ Circle::Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec2& center
 	: Circle( vao, glm::vec3(center, 0.f), radius, color, thickness, fade, parent)
 {}
 
+void Circle::setRadius(float radius)
+{
+	// Create the vertices.
+	std::vector<VertexDataCircle> vertices;
+	vertices.reserve(4);
+	vertices.emplace_back(VertexDataCircle(glm::vec3(m_trackedCenter.x - radius, m_trackedCenter.y + radius, m_trackedCenter.z), local1, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(VertexDataCircle(glm::vec3(m_trackedCenter.x + radius, m_trackedCenter.y + radius, m_trackedCenter.z), local2, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(VertexDataCircle(glm::vec3(m_trackedCenter.x + radius, m_trackedCenter.y - radius, m_trackedCenter.z), local3, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(VertexDataCircle(glm::vec3(m_trackedCenter.x - radius, m_trackedCenter.y - radius, m_trackedCenter.z), local4, m_colour, m_thickness, m_fade, m_entityID));
+
+	// Create the indices.
+	std::vector<unsigned> indices = { 0,1,2,2,3,0 };
+
+	// Add to VAO.
+	m_VAO->popPrimitive(this);
+	m_VAO->pushPrimitive(this, vertices, indices);
+}
+
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

@@ -42,6 +42,9 @@ private:
 	static unsigned s_leftArrowIcon;
 	static unsigned s_componentFileIcon;
 	static unsigned s_reloadIcon;
+	
+	bool m_displayComponents = true;
+	bool m_displayCircuits = true;
 
 	// Reload the files in the current directory.
 	void loadDirectories();
@@ -52,6 +55,9 @@ private:
 	bool m_clearFilterOnFrameStart = false;
 	// Reload the directories at the start of rendering.
 	bool m_reloadDirectories = false;
+
+	// Keep track of the file history for the forward button.
+	std::vector<std::filesystem::path> m_pathHistory;
 
 };
 

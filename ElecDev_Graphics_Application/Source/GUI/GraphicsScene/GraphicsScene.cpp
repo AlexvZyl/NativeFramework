@@ -19,9 +19,14 @@
 //  Constructor.																																//
 //==============================================================================================================================================//
 
+// For some reason the Renderer is not rendering to the entire texture, causing some of the clear color to come through?
+// Temporarily fixed by adjusting the texture and disabling scrolling.
+
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
-{}
+{
+	m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_MenuBar;
+}
 
 void GraphicsScene::setEngine(EngineCore* engine)
 {
@@ -50,15 +55,42 @@ void GraphicsScene::onEvent(Event& event)
 void GraphicsScene::begin()
 {
 	// Adjust window padding.
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
 }
 
 void GraphicsScene::onRender() 
 {
+	// Design palette.
+	if (m_engine->hasDesignPalette())
+	{
+		// Setup style.
+		ImGui::PopStyleVar();
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+		ImGui::PushID(m_name.c_str());
+		// Render palette.
+		if (ImGui::BeginMenuBar()) 
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
+			m_engine->renderDesignPalette();
+			ImGui::EndMenuBar();
+			ImGui::PopStyleVar();
+		}
+		// Clear style.
+		ImGui::PopID();
+		ImGui::PopStyleColor();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+	}
+
+	// Render engine scene.
+	ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 1.f);
 	m_engine->onRender();
 	if (!m_textureID) return;
-	ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image(m_textureID, { m_engine->m_contentRegionSize.x + 1.f, m_engine->m_contentRegionSize.y +1.f }, ImVec2(0, 1), ImVec2(1, 0));
+
+	// Receive dropped files.
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
@@ -78,6 +110,8 @@ void GraphicsScene::onRender()
 void GraphicsScene::end()
 {
 	ImGui::End();
+	ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();
 }
 
@@ -112,10 +146,12 @@ void GraphicsScene::onContentRegionMoveEvent(WindowEvent& event)
 
 void GraphicsScene::onContentRegionResizeEvent(WindowEvent& event) 
 {
+	// Adjust the event so that the scene fits correctly.
 	GuiElementCore::onContentRegionResizeEvent(event);
 
 	// Pass data to engine.
-	m_engine->setContentRegionSize(glm::vec2(event.windowData.x, event.windowData.y));
+	WindowEvent resizeEvent({ event.windowData.x, event.windowData.y}, EventType_WindowResize);
+	m_engine->onEvent(resizeEvent);
 }
 
 //==============================================================================================================================================//

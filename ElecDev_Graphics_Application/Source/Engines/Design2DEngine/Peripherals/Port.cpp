@@ -48,28 +48,30 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 		m_position = PortPosition::TOP;
 		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "T", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
+		title->rotate(-90);
 	}	
 	else if (m_offset.y < -0.078) 
 	{//bottom
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "C", "U", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
+		title->rotate(90);
 	}
 	else if (m_offset.x > 0.078) 
 	{//right
 		m_position = PortPosition::RIGHT;
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C");
 	}
 	else if (m_offset.x < -0.078) 
 	{//left
 		m_position = PortPosition::LEFT;
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C", this);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
 	}
 	else {
 		//This should never happen. Print a warning!
@@ -79,24 +81,29 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 	border->setColor(borderColour);
 	setLayer(portLayer);
 
-	highlight();
+	if (parent->m_highlighted) {
+		highlight();
+	}
 }
 
 Port::~Port()
 {
-	// If a port is removed, we need to find and destroy any linked cables.
-	auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
-	for (Cable* cable : m_cables)
-	{
-		auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr<Cable> current)
-			{
-				return current.get() == cable;
-			});
-
-		// Check that the cable is in the list.
-		if (toRemove != cableList.end())
+	//check if port is in a circuit
+	if (dynamic_cast<Circuit*>(m_parent->m_parent) != nullptr) {
+		// If a port is removed, we need to find and destroy any linked cables.
+		auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
+		for (Cable* cable : m_cables)
 		{
-			cableList.erase(toRemove);
+			auto toRemove = std::find_if(cableList.begin(), cableList.end(), [&](std::shared_ptr<Cable> current)
+				{
+					return current.get() == cable;
+				});
+
+			// Check that the cable is in the list.
+			if (toRemove != cableList.end())
+			{
+				cableList.erase(toRemove);
+			}
 		}
 	}
 

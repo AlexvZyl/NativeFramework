@@ -15,6 +15,7 @@
 #include "Circuit.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "Utilities/Logger/Logger.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -38,11 +39,12 @@ Component2D::Component2D(Circuit* parent)
 
 	// Create vertices.
 	centre = glm::vec2(0.0f, 0.0f);
-	vertices.reserve(4);
+	vertices.reserve(5);
 	vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
 	vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
 	vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
-	vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x - width/2, centre.y + height/2, 0.0f));
 
 	// --------------------- //
 	//  P R I M I T I V E S  //
@@ -59,11 +61,12 @@ Component2D::Component2D(Circuit* parent)
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
-	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
+	std::string textString = equipType + std::string(": ") + titleString;
+	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
-	addPort(0, PortType::PORT_IN, "LX1");
-	addPort(1, PortType::PORT_OUT, "RX1");
+	//addPort(0, PortType::PORT_IN, "LX1");
+	//addPort(1, PortType::PORT_OUT, "RX1");
 	highlight();
 
 	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
@@ -78,6 +81,105 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	: Component2D(parent)
 {
 	moveTo(centreCoords);
+}
+
+Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityType::COMPONENT, parent)
+{
+
+	//check that the node is from a .lmcp file
+	if (lmcpFile["Lumen File Info"]["Type"].as<std::string>() != "Component") {
+		LUMEN_LOG_ERROR("Components can only be constructed from a .lmcp file.", "Component2D");
+	}
+	YAML::Node componentNode = lmcpFile["Component"];
+	shapeColour = glm::vec4(componentNode["Shape"]["Colour"][0].as<float>(),
+							componentNode["Shape"]["Colour"][1].as<float>(),
+							componentNode["Shape"]["Colour"][2].as<float>(),
+							componentNode["Shape"]["Colour"][3].as<float>());
+
+
+	// ----------- //
+	//  S E T U P  //
+	// ----------- //
+
+	// Create vertices.
+	centre = glm::vec2(0.0f, 0.0f);
+	//vertices.reserve(4);
+	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+
+	// --------------------- //
+	//  P R I M I T I V E S  //
+	// --------------------- //
+
+	// Main shape.
+	//shape = Renderer::addPolygon2D(vertices, this);
+	//shape->setColor({ shapeColour.r, shapeColour.g, shapeColour.b, 0.5f });
+	//shape->setLayer(0.001f);//temp fix
+	// Component border.
+	//border = Renderer::addPolygon2DClear(vertices, this);
+	//border->setColor(borderColour);
+	//border->setLayer(componentLayer + borderLayerOffset);
+	// Component title.
+	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
+	titleString = componentNode["Title"]["String"].as<std::string>();
+	equipType = componentNode["Title"]["EquipType"].as<std::string>();
+	std::string textString = equipType + std::string(": ") + titleString;
+	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
+	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
+
+	//Load dictionary.
+	YAML::Node componentDict = componentNode["Dictionary"];
+	for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
+	{
+		dataDict.insert({ it->first.as<std::string>(), it->second.as<std::string>() });
+	}
+
+	// ----------- //
+	//  P O R T S  //
+	// ----------- //
+
+	// Load the ports.
+	YAML::Node portList = componentNode["Ports"];
+
+	// East ports.
+	YAML::Node eastPortList = portList["East Ports"];
+	for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	}
+	// West ports.
+	YAML::Node westPortList = portList["West Ports"];
+	for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	}
+	// West ports.
+	YAML::Node northPortList = portList["North Ports"];
+	for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	}
+	// South ports.
+	YAML::Node southPortList = portList["South Ports"];
+	for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
+	{
+		YAML::Node portNode = portIterator->second;
+		unsigned entityID = addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+		// Add entity ID to table.
+		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+
+	}
 }
 
 Component2D::~Component2D() 
@@ -173,6 +275,7 @@ void Component2D::setContext(GUIState* guiState)
 
 void Component2D::highlight()
 {
+	m_highlighted = true;
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border->setColor(borderColour);
 
@@ -193,6 +296,7 @@ void Component2D::highlight()
 
 void Component2D::unhighlight()
 {
+	m_highlighted = false;
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
 
@@ -347,7 +451,50 @@ void Component2D::translateTitle(glm::vec2 translation)
 	title->translate(translation);
 }
 
-void Component2D::enableOutline() 
+void Component2D::updateText()
+{
+	std::string textString = equipType + std::string(": ") + titleString;
+	title->updateText(textString);
+}
+
+Polygon2D* Component2D::addPoly(std::vector<glm::vec2> vertices)
+{
+
+	std::vector<glm::vec3> vertices3;
+	for (glm::vec2 vertex : vertices) {
+		vertices3.push_back(glm::vec3(vertex, 0.f));
+	}
+	m_polygons.emplace_back(Renderer::addPolygon2D(vertices3, this));
+	m_polygons.back()->setColor(shapeColour);
+	m_polygons.back()->setLayer(0.001f);//temp fix
+	return m_polygons.back();
+}
+
+void Component2D::addCircle(Circle* circle)
+{
+	m_circles.emplace_back(circle);
+	//m_circles.emplace_back(Renderer::addCircle2D(centre, radius, shapeColour, 1.0f, 0.f, this));
+}
+
+void Component2D::addLine(LineSegment* line)
+{
+	m_lines.emplace_back(line);
+	//m_lines.emplace_back(Renderer::addLineSegment2D(start, end, 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
+}
+
+//=============================================================================================================================================//
+//  Utilities.				     																											   //
+//=============================================================================================================================================//
+
+PortType Component2D::getPortType(YAML::Node node)
+{
+	if (node["Type"].as<std::string>() == "PORT_IN") { return PortType::PORT_IN; }
+	else if (node["Type"].as<std::string>() == "PORT_OUT") { return PortType::PORT_OUT; }
+	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
+}
+
+
+void Component2D::enableOutline()
 {
 	shape->enableOutline();
 	border->enableOutline();

@@ -57,13 +57,15 @@ Cable::Cable(Port* startPort, Circuit* parent)
 		m_curOrientation = LineOrientation::VERTICAL;
 		endPt += glm::vec2(0.f, initial_length);
 		endPt2 += glm::vec2(-initial_length, 0.f);
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt, 0.f), m_titleColour, m_titleSize);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt - glm::vec2(m_thickness, 0.f), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title1->rotate(90);
 		break;
 	case PortPosition::BOTTOM:
 		m_curOrientation = LineOrientation::VERTICAL;
 		endPt += glm::vec2(0.f, -initial_length);
 		endPt2 += glm::vec2(-initial_length, 0.f);
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt, 0.f), m_titleColour, m_titleSize);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt + glm::vec2(m_thickness, 0.f), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title1->rotate(-90);
 		break;
 	case PortPosition::LEFT:
 		m_curOrientation = LineOrientation::HORIZONTAL;
@@ -119,11 +121,13 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	//Add title
 	switch (endPort->m_position) {
 	case PortPosition::TOP:
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title2->rotate(90);
 		//endPt += glm::vec2(0.f, initial_length);
 		break;
 	case PortPosition::BOTTOM:
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title2->rotate(-90);
 		//endPt += glm::vec2(0.f, -initial_length);
 		break;
 	case PortPosition::LEFT:
@@ -138,11 +142,11 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 
 	switch (startPort->m_position) {
 	case PortPosition::TOP:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
 		//endPt += glm::vec2(0.f, initial_length);
 		break;
 	case PortPosition::BOTTOM:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
 		//endPt += glm::vec2(0.f, -initial_length);
 		break;
 	case PortPosition::LEFT:
@@ -250,12 +254,14 @@ void Cable::attach(Port* endPort)
 	switch (endPort->m_position) {
 	case PortPosition::TOP:
 		portOrientation = LineOrientation::VERTICAL;
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title2->rotate(90);
 		//endPt += glm::vec2(0.f, initial_length);
 		break;
 	case PortPosition::BOTTOM:
 		portOrientation = LineOrientation::VERTICAL;
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f), m_titleColour, m_titleSize);
+		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+		m_title2->rotate(-90);
 		//endPt += glm::vec2(0.f, -initial_length);
 		break;
 	case PortPosition::LEFT:
@@ -289,11 +295,11 @@ void Cable::followPort(Port* movedPort)
 	{
 	case PortPosition::TOP:
 		m_curOrientation = LineOrientation::HORIZONTAL;
-		titlePos = glm::vec3(movedPort->centre + glm::vec2(0.f, m_titleOffset), 0.f);
+		titlePos = glm::vec3(movedPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f);
 		break;
 	case PortPosition::BOTTOM:
 		m_curOrientation = LineOrientation::HORIZONTAL;
-		titlePos = glm::vec3(movedPort->centre + glm::vec2(0.f, -m_titleOffset), 0.f);
+		titlePos = glm::vec3(movedPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f);
 		break;
 	case PortPosition::LEFT:
 		m_curOrientation = LineOrientation::VERTICAL;

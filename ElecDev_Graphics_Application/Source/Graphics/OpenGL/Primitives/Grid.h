@@ -101,20 +101,6 @@ public:
 		hideHelperCircle();
 		return *this;
 	}
-	inline Grid& hideHelperCircle() 
-	{
-		m_helperCircle->setColor({ 0.f, 0.f, 0.f, 0.f, });
-		return *this;
-	}
-	inline Grid& visibleHelperCircle() 
-	{
-		m_helperCircle->setColor(m_helperCircleColor);
-		return *this;
-	}
-
-	void updateHelperCircle(const glm::vec2& coords);
-	Grid& createGrid();
-	Grid& destroyGrid();
 
 	// Getters.
 	inline int getFinePixelSize()			{ return m_coarseGridPixelSize; }
@@ -128,8 +114,15 @@ public:
 	inline bool isEnabled()					{ return m_enabled;	}
 	inline glm::vec4& getHelperCircleColor(){ return m_helperCircleColor; }
 
+	// Utility functions.
+	void updateHelperCircle(const glm::vec2& coords);
+	Grid& createGrid();
+	Grid& destroyGrid();
 	// Find the grid vertex closest to the given coordinates.
 	glm::vec2 getClosestGridVertex(const glm::vec2& coords);
+	// This function should be called when data has been changed and needs to be updated.
+	//  TODO!
+	inline void updateGridData(){}
 
 private:
 
@@ -159,6 +152,17 @@ private:
 	// Circle used to identify active vertex.
 	Circle* m_helperCircle = nullptr;
 
+	// Internal utility functions.
+	inline Grid& hideHelperCircle()
+	{
+		m_helperCircle->setColor({ 0.f, 0.f, 0.f, 0.f, });
+		return *this;
+	}
+	inline Grid& visibleHelperCircle()
+	{
+		m_helperCircle->setColor(m_helperCircleColor);
+		return *this;
+	}
 };
 
 //=============================================================================================================================================//
