@@ -25,7 +25,8 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 
 			if (!m_activePoly)
 			{
-				m_activePoly = m_activeComponent->addPoly({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) });
+				m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+				m_activeComponent->addPoly(m_activePoly);
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else
@@ -109,6 +110,13 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 			m_activeCircle->setRadius(glm::length(glm::vec2(m_activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
 	}
+	else if (designerState == CompDesignState::PLACE_PORT)
+	{
+		if (m_activePort) {
+			//update port location
+			m_activePort->moveTo(getNearestGridVertex(screenCoords));
+		}
+	}
 
 }
 
@@ -138,45 +146,27 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 
 		case GLFW_KEY_P:
 			//Add new polygon
-			designerState = CompDesignState::DRAW_POLY;
-			m_activePoly = nullptr;
+			switchState(CompDesignState::DRAW_POLY);
 			break;
 
 		case GLFW_KEY_L:
 			//Add new line
-			designerState = CompDesignState::DRAW_LINE;
-			m_activeLine = nullptr;
+			switchState(CompDesignState::DRAW_LINE);
 			break;
 
 		case GLFW_KEY_C:
 			//Add new circle
-			designerState = CompDesignState::DRAW_CIRCLE;
-			m_activeCircle = nullptr;
+			switchState(CompDesignState::DRAW_CIRCLE);
 			break;
 
 		case GLFW_KEY_O:
 			//Add new port
-			designerState = CompDesignState::DRAW_CIRCLE;
-			m_activeCircle = nullptr;
+			switchState(CompDesignState::PLACE_PORT);
 			break;
 			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_ESCAPE:
-			if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE) {
-				if (m_activeCircle) {
-					Renderer::remove(m_activeCircle);
-				}
-				if (m_activePoly) {
-					Renderer::remove(m_activePoly);
-				}
-				if (m_activeLine) {
-					Renderer::remove(m_activeLine);
-				}
-			}
-			m_activeLine = nullptr;
-			m_activePoly = nullptr;
-			m_activeCircle = nullptr;
-			designerState = CompDesignState::SELECT;
+			switchState(CompDesignState::SELECT);
 			break;
 
 			// --------------------------------------------------------------------------------------------------------------- //

@@ -7,13 +7,13 @@ enum class CompDesignState
     SELECT,
     DRAW_POLY,
     DRAW_LINE,
-    DRAW_CIRCLE
+    DRAW_CIRCLE,
+    PLACE_PORT
 };
 
 class ComponentDesigner : public Base2DEngine
 {
 protected:
-    
 
 public:
 
@@ -21,6 +21,9 @@ public:
     Polygon2D* m_activePoly;
     LineSegment* m_activeLine;
     Circle* m_activeCircle;
+    std::shared_ptr<Port> m_activePort;
+    PortType next_port_type = PortType::PORT_INOUT;
+
     CompDesignState designerState = CompDesignState::SELECT;
 
     //Constructor
@@ -35,6 +38,9 @@ public:
 
     // Design palette.
     virtual void renderDesignPalette() override;
+
+    void switchState(CompDesignState state);
+    void pushActivePrimitives();
     // Buttons state.
     bool m_polygon = false;
     bool m_lines = false;

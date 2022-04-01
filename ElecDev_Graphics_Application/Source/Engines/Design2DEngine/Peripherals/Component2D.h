@@ -89,6 +89,7 @@ public:
 	std::vector<std::shared_ptr<Port>> portsEast;
 	std::vector<std::shared_ptr<Port>> portsWest;
 
+	std::vector<std::shared_ptr<Port>> ports;
 	unsigned numPorts = 0;
 
 	float componentLayer = 0.9f;
@@ -130,9 +131,9 @@ public:
 	//updates the Component label
 	void updateText();
 	//Adds a new polygon to the polygon list
-	 Polygon2D* addPoly(std::vector<glm::vec2> vertices);
-	void addCircle(Circle*);
-	void addLine(LineSegment*);
+	void addPoly(Polygon2D* poly);
+	void addCircle(Circle* circle);
+	void addLine(LineSegment* line);
 	
 
 private:

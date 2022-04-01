@@ -457,17 +457,11 @@ void Component2D::updateText()
 	title->updateText(textString);
 }
 
-Polygon2D* Component2D::addPoly(std::vector<glm::vec2> vertices)
+void Component2D::addPoly(Polygon2D* poly)
 {
-
-	std::vector<glm::vec3> vertices3;
-	for (glm::vec2 vertex : vertices) {
-		vertices3.push_back(glm::vec3(vertex, 0.f));
-	}
-	m_polygons.emplace_back(Renderer::addPolygon2D(vertices3, this));
+	m_polygons.emplace_back(poly);
 	m_polygons.back()->setColor(shapeColour);
 	m_polygons.back()->setLayer(0.001f);//temp fix
-	return m_polygons.back();
 }
 
 void Component2D::addCircle(Circle* circle)

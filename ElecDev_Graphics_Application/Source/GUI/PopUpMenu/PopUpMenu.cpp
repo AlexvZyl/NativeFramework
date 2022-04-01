@@ -162,24 +162,67 @@ void PopUpMenu::onRender()
         }
     }
     else if (dynamic_cast<ComponentDesigner*>(m_engine)) {
-        Component2D* active_component = (dynamic_cast<ComponentDesigner*>(m_engine))->m_activeComponent.get();
-        if (ImGui::MenuItem("Component Editor", "E"))
-        {
-            // Pushing this GUI layer defocuses the popup, causing a 
-            // defocus event, which removes the popup event.
-            app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
-        }
-        if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
-        {
-            // Create and log save event.
-            std::string path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
-            if (path.size())
+
+        ComponentDesigner* component_designer = dynamic_cast<ComponentDesigner*>(m_engine);
+
+        if (component_designer->designerState == CompDesignState::SELECT) {
+
+            Component2D* active_component = (dynamic_cast<ComponentDesigner*>(m_engine))->m_activeComponent.get();
+            if (ImGui::MenuItem("Component Editor", "E"))
             {
-                FileSaveEvent event(path, dynamic_cast<ComponentDesigner*>(m_engine));
-                app.logEvent<FileSaveEvent>(event);
+                app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
             }
-            // Remove popup.
-            app.queuePopLayer(m_name);
+            if (ImGui::MenuItem("Add Polygon", "P"))
+            {
+                component_designer->switchState(CompDesignState::DRAW_POLY);
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+            if (ImGui::MenuItem("Add Line", "L"))
+            {
+                component_designer->switchState(CompDesignState::DRAW_LINE);
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+            if (ImGui::MenuItem("Add Circle", "C"))
+            {
+                component_designer->switchState(CompDesignState::DRAW_CIRCLE);
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+            if (ImGui::MenuItem("Add Port", "O"))
+            {
+                component_designer->switchState(CompDesignState::PLACE_PORT);
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+            if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
+            {
+                // Create and log save event.
+                std::string path = selectFile("Lumen Save Component", "", active_component->equipType, "Save");
+                if (path.size())
+                {
+                    FileSaveEvent event(path, dynamic_cast<ComponentDesigner*>(m_engine));
+                    app.logEvent<FileSaveEvent>(event);
+                }
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+        }
+        else {
+            if (ImGui::MenuItem("Done"))
+            {
+                component_designer->pushActivePrimitives();
+                component_designer->switchState(CompDesignState::SELECT);
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
+            if (ImGui::MenuItem("Cancel", "ESC"))
+            {
+                component_designer->switchState(CompDesignState::SELECT);
+                // Remove popup.
+                app.queuePopLayer(m_name);
+            }
         }
     }
 }
