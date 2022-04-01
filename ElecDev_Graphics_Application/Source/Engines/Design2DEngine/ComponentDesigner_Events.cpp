@@ -20,7 +20,13 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		if (designerState == CompDesignState::DRAW_POLY)
+
+		if (designerState == CompDesignState::SELECT)
+		{
+			m_currentEntityID = getEntityID(pixelCoords);
+			setActivePrimitives(m_currentEntityID);
+		}
+		else if (designerState == CompDesignState::DRAW_POLY)
 		{
 
 			if (!m_activePoly)
@@ -88,6 +94,7 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
+	uint64_t eventID = event.ID;
 
 	glm::vec2 pixelCoords = event.mousePosition;
 	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
@@ -116,7 +123,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	}
 	else if (designerState == CompDesignState::PLACE_PORT)
 	{
-		if (m_activePort) {
+		if (m_activePort.get()) {
 			//update the title location based on the positioning for user convenience
 			if (m_activePort->centre.x >= 0 && getNearestGridVertex(screenCoords).x < 0) {
 				m_activePort->titleOffset = -m_activePort->titleOffset;
@@ -130,6 +137,46 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 			m_activePort->moveTo(getNearestGridVertex(screenCoords));
 		}
 	}
+
+	else if (designerState == CompDesignState::SELECT)
+	{
+		if (eventID == EventType_MouseButtonLeft)
+		{
+			//User is dragging a component.
+			glm::vec2 translation = screenCoords - m_lastDragPos;
+			if (m_activePoly) {
+				if (getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation) != glm::vec2{ m_activePoly->m_trackedCenter }) {
+					m_activePoly->translateTo(getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+			}
+			if (m_activeLine) {
+				if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
+					m_activeLine->translateTo(getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+			}
+			if (m_activeCircle) {
+				if (getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation) != glm::vec2{ m_activeCircle->m_trackedCenter }) {
+					m_activeCircle->translateTo(getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+			}
+			if (m_activePort.get()) {
+				if (getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation) != glm::vec2{ m_activePort->centre }) {
+					m_activePort->moveTo(getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+			}
+		}
+		else {
+			m_lastDragPos = screenCoords;
+		}
+	}
+
+	// Store state.
+	//m_lastDragPos = screenCoords;
+	m_currentEntityID = getEntityID(pixelCoords);
 
 }
 

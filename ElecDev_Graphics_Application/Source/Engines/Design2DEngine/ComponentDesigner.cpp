@@ -5,6 +5,7 @@
 #include "Graphics/OpenGL/Primitives/Polygon.h"
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
+#include "Graphics/Entities/EntityManager.h"
 
 
 void ComponentDesigner::switchState(CompDesignState state)
@@ -72,6 +73,67 @@ void ComponentDesigner::pushActivePrimitives()
 	m_activeLine = nullptr;
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
+}
+
+void ComponentDesigner::setActivePrimitives(unsigned eID)
+{
+	//Remove outline of current entity
+	if (m_activePoly) {
+		m_activePoly->disableOutline();
+	}
+	if (m_activeLine) {
+		m_activeLine->disableOutline();
+	}
+	if (m_activeCircle) {
+		m_activeCircle->disableOutline();
+	}
+	if (m_activePort.get()) {
+		m_activePort->unhighlight();
+	}
+	//remove previous selection
+	m_activeLine = nullptr;
+	m_activePoly = nullptr;
+	m_activeCircle = nullptr;
+	m_activePort = nullptr;
+
+	if ((eID == 0) || (eID == -1))
+	{
+		Lumen::getApp().m_guiState->clickedZone.background = true;
+	}
+	else {
+		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (currentEntity->m_parent == m_activeComponent.get()) {
+			//Entity is a primitive belonging to the component
+			if (dynamic_cast<Polygon2D*>(currentEntity)) {
+				//Polygon
+				m_activePoly = dynamic_cast<Polygon2D*>(currentEntity);
+				m_activePoly->enableOutline();
+			}
+			else if (dynamic_cast<LineSegment*>(currentEntity)) {
+				//Line
+				m_activeLine = dynamic_cast<LineSegment*>(currentEntity);
+				m_activeLine->enableOutline();
+			}
+			else if (dynamic_cast<Circle*>(currentEntity)) {
+				//Circle
+				m_activeCircle = dynamic_cast<Circle*>(currentEntity);
+				m_activeCircle->enableOutline();
+			}
+		}
+		else if (dynamic_cast<Port*>(currentEntity->m_parent)) {
+			//Port
+			//Should handle port text here as well (TODO)
+
+			Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
+			m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
+				{
+					return current.get() == cur;
+				});
+			if (m_activePort) {
+				m_activePort->highlight();
+			}
+		}
+	}
 }
 
 ComponentDesigner::ComponentDesigner():Base2DEngine()

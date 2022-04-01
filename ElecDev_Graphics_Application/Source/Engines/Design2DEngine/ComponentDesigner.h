@@ -24,6 +24,9 @@ public:
     std::shared_ptr<Port> m_activePort;
     PortType next_port_type = PortType::PORT_INOUT;
 
+    glm::vec2 m_lastDragPos = { 0.f, 0.f };
+    unsigned int m_currentEntityID = 0;
+
     CompDesignState designerState = CompDesignState::SELECT;
 
     //Constructor
@@ -41,6 +44,7 @@ public:
 
     void switchState(CompDesignState state);
     void pushActivePrimitives();
+    void setActivePrimitives(unsigned eID);
     // Buttons state.
     bool m_polygon = false;
     bool m_lines = false;
