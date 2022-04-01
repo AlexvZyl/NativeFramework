@@ -260,7 +260,6 @@ int lua_imgui_Table(lua_State* L)
 		// Populate values.
 		int rows = formatDictionary(currentDict);
 		int columns = currentDict.size();
-		ImGui::TableSetColumnIndex(0);
 		// Iterate over rows.
 		for (int r = 0; r < rows; r++)
 		{

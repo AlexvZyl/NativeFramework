@@ -44,10 +44,11 @@ HMODULE getCurrentModule()
 // SIGDN_DESKTOPABSOLUTEPARSING
 // -------------
 
-std::string selectFolder(std::string root)
+std::filesystem::path selectFolder(const std::string& root)
 {
     // Default location.
-    if (!root.length()) { root = getExecutableLocation(); }
+    std::string usingRoot = root;
+    if (!usingRoot.length()) { usingRoot = getExecutableLocation(); }
 
     // Stores the results of the windows calls.
     HRESULT hResult;
@@ -62,7 +63,7 @@ std::string selectFolder(std::string root)
 
     // Set target folder at the .exe location.
     // This default location changes as the user uses the explorer (TBC).
-    std::wstring exeLocationW = std::wstring(root.begin(), root.end());
+    std::wstring exeLocationW = std::wstring(usingRoot.begin(), usingRoot.end());
     PIDLIST_ABSOLUTE targetFolderID;
     hResult = SHILCreateFromPath(exeLocationW.c_str(), &targetFolderID, NULL);
     IShellItem* defaultFolder;
@@ -86,10 +87,10 @@ std::string selectFolder(std::string root)
     hResult = resultSI->Release();
 
     // Return the path as an std::string.
-    return std::string(resultW.begin(), resultW.end());
+    return std::filesystem::path(std::string(resultW.begin(), resultW.end()));
 }
 
-std::string selectFile(std::string title, std::string root, std::string defaultFile, std::string buttonLabel) 
+std::filesystem::path selectFile(const std::string& windowTitle, const std::string& root, const std::string& defaultFileEntry, const std::string& buttonLabel)
 {
     // Stores the results of the windows calls.
     HRESULT hResult;
@@ -99,25 +100,27 @@ std::string selectFile(std::string title, std::string root, std::string defaultF
     hResult = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
     hResult = CoCreateInstance(__uuidof(FileOpenDialog), NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&dialog));
     std::wstring titleW;
-    if (!title.size()) { titleW = L"Lumen File Selector"; }
-    else               { titleW = std::wstring(title.begin(), title.end()); }
+    if (!windowTitle.size()) { titleW = L"Lumen File Selector"; }
+    else                     { titleW = std::wstring(windowTitle.begin(), windowTitle.end()); }
     
     hResult = dialog->SetTitle((LPCWSTR)titleW.c_str());
 
     // Set the dialog options.
     COMDLG_FILTERSPEC fileSpec[] =
     {
-        { L"Lumen File", L"*.yml; *.yaml; *.lmct; *.lmcp;" }
+        { L"Lumen File", L"*.lmct; *.lmcp;" }
     };
+
     hResult = dialog->SetFileTypes(1, fileSpec);
     hResult = dialog->SetOptions(FOS_STRICTFILETYPES);
 
     // Default root is at the exe location.
-    if (!root.length()) { root = getExecutableLocation(); }
+    std::string usingRoot = root;
+    if (!usingRoot.length()) { usingRoot = getExecutableLocation(); }
     // User specified root.
     else
     {
-        std::wstring exeLocationW = std::wstring(root.begin(), root.end());
+        std::wstring exeLocationW = std::wstring(usingRoot.begin(), usingRoot.end());
         PIDLIST_ABSOLUTE targetFolderID;
         hResult = SHILCreateFromPath(exeLocationW.c_str(), &targetFolderID, NULL);
         IShellItem* defaultFolder;
@@ -127,9 +130,9 @@ std::string selectFile(std::string title, std::string root, std::string defaultF
     }
 
     // Set the default file.
-    if (defaultFile.size())
+    if (defaultFileEntry.size())
     {
-        std::wstring defaultFileW = std::wstring(defaultFile.begin(), defaultFile.end());
+        std::wstring defaultFileW = std::wstring(defaultFileEntry.begin(), defaultFileEntry.end());
         dialog->SetFileName((LPCWSTR)defaultFileW.c_str());
     }
 
@@ -155,24 +158,13 @@ std::string selectFile(std::string title, std::string root, std::string defaultF
     std::wstring resultW = resultWindowsWS;
     hResult = resultSI->Release();
 
-    // Get return file as string.
-    std::string returnFile = std::string(resultW.begin(), resultW.end());
-    // If the file does not have an extension, add a .lmct extension.
-    if (returnFile.find(".lmct")  == std::string::npos &&
-        returnFile.find(".yml")  == std::string::npos &&
-        returnFile.find(".yaml") == std::string::npos)
-    {
-        std::string extension = ".lmct";
-        returnFile.insert(returnFile.end(), extension.begin(), extension.end());
-    }
-
     // Return the path as an std::string.
-    return returnFile;
+    return std::filesystem::path(std::string(resultW.begin(), resultW.end()));
 }
 
-std::vector<std::string> selectFileMultiple(std::string root) 
+std::vector<std::filesystem::path> selectFileMultiple(std::string root)
 {
-    std::vector<std::string> filePaths;
+    std::vector<std::filesystem::path> filePaths;
     return filePaths;
 }
 

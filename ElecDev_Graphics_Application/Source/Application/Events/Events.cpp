@@ -101,11 +101,11 @@ WindowEvent::WindowEvent(const glm::vec2& windowResize, uint64_t ID, bool isScal
 //  F I L E  //
 // --------- //
 
-FileEvent::FileEvent(uint64_t eventID, std::vector<std::string>& files)
+FileEvent::FileEvent(uint64_t eventID, const std::vector<std::filesystem::path>& files)
 	: Event(eventID | EventType_Application), fileData(files)
 {}
 
-FileEvent::FileEvent(uint64_t eventID, std::string& file)
+FileEvent::FileEvent(uint64_t eventID, const std::filesystem::path& file)
 	: Event(eventID | EventType_Application)
 {
 	fileData.emplace_back(file);
@@ -115,11 +115,11 @@ FileEvent::FileEvent(uint64_t eventID, std::string& file)
 //  F I L E   L O A D  //
 // ------------------- //
 
-FileLoadEvent::FileLoadEvent(std::vector<std::string>& files)
+FileLoadEvent::FileLoadEvent(const std::vector<std::filesystem::path>& files)
 	: FileEvent(EventType_FileLoad, files)
 {}
 
-FileLoadEvent::FileLoadEvent(std::string& file) 
+FileLoadEvent::FileLoadEvent(const std::filesystem::path& file)
 	: FileEvent(EventType_FileLoad, file)
 {}
 
@@ -127,11 +127,11 @@ FileLoadEvent::FileLoadEvent(std::string& file)
 //  F I L E   S A V E  //
 // ------------------- //
 
-FileSaveEvent::FileSaveEvent(std::vector<std::string>& files, EngineCore* engine)
+FileSaveEvent::FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine)
 	: FileEvent(EventType_FileSave, files), engine(engine)
 {}
 
-FileSaveEvent::FileSaveEvent(std::string& file, EngineCore* engine)
+FileSaveEvent::FileSaveEvent(const std::filesystem::path& file, EngineCore* engine)
 	: FileEvent(EventType_FileSave, file), engine(engine)
 {}
 
@@ -139,11 +139,11 @@ FileSaveEvent::FileSaveEvent(std::string& file, EngineCore* engine)
 //  F I L E   D R O P  //
 // ------------------- //
 
-FileDropEvent::FileDropEvent(std::vector<std::string>& files)
+FileDropEvent::FileDropEvent(const std::vector<std::filesystem::path>& files)
 	: FileEvent(EventType_FileDrop, files)
 {}
 
-FileDropEvent::FileDropEvent(std::string& file)
+FileDropEvent::FileDropEvent(const std::filesystem::path& file)
 	: FileEvent(EventType_FileDrop, file)
 {}
 

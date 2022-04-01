@@ -248,7 +248,7 @@ void Design2DEngine::onFileDropEvent(FileDropEvent& event)
 {
 	for (auto& path : event.fileData)
 	{
-		LUMEN_LOG_DEBUG(path, "FileDropEvent");
+		LUMEN_LOG_DEBUG(path.string(), "FileDropEvent");
 	}
 }
 

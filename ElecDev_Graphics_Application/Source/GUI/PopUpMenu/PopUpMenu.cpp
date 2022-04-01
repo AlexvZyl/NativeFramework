@@ -139,10 +139,10 @@ void PopUpMenu::onRender()
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
         {
             // Create and log load event.
-            std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-            if (path.size())
+            auto path = selectFile("Lumen Load Circuit", "", "", "Load");
+            if (path.string().size())
             {
-                FileLoadEvent event(path);
+                FileLoadEvent event(path.string());
                 app.logEvent<FileLoadEvent>(event);
             }
             // Remove popup.
@@ -151,10 +151,10 @@ void PopUpMenu::onRender()
         if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
         {
             // Create and log save event.
-            std::string path = selectFile("Lumen Save Circuit", "", design_engine->m_circuit->m_label, "Save");
-            if (path.size())
+            auto path = selectFile("Lumen Save Circuit", "", design_engine->m_circuit->m_label, "Save");
+            if (path.string().size())
             {
-                FileSaveEvent event(path, design_engine);
+                FileSaveEvent event(path.string(), design_engine);
                 app.logEvent<FileSaveEvent>(event);
             }
             // Remove popup.
@@ -172,10 +172,10 @@ void PopUpMenu::onRender()
         if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
         {
             // Create and log save event.
-            std::string path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
-            if (path.size())
+            auto path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
+            if (path.string().size())
             {
-                FileSaveEvent event(path, dynamic_cast<ComponentDesigner*>(m_engine));
+                FileSaveEvent event(path.string(), dynamic_cast<ComponentDesigner*>(m_engine));
                 app.logEvent<FileSaveEvent>(event);
             }
             // Remove popup.

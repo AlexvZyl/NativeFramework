@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include "glm/glm.hpp"
+#include <filesystem>
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -220,13 +221,13 @@ class FileEvent : public Event
 public:
 
 	// The path to the dropped files.
-	std::vector<std::string> fileData;	
+	std::vector<std::filesystem::path> fileData;	
 
 protected:
 
 	// Constructors.
-	FileEvent(uint64_t eventID, std::vector<std::string>& files);
-	FileEvent(uint64_t eventID, std::string& file);
+	FileEvent(uint64_t eventID, const std::vector<std::filesystem::path>& files);
+	FileEvent(uint64_t eventID, const std::filesystem::path& file);
 };
 
 // ------------------- //
@@ -239,8 +240,8 @@ class FileLoadEvent : public FileEvent
 public: 
 
 	// Constructors.
-	FileLoadEvent(std::vector<std::string>& files);
-	FileLoadEvent(std::string& file);
+	FileLoadEvent(const std::vector<std::filesystem::path>& files);
+	FileLoadEvent(const std::filesystem::path& file);
 };
 
 // ------------------- //
@@ -253,8 +254,16 @@ class FileSaveEvent : public FileEvent
 public:
 
 	// Constructors.
-	FileSaveEvent(std::vector<std::string>& files, EngineCore* engine);
-	FileSaveEvent(std::string& file, EngineCore* engine);
+	FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine);
+	FileSaveEvent(const std::filesystem::path& file, EngineCore* engine);
+
+	template<class EngineType>
+	inline EngineType* getEngine() 
+	{
+		return dynamic_cast<EngineType*>(engine);
+	}
+
+private:
 
 	// The engine that is to be saved.
 	EngineCore* engine = nullptr;
@@ -270,8 +279,8 @@ class FileDropEvent : public FileEvent
 public:
 
 	// Constructors.
-	FileDropEvent(std::vector<std::string>& files);
-	FileDropEvent(std::string& file);
+	FileDropEvent(const std::vector<std::filesystem::path>& files);
+	FileDropEvent(const std::filesystem::path& file);
 };
 
 //==============================================================================================================================================//

@@ -19,137 +19,66 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(std::shared_ptr<Circuit>& circuit, std::string& directory, std::string& filename)
+void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path)
 {
-	std::string labelTemp;
-	// Check if file name supplied.
-	if (filename.length()) 
-	{
-		// Remove extensions from the file name.
-		if		(filename.find(".yml") != std::string::npos)	{ filename.erase(filename.length() - 4, 4); }
-		else if (filename.find(".yaml") != std::string::npos)	{ filename.erase(filename.length() - 5, 5); }
-		else if (filename.find(".lmct") != std::string::npos)	{ filename.erase(filename.length() - 5, 5); }
-		// Change circuit name to the file name.
-		labelTemp = circuit->m_label;	
-		circuit->m_label = filename;
-	}
-
-	// --------- //
-	//  F I L E  //
-	// --------- //
-
-	// Begin File.
+	// Create yaml file.
 	YAML::Emitter yamlEmitter;
 	yamlEmitter << YAML::BeginMap;
-
-	yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
-	yamlEmitter << YAML::BeginMap;
-		yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
-		yamlEmitter << YAML::Key << "Type" << YAML::Value << "Circuit";
+		yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
+		yamlEmitter << YAML::BeginMap;
+			yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
+			yamlEmitter << YAML::Key << "Type" << YAML::Value << "Circuit";
+		yamlEmitter << YAML::EndMap;
+		yamlEmitter << circuit;
 	yamlEmitter << YAML::EndMap;
 
-	// Serialise circuit.
-	yamlEmitter << circuit;
-
-	// Restore current (in Lumen) circuit name.
-	if (filename.length()) 
-		circuit->m_label = labelTemp;
-	
-	// --------- //
-	//  S A V E  //
-	// --------- //
-
-	// Make sure directory has backslash.
-	if (directory.back() != '\\') { directory.push_back('\\'); }
-	
-	std::string file;
-	// If filename was not supplied, create from circuit.
-	if (!filename.length()) 
-	{ 
-		file = directory + circuit->m_label + ".lmct"; 
-	}
-	// Use supplied filename.
-	else 
+	// If a directory was received and not a file, create a file from the component label.
+	std::string saveLocation = path.string();
+	if (!path.filename().string().size())
 	{
-		std::string ext = ".lmct";
-		filename.insert(filename.end(), ext.begin(), ext.end());
-		// Set file name;
-		file = directory + filename;
+		saveLocation += circuit->m_label + ".lmct";
+	}
+	// Check if a file extension was supplied.
+	else if (path.extension().string() != ".lmct")
+	{
+		saveLocation += ".lmct";
 	}
 
-	// End YAML.
-	yamlEmitter << YAML::EndMap;
 	// Save file.
 	std::ofstream yamlStream;
-	yamlStream.open(file);
+	yamlStream.open(saveLocation);
 	yamlStream << yamlEmitter.c_str();
 	yamlStream.close();
 }
 
-void saveToYAML(std::shared_ptr<Component2D>& component, std::string& directory, std::string& filename)
+void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::path& path)
 {
-	std::string labelTemp;
-	// Check if file name supplied.
-	if (filename.length())
-	{
-		// Remove extensions from the file name.
-		if (filename.find(".yml") != std::string::npos) { filename.erase(filename.length() - 4, 4); }
-		else if (filename.find(".yaml") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
-		else if (filename.find(".lmcp") != std::string::npos) { filename.erase(filename.length() - 5, 5); }
-		// Change circuit name to the file name.
-		labelTemp = component->equipType;
-		component->equipType = filename;
-	}
-
-	// --------- //
-	//  F I L E  //
-	// --------- //
-
-	// Begin File.
+	// Create yaml file.
 	YAML::Emitter yamlEmitter;
 	yamlEmitter << YAML::BeginMap;
-
-	yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
-	yamlEmitter << YAML::BeginMap;
-	yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
-	yamlEmitter << YAML::Key << "Type" << YAML::Value << "Component";
+		yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
+		yamlEmitter << YAML::BeginMap;
+			yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
+			yamlEmitter << YAML::Key << "Type" << YAML::Value << "Component";
+		yamlEmitter << YAML::EndMap;
+		yamlEmitter << YAML::Key << "Component" << YAML::Value << component;
 	yamlEmitter << YAML::EndMap;
 
-
-	// Serialise circuit.
-	yamlEmitter << YAML::Key << "Component" << YAML::Value << component;
-
-	// Restore current (in Lumen) circuit name.
-	if (filename.length())
-		component->equipType = labelTemp;
-
-	// --------- //
-	//  S A V E  //
-	// --------- //
-
-	// Make sure directory has backslash.
-	if (directory.back() != '\\') { directory.push_back('\\'); }
-
-	std::string file;
-	// If filename was not supplied, create from circuit.
-	if (!filename.length())
+	// If a directory was received and not a file, create a file from the component label.
+	std::string saveLocation = path.string();
+	if (!path.filename().string().size())
 	{
-		file = directory + component->equipType + ".lmcp";
+		saveLocation += component->titleString + ".lmcp";
 	}
-	// Use supplied filename.
-	else
+	// Check if a file extension was supplied.
+	else if (path.extension().string() != ".lmcp")
 	{
-		std::string ext = ".lmcp";
-		filename.insert(filename.end(), ext.begin(), ext.end());
-		// Set file name;
-		file = directory + filename;
+		saveLocation += ".lmcp";
 	}
 
-	// End YAML.
-	yamlEmitter << YAML::EndMap;
-	// Save file.
+	// Save the yaml file.
 	std::ofstream yamlStream;
-	yamlStream.open(file);
+	yamlStream.open(saveLocation);
 	yamlStream << yamlEmitter.c_str();
 	yamlStream.close();
 }
@@ -158,29 +87,30 @@ void saveToYAML(std::shared_ptr<Component2D>& component, std::string& directory,
 //  Deserialisation.		  																												   //
 //=============================================================================================================================================//
 
-void loadFromYAML(std::string& path)
+void loadFromYAML(const std::filesystem::path& path)
 {
 	// Create yaml node from file.
-	YAML::Node yamlFile = YAML::LoadFile(path);
+	YAML::Node yamlFile = YAML::LoadFile(path.string());
 
 	// Deserialise the circuit into the engine.
 	if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
 	{
 		deserialiseCircuit(yamlFile);
 	}
+
 	else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
 	{
 		//deserialiseCircuit(yamlFile);
-		if (Lumen::getApp().getActiveEngine<Design2DEngine>()) {
-			//Handle component import
+		if (Lumen::getApp().getActiveEngine<Design2DEngine>()) 
+		{
+			// Handle component import.
 		}
-		else {
-			//Open component in component designer
-			
+		else 
+		{
+			// Open component in component designer.
 		}
 	}
 }
-
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

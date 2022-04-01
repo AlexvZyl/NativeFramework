@@ -158,9 +158,10 @@ void Application::glfwInitCallbacks()
     glfwSetDropCallback(m_window, [](GLFWwindow* window, int count, const char** paths)
         {
             // Load the files.
-            std::vector<std::string> filePaths;
+            std::vector<std::filesystem::path> filePaths;
             filePaths.reserve(count);
-            for (int i = 0; i < count; i++) { filePaths.emplace_back(std::string(paths[i])); }
+            for (int i = 0; i < count; i++) 
+                filePaths.emplace_back(std::string(paths[i])); 
 
             // Log the event.
             FileDropEvent event(filePaths);

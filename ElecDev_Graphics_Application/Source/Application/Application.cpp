@@ -23,6 +23,7 @@
 #include "External/Misc/ConsoleColor.h"
 #include "GLFW/glfw3.h"
 #include "Utilities/Logger/Logger.h"
+#include "Engines/Base2DEngine/Base2DEngine.h"
 
 //==============================================================================================================================================//
 //  Setup																																		//
@@ -59,6 +60,7 @@ Application::Application()
 	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
 	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon, 0, false);
 	pushGuiLayer<BottomBar>("Bottom Bar", DockPanel::Fixed, 0, false);
+	pushEngineLayer<Base2DEngine>("Test");
 
 	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();

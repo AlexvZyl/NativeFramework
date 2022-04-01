@@ -13,6 +13,7 @@ storing circuit templates/diagrams in a YAML format.
 #include "glm/glm.hpp"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
 #include <unordered_map>
+#include <filesystem>
 
 //=============================================================================================================================================//
 //  Forward decelrations.																													   //
@@ -50,16 +51,16 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string
 // The saving function is not a generic function, but it should be.
 
 // Serialise a circuit to a YAML file.
-void saveToYAML(std::shared_ptr<Circuit>& circuit, std::string& path, std::string& fileName);
+void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path);
 // Serialise a component to a YAML file
-void saveToYAML(std::shared_ptr<Component2D>& component, std::string& path, std::string& fileName);
+void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::path& path);
 // Load a circuit from a YAML file.
-void loadFromYAML(std::string& path);
+void loadFromYAML(const std::filesystem::path& path);
 
 // Serialise a circuit to a BIN file.
-void saveToBIN(std::shared_ptr<Circuit>& circuit, std::string& folder);
+void saveToBIN(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path);
 // Deserialise a circuit from a BIN file.
-void loadFromBIN(std::string& path);
+void loadFromBIN(const std::filesystem::path& path);
 
 //=============================================================================================================================================//
 //  Circuits.																																   //
