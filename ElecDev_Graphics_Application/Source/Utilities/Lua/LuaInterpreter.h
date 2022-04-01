@@ -78,7 +78,6 @@ inline void lua_ExecuteScript(lua_State* L, const std::string& script, bool noti
 //  Utilities.																																	//
 //==============================================================================================================================================//
 
-// NOTE: The table has to be on the top.
 template <typename T>
 inline void lua_GetTableAndPop(lua_State* L, T* data, int dataSize)
 {
@@ -109,15 +108,14 @@ inline std::string lua_GetStringAndPop(lua_State* L)
 	return result;
 }
 
-inline void lua_GetStringTableAndPop(lua_State* L, std::vector<std::string>& data, int count) 
+inline void lua_GetStringTableAndPop(lua_State* L, std::vector<std::string>& data) 
 {
-	// Get the table entries.
-	for (int i = 0; i < count; i++) 
+	// Start at entry 0.
+	lua_pushnil(L);
+	while(lua_next(L, -2) != 0)
 	{
-		lua_pushinteger(L, i + 1);
-		lua_gettable(L, -2);
-		const char* item = lua_tostring(L, -1);
-		data.push_back(item);
+		// Get the string value.
+		data.push_back(lua_tostring(L, -1));
 		lua_pop(L, 1);
 	}
 	// Pop the table from the stack.
@@ -131,16 +129,20 @@ inline bool lua_GetBooleanAndPop(lua_State* L)
 	return result;
 }
 
-inline void lua_GetDictAndPop(lua_State* L, std::map<std::string, std::string>& dict)
+inline void lua_GetDictAndPop(lua_State* L, std::map<std::string, std::vector<std::string>>& dict)
 {
 	// First key.
 	lua_pushnil(L);
 	// Get dict entries.
 	while(lua_next(L, -2) != 0)
 	{
-		// Get key & value.
-		dict.insert({lua_tostring(L, -2), lua_tostring(L, -1)});
-		lua_pop(L, 1);
+		// Place values table on top.
+		std::string key = lua_tostring(L, -2);
+		lua_gettable(L, -2);
+		std::vector<std::string> currentValues;
+		lua_GetStringTableAndPop(L, currentValues);
+		// Get key & values.
+		dict.insert({ key, currentValues });
 	}
 	// Pop dict.
 	lua_pop(L, 1);

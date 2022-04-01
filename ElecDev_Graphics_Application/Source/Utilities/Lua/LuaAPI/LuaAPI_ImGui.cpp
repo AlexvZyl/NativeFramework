@@ -11,6 +11,31 @@
 //  Functions.																																	//
 //==============================================================================================================================================//
 
+// Used to format the dictionary so that imgui can plot a table.
+inline int formatDictionary(std::map<std::string, std::vector<std::string>>& dict)
+{
+	// Find the longest vector.
+	int length = 0;
+	for (auto& [key, value] : dict)
+	{
+		int currentLength = value.size();
+		if (currentLength > length)
+			length = currentLength;
+	}
+	// Ensure all of the entries have the same length.
+	for (auto& [key, value] : dict) 
+	{
+		int currentEntriesLength = value.size();
+		while(currentEntriesLength < length) 
+		{
+			value.push_back("");
+			currentEntriesLength++;
+		}
+	}
+	return length;
+}
+
+
 int lua_imgui_Text(lua_State* L) 
 {
 	// Get data.
@@ -115,10 +140,8 @@ int lua_imgui_Combo(lua_State* L)
 
 	// Get data.
 	int maxHeightInItems = lua_GetNumberAndPop<int>(L);
-	int totalItems = lua_GetNumberAndPop<int>(L);
 	std::vector<std::string> items;
-	items.reserve(totalItems);
-	lua_GetStringTableAndPop(L, items, totalItems);
+	lua_GetStringTableAndPop(L, items);
 	int initialItem = lua_GetNumberAndPop<int>(L);
 	std::string label = lua_GetStringAndPop(L);
 
@@ -209,43 +232,60 @@ int lua_imgui_Table(lua_State* L)
 {
 	static std::unordered_map<
 		std::string,
-		std::map<std::string, std::string>
+		std::map<std::string, std::vector<std::string>>
 	> tableData;
 
 	// Get data.
-	std::map<std::string, std::string> dict;
+	std::map<std::string, std::vector<std::string>> dict;
 	lua_GetDictAndPop(L, dict);
 	float height = lua_GetNumberAndPop<float>(L);
 	std::string label = lua_GetStringAndPop(L);
 
 	// Store and get data.
 	tableData.insert({label, dict});
-	std::map<std::string, std::string>& currentDict = tableData[label];
+	std::map<std::string, std::vector<std::string>>& currentDict = tableData[label];
 
 	// Render table.
 	ImGui::PushID(label.c_str());
 	if (ImGui::BeginChild("Child", {0.f, height}, true))
 	{
 		// Setup table.
-		ImGui::BeginTable("Table", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
-		ImGui::TableSetupColumn("Key", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch);
-		ImGui::TableHeadersRow();
-		ImGui::PushItemWidth(-1);
-		for (auto& [key, value] : currentDict)
+		ImGui::BeginTable("Table", currentDict.size(), ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg);
+		for (auto& [key, values] : currentDict)
 		{
+			ImGui::TableSetupColumn(key.c_str(), ImGuiTableColumnFlags_WidthStretch);
+		}
+		ImGui::TableHeadersRow();
+
+		// Populate values.
+		int rows = formatDictionary(currentDict);
+		int columns = currentDict.size();
+		ImGui::TableSetColumnIndex(0);
+		// Iterate over rows.
+		for (int r = 0; r < rows; r++)
+		{
+			ImGui::PushID(std::to_string(r).c_str());
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
-			ImGui::Text(key.c_str());
-			ImGui::TableNextColumn();
-			std::string id = "##" + key;
-			if (ImGui::InputText(id.c_str(), &value))
+			// Iterate over columns.
+			for (auto& [key, value] : currentDict)
 			{
-				std::string msg = "[Table] " + label + " : [Key] " + key + " [Value] " + value;
-				Lumen::getActiveScriptGui()->callbackMessage(msg);
+				if (value[r].size())
+				{
+					ImGui::PushID(key.c_str());
+					ImGui::PushItemWidth(-1);
+					if (ImGui::InputText("##Input", &value[r])) 
+					{
+						std::string msg = "[Table] " + label + " : [Key] " + key + " [Value " + std::to_string(r) + "] : " + value[r];
+						Lumen::getActiveScriptGui()->callbackMessage(msg);
+					}
+					ImGui::PopItemWidth();
+					ImGui::PopID();
+				}
+				ImGui::TableNextColumn();
 			}
+			ImGui::PopID();
 		}
-		ImGui::PopItemWidth();
 		ImGui::EndTable();
 	}
 	ImGui::EndChild();

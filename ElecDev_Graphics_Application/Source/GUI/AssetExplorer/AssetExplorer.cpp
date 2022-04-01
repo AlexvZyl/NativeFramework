@@ -109,7 +109,7 @@ void AssetExplorer::onRender()
 	ImGui::SameLine();
 
 	// Current directory.
-	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 1.75f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::SetScrollX(ImGui::GetScrollMaxX());
 		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))

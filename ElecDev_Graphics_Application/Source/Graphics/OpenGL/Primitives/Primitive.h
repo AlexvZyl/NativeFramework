@@ -64,6 +64,7 @@ public:
 	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
+	VertexType* m_vertices;							// Pointer to the first vertex in memory.
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
