@@ -103,24 +103,24 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 
 	// Create vertices.
 	centre = glm::vec2(0.0f, 0.0f);
-	vertices.reserve(4);
-	vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
-	vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
-	vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
-	vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
+	//vertices.reserve(4);
+	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x + width, centre.y + height, 0.0f));
+	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y + height, 0.0f));
 
 	// --------------------- //
 	//  P R I M I T I V E S  //
 	// --------------------- //
 
 	// Main shape.
-	shape = Renderer::addPolygon2D(vertices, this);
-	shape->setColor({ shapeColour.r, shapeColour.g, shapeColour.b, 0.5f });
-	shape->setLayer(0.001f);//temp fix
+	//shape = Renderer::addPolygon2D(vertices, this);
+	//shape->setColor({ shapeColour.r, shapeColour.g, shapeColour.b, 0.5f });
+	//shape->setLayer(0.001f);//temp fix
 	// Component border.
-	border = Renderer::addPolygon2DClear(vertices, this);
-	border->setColor(borderColour);
-	border->setLayer(componentLayer + borderLayerOffset);
+	//border = Renderer::addPolygon2DClear(vertices, this);
+	//border->setColor(borderColour);
+	//border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
 	titleString = componentNode["Title"]["String"].as<std::string>();
@@ -470,16 +470,16 @@ Polygon2D* Component2D::addPoly(std::vector<glm::vec2> vertices)
 	return m_polygons.back();
 }
 
-Circle* Component2D::addCircle(glm::vec2 centre)
+void Component2D::addCircle(Circle* circle)
 {
-	m_circles.emplace_back(Renderer::addCircle2D(centre, 0.f, shapeColour, 1.0f, 0.f, this));
-	return m_circles.back();
+	m_circles.emplace_back(circle);
+	//m_circles.emplace_back(Renderer::addCircle2D(centre, radius, shapeColour, 1.0f, 0.f, this));
 }
 
-LineSegment* Component2D::addLine(glm::vec2 start, glm::vec2 end)
+void Component2D::addLine(LineSegment* line)
 {
-	m_lines.emplace_back(Renderer::addLineSegment2D(start, end, 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
-	return m_lines.back();
+	m_lines.emplace_back(line);
+	//m_lines.emplace_back(Renderer::addLineSegment2D(start, end, 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
 }
 
 //=============================================================================================================================================//
