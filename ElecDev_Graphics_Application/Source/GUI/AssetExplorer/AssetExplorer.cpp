@@ -43,7 +43,7 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 void AssetExplorer::begin()
 {
 	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0.f, 10.f});
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {2.f, 10.f});
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
 	ImGui::PushStyleColor(ImGuiCol_Button, {0.f, 0.f, 0.f, 0.f});
 }
@@ -63,7 +63,7 @@ void AssetExplorer::onRender()
 		m_reloadDirectories = false;
 	}
 
-	static float buttonsWidth = 115.f;
+	static float buttonsWidth = 119.f;
 	static float headerHeight = 41.f;
 	static glm::vec2 headerSize(22, 22);
 
@@ -73,10 +73,12 @@ void AssetExplorer::onRender()
 		// Move back button.
 		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
 		{
-			m_pathHistory.push_back(m_currentDirectory);
-			m_currentDirectory = m_currentDirectory.parent_path();
-			m_clearFilterOnFrameStart = true;
-			loadDirectories();
+			if (m_currentDirectory != m_currentDirectory.parent_path())
+			{
+				m_pathHistory.push_back(m_currentDirectory);
+				m_currentDirectory = m_currentDirectory.parent_path();
+				loadDirectories();
+			}
 		}
 
 		ImGui::SameLine();
@@ -89,7 +91,6 @@ void AssetExplorer::onRender()
 			{
 				m_currentDirectory = m_pathHistory.back();
 				m_pathHistory.pop_back();
-				m_clearFilterOnFrameStart = true;
 				loadDirectories();
 			}
 		}
@@ -145,14 +146,14 @@ void AssetExplorer::onRender()
 	ImGui::SameLine();
 
 	// Filter options.
-	static bool circuitFiles = true;
-	static bool componentFiles = true;
-	if (ImGui::BeginChild("AssetFilter", { 139.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("AssetFilter", { 140.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
-		ImGui::Checkbox(" .lmcp ", &componentFiles);
+		if (ImGui::Checkbox(" .lmcp ", &m_displayComponents))
+			loadDirectories();
 		ImGui::SameLine();
-		ImGui::Checkbox(" .lmct ", &circuitFiles);
+		if (ImGui::Checkbox(" .lmct ", &m_displayCircuits))
+			loadDirectories();
 	}
 	ImGui::EndChild();
 
@@ -171,6 +172,7 @@ void AssetExplorer::onRender()
 	ImGui::EndChild();
 
 	// Files & Folders.
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 5.f, 5.f });
 	if (ImGui::BeginChild("##AssetExplorerChild", {0,0}, true))
 	{
 		// Create icon columns.
@@ -187,36 +189,6 @@ void AssetExplorer::onRender()
 		{
 			// Filter.
 			if (!filter.PassFilter(p.path().stem().string().c_str())) continue;
-
-			// Check for file extensions.
-			bool shouldDisplay = false;
-			std::string extension = p.path().extension().string();
-			// Do not dispay these files.
-			if (p.path().filename().string()[0] == '.')
-			{
-				continue;
-			}
-			// We always want to render folders.
-			else if (!extension.size())
-			{
-				shouldDisplay = true;
-			}
-			// Check if the file type should be rendred.
-			else if (componentFiles && extension == ".lmcp")
-			{
-				shouldDisplay = true;
-			}
-			else if (circuitFiles && extension == ".lmct")
-			{
-				shouldDisplay = true;
-			}
-			// If no flags are set we want to display.
-			else if (!circuitFiles && !componentFiles)
-			{
-				shouldDisplay = true;
-			}
-
-			if (!shouldDisplay) continue;
 
 			ImGui::PushID(directoryCount++);
 
@@ -296,6 +268,7 @@ void AssetExplorer::onRender()
 		}
 	}
 	ImGui::EndChild();
+	ImGui::PopStyleVar();
 
 	// Done with icons.
 	ImGui::Columns(1);
@@ -303,7 +276,7 @@ void AssetExplorer::onRender()
 	// Open popup.
 	if (addFolder)
 	{
-		ImGui::OpenPopup("Add Folder");
+		ImGui::OpenPopup("Add Folder##AFPOPUP");
 		addFolder = false;
 	}
 	// Write to popup.
@@ -329,7 +302,39 @@ void AssetExplorer::loadDirectories()
 {
 	m_directories.clear();
 	for (auto& p : std::filesystem::directory_iterator(m_currentDirectory))
+	{
+		// Check for file extensions.
+		bool shouldDisplay = false;
+		std::string extension = p.path().extension().string();
+		// Do not dispay these files.
+		if (p.path().filename().string()[0] == '.')
+		{
+			continue;
+		}
+		// We always want to render folders.
+		else if (!extension.size())
+		{
+			shouldDisplay = true;
+		}
+		// Check if the file type should be rendred.
+		else if (m_displayComponents && extension == ".lmcp")
+		{
+			shouldDisplay = true;
+		}
+		else if (m_displayCircuits && extension == ".lmct")
+		{
+			shouldDisplay = true;
+		}
+		// If no flags are set we want to display.
+		else if (!m_displayCircuits && !m_displayComponents)
+		{
+			shouldDisplay = true;
+		}
+
+		if (!shouldDisplay) continue;
+
 		m_directories.push_back(p);
+	}
 }
 
 //==============================================================================================================================================//

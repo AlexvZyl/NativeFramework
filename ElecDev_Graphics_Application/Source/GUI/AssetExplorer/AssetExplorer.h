@@ -42,6 +42,9 @@ private:
 	static unsigned s_leftArrowIcon;
 	static unsigned s_componentFileIcon;
 	static unsigned s_reloadIcon;
+	
+	bool m_displayComponents = true;
+	bool m_displayCircuits = true;
 
 	// Reload the files in the current directory.
 	void loadDirectories();
