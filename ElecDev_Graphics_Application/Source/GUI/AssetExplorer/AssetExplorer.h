@@ -36,12 +36,13 @@ private:
 	static std::filesystem::path m_currentDirectory;
 
 	// Icons.
-	static unsigned s_folderIcon;
-	static unsigned s_fileIcon;
-	static unsigned s_circuitFileIcon;
-	static unsigned s_leftArrowIcon;
-	static unsigned s_componentFileIcon;
-	static unsigned s_reloadIcon;
+	inline static unsigned s_folderIcon = NULL;
+	inline static unsigned s_fileIcon = NULL;
+	inline static unsigned s_circuitFileIcon = NULL;
+	inline static unsigned s_leftArrowIcon = NULL;
+	inline static unsigned s_upArrowIcon = NULL;
+	inline static unsigned s_componentFileIcon = NULL;
+	inline static unsigned s_reloadIcon = NULL;
 	
 	bool m_displayComponents = true;
 	bool m_displayCircuits = true;
@@ -58,6 +59,7 @@ private:
 
 	// Keep track of the file history for the forward button.
 	std::vector<std::filesystem::path> m_pathHistory;
+	std::vector<std::filesystem::path> m_pathUndoHistory;
 
 };
 

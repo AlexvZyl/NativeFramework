@@ -15,12 +15,6 @@
 
 std::string AssetExplorer::s_startingDirectory = getExecutableLocation(true);
 std::filesystem::path AssetExplorer::m_currentDirectory;
-unsigned AssetExplorer::s_fileIcon = NULL;
-unsigned AssetExplorer::s_folderIcon = NULL;
-unsigned AssetExplorer::s_circuitFileIcon = NULL;
-unsigned AssetExplorer::s_leftArrowIcon = NULL;
-unsigned AssetExplorer::s_componentFileIcon = NULL;
-unsigned AssetExplorer::s_reloadIcon = NULL;
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -37,6 +31,7 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	s_leftArrowIcon = loadBitmapToGL(loadImageFromResource(LEFT_ARROW_ICON));
 	s_componentFileIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 	s_reloadIcon = loadBitmapToGL(loadImageFromResource(RELOAD_ICON));
+	s_upArrowIcon = loadBitmapToGL(loadImageFromResource(UP_ARROW_ICON));
 	loadDirectories();
 }
 
@@ -63,7 +58,7 @@ void AssetExplorer::onRender()
 		m_reloadDirectories = false;
 	}
 
-	static float buttonsWidth = 119.f;
+	static float buttonsWidth = 155.f;
 	static float headerHeight = 41.f;
 	static glm::vec2 headerSize(22, 22);
 
@@ -71,7 +66,38 @@ void AssetExplorer::onRender()
 	if (ImGui::BeginChild("AssetButtons", { buttonsWidth, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		// Move back button.
-		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
+		ImGui::PushID("BACK_AB");
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 0, 0 }, { 1, 1 }))
+		{
+			if (m_pathHistory.size())
+			{
+				m_pathUndoHistory.push_back(m_currentDirectory);
+				m_currentDirectory = m_pathHistory.back();
+				m_pathHistory.pop_back();
+				loadDirectories();
+			}
+		}
+		ImGui::PopID();
+
+		// Move forward button.
+		ImGui::SameLine();
+		ImGui::PushID("FORWARD_AB");
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
+		{
+			if (m_pathUndoHistory.size())
+			{
+				m_pathHistory.push_back(m_currentDirectory);
+				m_currentDirectory = m_pathUndoHistory.back();
+				m_pathUndoHistory.pop_back();
+				loadDirectories();
+			}
+		}
+		ImGui::PopID();
+
+		// Move up.
+		ImGui::PushID("UP_AB");
+		ImGui::SameLine();
+		if (ImGui::ImageButton((void*)s_upArrowIcon, headerSize, {0,1}, {1,0}))
 		{
 			if (m_currentDirectory != m_currentDirectory.parent_path())
 			{
@@ -80,25 +106,10 @@ void AssetExplorer::onRender()
 				loadDirectories();
 			}
 		}
-
-		ImGui::SameLine();
-
-		// Move forward button.
-		ImGui::PushID("FAB");
-		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
-		{
-			if (m_pathHistory.size())
-			{
-				m_currentDirectory = m_pathHistory.back();
-				m_pathHistory.pop_back();
-				loadDirectories();
-			}
-		}
 		ImGui::PopID();
 
-		ImGui::SameLine();
-
 		// Reload button.
+		ImGui::SameLine();
 		if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
 		{
 			loadDirectories();
@@ -114,8 +125,8 @@ void AssetExplorer::onRender()
 		ImGui::SetScrollX(ImGui::GetScrollMaxX());
 		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
 		{
-			std::string newDirectory = selectFolder(m_currentDirectory.string());
-			if (newDirectory.size())
+			auto newDirectory = selectFolder(m_currentDirectory.string());
+			if (newDirectory.string().size())
 			{
 				m_pathHistory.push_back(m_currentDirectory);
 				m_currentDirectory = newDirectory;
@@ -201,7 +212,7 @@ void AssetExplorer::onRender()
 				ImGui::ImageButton((void*)s_folderIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
-					m_pathHistory.push_back(p);
+					m_pathHistory.push_back(m_currentDirectory);
 					m_currentDirectory /= p.path().filename();
 					m_clearFilterOnFrameStart = true;
 					m_reloadDirectories = true;
@@ -220,8 +231,8 @@ void AssetExplorer::onRender()
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
 						std::string item = p.path().string();
-						FileDropEvent event(item);
-						Lumen::getApp().logEvent<FileDropEvent>(event);
+						FileLoadEvent event(item);
+						Lumen::getApp().logEvent<FileLoadEvent>(event);
 					}
 				}
 

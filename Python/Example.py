@@ -1,5 +1,6 @@
 # Imports.
 from Lumen import LumenScript, LumenInstance, LumenGui
+import threading
 
 # Create Lumen program instance.
 # instance = LumenInstance("C:\\Lumen\\Binaries\\Executables\\x64\\Release\\Lumen.exe")
@@ -105,7 +106,7 @@ imgui.ClearAwaitScriptButton("Clear Await", (100, 30))
 imgui.Separator()
 
 # Start gui inside the Lumen instance.
-imgui.StartServer(instance)
+threading.Thread(imgui.StartServer(instance))
 
 # Stop instance (this will close Lumen).
 # instance.Shutdown()  

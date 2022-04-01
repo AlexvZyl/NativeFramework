@@ -21,6 +21,7 @@ class KeyEvent;
 class WindowEvent;
 class LayerEvent;
 class FileDropEvent;
+class Layer;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -115,6 +116,9 @@ public:
 	// Set the name elements of the engine.
 	inline virtual void setName(std::string& name) {}
 
+	// The layer the engine belongs to.
+	Layer* m_layer;
+
 	// ------------- //
 	//  S T A T E S  //
 	// ------------- //
@@ -124,14 +128,17 @@ public:
 	// Is the engine focused?
 	bool m_isFocused = false;
 	
-	inline bool hasDesignPalette() { return m_hasDesignPalette; }
+	inline bool hasDesignPalette() 
+	{ 
+		return m_hasDesignPalette; 
+	}
 	virtual void renderDesignPalette() {};
+
+public:
 
 	// ----------------------------- //
 	//  C O N T E N T   R E G I O N  //
 	// ----------------------------- //
-
-public:
 
 	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 
@@ -147,8 +154,21 @@ public:
 	// The graphics window position in the window.
 	glm::vec2 m_contentRegionPos = { 0, 0 };
 
+protected:
+
+	inline void enableDesignPalette() 
+	{
+		m_hasDesignPalette = true;
+	}
+	inline void disableDesignPalette()
+	{
+		m_hasDesignPalette = false;
+	}
+
+private:
+
 	// Does the engine have a design palette?
-	bool m_hasDesignPalette = true;
+	bool m_hasDesignPalette = false;
 };
 
 //=============================================================================================================================================//

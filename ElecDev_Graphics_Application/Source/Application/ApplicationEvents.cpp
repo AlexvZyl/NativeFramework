@@ -202,7 +202,7 @@ void Application::onEvent(Event& event)
 
 void Application::onWindowResizeEvent(WindowEvent& event)
 {
-	// This should pass a scaled window resize event to all of the layers.
+	// This should pass a scaled window resize event to all of the layers.  I think...
 }
 
 //==============================================================================================================================================//
@@ -214,9 +214,8 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
 	{
-		// Check if operation did not fail.
-		if (path.size())
-			loadFromYAML(path);
+		if (path.string().size())
+			loadFromYAML(path.string());
 	}
 }
 
@@ -226,56 +225,18 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 	for (auto& path : event.fileData)
 	{
 		// Check if operation did not fail.
-		if (path.size())
+		if (path.string().size())
 		{
-			// Find engine.
-			Design2DEngine* designEngine = dynamic_cast<Design2DEngine*>(event.engine);
-			ComponentDesigner* component_designer = dynamic_cast<ComponentDesigner*>(event.engine);
-			if (designEngine) {
+			Design2DEngine* designEngine = event.getEngine<Design2DEngine>();
+			ComponentDesigner* component_designer = event.getEngine<ComponentDesigner>();
 
-				// Check if file is added to the save event.
-				if (path.find(".lmct") != std::string::npos ||
-					path.find(".yml") != std::string::npos ||
-					path.find(".yaml") != std::string::npos)
-				{
-					// Move the file onto a new string.
-					std::string file;
-					while (path.back() != '\\')
-					{
-						file.push_back(path.back());
-						path.pop_back();
-					}
-					std::reverse(file.begin(), file.end());
-					saveToYAML(designEngine->m_circuit, path, file);
-				}
-				else
-				{
-					std::string empty = "";
-					saveToYAML(designEngine->m_circuit, path, empty);
-				}
+			if (designEngine) 
+			{
+				saveToYAML(designEngine->m_circuit, path);
 			}
-			else if (component_designer) {
-
-				// Check if file is added to the save event.
-				if (path.find(".lmcp") != std::string::npos ||
-					path.find(".yml") != std::string::npos ||
-					path.find(".yaml") != std::string::npos)
-				{
-					// Move the file onto a new string.
-					std::string file;
-					while (path.back() != '\\')
-					{
-						file.push_back(path.back());
-						path.pop_back();
-					}
-					std::reverse(file.begin(), file.end());
-					saveToYAML(component_designer->m_activeComponent, path, file);
-				}
-				else
-				{
-					std::string empty = "";
-					saveToYAML(component_designer->m_activeComponent, path, empty);
-				}
+			else if (component_designer) 
+			{
+				saveToYAML(component_designer->m_activeComponent, path);
 			}
 		}
 	}
@@ -286,9 +247,8 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
 	{
-		// Check if operation did not fail.
-		if (path.size())
-			loadFromYAML(path);
+		if (path.string().size())
+			loadFromYAML(path.string());
 	}
 }
 

@@ -23,6 +23,7 @@
 #include "External/Misc/ConsoleColor.h"
 #include "GLFW/glfw3.h"
 #include "Utilities/Logger/Logger.h"
+#include "Engines/Base2DEngine/Base2DEngine.h"
 
 //==============================================================================================================================================//
 //  Setup																																		//

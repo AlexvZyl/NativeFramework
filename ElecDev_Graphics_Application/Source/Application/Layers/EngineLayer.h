@@ -29,6 +29,7 @@ public:
 		m_engine = std::make_unique<EngineType>();
 		// Set the texture.
 		m_guiElement->setEngine(m_engine.get());
+		m_engine->m_layer = this;
 	}
 
 	// Destructor.
