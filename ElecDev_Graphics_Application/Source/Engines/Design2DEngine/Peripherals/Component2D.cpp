@@ -459,21 +459,24 @@ void Component2D::updateText()
 
 void Component2D::addPoly(Polygon2D* poly)
 {
-	m_polygons.emplace_back(poly);
+	m_polygons.push_back(poly);
 	m_polygons.back()->setColor(shapeColour);
 	m_polygons.back()->setLayer(0.001f);//temp fix
 }
 
 void Component2D::addCircle(Circle* circle)
 {
-	m_circles.emplace_back(circle);
-	//m_circles.emplace_back(Renderer::addCircle2D(centre, radius, shapeColour, 1.0f, 0.f, this));
+	m_circles.push_back(circle);
 }
 
 void Component2D::addLine(LineSegment* line)
 {
-	m_lines.emplace_back(line);
-	//m_lines.emplace_back(Renderer::addLineSegment2D(start, end, 0.001f, { 0.f, 0.f, 0.f, 1.f }, this));
+	m_lines.push_back(line);
+}
+
+void Component2D::addPort(std::shared_ptr<Port> port)
+{
+	ports.push_back(port);
 }
 
 //=============================================================================================================================================//

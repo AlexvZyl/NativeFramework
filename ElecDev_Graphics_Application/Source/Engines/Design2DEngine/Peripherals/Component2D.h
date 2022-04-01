@@ -134,6 +134,7 @@ public:
 	void addPoly(Polygon2D* poly);
 	void addCircle(Circle* circle);
 	void addLine(LineSegment* line);
+	void addPort(std::shared_ptr<Port> port);
 	
 
 private:

@@ -63,6 +63,10 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 			}
 
 		}
+		else if (designerState == CompDesignState::PLACE_PORT) {
+			m_activeComponent->addPort(m_activePort);
+			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
+		}
 	}
 	if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
 	{
@@ -113,6 +117,15 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	else if (designerState == CompDesignState::PLACE_PORT)
 	{
 		if (m_activePort) {
+			//update the title location based on the positioning for user convenience
+			if (m_activePort->centre.x >= 0 && getNearestGridVertex(screenCoords).x < 0) {
+				m_activePort->titleOffset = -m_activePort->titleOffset;
+				m_activePort->title->updateAlignment("R");
+			}
+			if (m_activePort->centre.x < 0 && getNearestGridVertex(screenCoords).x >= 0) {
+				m_activePort->titleOffset = -m_activePort->titleOffset;
+				m_activePort->title->updateAlignment("L");
+			}
 			//update port location
 			m_activePort->moveTo(getNearestGridVertex(screenCoords));
 		}

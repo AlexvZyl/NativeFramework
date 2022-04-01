@@ -36,6 +36,7 @@ Text::Text(const std::string& text, const glm::vec3& position, const glm::vec4& 
 	m_verticalAlign = verticalAlignment;
 	m_horizontalAlign = horizontalAlignment;
 	m_colour = color;
+	m_string = text;
 
 	// --------------------- //
 	//  T E X T   Q U A D S  //
@@ -299,8 +300,17 @@ void Text::generateText(const std::string& text)
 
 void Text::updateText(const std::string& text) 
 {
+	m_string = text;
 	wipeGPU();
-	generateText(text);
+	generateText(m_string);
+}
+
+void Text::updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment)
+{
+	wipeGPU();
+	m_horizontalAlign = horizontalAlignment;
+	m_verticalAlign = verticalAlignment;
+	generateText(m_string);
 }
 
 void Text::setBoxColour(const glm::vec4& colour) 

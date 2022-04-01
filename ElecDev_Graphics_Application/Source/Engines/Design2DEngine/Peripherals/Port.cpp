@@ -19,13 +19,13 @@
 //  Methods.																																	//
 //==============================================================================================================================================//
 
-Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const std::string& label) 
-	: Entity(EntityType::PORT, parent), 
-	  bodyColour( 0.7f, 0.7f, 0.7f, 1.f ),
-	  borderColour(0.f, 0.f, 0.f, 1.f),
-	  m_offset(offset),
-	  centre(parent->centre + offset),
-	  m_type(type)
+Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const std::string& label)
+	: Entity(EntityType::PORT, parent),
+	bodyColour(0.7f, 0.7f, 0.7f, 1.f),
+	borderColour(0.f, 0.f, 0.f, 1.f),
+	// m_offset(offset),
+	centre(centre),
+	m_type(type)
 {
 	// --------------------- //
 	//  P R I M I T I V E S  //
@@ -37,21 +37,22 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
-	if (label == "default") 
+	if (label == "default")
 		m_label = "Port " + std::to_string(parent->numPorts++);
 	else m_label = label;
 
 	float textMargin = 0.015;
+	//OLD DEPRECATED CODE
 	//infer the port position from the offset, and set the title
-	if (m_offset.y > 0.078) 
+	/*if (m_offset.y > 0.078)
 	{//top
 		m_position = PortPosition::TOP;
 		titleOffset = glm::vec2{ 0.f, -textMargin };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
 		title->rotate(-90);
-	}	
-	else if (m_offset.y < -0.078) 
+	}
+	else if (m_offset.y < -0.078)
 	{//bottom
 		m_position = PortPosition::BOTTOM;
 		titleOffset = glm::vec2{ 0.f, textMargin };
@@ -59,14 +60,14 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
 		title->rotate(90);
 	}
-	else if (m_offset.x > 0.078) 
+	else if (m_offset.x > 0.078)
 	{//right
 		m_position = PortPosition::RIGHT;
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C");
 	}
-	else if (m_offset.x < -0.078) 
+	else if (m_offset.x < -0.078)
 	{//left
 		m_position = PortPosition::LEFT;
 		titleOffset = glm::vec2{ textMargin, 0.0f };
@@ -76,6 +77,17 @@ Port::Port(const glm::vec2& offset, PortType type, Component2D* parent, const st
 	else {
 		//This should never happen. Print a warning!
 		LUMEN_LOG_ERROR("Invalid port offset.", "Design Engine");
+	}*/
+	//m_position = PortPosition::RIGHT;//deprecated
+	if (centre.x < 0){
+		titleOffset = glm::vec2{ -textMargin, 0.0f };
+		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R");
+	}
+	else {
+		titleOffset = glm::vec2{ textMargin, 0.0f };
+		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L");
 	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
