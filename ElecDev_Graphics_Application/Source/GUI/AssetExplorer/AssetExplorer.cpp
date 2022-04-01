@@ -212,7 +212,7 @@ void AssetExplorer::onRender()
 				ImGui::ImageButton((void*)s_folderIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
-					m_pathHistory.push_back(p);
+					m_pathHistory.push_back(m_currentDirectory);
 					m_currentDirectory /= p.path().filename();
 					m_clearFilterOnFrameStart = true;
 					m_reloadDirectories = true;
