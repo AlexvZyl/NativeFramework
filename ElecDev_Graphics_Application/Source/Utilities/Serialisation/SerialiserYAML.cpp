@@ -21,6 +21,14 @@
 
 void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path)
 {
+	// Change the circuit name if a file name is supplied.
+	if (path.filename().string().size())
+	{
+		std::string newName = path.filename().string();
+		circuit->m_label = newName;
+		Lumen::getApp().getActiveEngine()->m_layer->setName(newName);
+	}
+
 	// Create yaml file.
 	YAML::Emitter yamlEmitter;
 	yamlEmitter << YAML::BeginMap;
@@ -53,6 +61,15 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& 
 
 void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::path& path)
 {
+	// Change the component name if a file name is supplied.
+	if (path.filename().string().size())
+	{
+		std::string newName = path.filename().string();
+		component->titleString = newName;
+		component->title->updateText(newName);
+		Lumen::getApp().getActiveEngine()->m_layer->setName(newName);
+	}
+
 	// Create yaml file.
 	YAML::Emitter yamlEmitter;
 	yamlEmitter << YAML::BeginMap;

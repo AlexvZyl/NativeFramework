@@ -21,6 +21,7 @@ class KeyEvent;
 class WindowEvent;
 class LayerEvent;
 class FileDropEvent;
+class Layer;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -114,6 +115,9 @@ public:
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
 	// Set the name elements of the engine.
 	inline virtual void setName(std::string& name) {}
+
+	// The layer the engine belongs to.
+	Layer* m_layer;
 
 	// ------------- //
 	//  S T A T E S  //
