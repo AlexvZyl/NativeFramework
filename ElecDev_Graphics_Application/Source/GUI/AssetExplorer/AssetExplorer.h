@@ -53,6 +53,9 @@ private:
 	// Reload the directories at the start of rendering.
 	bool m_reloadDirectories = false;
 
+	// Keep track of the file history for the forward button.
+	std::vector<std::filesystem::path> m_pathHistory;
+
 };
 
 //==============================================================================================================================================//

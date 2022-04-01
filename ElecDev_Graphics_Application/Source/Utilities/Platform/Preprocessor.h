@@ -12,11 +12,11 @@
     //  C O N S O L E  //    
     // --------------- //
 
-  /*  #if defined (_DEBUG)
+    #if defined (_DEBUG)
         #pragma comment(linker, "/SUBSYSTEM:console /ENTRY:mainCRTStartup")
     #else
         #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-    #endif*/
+    #endif
 
 #endif
 
