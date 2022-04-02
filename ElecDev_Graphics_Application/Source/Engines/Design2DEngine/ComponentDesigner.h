@@ -30,6 +30,7 @@ public:
     virtual void onMouseButtonEvent(MouseButtonEvent& event) override;
     virtual void onMouseMoveEvent(MouseMoveEvent& event) override;
     virtual void onMouseScrollEvent(MouseScrollEvent& event) override;
+    virtual void onMouseDragEvent(MouseDragEvent& event) override;
     // Key events.
     virtual void onKeyEvent(KeyEvent& event) override;
 

@@ -16,6 +16,14 @@
 #include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
+//  States.																																	    //
+//==============================================================================================================================================//
+
+static bool draggingLeftbutton = false;
+static glm::vec2 latestLeftButtonPressPosition;
+static glm::vec2 mouseDragInitialPosition;
+
+//==============================================================================================================================================//
 //  Callbacks.																																	//
 //==============================================================================================================================================//
 
@@ -52,11 +60,17 @@ void Application::glfwInitCallbacks()
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+
+            // Store the latest pressed location for the mouse drag.
+            if (eventID == EventType_MouseButtonLeft | EventType_MousePress)
+            {
+                latestLeftButtonPressPosition = { cursorX, cursorY };
+            }
         });
 
-    // --------------------- //
-    //  M O U S E   M O V E  //
-    // --------------------- //
+    // ----------------------------------- //
+    //  M O U S E   M O V E   &   D R A G  //
+    // ----------------------------------- //
 
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
         {
@@ -83,6 +97,27 @@ void Application::glfwInitCallbacks()
             Lumen::getApp().logEvent<MouseMoveEvent>(event);
 
             // Do not pass to imgui, Lumen handles this.
+
+            // Was dragging but button is no longer pressed.
+            if (draggingLeftbutton && !(eventID == EventType_MouseButtonLeft))
+            {
+                draggingLeftbutton = false;
+                return;
+            }
+            // Was not dragging but left button is now pressed.
+            else if (!draggingLeftbutton && (eventID == EventType_MouseButtonLeft))
+            {
+                draggingLeftbutton = true;
+                mouseDragInitialPosition = latestLeftButtonPressPosition;
+            }
+
+            // If currently dragging, create an event.
+            if (draggingLeftbutton)
+            {
+                uint64_t dragEventID = EventType_MouseDrag | EventType_MouseButtonLeft;
+                MouseDragEvent dragEvent(mouseDragInitialPosition, { cursorX, cursorY }, dragEventID);
+                Lumen::getApp().logEvent<MouseDragEvent>(dragEvent);
+            }
         });
 
     // ------------------------- //

@@ -8,6 +8,16 @@
 #include <shlobj_core.h>
 
 //=============================================================================================================================================//
+//  Data.																																       //
+//=============================================================================================================================================//
+
+// Files supported by Lumen.
+const COMDLG_FILTERSPEC fileSpec[] =
+{
+    { L"Lumen File", L"*.lmct; *.lmcp;" }
+};
+
+//=============================================================================================================================================//
 //  Executable.																																   //
 //=============================================================================================================================================//
 
@@ -105,11 +115,7 @@ std::filesystem::path selectFile(const std::string& windowTitle, const std::stri
     
     hResult = dialog->SetTitle((LPCWSTR)titleW.c_str());
 
-    // Set the dialog options.
-    COMDLG_FILTERSPEC fileSpec[] =
-    {
-        { L"Lumen File", L"*.lmct; *.lmcp;" }
-    };
+ 
 
     hResult = dialog->SetFileTypes(1, fileSpec);
     hResult = dialog->SetOptions(FOS_STRICTFILETYPES);

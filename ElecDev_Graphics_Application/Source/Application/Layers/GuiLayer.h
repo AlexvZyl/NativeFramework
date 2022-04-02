@@ -112,6 +112,15 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
 		m_guiElement->onEvent(mouseEvent);
 	}
+	else if (eventID == EventType_MouseDrag)
+	{
+		MouseDragEvent mouseEvent = dynamic_cast<MouseDragEvent&>(event);
+		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
+		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
+		mouseEvent.initialPosition.x = mouseEvent.initialPosition.x - m_guiElement->m_contentRegionPosition.x;
+		mouseEvent.initialPosition.y = mouseEvent.initialPosition.y - m_guiElement->m_contentRegionPosition.y;
+		m_guiElement->onEvent(mouseEvent);
+	}
 	else if (eventID == EventType_MouseScroll)
 	{
 		MouseScrollEvent mouseEvent = dynamic_cast<MouseScrollEvent&>(event);

@@ -8,6 +8,7 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/notify/notify_icons_define.h"
+#include "imgui/imgui_internal.h"
 
 //==============================================================================================================================================//
 //  Statics.																																	//
@@ -67,9 +68,12 @@ void AssetExplorer::onRender()
 	{
 		// Move back button.
 		ImGui::PushID("BACK_AB");
+		bool pathHistory = m_pathHistory.size();
+		if(!pathHistory)
+			ImGui::BeginDisabled();
 		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 0, 0 }, { 1, 1 }))
 		{
-			if (m_pathHistory.size())
+			if (pathHistory)
 			{
 				m_pathUndoHistory.push_back(m_currentDirectory);
 				m_currentDirectory = m_pathHistory.back();
@@ -77,14 +81,19 @@ void AssetExplorer::onRender()
 				loadDirectories();
 			}
 		}
+		if (!pathHistory)
+			ImGui::EndDisabled();
 		ImGui::PopID();
 
 		// Move forward button.
 		ImGui::SameLine();
+		bool pathUndoHistory = m_pathUndoHistory.size();
 		ImGui::PushID("FORWARD_AB");
+		if (!pathUndoHistory)
+			ImGui::BeginDisabled();
 		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
 		{
-			if (m_pathUndoHistory.size())
+			if (pathUndoHistory)
 			{
 				m_pathHistory.push_back(m_currentDirectory);
 				m_currentDirectory = m_pathUndoHistory.back();
@@ -92,6 +101,8 @@ void AssetExplorer::onRender()
 				loadDirectories();
 			}
 		}
+		if (!pathUndoHistory)
+			ImGui::EndDisabled();
 		ImGui::PopID();
 
 		// Move up.

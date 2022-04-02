@@ -14,6 +14,7 @@
 #include "Graphics/Fonts/FontLoader.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //
@@ -106,26 +107,35 @@ void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::
 
 void loadFromYAML(const std::filesystem::path& path)
 {
-	// Create yaml node from file.
-	YAML::Node yamlFile = YAML::LoadFile(path.string());
-
-	// Deserialise the circuit into the engine.
-	if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+	try
 	{
-		deserialiseCircuit(yamlFile);
+		// Create yaml node from file.
+		YAML::Node yamlFile = YAML::LoadFile(path.string());
+
+		// Circuits.
+		if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+		{
+			deserialiseCircuit(yamlFile);
+		}
+
+		// Components.
+		else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
+		{
+			//deserialiseCircuit(yamlFile);
+			if (Lumen::getApp().getActiveEngine<Design2DEngine>())
+			{
+				// Handle component import.
+			}
+			else
+			{
+				// Open component in component designer.
+			}
+		}
 	}
-
-	else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
+	catch (...)
 	{
-		//deserialiseCircuit(yamlFile);
-		if (Lumen::getApp().getActiveEngine<Design2DEngine>()) 
-		{
-			// Handle component import.
-		}
-		else 
-		{
-			// Open component in component designer.
-		}
+		LUMEN_LOG_ERROR("Could not load file.  It may contain invalid content or be an unsupported version.", "YAML Serialiser");
+		return;
 	}
 }
 
