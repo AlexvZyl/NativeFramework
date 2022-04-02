@@ -5,6 +5,7 @@
 #include "Application/Application.h"
 #include "AssetExplorer.h"
 #include "Lumen.h"
+#include "Application/Events/EventLog.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/notify/notify_icons_define.h"
@@ -241,9 +242,7 @@ void AssetExplorer::onRender()
 					ImGui::ImageButton((void*)s_circuitFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
-						std::string item = p.path().string();
-						FileLoadEvent event(item);
-						Lumen::getApp().logEvent<FileLoadEvent>(event);
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p.path().string()));
 					}
 				}
 

@@ -18,46 +18,48 @@ void Application::buildDocks()
 	//  D O C K   B U I L D E R  //
 	// ------------------------- //
 
-	// Pointer used to access nodes.
-	ImGuiDockNode* dockNode = nullptr;
+	// Used to build the docks.
+	ImGuiID newDockNodeID;
+	ImGuiID sceneDockNodeID;
 
 	// Ribbon dock.
-	m_ribbonPanelID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.0375f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_ribbonPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
-						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
-						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
-						 | ImGuiDockNodeFlags_NoTabBar;
+	newDockNodeID = ImGui::DockBuilderSplitNode(m_mainDockspacePtr->ID, ImGuiDir_Left, 0.0375f, NULL, &sceneDockNodeID);
+	m_ribbonPanelPtr = ImGui::DockBuilderGetNode(newDockNodeID);
+	m_ribbonPanelPtr->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
+								 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
+								 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
+								 | ImGuiDockNodeFlags_NoTabBar;
 
 	// Left Panel.
-	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.3f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+	newDockNodeID = ImGui::DockBuilderSplitNode(sceneDockNodeID, ImGuiDir_Left, 0.3f, NULL, &sceneDockNodeID);
+	m_leftPanelPtr = ImGui::DockBuilderGetNode(newDockNodeID);
 
 	// Bottom Bar.
-	m_bottomBarID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.03f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_bottomBarID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
+	newDockNodeID = ImGui::DockBuilderSplitNode(sceneDockNodeID, ImGuiDir_Down, 0.03f, NULL, &sceneDockNodeID);
+	m_bottomBarPtr = ImGui::DockBuilderGetNode(newDockNodeID);
+	m_bottomBarPtr->LocalFlags |= ImGuiDockNodeFlags_NoSplit		| ImGuiDockNodeFlags_NoDockingOverMe
 						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
 						 | ImGuiDockNodeFlags_HiddenTabBar	| ImGuiDockNodeFlags_NoWindowMenuButton
 						 | ImGuiDockNodeFlags_NoTabBar;
 
 	// Right Panel.
-	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.3f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_rightPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
+	newDockNodeID = ImGui::DockBuilderSplitNode(sceneDockNodeID, ImGuiDir_Right, 0.3f, NULL, &sceneDockNodeID);
+	m_rightPanelPtr = ImGui::DockBuilderGetNode(newDockNodeID);
+	m_rightPanelPtr->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Bottom Panel.
-	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.3f, NULL, &m_scenePanelID);
-	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
+	newDockNodeID = ImGui::DockBuilderSplitNode(sceneDockNodeID, ImGuiDir_Down, 0.3f, NULL, &sceneDockNodeID);
+	m_bottomPanelPtr = ImGui::DockBuilderGetNode(newDockNodeID);
+	m_bottomPanelPtr->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Scene dock.
-	dockNode = ImGui::DockBuilderGetNode(m_scenePanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoDockingSplitMe;
+	m_scenePanelPtr = ImGui::DockBuilderGetNode(sceneDockNodeID);
+	m_scenePanelPtr->SharedFlags &= ~ImGuiDockNodeFlags_NoDockingSplitMe;
+	m_scenePanelPtr->LocalFlags &= ~ImGuiDockNodeFlags_NoDockingSplitMe;
+	m_scenePanelPtr->LocalFlagsInWindows &= ~ImGuiDockNodeFlags_NoDockingSplitMe;
 
 	// Finish dock builder.
-	ImGui::DockBuilderFinish(m_mainDockspaceID);
+	ImGui::DockBuilderFinish(m_mainDockspacePtr->ID);
 
 	// Cleanup.
 	onRenderCleanup();
@@ -89,20 +91,20 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 	switch (panel)
 	{
 	case DockPanel::Scene:
-		ImGui::DockBuilderDockWindow(name.c_str(), m_scenePanelID);
+		ImGui::DockBuilderDockWindow(name.c_str(), m_scenePanelPtr->ID);
 		break;
 
 	case DockPanel::Left:
 		// Could have the left panel only consist of one GUI, like in VS Code.
-		ImGui::DockBuilderDockWindow(name.c_str(), m_leftPanelID);
+		ImGui::DockBuilderDockWindow(name.c_str(), m_leftPanelPtr->ID);
 		break;
 
 	case DockPanel::Right:
-		ImGui::DockBuilderDockWindow(name.c_str(), m_rightPanelID);
+		ImGui::DockBuilderDockWindow(name.c_str(), m_rightPanelPtr->ID);
 		break;
 
 	case DockPanel::Bottom:
-		ImGui::DockBuilderDockWindow(name.c_str(), m_bottomPanelID);
+		ImGui::DockBuilderDockWindow(name.c_str(), m_bottomPanelPtr->ID);
 		break;
 
 	case DockPanel::Floating:
@@ -114,11 +116,11 @@ void Application::dockLayerToPanel(std::string& name, DockPanel panel)
 		break;
 
 	case DockPanel::Ribbon:
-		ImGui::DockBuilderDockWindow(name.c_str(), m_ribbonPanelID);
+		ImGui::DockBuilderDockWindow(name.c_str(), m_ribbonPanelPtr->ID);
 		break;
 
 	default:
-		LUMEN_LOG_WARN("Invalid docking configuration.", "IMGUI")
+		LUMEN_LOG_WARN("Invalid docking configuration.", "ImGui")
 		break;
 	}
 }

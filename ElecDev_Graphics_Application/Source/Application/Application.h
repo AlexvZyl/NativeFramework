@@ -7,7 +7,6 @@
 #include <memory>
 #include <iostream>
 #include <vector>
-#include "Application/Events/EventLog.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
@@ -22,12 +21,11 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class EventLog;
 class Layer;
-class ImFont;
 class LumenWebSocket;
 class LayerStack;
 
+struct ImFont;
 struct GLFWwindow;
 struct RendererData;
 struct ProfileResult;
@@ -111,9 +109,6 @@ public:
 	void onUpdate();
 	// Handle events specifically for the Application layer.
 	void onEvent(Event& event);
-	// Log the event in the event log.
-	template <typename EventType>
-	void logEvent(Event& event);
 	// Should the app close?
 	bool isRunning();
 	// Close the app.
@@ -230,8 +225,6 @@ private:
 	//  E V E N T S  //
 	// ------------- //
 
-	// Log containing all of the events.
-	std::unique_ptr<EventLog> m_eventLog;
 	// Handle window events.
 	void onWindowResizeEvent(WindowEvent& event);
 	// Handle serialisation events.
@@ -271,26 +264,20 @@ private:
 	//  D O C K   N O D E S  //
 	// --------------------- //
 
-	// Dock space IDs.
-	ImGuiID m_mainDockspaceID = NULL;
-	ImGuiID m_leftPanelID = NULL;
-	ImGuiID m_rightPanelID = NULL;
-	ImGuiID m_bottomPanelID = NULL;
-	ImGuiID m_scenePanelID = NULL;
-	ImGuiID m_ribbonPanelID = NULL;
-	ImGuiID m_bottomBarID = NULL;
+	// Dockspace pointers.
+	ImGuiDockNode* m_mainDockspacePtr = nullptr;
+	ImGuiDockNode* m_leftPanelPtr = nullptr;
+	ImGuiDockNode* m_rightPanelPtr = nullptr;
+	ImGuiDockNode* m_bottomPanelPtr = nullptr;
+	ImGuiDockNode* m_scenePanelPtr = nullptr;
+	ImGuiDockNode* m_ribbonPanelPtr = nullptr;
+	ImGuiDockNode* m_bottomBarPtr = nullptr;
 };
 
 //==============================================================================================================================================//
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-template <typename EventType>
-void Application::logEvent(Event& event)
-{
-	// Log event in the event log.
-	m_eventLog->log<EventType>(event);
-}
 
 template<typename EngineType>
 EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)

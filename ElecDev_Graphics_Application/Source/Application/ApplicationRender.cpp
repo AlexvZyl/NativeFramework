@@ -77,7 +77,8 @@ void Application::onRenderInit()
 		ImGui::NewFrame();
 
 		// Enable docking in main viewport.
-		m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.
+		ImGuiID mainDockspace = ImGui::DockSpaceOverViewport(NULL);  // NULL uses the main viewport.
+		m_mainDockspacePtr = ImGui::DockBuilderGetNode(mainDockspace);
 
 		// Push custom font.
 		ImGui::PushFont(m_defaultFont);
