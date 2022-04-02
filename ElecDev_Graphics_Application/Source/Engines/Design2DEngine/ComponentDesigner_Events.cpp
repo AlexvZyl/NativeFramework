@@ -92,25 +92,36 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
 		//Move the back vertex
-		if (m_activePoly) {
+		if (m_activePoly) 
+		{
 			m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount-1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
 	{
-		if (m_activeLine) {
+		if (m_activeLine)
+		{
 			//update the line end position
 			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
 	{
-		if (m_activeCircle) {
+		if (m_activeCircle) 
+		{
 			//update circle
 			m_activeCircle->setRadius(glm::length(glm::vec2(m_activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
 	}
 
+	if (event.ID == EventType_MouseDrag)
+	{
+		LUMEN_LOG_DEBUG("Dragging...","Move Event");
+	}
+	else 
+	{
+		LUMEN_LOG_DEBUG("Not dragging.", "Move Event");
+	}
 }
 
 void ComponentDesigner::onMouseScrollEvent(MouseScrollEvent& event)

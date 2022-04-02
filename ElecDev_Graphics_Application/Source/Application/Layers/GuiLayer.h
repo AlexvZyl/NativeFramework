@@ -104,7 +104,7 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 
 	uint64_t eventID = event.ID;
 
-	// Mouse events.
+	// Mouse events.  Order is important.
 	if (eventID == EventType_MouseMove)
 	{
 		MouseMoveEvent mouseEvent = dynamic_cast<MouseMoveEvent&>(event);
