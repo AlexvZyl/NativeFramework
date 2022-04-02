@@ -74,34 +74,31 @@ void Application::glfwInitCallbacks()
 
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
         {
-            // Event ID.
-            uint64_t moveEventID = EventType_MouseMove;
+            // Event states ID.
+            uint64_t eventState = 0;
             // Mouse button states.
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { moveEventID |= EventType_MouseButtonLeft;   }
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { moveEventID |= EventType_MouseButtonRight;  }
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { moveEventID |= EventType_MouseButtonMiddle; }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventState |= EventType_MouseButtonLeft;   }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventState |= EventType_MouseButtonRight;  }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventState |= EventType_MouseButtonMiddle; }
             // Key states.
-            uint64_t keyStates = 0;
-            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { keyStates |= EventType_LeftCtrl;   }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { keyStates |= EventType_RightCtrl;  }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { keyStates |= EventType_LeftShift;  }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { keyStates |= EventType_RightShift; }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { keyStates |= EventType_LeftAlt;    }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { keyStates |= EventType_RightAlt;   }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;   }
 
             // Get the cursor position.
             double cursorX, cursorY;
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
-            // Do not pass to imgui, Lumen handles this.
-
             // Was dragging but button is no longer pressed.
-            if (draggingLeftbutton && !(moveEventID == EventType_MouseButtonLeft))
+            if (draggingLeftbutton && !(eventState == EventType_MouseButtonLeft))
             {
                 draggingLeftbutton = false;
             }
             // Was not dragging but left button is now pressed.
-            else if (!draggingLeftbutton && (moveEventID == EventType_MouseButtonLeft))
+            else if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
             {
                 draggingLeftbutton = true;
                 mouseDragInitialPosition = latestLeftButtonPressPosition;
@@ -110,18 +107,19 @@ void Application::glfwInitCallbacks()
             // If currently dragging, log an event.
             if (draggingLeftbutton)
             {
-                uint64_t dragEventID = EventType_MouseDrag | EventType_MouseButtonLeft | keyStates;
+                uint64_t dragEventID = EventType_MouseDrag | eventState;
                 MouseDragEvent dragEvent(mouseDragInitialPosition, { cursorX, cursorY }, dragEventID);
                 Lumen::getApp().logEvent<MouseDragEvent>(dragEvent);
             }
 
             // Add dragging ID to move event.
+            uint64_t moveEventID = EventType_MouseMove | eventState;
             if (draggingLeftbutton)
                 moveEventID |= EventType_MouseDrag;
-            // Log move event.
-            moveEventID |= keyStates;
-            MouseMoveEvent event({ cursorX, cursorY }, moveEventID | keyStates);
+            MouseMoveEvent event({ cursorX, cursorY }, moveEventID);
             Lumen::getApp().logEvent<MouseMoveEvent>(event);
+
+            // Do not pass to imgui, Lumen handles this.
         });
 
     // ------------------------- //
