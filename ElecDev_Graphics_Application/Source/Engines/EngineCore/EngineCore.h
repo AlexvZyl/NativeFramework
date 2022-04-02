@@ -17,6 +17,7 @@ class Event;
 class MouseButtonEvent;
 class MouseMoveEvent;
 class MouseScrollEvent;
+class MouseDragEvent;
 class KeyEvent;
 class WindowEvent;
 class LayerEvent;
@@ -89,6 +90,7 @@ public:
 	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) = 0;
 	inline virtual void onMouseMoveEvent(MouseMoveEvent& event);
 	inline virtual void onMouseScrollEvent(MouseScrollEvent& event) = 0;
+	inline virtual void onMouseDragEvent(MouseDragEvent& event) {};
 
 	// Key events.
 	inline virtual void onKeyEvent(KeyEvent& event) = 0;

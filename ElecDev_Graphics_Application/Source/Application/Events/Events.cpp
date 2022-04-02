@@ -21,6 +21,7 @@ bool operator!=(uint64_t id, EventType eventType)
 	return not (id & eventType);
 }
 
+
 //==============================================================================================================================================//
 //  Event Class.																																//
 //==============================================================================================================================================//
@@ -75,6 +76,14 @@ MouseMoveEvent::MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID
 
 MouseScrollEvent::MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, uint64_t ID)
 	: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset), xOffset(xOffset)
+{}
+
+// --------------------- //
+//  M O U S E   D R A G  //
+// --------------------- //
+
+MouseDragEvent::MouseDragEvent(const glm::vec2& init, const glm::vec2& current, uint64_t ID)
+	: MouseEvent(current, ID | EventType_MouseDrag), initialPosition(init)
 {}
 
 //==============================================================================================================================================//

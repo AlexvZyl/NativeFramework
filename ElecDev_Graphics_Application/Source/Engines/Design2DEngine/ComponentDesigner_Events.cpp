@@ -7,6 +7,7 @@
 #include "Graphics/OpenGL/Primitives/Polygon.h"
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
+#include "Utilities/Logger/Logger.h"
 
 void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 {
@@ -187,4 +188,12 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 			// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
+}
+
+void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
+{
+	std::string initial = std::to_string(event.initialPosition.x) + " , " + std::to_string(event.initialPosition.y);
+	LUMEN_LOG_DEBUG(initial, "DragEvent Initial");
+	std::string current = std::to_string(event.mousePosition.x) + " , " + std::to_string(event.mousePosition.y);
+	LUMEN_LOG_DEBUG(current, "DragEvent Current");
 }

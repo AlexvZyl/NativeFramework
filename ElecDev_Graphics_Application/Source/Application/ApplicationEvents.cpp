@@ -76,6 +76,9 @@ void Application::onUpdate()
 
 		if (m_eventLog->mouseScroll) 
 			m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
+
+		if (m_eventLog->mouseDrag)
+			m_hoveredLayer->onEvent(*m_eventLog->mouseDrag.get());
 	}
 
 	// Pop layers that are queued from GLFW events.
