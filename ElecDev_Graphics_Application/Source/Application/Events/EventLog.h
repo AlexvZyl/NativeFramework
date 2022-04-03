@@ -35,7 +35,7 @@ public:
 	}
 
 	// Setup the event log.
-	inline void static init() 
+	inline static void init() 
 	{
 		EventLog::events.reserve(15);
 	}
