@@ -22,7 +22,7 @@ public:
 	inline static void log(const Event& event) 
 	{
 		if (typeid(EventType) == typeid(MouseMoveEvent))
-			EventLog::mouseMove = std::make_unique<MouseMoveEvent>(dynamic_cast<const MouseMoveEvent&>(event));
+			mouseMove = std::make_unique<MouseMoveEvent>(dynamic_cast<const MouseMoveEvent&>(event));
 
 		else if (typeid(EventType) == typeid(MouseDragEvent))
 			mouseDrag = std::make_unique<MouseDragEvent>(dynamic_cast<const MouseDragEvent&>(event));
@@ -37,16 +37,16 @@ public:
 	// Setup the event log.
 	inline static void init() 
 	{
-		EventLog::events.reserve(15);
+		events.reserve(15);
 	}
 	
 	// Clears all of the events from the event log.
 	inline static void clear() 
 	{
-		EventLog::events.clear();
-		EventLog::mouseMove.reset();
-		EventLog::mouseDrag.reset();
-		EventLog::mouseScroll.reset();
+		events.clear();
+		mouseMove.reset();
+		mouseDrag.reset();
+		mouseScroll.reset();
 	}
 
 	// Store all of the events that occurred.
