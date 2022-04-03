@@ -44,6 +44,9 @@ public:
 	inline static void clear() 
 	{
 		EventLog::events.clear();
+		EventLog::mouseMove.reset();
+		EventLog::mouseDrag.reset();
+		EventLog::mouseScroll.reset();
 	}
 
 	// Store all of the events that occurred.
