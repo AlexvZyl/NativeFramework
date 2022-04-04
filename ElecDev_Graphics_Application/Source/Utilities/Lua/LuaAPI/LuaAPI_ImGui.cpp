@@ -28,7 +28,7 @@ inline int formatDictionary(std::map<std::string, std::vector<std::string>>& dic
 		int currentEntriesLength = value.size();
 		while(currentEntriesLength < length) 
 		{
-			value.push_back("");
+			value.push_back("###DONOTDISPLAY");
 			currentEntriesLength++;
 		}
 	}
@@ -269,7 +269,7 @@ int lua_imgui_Table(lua_State* L)
 			// Iterate over columns.
 			for (auto& [key, value] : currentDict)
 			{
-				if (value[r].size())
+				if (value[r] != "###DONOTDISPLAY")
 				{
 					ImGui::PushID(key.c_str());
 					ImGui::PushItemWidth(-1);

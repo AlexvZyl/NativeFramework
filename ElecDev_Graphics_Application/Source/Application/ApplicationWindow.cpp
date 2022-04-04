@@ -94,11 +94,13 @@ void Application::glfwInitCallbacks()
             // Was dragging but button is no longer pressed.
             if (draggingLeftbutton && !(eventState == EventType_MouseButtonLeft))
             {
+                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStop | eventState));
                 draggingLeftbutton = false;
             }
             // Was not dragging but left button is now pressed.
             else if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
             {
+                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStart | eventState));
                 draggingLeftbutton = true;
                 mouseDragInitialPosition = latestLeftButtonPressPosition;
             }
@@ -106,8 +108,7 @@ void Application::glfwInitCallbacks()
             // If currently dragging, log an event.
             if (draggingLeftbutton)
             {
-                uint64_t dragEventID = EventType_MouseDrag | eventState;
-                EventLog::log<MouseDragEvent>(MouseDragEvent(mouseDragInitialPosition, { cursorX, cursorY }, dragEventID));
+                EventLog::log<MouseDragEvent>(MouseDragEvent(mouseDragInitialPosition, { cursorX, cursorY }, EventType_MouseDrag | eventState));
             }
 
             // Log move event.

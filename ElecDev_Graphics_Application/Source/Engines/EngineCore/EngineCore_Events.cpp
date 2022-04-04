@@ -9,6 +9,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  On Event.																																	//
@@ -39,10 +40,13 @@ void EngineCore::onEvent(Event& event)
 
 	// File events.
 	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
+
+	// Event not found.
+	else LUMEN_LOG_WARN("Invalid event ID.", "Engine Events");
 }
 
 //==============================================================================================================================================//
-//  Window Events.																																//
+//  Forced parent event calls.																													//
 //==============================================================================================================================================//
 
 void EngineCore::onWindowResizeEventForce(WindowEvent& event)
@@ -52,10 +56,6 @@ void EngineCore::onWindowResizeEventForce(WindowEvent& event)
 
 	onWindowResizeEvent(event);
 }
-
-//==============================================================================================================================================//
-//  Notify Events.																																//
-//==============================================================================================================================================//
 
 void EngineCore::onFocusEventForce(NotifyEvent& event) 
 {
@@ -101,10 +101,6 @@ void EngineCore::onNotifyEventForce(NotifyEvent& event)
 
 	onNotifyEvent(event);
 }
-
-//=============================================================================================================================================//
-//  Mouse.																																	   //
-//=============================================================================================================================================//
 
 void EngineCore::onMouseMoveEventForce(MouseMoveEvent& event)
 {
