@@ -264,9 +264,12 @@ int lua_imgui_Table(lua_State* L)
 		// Iterate over rows.
 		for (int r = 0; r < rows; r++)
 		{
+			if (r)
+				ImGui::TableNextRow();
 			ImGui::PushID(std::to_string(r).c_str());
 			ImGui::TableSetColumnIndex(0);
 			// Iterate over columns.
+			int column = 0;
 			for (auto& [key, value] : currentDict)
 			{
 				if (value[r] != "###DONOTDISPLAY")
@@ -281,7 +284,10 @@ int lua_imgui_Table(lua_State* L)
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 				}
-				ImGui::TableNextColumn();
+				// Prevent empty last row.
+				if (column < columns-1)
+					ImGui::TableNextColumn();
+				column++;
 			}
 			ImGui::PopID();
 		}

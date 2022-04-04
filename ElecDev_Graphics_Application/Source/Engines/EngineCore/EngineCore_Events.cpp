@@ -94,10 +94,10 @@ void EngineCore::onDehoverEventForce(NotifyEvent& event)
 void EngineCore::onNotifyEventForce(NotifyEvent& event)
 {
 	uint64_t eventID = event.ID;
-	if		(eventID == EventType_Focus)	{ onFocusEventForce(dynamic_cast<NotifyEvent&>(event)); }
-	else if (eventID == EventType_Defocus)	{ onDefocusEventForce(dynamic_cast<NotifyEvent&>(event)); }
-	else if (eventID == EventType_Hover)	{ onHoverEventForce(dynamic_cast<NotifyEvent&>(event)); }
-	else if (eventID == EventType_Dehover)	{ onDehoverEventForce(dynamic_cast<NotifyEvent&>(event)); }
+	if		(eventID == EventType_Focus)	{ onFocusEventForce(event); }
+	else if (eventID == EventType_Defocus)	{ onDefocusEventForce(event); }
+	else if (eventID == EventType_Hover)	{ onHoverEventForce(event); }
+	else if (eventID == EventType_Dehover)	{ onDehoverEventForce(event); }
 
 	onNotifyEvent(event);
 }

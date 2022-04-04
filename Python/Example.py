@@ -7,7 +7,7 @@ import threading
 instance = LumenInstance("C:\\Lumen\\Binaries\\Executables\\x64\\Debug\\Lumen.exe")
 
 # Create a script.
-script = LumenScript()
+script = LumenScript()  
 
 # Write first script.
 script.BeginScene2D("Test")

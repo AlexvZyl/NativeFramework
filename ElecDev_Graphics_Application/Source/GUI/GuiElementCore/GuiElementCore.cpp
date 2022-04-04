@@ -98,10 +98,10 @@ void GuiElementCore::onUpdate()
 void GuiElementCore::onNotifyEvent(NotifyEvent& event)
 {
 	uint64_t eventID = event.ID;
-	if		(eventID == EventType_Focus)	{ onFocusEvent(dynamic_cast<NotifyEvent&>(event)); }
-	else if (eventID == EventType_Defocus)	{ onDefocusEvent(dynamic_cast<NotifyEvent&>(event)); }
-	else if (eventID == EventType_Hover)	{ onHoverEvent(dynamic_cast<NotifyEvent&>(event)); }
-	else if (eventID == EventType_Dehover)	{ onDehoverEvent(dynamic_cast<NotifyEvent&>(event)); }
+	if		(eventID == EventType_Focus)	{ onFocusEvent(event); }
+	else if (eventID == EventType_Defocus)	{ onDefocusEvent(event); }
+	else if (eventID == EventType_Hover)	{ onHoverEvent(event); }
+	else if (eventID == EventType_Dehover)	{ onDehoverEvent(event); }
 }
 
 //==============================================================================================================================================//
