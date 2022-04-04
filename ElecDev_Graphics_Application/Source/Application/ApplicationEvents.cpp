@@ -138,14 +138,14 @@ void Application::onHoveredLayerChange(Layer* newLayer)
 	// Create a dehover event.
 	if (m_hoveredLayer)
 	{
-		LayerEvent dehoverEvent(EventType_Dehover);
+		NotifyEvent dehoverEvent(EventType_Dehover);
 		m_hoveredLayer->onEvent(dehoverEvent);
 	}
 
 	// Create a hover event.
 	if (newLayer)
 	{
-		LayerEvent hoverEvent(EventType_Hover);
+		NotifyEvent hoverEvent(EventType_Hover);
 		newLayer->onEvent(hoverEvent);
 	}
 
@@ -164,14 +164,14 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	// Create a defocus event.
 	if (m_focusedLayer)
 	{
-		LayerEvent defocusEvent(EventType_Defocus);
+		NotifyEvent defocusEvent(EventType_Defocus);
 		m_focusedLayer->onEvent(defocusEvent);
 	}
 
 	// Create a focus event.
 	if (newLayer)
 	{
-		LayerEvent focusEvent(EventType_Focus);
+		NotifyEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
 		newLayer->focus();
 	}

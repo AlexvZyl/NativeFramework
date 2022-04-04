@@ -208,3 +208,17 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 	std::string current = std::to_string(event.mousePosition.x) + " , " + std::to_string(event.mousePosition.y);
 	LUMEN_LOG_DEBUG(current, "DragEvent Current");
 }
+
+void ComponentDesigner::onNotifyEvent(NotifyEvent& event) 
+{
+	uint64_t eventID = event.ID;
+
+	if (eventID == EventType_MouseDragStart)
+	{
+
+	}
+	else if (eventID == EventType_MouseDragStop) 
+	{
+	
+	}
+}

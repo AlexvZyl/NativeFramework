@@ -156,11 +156,15 @@ FileDropEvent::FileDropEvent(const std::filesystem::path& file)
 {}
 
 //==============================================================================================================================================//
-//  Layer Events.																																//
+//  Notify Events.																																//
 //==============================================================================================================================================//
 
-LayerEvent::LayerEvent(uint64_t ID)
-	: Event(ID)
+NotifyEvent::NotifyEvent(uint64_t ID) 
+	: Event(ID | EventType_Notify)
+{}
+
+NotifyEvent::NotifyEvent(uint64_t ID, const std::string& msg) 
+	: Event(ID | EventType_Notify), msg(msg)
 {}
 
 //==============================================================================================================================================//

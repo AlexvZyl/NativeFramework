@@ -60,11 +60,14 @@ enum EventType
 	EventType_FileSave			=	1 << 23,
 	EventType_FileLoad			=	1 << 24,
 
-	// Layer events.
-	EventType_Focus				=	1 << 25,
-	EventType_Defocus			=	1 << 26,
-	EventType_Hover				=	1 << 27,
-	EventType_Dehover			=	1 << 28,
+	// Notify events.
+	EventType_Notify			=	1 << 25,
+	EventType_Focus				=	1 << 26,
+	EventType_Defocus			=	1 << 27,
+	EventType_Hover				=	1 << 28,
+	EventType_Dehover			=	1 << 29,
+	EventType_MouseDragStart	=	1 << 30,
+	EventType_MouseDragStop		=	1 << 31
 };
 
 // Check if an ID contains a specific type.
@@ -302,15 +305,17 @@ public:
 //  Layer Events.																																//
 //==============================================================================================================================================//
 
-// Currently these events only notify the layer of specific things,
-// it does not supply any data.
-class LayerEvent : public Event
+// Events used to notify the engine of events.
+class NotifyEvent : public Event
 {
 
 public:
 
 	// Constructor.
-	LayerEvent(uint64_t ID);
+	NotifyEvent(uint64_t ID);
+	NotifyEvent(uint64_t ID, const std::string& msg);
+
+	std::string msg = "";
 };
 
 //==============================================================================================================================================//

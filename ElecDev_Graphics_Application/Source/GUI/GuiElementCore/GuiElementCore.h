@@ -19,7 +19,7 @@ class MouseButtonEvent;
 class MouseMoveEvent;
 class MouseScrollEvent;
 class KeyEvent;
-class LayerEvent;
+class NotifyEvent;
 class Layer;
 
 struct ImGuiWindow;
@@ -108,14 +108,16 @@ public:
 	virtual void onContentRegionMoveEvent(WindowEvent& event);
 
 	// Layer events.
-	inline virtual void onFocusEvent(LayerEvent& event) {};
-	inline virtual void onDefocusEvent(LayerEvent& event) {};
-	inline virtual void onHoverEvent(LayerEvent& event) {};
-	inline virtual void onDehoverEvent(LayerEvent& event) {};
+	virtual void onNotifyEvent(NotifyEvent& event);
+	inline virtual void onFocusEvent(NotifyEvent& event) {};
+	inline virtual void onDefocusEvent(NotifyEvent& event) {};
+	inline virtual void onHoverEvent(NotifyEvent& event) {};
+	inline virtual void onDehoverEvent(NotifyEvent& event) {};
 
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.
-	glm::vec2 getMousePosition();
+	glm::vec2 getMouseLocalPosition();
+	glm::vec2 getMouseGlobalPosition();
 
 	// The layer that the GUI belongs to.
 	Layer* m_layer;

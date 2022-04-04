@@ -46,7 +46,7 @@ private:
 	Base2DEngine* m_engine = nullptr;
 
 	// We need to close the popup on a defocus.
-	virtual void onDefocusEvent(LayerEvent& event) override;
+	virtual void onDefocusEvent(NotifyEvent& event) override;
 };
 
 //==============================================================================================================================================//

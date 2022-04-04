@@ -30,7 +30,7 @@ void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords)
 
 void Design2DEngine::ComponentPlaceMode()
 {
-	glm::vec2 pos = getMousePosition();
+	glm::vec2 pos = getMouseLocalPosition();
 	pos = m_scene->pixelCoordsToWorldCoords(pos);
 	ComponentPlaceMode(pos);
 }

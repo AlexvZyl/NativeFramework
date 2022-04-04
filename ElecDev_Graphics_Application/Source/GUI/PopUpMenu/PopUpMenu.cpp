@@ -96,7 +96,7 @@ void PopUpMenu::onRender()
             if (ImGui::MenuItem("Color Editor"))
             {
                 ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
-                glm::vec2 localMousePos = getMousePosition();
+                glm::vec2 localMousePos = getMouseLocalPosition();
                 glm::vec2 pos = {
 
                     localMousePos.x + m_contentRegionPosition.x,
@@ -193,7 +193,7 @@ void PopUpMenu::end()
 /* EVents.																															     */
 /*=======================================================================================================================================*/
 
-void PopUpMenu::onDefocusEvent(LayerEvent& event) 
+void PopUpMenu::onDefocusEvent(NotifyEvent& event) 
 {
     Lumen::getApp().queuePopLayer(m_layer);
 }
