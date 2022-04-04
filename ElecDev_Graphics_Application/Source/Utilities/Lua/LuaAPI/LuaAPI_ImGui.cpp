@@ -256,6 +256,7 @@ int lua_imgui_Table(lua_State* L)
 			ImGui::TableSetupColumn(key.c_str(), ImGuiTableColumnFlags_WidthStretch);
 		}
 		ImGui::TableHeadersRow();
+		ImGui::TableNextRow();
 
 		// Populate values.
 		int rows = formatDictionary(currentDict);
@@ -264,7 +265,6 @@ int lua_imgui_Table(lua_State* L)
 		for (int r = 0; r < rows; r++)
 		{
 			ImGui::PushID(std::to_string(r).c_str());
-			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			// Iterate over columns.
 			for (auto& [key, value] : currentDict)
