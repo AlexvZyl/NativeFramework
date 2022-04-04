@@ -28,7 +28,7 @@ inline int formatDictionary(std::map<std::string, std::vector<std::string>>& dic
 		int currentEntriesLength = value.size();
 		while(currentEntriesLength < length) 
 		{
-			value.push_back("");
+			value.push_back("###DONOTDISPLAY");
 			currentEntriesLength++;
 		}
 	}
@@ -256,6 +256,7 @@ int lua_imgui_Table(lua_State* L)
 			ImGui::TableSetupColumn(key.c_str(), ImGuiTableColumnFlags_WidthStretch);
 		}
 		ImGui::TableHeadersRow();
+		ImGui::TableNextRow();
 
 		// Populate values.
 		int rows = formatDictionary(currentDict);
@@ -263,13 +264,15 @@ int lua_imgui_Table(lua_State* L)
 		// Iterate over rows.
 		for (int r = 0; r < rows; r++)
 		{
+			if (r)
+				ImGui::TableNextRow();
 			ImGui::PushID(std::to_string(r).c_str());
-			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
 			// Iterate over columns.
+			int column = 0;
 			for (auto& [key, value] : currentDict)
 			{
-				if (value[r].size())
+				if (value[r] != "###DONOTDISPLAY")
 				{
 					ImGui::PushID(key.c_str());
 					ImGui::PushItemWidth(-1);
@@ -281,7 +284,10 @@ int lua_imgui_Table(lua_State* L)
 					ImGui::PopItemWidth();
 					ImGui::PopID();
 				}
-				ImGui::TableNextColumn();
+				// Prevent empty last row.
+				if (column < columns-1)
+					ImGui::TableNextColumn();
+				column++;
 			}
 			ImGui::PopID();
 		}

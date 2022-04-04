@@ -20,7 +20,7 @@ class MouseScrollEvent;
 class MouseDragEvent;
 class KeyEvent;
 class WindowEvent;
-class LayerEvent;
+class NotifyEvent;
 class FileDropEvent;
 class Layer;
 
@@ -83,28 +83,18 @@ public:
 	//  E V E N T S  //
 	// ------------- //
 
-	// Pass the event to the engine.
-	virtual void onEvent(Event& event);
-
-	// Mouse events.
-	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) = 0;
-	inline virtual void onMouseMoveEvent(MouseMoveEvent& event);
-	inline virtual void onMouseScrollEvent(MouseScrollEvent& event) = 0;
-	inline virtual void onMouseDragEvent(MouseDragEvent& event) {};
-
-	// Key events.
-	inline virtual void onKeyEvent(KeyEvent& event) = 0;
-
-	// Window events.
-	virtual void onWindowResizeEvent(WindowEvent& event);
-
-	// Layer events.
-	virtual void onFocusEvent(LayerEvent& event);
-	virtual void onDefocusEvent(LayerEvent& event);
-	virtual void onHoverEvent(LayerEvent& event);
-	virtual void onDehoverEvent(LayerEvent& event);
-
-	// Files.
+	void onEvent(Event& event);
+	inline virtual void onMouseButtonEvent(MouseButtonEvent& event) {}
+	inline virtual void onMouseMoveEvent(MouseMoveEvent& event) {}
+	inline virtual void onMouseScrollEvent(MouseScrollEvent& event) {}
+	inline virtual void onMouseDragEvent(MouseDragEvent& event) {}
+	inline virtual void onKeyEvent(KeyEvent& event) {};
+	inline virtual void onWindowResizeEvent(WindowEvent& event) {}
+	inline virtual void onNotifyEvent(NotifyEvent& event) {}
+	inline virtual void onFocusEvent(NotifyEvent& event) {}
+	inline virtual void onDefocusEvent(NotifyEvent& event) {}
+	inline virtual void onHoverEvent(NotifyEvent& event) {}
+	inline virtual void onDehoverEvent(NotifyEvent& event) {}
 	inline virtual void onFileDropEvent(FileDropEvent& event) {};
 
 	// --------- //
@@ -134,19 +124,14 @@ public:
 	{ 
 		return m_hasDesignPalette; 
 	}
-	virtual void renderDesignPalette() {};
 
-public:
-
-	// ----------------------------- //
-	//  C O N T E N T   R E G I O N  //
-	// ----------------------------- //
+	inline virtual void renderDesignPalette() {};
 
 	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 
-	// Return the mouse position in the local scene coordinates (pixels).
-	// (0,0) is in the top left.
-	glm::vec2 getMousePosition();
+	// Get muouse position helpers.
+	glm::vec2 getMouseLocalPosition();
+	glm::vec2 getMouseGlobalPosition();
 
 	// Set content region pos.
 	void setContentRegionPos(const glm::vec2& pos);
@@ -171,6 +156,17 @@ private:
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
+
+	// Handlers that are always called on the events.
+	// Prevents children from overriding certain behaviour.
+	virtual void onNotifyEventForce(NotifyEvent& event);
+	virtual void onMouseMoveEventForce(MouseMoveEvent& event);
+	virtual void onFocusEventForce(NotifyEvent& event);
+	virtual void onDefocusEventForce(NotifyEvent& event);
+	virtual void onHoverEventForce(NotifyEvent& event);
+	virtual void onDehoverEventForce(NotifyEvent& event);
+	virtual void onWindowResizeEventForce(WindowEvent& event);
+
 };
 
 //=============================================================================================================================================//

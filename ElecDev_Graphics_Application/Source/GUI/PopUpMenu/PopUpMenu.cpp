@@ -15,6 +15,7 @@
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "GUI/ColorEditor/ColorEditor.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Application/Events/EventLog.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -95,7 +96,7 @@ void PopUpMenu::onRender()
             if (ImGui::MenuItem("Color Editor"))
             {
                 ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
-                glm::vec2 localMousePos = getMousePosition();
+                glm::vec2 localMousePos = getMouseLocalPosition();
                 glm::vec2 pos = {
 
                     localMousePos.x + m_contentRegionPosition.x,
@@ -142,8 +143,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Load Circuit", "", "", "Load");
             if (path.string().size())
             {
-                FileLoadEvent event(path.string());
-                app.logEvent<FileLoadEvent>(event);
+                EventLog::log<FileLoadEvent>(FileLoadEvent(path.string()));
             }
             // Remove popup.
             app.queuePopLayer(m_name);
@@ -154,8 +154,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Save Circuit", "", design_engine->m_circuit->m_label, "Save");
             if (path.string().size())
             {
-                FileSaveEvent event(path.string(), design_engine);
-                app.logEvent<FileSaveEvent>(event);
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), design_engine));
             }
             // Remove popup.
             app.queuePopLayer(m_layer);
@@ -175,8 +174,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
             if (path.string().size())
             {
-                FileSaveEvent event(path.string(), dynamic_cast<ComponentDesigner*>(m_engine));
-                app.logEvent<FileSaveEvent>(event);
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), dynamic_cast<ComponentDesigner*>(m_engine)));
             }
             // Remove popup.
             app.queuePopLayer(m_name);
@@ -195,7 +193,7 @@ void PopUpMenu::end()
 /* EVents.																															     */
 /*=======================================================================================================================================*/
 
-void PopUpMenu::onDefocusEvent(LayerEvent& event) 
+void PopUpMenu::onDefocusEvent(NotifyEvent& event) 
 {
     Lumen::getApp().queuePopLayer(m_layer);
 }

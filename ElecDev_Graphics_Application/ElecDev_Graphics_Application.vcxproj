@@ -200,7 +200,6 @@
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Application\ApplicationWindow.cpp" />
-    <ClCompile Include="Source\Application\Events\EventLog.cpp" />
     <ClCompile Include="Source\Application\Events\Events.cpp" />
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />

@@ -46,12 +46,9 @@ void GuiElementCore::onEvent(Event& event)
 
 	uint64_t eventID = event.ID;
 
-	// Layer events should be passed even if the gui is collapsed.
-	if		(eventID == EventType_Focus)		{ onFocusEvent(dynamic_cast<LayerEvent&>(event)); }
-	else if (eventID == EventType_Defocus)		{ onDefocusEvent(dynamic_cast<LayerEvent&>(event)); }
-	else if (eventID == EventType_Hover)		{ onHoverEvent(dynamic_cast<LayerEvent&>(event)); }
-	else if (eventID == EventType_Dehover)		{ onDehoverEvent(dynamic_cast<LayerEvent&>(event)); }
-
+	// Notify events.
+	if		(eventID == EventType_Notify)		{ onNotifyEvent(dynamic_cast<NotifyEvent&>(event)); }
+	
 	// Window events.
 	else if (eventID == EventType_WindowResize) { onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
@@ -96,6 +93,15 @@ void GuiElementCore::onUpdate()
 	// Update gui data.
 	detectContentRegionMove();
 	detectContentRegionResize();
+}
+
+void GuiElementCore::onNotifyEvent(NotifyEvent& event)
+{
+	uint64_t eventID = event.ID;
+	if		(eventID == EventType_Focus)	{ onFocusEvent(event); }
+	else if (eventID == EventType_Defocus)	{ onDefocusEvent(event); }
+	else if (eventID == EventType_Hover)	{ onHoverEvent(event); }
+	else if (eventID == EventType_Dehover)	{ onDehoverEvent(event); }
 }
 
 //==============================================================================================================================================//
@@ -146,16 +152,20 @@ void GuiElementCore::detectContentRegionMove()
 	}
 }
 
-glm::vec2 GuiElementCore::getMousePosition() 
+glm::vec2 GuiElementCore::getMouseLocalPosition() 
 {
 	// Get the cursor position.
 	double cursorX, cursorY;
 	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
-	glm::vec2 cursorPos = {
-		cursorX - m_contentRegionPosition.x,
-		cursorY - m_contentRegionPosition.y
-	};
-	return cursorPos;
+	return { cursorX - m_contentRegionPosition.x, cursorY - m_contentRegionPosition.y };
+}
+
+glm::vec2 GuiElementCore::getMouseGlobalPosition()
+{
+	// Get the cursor position.
+	double cursorX, cursorY;
+	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
+	return { cursorX, cursorY };
 }
 
 //==============================================================================================================================================//

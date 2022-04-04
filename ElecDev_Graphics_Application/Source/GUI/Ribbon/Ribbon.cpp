@@ -22,6 +22,7 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "GUI/SettingsWidget/SettingsWidget.h"
+#include "Application/Events/EventLog.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -70,8 +71,7 @@ void Ribbon::onRender()
         auto path = selectFile("Lumen Load Circuit", "", "", "Load");
         if (path.string().size())
         {
-            FileLoadEvent event(path.string());
-            app.logEvent<FileLoadEvent>(event);
+            EventLog::log<FileLoadEvent>(FileLoadEvent(path.string()));
         }
     }
     // Tooltip.

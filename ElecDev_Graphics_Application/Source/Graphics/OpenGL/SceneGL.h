@@ -39,8 +39,6 @@ public:
 	Scene(CameraType cameraType, float width, float height);
 	// Destructor.
 	virtual ~Scene();
-	// Handle events.
-	void onEvent(Event& event);
 	// Returns the rendered texture.
 	unsigned getRenderTexture();
 	// Set the viewport dimensions.

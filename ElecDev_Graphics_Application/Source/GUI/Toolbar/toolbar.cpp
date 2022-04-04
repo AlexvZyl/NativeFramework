@@ -18,6 +18,7 @@
 #include "GUI/SceneHierarchy/SceneHierarchy.h"
 #include "GUI/BackgroundColorEditor/BackgroundColorEditor.h"
 #include <GLFW/glfw3.h>
+#include "Application/Events/EventLog.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
@@ -77,8 +78,7 @@ void Toolbar::onRender()
             auto fsPath = selectFile("Lumen Load Circuit", "", "", "Load");
             if (fsPath.string().size())
             {
-                FileLoadEvent event(fsPath.string());
-                app.logEvent<FileLoadEvent>(event);
+                EventLog::log<FileLoadEvent>(FileLoadEvent(fsPath.string()));
             }
         }
 

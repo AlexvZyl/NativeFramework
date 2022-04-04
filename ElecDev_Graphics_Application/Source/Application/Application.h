@@ -7,7 +7,6 @@
 #include <memory>
 #include <iostream>
 #include <vector>
-#include "Application/Events/EventLog.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
@@ -22,12 +21,11 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class EventLog;
 class Layer;
-class ImFont;
 class LumenWebSocket;
 class LayerStack;
 
+struct ImFont;
 struct GLFWwindow;
 struct RendererData;
 struct ProfileResult;
@@ -111,9 +109,6 @@ public:
 	void onUpdate();
 	// Handle events specifically for the Application layer.
 	void onEvent(Event& event);
-	// Log the event in the event log.
-	template <typename EventType>
-	void logEvent(Event& event);
 	// Should the app close?
 	bool isRunning();
 	// Close the app.
@@ -225,13 +220,16 @@ private:
 	void dockLayerToPanel(std::string& name, DockPanel panel);
 	// Pop the layers queued for removal.
 	void popLayers();
+	
+	// Functions used to get data regarding the docking child nodes.
+	ImGuiID findLargestChildNode(ImGuiID nodeID);
+	ImGuiID findLastActiveChildNode(ImGuiID nodeID);
+	void findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDockNode*>& nodes);
 
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
 
-	// Log containing all of the events.
-	std::unique_ptr<EventLog> m_eventLog;
 	// Handle window events.
 	void onWindowResizeEvent(WindowEvent& event);
 	// Handle serialisation events.
@@ -285,12 +283,6 @@ private:
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-template <typename EventType>
-void Application::logEvent(Event& event)
-{
-	// Log event in the event log.
-	m_eventLog->log<EventType>(event);
-}
 
 template<typename EngineType>
 EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)

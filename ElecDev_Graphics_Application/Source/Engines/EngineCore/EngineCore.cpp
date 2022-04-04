@@ -14,11 +14,11 @@ and notify the user via the terminal interface.
 #include <memory>
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
-#include "OpenGL/Primitives/Grid.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "OpenGL/Primitives/Grid.h"
 
 //=============================================================================================================================================//
 //  Rendering.																																   //
@@ -70,25 +70,20 @@ void EngineCore::setContentRegionPos(const glm::vec2& pos)
 	m_contentRegionPos = pos;
 }
 
-glm::vec2 EngineCore::getMousePosition()
+glm::vec2 EngineCore::getMouseLocalPosition()
 {
 	// Get the cursor position.
 	double cursorX, cursorY;
 	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
-	glm::vec2 cursorPos = { 
-		cursorX - m_contentRegionPos.x, 
-		cursorY - m_contentRegionPos.y
-	};
-	return cursorPos;
+	return { cursorX - m_contentRegionPos.x, cursorY - m_contentRegionPos.y };
 }
 
-//=============================================================================================================================================//
-//  Events.																																	   //
-//=============================================================================================================================================//
-
-void EngineCore::onMouseMoveEvent(MouseMoveEvent& event) 
+glm::vec2 EngineCore::getMouseGlobalPosition()
 {
-	m_scene->m_grid->updateHelperCircle(m_scene->pixelCoordsToWorldCoords(getMousePosition()));
+	// Get the cursor position.
+	double cursorX, cursorY;
+	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
+	return { cursorX, cursorY };
 }
 
 //=============================================================================================================================================//

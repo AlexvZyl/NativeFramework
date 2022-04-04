@@ -3,17 +3,17 @@
 //==============================================================================================================================================//
 
 #include "Application/Application.h"
-#include "Lumen.h"
+#include "Application/Events/EventLog.h"
 #include "External/Misc/ConsoleColor.h"
+#include "External/GLAD/Includes/glad/glad.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 #include "Resources/ResourceHandler.h"
-#include "External/GLAD/Includes/glad/glad.h"
 #include "OpenGL/ErrorHandlerGL.h"
-#include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
 #include "Utilities/Logger/Logger.h"
+#include "glm/glm.hpp"
+#include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  States.																																	    //
@@ -55,8 +55,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseButtonEvent event({ cursorX, cursorY }, eventID);
-            Lumen::getApp().logEvent<MouseButtonEvent>(event);
+            EventLog::log<MouseButtonEvent>(MouseButtonEvent({ cursorX, cursorY }, eventID));
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
@@ -95,11 +94,13 @@ void Application::glfwInitCallbacks()
             // Was dragging but button is no longer pressed.
             if (draggingLeftbutton && !(eventState == EventType_MouseButtonLeft))
             {
+                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStop | eventState));
                 draggingLeftbutton = false;
             }
             // Was not dragging but left button is now pressed.
             else if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
             {
+                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStart | eventState));
                 draggingLeftbutton = true;
                 mouseDragInitialPosition = latestLeftButtonPressPosition;
             }
@@ -107,17 +108,14 @@ void Application::glfwInitCallbacks()
             // If currently dragging, log an event.
             if (draggingLeftbutton)
             {
-                uint64_t dragEventID = EventType_MouseDrag | eventState;
-                MouseDragEvent dragEvent(mouseDragInitialPosition, { cursorX, cursorY }, dragEventID);
-                Lumen::getApp().logEvent<MouseDragEvent>(dragEvent);
+                EventLog::log<MouseDragEvent>(MouseDragEvent(mouseDragInitialPosition, { cursorX, cursorY }, EventType_MouseDrag | eventState));
             }
 
-            // Add dragging ID to move event.
+            // Log move event.
             uint64_t moveEventID = EventType_MouseMove | eventState;
             if (draggingLeftbutton)
                 moveEventID |= EventType_MouseDrag;
-            MouseMoveEvent event({ cursorX, cursorY }, moveEventID);
-            Lumen::getApp().logEvent<MouseMoveEvent>(event);
+            EventLog::log<MouseMoveEvent>(MouseMoveEvent({ cursorX, cursorY }, moveEventID));
 
             // Do not pass to imgui, Lumen handles this.
         });
@@ -147,8 +145,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            MouseScrollEvent event({ cursorX, cursorY }, yoffset, xoffset, eventID);
-            Lumen::getApp().logEvent<MouseScrollEvent>(event);
+            EventLog::log<MouseScrollEvent>(MouseScrollEvent({ cursorX, cursorY }, (float)yoffset, (float)xoffset, eventID));
 
             // Do not pass to imgui, Lumen handles this.
         });
@@ -181,8 +178,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            KeyEvent event(key, eventID, { cursorX, cursorY });
-            Lumen::getApp().logEvent<KeyEvent>(event);
+            EventLog::log<KeyEvent>(KeyEvent(key, eventID, { cursorX, cursorY }));
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
@@ -201,8 +197,7 @@ void Application::glfwInitCallbacks()
                 filePaths.emplace_back(std::string(paths[i])); 
 
             // Log the event.
-            FileDropEvent event(filePaths);
-            Lumen::getApp().logEvent<FileDropEvent>(event);
+            EventLog::log<FileDropEvent>(FileDropEvent(filePaths));
         });
 
     // --------------------- //
@@ -212,8 +207,7 @@ void Application::glfwInitCallbacks()
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
         {
             // Create and log event.
-            WindowEvent event({ width, height }, EventType_Application | EventType_WindowResize);
-            Lumen::getApp().logEvent<WindowEvent>(event);
+            EventLog::log<WindowEvent>(WindowEvent({ width, height }, EventType_Application | EventType_WindowResize));
         });
 
     // ----------- //
