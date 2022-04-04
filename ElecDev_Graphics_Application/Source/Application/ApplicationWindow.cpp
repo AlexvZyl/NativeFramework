@@ -24,6 +24,15 @@ static glm::vec2 latestLeftButtonPressPosition;
 static glm::vec2 mouseDragInitialPosition;
 
 //==============================================================================================================================================//
+//  Helpers.																																	//
+//==============================================================================================================================================//
+
+bool isEventOfType(uint64_t eventID, uint64_t compareID) 
+{
+    return (eventID & compareID) == compareID;
+}
+
+//==============================================================================================================================================//
 //  Callbacks.																																	//
 //==============================================================================================================================================//
 
@@ -61,13 +70,14 @@ void Application::glfwInitCallbacks()
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 
             // Store the latest pressed location for the mouse drag.
-            if (buttonEventID == (EventType_MouseButtonLeft | EventType_MousePress))
+            if ( isEventOfType(buttonEventID, EventType_MouseButtonLeft | EventType_MousePress) )
             {
                 latestLeftButtonPressPosition = { cursorX, cursorY };
             }
 
             // Was dragging but button is no longer pressed.
-            else if (buttonEventID == (EventType_MouseButtonLeft | EventType_MouseRelease) && draggingLeftbutton) 
+            else if ( isEventOfType( buttonEventID, EventType_MouseButtonLeft | EventType_MouseRelease) 
+                      && draggingLeftbutton )
             {
                 EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStop | eventState));
                 draggingLeftbutton = false;
@@ -98,8 +108,9 @@ void Application::glfwInitCallbacks()
             double cursorX, cursorY;
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
-            // Was not dragging but left button is now pressed.
-            if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
+            // Was not dragging, but left button is now pressed.
+            if ( !draggingLeftbutton 
+                && isEventOfType(eventState, EventType_MouseButtonLeft) )
             {
                 EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStart | eventState));
                 draggingLeftbutton = true;
