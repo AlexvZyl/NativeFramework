@@ -41,6 +41,7 @@ private:
 	// more than once.
 	std::unique_ptr<MouseMoveEvent> mouseMove = nullptr;
 	std::unique_ptr<MouseScrollEvent> mouseScroll = nullptr;
+	std::unique_ptr<MouseDragEvent> mouseDrag = nullptr;
 };
 
 //==============================================================================================================================================//
@@ -53,6 +54,10 @@ void EventLog::log(Event& event)
 	// Mouse move.
 	if (typeid(EventType) == typeid(MouseMoveEvent))
 		mouseMove = std::make_unique<MouseMoveEvent>(std::move(dynamic_cast<MouseMoveEvent&>(event)));
+
+	// Mouse drag.
+	else if (typeid(EventType) == typeid(MouseDragEvent))
+		mouseDrag = std::make_unique<MouseDragEvent>(std::move(dynamic_cast<MouseDragEvent&>(event)));
 
 	// Mouse scroll.
 	else if (typeid(EventType) == typeid(MouseScrollEvent))

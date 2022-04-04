@@ -7,6 +7,7 @@
 #include "Graphics/OpenGL/Primitives/Polygon.h"
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
+#include "Utilities/Logger/Logger.h"
 
 void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 {
@@ -103,20 +104,23 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
 		//Move the back vertex
-		if (m_activePoly) {
+		if (m_activePoly) 
+		{
 			m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount-1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
 	{
-		if (m_activeLine) {
+		if (m_activeLine)
+		{
 			//update the line end position
 			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
 	{
-		if (m_activeCircle) {
+		if (m_activeCircle) 
+		{
 			//update circle
 			m_activeCircle->setRadius(glm::length(glm::vec2(m_activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
@@ -178,6 +182,14 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	//m_lastDragPos = screenCoords;
 	m_currentEntityID = getEntityID(pixelCoords);
 
+	if (event.ID == EventType_MouseDrag)
+	{
+		LUMEN_LOG_DEBUG("Dragging...","Move Event");
+	}
+	else 
+	{
+		LUMEN_LOG_DEBUG("Not dragging.", "Move Event");
+	}
 }
 
 void ComponentDesigner::onMouseScrollEvent(MouseScrollEvent& event)
@@ -237,4 +249,12 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 			// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
+}
+
+void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
+{
+	std::string initial = std::to_string(event.initialPosition.x) + " , " + std::to_string(event.initialPosition.y);
+	LUMEN_LOG_DEBUG(initial, "DragEvent Initial");
+	std::string current = std::to_string(event.mousePosition.x) + " , " + std::to_string(event.mousePosition.y);
+	LUMEN_LOG_DEBUG(current, "DragEvent Current");
 }

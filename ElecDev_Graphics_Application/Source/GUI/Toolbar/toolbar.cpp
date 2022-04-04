@@ -74,10 +74,10 @@ void Toolbar::onRender()
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, dropdownItemSpacing);
         if (ImGui::MenuItem("Load...", "Ctrl+O"))
         {
-            std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-            if (path.size())
+            auto fsPath = selectFile("Lumen Load Circuit", "", "", "Load");
+            if (fsPath.string().size())
             {
-                FileLoadEvent event(path);
+                FileLoadEvent event(fsPath.string());
                 app.logEvent<FileLoadEvent>(event);
             }
         }

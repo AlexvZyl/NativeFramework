@@ -16,6 +16,14 @@
 #include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
+//  States.																																	    //
+//==============================================================================================================================================//
+
+static bool draggingLeftbutton = false;
+static glm::vec2 latestLeftButtonPressPosition;
+static glm::vec2 mouseDragInitialPosition;
+
+//==============================================================================================================================================//
 //  Callbacks.																																	//
 //==============================================================================================================================================//
 
@@ -52,34 +60,63 @@ void Application::glfwInitCallbacks()
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+
+            // Store the latest pressed location for the mouse drag.
+            if (eventID == EventType_MouseButtonLeft | EventType_MousePress)
+            {
+                latestLeftButtonPressPosition = { cursorX, cursorY };
+            }
         });
 
-    // --------------------- //
-    //  M O U S E   M O V E  //
-    // --------------------- //
+    // ----------------------------------- //
+    //  M O U S E   M O V E   &   D R A G  //
+    // ----------------------------------- //
 
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
         {
-            // Event ID.
-            uint64_t eventID = EventType_MouseMove;
+            // Event states ID.
+            uint64_t eventState = 0;
             // Mouse button states.
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventID |= EventType_MouseButtonLeft;   }
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventID |= EventType_MouseButtonRight;  }
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventID |= EventType_MouseButtonMiddle; }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))   { eventState |= EventType_MouseButtonLeft;   }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))  { eventState |= EventType_MouseButtonRight;  }
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventState |= EventType_MouseButtonMiddle; }
             // Key states.
-            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;   }
 
             // Get the cursor position.
             double cursorX, cursorY;
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
-            // Log event.
-            MouseMoveEvent event({ cursorX, cursorY }, eventID);
+            // Was dragging but button is no longer pressed.
+            if (draggingLeftbutton && !(eventState == EventType_MouseButtonLeft))
+            {
+                draggingLeftbutton = false;
+            }
+            // Was not dragging but left button is now pressed.
+            else if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
+            {
+                draggingLeftbutton = true;
+                mouseDragInitialPosition = latestLeftButtonPressPosition;
+            }
+
+            // If currently dragging, log an event.
+            if (draggingLeftbutton)
+            {
+                uint64_t dragEventID = EventType_MouseDrag | eventState;
+                MouseDragEvent dragEvent(mouseDragInitialPosition, { cursorX, cursorY }, dragEventID);
+                Lumen::getApp().logEvent<MouseDragEvent>(dragEvent);
+            }
+
+            // Add dragging ID to move event.
+            uint64_t moveEventID = EventType_MouseMove | eventState;
+            if (draggingLeftbutton)
+                moveEventID |= EventType_MouseDrag;
+            MouseMoveEvent event({ cursorX, cursorY }, moveEventID);
             Lumen::getApp().logEvent<MouseMoveEvent>(event);
 
             // Do not pass to imgui, Lumen handles this.
@@ -158,9 +195,10 @@ void Application::glfwInitCallbacks()
     glfwSetDropCallback(m_window, [](GLFWwindow* window, int count, const char** paths)
         {
             // Load the files.
-            std::vector<std::string> filePaths;
+            std::vector<std::filesystem::path> filePaths;
             filePaths.reserve(count);
-            for (int i = 0; i < count; i++) { filePaths.emplace_back(std::string(paths[i])); }
+            for (int i = 0; i < count; i++) 
+                filePaths.emplace_back(std::string(paths[i])); 
 
             // Log the event.
             FileDropEvent event(filePaths);

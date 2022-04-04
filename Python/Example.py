@@ -1,5 +1,6 @@
 # Imports.
 from Lumen import LumenScript, LumenInstance, LumenGui
+import threading
 
 # Create Lumen program instance.
 # instance = LumenInstance("C:\\Lumen\\Binaries\\Executables\\x64\\Release\\Lumen.exe")
@@ -70,7 +71,7 @@ imgui.Button("Sameline button", (0,0))
 imgui.Separator()
 
 # If you make the last parameter -1 imgui wil display all of the entries.
-imgui.Combo("ComboboxTest", 0, ("Test0", "Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7"), 8, 4) 
+imgui.Combo("ComboboxTest", 0, ("Test0", "Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7"), 4) 
 
 imgui.Separator()
 
@@ -78,17 +79,19 @@ imgui.Checkbox("Checkbox 1 True", True)
 imgui.Checkbox("Checkbox 2 False", False)
 
 imgui.Separator()
-
+    
 imgui.InputText("Input Text 1", "Initial Entry")
 imgui.InputText("Input Text 2", "")
 
 imgui.Separator()
 
 dictionary = {
-    "Key1"  : "Value1",
-    "Key2"  : 2,
-    3       : 3,
-    4       : "Value4"
+    "SingleKey" : "SingleValue",
+    1           : 2,
+    "Key1"      : ["Value1", "Value2", "Value3"],
+    "Key2"      : [1, 2, 3],
+    3           : ["V1", 2, 3],
+    4           : [1, "V2", 3]
 }
 
 imgui.Table("Table Label", 150, dictionary)
@@ -103,7 +106,7 @@ imgui.ClearAwaitScriptButton("Clear Await", (100, 30))
 imgui.Separator()
 
 # Start gui inside the Lumen instance.
-imgui.StartServer(instance)
+threading.Thread(imgui.StartServer(instance))
 
 # Stop instance (this will close Lumen).
-# instance.Shutdown()
+# instance.Shutdown()  

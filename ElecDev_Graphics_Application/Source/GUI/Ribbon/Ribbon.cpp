@@ -67,10 +67,10 @@ void Ribbon::onRender()
     if (ImGui::ImageButton((void*)m_loadFileIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
         // Create and log load event.
-        std::string path = selectFile("Lumen Load Circuit", "", "", "Load");
-        if (path.size())
+        auto path = selectFile("Lumen Load Circuit", "", "", "Load");
+        if (path.string().size())
         {
-            FileLoadEvent event(path);
+            FileLoadEvent event(path.string());
             app.logEvent<FileLoadEvent>(event);
         }
     }

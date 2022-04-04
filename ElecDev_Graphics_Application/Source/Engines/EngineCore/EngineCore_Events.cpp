@@ -24,6 +24,7 @@ void EngineCore::onEvent(Event& event)
 	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 	else if (eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
 	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
+	else if (eventID == EventType_MouseDrag)	{ onMouseDragEvent(dynamic_cast<MouseDragEvent&>(event)); }
 
 	// Key events.
 	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }

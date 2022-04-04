@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include "glm/glm.hpp"
+#include <filesystem>
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -31,38 +32,39 @@ enum EventType
 	EventType_MouseRelease		=	1 << 3,
 	EventType_MouseScroll		=	1 << 4,
 	EventType_MouseMove			=	1 << 5,
+	EventType_MouseDrag			=	1 << 6,
 	// Mouse button states.
-	EventType_MouseButtonLeft	=	1 << 6,
-	EventType_MouseButtonRight	=	1 << 7,
-	EventType_MouseButtonMiddle	=	1 << 8,
+	EventType_MouseButtonLeft	=	1 << 7,
+	EventType_MouseButtonRight	=	1 << 8,
+	EventType_MouseButtonMiddle	=	1 << 9,
 
 	// Key events.
-	EventType_KeyPress			=	1 << 9,
-	EventType_KeyRelease		=	1 << 10,
-	EventType_KeyRepeat			=	1 << 11,
+	EventType_KeyPress			=	1 << 10,
+	EventType_KeyRelease		=	1 << 12,
+	EventType_KeyRepeat			=	1 << 13,
 	// Key states.
-	EventType_LeftCtrl			=	1 << 12,
-	EventType_RightCtrl			=	1 << 13,
-	EventType_LeftShift			=	1 << 14,
-	EventType_RightShift		=	1 << 15,
-	EventType_LeftAlt			=	1 << 16,
-	EventType_RightAlt			=	1 << 17,
+	EventType_LeftCtrl			=	1 << 13,
+	EventType_RightCtrl			=	1 << 14,
+	EventType_LeftShift			=	1 << 15,
+	EventType_RightShift		=	1 << 16,
+	EventType_LeftAlt			=	1 << 17,
+	EventType_RightAlt			=	1 << 18,
 
 	// Window events.
-	EventType_WindowResize		=	1 << 18,
-	EventType_WindowMove		=	1 << 19,
-	EventType_WindowClose		=	1 << 20,
+	EventType_WindowResize		=	1 << 19,
+	EventType_WindowMove		=	1 << 20,
+	EventType_WindowClose		=	1 << 21,
 
 	// File events.
-	EventType_FileDrop			=	1 << 21,
-	EventType_FileSave			=	1 << 22,
-	EventType_FileLoad			=	1 << 23,
+	EventType_FileDrop			=	1 << 22,
+	EventType_FileSave			=	1 << 23,
+	EventType_FileLoad			=	1 << 24,
 
 	// Layer events.
-	EventType_Focus				=	1 << 24,
-	EventType_Defocus			=	1 << 25,
-	EventType_Hover				=	1 << 26,
-	EventType_Dehover			=	1 << 27,
+	EventType_Focus				=	1 << 25,
+	EventType_Defocus			=	1 << 26,
+	EventType_Hover				=	1 << 27,
+	EventType_Dehover			=	1 << 28,
 };
 
 // Check if an ID contains a specific type.
@@ -167,6 +169,20 @@ public:
 	float xOffset = 0;
 };
 
+// --------------------- //
+//  M O U S E   D R A G  //
+// --------------------- //
+
+class MouseDragEvent : public MouseEvent
+{
+public:
+
+	// Contructor.
+	MouseDragEvent(const glm::vec2& init, const glm::vec2& current, uint64_t ID);
+
+	glm::vec2 initialPosition;
+};
+
 //==============================================================================================================================================//
 //  Key Events.																																    //
 //==============================================================================================================================================//
@@ -220,13 +236,13 @@ class FileEvent : public Event
 public:
 
 	// The path to the dropped files.
-	std::vector<std::string> fileData;	
+	std::vector<std::filesystem::path> fileData;	
 
 protected:
 
 	// Constructors.
-	FileEvent(uint64_t eventID, std::vector<std::string>& files);
-	FileEvent(uint64_t eventID, std::string& file);
+	FileEvent(uint64_t eventID, const std::vector<std::filesystem::path>& files);
+	FileEvent(uint64_t eventID, const std::filesystem::path& file);
 };
 
 // ------------------- //
@@ -239,8 +255,8 @@ class FileLoadEvent : public FileEvent
 public: 
 
 	// Constructors.
-	FileLoadEvent(std::vector<std::string>& files);
-	FileLoadEvent(std::string& file);
+	FileLoadEvent(const std::vector<std::filesystem::path>& files);
+	FileLoadEvent(const std::filesystem::path& file);
 };
 
 // ------------------- //
@@ -253,8 +269,16 @@ class FileSaveEvent : public FileEvent
 public:
 
 	// Constructors.
-	FileSaveEvent(std::vector<std::string>& files, EngineCore* engine);
-	FileSaveEvent(std::string& file, EngineCore* engine);
+	FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine);
+	FileSaveEvent(const std::filesystem::path& file, EngineCore* engine);
+
+	template<class EngineType>
+	inline EngineType* getEngine() 
+	{
+		return dynamic_cast<EngineType*>(engine);
+	}
+
+private:
 
 	// The engine that is to be saved.
 	EngineCore* engine = nullptr;
@@ -270,8 +294,8 @@ class FileDropEvent : public FileEvent
 public:
 
 	// Constructors.
-	FileDropEvent(std::vector<std::string>& files);
-	FileDropEvent(std::string& file);
+	FileDropEvent(const std::vector<std::filesystem::path>& files);
+	FileDropEvent(const std::filesystem::path& file);
 };
 
 //==============================================================================================================================================//

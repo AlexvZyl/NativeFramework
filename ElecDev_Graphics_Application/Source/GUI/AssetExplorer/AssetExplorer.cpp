@@ -8,6 +8,7 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/notify/notify_icons_define.h"
+#include "imgui/imgui_internal.h"
 
 //==============================================================================================================================================//
 //  Statics.																																	//
@@ -15,12 +16,6 @@
 
 std::string AssetExplorer::s_startingDirectory = getExecutableLocation(true);
 std::filesystem::path AssetExplorer::m_currentDirectory;
-unsigned AssetExplorer::s_fileIcon = NULL;
-unsigned AssetExplorer::s_folderIcon = NULL;
-unsigned AssetExplorer::s_circuitFileIcon = NULL;
-unsigned AssetExplorer::s_leftArrowIcon = NULL;
-unsigned AssetExplorer::s_componentFileIcon = NULL;
-unsigned AssetExplorer::s_reloadIcon = NULL;
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -37,13 +32,14 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	s_leftArrowIcon = loadBitmapToGL(loadImageFromResource(LEFT_ARROW_ICON));
 	s_componentFileIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 	s_reloadIcon = loadBitmapToGL(loadImageFromResource(RELOAD_ICON));
+	s_upArrowIcon = loadBitmapToGL(loadImageFromResource(UP_ARROW_ICON));
 	loadDirectories();
 }
 
 void AssetExplorer::begin()
 {
 	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0.f, 10.f});
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {2.f, 10.f});
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
 	ImGui::PushStyleColor(ImGuiCol_Button, {0.f, 0.f, 0.f, 0.f});
 }
@@ -63,7 +59,7 @@ void AssetExplorer::onRender()
 		m_reloadDirectories = false;
 	}
 
-	static float buttonsWidth = 115.f;
+	static float buttonsWidth = 155.f;
 	static float headerHeight = 41.f;
 	static glm::vec2 headerSize(22, 22);
 
@@ -71,33 +67,60 @@ void AssetExplorer::onRender()
 	if (ImGui::BeginChild("AssetButtons", { buttonsWidth, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		// Move back button.
-		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize))
+		ImGui::PushID("BACK_AB");
+		bool pathHistory = m_pathHistory.size();
+		if(!pathHistory)
+			ImGui::BeginDisabled();
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 0, 0 }, { 1, 1 }))
 		{
-			m_pathHistory.push_back(m_currentDirectory);
-			m_currentDirectory = m_currentDirectory.parent_path();
-			m_clearFilterOnFrameStart = true;
-			loadDirectories();
-		}
-
-		ImGui::SameLine();
-
-		// Move forward button.
-		ImGui::PushID("FAB");
-		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
-		{
-			if (m_pathHistory.size())
+			if (pathHistory)
 			{
+				m_pathUndoHistory.push_back(m_currentDirectory);
 				m_currentDirectory = m_pathHistory.back();
 				m_pathHistory.pop_back();
-				m_clearFilterOnFrameStart = true;
+				loadDirectories();
+			}
+		}
+		if (!pathHistory)
+			ImGui::EndDisabled();
+		ImGui::PopID();
+
+		// Move forward button.
+		ImGui::SameLine();
+		bool pathUndoHistory = m_pathUndoHistory.size();
+		ImGui::PushID("FORWARD_AB");
+		if (!pathUndoHistory)
+			ImGui::BeginDisabled();
+		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
+		{
+			if (pathUndoHistory)
+			{
+				m_pathHistory.push_back(m_currentDirectory);
+				m_currentDirectory = m_pathUndoHistory.back();
+				m_pathUndoHistory.pop_back();
+				loadDirectories();
+			}
+		}
+		if (!pathUndoHistory)
+			ImGui::EndDisabled();
+		ImGui::PopID();
+
+		// Move up.
+		ImGui::PushID("UP_AB");
+		ImGui::SameLine();
+		if (ImGui::ImageButton((void*)s_upArrowIcon, headerSize, {0,1}, {1,0}))
+		{
+			if (m_currentDirectory != m_currentDirectory.parent_path())
+			{
+				m_pathHistory.push_back(m_currentDirectory);
+				m_currentDirectory = m_currentDirectory.parent_path();
 				loadDirectories();
 			}
 		}
 		ImGui::PopID();
 
-		ImGui::SameLine();
-
 		// Reload button.
+		ImGui::SameLine();
 		if (ImGui::ImageButton((void*)s_reloadIcon, headerSize))
 		{
 			loadDirectories();
@@ -108,13 +131,13 @@ void AssetExplorer::onRender()
 	ImGui::SameLine();
 
 	// Current directory.
-	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 1.75f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::SetScrollX(ImGui::GetScrollMaxX());
 		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
 		{
-			std::string newDirectory = selectFolder(m_currentDirectory.string());
-			if (newDirectory.size())
+			auto newDirectory = selectFolder(m_currentDirectory.string());
+			if (newDirectory.string().size())
 			{
 				m_pathHistory.push_back(m_currentDirectory);
 				m_currentDirectory = newDirectory;
@@ -145,14 +168,14 @@ void AssetExplorer::onRender()
 	ImGui::SameLine();
 
 	// Filter options.
-	static bool circuitFiles = true;
-	static bool componentFiles = true;
-	if (ImGui::BeginChild("AssetFilter", { 139.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("AssetFilter", { 140.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
-		ImGui::Checkbox(" .lmcp ", &componentFiles);
+		if (ImGui::Checkbox(" .lmcp ", &m_displayComponents))
+			loadDirectories();
 		ImGui::SameLine();
-		ImGui::Checkbox(" .lmct ", &circuitFiles);
+		if (ImGui::Checkbox(" .lmct ", &m_displayCircuits))
+			loadDirectories();
 	}
 	ImGui::EndChild();
 
@@ -171,6 +194,7 @@ void AssetExplorer::onRender()
 	ImGui::EndChild();
 
 	// Files & Folders.
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 5.f, 5.f });
 	if (ImGui::BeginChild("##AssetExplorerChild", {0,0}, true))
 	{
 		// Create icon columns.
@@ -188,36 +212,6 @@ void AssetExplorer::onRender()
 			// Filter.
 			if (!filter.PassFilter(p.path().stem().string().c_str())) continue;
 
-			// Check for file extensions.
-			bool shouldDisplay = false;
-			std::string extension = p.path().extension().string();
-			// Do not dispay these files.
-			if (p.path().filename().string()[0] == '.')
-			{
-				continue;
-			}
-			// We always want to render folders.
-			else if (!extension.size())
-			{
-				shouldDisplay = true;
-			}
-			// Check if the file type should be rendred.
-			else if (componentFiles && extension == ".lmcp")
-			{
-				shouldDisplay = true;
-			}
-			else if (circuitFiles && extension == ".lmct")
-			{
-				shouldDisplay = true;
-			}
-			// If no flags are set we want to display.
-			else if (!circuitFiles && !componentFiles)
-			{
-				shouldDisplay = true;
-			}
-
-			if (!shouldDisplay) continue;
-
 			ImGui::PushID(directoryCount++);
 
 			// --------------- //
@@ -229,7 +223,7 @@ void AssetExplorer::onRender()
 				ImGui::ImageButton((void*)s_folderIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
 				if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 				{
-					m_pathHistory.push_back(p);
+					m_pathHistory.push_back(m_currentDirectory);
 					m_currentDirectory /= p.path().filename();
 					m_clearFilterOnFrameStart = true;
 					m_reloadDirectories = true;
@@ -248,8 +242,8 @@ void AssetExplorer::onRender()
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
 						std::string item = p.path().string();
-						FileDropEvent event(item);
-						Lumen::getApp().logEvent<FileDropEvent>(event);
+						FileLoadEvent event(item);
+						Lumen::getApp().logEvent<FileLoadEvent>(event);
 					}
 				}
 
@@ -296,6 +290,7 @@ void AssetExplorer::onRender()
 		}
 	}
 	ImGui::EndChild();
+	ImGui::PopStyleVar();
 
 	// Done with icons.
 	ImGui::Columns(1);
@@ -303,7 +298,7 @@ void AssetExplorer::onRender()
 	// Open popup.
 	if (addFolder)
 	{
-		ImGui::OpenPopup("Add Folder");
+		ImGui::OpenPopup("Add Folder##AFPOPUP");
 		addFolder = false;
 	}
 	// Write to popup.
@@ -329,7 +324,39 @@ void AssetExplorer::loadDirectories()
 {
 	m_directories.clear();
 	for (auto& p : std::filesystem::directory_iterator(m_currentDirectory))
+	{
+		// Check for file extensions.
+		bool shouldDisplay = false;
+		std::string extension = p.path().extension().string();
+		// Do not dispay these files.
+		if (p.path().filename().string()[0] == '.')
+		{
+			continue;
+		}
+		// We always want to render folders.
+		else if (!extension.size())
+		{
+			shouldDisplay = true;
+		}
+		// Check if the file type should be rendred.
+		else if (m_displayComponents && extension == ".lmcp")
+		{
+			shouldDisplay = true;
+		}
+		else if (m_displayCircuits && extension == ".lmct")
+		{
+			shouldDisplay = true;
+		}
+		// If no flags are set we want to display.
+		else if (!m_displayCircuits && !m_displayComponents)
+		{
+			shouldDisplay = true;
+		}
+
+		if (!shouldDisplay) continue;
+
 		m_directories.push_back(p);
+	}
 }
 
 //==============================================================================================================================================//

@@ -1044,12 +1044,13 @@
     <Image Include="Source\Resources\Icons\FolderIcon.png" />
     <Image Include="Source\Resources\Icons\FileIcon.png" />
     <Image Include="Source\Resources\Icons\ComponentFileIcon.png" />
-    <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
+    <Image Include="Source\Resources\Icons\UpArrowIcon.png" />
     <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
     <Image Include="Source\Resources\Icons\ReloadIcon.png" />
     <Image Include="Source\Resources\Icons\LoadFileIcon.png" />
     <Image Include="Source\Resources\Icons\SettingsIcon.png" />
     <Image Include="Source\Resources\Icons\UserIcon.png" />
+    <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -145,6 +145,7 @@ void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive, const
 	// Store primitive metadata.
 	primitive->m_primitiveBufferPos = m_primitives.size();
 	primitive->m_vertexBufferPos = m_vertexCount;
+	//dynamic_cast<Primitive<VertexType>*>(primitive)->m_vertices = &m_vertexCPU[m_vertexCount];
 	primitive->m_indexBufferPos = m_indexCount;
 	primitive->m_queuedForSync = false;
 
@@ -220,6 +221,7 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 	{
 		PrimitivePtr* primitive = m_primitives[i];
 		primitive->m_indexBufferPos -= indexCount;
+		//dynamic_cast<Primitive<VertexType>*>(primitive)->m_vertices = &m_vertexCPU[primitive->m_vertexBufferPos];
 		primitive->m_vertexBufferPos -= vertexCount;
 		primitive->m_primitiveBufferPos -= 1;
 	}

@@ -1023,6 +1023,7 @@
     <Image Include="Source\Resources\Icons\FileIcon.png" />
     <Image Include="Source\Resources\Icons\FolderIcon.png" />
     <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
+    <Image Include="Source\Resources\Icons\UpArrowIcon.png" />
     <Image Include="Source\Resources\Icons\LoadFileIcon.png" />
     <Image Include="Source\Resources\Icons\mainIcon.ico" />
     <Image Include="Source\Resources\Icons\panda.bmp" />

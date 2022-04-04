@@ -19,6 +19,7 @@ void EventLog::clear()
 {
 	mouseMove.reset();
 	mouseScroll.reset();
+	mouseDrag.reset();
 	events.clear();
 }
 
