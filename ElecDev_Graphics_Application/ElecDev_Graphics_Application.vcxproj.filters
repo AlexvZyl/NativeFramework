@@ -79,7 +79,6 @@
     <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
-    <ClCompile Include="Source\Application\Events\Events.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Graphics\Vulkan\README.md" />
     <ClCompile Include="Source\Application\ApplicationWindow.cpp" />

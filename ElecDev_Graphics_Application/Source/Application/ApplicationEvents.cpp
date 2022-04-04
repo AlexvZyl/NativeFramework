@@ -49,10 +49,8 @@ void Application::onUpdate()
 	// Dispatch GLFW events.
 	for (auto& event : EventLog::events)
 	{
-		uint64_t eventID = event->ID;
-
 		// Application events are dispatched explicitly (since it is not a part of the layers).
-		if (eventID == EventType_Application)
+		if (event->isType(EventType_Application))
 		{
 			Application::onEvent(*event.get()); 
 			continue;
@@ -60,7 +58,7 @@ void Application::onUpdate()
 		
 		// On a mouse press we need to change the focused layer.
 		// This also allows us to modify how dear imgui sets focused layers.
-		if (eventID == EventType_MousePress) 
+		if (event->isType(EventType_MousePress))
 			onFocusedLayerChange(m_hoveredLayer); 
 
 		// Pass events to focused layer.
@@ -188,15 +186,13 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 
 void Application::onEvent(Event& event)
 {
-	uint64_t eventID = event.ID;
-	
 	// Window events.																	 
-	if      (eventID == EventType_WindowResize)	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	if      (event.isType(EventType_WindowResize))	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 												 								 
 	// File events.					 								 
-	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
-	else if (eventID == EventType_FileSave)		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
-	else if (eventID == EventType_FileLoad)		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
+	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
+	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
+	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
 }
 
 //==============================================================================================================================================//

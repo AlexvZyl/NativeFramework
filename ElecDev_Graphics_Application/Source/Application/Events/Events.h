@@ -21,7 +21,7 @@ class EngineCore;
 //  Event types.																																//
 //==============================================================================================================================================//
 
-enum EventType
+enum EventType : uint64_t
 {
 	// Layer specific identifiers.
 	EventType_Error				=	1 << 0,
@@ -40,8 +40,8 @@ enum EventType
 
 	// Key events.
 	EventType_KeyPress			=	1 << 10,
-	EventType_KeyRelease		=	1 << 12,
-	EventType_KeyRepeat			=	1 << 13,
+	EventType_KeyRelease		=	1 << 11,
+	EventType_KeyRepeat			=	1 << 12,
 	// Key states.
 	EventType_LeftCtrl			=	1 << 13,
 	EventType_RightCtrl			=	1 << 14,
@@ -70,11 +70,6 @@ enum EventType
 	EventType_MouseDragStop		=	1 << 31
 };
 
-// Check if an ID contains a specific type.
-bool operator==(uint64_t id, EventType eventType);
-// Check if an ID does not contain a specific type.
-bool operator!=(uint64_t id, EventType eventType);
-
 //==============================================================================================================================================//
 //  Event Class.																																//
 //==============================================================================================================================================//
@@ -84,12 +79,30 @@ class Event
 
 public:
 
-	// Called when the event has been handled.
-	void consume();
-	// Checks if the event has been handled.
-	bool isConsumed();
+	// Consumes the event, preventing it from being used by other layers.
+	inline void consume() 
+	{
+		consumed = true;
+	}
+	// Checks if the event has been consumed and if it should not be handled.
+	inline bool isConsumed() 
+	{
+		return consumed;
+	}
 	// Destructor (for polymorphic type).
 	virtual ~Event() = default;
+	// Check if the event is of a certain type.
+	// Does NOT check if it ONLY belongs to the specific ID.
+	inline bool isType(uint64_t compareID) 
+	{
+		return ( compareID & ID ) == compareID;
+	}
+	// Check if the event is not of a certain type.
+	// Does NOT check if it ONLY belongs to the specific ID.
+	inline bool isNotType(uint64_t compareID) 
+	{
+		return (compareID & ID) != compareID;
+	}
 
 	// ID describing the event.
 	uint64_t ID;
@@ -99,7 +112,9 @@ protected:
 	// Constructor that sets the ID of the event.
 	// This is a protected type to ensure that an 
 	// 'Event' object is not created.
-	Event(uint64_t ID);
+	inline Event(uint64_t ID) 
+		: ID(ID)
+	{}
 
 	// Has the event been handled?
 	bool consumed = false;
@@ -123,10 +138,9 @@ public:
 
 protected:
 
-	// Constructor that sets the mouse position.
-	// This is a protected type to ensure that a
-	// 'MouseEvent' object is not created.
-	MouseEvent(const glm::vec2& positionPixels, uint64_t ID);
+	inline MouseEvent(const glm::vec2& positionPixels, uint64_t ID) 
+		: Event(ID), mousePosition(positionPixels)
+	{}
 };
 
 // ------------------------- //
@@ -138,8 +152,9 @@ class MouseButtonEvent : public MouseEvent
 
 public:
 
-	// Constructor with mouse position.
-	MouseButtonEvent(const glm::vec2& mousePositionPixels, uint64_t ID);
+	inline MouseButtonEvent(const glm::vec2& mousePositionPixels, uint64_t ID) 
+		: MouseEvent(mousePositionPixels, ID)
+	{}
 };
 
 // --------------------- //
@@ -151,8 +166,9 @@ class MouseMoveEvent : public MouseEvent
 
 public:
 
-	// Constructor with mouse position.
-	MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID);
+	inline MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID) 
+		: MouseEvent(mousePositionPixels, ID | EventType_MouseMove)
+	{}
 };
 
 // ------------------------- //
@@ -164,8 +180,9 @@ class MouseScrollEvent : public MouseEvent
 
 public:
 
-	// Constructor with mouse position.
-	MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, uint64_t ID);
+	inline MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, uint64_t ID) 
+		: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset), xOffset(xOffset)
+	{}
 
 	// How much the mouse wheel scrolled.
 	float yOffset = 0;
@@ -180,8 +197,9 @@ class MouseDragEvent : public MouseEvent
 {
 public:
 
-	// Contructor.
-	MouseDragEvent(const glm::vec2& init, const glm::vec2& current, uint64_t ID);
+	inline MouseDragEvent(const glm::vec2& init, const glm::vec2& current, uint64_t ID)
+		: MouseEvent(current, ID | EventType_MouseDrag), initialPosition(init)
+	{}
 
 	glm::vec2 initialPosition;
 };
@@ -195,8 +213,9 @@ class KeyEvent : public Event
 
 public:
 
-	// Constructor.
-	KeyEvent(int key, uint64_t ID, const glm::vec2& mousePos);
+	inline KeyEvent(int key, uint64_t ID, const glm::vec2& mousePos) 
+		: Event(ID), key(key), mousePosition(mousePos)
+	{}
 
 	// Key associated with the event.
 	int key;
@@ -215,8 +234,9 @@ class WindowEvent : public Event
 
 public:
 
-	// Constructor.
-	WindowEvent(const glm::vec2& windowResize, uint64_t ID, bool isScale = false);
+	inline WindowEvent(const glm::vec2& windowResize, uint64_t ID, bool isScale = false) 
+		: Event(ID), windowData(windowResize), isScale(isScale)
+	{}
 
 	// For resize events it is the new size, or the scaling.
 	// For move events it is the new position.
@@ -238,14 +258,20 @@ class FileEvent : public Event
 {
 public:
 
-	// The path to the dropped files.
-	std::vector<std::filesystem::path> fileData;	
+	// The files related to the event.
+	std::vector<std::filesystem::path> fileData;
 
 protected:
 
-	// Constructors.
-	FileEvent(uint64_t eventID, const std::vector<std::filesystem::path>& files);
-	FileEvent(uint64_t eventID, const std::filesystem::path& file);
+	inline FileEvent(uint64_t eventID, const std::vector<std::filesystem::path>& files) 
+		: Event(eventID | EventType_Application), fileData(files)
+	{}
+
+	inline FileEvent(uint64_t eventID, const std::filesystem::path& file)
+		: Event(eventID | EventType_Application)
+	{
+		fileData.emplace_back(file);
+	}
 };
 
 // ------------------- //
@@ -257,9 +283,13 @@ class FileLoadEvent : public FileEvent
 
 public: 
 
-	// Constructors.
-	FileLoadEvent(const std::vector<std::filesystem::path>& files);
-	FileLoadEvent(const std::filesystem::path& file);
+	inline FileLoadEvent(const std::vector<std::filesystem::path>& files) 
+		: FileEvent(EventType_FileLoad, files)
+	{}
+
+	inline FileLoadEvent(const std::filesystem::path& file) 
+		: FileEvent(EventType_FileLoad, file)
+	{}
 };
 
 // ------------------- //
@@ -271,9 +301,13 @@ class FileSaveEvent : public FileEvent
 
 public:
 
-	// Constructors.
-	FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine);
-	FileSaveEvent(const std::filesystem::path& file, EngineCore* engine);
+	inline FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine) 
+		: FileEvent(EventType_FileSave, files), engine(engine)
+	{}
+
+	inline FileSaveEvent(const std::filesystem::path& file, EngineCore* engine) 
+		: FileEvent(EventType_FileSave, file), engine(engine)
+	{}
 
 	template<class EngineType>
 	inline EngineType* getEngine() 
@@ -296,25 +330,33 @@ class FileDropEvent : public FileEvent
 
 public:
 
-	// Constructors.
-	FileDropEvent(const std::vector<std::filesystem::path>& files);
-	FileDropEvent(const std::filesystem::path& file);
+	inline FileDropEvent(const std::vector<std::filesystem::path>& files) 
+		: FileEvent(EventType_FileDrop, files)
+	{}
+
+	inline FileDropEvent(const std::filesystem::path& file) 
+		: FileEvent(EventType_FileDrop, file)
+	{}
 };
 
 //==============================================================================================================================================//
 //  Layer Events.																																//
 //==============================================================================================================================================//
 
-// Events used to notify the engine of events.
 class NotifyEvent : public Event
 {
 
 public:
 
-	// Constructor.
-	NotifyEvent(uint64_t ID);
-	NotifyEvent(uint64_t ID, const std::string& msg);
+	inline NotifyEvent(uint64_t ID) 
+		: Event(ID | EventType_Notify)
+	{}
 
+	inline NotifyEvent(uint64_t ID, const std::string& msg) 
+		: Event(ID | EventType_Notify), msg(msg)	
+	{}
+
+	// Notify message.
 	std::string msg = "";
 };
 

@@ -102,17 +102,15 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 
 	if (event.isConsumed()) return;
 
-	uint64_t eventID = event.ID;
-
 	// Mouse events.  Order is important.
-	if (eventID == EventType_MouseMove)
+	if (event.isType(EventType_MouseMove))
 	{
 		MouseMoveEvent mouseEvent = dynamic_cast<MouseMoveEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
 		m_guiElement->onEvent(mouseEvent);
 	}
-	else if (eventID == EventType_MouseDrag)
+	else if (event.isType(EventType_MouseDrag))
 	{
 		MouseDragEvent mouseEvent = dynamic_cast<MouseDragEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
@@ -121,14 +119,14 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 		mouseEvent.initialPosition.y = mouseEvent.initialPosition.y - m_guiElement->m_contentRegionPosition.y;
 		m_guiElement->onEvent(mouseEvent);
 	}
-	else if (eventID == EventType_MouseScroll)
+	else if (event.isType(EventType_MouseScroll))
 	{
 		MouseScrollEvent mouseEvent = dynamic_cast<MouseScrollEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
 		m_guiElement->onEvent(mouseEvent);
 	}
-	else if (eventID == EventType_MousePress || eventID == EventType_MouseRelease)
+	else if (event.isType(EventType_MousePress) || event.isType(EventType_MouseRelease))
 	{
 		MouseButtonEvent mouseEvent = dynamic_cast<MouseButtonEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
@@ -137,7 +135,7 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 	}
 
 	// Key events.
-	else if (eventID == EventType_KeyPress || eventID == EventType_KeyRelease || eventID == EventType_KeyRepeat)
+	else if (event.isType(EventType_KeyPress) || event.isType(EventType_KeyRelease) || event.isType(EventType_KeyRepeat))
 	{
 		KeyEvent keyEvent = dynamic_cast<KeyEvent&>(event);
 		keyEvent.mousePosition.x = keyEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;

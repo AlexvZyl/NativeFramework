@@ -35,35 +35,42 @@ void Application::glfwInitCallbacks()
 
     glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
         {
-            // Create the event ID. 
-            uint64_t eventID = 0;
-            if      (action == GLFW_PRESS)               { eventID |= EventType_MousePress;        }
-            else if (action == GLFW_RELEASE)             { eventID |= EventType_MouseRelease;      }
-            if      (button == GLFW_MOUSE_BUTTON_LEFT)   { eventID |= EventType_MouseButtonLeft;   }
-            else if (button == GLFW_MOUSE_BUTTON_RIGHT)  { eventID |= EventType_MouseButtonRight;  }
-            else if (button == GLFW_MOUSE_BUTTON_MIDDLE) { eventID |= EventType_MouseButtonMiddle; }
-            // Key states.
-            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventID |= EventType_LeftCtrl;   }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventID |= EventType_RightCtrl;  }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventID |= EventType_LeftShift;  }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventID |= EventType_RightShift; }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventID |= EventType_LeftAlt;    }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventID |= EventType_RightAlt;   }
+            // Event state.
+            uint64_t eventState = 0;
+            if      (button == GLFW_MOUSE_BUTTON_LEFT)      { eventState |= EventType_MouseButtonLeft;   }
+            else if (button == GLFW_MOUSE_BUTTON_RIGHT)     { eventState |= EventType_MouseButtonRight;  }
+            else if (button == GLFW_MOUSE_BUTTON_MIDDLE)    { eventState |= EventType_MouseButtonMiddle; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;   }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl;  }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift;  }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
+            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;    }
+            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;   }
 
             // Get the cursor position.
             double cursorX, cursorY;
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
-            // Log event.
-            EventLog::log<MouseButtonEvent>(MouseButtonEvent({ cursorX, cursorY }, eventID));
+            // Log button event.
+            uint64_t buttonEventID = eventState;
+            if      (action == GLFW_PRESS)      { buttonEventID |= EventType_MousePress; }
+            else if (action == GLFW_RELEASE)    { buttonEventID |= EventType_MouseRelease; }
+            EventLog::log<MouseButtonEvent>(MouseButtonEvent({ cursorX, cursorY }, buttonEventID));
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 
             // Store the latest pressed location for the mouse drag.
-            if (eventID == EventType_MouseButtonLeft | EventType_MousePress)
+            if (buttonEventID == (EventType_MouseButtonLeft | EventType_MousePress))
             {
                 latestLeftButtonPressPosition = { cursorX, cursorY };
+            }
+
+            // Was dragging but button is no longer pressed.
+            else if (buttonEventID == (EventType_MouseButtonLeft | EventType_MouseRelease) && draggingLeftbutton) 
+            {
+                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStop | eventState));
+                draggingLeftbutton = false;
             }
         });
 
@@ -91,14 +98,8 @@ void Application::glfwInitCallbacks()
             double cursorX, cursorY;
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
-            // Was dragging but button is no longer pressed.
-            if (draggingLeftbutton && !(eventState == EventType_MouseButtonLeft))
-            {
-                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStop | eventState));
-                draggingLeftbutton = false;
-            }
             // Was not dragging but left button is now pressed.
-            else if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
+            if (!draggingLeftbutton && (eventState == EventType_MouseButtonLeft))
             {
                 EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStart | eventState));
                 draggingLeftbutton = true;
