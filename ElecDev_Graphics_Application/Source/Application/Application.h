@@ -220,6 +220,11 @@ private:
 	void dockLayerToPanel(std::string& name, DockPanel panel);
 	// Pop the layers queued for removal.
 	void popLayers();
+	
+	// Functions used to get data regarding the docking child nodes.
+	ImGuiID findLargestChildNode(ImGuiID nodeID);
+	ImGuiID findLastActiveChildNode(ImGuiID nodeID);
+	void findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDockNode*>& nodes);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -264,14 +269,14 @@ private:
 	//  D O C K   N O D E S  //
 	// --------------------- //
 
-	// Dockspace pointers.
-	ImGuiDockNode* m_mainDockspacePtr = nullptr;
-	ImGuiDockNode* m_leftPanelPtr = nullptr;
-	ImGuiDockNode* m_rightPanelPtr = nullptr;
-	ImGuiDockNode* m_bottomPanelPtr = nullptr;
-	ImGuiDockNode* m_scenePanelPtr = nullptr;
-	ImGuiDockNode* m_ribbonPanelPtr = nullptr;
-	ImGuiDockNode* m_bottomBarPtr = nullptr;
+	// Dock space IDs.
+	ImGuiID m_mainDockspaceID = NULL;
+	ImGuiID m_leftPanelID = NULL;
+	ImGuiID m_rightPanelID = NULL;
+	ImGuiID m_bottomPanelID = NULL;
+	ImGuiID m_scenePanelID = NULL;
+	ImGuiID m_ribbonPanelID = NULL;
+	ImGuiID m_bottomBarID = NULL;
 };
 
 //==============================================================================================================================================//
