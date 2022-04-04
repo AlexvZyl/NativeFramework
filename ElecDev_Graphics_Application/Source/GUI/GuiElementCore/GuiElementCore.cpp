@@ -44,27 +44,25 @@ void GuiElementCore::onEvent(Event& event)
 {
 	if (event.isConsumed()) return;
 
-	uint64_t eventID = event.ID;
-
 	// Notify events.
-	if		(eventID == EventType_Notify)		{ onNotifyEvent(dynamic_cast<NotifyEvent&>(event)); }
+	if		(event.isType(EventType_Notify))		{ onNotifyEvent(dynamic_cast<NotifyEvent&>(event)); }
 	
 	// Window events.
-	else if (eventID == EventType_WindowResize) { onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
-	else if (eventID == EventType_WindowMove)	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowResize))	{ onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowMove))	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 
 	// Do not pass the events below if the layer is not to be rendered.
 	else if (!shouldRender()) return;
 
 	// Mouse events.
-	else if	(eventID == EventType_MouseMove)	{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
-	else if (eventID == EventType_MouseScroll)	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
-	else if (eventID == EventType_MousePress)	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
-	else if (eventID == EventType_MouseRelease) { onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if	(event.isType(EventType_MouseMove))		{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
+	else if (event.isType(EventType_MouseScroll))	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
+	else if (event.isType(EventType_MousePress))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (event.isType(EventType_MouseRelease))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 
 	// Key events.
-	else if (eventID == EventType_KeyPress)		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
-	else if (eventID == EventType_KeyRelease)	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyPress))		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyRelease))	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 }
 
 void GuiElementCore::onUpdate()
@@ -97,11 +95,10 @@ void GuiElementCore::onUpdate()
 
 void GuiElementCore::onNotifyEvent(NotifyEvent& event)
 {
-	uint64_t eventID = event.ID;
-	if		(eventID == EventType_Focus)	{ onFocusEvent(event); }
-	else if (eventID == EventType_Defocus)	{ onDefocusEvent(event); }
-	else if (eventID == EventType_Hover)	{ onHoverEvent(event); }
-	else if (eventID == EventType_Dehover)	{ onDehoverEvent(event); }
+	if		(event.isType(EventType_Focus))		{ onFocusEvent(event); }
+	else if (event.isType(EventType_Defocus))	{ onDefocusEvent(event); }
+	else if (event.isType(EventType_Hover))		{ onHoverEvent(event); }
+	else if (event.isType(EventType_Dehover))	{ onDehoverEvent(event); }
 }
 
 //==============================================================================================================================================//

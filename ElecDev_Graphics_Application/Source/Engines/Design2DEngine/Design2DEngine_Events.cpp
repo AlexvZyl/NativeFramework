@@ -23,13 +23,11 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {
 	Base2DEngine::onMouseButtonEvent(event);
 
-	uint64_t eventID = event.ID;
-
 	// --------------------- //
 	//  L E F T   P R E S S  //
 	// --------------------- //
 
-	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
+	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
@@ -83,7 +81,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  R I G H T   P R E S S  //
 	// ----------------------- //
 
-	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
+	else if (event.isType(EventType_MousePress | EventType_MouseButtonRight))
 	{
 
 		// Switch out of any placement state.
@@ -110,15 +108,6 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			menu->setEngine(this);
 		}
 	}
-
-	// ------------------------- //
-	//  M I D D L E   P R E S S  //
-	// ------------------------- //
-
-	else if (eventID == (EventType_MousePress | EventType_MouseButtonMiddle))
-	{
-
-	}
 }
 
 //==============================================================================================================================================//
@@ -128,8 +117,6 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
-
-	uint64_t eventID = event.ID;
 
 	glm::vec2 coords = event.mousePosition;
 	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(coords);
@@ -163,7 +150,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		}
 		else if (designerState == ENTITY_SELECT)
 		{
-			if (eventID == EventType_MouseButtonLeft)
+			if (event.isType(EventType_MouseButtonLeft))
 			{
 				//User is dragging a component.
 				glm::vec2 translation = screenCoords - m_lastDragPos;
@@ -195,11 +182,8 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 {
 	Base2DEngine::onKeyEvent(event);
 
-	// Get the event ID.
-	uint64_t eventID = event.ID;
-
 	// Events based on key type.
-	if (eventID == EventType_KeyPress) 
+	if (event.isType(EventType_KeyPress))
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
