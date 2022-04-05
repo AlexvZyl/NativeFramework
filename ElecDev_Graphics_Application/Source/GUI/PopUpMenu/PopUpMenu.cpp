@@ -169,7 +169,7 @@ void PopUpMenu::onRender()
             Component2D* active_component = (dynamic_cast<ComponentDesigner*>(m_engine))->m_activeComponent.get();
             if (ImGui::MenuItem("Component Editor", "E"))
             {
-                app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
+                app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
             }
             if (ImGui::MenuItem("Add Polygon", "P"))
             {

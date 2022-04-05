@@ -157,36 +157,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 
 	else if (designerState == CompDesignState::SELECT)
 	{
-		if (eventID == EventType_MouseButtonLeft)
-		{
-			//User is dragging a component.
-			glm::vec2 translation = screenCoords - m_lastDragPos;
-			if (m_activePoly) {
-				if (getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation) != glm::vec2{ m_activePoly->m_trackedCenter }) {
-					m_activePoly->translateTo(getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-			}
-			if (m_activeLine) {
-				if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
-					m_activeLine->translateTo(getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-			}
-			if (m_activeCircle) {
-				if (getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation) != glm::vec2{ m_activeCircle->m_trackedCenter }) {
-					m_activeCircle->translateTo(getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-			}
-			if (m_activePort.get()) {
-				if (getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation) != glm::vec2{ m_activePort->centre }) {
-					m_activePort->moveTo(getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-			}
-		}
-		else {
+		if (event.isNotType(EventType_MouseButtonLeft)) {
 			m_lastDragPos = screenCoords;
 		}
 	}
@@ -265,6 +236,40 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
 {
 
+	Base2DEngine::onMouseDragEvent(event);
+	uint64_t eventID = event.ID;
+
+	glm::vec2 pixelCoords = event.mousePosition;
+	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+	if (designerState == CompDesignState::SELECT) {
+		//User is dragging a component.
+		glm::vec2 translation = screenCoords - m_lastDragPos;
+		if (m_activePoly) {
+			if (getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation) != glm::vec2{ m_activePoly->m_trackedCenter }) {
+				m_activePoly->translateTo(getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation));
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+		}
+		if (m_activeLine) {
+			if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
+				m_activeLine->translateTo(getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation));
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+		}
+		if (m_activeCircle) {
+			if (getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation) != glm::vec2{ m_activeCircle->m_trackedCenter }) {
+				m_activeCircle->translateTo(getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation));
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+		}
+		if (m_activePort.get()) {
+			if (getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation) != glm::vec2{ m_activePort->centre }) {
+				m_activePort->moveTo(getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation));
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+		}
+	}
 }
 
 void ComponentDesigner::onNotifyEvent(NotifyEvent& event) 

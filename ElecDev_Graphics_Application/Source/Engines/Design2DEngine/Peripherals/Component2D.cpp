@@ -187,6 +187,15 @@ Component2D::~Component2D()
 	Renderer::remove(shape);
 	Renderer::remove(border);
 	Renderer::remove(title);
+	for (auto circle : m_circles) {
+		Renderer::remove(circle);
+	}
+	for (auto line : m_lines) {
+		Renderer::remove(line);
+	}
+	for (auto poly : m_polygons) {
+		Renderer::remove(poly);
+	}
 }
 
 //=============================================================================================================================================//

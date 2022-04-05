@@ -33,7 +33,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 	case CompDesignState::PLACE_PORT:
 		//Add new port
 		switchState(CompDesignState::SELECT);
-		m_activePort = std::make_shared<Port>(getNearestGridVertex( { m_scene->pixelCoordsToWorldCoords(getMousePosition()) }), next_port_type, m_activeComponent.get());
+		m_activePort = std::make_shared<Port>(getNearestGridVertex( { m_scene->pixelCoordsToWorldCoords(getMouseLocalPosition()) }), next_port_type, m_activeComponent.get());
 		designerState = CompDesignState::PLACE_PORT;
 		break;
 
