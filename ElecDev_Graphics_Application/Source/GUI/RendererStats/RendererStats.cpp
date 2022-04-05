@@ -29,6 +29,17 @@ void RendererStats::onRender()
 	Scene* scene = Renderer::getScene();
 	Application& app = Lumen::getApp();
 
+	// Update frame count used for fps calculations.
+	// Allows a consistent update time independant of FPS.
+	if (app.m_waitForEvents)
+	{
+		m_framesPerAverage = (1.f / app.m_eventsTimeout) * m_updateTime;
+	}
+	else 
+	{
+		m_framesPerAverage = app.m_targetFPS * m_updateTime;
+	}
+
 	// ----------------- //
 	//  P R O F I L E R  //
 	// ----------------- //
@@ -36,81 +47,118 @@ void RendererStats::onRender()
 	ImGui::PushID("ProfilerResults");
 	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 5.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		// Enable profiler.
+		// Ensure profilder is enabled.
 		app.m_profilerActive = true;
 
-		// Setup table
-		ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
-		ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
-		ImGui::TableSetupColumn("Time (ms/frame)", ImGuiTableColumnFlags_WidthStretch);
-		ImGui::TableHeadersRow();
-
-		// Log results in table.
-		float renderLayersTime = 0;
-		float renderScenesTime = 0;
-		float imGuiTime = 0;
+		// Iterate over profiler restults and use to calculate average.
 		for (auto& result : app.m_profilerResults)
 		{
-			// Keep track of these values to track imgui calls time.
-			// Drawing scenes.
-			if (result.name == "Draw Scene")
-			{
-				renderScenesTime += result.msTime;
-				continue;
-			}
-
-#ifdef PROFILE_IMGUI_OVERHEAD
-			// Rendering all of the layers.
-			else if (result.name == "App OnRender")
-			{
-				renderLayersTime = result.msTime;
-				continue;
-			}
-
-			// ImGui functions.
-			else if (result.name == "ImGui NewFrame" ||
-				result.name == "ImGui OnUpdate" ||
-				result.name == "ImGui Draw")
-			{
-				imGuiTime += result.msTime;
-				continue;
-			}
-#endif
-
-			// Log the scope time.
-			ImGui::TableNextRow();
-			ImGui::TableSetColumnIndex(0);
-			ImGui::TableSetColumnIndex(0);
-			ImGui::Text(result.name);
-			ImGui::TableSetColumnIndex(1);
-			ImGui::Text("%.3f", result.msTime);
+			// Ensure entry.
+			m_currentFrameAverages.insert({ result.name, 0 });
+			// Update average.
+			m_currentFrameAverages.at(result.name) += result.msTime / m_framesPerAverage;
 		}
-
-#ifdef PROFILE_IMGUI_OVERHEAD
-		// ImGui overhead (Drawing, calling functions, new frame).
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0);
-		ImGui::Text("ImGui Overhead");
-		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
-#endif
-
-		// Rendering scenes.
-		if (renderScenesTime)
+		// Done with frame.
+		m_currentFrame++;
+		if (m_currentFrame > m_framesPerAverage - 1)
 		{
-			ImGui::TableNextRow();
-			ImGui::TableSetColumnIndex(0);
-			ImGui::Text("Draw Scenes");
-			ImGui::TableSetColumnIndex(1);
-			ImGui::Text("%.3f", renderScenesTime);
+			m_prevFrameAverages = m_currentFrameAverages;
+			m_currentFrameAverages.clear();
+			m_currentFrame = 0;
 		}
 
-		// Done.
-		ImGui::EndTable();
-		// Clear profiler results.
-		app.m_profilerResults.reserve(app.m_profilerResults.size());
-		app.m_profilerResults.shrink_to_fit();
-		app.m_profilerResults.clear();
+		// Startup message.
+		if (!m_prevFrameAverages.size())
+		{
+			ImGui::Text("Gathering initial data...");
+		}
+		// Performance table.
+		else
+		{
+			// Setup table
+			ImGui::BeginTable("Profiler", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
+			ImGui::TableSetupColumn("Pipeline", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Time (ms/frame)", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableHeadersRow();
+
+			// Log results in table.
+			float renderLayersTime = 0;
+			float renderScenesTime = 0;
+			float imGuiTime = 0;
+			float fps = 0;
+		
+			// Display the calculated averages.
+			for (auto& [name, time] : m_prevFrameAverages)
+			{
+				// Keep track of these values to track imgui calls time.
+				// Drawing scenes.
+				if (name == "Draw Scene")
+				{
+					renderScenesTime += time;
+					continue;
+				}
+				else if (name == "Frametime")
+				{
+					fps = 1.f / (time * 1e-3);
+				}
+
+#ifdef PROFILE_IMGUI_OVERHEAD
+				// Rendering all of the layers.
+				else if (name == "App OnRender")
+				{
+					renderLayersTime = time;
+					continue;
+				}
+
+				// ImGui functions.
+				else if (result.name == "ImGui NewFrame" ||
+						 result.name == "ImGui OnUpdate" ||
+						 result.name == "ImGui Draw")
+				{
+					imGuiTime += time;
+					continue;
+				}
+#endif
+
+				// Log the scope time.
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text(name.c_str());
+				ImGui::TableSetColumnIndex(1);
+				ImGui::Text("%.3f", time);
+			}
+
+#ifdef PROFILE_IMGUI_OVERHEAD
+			// ImGui overhead (Drawing, calling functions, new frame).
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0);
+			ImGui::Text("ImGui Overhead");
+			ImGui::TableSetColumnIndex(1);
+			ImGui::Text("%.3f", renderLayersTime - renderScenesTime + imGuiTime);
+#endif
+
+			// Rendering scenes.
+			if (renderScenesTime)
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text("Draw Scenes");
+				ImGui::TableSetColumnIndex(1);
+				ImGui::Text("%.3f", renderScenesTime);
+			}
+
+			// Done.
+			ImGui::EndTable();
+			// Clear profiler results.
+			app.m_profilerResults.reserve(app.m_profilerResults.size());
+			app.m_profilerResults.shrink_to_fit();
+			app.m_profilerResults.clear();
+
+			// Display fps.
+			std::string fpsMsg = "Estimated FPS: " + std::to_string((int)fps);
+			ImGui::Text(fpsMsg.c_str());
+		}		
 	}
 	else
 	{

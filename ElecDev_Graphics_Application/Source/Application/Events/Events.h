@@ -87,7 +87,7 @@ public:
 		consumed = true;
 	}
 	// Checks if the event has been consumed and if it should not be handled.
-	inline bool isConsumed() 
+	inline bool isConsumed() const
 	{
 		return consumed;
 	}
@@ -95,13 +95,13 @@ public:
 	virtual ~Event() = default;
 	// Check if the event is of a certain type.
 	// Does NOT check if it ONLY belongs to the specific ID.
-	inline bool isType(LumenEventID compareID) 
+	inline bool isType(LumenEventID compareID) const 
 	{
 		return ( compareID & ID ) == compareID;
 	}
 	// Check if the event is not of a certain type.
 	// Does NOT check if it ONLY belongs to the specific ID.
-	inline bool isNotType(LumenEventID compareID) 
+	inline bool isNotType(LumenEventID compareID) const
 	{
 		return (compareID & ID) != compareID;
 	}
@@ -117,6 +117,8 @@ protected:
 	inline Event(LumenEventID ID) 
 		: ID(ID)
 	{}
+
+private:
 
 	// Has the event been handled?
 	bool consumed = false;
@@ -312,9 +314,14 @@ public:
 	{}
 
 	template<class EngineType>
-	inline EngineType* getEngine() 
+	inline EngineType* getEngine() const 
 	{
 		return dynamic_cast<EngineType*>(engine);
+	}
+
+	inline EngineCore* getEngine() const
+	{
+		return engine;
 	}
 
 private:
