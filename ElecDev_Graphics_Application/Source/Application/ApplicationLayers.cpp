@@ -128,8 +128,8 @@ ImGuiID Application::findLargestChildNode(ImGuiID nodeID)
 	std::vector<ImGuiDockNode*> nodes;
 	findChildNodes(ImGui::DockBuilderGetNode(nodeID), nodes);
 
-	// No children found.
-	if (!nodes.size())
+	// If the size is one we only have the parent.
+	if (nodes.size() == 1)
 		return nodeID;
 
 	// Find the largest node.
@@ -153,8 +153,8 @@ ImGuiID Application::findLastActiveChildNode(ImGuiID nodeID)
 	std::vector<ImGuiDockNode*> nodes;
 	findChildNodes(ImGui::DockBuilderGetNode(nodeID), nodes);
 
-	// No children found.
-	if (!nodes.size())
+	// If the size is one we only have the parent.
+	if (nodes.size() == 1)
 		return nodeID;
 
 	// Find the last active node.
@@ -174,12 +174,16 @@ void Application::findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDo
 	// Iterate over children.
 	for (auto* childNode : currentNode->ChildNodes) 
 	{
+		// If valid, find its children.
 		if (childNode)
 		{
-			// If valid, find its children.
 			findChildNodes(childNode, nodes);
-			// Add valid child to vector.
-			nodes.push_back(childNode);
+		}
+		// If any of the two children are NULL it means the current node is at the bottom.
+		else 
+		{
+			nodes.push_back(currentNode);
+			return;
 		}
 	}
 }
