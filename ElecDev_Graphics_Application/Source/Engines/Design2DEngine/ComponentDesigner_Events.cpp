@@ -76,6 +76,22 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 			menu->setInitialPosition(pos);
 			menu->setEngine(this);
 	}
+
+	if (event.isType(EventType_MouseDoublePress))
+	{
+		if (event.isType(EventType_MouseButtonLeft))
+		{
+			LUMEN_LOG_DEBUG("Left Double Press", "Component Designer Button Event");
+		}
+		else if (event.isType(EventType_MouseButtonRight))
+		{
+			LUMEN_LOG_DEBUG("Right Double Press", "Component Designer Button Event");
+		}
+		else if (event.isType(EventType_MouseButtonMiddle))
+		{
+			LUMEN_LOG_DEBUG("Middle Double Press", "Component Designer Button Event");
+		}
+	}
 }
 
 void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
