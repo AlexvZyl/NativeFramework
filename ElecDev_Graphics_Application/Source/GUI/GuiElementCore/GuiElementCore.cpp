@@ -10,6 +10,7 @@
 #include "Application/Application.h"
 #include "Lumen.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "Utilities/Logger/Logger.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -45,24 +46,29 @@ void GuiElementCore::onEvent(Event& event)
 	if (event.isConsumed()) return;
 
 	// Notify events.
-	if		(event.isType(EventType_Notify))		{ onNotifyEvent(dynamic_cast<NotifyEvent&>(event)); }
+	if		(event.isType(EventType_Notify))			{ onNotifyEvent(dynamic_cast<NotifyEvent&>(event)); }
 	
 	// Window events.
-	else if (event.isType(EventType_WindowResize))	{ onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
-	else if (event.isType(EventType_WindowMove))	{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowResize))		{ onContentRegionResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowMove))		{ onContentRegionMoveEvent(dynamic_cast<WindowEvent&>(event)); }
 
 	// Do not pass the events below if the layer is not to be rendered.
 	else if (!shouldRender()) return;
 
 	// Mouse events.
-	else if	(event.isType(EventType_MouseMove))		{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
-	else if (event.isType(EventType_MouseScroll))	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
-	else if (event.isType(EventType_MousePress))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
-	else if (event.isType(EventType_MouseRelease))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if	(event.isType(EventType_MouseMove))			{ onMouseMoveEvent(dynamic_cast<MouseMoveEvent&>(event)); }
+	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEvent(dynamic_cast<MouseDragEvent&>(event)); }
+	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
+	else if (event.isType(EventType_MousePress))		{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
 
 	// Key events.
-	else if (event.isType(EventType_KeyPress))		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
-	else if (event.isType(EventType_KeyRelease))	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyPress))			{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyRelease))		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+
+	// Event unhandled.
+	else LUMEN_LOG_WARN("No handler for event.", "Gui Core");
 }
 
 void GuiElementCore::onUpdate()

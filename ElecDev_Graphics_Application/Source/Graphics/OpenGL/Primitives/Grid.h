@@ -127,6 +127,7 @@ public:
 private:
 
 	friend class Renderer;
+	friend class EngineCore;
 
 	// Grid data.
 	int m_fineGridPixelSize = 1;

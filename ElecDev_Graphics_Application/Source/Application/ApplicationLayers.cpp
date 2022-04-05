@@ -78,37 +78,37 @@ void Application::popLayers()
 	m_layerStack->popLayers();
 }
 
-void Application::dockLayerToPanel(std::string& name, DockPanel panel)
+void Application::dockLayerToPanel(std::string& name, LumenDockPanel panel)
 {
 	// Dock the layer.
 	switch (panel)
 	{
-	case DockPanel::Scene:
+	case LumenDockPanel::Scene:
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_scenePanelID));
 		break;
 
-	case DockPanel::Left:
+	case LumenDockPanel::Left:
 		// Could have the left panel only consist of one GUI, like in VS Code.
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_leftPanelID));
 		break;
 
-	case DockPanel::Right:
+	case LumenDockPanel::Right:
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_rightPanelID));
 		break;
 
-	case DockPanel::Bottom:
+	case LumenDockPanel::Bottom:
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_bottomPanelID));
 		break;
 
-	case DockPanel::Floating:
+	case LumenDockPanel::Floating:
 		// Do not dock, maybe move to a specific position.
 		break;
 
-	case DockPanel::Fixed:
+	case LumenDockPanel::Fixed:
 		// These have to be handled manually.
 		break;
 
-	case DockPanel::Ribbon:
+	case LumenDockPanel::Ribbon:
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_ribbonPanelID));
 		break;
 

@@ -108,7 +108,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Left);
+        Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Editor", LumenDockPanel::Left);
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
@@ -135,7 +135,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_settingsIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        app.pushGuiLayer<SettingsWidget>("Settings", DockPanel::Floating);
+        app.pushGuiLayer<SettingsWidget>("Settings", LumenDockPanel::Floating);
     }
     // Tooltip.
     if (ImGui::IsItemHovered())

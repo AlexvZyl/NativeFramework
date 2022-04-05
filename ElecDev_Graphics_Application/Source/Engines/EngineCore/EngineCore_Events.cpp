@@ -20,27 +20,29 @@ void EngineCore::onEvent(Event& event)
 	if (event.isConsumed()) return;
 
 	// Mouse events.
-	if		(event.isType(EventType_MousePress))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
-	else if (event.isType(EventType_MouseRelease))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
-	else if (event.isType(EventType_MouseMove))		{ onMouseMoveEventForce(dynamic_cast<MouseMoveEvent&>(event)); }
-	else if (event.isType(EventType_MouseScroll))	{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
-	else if (event.isType(EventType_MouseDrag))		{ onMouseDragEvent(dynamic_cast<MouseDragEvent&>(event)); }
+	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(dynamic_cast<MouseMoveEvent&>(event)); }
+	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEvent(dynamic_cast<MouseDragEvent&>(event)); }
+	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(dynamic_cast<MouseButtonEvent&>(event)); }
+	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(dynamic_cast<MouseScrollEvent&>(event)); }
 
 	// Key events.
-	else if (event.isType(EventType_KeyPress))		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
-	else if (event.isType(EventType_KeyRelease))	{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyPress))			{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyRelease))		{ onKeyEvent(dynamic_cast<KeyEvent&>(event)); }
 
 	// Window events.
-	else if (event.isType(EventType_WindowResize))	{ onWindowResizeEventForce(dynamic_cast<WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowResize))		{ onWindowResizeEventForce(dynamic_cast<WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowMove))		{}
 
 	// Notify.
-	else if (event.isType(EventType_Notify))		{ onNotifyEventForce(dynamic_cast<NotifyEvent&>(event)); }
+	else if (event.isType(EventType_Notify))			{ onNotifyEventForce(dynamic_cast<NotifyEvent&>(event)); }
 
 	// File events.
-	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
+	else if (event.isType(EventType_FileDrop))			{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
 
-	// Event not found.
-	else LUMEN_LOG_WARN("Invalid event ID.", "Engine Core");
+	// Event unhandled.
+	else LUMEN_LOG_WARN("No handler for event.", "Engine Core");
 }
 
 //==============================================================================================================================================//
@@ -78,6 +80,7 @@ void EngineCore::onDefocusEventForce(NotifyEvent& event)
 void EngineCore::onHoverEventForce(NotifyEvent& event) 
 {
 	m_isHovered = true;
+	m_scene->m_grid->visibleHelperCircle();
 
 	onHoverEvent(event);
 }
@@ -85,6 +88,7 @@ void EngineCore::onHoverEventForce(NotifyEvent& event)
 void EngineCore::onDehoverEventForce(NotifyEvent& event) 
 {
 	m_isHovered = false;
+	m_scene->m_grid->hideHelperCircle();
 
 	onDehoverEvent(event);
 }

@@ -27,7 +27,7 @@ public:
 	virtual ~PopUpMenu();
 	
 	// Set the initial position.
-	void setInitialPosition(glm::vec2& pos);
+	void setInitialPosition(const glm::vec2& pos);
 
 	// Set the engine that the popup is in.
 	void setEngine(Base2DEngine* engine);

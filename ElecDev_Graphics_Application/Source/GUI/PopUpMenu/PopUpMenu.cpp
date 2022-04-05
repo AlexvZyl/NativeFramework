@@ -37,7 +37,7 @@ PopUpMenu::~PopUpMenu()
     Lumen::getApp().m_guiState->clickedZone.port = false;
 }
 
-void PopUpMenu::setInitialPosition(glm::vec2& pos) 
+void PopUpMenu::setInitialPosition(const glm::vec2& pos) 
 {
     m_initialPos = pos;
 }
@@ -91,11 +91,11 @@ void PopUpMenu::onRender()
             {
                 // Pushing this GUI layer defocuses the popup, causing a 
                 // defocus event, which removes the popup event.
-                app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
+                app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
             }
             if (ImGui::MenuItem("Color Editor"))
             {
-                ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
+                ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", LumenDockPanel::Floating)->getGui();
                 glm::vec2 localMousePos = getMouseLocalPosition();
                 glm::vec2 pos = {
 
@@ -132,7 +132,7 @@ void PopUpMenu::onRender()
 
         if (ImGui::MenuItem("Circuit Editor..."))
         {
-            CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Right)->getGui();
+            CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", LumenDockPanel::Right)->getGui();
             editor->setEngine(design_engine);
             editor->setActiveEngineTracking(true);
         }
@@ -166,7 +166,7 @@ void PopUpMenu::onRender()
         {
             // Pushing this GUI layer defocuses the popup, causing a 
             // defocus event, which removes the popup event.
-            app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
+            app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
         }
         if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
         {

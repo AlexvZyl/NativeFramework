@@ -21,54 +21,55 @@ class EngineCore;
 //  Event types.																																//
 //==============================================================================================================================================//
 
-enum EventType : uint64_t
+typedef uint64_t LumenEventID;
+enum EventType : LumenEventID
 {
 	// Layer specific identifiers.
-	EventType_Error				=	0,
-	EventType_Application		=	1 << 0,
-
-	// Mouse events.
-	EventType_MousePress		=	1 << 1,
-	EventType_MouseRelease		=	1 << 2,
-	EventType_MouseDoublePress	=	1 << 3,
-	EventType_MouseScroll		=	1 << 4,
-	EventType_MouseMove			=	1 << 5,
-	EventType_MouseDrag			=	1 << 6,
-	// Mouse button states.
-	EventType_MouseButtonLeft	=	1 << 7,
-	EventType_MouseButtonRight	=	1 << 8,
-	EventType_MouseButtonMiddle	=	1 << 9,
-
-	// Key events.
-	EventType_KeyPress			=	1 << 10,
-	EventType_KeyRelease		=	1 << 11,
-	EventType_KeyRepeat			=	1 << 12,
-	// Key states.
-	EventType_LeftCtrl			=	1 << 13,
-	EventType_RightCtrl			=	1 << 14,
-	EventType_LeftShift			=	1 << 15,
-	EventType_RightShift		=	1 << 16,
-	EventType_LeftAlt			=	1 << 17,
-	EventType_RightAlt			=	1 << 18,
-
-	// Window events.
-	EventType_WindowResize		=	1 << 19,
-	EventType_WindowMove		=	1 << 20,
-	EventType_WindowClose		=	1 << 21,
-
-	// File events.
-	EventType_FileDrop			=	1 << 22,
-	EventType_FileSave			=	1 << 23,
-	EventType_FileLoad			=	1 << 24,
-
-	// Notify events.
-	EventType_Notify			=	1 << 25,
-	EventType_Focus				=	1 << 26,
-	EventType_Defocus			=	1 << 27,
-	EventType_Hover				=	1 << 28,
-	EventType_Dehover			=	1 << 29,
-	EventType_MouseDragStart	=	1 << 30,
-	EventType_MouseDragStop		=	1 << 31
+	EventType_Error				=	(LumenEventID)0,
+	EventType_Application		=	(LumenEventID)1 << 0,
+									
+	// Mouse events.				
+	EventType_MousePress		=	(LumenEventID)1 << 1,
+	EventType_MouseRelease		=	(LumenEventID)1 << 2,
+	EventType_MouseDoublePress	=	(LumenEventID)1 << 3,
+	EventType_MouseScroll		=	(LumenEventID)1 << 4,
+	EventType_MouseMove			=	(LumenEventID)1 << 5,
+	EventType_MouseDrag			=	(LumenEventID)1 << 6,
+	// Mouse button states.			
+	EventType_MouseButtonLeft	=	(LumenEventID)1 << 7,
+	EventType_MouseButtonRight	=	(LumenEventID)1 << 8,
+	EventType_MouseButtonMiddle	=	(LumenEventID)1 << 9,
+									
+	// Key events.					
+	EventType_KeyPress			=	(LumenEventID)1 << 10,
+	EventType_KeyRelease		=	(LumenEventID)1 << 11,
+	EventType_KeyRepeat			=	(LumenEventID)1 << 12,
+	// Key states.				
+	EventType_LeftCtrl			=	(LumenEventID)1 << 13,
+	EventType_RightCtrl			=	(LumenEventID)1 << 14,
+	EventType_LeftShift			=	(LumenEventID)1 << 15,
+	EventType_RightShift		=	(LumenEventID)1 << 16,
+	EventType_LeftAlt			=	(LumenEventID)1 << 17,
+	EventType_RightAlt			=	(LumenEventID)1 << 18,
+									
+	// Window events.				
+	EventType_WindowResize		=	(LumenEventID)1 << 19,
+	EventType_WindowMove		=	(LumenEventID)1 << 20,
+	EventType_WindowClose		=	(LumenEventID)1 << 21,
+									
+	// File events.					
+	EventType_FileDrop			=	(LumenEventID)1 << 22,
+	EventType_FileSave			=	(LumenEventID)1 << 23,
+	EventType_FileLoad			=	(LumenEventID)1 << 24,
+									
+	// Notify events.				
+	EventType_Notify			=	(LumenEventID)1 << 25,
+	EventType_Focus				=	(LumenEventID)1 << 26,
+	EventType_Defocus			=	(LumenEventID)1 << 27,
+	EventType_Hover				=	(LumenEventID)1 << 28,
+	EventType_Dehover			=	(LumenEventID)1 << 29,
+	EventType_MouseDragStart	=	(LumenEventID)1 << 30,
+	EventType_MouseDragStop		=	(LumenEventID)1 << 31,
 };
 
 //==============================================================================================================================================//
@@ -94,26 +95,26 @@ public:
 	virtual ~Event() = default;
 	// Check if the event is of a certain type.
 	// Does NOT check if it ONLY belongs to the specific ID.
-	inline bool isType(uint64_t compareID) 
+	inline bool isType(LumenEventID compareID) 
 	{
 		return ( compareID & ID ) == compareID;
 	}
 	// Check if the event is not of a certain type.
 	// Does NOT check if it ONLY belongs to the specific ID.
-	inline bool isNotType(uint64_t compareID) 
+	inline bool isNotType(LumenEventID compareID) 
 	{
 		return (compareID & ID) != compareID;
 	}
 
 	// ID describing the event.
-	uint64_t ID;
+	LumenEventID ID;
 
 protected:
 	 
 	// Constructor that sets the ID of the event.
 	// This is a protected type to ensure that an 
 	// 'Event' object is not created.
-	inline Event(uint64_t ID) 
+	inline Event(LumenEventID ID) 
 		: ID(ID)
 	{}
 
@@ -139,7 +140,7 @@ public:
 
 protected:
 
-	inline MouseEvent(const glm::vec2& positionPixels, uint64_t ID) 
+	inline MouseEvent(const glm::vec2& positionPixels, LumenEventID ID) 
 		: Event(ID), mousePosition(positionPixels)
 	{}
 };
@@ -153,7 +154,7 @@ class MouseButtonEvent : public MouseEvent
 
 public:
 
-	inline MouseButtonEvent(const glm::vec2& mousePositionPixels, uint64_t ID) 
+	inline MouseButtonEvent(const glm::vec2& mousePositionPixels, LumenEventID ID) 
 		: MouseEvent(mousePositionPixels, ID)
 	{}
 };
@@ -167,7 +168,7 @@ class MouseMoveEvent : public MouseEvent
 
 public:
 
-	inline MouseMoveEvent(const glm::vec2& mousePositionPixels, uint64_t ID) 
+	inline MouseMoveEvent(const glm::vec2& mousePositionPixels, LumenEventID ID) 
 		: MouseEvent(mousePositionPixels, ID | EventType_MouseMove)
 	{}
 };
@@ -181,7 +182,7 @@ class MouseScrollEvent : public MouseEvent
 
 public:
 
-	inline MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, uint64_t ID) 
+	inline MouseScrollEvent(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID) 
 		: MouseEvent(mousePositionPixels, ID | EventType_MouseScroll), yOffset(yOffset), xOffset(xOffset)
 	{}
 
@@ -198,7 +199,7 @@ class MouseDragEvent : public MouseEvent
 {
 public:
 
-	inline MouseDragEvent(const glm::vec2& init, const glm::vec2& current, uint64_t ID)
+	inline MouseDragEvent(const glm::vec2& init, const glm::vec2& current, LumenEventID ID)
 		: MouseEvent(current, ID | EventType_MouseDrag), initialPosition(init)
 	{}
 
@@ -214,7 +215,7 @@ class KeyEvent : public Event
 
 public:
 
-	inline KeyEvent(int key, uint64_t ID, const glm::vec2& mousePos) 
+	inline KeyEvent(int key, LumenEventID ID, const glm::vec2& mousePos) 
 		: Event(ID), key(key), mousePosition(mousePos)
 	{}
 
@@ -235,7 +236,7 @@ class WindowEvent : public Event
 
 public:
 
-	inline WindowEvent(const glm::vec2& windowResize, uint64_t ID, bool isScale = false) 
+	inline WindowEvent(const glm::vec2& windowResize, LumenEventID ID, bool isScale = false) 
 		: Event(ID), windowData(windowResize), isScale(isScale)
 	{}
 
@@ -264,11 +265,11 @@ public:
 
 protected:
 
-	inline FileEvent(uint64_t eventID, const std::vector<std::filesystem::path>& files) 
+	inline FileEvent(LumenEventID eventID, const std::vector<std::filesystem::path>& files) 
 		: Event(eventID | EventType_Application), fileData(files)
 	{}
 
-	inline FileEvent(uint64_t eventID, const std::filesystem::path& file)
+	inline FileEvent(LumenEventID eventID, const std::filesystem::path& file)
 		: Event(eventID | EventType_Application)
 	{
 		fileData.emplace_back(file);
@@ -349,11 +350,11 @@ class NotifyEvent : public Event
 
 public:
 
-	inline NotifyEvent(uint64_t ID) 
+	inline NotifyEvent(LumenEventID ID) 
 		: Event(ID | EventType_Notify)
 	{}
 
-	inline NotifyEvent(uint64_t ID, const std::string& msg) 
+	inline NotifyEvent(LumenEventID ID, const std::string& msg) 
 		: Event(ID | EventType_Notify), msg(msg)	
 	{}
 

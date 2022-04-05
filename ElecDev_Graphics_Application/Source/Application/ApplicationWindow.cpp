@@ -21,8 +21,8 @@
 
 // Mouse double press information.
 #define MOUSE_DOUBLE_PRESS_TIMEOUT 0.4
-static std::unordered_map<uint64_t, double> buttonReleaseTimes;
-static std::unordered_map<uint64_t, bool> buttonReleaseIgnore;
+static std::unordered_map<LumenEventID, double> buttonReleaseTimes;
+static std::unordered_map<LumenEventID, bool> buttonReleaseIgnore;
 
 // Mouse dragging information.
 static bool draggingLeftbutton = false;
@@ -33,26 +33,26 @@ static glm::vec2 mouseDragInitialPosition;
 //  Helpers.																																	//
 //==============================================================================================================================================//
 
-bool isEventOfType(uint64_t eventID, uint64_t compareID) 
+bool isEventOfType(LumenEventID eventID, LumenEventID compareID) 
 {
     return (eventID & compareID) == compareID;
 }
 
-uint64_t getEventState(GLFWwindow* window) 
+LumenEventID getEventState(GLFWwindow* window) 
 {
-    uint64_t eventState = 0;
+    LumenEventID eventState = 0;
 
     // Mouse buttons.
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)) { eventState |= EventType_MouseButtonLeft; }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT)) { eventState |= EventType_MouseButtonRight; }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) { eventState |= EventType_MouseButtonMiddle; }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))     { eventState |= EventType_MouseButtonLeft;  }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))    { eventState |= EventType_MouseButtonRight; }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE))   { eventState |= EventType_MouseButtonMiddle;}
     // Keys.
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL)) { eventState |= EventType_LeftCtrl; }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;  }
     if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl; }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) { eventState |= EventType_LeftShift; }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)) { eventState |= EventType_RightShift; }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT)) { eventState |= EventType_LeftAlt; }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT)) { eventState |= EventType_RightAlt; }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift; }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift;}
+    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;   }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;  }
 
     return eventState;
 }
@@ -78,10 +78,10 @@ void Application::glfwInitCallbacks()
     glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
         {
             // Event state (Do not use the helper since we want to keep buttons seperate).
-            uint64_t eventState = 0;
+            LumenEventID eventState = 0;
 
             // Get the button related to the event.
-            uint64_t currentButton = 0;
+            LumenEventID currentButton = 0;
             if      (button == GLFW_MOUSE_BUTTON_LEFT)      { currentButton = EventType_MouseButtonLeft;   }
             else if (button == GLFW_MOUSE_BUTTON_RIGHT)     { currentButton = EventType_MouseButtonRight;  }
             else if (button == GLFW_MOUSE_BUTTON_MIDDLE)    { currentButton = EventType_MouseButtonMiddle; }
@@ -100,7 +100,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Create button event.
-            uint64_t buttonEventID = eventState;
+            LumenEventID buttonEventID = eventState;
             if      (action == GLFW_PRESS)      { buttonEventID |= EventType_MousePress; }
             else if (action == GLFW_RELEASE)    { buttonEventID |= EventType_MouseRelease; }
             MouseButtonEvent mouseButtonEvent({ cursorX, cursorY }, buttonEventID);
@@ -109,6 +109,8 @@ void Application::glfwInitCallbacks()
             double currentTime = glfwGetTime();
             if ( (currentTime - buttonReleaseTimes[currentButton] < MOUSE_DOUBLE_PRESS_TIMEOUT) && mouseButtonEvent.isType(EventType_MousePress))
             {
+                // Remove mouse press ID so that double presses are seperate.
+                mouseButtonEvent.ID &= ~(EventType_MousePress);
                 mouseButtonEvent.ID |= EventType_MouseDoublePress;
                 EventLog::log<MouseButtonEvent>(mouseButtonEvent);
                 // Ignore next release for double press.
@@ -141,7 +143,7 @@ void Application::glfwInitCallbacks()
                 // Store release time.
                 else
                 {
-                    // Reset times.
+                    // Reset times to ensure different mouse buttons stop double press.
                     for (auto& [button, time] : buttonReleaseTimes) time = 0;
                     // Set current time.
                     buttonReleaseTimes[currentButton] = glfwGetTime();
@@ -163,7 +165,7 @@ void Application::glfwInitCallbacks()
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
         {
             // Event states ID.
-            uint64_t eventState = getEventState(window);
+            LumenEventID eventState = getEventState(window);
 
             // Get the cursor position.
             double cursorX, cursorY;
@@ -185,7 +187,7 @@ void Application::glfwInitCallbacks()
             }
 
             // Log move event.
-            uint64_t moveEventID = EventType_MouseMove | eventState;
+            LumenEventID moveEventID = EventType_MouseMove | eventState;
             if (draggingLeftbutton)
                 moveEventID |= EventType_MouseDrag;
             EventLog::log<MouseMoveEvent>(MouseMoveEvent({ cursorX, cursorY }, moveEventID));
@@ -200,7 +202,7 @@ void Application::glfwInitCallbacks()
     glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset)
         {
             // Event ID.
-            uint64_t eventID = getEventState(window) | EventType_MouseScroll;
+            LumenEventID eventID = getEventState(window) | EventType_MouseScroll;
 
             // Get the cursor position.
             double cursorX, cursorY;
@@ -219,7 +221,7 @@ void Application::glfwInitCallbacks()
     glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             // Event ID.
-            uint64_t eventID = getEventState(window);
+            LumenEventID eventID = getEventState(window);
             if      (action == GLFW_PRESS)   { eventID |= EventType_KeyPress;   }
             else if (action == GLFW_RELEASE) { eventID |= EventType_KeyRelease; }
             else if (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }

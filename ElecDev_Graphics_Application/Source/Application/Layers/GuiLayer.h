@@ -126,7 +126,7 @@ void GuiLayer<GuiType>::onEvent(Event& event)
 		mouseEvent.mousePosition.y = mouseEvent.mousePosition.y - m_guiElement->m_contentRegionPosition.y;
 		m_guiElement->onEvent(mouseEvent);
 	}
-	else if (event.isType(EventType_MousePress) || event.isType(EventType_MouseRelease))
+	else if (event.isType(EventType_MousePress) || event.isType(EventType_MouseRelease || event.isType(EventType_MouseDoublePress)))
 	{
 		MouseButtonEvent mouseEvent = dynamic_cast<MouseButtonEvent&>(event);
 		mouseEvent.mousePosition.x = mouseEvent.mousePosition.x - m_guiElement->m_contentRegionPosition.x;
