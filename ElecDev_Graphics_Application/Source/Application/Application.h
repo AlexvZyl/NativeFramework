@@ -41,6 +41,7 @@ enum class LumenDockPanel
 	Right,		// The right panel.
 	Bottom,		// The bottom panel.
 	Scene,		// The main scene panel where the graphics are displayed.
+	AssetViewer,// Node used for the asset viewer.
 
 	// DO NOT USE!  Internal use only.
 	Ribbon,		// The left ribbon that holds the buttons).
@@ -275,6 +276,7 @@ private:
 	ImGuiID m_leftPanelID = NULL;
 	ImGuiID m_rightPanelID = NULL;
 	ImGuiID m_bottomPanelID = NULL;
+	ImGuiID m_bottomAssetViewerID = NULL;
 	ImGuiID m_scenePanelID = NULL;
 	ImGuiID m_ribbonPanelID = NULL;
 	ImGuiID m_bottomBarID = NULL;

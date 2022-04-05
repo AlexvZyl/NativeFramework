@@ -44,6 +44,11 @@ void Application::buildDocks()
 
 	// Bottom Panel.
 	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.3f, NULL, &m_scenePanelID);
+
+	// Bottom Asset viewer.
+	m_bottomAssetViewerID = ImGui::DockBuilderSplitNode(m_bottomPanelID, ImGuiDir_Right, 0.2f, NULL, &m_bottomPanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_bottomAssetViewerID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoDockingOverMe | ImGuiDockNodeFlags_NoDockingSplitMe;
 	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
@@ -56,7 +61,6 @@ void Application::buildDocks()
 	// Cleanup.
 	onRenderCleanup();
 }
-
 
 //==============================================================================================================================================//
 //  Layers																																		//
@@ -110,6 +114,10 @@ void Application::dockLayerToPanel(std::string& name, LumenDockPanel panel)
 
 	case LumenDockPanel::Ribbon:
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_ribbonPanelID));
+		break;
+
+	case LumenDockPanel::AssetViewer:
+		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_bottomAssetViewerID));
 		break;
 
 	default:
