@@ -198,8 +198,6 @@ void PopUpMenu::onRender()
             }
             if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
             {
-                if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
-         {
             // Create and log save event.
             auto path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
             if (path.string().size())
