@@ -143,7 +143,7 @@ void Toolbar::onRender()
             static std::string statsName;
             if (profilerState)
             {
-                auto* layer = app.pushGuiLayer<RendererStats>("Renderer Info", DockPanel::Right, 0, false);
+                auto* layer = app.pushGuiLayer<RendererStats>("Renderer Info", LumenDockPanel::Right, 0, false);
                 statsName = layer->getName();
                 app.m_profilerActive = true;
             }
@@ -161,7 +161,7 @@ void Toolbar::onRender()
             static std::string sceneHierarchyname;
             if (sceneHierarchy)
             {
-                auto* layer = app.pushGuiLayer<SceneHierarchy>("Scene Hierarchy", DockPanel::Right, 0, false);
+                auto* layer = app.pushGuiLayer<SceneHierarchy>("Scene Hierarchy", LumenDockPanel::Right, 0, false);
                 sceneHierarchyname = layer->getName();
             }
             else
@@ -177,7 +177,7 @@ void Toolbar::onRender()
             static std::string assetExplorerName;
             if (assetExplorer)
             {
-                m_assetExplorerLayer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
+                m_assetExplorerLayer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", LumenDockPanel::Bottom, 0, false);
             }
             else
             {
@@ -195,7 +195,7 @@ void Toolbar::onRender()
             static std::string styleLayernName;
             if (style)
             {
-                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Style Editor", DockPanel::Floating, 0, false);
+                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Style Editor", LumenDockPanel::Floating, 0, false);
                 layer->getGui()->showStyleEditor = true;
                 styleLayernName = layer->getName();
             }
@@ -212,7 +212,7 @@ void Toolbar::onRender()
             static std::string demoLayerName;
             if (demo)
             {
-                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Demo Window", DockPanel::Floating, 0, false);
+                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Demo Window", LumenDockPanel::Floating, 0, false);
                 layer->getGui()->showDemoWindow = true;
                 demoLayerName = layer->getName();
             }
@@ -226,7 +226,7 @@ void Toolbar::onRender()
 
         if (ImGui::MenuItem("Add BGCE"))
         {
-            app.pushGuiLayer<BackgroundColorEditor>("BGCE", DockPanel::Floating);
+            app.pushGuiLayer<BackgroundColorEditor>("BGCE", LumenDockPanel::Floating);
         }
 
         // End.

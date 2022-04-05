@@ -14,7 +14,7 @@
 #include "imgui/notify/imgui_notify.h"
 #include "Lumen.h"
 
-// TO BE DEPRECATED?
+// TO BE DEPRECATED!
 #include "GuiState.h"
 
 //==============================================================================================================================================//
@@ -34,7 +34,7 @@ struct ProfileResult;
 //  Data.																																		//
 //==============================================================================================================================================//
 
-enum class DockPanel 
+enum class LumenDockPanel
 {
 	Floating,	// Undocked windows.
 	Left,		// The left panel.
@@ -86,10 +86,10 @@ public:
 
 	// Push an engine onto the layerstack.
 	template<typename EngineType>
-	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  DockPanel dockPanel = DockPanel::Scene, int imguiWindowFlags = 0, bool focus = true);
+	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  LumenDockPanel panel = LumenDockPanel::Scene, int imguiWindowFlags = 0, bool focus = true);
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
-	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, DockPanel dockPanel = DockPanel::Floating, int imguiWindowFlags = 0, bool focus = true);
+	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, LumenDockPanel panel = LumenDockPanel::Floating, int imguiWindowFlags = 0, bool focus = true);
 	// Pop a layer from the layerstack using the pointer.
 	void queuePopLayer(Layer* layer);
 	// Pop a layer from the layerstack using the layer name.
@@ -217,7 +217,7 @@ private:
 	// Find the layer that is being hovered.
 	Layer* findHoveredLayer();
 	// Dock a layer to the panel.
-	void dockLayerToPanel(std::string& name, DockPanel panel);
+	void dockLayerToPanel(std::string& name, LumenDockPanel panel);
 	// Pop the layers queued for removal.
 	void popLayers();
 	
@@ -285,7 +285,7 @@ private:
 
 
 template<typename EngineType>
-EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)
+EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
@@ -294,13 +294,13 @@ EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, Doc
 	if(focus)
 		onFocusedLayerChange(ptr);
 	// Dock the layer.
-	dockLayerToPanel(newName, dockPanel);
+	dockLayerToPanel(newName, panel);
 	// Return the layer.
 	return ptr;
 }
 
 template<typename GuiType>
-GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)
+GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
@@ -309,7 +309,7 @@ GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel do
 	if(focus)
 		onFocusedLayerChange(ptr);
 	// Dock the layer.
-	dockLayerToPanel(newName, dockPanel);
+	dockLayerToPanel(newName, panel);
 	// Return the layer.
 	return ptr;
 	return nullptr;

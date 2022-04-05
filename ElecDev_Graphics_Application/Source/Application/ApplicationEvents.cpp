@@ -193,6 +193,9 @@ void Application::onEvent(Event& event)
 	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
 	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
 	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
+
+	// Event unhandled.
+	else LUMEN_LOG_WARN("No handler for event.", "Application");
 }
 
 //==============================================================================================================================================//
