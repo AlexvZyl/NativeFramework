@@ -174,6 +174,7 @@ private:
 	// Friends.
 	friend class LayerStack;
 	friend class SettingsWidget;
+	friend class RendererStats;
 
 	// The window containing the application.
 	GLFWwindow* m_window = nullptr;
