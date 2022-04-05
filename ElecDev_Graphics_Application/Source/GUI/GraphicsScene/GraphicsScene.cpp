@@ -25,7 +25,7 @@
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {
-	m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_MenuBar;
+	m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
 }
 
 void GraphicsScene::setEngine(EngineCore* engine)
@@ -63,6 +63,16 @@ void GraphicsScene::begin()
 
 void GraphicsScene::onRender() 
 {
+	// Set flag for design palette.
+	if (m_engine->hasDesignPalette())
+	{
+		m_imguiWindowFlags |= ImGuiWindowFlags_MenuBar;
+	}
+	else 
+	{
+		m_imguiWindowFlags &= ~ImGuiWindowFlags_MenuBar;
+	}
+
 	// Design palette.
 	if (m_engine->hasDesignPalette())
 	{

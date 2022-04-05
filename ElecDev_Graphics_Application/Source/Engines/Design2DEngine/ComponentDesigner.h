@@ -39,6 +39,7 @@ public:
     virtual void onMouseDragEvent(MouseDragEvent& event) override;
     // Key events.
     virtual void onKeyEvent(KeyEvent& event) override;
+    virtual void onNotifyEvent(NotifyEvent& event) override;
 
     // Design palette.
     virtual void renderDesignPalette() override;

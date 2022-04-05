@@ -103,6 +103,10 @@ public:
 	static void initSceneDestruction(Scene* scene);
 	// Done with scene destruction.
 	static void doneSceneDestruction();
+	// Bind a scene, but store the currently bound scene.
+	static void storeAndBindScene(Scene* scene);
+	// Unbind the scene and bind the stored scene.
+	static void restoreAndUnbindScene();
 
 	// --------------------------- //
 	//  2 D   P R I M I T I V E S  //
@@ -204,7 +208,7 @@ private:
 
 	// The scene rendered to.
 	static Scene* s_scene;
-	// Scene stored when another scene is being destroyed.
+	// Scene stored when another scene is being destroyed or bound.
 	static Scene* s_storedScene;
 	// The 2D Rendering pipeline.
 	static void renderingPipeline2D(Scene* scene);

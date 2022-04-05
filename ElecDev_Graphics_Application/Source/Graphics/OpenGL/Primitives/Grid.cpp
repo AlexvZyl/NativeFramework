@@ -52,7 +52,7 @@ Grid& Grid::createGrid()
 	// Calculate total required vertices.
 	float maxVertexCoord = (float)m_totalCoarseLines * (float)m_coarseIncrementSize;
 	int totalCoarseVerts = m_totalCoarseLines * 2 * 4;
-	int totalFineVerts = std::floor(maxVertexCoord / m_fineIncrementSize) * 2 * 8;
+	int totalFineVerts = (int)std::floor(maxVertexCoord / m_fineIncrementSize) * 2 * 8;
 	m_fineVAO->m_vertexCPU.reserve(totalFineVerts);
 	m_fineVAO->m_indexCPU.reserve(totalFineVerts);
 	m_coarseVAO->m_vertexCPU.reserve(totalCoarseVerts);

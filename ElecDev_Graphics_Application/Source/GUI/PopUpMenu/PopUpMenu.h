@@ -27,7 +27,7 @@ public:
 	virtual ~PopUpMenu();
 	
 	// Set the initial position.
-	void setInitialPosition(glm::vec2& pos);
+	void setInitialPosition(const glm::vec2& pos);
 
 	// Set the engine that the popup is in.
 	void setEngine(Base2DEngine* engine);
@@ -46,7 +46,7 @@ private:
 	Base2DEngine* m_engine = nullptr;
 
 	// We need to close the popup on a defocus.
-	virtual void onDefocusEvent(LayerEvent& event) override;
+	virtual void onDefocusEvent(NotifyEvent& event) override;
 };
 
 //==============================================================================================================================================//

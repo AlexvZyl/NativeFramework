@@ -147,7 +147,7 @@ void Renderer::loadTextures(Scene* scene)
 {	// SHADER MUST BE BOUND.
 
 	// Create sampler variable.
-	int textureCount = scene->m_textures.size() + 2;
+	int textureCount = (int)scene->m_textures.size() + 2;
 	std::vector<int> samplers = { 0 };
 	samplers.reserve(textureCount);
 	for (int i = 1; i < textureCount; i++) 

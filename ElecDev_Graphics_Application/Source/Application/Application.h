@@ -7,7 +7,6 @@
 #include <memory>
 #include <iostream>
 #include <vector>
-#include "Application/Events/EventLog.h"
 #include "Application/Layers/GuiLayer.h"
 #include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
@@ -15,19 +14,18 @@
 #include "imgui/notify/imgui_notify.h"
 #include "Lumen.h"
 
-// TO BE DEPRECATED?
+// TO BE DEPRECATED!
 #include "GuiState.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class EventLog;
 class Layer;
-class ImFont;
 class LumenWebSocket;
 class LayerStack;
 
+struct ImFont;
 struct GLFWwindow;
 struct RendererData;
 struct ProfileResult;
@@ -36,13 +34,14 @@ struct ProfileResult;
 //  Data.																																		//
 //==============================================================================================================================================//
 
-enum class DockPanel 
+enum class LumenDockPanel
 {
 	Floating,	// Undocked windows.
 	Left,		// The left panel.
 	Right,		// The right panel.
 	Bottom,		// The bottom panel.
 	Scene,		// The main scene panel where the graphics are displayed.
+	AssetViewer,// Node used for the asset viewer.
 
 	// DO NOT USE!  Internal use only.
 	Ribbon,		// The left ribbon that holds the buttons).
@@ -88,10 +87,10 @@ public:
 
 	// Push an engine onto the layerstack.
 	template<typename EngineType>
-	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  DockPanel dockPanel = DockPanel::Scene, int imguiWindowFlags = 0, bool focus = true);
+	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  LumenDockPanel panel = LumenDockPanel::Scene, int imguiWindowFlags = 0, bool focus = true);
 	// Push a gui onto the layerstack.
 	template<typename GuiType>
-	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, DockPanel dockPanel = DockPanel::Floating, int imguiWindowFlags = 0, bool focus = true);
+	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, LumenDockPanel panel = LumenDockPanel::Floating, int imguiWindowFlags = 0, bool focus = true);
 	// Pop a layer from the layerstack using the pointer.
 	void queuePopLayer(Layer* layer);
 	// Pop a layer from the layerstack using the layer name.
@@ -111,9 +110,6 @@ public:
 	void onUpdate();
 	// Handle events specifically for the Application layer.
 	void onEvent(Event& event);
-	// Log the event in the event log.
-	template <typename EventType>
-	void logEvent(Event& event);
 	// Should the app close?
 	bool isRunning();
 	// Close the app.
@@ -179,6 +175,7 @@ private:
 	// Friends.
 	friend class LayerStack;
 	friend class SettingsWidget;
+	friend class RendererStats;
 
 	// The window containing the application.
 	GLFWwindow* m_window = nullptr;
@@ -222,16 +219,19 @@ private:
 	// Find the layer that is being hovered.
 	Layer* findHoveredLayer();
 	// Dock a layer to the panel.
-	void dockLayerToPanel(std::string& name, DockPanel panel);
+	void dockLayerToPanel(std::string& name, LumenDockPanel panel);
 	// Pop the layers queued for removal.
 	void popLayers();
+	
+	// Functions used to get data regarding the docking child nodes.
+	ImGuiID findLargestChildNode(ImGuiID nodeID);
+	ImGuiID findLastActiveChildNode(ImGuiID nodeID);
+	void findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDockNode*>& nodes);
 
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
 
-	// Log containing all of the events.
-	std::unique_ptr<EventLog> m_eventLog;
 	// Handle window events.
 	void onWindowResizeEvent(WindowEvent& event);
 	// Handle serialisation events.
@@ -276,6 +276,7 @@ private:
 	ImGuiID m_leftPanelID = NULL;
 	ImGuiID m_rightPanelID = NULL;
 	ImGuiID m_bottomPanelID = NULL;
+	ImGuiID m_bottomAssetViewerID = NULL;
 	ImGuiID m_scenePanelID = NULL;
 	ImGuiID m_ribbonPanelID = NULL;
 	ImGuiID m_bottomBarID = NULL;
@@ -285,15 +286,9 @@ private:
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-template <typename EventType>
-void Application::logEvent(Event& event)
-{
-	// Log event in the event log.
-	m_eventLog->log<EventType>(event);
-}
 
 template<typename EngineType>
-EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)
+EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
@@ -302,13 +297,13 @@ EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, Doc
 	if(focus)
 		onFocusedLayerChange(ptr);
 	// Dock the layer.
-	dockLayerToPanel(newName, dockPanel);
+	dockLayerToPanel(newName, panel);
 	// Return the layer.
 	return ptr;
 }
 
 template<typename GuiType>
-GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel dockPanel, int imguiWindowFlags, bool focus)
+GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
@@ -317,7 +312,7 @@ GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, DockPanel do
 	if(focus)
 		onFocusedLayerChange(ptr);
 	// Dock the layer.
-	dockLayerToPanel(newName, dockPanel);
+	dockLayerToPanel(newName, panel);
 	// Return the layer.
 	return ptr;
 	return nullptr;

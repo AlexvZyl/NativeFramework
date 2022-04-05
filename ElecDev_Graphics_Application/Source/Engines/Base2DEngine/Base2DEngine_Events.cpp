@@ -15,13 +15,11 @@
 
 void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 {
-	uint64_t eventID = event.ID;
-
 	// --------------------- //
 	//  L E F T   P R E S S  //
 	// --------------------- //
 
-	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
+	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		// Find current click in world coords.
 		glm::vec3 m_prevMouseEventWorldVec = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
@@ -31,7 +29,7 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  R I G H T   P R E S S  //
 	// ----------------------- //
 
-	else if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
+	else if (event.isType(EventType_MousePress | EventType_MouseButtonRight))
 	{
 		
 	}
@@ -40,7 +38,7 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	//  M I D D L E   P R E S S  //
 	// ------------------------- //
 
-	else if (eventID == (EventType_MousePress | EventType_MouseButtonMiddle))
+	else if (event.isType(EventType_MousePress | EventType_MouseButtonMiddle))
 	{
 		// Find current click in world coords.
 		m_prevMouseEventWorldVec = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
@@ -51,8 +49,6 @@ void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 {
 	EngineCore::onMouseMoveEvent(event);
 
-	uint64_t eventID = event.ID;
-
 	// Find current click in world coords.
 	glm::vec3 currmousePosVec = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
 
@@ -60,7 +56,7 @@ void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	//  M I D D L E   P R E S S  //
 	// ------------------------- //
 
-	if (eventID == EventType_MouseButtonMiddle)
+	if (event.isType(EventType_MouseButtonMiddle))
 	{
 		// Calculate distance to translate
 		glm::vec3 translateVec({ (currmousePosVec.x - m_prevMouseEventWorldVec.x),(currmousePosVec.y - m_prevMouseEventWorldVec.y), 0 });

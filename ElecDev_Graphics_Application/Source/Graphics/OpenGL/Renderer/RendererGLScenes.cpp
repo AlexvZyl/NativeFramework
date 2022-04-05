@@ -49,6 +49,19 @@ void Renderer::doneSceneDestruction()
 	s_storedScene = nullptr;
 }
 
+void Renderer::storeAndBindScene(Scene* scene) 
+{
+	s_storedScene = s_scene;
+	Renderer::bindScene(scene);	
+}
+
+void Renderer::restoreAndUnbindScene() 
+{
+	Renderer::unbindScene();
+	s_scene = s_storedScene;
+	s_storedScene = nullptr;
+}
+
 //==============================================================================================================================================//
 //  Rendering.																																	//
 //==============================================================================================================================================//
@@ -139,12 +152,7 @@ void Renderer::renderingPipeline2D(Scene* scene)
 	
 	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
 	{
-		scene->m_grid->visibleHelperCircle();
 		Renderer::gridPass(scene);
-	}
-	else 
-	{
-		scene->m_grid->hideHelperCircle();
 	}
 
 	if (Renderer::s_pipelineControls["Geometry"])

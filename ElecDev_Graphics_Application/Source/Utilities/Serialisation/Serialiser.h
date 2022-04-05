@@ -87,6 +87,8 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Po
 
 // Deserialise a single port.
 void deserialise(YAML::Node& yamlNode, std::shared_ptr<Port>& port);
+// Helper to get the port type.
+PortType getPortType(YAML::Node node);
 
 //=============================================================================================================================================//
 //  Componenet 2D.																															   //

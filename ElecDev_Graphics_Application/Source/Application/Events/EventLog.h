@@ -17,56 +17,52 @@ class EventLog
 
 public:
 
-	// Constructor.
-	EventLog();
-
-	// Log an event.
+	// Log an event to be handled in the next frame.
 	template <typename EventType>
-	void log(Event& event);
+	inline static void log(const Event& event) 
+	{
+		if (typeid(EventType) == typeid(MouseMoveEvent))
+			mouseMove = std::make_unique<MouseMoveEvent>(dynamic_cast<const MouseMoveEvent&>(event));
 
+		else if (typeid(EventType) == typeid(MouseDragEvent))
+			mouseDrag = std::make_unique<MouseDragEvent>(dynamic_cast<const MouseDragEvent&>(event));
+
+		else if (typeid(EventType) == typeid(MouseScrollEvent))
+			mouseScroll = std::make_unique<MouseScrollEvent>(dynamic_cast<const MouseScrollEvent&>(event));
+
+		else
+			events.emplace_back(std::make_unique<EventType>(dynamic_cast<const EventType&>(event)));
+	}
+
+	// Setup the event log.
+	inline static void init() 
+	{
+		events.reserve(15);
+	}
+	
 	// Clears all of the events from the event log.
-	void clear();
+	inline static void clear() 
+	{
+		events.clear();
+		mouseMove.reset();
+		mouseDrag.reset();
+		mouseScroll.reset();
+	}
+
+	// Store all of the events that occurred.
+	inline static std::vector<std::unique_ptr<Event>> events;
+
+	// These events are kept seperate, since we only want to 
+	// handle one of them per frame.
+	inline static std::unique_ptr<MouseMoveEvent> mouseMove = nullptr;
+	inline static std::unique_ptr<MouseScrollEvent> mouseScroll = nullptr;
+	inline static std::unique_ptr<MouseDragEvent> mouseDrag = nullptr;
 
 private:
 
-	// Only the application needs to have access to dispatch 
-	// the specific events.
-	friend class Application;
+	EventLog();
 
-	// Store all of the events that occurred.
-	std::vector<std::unique_ptr<Event>> events;
-
-	// Keep mouse move and scroll events seperate so that multiple
-	// events that basically do the same thing do not get handled
-	// more than once.
-	std::unique_ptr<MouseMoveEvent> mouseMove = nullptr;
-	std::unique_ptr<MouseScrollEvent> mouseScroll = nullptr;
-	std::unique_ptr<MouseDragEvent> mouseDrag = nullptr;
 };
-
-//==============================================================================================================================================//
-//  Templates.																																	//
-//==============================================================================================================================================//
-
-template <typename EventType>
-void EventLog::log(Event& event)
-{
-	// Mouse move.
-	if (typeid(EventType) == typeid(MouseMoveEvent))
-		mouseMove = std::make_unique<MouseMoveEvent>(std::move(dynamic_cast<MouseMoveEvent&>(event)));
-
-	// Mouse drag.
-	else if (typeid(EventType) == typeid(MouseDragEvent))
-		mouseDrag = std::make_unique<MouseDragEvent>(std::move(dynamic_cast<MouseDragEvent&>(event)));
-
-	// Mouse scroll.
-	else if (typeid(EventType) == typeid(MouseScrollEvent))
-		mouseScroll = std::make_unique<MouseScrollEvent>(std::move(dynamic_cast<MouseScrollEvent&>(event)));
-
-	// General events.
-	else 
-		events.emplace_back(std::make_unique<EventType>(std::move(dynamic_cast<EventType&>(event))));
-}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

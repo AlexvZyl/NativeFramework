@@ -56,7 +56,7 @@ public:
 	std::unordered_map<std::string, std::string> dataDict;
 
 	// Component shape attributes.
-	float height = 0.08;
+	float height = 0.08f;
 	float width = 0.08f;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> vertices2;

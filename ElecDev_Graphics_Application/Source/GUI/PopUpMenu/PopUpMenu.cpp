@@ -15,6 +15,7 @@
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "GUI/ColorEditor/ColorEditor.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Application/Events/EventLog.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -36,7 +37,7 @@ PopUpMenu::~PopUpMenu()
     Lumen::getApp().m_guiState->clickedZone.port = false;
 }
 
-void PopUpMenu::setInitialPosition(glm::vec2& pos) 
+void PopUpMenu::setInitialPosition(const glm::vec2& pos) 
 {
     m_initialPos = pos;
 }
@@ -90,12 +91,12 @@ void PopUpMenu::onRender()
             {
                 // Pushing this GUI layer defocuses the popup, causing a 
                 // defocus event, which removes the popup event.
-                app.pushGuiLayer<ComponentEditor>("Component Editor", DockPanel::Left);
+                app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
             }
             if (ImGui::MenuItem("Color Editor"))
             {
-                ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", DockPanel::Floating)->getGui();
-                glm::vec2 localMousePos = getMousePosition();
+                ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", LumenDockPanel::Floating)->getGui();
+                glm::vec2 localMousePos = getMouseLocalPosition();
                 glm::vec2 pos = {
 
                     localMousePos.x + m_contentRegionPosition.x,
@@ -131,7 +132,7 @@ void PopUpMenu::onRender()
 
         if (ImGui::MenuItem("Circuit Editor..."))
         {
-            CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", DockPanel::Right)->getGui();
+            CircuitEditor* editor = app.pushGuiLayer<CircuitEditor>("Circuit Editor", LumenDockPanel::Right)->getGui();
             editor->setEngine(design_engine);
             editor->setActiveEngineTracking(true);
         }
@@ -142,8 +143,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Load Circuit", "", "", "Load");
             if (path.string().size())
             {
-                FileLoadEvent event(path.string());
-                app.logEvent<FileLoadEvent>(event);
+                EventLog::log<FileLoadEvent>(FileLoadEvent(path.string()));
             }
             // Remove popup.
             app.queuePopLayer(m_name);
@@ -154,8 +154,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Save Circuit", "", design_engine->m_circuit->m_label, "Save");
             if (path.string().size())
             {
-                FileSaveEvent event(path.string(), design_engine);
-                app.logEvent<FileSaveEvent>(event);
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), design_engine));
             }
             // Remove popup.
             app.queuePopLayer(m_layer);
@@ -202,8 +201,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
             if (path.string().size())
             {
-                FileSaveEvent event(path.string(), dynamic_cast<ComponentDesigner*>(m_engine));
-                app.logEvent<FileSaveEvent>(event);
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), dynamic_cast<ComponentDesigner*>(m_engine)));
             }
                 // Remove popup.
                 app.queuePopLayer(m_name);
@@ -238,7 +236,7 @@ void PopUpMenu::end()
 /* EVents.																															     */
 /*=======================================================================================================================================*/
 
-void PopUpMenu::onDefocusEvent(LayerEvent& event) 
+void PopUpMenu::onDefocusEvent(NotifyEvent& event) 
 {
     Lumen::getApp().queuePopLayer(m_layer);
 }

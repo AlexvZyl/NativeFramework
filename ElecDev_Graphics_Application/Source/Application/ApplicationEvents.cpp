@@ -35,7 +35,7 @@ void Application::onUpdate()
 	popLayers();
 
 	// Find the hovered layer on a mouse move event.
-	if (m_eventLog->mouseMove)
+	if (EventLog::mouseMove)
 	{
 		// If there is no hovered layer, we need to check if a layer is hovered.
 		if (!m_hoveredLayer) 
@@ -47,12 +47,10 @@ void Application::onUpdate()
 	}
 	
 	// Dispatch GLFW events.
-	for (auto& event : m_eventLog->events)
+	for (auto& event : EventLog::events)
 	{
-		uint64_t eventID = event->ID;
-
 		// Application events are dispatched explicitly (since it is not a part of the layers).
-		if (eventID == EventType_Application)
+		if (event->isType(EventType_Application))
 		{
 			Application::onEvent(*event.get()); 
 			continue;
@@ -60,7 +58,7 @@ void Application::onUpdate()
 		
 		// On a mouse press we need to change the focused layer.
 		// This also allows us to modify how dear imgui sets focused layers.
-		if (eventID == EventType_MousePress) 
+		if (event->isType(EventType_MousePress))
 			onFocusedLayerChange(m_hoveredLayer); 
 
 		// Pass events to focused layer.
@@ -71,14 +69,14 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer)
 	{
-		if (m_eventLog->mouseMove)   
-			m_hoveredLayer->onEvent(*m_eventLog->mouseMove.get());
+		if (EventLog::mouseMove)   
+			m_hoveredLayer->onEvent(*EventLog::mouseMove.get());
 
-		if (m_eventLog->mouseScroll) 
-			m_hoveredLayer->onEvent(*m_eventLog->mouseScroll.get());
+		if (EventLog::mouseScroll) 
+			m_hoveredLayer->onEvent(*EventLog::mouseScroll.get());
 
-		if (m_eventLog->mouseDrag)
-			m_hoveredLayer->onEvent(*m_eventLog->mouseDrag.get());
+		if (EventLog::mouseDrag)
+			m_hoveredLayer->onEvent(*EventLog::mouseDrag.get());
 	}
 
 	// Pop layers that are queued from GLFW events.
@@ -96,7 +94,7 @@ void Application::onUpdate()
 		layer->onUpdate();
 
 	// All of the GLFW events have been handled and the log can be cleared.
-	m_eventLog->clear();
+	EventLog::clear();
 }
 
 Layer* Application::findHoveredLayer()
@@ -120,10 +118,10 @@ void Application::imguiOnUpdate()
 
 	// Pass events to ImGui.
 	// Thess events are called here so that ImGui is not hammered with more that one per frame.
-	if (m_eventLog->mouseScroll)
-		ImGui_ImplGlfw_ScrollCallback(m_window, m_eventLog->mouseScroll->xOffset, m_eventLog->mouseScroll->yOffset);
-	if (m_eventLog->mouseMove)
-		ImGui_ImplGlfw_CursorPosCallback(m_window, m_eventLog->mouseMove->mousePosition.x, m_eventLog->mouseMove->mousePosition.y);
+	if (EventLog::mouseScroll)
+		ImGui_ImplGlfw_ScrollCallback(m_window, EventLog::mouseScroll->xOffset, EventLog::mouseScroll->yOffset);
+	if (EventLog::mouseMove)
+		ImGui_ImplGlfw_CursorPosCallback(m_window, EventLog::mouseMove->mousePosition.x, EventLog::mouseMove->mousePosition.y);
 }
 
 //==============================================================================================================================================//
@@ -138,14 +136,14 @@ void Application::onHoveredLayerChange(Layer* newLayer)
 	// Create a dehover event.
 	if (m_hoveredLayer)
 	{
-		LayerEvent dehoverEvent(EventType_Dehover);
+		NotifyEvent dehoverEvent(EventType_Dehover);
 		m_hoveredLayer->onEvent(dehoverEvent);
 	}
 
 	// Create a hover event.
 	if (newLayer)
 	{
-		LayerEvent hoverEvent(EventType_Hover);
+		NotifyEvent hoverEvent(EventType_Hover);
 		newLayer->onEvent(hoverEvent);
 	}
 
@@ -164,14 +162,14 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 	// Create a defocus event.
 	if (m_focusedLayer)
 	{
-		LayerEvent defocusEvent(EventType_Defocus);
+		NotifyEvent defocusEvent(EventType_Defocus);
 		m_focusedLayer->onEvent(defocusEvent);
 	}
 
 	// Create a focus event.
 	if (newLayer)
 	{
-		LayerEvent focusEvent(EventType_Focus);
+		NotifyEvent focusEvent(EventType_Focus);
 		newLayer->onEvent(focusEvent);
 		newLayer->focus();
 	}
@@ -188,15 +186,16 @@ void Application::onFocusedLayerChange(Layer* newLayer)
 
 void Application::onEvent(Event& event)
 {
-	uint64_t eventID = event.ID;
-	
 	// Window events.																	 
-	if      (eventID == EventType_WindowResize)	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	if      (event.isType(EventType_WindowResize))	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
 												 								 
 	// File events.					 								 
-	else if (eventID == EventType_FileDrop)		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
-	else if (eventID == EventType_FileSave)		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
-	else if (eventID == EventType_FileLoad)		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
+	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
+	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
+	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
+
+	// Event unhandled.
+	else LUMEN_LOG_WARN("No handler for event.", "Application");
 }
 
 //==============================================================================================================================================//

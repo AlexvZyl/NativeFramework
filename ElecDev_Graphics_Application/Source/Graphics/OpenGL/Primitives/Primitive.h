@@ -44,7 +44,9 @@ public:
 protected:
 
 	// Constructor.
-	PrimitivePtr(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) {}
+	PrimitivePtr(Entity* parent) 
+		: Entity(EntityType::PRIMITIVE, parent) 
+	{}
 };
 
 //=============================================================================================================================================//

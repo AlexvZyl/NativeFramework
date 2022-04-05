@@ -6,6 +6,13 @@
 
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include <filesystem>
+#include <string>
+
+//==============================================================================================================================================//
+//  Forward declerations.																														//
+//==============================================================================================================================================//
+
+class AssetViewer;
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -19,10 +26,8 @@ public:
 	// Constructor.
 	AssetExplorer(std::string name, int imguiWindowFlags);
 	// Destructor.
-	inline virtual ~AssetExplorer() 
-	{
-		s_startingDirectory = m_currentDirectory.string();
-	};
+	virtual ~AssetExplorer();
+	
 
 	// Rendering.
 	virtual void begin() override;
@@ -61,6 +66,8 @@ private:
 	std::vector<std::filesystem::path> m_pathHistory;
 	std::vector<std::filesystem::path> m_pathUndoHistory;
 
+	// Engine used to view assets.
+	AssetViewer* m_assetViewerEngine = nullptr;
 };
 
 //==============================================================================================================================================//

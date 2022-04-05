@@ -5,10 +5,12 @@
 #include "Application/Application.h"
 #include "AssetExplorer.h"
 #include "Lumen.h"
+#include "Application/Events/EventLog.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/notify/notify_icons_define.h"
 #include "imgui/imgui_internal.h"
+#include "Engines/AssetViewer/AssetViewer.h" 
 
 //==============================================================================================================================================//
 //  Statics.																																	//
@@ -34,7 +36,17 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	s_reloadIcon = loadBitmapToGL(loadImageFromResource(RELOAD_ICON));
 	s_upArrowIcon = loadBitmapToGL(loadImageFromResource(UP_ARROW_ICON));
 	loadDirectories();
+
+	// Start asset viewer engine.
+	m_assetViewerEngine = Lumen::getApp().pushEngineLayer<AssetViewer>("Asset Viewer", LumenDockPanel::AssetViewer)->getEngine();
 }
+
+AssetExplorer::~AssetExplorer() 
+{
+	s_startingDirectory = m_currentDirectory.string();
+	Lumen::getApp().queuePopLayer(m_assetViewerEngine->m_layer);
+	m_assetViewerEngine = nullptr;
+};
 
 void AssetExplorer::begin()
 {
@@ -238,12 +250,17 @@ void AssetExplorer::onRender()
 
 				if (p.path().extension() == ".lmct")
 				{
-					ImGui::ImageButton((void*)s_circuitFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
+					if (ImGui::ImageButton((void*)s_circuitFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 })) 
+					{
+						if (!ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+						{
+							m_assetViewerEngine->viewAsset(p);
+						}
+					}
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
-						std::string item = p.path().string();
-						FileLoadEvent event(item);
-						Lumen::getApp().logEvent<FileLoadEvent>(event);
+						m_assetViewerEngine->clearAssets();
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p.path().string()));
 					}
 				}
 

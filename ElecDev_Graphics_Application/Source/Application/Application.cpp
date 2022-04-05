@@ -8,6 +8,7 @@
 #include "Application/Application.h"
 #include "Application/Layers/Layer.h"
 #include "Application/Layers/GuiLayer.h"
+#include "Application/Events/EventLog.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
@@ -21,9 +22,8 @@
 #include "Utilities/Profiler/Profiler.h"
 #include "Utilities/Lua/LuaInterpreter.h"
 #include "External/Misc/ConsoleColor.h"
-#include "GLFW/glfw3.h"
 #include "Utilities/Logger/Logger.h"
-#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  Setup																																		//
@@ -41,8 +41,8 @@ Application::Application()
 
 	// Events & Layers.
 	Application::glfwInitCallbacks();
+	EventLog::init();
 	m_layerStack = std::make_unique<LayerStack>();
-	m_eventLog = std::make_unique<EventLog>();
 
 	// NOTE: TO BE DEPRECATED!
 	m_guiState = std::make_unique<GUIState>();
@@ -56,10 +56,10 @@ Application::Application()
 	buildDocks();
 
 	// Create the main GUI layers.
-	auto* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", DockPanel::Fixed)->getGui();
-	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", DockPanel::Bottom, 0, false);
-	pushGuiLayer<Ribbon>("Main Ribbon", DockPanel::Ribbon, 0, false);
-	pushGuiLayer<BottomBar>("Bottom Bar", DockPanel::Fixed, 0, false);
+	auto* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", LumenDockPanel::Fixed)->getGui();
+	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", LumenDockPanel::Bottom, 0, false);
+	pushGuiLayer<Ribbon>("Main Ribbon", LumenDockPanel::Ribbon, 0, false);
+	pushGuiLayer<BottomBar>("Bottom Bar", LumenDockPanel::Fixed, 0, false);
 
 	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();
@@ -262,7 +262,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_SeparatorHovered] = colors[ImGuiCol_Separator];
 	colors[ImGuiCol_Border] = colors[ImGuiCol_Separator];
 	colors[ImGuiCol_ScrollbarBg] = colors[ImGuiCol_Separator];
-	colors[ImGuiCol_ScrollbarBg].w = 0.6;
+	colors[ImGuiCol_ScrollbarBg].w = 0.6f;
 	colors[ImGuiCol_DockingEmptyBg] = colors[ImGuiCol_Separator];
 
 	colors[ImGuiCol_MenuBarBg] = colors[ImGuiCol_WindowBg];

@@ -12,10 +12,8 @@
 void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 {
 	Base2DEngine::onMouseButtonEvent(event);
-	uint64_t eventID = event.ID;
 
-
-	if (eventID == (EventType_MousePress | EventType_MouseButtonLeft))
+	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
@@ -59,27 +57,28 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		}
 		else if (designerState == CompDesignState::DRAW_CIRCLE)
 		{
-			if (!m_activeCircle) {
+			if (!m_activeCircle) 
+			{
 				//start new line
 				m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
 			}
-			else {
+			else 
+			{
 				//end the line
 				m_activeComponent->addCircle(m_activeCircle);
 				m_activeCircle = nullptr;
 			}
-
 		}
 		else if (designerState == CompDesignState::PLACE_PORT) {
 			m_activeComponent->addPort(m_activePort);
 			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
 		}
 	}
-	if (eventID == (EventType_MousePress | EventType_MouseButtonRight))
-	{
 
+	if (event.isType(EventType_MousePress | EventType_MouseButtonRight))
+	{
 			// Create a popup menu on a right click on a graphics scene.
-			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", DockPanel::Floating)->getGui();
+			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", LumenDockPanel::Floating)->getGui();
 			glm::vec2 pos = {
 
 				event.mousePosition.x + m_contentRegionPos.x,
@@ -89,7 +88,21 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 			menu->setEngine(this);
 	}
 
-
+	if (event.isType(EventType_MouseDoublePress))
+	{
+		if (event.isType(EventType_MouseButtonLeft))
+		{
+			LUMEN_LOG_DEBUG("Left Double Press", "Component Designer Button Event");
+		}
+		else if (event.isType(EventType_MouseButtonRight))
+		{
+			LUMEN_LOG_DEBUG("Right Double Press", "Component Designer Button Event");
+		}
+		else if (event.isType(EventType_MouseButtonMiddle))
+		{
+			LUMEN_LOG_DEBUG("Middle Double Press", "Component Designer Button Event");
+		}
+	}
 }
 
 void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
@@ -103,7 +116,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
-		//Move the back vertex
+		// Move the back vertex.
 		if (m_activePoly) 
 		{
 			m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount-1, getNearestGridVertex(screenCoords));
@@ -113,7 +126,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	{
 		if (m_activeLine)
 		{
-			//update the line end position
+			// Update the line end position.
 			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 		}
 	}
@@ -121,7 +134,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	{
 		if (m_activeCircle) 
 		{
-			//update circle
+			// Update circle.
 			m_activeCircle->setRadius(glm::length(glm::vec2(m_activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
 	}
@@ -182,7 +195,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	//m_lastDragPos = screenCoords;
 	m_currentEntityID = getEntityID(pixelCoords);
 
-	if (event.ID == EventType_MouseDrag)
+	if (event.isType(EventType_MouseDrag))
 	{
 		LUMEN_LOG_DEBUG("Dragging...","Move Event");
 	}
@@ -201,11 +214,9 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 {
 	Base2DEngine::onKeyEvent(event);
 
-	// Get the event ID.
-	uint64_t eventID = event.ID;
 
 	// Events based on key type.
-	if (eventID == EventType_KeyPress)
+	if (event.isType(EventType_KeyPress))
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
@@ -253,8 +264,17 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 
 void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
 {
-	std::string initial = std::to_string(event.initialPosition.x) + " , " + std::to_string(event.initialPosition.y);
-	LUMEN_LOG_DEBUG(initial, "DragEvent Initial");
-	std::string current = std::to_string(event.mousePosition.x) + " , " + std::to_string(event.mousePosition.y);
-	LUMEN_LOG_DEBUG(current, "DragEvent Current");
+
+}
+
+void ComponentDesigner::onNotifyEvent(NotifyEvent& event) 
+{
+	if (event.isType(EventType_MouseDragStart))
+	{
+		LUMEN_LOG_DEBUG("Mouse Drag Start","Component Designer Notify");
+	}
+	else if (event.isType(EventType_MouseDragStop))
+	{
+		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
+	}
 }
