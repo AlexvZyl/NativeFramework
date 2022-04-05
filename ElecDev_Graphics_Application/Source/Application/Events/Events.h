@@ -24,12 +24,13 @@ class EngineCore;
 enum EventType : uint64_t
 {
 	// Layer specific identifiers.
-	EventType_Error				=	1 << 0,
-	EventType_Application		=	1 << 1,
+	EventType_Error				=	0,
+	EventType_Application		=	1 << 0,
 
 	// Mouse events.
-	EventType_MousePress		=	1 << 2,
-	EventType_MouseRelease		=	1 << 3,
+	EventType_MousePress		=	1 << 1,
+	EventType_MouseRelease		=	1 << 2,
+	EventType_MouseDoublePress	=	1 << 3,
 	EventType_MouseScroll		=	1 << 4,
 	EventType_MouseMove			=	1 << 5,
 	EventType_MouseDrag			=	1 << 6,
