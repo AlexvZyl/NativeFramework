@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
     <ClCompile Include="External\glm\glm\detail\glm.cpp" />
     <ClCompile Include="External\imgui\backends\imgui_impl_glfw.cpp" />
@@ -304,6 +305,7 @@
   <ItemGroup>
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
+    <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />
     <ClInclude Include="External\glm\glm\common.hpp" />
     <ClInclude Include="External\glm\glm\detail\compute_common.hpp" />

@@ -113,7 +113,7 @@ void Application::dockLayerToPanel(std::string& name, LumenDockPanel panel)
 		break;
 
 	default:
-		LUMEN_LOG_WARN("Invalid docking configuration.", "IMGUI")
+		LUMEN_LOG_WARN("Invalid docking configuration.", "ImGui")
 		break;
 	}
 }
