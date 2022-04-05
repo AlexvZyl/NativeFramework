@@ -49,6 +49,19 @@ void Renderer::doneSceneDestruction()
 	s_storedScene = nullptr;
 }
 
+void Renderer::storeAndBindScene(Scene* scene) 
+{
+	s_storedScene = s_scene;
+	Renderer::bindScene(scene);	
+}
+
+void Renderer::restoreAndUnbindScene() 
+{
+	Renderer::unbindScene();
+	s_scene = s_storedScene;
+	s_storedScene = nullptr;
+}
+
 //==============================================================================================================================================//
 //  Rendering.																																	//
 //==============================================================================================================================================//

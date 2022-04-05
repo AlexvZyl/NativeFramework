@@ -132,6 +132,7 @@
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
+    <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -819,6 +820,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
+    <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

@@ -44,6 +44,11 @@ void Application::buildDocks()
 
 	// Bottom Panel.
 	m_bottomPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.3f, NULL, &m_scenePanelID);
+
+	// Bottom Asset viewer.
+	m_bottomAssetViewerID = ImGui::DockBuilderSplitNode(m_bottomPanelID, ImGuiDir_Right, 0.2f, NULL, &m_bottomPanelID);
+	dockNode = ImGui::DockBuilderGetNode(m_bottomAssetViewerID);
+	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoDockingOverMe | ImGuiDockNodeFlags_NoDockingSplitMe;
 	dockNode = ImGui::DockBuilderGetNode(m_bottomPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_AutoHideTabBar;
 
@@ -56,7 +61,6 @@ void Application::buildDocks()
 	// Cleanup.
 	onRenderCleanup();
 }
-
 
 //==============================================================================================================================================//
 //  Layers																																		//
@@ -112,8 +116,12 @@ void Application::dockLayerToPanel(std::string& name, LumenDockPanel panel)
 		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_ribbonPanelID));
 		break;
 
+	case LumenDockPanel::AssetViewer:
+		ImGui::DockBuilderDockWindow(name.c_str(), findLastActiveChildNode(m_bottomAssetViewerID));
+		break;
+
 	default:
-		LUMEN_LOG_WARN("Invalid docking configuration.", "IMGUI")
+		LUMEN_LOG_WARN("Invalid docking configuration.", "ImGui")
 		break;
 	}
 }
@@ -128,8 +136,8 @@ ImGuiID Application::findLargestChildNode(ImGuiID nodeID)
 	std::vector<ImGuiDockNode*> nodes;
 	findChildNodes(ImGui::DockBuilderGetNode(nodeID), nodes);
 
-	// No children found.
-	if (!nodes.size())
+	// If the size is one we only have the parent.
+	if (nodes.size() == 1)
 		return nodeID;
 
 	// Find the largest node.
@@ -153,8 +161,8 @@ ImGuiID Application::findLastActiveChildNode(ImGuiID nodeID)
 	std::vector<ImGuiDockNode*> nodes;
 	findChildNodes(ImGui::DockBuilderGetNode(nodeID), nodes);
 
-	// No children found.
-	if (!nodes.size())
+	// If the size is one we only have the parent.
+	if (nodes.size() == 1)
 		return nodeID;
 
 	// Find the last active node.
@@ -174,12 +182,16 @@ void Application::findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDo
 	// Iterate over children.
 	for (auto* childNode : currentNode->ChildNodes) 
 	{
+		// If valid, find its children.
 		if (childNode)
 		{
-			// If valid, find its children.
 			findChildNodes(childNode, nodes);
-			// Add valid child to vector.
-			nodes.push_back(childNode);
+		}
+		// If any of the two children are NULL it means the current node is at the bottom.
+		else 
+		{
+			nodes.push_back(currentNode);
+			return;
 		}
 	}
 }

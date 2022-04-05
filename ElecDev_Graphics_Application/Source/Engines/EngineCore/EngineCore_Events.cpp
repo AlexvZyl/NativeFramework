@@ -80,7 +80,8 @@ void EngineCore::onDefocusEventForce(NotifyEvent& event)
 void EngineCore::onHoverEventForce(NotifyEvent& event) 
 {
 	m_isHovered = true;
-	m_scene->m_grid->visibleHelperCircle();
+	if(m_scene->m_grid->m_helperCircleEnabled)
+		m_scene->m_grid->visibleHelperCircle();
 
 	onHoverEvent(event);
 }
