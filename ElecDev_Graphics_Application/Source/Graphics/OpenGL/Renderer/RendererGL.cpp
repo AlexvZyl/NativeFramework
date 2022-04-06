@@ -19,7 +19,7 @@
 
 std::map<std::string, std::unique_ptr<Shader>> Renderer::s_shaders;
 Scene* Renderer::s_scene = nullptr;
-Scene* Renderer::s_storedScene = nullptr;
+std::vector<Scene*> Renderer::s_storedScenes;
 std::unique_ptr<Font> Renderer::s_defaultFont = nullptr;
 std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
 std::unique_ptr<VertexArrayObject<VertexDataTextured>> Renderer::s_unitQuad = nullptr;

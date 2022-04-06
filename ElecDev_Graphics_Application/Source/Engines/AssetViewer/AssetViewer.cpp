@@ -24,19 +24,13 @@ AssetViewer::AssetViewer()
 
 void AssetViewer::clearAssets()
 {
-	bool bindScene = false;
-	if (Renderer::getScene() != m_scene.get())
-			bindScene = true;
-
-	if(bindScene)
-		Renderer::storeAndBindScene(m_scene.get());
+	Renderer::storeAndBindScene(m_scene.get());
 
 	m_currentAsset = "No Asset.";
 	m_circuit.reset();
 	m_component.reset();
 
-	if(bindScene)
-		Renderer::restoreAndUnbindScene();
+	Renderer::restoreAndUnbindScene();
 }
 
 void AssetViewer::renderDesignPalette() 
@@ -80,7 +74,7 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 void AssetViewer::viewCircuit(YAML::Node& yamlNode)
 {
 	clearAssets();
-	deserialiseCircuit(yamlNode, m_circuit.get());
+	m_circuit = deserialiseCircuit(yamlNode);
 }
 
 //=============================================================================================================================================//

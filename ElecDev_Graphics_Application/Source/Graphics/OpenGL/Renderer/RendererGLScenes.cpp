@@ -64,8 +64,7 @@ void Renderer::storeAndBindScene(Scene* scene)
 
 void Renderer::restoreAndUnbindScene() 
 {
-	Renderer::unbindScene();
-	s_scene = s_storedScenes.back();
+	Renderer::bindScene(s_storedScenes.back());
 	s_storedScenes.pop_back();
 }
 
