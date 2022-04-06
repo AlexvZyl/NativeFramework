@@ -257,7 +257,7 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == CompDesignState::SELECT) {
 		//User is dragging a component.
-		glm::vec2 translation = screenCoords - m_lastDragPos;
+		glm::vec2 translation = m_scene->pixelCoordsToWorldCoords(event.currentFrameDelta);
 		if (m_activeVertex) {
 			//First check if we should move a vertex
 			if (getNearestGridVertex(glm::vec2{m_activeVertex->data.position} + translation) != glm::vec2{ m_activeVertex->data.position }) {
@@ -278,22 +278,16 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 					m_lastDragPos = screenCoords;
 			}
 			if (m_activeLine) {
-				if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
-					m_activeLine->translateTo(getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
+				m_activeLine->translate(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
 			}
 			if (m_activeCircle) {
-				if (getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation) != glm::vec2{ m_activeCircle->m_trackedCenter }) {
-					m_activeCircle->translateTo(getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
+				m_activeCircle->translate(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
 			}
 			if (m_activePort.get()) {
-				if (getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation) != glm::vec2{ m_activePort->centre }) {
-					m_activePort->moveTo(getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
+				m_activePort->move(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
 			}
 		}
 	}
@@ -312,7 +306,15 @@ void ComponentDesigner::onNotifyEvent(NotifyEvent& event)
 		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
 		if (m_activePoly) {
 			m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
-			//notify undo system of drag with drag vector
+		}
+		if (m_activeLine) {
+			m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
+		}
+		if (m_activeCircle) {
+			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
+		}
+		if (m_activePort) {
+			m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
 		}
 	}
 }
