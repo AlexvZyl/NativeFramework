@@ -126,15 +126,6 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 			m_activeCircle->setRadius(glm::length(glm::vec2(m_activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
 	}
-
-	if (event.isType(EventType_MouseDrag))
-	{
-		LUMEN_LOG_DEBUG("Dragging...","Move Event");
-	}
-	else 
-	{
-		LUMEN_LOG_DEBUG("Not dragging.", "Move Event");
-	}
 }
 
 void ComponentDesigner::onMouseScrollEvent(MouseScrollEvent& event)
@@ -214,7 +205,8 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 
 void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
 {
-
+	std::string msg = "Delta: " + std::to_string(event.currentFrameDelta.x) + " + " + std::to_string(event.currentFrameDelta.y);
+	LUMEN_LOG_DEBUG(msg, "Comp Design Drag");
 }
 
 void ComponentDesigner::onNotifyEvent(NotifyEvent& event) 

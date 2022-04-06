@@ -115,7 +115,7 @@ void loadFromYAML(const std::filesystem::path& path)
 		// Circuits.
 		if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
 		{
-			deserialiseCircuit(yamlFile);
+			deserialiseCircuit(yamlFile, true);
 		}
 
 		// Components.
