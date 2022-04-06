@@ -61,6 +61,11 @@ glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords)
 	return m_scene->m_grid->getClosestGridVertex(coords);
 }
 
+glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
+{
+	return m_scene->pixelCoordsToWorldCoords(distance) - m_scene->pixelCoordsToWorldCoords({ 0.f, 0.f });
+}
+
 //=============================================================================================================================================//
 //  Content Region.																															   //
 //=============================================================================================================================================//
