@@ -197,7 +197,7 @@ void Application::glfwInitCallbacks()
             resetDoublePressData();
 
             // Store position.
-            s_lastMouseMovePosition = { cursorX, cursorY };
+            s_lastMouseMovePosition = mousePos;
 
             // Do not pass to imgui, Lumen handles this.
         });
