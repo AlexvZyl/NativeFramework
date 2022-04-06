@@ -51,13 +51,13 @@ Component2D::Component2D(Circuit* parent)
 	// --------------------- //
 
 	// Main shape.
-	shape = Renderer::addPolygon2D(vertices, this);
-	shape->setColor({shapeColour.r, shapeColour.g, shapeColour.b, 0.5f});
-	shape->setLayer(0.001f);//temp fix
+	//shape = Renderer::addPolygon2D(vertices, this);
+	//shape->setColor({shapeColour.r, shapeColour.g, shapeColour.b, 0.5f});
+	//shape->setLayer(0.001f);//temp fix
 	// Component border.
-	border = Renderer::addPolygon2DClear(vertices, this);
-	border->setColor(borderColour);
-	border->setLayer(componentLayer + borderLayerOffset);
+	//border = Renderer::addPolygon2DClear(vertices, this);
+	//border->setColor(borderColour);
+	//border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
@@ -184,8 +184,8 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 
 Component2D::~Component2D() 
 {
-	Renderer::remove(shape);
-	Renderer::remove(border);
+	//Renderer::remove(shape);
+	//Renderer::remove(border);
 	Renderer::remove(title);
 	for (auto circle : m_circles) {
 		Renderer::remove(circle);
@@ -204,8 +204,8 @@ Component2D::~Component2D()
 
 void Component2D::moveTo(const glm::vec2& pointerPos)
 {
-	shape->translateTo(pointerPos);
-	border->translateTo(pointerPos);
+	//shape->translateTo(pointerPos);
+	//border->translateTo(pointerPos);
 	glm::vec2 titleDest = pointerPos + titleOffset;
 	title->translateTo(titleDest);
 
@@ -228,8 +228,8 @@ void Component2D::moveTo(const glm::vec2& pointerPos)
 
 void Component2D::move(const glm::vec2& translation)
 {
-	shape->translate(translation);
-	border->translate(translation);
+	//shape->translate(translation);
+	//border->translate(translation);
 	title->translate(translation);
 	for (auto poly : m_polygons) {
 		poly->translate(translation);
@@ -253,7 +253,7 @@ void Component2D::place(const glm::vec2& pos)
 	// Ensure the component is at the desired position.
 	moveTo(pos);
 	setLayer(0.0f);
-	shape->setColor(shapeColour);
+	//shape->setColor(shapeColour);
 	title->setColor(titleColour);
 	for (auto poly : m_polygons) {
 		poly->setColor(shapeColour);
@@ -266,8 +266,8 @@ void Component2D::place(const glm::vec2& pos)
 
 void Component2D::setLayer(float layer)
 {
-	shape->setLayer(layer);
-	border->setLayer(layer + borderLayerOffset);
+	//shape->setLayer(layer);
+	//border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
 	for (auto poly : m_polygons) {
 		poly->setLayer(layer);
@@ -294,7 +294,7 @@ void Component2D::highlight()
 {
 	m_highlighted = true;
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
-	border->setColor(borderColour);
+	//border->setColor(borderColour);
 
 	for (std::shared_ptr port : ports) {
 		port->highlight();
@@ -307,7 +307,7 @@ void Component2D::unhighlight()
 {
 	m_highlighted = false;
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
-	border->setColor(borderColour);
+	//border->setColor(borderColour);
 	for (std::shared_ptr port : ports) {
 		port->unhighlight();
 	}
@@ -317,8 +317,8 @@ void Component2D::unhighlight()
 
 void Component2D::disableOutline()
 {
-	shape->disableOutline();
-	border->disableOutline();
+	//shape->disableOutline();
+	//border->disableOutline();
 	title->disableOutline();
 	for (auto poly : m_polygons) {
 		poly->disableOutline();
@@ -524,8 +524,8 @@ PortType Component2D::getPortType(YAML::Node node)
 
 void Component2D::enableOutline()
 {
-	shape->enableOutline();
-	border->enableOutline();
+	//shape->enableOutline();
+	//border->enableOutline();
 	title->enableOutline();
 	for (auto poly : m_polygons) {
 		poly->enableOutline();

@@ -351,7 +351,15 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 		m_vertexCPU.reserve(m_vertexBufferSize);
 		m_indexCPU.reserve(m_indexBufferSize);
 	}
+	else if (m_indexCount > m_indexBufferSize)
+	{
+		// Calculate IBO size based on index/vertex ratio.
+		m_indexBufferSize = (int)((float)m_vertexBufferSize * ((float)m_indexCount / (float)m_vertexCount));
 
+		// CPU.
+		m_vertexCPU.reserve(m_vertexBufferSize);
+		m_indexCPU.reserve(m_indexBufferSize);
+	}
 	// Reduce capacity.
 	else if (m_vertexCount < (m_vertexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
 	{
@@ -367,6 +375,15 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 		m_indexCPU.reserve(m_indexBufferSize);
 		// Find a better way to do this.
 		// Should be fixed when we implement our own freelist...
+	}
+	else if (m_indexCount < (m_indexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
+	{
+		// Calculate IBO size based on index/vertex ratio.
+		m_indexBufferSize = (int)((float)m_vertexBufferSize * ((float)m_indexCount / (float)m_vertexCount));
+
+		// CPU.
+		m_indexCPU.shrink_to_fit();
+		m_indexCPU.reserve(m_indexBufferSize);
 	}
 
 	// No resize occured.

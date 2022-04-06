@@ -49,6 +49,12 @@ void ComponentDesigner::switchState(CompDesignState state)
 				Renderer::remove(m_activeLine);
 			}
 		}
+		if (m_activeText) {
+			m_activeText->disableOutline();
+		}
+		if (m_activePort.get()) {
+			m_activePort->unhighlight();
+		}
 		m_activeLine = nullptr;
 		m_activePoly = nullptr;
 		m_activeCircle = nullptr;
@@ -86,6 +92,9 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 	}
 	if (m_activeCircle) {
 		m_activeCircle->disableOutline();
+	}
+	if (m_activeText) {
+		m_activeText->disableOutline();
 	}
 	if (m_activePort.get()) {
 		m_activePort->unhighlight();

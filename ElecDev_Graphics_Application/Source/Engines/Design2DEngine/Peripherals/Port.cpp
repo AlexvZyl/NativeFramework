@@ -82,12 +82,12 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	if (centre.x < 0){
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R");
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "B", this);
 	}
 	else {
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L");
+		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "B", this);
 	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
