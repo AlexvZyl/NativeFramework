@@ -140,6 +140,8 @@ public:
 	glm::vec2 m_contentRegionSize = { 0,0 };
 	// The graphics window position in the window.
 	glm::vec2 m_contentRegionPos = { 0, 0 };
+	// Convert screen pixel distance to distance in the world.
+	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
 
 protected:
 
