@@ -33,9 +33,16 @@ static glm::vec2 mouseDragInitialPosition;
 //  Helpers.																																	//
 //==============================================================================================================================================//
 
-bool isEventOfType(LumenEventID eventID, LumenEventID compareID) 
+inline bool isEventOfType(LumenEventID eventID, LumenEventID compareID) 
 {
     return (eventID & compareID) == compareID;
+}
+
+inline void resetDoublePressData() 
+{
+    for (auto& [button, time] : buttonReleaseTimes) time = 0;
+    for (auto& [button, ignore] : buttonReleaseIgnore) ignore = false;
+
 }
 
 LumenEventID getEventState(GLFWwindow* window) 
@@ -192,6 +199,9 @@ void Application::glfwInitCallbacks()
                 moveEventID |= EventType_MouseDrag;
             EventLog::log<MouseMoveEvent>(MouseMoveEvent({ cursorX, cursorY }, moveEventID));
 
+            // Reset double press on a move.
+            resetDoublePressData();
+
             // Do not pass to imgui, Lumen handles this.
         });
 
@@ -210,6 +220,9 @@ void Application::glfwInitCallbacks()
 
             // Log event.
             EventLog::log<MouseScrollEvent>(MouseScrollEvent({ cursorX, cursorY }, (float)yoffset, (float)xoffset, eventID));
+
+            // Reset double press on a scroll.
+            resetDoublePressData();
 
             // Do not pass to imgui, Lumen handles this.
         });
