@@ -61,6 +61,19 @@ void LineSegment::setEnd(const glm::vec2& end)
 	syncWithGPU();
 }
 
+void LineSegment::translateVertexTo(VertexData* vertex, const glm::vec2 position)
+{
+	//check if we should move the end or the start of the line
+	if (glm::length(glm::vec2(vertex->data.position) - m_end) < glm::length(glm::vec2(vertex->data.position) - m_start)) {
+		//move the end
+		setEnd(position);
+	}
+	else {
+		//move the sart
+		setStart(position);
+	}
+}
+
 //==============================================================================================================================================//
 // EOF.																																			//
 //==============================================================================================================================================//

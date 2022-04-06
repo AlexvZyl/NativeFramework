@@ -151,6 +151,18 @@ void Polygon2D::updateIndices()
 	m_VAO->updateIndices(this, indices);
 }
 
+void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec3 position)
+{
+	vertex->data.position = position;
+	updateIndices();
+	syncWithGPU();
+}
+
+void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec2 position)
+{
+	translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

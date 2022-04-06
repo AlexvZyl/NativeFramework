@@ -23,7 +23,16 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		if (designerState == CompDesignState::SELECT)
 		{
 			m_currentEntityID = getEntityID(pixelCoords);
-			setActivePrimitives(m_currentEntityID);
+			if (m_activePoly || m_activeCircle || m_activeLine) {
+				//If we already have an active primitive, we need to check for vertex selection.
+				//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
+				setActiveVertex(screenCoords);
+
+			}
+			if (!m_activeVertex) {
+				//If we did not select a vertex, then we can check for a new primitive selection
+				setActivePrimitives(m_currentEntityID);
+			}
 		}
 		else if (designerState == CompDesignState::DRAW_POLY)
 		{
@@ -245,28 +254,44 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 	if (designerState == CompDesignState::SELECT) {
 		//User is dragging a component.
 		glm::vec2 translation = screenCoords - m_lastDragPos;
-		if (m_activePoly) {
-			if (getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation) != glm::vec2{ m_activePoly->m_trackedCenter }) {
-				m_activePoly->translateTo(getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation));
+		if (m_activeVertex) {
+			//First check if we should move a vertex
+			if (getNearestGridVertex(glm::vec2{m_activeVertex->data.position} + translation) != glm::vec2{ m_activeVertex->data.position }) {
+				//We need to move a vertex
+				if (m_activePoly) {
+					m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(glm::vec2{ m_activeVertex->data.position } + translation));
+				}
+				else if (m_activeLine) {
+					m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(glm::vec2{ m_activeVertex->data.position } + translation));
+				}
 				m_lastDragPos = getNearestGridVertex(screenCoords);
 			}
 		}
-		if (m_activeLine) {
-			if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
-				m_activeLine->translateTo(getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation));
-				m_lastDragPos = getNearestGridVertex(screenCoords);
+		else {
+			//If we are not moveing a vertex, then check to move primitives
+			if (m_activePoly) {
+				if (getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation) != glm::vec2{ m_activePoly->m_trackedCenter }) {
+					m_activePoly->translateTo(getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
 			}
-		}
-		if (m_activeCircle) {
-			if (getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation) != glm::vec2{ m_activeCircle->m_trackedCenter }) {
-				m_activeCircle->translateTo(getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation));
-				m_lastDragPos = getNearestGridVertex(screenCoords);
+			if (m_activeLine) {
+				if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
+					m_activeLine->translateTo(getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
 			}
-		}
-		if (m_activePort.get()) {
-			if (getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation) != glm::vec2{ m_activePort->centre }) {
-				m_activePort->moveTo(getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation));
-				m_lastDragPos = getNearestGridVertex(screenCoords);
+			if (m_activeCircle) {
+				if (getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation) != glm::vec2{ m_activeCircle->m_trackedCenter }) {
+					m_activeCircle->translateTo(getNearestGridVertex(glm::vec2{ m_activeCircle->m_trackedCenter } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+			}
+			if (m_activePort.get()) {
+				if (getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation) != glm::vec2{ m_activePort->centre }) {
+					m_activePort->moveTo(getNearestGridVertex(glm::vec2{ m_activePort->centre } + translation));
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
 			}
 		}
 	}

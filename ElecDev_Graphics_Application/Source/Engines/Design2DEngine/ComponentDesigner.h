@@ -22,10 +22,12 @@ public:
     LineSegment* m_activeLine;
     Circle* m_activeCircle;
     std::shared_ptr<Port> m_activePort;
+    VertexData* m_activeVertex;
     PortType next_port_type = PortType::PORT_INOUT;
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
+    float clickTol = 0.01f;
 
     CompDesignState designerState = CompDesignState::SELECT;
 
@@ -46,6 +48,7 @@ public:
 
     void switchState(CompDesignState state);
     void pushActivePrimitives();
+    void setActiveVertex(glm::vec2 coords);
     void setActivePrimitives(unsigned eID);
     // Buttons state.
     bool m_polygon = false;

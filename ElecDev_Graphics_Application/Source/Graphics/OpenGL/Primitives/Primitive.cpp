@@ -196,6 +196,19 @@ void Primitive<VertexType>::disableOutline()
 	syncWithGPU();
 }
 
+template<typename VertexType>
+void Primitive<VertexType>::translateVertexTo(VertexType* vertex, const glm::vec3 position)
+{
+	vertex->data.position = position;
+	syncWithGPU();
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::translateVertexTo(VertexType* vertex, const glm::vec2 position)
+{
+	translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
+}
+
 //=============================================================================================================================================//
 //  Vertex.																																	   //
 //=============================================================================================================================================//

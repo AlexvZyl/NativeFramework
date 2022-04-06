@@ -38,6 +38,10 @@ public:
 	void translateToVertexAtIndex(unsigned index, const glm::vec3& position) override;
 	void translateToVertexAtIndex(unsigned index, const glm::vec2& position) override;
 	void updateIndices();
+	// Move a vertex
+	virtual void translateVertexTo(VertexData* vertex, const glm::vec3 position) override;
+	// Move a vertex
+	virtual void translateVertexTo(VertexData* vertex, const glm::vec2 position) override;
 };
 
 //=============================================================================================================================================//

@@ -99,6 +99,10 @@ public:
 	virtual void enableOutline();
 	// Remove the outline.
 	virtual void disableOutline();
+	// Move a vertex
+	virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position);
+	// Move a vertex
+	virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position);
 
 	// ------------- //
 	//  V E R T E X  //

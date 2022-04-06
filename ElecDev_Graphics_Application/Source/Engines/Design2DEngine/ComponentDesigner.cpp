@@ -136,6 +136,29 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 	}
 }
 
+void ComponentDesigner::setActiveVertex(glm::vec2 coords)
+{
+	m_activeVertex = nullptr;
+	if (m_activePoly) {
+		auto [vertexPtr, distance] = m_activePoly->getNearestVertex(coords);
+		if (distance < clickTol) {
+			m_activeVertex = vertexPtr;
+		}
+	}
+	/*if (m_activeCircle) {
+		auto [vertexPtr, distance] = m_activeCircle->getNearestVertex(coords);
+		if (distance < clickTol) {
+			m_activeVertex = vertexPtr;
+		}
+	}*/
+	else if (m_activeLine) {
+		auto [vertexPtr, distance] = m_activeLine->getNearestVertex(coords);
+		if (distance < clickTol) {
+			m_activeVertex = vertexPtr;
+		}
+	}
+}
+
 ComponentDesigner::ComponentDesigner():Base2DEngine()
 {
 	m_activeComponent = std::make_shared<Component2D>(nullptr);
