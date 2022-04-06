@@ -209,7 +209,7 @@ private:
 	// The scene rendered to.
 	static Scene* s_scene;
 	// Scene stored when another scene is being destroyed or bound.
-	static Scene* s_storedScene;
+	static std::vector<Scene*> s_storedScenes;
 	// The 2D Rendering pipeline.
 	static void renderingPipeline2D(Scene* scene);
 	// Render a 2D scene's gemeometry.

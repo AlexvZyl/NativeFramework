@@ -35,7 +35,7 @@ Scene* Renderer::getScene()
 void Renderer::initSceneDestruction(Scene* scene)
 {
 	// Store current scene.
-	s_storedScene = s_scene;
+	s_storedScenes.push_back(s_scene);
 	// Bind scene to be destroyed.
 	s_scene = scene;
 }
@@ -43,23 +43,30 @@ void Renderer::initSceneDestruction(Scene* scene)
 void Renderer::doneSceneDestruction()
 {
 	// Restore scene.
-	if (s_scene != s_storedScene) { s_scene = s_storedScene; }
-	else						  { s_scene = nullptr;		 }
+	if (s_scene != s_storedScenes.back()) 
+	{ 
+		s_scene = s_storedScenes.back();
+	}
+	else									
+	{ 
+		s_scene = nullptr;		 
+	}
 	// Remove stored scene.
-	s_storedScene = nullptr;
+	s_storedScenes.pop_back();
+
 }
 
 void Renderer::storeAndBindScene(Scene* scene) 
 {
-	s_storedScene = s_scene;
+	s_storedScenes.push_back(s_scene);
 	Renderer::bindScene(scene);	
 }
 
 void Renderer::restoreAndUnbindScene() 
 {
 	Renderer::unbindScene();
-	s_scene = s_storedScene;
-	s_storedScene = nullptr;
+	s_scene = s_storedScenes.back();
+	s_storedScenes.pop_back();
 }
 
 //==============================================================================================================================================//

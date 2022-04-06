@@ -42,25 +42,26 @@ inline void resetDoublePressData()
 {
     for (auto& [button, time] : buttonReleaseTimes) time = 0;
     for (auto& [button, ignore] : buttonReleaseIgnore) ignore = false;
-
 }
 
-LumenEventID getEventState(GLFWwindow* window) 
+inline LumenEventID getMouseButtonState(GLFWwindow* window) 
 {
     LumenEventID eventState = 0;
-
-    // Mouse buttons.
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))     { eventState |= EventType_MouseButtonLeft;  }
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))    { eventState |= EventType_MouseButtonRight; }
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE))   { eventState |= EventType_MouseButtonMiddle;}
-    // Keys.
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;  }
+    return eventState;
+}
+
+inline LumenEventID getKeyState(GLFWwindow* window)
+{
+    LumenEventID eventState = 0;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl; }
     if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl; }
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift; }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift;}
-    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;   }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;  }
-
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt; }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt; }
     return eventState;
 }
 
@@ -84,8 +85,8 @@ void Application::glfwInitCallbacks()
 
     glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods)
         {
-            // Event state (Do not use the helper since we want to keep buttons seperate).
-            LumenEventID eventState = 0;
+            // Event state.
+            LumenEventID eventState = getKeyState(window);
 
             // Get the button related to the event.
             LumenEventID currentButton = 0;
@@ -93,14 +94,6 @@ void Application::glfwInitCallbacks()
             else if (button == GLFW_MOUSE_BUTTON_RIGHT)     { currentButton = EventType_MouseButtonRight;  }
             else if (button == GLFW_MOUSE_BUTTON_MIDDLE)    { currentButton = EventType_MouseButtonMiddle; }
             eventState |= currentButton;    
-
-            // Key states.
-            if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;   }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl;  }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift;  }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
-            if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;    }
-            if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;   }
 
             // Get the cursor position.
             double cursorX, cursorY;
@@ -172,7 +165,7 @@ void Application::glfwInitCallbacks()
     glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos)
         {
             // Event states ID.
-            LumenEventID eventState = getEventState(window);
+            LumenEventID eventState = getKeyState(window) | getMouseButtonState(window);
 
             // Get the cursor position.
             double cursorX, cursorY;
@@ -212,7 +205,7 @@ void Application::glfwInitCallbacks()
     glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset)
         {
             // Event ID.
-            LumenEventID eventID = getEventState(window) | EventType_MouseScroll;
+            LumenEventID eventID = getKeyState(window) | getMouseButtonState(window) | EventType_MouseScroll;
 
             // Get the cursor position.
             double cursorX, cursorY;
@@ -234,7 +227,7 @@ void Application::glfwInitCallbacks()
     glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             // Event ID.
-            LumenEventID eventID = getEventState(window);
+            LumenEventID eventID = getKeyState(window) | getMouseButtonState(window);
             if      (action == GLFW_PRESS)   { eventID |= EventType_KeyPress;   }
             else if (action == GLFW_RELEASE) { eventID |= EventType_KeyRelease; }
             else if (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
