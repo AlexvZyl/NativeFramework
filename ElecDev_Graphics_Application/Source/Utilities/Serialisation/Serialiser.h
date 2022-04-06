@@ -72,7 +72,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit>& circ
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>>& circuitVector);
 
 // Deserialise a single circuit.
-void deserialiseCircuit(YAML::Node& yamlNode);
+std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine = false);
 
 //=============================================================================================================================================//
 //  Ports.																																	   //

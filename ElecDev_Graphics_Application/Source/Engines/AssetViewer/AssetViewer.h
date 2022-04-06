@@ -33,12 +33,11 @@ public:
 
     // Asset viewing functions.
     void clearAssets();
-    void viewCircuit(const YAML::Node& node);
-
+    void viewCircuit(YAML::Node& node);
     void viewAsset(const std::filesystem::path& path);
 
     // Assets that can be viewed.
-    std::unique_ptr<Circuit> m_circuit;
+    std::shared_ptr<Circuit> m_circuit;
     std::unique_ptr<Component2D> m_component;
     std::string m_currentAsset = "No Asset.";
 };

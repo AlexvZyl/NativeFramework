@@ -64,7 +64,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ci
 //  Single Circuit deserialiser.																											   //
 //=============================================================================================================================================//
 
-void deserialiseCircuit(YAML::Node& yamlNode)
+std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine)
 {
 	// An ID table that holds the reference between new and old ID's.
 	std::map<unsigned, unsigned> idTable;	// Old -> New
@@ -75,15 +75,15 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 
 	// Load the circuit info.
 	YAML::Node circuitInfo = yamlNode["Circuit Info"];
-
-	// Create the circuit for the engine. 
 	std::shared_ptr<Circuit> circuit = std::make_shared<Circuit>(circuitInfo["Label"].as<std::string>(),
-																 circuitInfo["Type"].as<std::string>());
-	
+																	 circuitInfo["Type"].as<std::string>());
 	// Create an engine with the circuit.
-	Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit->m_label)->getEngine();
-	engine->m_circuit = circuit;
-
+	if (newEngine)
+	{
+		Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(circuit->m_label)->getEngine();
+		engine->m_circuit = circuit;
+	}
+	
 	// -------------------- //
 	// C O M P O N E N T S  //
 	// -------------------- //
@@ -94,9 +94,9 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 	{
 		YAML::Node componentNode = compIterator->second;
 		// Create component.
-		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(engine->m_circuit.get());
+		std::shared_ptr<Component2D> component = std::make_shared<Component2D>(circuit.get());
 		// Add component to circuit.
-		engine->m_circuit->m_components.push_back(component);
+		circuit->m_components.push_back(component);
 
 		// Add entity ID to table.
 		idTable.insert({ componentNode["Entity ID"].as<unsigned>(), component->m_entityID });
@@ -203,7 +203,7 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 		std::shared_ptr<Cable> cable = std::make_shared<Cable>(startPort,
 															   nodeVector,
 															   endPort,
-															   engine->m_circuit.get(), titleString);
+															   circuit.get(), titleString);
 		cable->unhighlight();
 
 		// Dictionary.
@@ -215,8 +215,10 @@ void deserialiseCircuit(YAML::Node& yamlNode)
 		}
 
 		// Add cable to circuit.
-		engine->m_circuit->m_cables.push_back(cable);
+		circuit->m_cables.push_back(cable);
 	}
+
+	return circuit;
 }
 
 //=============================================================================================================================================//

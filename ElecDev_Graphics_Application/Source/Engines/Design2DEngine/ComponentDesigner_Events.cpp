@@ -297,6 +297,8 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 			}
 		}
 	}
+	std::string msg = "Delta: " + std::to_string(event.currentFrameDelta.x) + " + " + std::to_string(event.currentFrameDelta.y);
+	LUMEN_LOG_DEBUG(msg, "Comp Design Drag");
 }
 
 void ComponentDesigner::onNotifyEvent(NotifyEvent& event) 
