@@ -235,6 +235,10 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_DELETE:
+			if (designerState == CompDesignState::SELECT)
+			{
+				deleteActivePrimitive();
+			}
 			break;
 
 			// --------------------------------------------------------------------------------------------------------------- //

@@ -159,6 +159,29 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	}
 }
 
+void ComponentDesigner::deleteActivePrimitive()
+{
+	if (m_activePoly) {
+		m_activeComponent->removePoly(m_activePoly);
+	}
+	if (m_activeCircle) {
+		m_activeComponent->removeCircle(m_activeCircle);
+	}
+	if (m_activeLine) {
+		m_activeComponent->removeLine(m_activeLine);
+	}
+	if (m_activePort) {
+		m_activeComponent->removePort(m_activePort);
+	}
+
+	//remove previous selection
+	m_activeLine = nullptr;
+	m_activePoly = nullptr;
+	m_activeCircle = nullptr;
+	m_activePort = nullptr;
+	m_activeVertex = nullptr;
+}
+
 ComponentDesigner::ComponentDesigner():Base2DEngine()
 {
 	m_activeComponent = std::make_shared<Component2D>(nullptr);

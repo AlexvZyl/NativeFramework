@@ -50,6 +50,7 @@ public:
     void pushActivePrimitives();
     void setActiveVertex(glm::vec2 coords);
     void setActivePrimitives(unsigned eID);
+    void deleteActivePrimitive();
     // Buttons state.
     bool m_polygon = false;
     bool m_lines = false;

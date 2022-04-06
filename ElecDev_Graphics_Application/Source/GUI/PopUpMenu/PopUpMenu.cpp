@@ -171,6 +171,14 @@ void PopUpMenu::onRender()
             {
                 app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
             }
+            if (component_designer->m_activeCircle || component_designer->m_activePoly || component_designer->m_activeLine || component_designer->m_activePort) {
+                if (ImGui::MenuItem("Delete", "DEL"))
+                {
+                    component_designer->deleteActivePrimitive();
+                    // Remove popup.
+                    app.queuePopLayer(m_name);
+                }
+            }
             if (ImGui::MenuItem("Add Polygon", "P"))
             {
                 component_designer->switchState(CompDesignState::DRAW_POLY);

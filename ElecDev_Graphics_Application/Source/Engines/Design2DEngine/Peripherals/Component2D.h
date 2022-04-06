@@ -135,6 +135,10 @@ public:
 	void addCircle(Circle* circle);
 	void addLine(LineSegment* line);
 	void addPort(std::shared_ptr<Port> port);
+
+	void removePoly(Polygon2D* poly);
+	void removeCircle(Circle* circle);
+	void removeLine(LineSegment* line);
 	
 
 private:

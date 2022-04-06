@@ -488,6 +488,42 @@ void Component2D::addPort(std::shared_ptr<Port> port)
 	ports.push_back(port);
 }
 
+void Component2D::removePoly(Polygon2D* poly)
+{
+	auto to_remove = std::find(begin(m_polygons), end(m_polygons), poly);
+	if (to_remove != m_polygons.end()) {
+		Renderer::remove(poly);
+		m_polygons.erase(to_remove);
+	}
+	else {
+		LUMEN_LOG_WARN("Attempted to remove a polygon that is not a member of m_polygons.", "Component2D");
+	}
+}
+
+void Component2D::removeCircle(Circle* circle)
+{
+	auto to_remove = std::find(begin(m_circles), end(m_circles), circle);
+	if (to_remove != m_circles.end()) {
+		Renderer::remove(circle);
+		m_circles.erase(to_remove);
+	}
+	else {
+		LUMEN_LOG_WARN("Attempted to remove a circle that is not a member of m_circles.", "Component2D");
+	}
+}
+
+void Component2D::removeLine(LineSegment* line)
+{
+	auto to_remove = std::find(begin(m_lines), end(m_lines), line);
+	if (to_remove != m_lines.end()) {
+		Renderer::remove(line);
+		m_lines.erase(to_remove);
+	}
+	else {
+		LUMEN_LOG_WARN("Attempted to remove a line that is not a member of m_lines.", "Component2D");
+	}
+}
+
 //=============================================================================================================================================//
 //  Utilities.				     																											   //
 //=============================================================================================================================================//
