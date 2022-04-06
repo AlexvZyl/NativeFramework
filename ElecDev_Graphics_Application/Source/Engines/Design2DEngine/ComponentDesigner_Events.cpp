@@ -257,7 +257,7 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == CompDesignState::SELECT) {
 		//User is dragging a component.
-		glm::vec2 translation = m_scene->pixelCoordsToWorldCoords(event.currentFrameDelta);
+		glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
 		if (m_activeVertex) {
 			//First check if we should move a vertex
 			if (getNearestGridVertex(glm::vec2{m_activeVertex->data.position} + translation) != glm::vec2{ m_activeVertex->data.position }) {
@@ -274,8 +274,8 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 		else {
 			//If we are not moving a vertex, then check to move primitives
 			if (m_activePoly) {
-					m_activePoly->translate(translation);
-					m_lastDragPos = screenCoords;
+				m_activePoly->translate(translation);
+				m_lastDragPos = screenCoords;
 			}
 			if (m_activeLine) {
 				m_activeLine->translate(translation);
