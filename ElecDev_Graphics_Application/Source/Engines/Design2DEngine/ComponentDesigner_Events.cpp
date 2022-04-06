@@ -285,6 +285,11 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 				m_activeCircle->translate(translation);
 				m_lastDragPos = getNearestGridVertex(screenCoords);
 			}
+			if (m_activeText) {
+				//Consideration: Should we keep track of the text position in the parent port/component? If so, this should be updated here.
+				m_activeText->translate(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
 			if (m_activePort.get()) {
 				m_activePort->move(translation);
 				m_lastDragPos = getNearestGridVertex(screenCoords);

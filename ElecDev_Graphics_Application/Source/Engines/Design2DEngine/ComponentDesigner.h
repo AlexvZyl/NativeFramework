@@ -21,6 +21,7 @@ public:
     Polygon2D* m_activePoly;
     LineSegment* m_activeLine;
     Circle* m_activeCircle;
+    Text* m_activeText;
     std::shared_ptr<Port> m_activePort;
     VertexData* m_activeVertex;
     PortType next_port_type = PortType::PORT_INOUT;

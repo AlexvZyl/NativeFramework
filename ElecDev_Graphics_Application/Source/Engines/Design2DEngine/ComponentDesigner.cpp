@@ -95,6 +95,7 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
 	m_activePort = nullptr;
+	m_activeText = nullptr;
 
 	if ((eID == 0) || (eID == -1))
 	{
@@ -119,19 +120,30 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 				m_activeCircle = dynamic_cast<Circle*>(currentEntity);
 				m_activeCircle->enableOutline();
 			}
+			else if (dynamic_cast<Text*>(currentEntity)) {
+				//Text
+				m_activeText = dynamic_cast<Text*>(currentEntity);
+				m_activeText->enableOutline();//We may want to rather outline the textbox in the future or change how text is highlighted.
+			}
 		}
 		else if (dynamic_cast<Port*>(currentEntity->m_parent)) {
 			//Port
-			//Should handle port text here as well (TODO)
-
-			Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
-			m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
-				{
-					return current.get() == cur;
-				});
-			if (m_activePort) {
-				m_activePort->highlight();
+			 if (dynamic_cast<Text*>(currentEntity)) {
+			//Port text is selected
+			m_activeText = dynamic_cast<Text*>(currentEntity);
+			m_activeText->enableOutline();//We may want to rather outline the textbox in the future or change how text is highlighted.
 			}
+			else {
+				//Port body is selected
+				Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
+				m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
+					{
+						return current.get() == cur;
+					});
+				if (m_activePort) {
+					m_activePort->highlight();
+				}
+			 }
 		}
 	}
 }
@@ -180,6 +192,7 @@ void ComponentDesigner::deleteActivePrimitive()
 	m_activeCircle = nullptr;
 	m_activePort = nullptr;
 	m_activeVertex = nullptr;
+	m_activeText = nullptr;
 }
 
 ComponentDesigner::ComponentDesigner():Base2DEngine()
