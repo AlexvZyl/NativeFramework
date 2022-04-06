@@ -156,8 +156,12 @@ void RendererStats::onRender()
 			app.m_profilerResults.clear();
 
 			// Display fps.
-			std::string fpsMsg = "Estimated FPS: " + std::to_string((int)fps);
-			ImGui::Text(fpsMsg.c_str());
+			ImGui::Text("Estimated FPS: ");
+			ImGui::SameLine();
+			 static glm::vec4 fpsCol = {0.4f, 0.4f, 1.f, 1.f};
+			ImGui::TextColored(fpsCol, std::to_string((int)fps).c_str());
+			ImGui::TextWrapped("Disable 'Wait Events' for more accurate results.");
+			ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
 		}		
 	}
 	else
