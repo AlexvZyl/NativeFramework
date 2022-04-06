@@ -272,12 +272,10 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 			}
 		}
 		else {
-			//If we are not moveing a vertex, then check to move primitives
+			//If we are not moving a vertex, then check to move primitives
 			if (m_activePoly) {
-				if (getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation) != glm::vec2{ m_activePoly->m_trackedCenter }) {
-					m_activePoly->translateTo(getNearestGridVertex(glm::vec2{ m_activePoly->m_trackedCenter } + translation));
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
+					m_activePoly->translate(translation);
+					m_lastDragPos = screenCoords;
 			}
 			if (m_activeLine) {
 				if (getNearestGridVertex(glm::vec2{ m_activeLine->m_trackedCenter } + translation) != glm::vec2{ m_activeLine->m_trackedCenter }) {
@@ -310,5 +308,9 @@ void ComponentDesigner::onNotifyEvent(NotifyEvent& event)
 	else if (event.isType(EventType_MouseDragStop))
 	{
 		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
+		if (m_activePoly) {
+			m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
+			//notify undo system of drag with drag vector
+		}
 	}
 }

@@ -204,23 +204,24 @@ Component2D::~Component2D()
 
 void Component2D::moveTo(const glm::vec2& pointerPos)
 {
-	glm::vec2 translateDestination(pointerPos[0], pointerPos[1]);
-	shape->translateTo(translateDestination);
-	border->translateTo(translateDestination);
-	glm::vec2 titleDest = translateDestination + titleOffset;
+	shape->translateTo(pointerPos);
+	border->translateTo(pointerPos);
+	glm::vec2 titleDest = pointerPos + titleOffset;
 	title->translateTo(titleDest);
 
-	for (int i = 0; i < portsWest.size(); i++) 
-		portsWest[i]->moveTo(translateDestination);
+	for (auto poly : m_polygons) {
+		poly->translateTo(pointerPos);
+	}
+	for (auto line : m_lines) {
+		line->translateTo(pointerPos);
+	}
+	for (auto circ : m_circles) {
+		circ->translateTo(pointerPos);
+	}
 
-	for (int i = 0; i < portsEast.size(); i++) 
-		portsEast[i]->moveTo(translateDestination);
-	
-	for (int i = 0; i < portsNorth.size(); i++) 
-		portsNorth[i]->moveTo(translateDestination);
-	
-	for (int i = 0; i < portsSouth.size(); i++) 
-		portsSouth[i]->moveTo(translateDestination);
+	for (std::shared_ptr port : ports) {
+		port->move(pointerPos - port->centre);
+	}
 	
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
 }
@@ -230,18 +231,19 @@ void Component2D::move(const glm::vec2& translation)
 	shape->translate(translation);
 	border->translate(translation);
 	title->translate(translation);
+	for (auto poly : m_polygons) {
+		poly->translate(translation);
+	}
+	for (auto line : m_lines) {
+		line->translate(translation);
+	}
+	for (auto circ : m_circles) {
+		circ->translate(translation);
+	}
 
-	for (int i = 0; i < portsWest.size(); i++) 
-		portsWest[i]->move(translation);
-	
-	for (int i = 0; i < portsEast.size(); i++) 
-		portsEast[i]->move(translation);
-	
-	for (int i = 0; i < portsNorth.size(); i++) 
-		portsNorth[i]->move(translation);
-	
-	for (int i = 0; i < portsSouth.size(); i++) 
-		portsSouth[i]->move(translation);
+	for (std::shared_ptr port : ports) {
+		port->move(translation);
+	}
 	
 	centre += translation;
 }
@@ -253,6 +255,12 @@ void Component2D::place(const glm::vec2& pos)
 	setLayer(0.0f);
 	shape->setColor(shapeColour);
 	title->setColor(titleColour);
+	for (auto poly : m_polygons) {
+		poly->setColor(shapeColour);
+	}
+	for (auto circ : m_circles) {
+		circ->setColor(shapeColour);
+	}
 	// Move to placement layer.
 }
 
@@ -261,18 +269,18 @@ void Component2D::setLayer(float layer)
 	shape->setLayer(layer);
 	border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
-
-	for (int i = 0; i < portsWest.size(); i++) 
-		portsWest[i]->setLayer(layer + portLayerOffset);
-	
-	for (int i = 0; i < portsEast.size(); i++) 
-		portsEast[i]->setLayer(layer + portLayerOffset);
-	
-	for (int i = 0; i < portsNorth.size(); i++) 
-		portsNorth[i]->setLayer(layer + portLayerOffset);
-	
-	for (int i = 0; i < portsSouth.size(); i++) 
-		portsSouth[i]->setLayer(layer + portLayerOffset);
+	for (auto poly : m_polygons) {
+		poly->setLayer(layer);
+	}
+	for (auto line : m_lines) {
+		line->setLayer(layer);
+	}
+	for (auto circ : m_circles) {
+		circ->setLayer(layer);
+	}
+	for (std::shared_ptr port : ports) {
+		port->setLayer(layer + portLayerOffset);
+	}
 	
 	componentLayer = layer;
 }
@@ -288,17 +296,9 @@ void Component2D::highlight()
 	borderColour = { 0.f, 0.f, 1.0f, 1.f };
 	border->setColor(borderColour);
 
-	for (int i = 0; i < portsWest.size(); i++) 
-		portsWest[i]->highlight();
-	
-	for (int i = 0; i < portsEast.size(); i++) 
-		portsEast[i]->highlight();
-	
-	for (int i = 0; i < portsNorth.size(); i++) 
-		portsNorth[i]->highlight();
-	
-	for (int i = 0; i < portsSouth.size(); i++) 
-		portsSouth[i]->highlight();
+	for (std::shared_ptr port : ports) {
+		port->highlight();
+	}
 
 	enableOutline();
 }
@@ -308,19 +308,9 @@ void Component2D::unhighlight()
 	m_highlighted = false;
 	borderColour = { 0.f, 0.f, 0.f, 1.f };
 	border->setColor(borderColour);
-
-	for (int i = 0; i < portsWest.size(); i++) 
-		portsWest[i]->unhighlight();
-	
-	for (int i = 0; i < portsEast.size(); i++) 
-		portsEast[i]->unhighlight();
-	
-	for (int i = 0; i < portsNorth.size(); i++) 
-		portsNorth[i]->unhighlight();
-	
-	for (int i = 0; i < portsSouth.size(); i++) 
-		portsSouth[i]->unhighlight();
-
+	for (std::shared_ptr port : ports) {
+		port->unhighlight();
+	}
 
 	disableOutline();
 }
@@ -330,6 +320,15 @@ void Component2D::disableOutline()
 	shape->disableOutline();
 	border->disableOutline();
 	title->disableOutline();
+	for (auto poly : m_polygons) {
+		poly->disableOutline();
+	}
+	for (auto line : m_lines) {
+		line->disableOutline();
+	}
+	for (auto circ : m_circles) {
+		circ->disableOutline();
+	}
 }
 
 unsigned Component2D::addPort(int side, PortType type, const std::string& name)
@@ -365,29 +364,16 @@ unsigned Component2D::addPort(int side, PortType type, const std::string& name)
 
 void Component2D::removePort(std::shared_ptr<Port> port)
 {
+	auto port_to_remove = std::find(begin(ports), end(ports), port);
 
-	std::vector<std::shared_ptr<Port>>* allPorts[4] = {&portsWest,
-														&portsEast,
-														&portsNorth,
-														&portsSouth};
-
-	for (int i = 0; i < 4; i++) 
+	if (port_to_remove != end(ports)) 
 	{
-		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
-
-		auto port_to_remove = std::find(begin(portsSide), end(portsSide), port);
-
-		if (port_to_remove != end(portsSide)) 
-		{
-			portsSide.erase(port_to_remove);
-			portsSide.shrink_to_fit();
-			updatePortPositions();
-			return;
-		}
+		ports.erase(port_to_remove);
+		ports.shrink_to_fit();
+		return;
 	}
 	//Warn the user if the port was not found on this component (i.e. if we have not returned yet).
 	std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Tried to delete port "<<port->m_label<< ", but it does not belong to component "<< titleString <<".";
-
 }
 
 void Component2D::updatePortPositions()
@@ -541,6 +527,15 @@ void Component2D::enableOutline()
 	shape->enableOutline();
 	border->enableOutline();
 	title->enableOutline();
+	for (auto poly : m_polygons) {
+		poly->enableOutline();
+	}
+	for (auto line : m_lines) {
+		line->enableOutline();
+	}
+	for (auto circ : m_circles) {
+		circ->enableOutline();
+	}
 }
 
 //void Component2D::destroy()

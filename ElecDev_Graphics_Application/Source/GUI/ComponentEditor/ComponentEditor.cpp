@@ -56,42 +56,29 @@ void ComponentEditor::onRender()
 		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))
 		{
 			// Setup table.
-			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
-			ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::BeginTable("Current ports", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 			ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
-			ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
-			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("I/O Type      ", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Action      ", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableHeadersRow();
 
 			ImGui::TableNextRow();
-			std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
-																		 activeComponent->portsEast,
-																		 activeComponent->portsNorth,
-																		 activeComponent->portsSouth };
 
 			static std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
-			for (int i = 0; i < allPorts.size(); i++)
-			{
-				std::vector<std::shared_ptr<Port>> portsSide = allPorts[i];
-				int j = 0;
-				for (std::shared_ptr<Port> port : portsSide)
+				int i = 0;
+				for (std::shared_ptr<Port> port : activeComponent->ports)
 				{
 					// Table labels.
 					char labelName[20];
-					sprintf_s(labelName, "##N%d,%d", i, j);
+					sprintf_s(labelName, "##N%d", i);
 					char labelPos[20];
-					sprintf_s(labelPos, "##P%d,%d", i, j);
+					sprintf_s(labelPos, "##P%d", i);
 					char labelType[20];
-					sprintf_s(labelType, "##T%d,%d", i, j);
+					sprintf_s(labelType, "##T%d", i);
 					char labelRemove[20];
-					sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
+					sprintf_s(labelRemove, "Remove##%d", i++);
 					// Port entry in table.
 					ImGui::TableNextRow();
-					ImGui::TableNextColumn();
-					// Position.
-					ImGui::PushItemWidth(-1);
-					ImGui::Text(portPositions[i].c_str());
-					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 					// Name.
 					ImGui::PushItemWidth(-1);
@@ -107,13 +94,16 @@ void ComponentEditor::onRender()
 					ImGui::TableNextColumn();
 					// Remove.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::Button(labelRemove))
+					if (ImGui::Button(labelRemove)) {
 						activeComponent->removePort(port);
+						ImGui::PopItemWidth();
+						break;//Stop iterating through the ports if the port vector changes.
+					}
 					ImGui::PopItemWidth();
 				}
-				if (j) ImGui::Separator();
-			}
 
+				ImGui::EndTable();
+			/*
 			if (addingPort)
 			{
 				//create a table entry for the port to be added
@@ -151,6 +141,7 @@ void ComponentEditor::onRender()
 				if (ImGui::Button("New Port"))
 					addingPort = true;
 			}
+			*/
 		}
 		ImGui::EndChild();
 
