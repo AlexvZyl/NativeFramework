@@ -31,5 +31,3 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Text>& text)
 {
 	return emitter << text.get();
 }
-
-
