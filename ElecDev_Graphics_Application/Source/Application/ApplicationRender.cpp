@@ -85,27 +85,39 @@ void Application::onRenderInit()
 }
 
 void Application::renderFrame()
-{	
-	LUMEN_PROFILE_SCOPE("Frametime");
+{
+	{
+		LUMEN_PROFILE_SCOPE("Frametime (App)");
 
-	// Update imgui states before starting new frame.
-	// These states are controlled by Lumen for optimistaion.
-	imguiOnUpdate();
+		{
+			LUMEN_PROFILE_SCOPE("Frametime (CPU)");
 
-	// Init.  Called before onUpdate so that 
-	// ImGui::NewFrame() can be called.
-	onRenderInit();
+			// Update imgui states before starting new frame.
+			// These states are controlled by Lumen for optimistaion.
+			imguiOnUpdate();
 
-	// Dispatch the events to the layers before we render them.
-	// Has to be called after the init so all of the ImGui data
-	// is updated.
-	onUpdate();
+			// Init.  Called before onUpdate so that 
+			// ImGui::NewFrame() can be called.
+			onRenderInit();
 
-	// Render the layers.
-	onRender();
+			// Dispatch the events to the layers before we render them.
+			// Has to be called after the init so all of the ImGui data
+			// is updated.
+			onUpdate();
 
-	// Cleanup.
-	onRenderCleanup();
+			// Render the layers.
+			onRender();
+
+			// Cleanup.
+			onRenderCleanup();
+		}
+		{
+			// Keep this seperate, since it blocks.
+			// This must be added to the Frametime (GPU) when added.
+			LUMEN_PROFILE_SCOPE("Swap Buffers");
+			glfwSwapBuffers(m_window);
+		}
+	}
 }
 
 void Application::onRender()
@@ -149,11 +161,6 @@ void Application::onRenderCleanup()
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-	}
-
-	{
-		LUMEN_PROFILE_SCOPE("Swap Buffers");
-		glfwSwapBuffers(m_window);
 	}
 }
 

@@ -69,7 +69,7 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer)
 	{
-		if (EventLog::mouseMove)   
+		if (EventLog::mouseMove)
 			m_hoveredLayer->onEvent(*EventLog::mouseMove.get());
 
 		if (EventLog::mouseScroll) 
@@ -101,8 +101,6 @@ Layer* Application::findHoveredLayer()
 {
 	// Find the layer that is being hovered.
 	// We do not have to worry about order, since dear imgui handles it.
-	// This could be optimized by ordering the layer (finding the
-	// layer will happen faster) but we will always have very few layers.
 	for (auto& [name, layer] : m_layerStack->getLayers())
 	{
 		if (layer->isHovered())

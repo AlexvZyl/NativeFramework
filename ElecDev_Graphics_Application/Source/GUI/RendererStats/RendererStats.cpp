@@ -45,7 +45,7 @@ void RendererStats::onRender()
 	// ----------------- //
 
 	ImGui::PushID("ProfilerResults");
-	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 5.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 4.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		// Ensure profilder is enabled.
 		app.m_profilerActive = true;
@@ -85,7 +85,8 @@ void RendererStats::onRender()
 			float renderLayersTime = 0;
 			float renderScenesTime = 0;
 			float imGuiTime = 0;
-			float fps = 0;
+			float fpsCPU = 0;
+			float fpsApp = 0;
 		
 			// Display the calculated averages.
 			for (auto& [name, time] : m_prevFrameAverages)
@@ -97,9 +98,13 @@ void RendererStats::onRender()
 					renderScenesTime += time;
 					continue;
 				}
-				else if (name == "Frametime")
+				else if (name == "Frametime (CPU)")
 				{
-					fps = 1.f / (time * 1e-3);
+					fpsCPU = 1.f / (time * 1e-3);
+				}
+				else if (name == "Frametime (App)")
+				{
+					fpsApp = 1.f / (time * 1e-3);
 				}
 
 #ifdef PROFILE_IMGUI_OVERHEAD
@@ -156,10 +161,13 @@ void RendererStats::onRender()
 			app.m_profilerResults.clear();
 
 			// Display fps.
-			ImGui::Text("Estimated FPS: ");
-			ImGui::SameLine();
 			 static glm::vec4 fpsCol = {0.4f, 0.4f, 1.f, 1.f};
-			ImGui::TextColored(fpsCol, std::to_string((int)fps).c_str());
+			ImGui::Text("Estimated FPS (CPU): ");
+			ImGui::SameLine();
+			ImGui::TextColored(fpsCol, std::to_string((int)fpsCPU).c_str());
+			ImGui::Text("Estimated FPS (App): ");
+			ImGui::SameLine();
+			ImGui::TextColored(fpsCol, std::to_string((int)fpsApp).c_str());
 			ImGui::TextWrapped("Disable 'Wait Events' for more accurate results.");
 			ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
 		}		

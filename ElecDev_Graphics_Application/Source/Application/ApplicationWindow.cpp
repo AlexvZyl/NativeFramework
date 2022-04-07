@@ -13,6 +13,7 @@
 #include "OpenGL/ErrorHandlerGL.h"
 #include "Utilities/Logger/Logger.h"
 #include "glm/glm.hpp"
+#include "Utilities/Profiler/Profiler.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
