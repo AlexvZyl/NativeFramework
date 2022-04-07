@@ -26,7 +26,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
 
 	// Shape.
-	emitter << YAML::Key << "Shape" << YAML::Value;
+	emitter << YAML::Key << "Polygon" << YAML::Value;
 	emitter << YAML::BeginMap;
 		emitter << YAML::Key << "Colour" << YAML::Value << comp->shapeColour;
 	emitter << YAML::EndMap;
@@ -44,10 +44,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	// Ports.
 	emitter << YAML::Key << "Ports" << YAML::Value;
 	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "East Ports" << YAML::Value << comp->portsEast;
-		emitter << YAML::Key << "West Ports" << YAML::Value << comp->portsWest;
-		emitter << YAML::Key << "North Ports" << YAML::Value << comp->portsNorth;
-		emitter << YAML::Key << "South Ports" << YAML::Value << comp->portsSouth;
+		emitter << YAML::Key << "Ports" << YAML::Value << comp->ports;
 	emitter << YAML::EndMap;
 
 	// Polygons.

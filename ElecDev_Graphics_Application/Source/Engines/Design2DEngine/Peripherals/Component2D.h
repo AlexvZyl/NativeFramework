@@ -43,8 +43,8 @@ public:
 	std::vector<LineSegment*> m_lines;
 	std::vector<Circle*> m_circles;
 
-	Polygon2D* shape;
-	Polygon2D* border;
+	//Polygon2D* shape;
+	//Polygon2D* border;
 	Text* title;
 
 	static unsigned componentID;
@@ -84,10 +84,10 @@ public:
 	bool selected = true;
 
 	// Port lists.
-	std::vector<std::shared_ptr<Port>> portsNorth;
-	std::vector<std::shared_ptr<Port>> portsSouth;
-	std::vector<std::shared_ptr<Port>> portsEast;
-	std::vector<std::shared_ptr<Port>> portsWest;
+	//std::vector<std::shared_ptr<Port>> portsNorth;
+	//std::vector<std::shared_ptr<Port>> portsSouth;
+	//std::vector<std::shared_ptr<Port>> portsEast;
+	//std::vector<std::shared_ptr<Port>> portsWest;
 
 	std::vector<std::shared_ptr<Port>> ports;
 	unsigned numPorts = 0;
@@ -121,15 +121,17 @@ public:
 	//Remove the component highlighting.
 	void unhighlight();
 	//Add a port with the given definition to the component.
-	unsigned addPort(int side, PortType type, const std::string& name);
+	//unsigned addPort(int side, PortType type, const std::string& name);
 	//remove a specified port from the component.
 	void removePort(std::shared_ptr<Port> port);
 	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.
-	void updatePortPositions();
+	//void updatePortPositions();
 	//move the title text relative to the component
 	void translateTitle(glm::vec2 translation);
 	//updates the Component label
 	void updateText();
+	//Set the colour of the polygons and circles belonging to the component
+	void setColour(const glm::vec4& colour);
 	//Adds a new polygon to the polygon list
 	void addPoly(Polygon2D* poly);
 	void addCircle(Circle* circle);
