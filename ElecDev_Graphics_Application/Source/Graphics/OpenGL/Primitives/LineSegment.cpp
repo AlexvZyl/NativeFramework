@@ -74,6 +74,11 @@ void LineSegment::translateVertexTo(VertexData* vertex, const glm::vec2 position
 	}
 }
 
+void LineSegment::translateVertex(VertexData* vertex, const glm::vec2 translation)
+{
+	translateVertexTo(vertex, glm::vec2{ vertex->data.position } + translation);
+}
+
 //==============================================================================================================================================//
 // EOF.																																			//
 //==============================================================================================================================================//

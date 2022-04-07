@@ -132,36 +132,36 @@ std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine
 		for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			unsigned entityID = component->addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+			//unsigned entityID = component->addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
 			// Add entity ID to table.
-			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+			//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 		}
 		// West ports.
 		YAML::Node westPortList = portList["West Ports"];
 		for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			unsigned entityID = component->addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+			//unsigned entityID = component->addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
 			// Add entity ID to table.
-			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+			//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 		}
 		// West ports.
 		YAML::Node northPortList = portList["North Ports"];
 		for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			unsigned entityID = component->addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+			//unsigned entityID = component->addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
 			// Add entity ID to table.
-			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+			//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 		}
 		// South ports.
 		YAML::Node southPortList = portList["South Ports"];
 		for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
 		{
 			YAML::Node portNode = portIterator->second;
-			unsigned entityID = component->addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+			//unsigned entityID = component->addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
 			// Add entity ID to table.
-			idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+			//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 
 		}
 

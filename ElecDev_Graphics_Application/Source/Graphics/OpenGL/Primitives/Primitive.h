@@ -104,6 +104,11 @@ public:
 	// Move a vertex
 	virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position);
 
+	// Move a vertex
+	virtual void translateVertex(VertexType* vertex, const glm::vec3 translation);
+	// Move a vertex
+	virtual void translateVertex(VertexType* vertex, const glm::vec2 translation);
+
 	// ------------- //
 	//  V E R T E X  //
 	// ------------- //

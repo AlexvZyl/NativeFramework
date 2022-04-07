@@ -260,15 +260,12 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 		glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
 		if (m_activeVertex) {
 			//First check if we should move a vertex
-			if (getNearestGridVertex(glm::vec2{m_activeVertex->data.position} + translation) != glm::vec2{ m_activeVertex->data.position }) {
-				//We need to move a vertex
-				if (m_activePoly) {
-					m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(glm::vec2{ m_activeVertex->data.position } + translation));
-				}
-				else if (m_activeLine) {
-					m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(glm::vec2{ m_activeVertex->data.position } + translation));
-				}
-				m_lastDragPos = getNearestGridVertex(screenCoords);
+			//We need to move a vertex
+			if (m_activePoly) {
+				m_activePoly->translateVertex(m_activeVertex, translation);
+			}
+			else if (m_activeLine) {
+				m_activeLine->translateVertex(m_activeVertex, translation);
 			}
 		}
 		else {
@@ -317,6 +314,14 @@ void ComponentDesigner::onNotifyEvent(NotifyEvent& event)
 		}
 		if (m_activeCircle) {
 			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
+		}
+		if (m_activeVertex) {
+			if (m_activePoly) {
+				m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			}
+			else if (m_activeLine) {
+				m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			}
 		}
 		if (m_activePort) {
 			m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));

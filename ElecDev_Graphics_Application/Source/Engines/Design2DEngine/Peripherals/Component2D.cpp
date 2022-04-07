@@ -148,7 +148,7 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 	for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
 	{
 		YAML::Node portNode = portIterator->second;
-		unsigned entityID = addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+		//unsigned entityID = addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
 		// Add entity ID to table.
 		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 	}
@@ -157,7 +157,7 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 	for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
 	{
 		YAML::Node portNode = portIterator->second;
-		unsigned entityID = addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+		//unsigned entityID = addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
 		// Add entity ID to table.
 		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 	}
@@ -166,7 +166,7 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 	for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
 	{
 		YAML::Node portNode = portIterator->second;
-		unsigned entityID = addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+		//unsigned entityID = addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
 		// Add entity ID to table.
 		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 	}
@@ -175,7 +175,7 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 	for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
 	{
 		YAML::Node portNode = portIterator->second;
-		unsigned entityID = addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+		//unsigned entityID = addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
 		// Add entity ID to table.
 		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 
@@ -331,37 +331,6 @@ void Component2D::disableOutline()
 	}
 }
 
-unsigned Component2D::addPort(int side, PortType type, const std::string& name)
-{
-	switch(side)
-	{
-	case 0:
-		portsWest.push_back(std::make_shared<Port>(glm::vec2(-width, 0.f), type, this, name));
-		updatePortPositions();
-		return portsWest.back()->m_entityID;
-
-	case 1:
-		portsEast.push_back(std::make_shared<Port>(glm::vec2(width, 0.f), type, this, name));
-		updatePortPositions();
-		return portsEast.back()->m_entityID;
-
-	case 2:
-		portsNorth.push_back(std::make_shared<Port>(glm::vec2(0.f, height), type, this, name));
-		updatePortPositions();
-		return portsNorth.back()->m_entityID;
-
-	case 3:
-		portsSouth.push_back(std::make_shared<Port>(glm::vec2(0.f, -height), type, this, name));
-		updatePortPositions();
-		return portsSouth.back()->m_entityID;
-
-	default:
-		// Invalid value passed.
-		std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Cannot add a port to side " << side << " (require side < 4).";
-		return NULL;
-	}
-}
-
 void Component2D::removePort(std::shared_ptr<Port> port)
 {
 	auto port_to_remove = std::find(begin(ports), end(ports), port);
@@ -376,69 +345,6 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 	std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Tried to delete port "<<port->m_label<< ", but it does not belong to component "<< titleString <<".";
 }
 
-void Component2D::updatePortPositions()
-{
-	std::vector<std::shared_ptr<Port>>* allPorts[4] = {	&portsWest,
-														&portsEast,
-														&portsNorth,
-														&portsSouth };
-
-	unsigned* n_ports_sides[4] = {&n_ports_west, &n_ports_east, &n_ports_north, &n_ports_south};
-
-	for (int i = 0; i < 4; i++) {
-		std::vector<std::shared_ptr<Port>>& portsSide = *allPorts[i];
-		unsigned* n_ports = n_ports_sides[i];
-		if (portsSide.size() != *n_ports) {
-			*n_ports = portsSide.size();
-
-			//Placement is dependent on which side we are on.
-			glm::vec2 offset_side;
-			switch (i) 
-			{
-			case 0:
-				//Set west offsets
-				offset_side = glm::vec2(-width, -height);
-				for (int j = 0; j < *n_ports; j++) 
-				{
-					glm::vec2 offset_j = glm::vec2(0.f, 2.f * (j+1) * height / (*n_ports + 1));
-					portsSide[j]->setOffset(offset_side + offset_j);
-				}
-				break;
-
-			case 1:
-				//Set east offsets
-				offset_side = glm::vec2(width, -height);
-				for (int j = 0; j < *n_ports; j++) 
-				{
-					glm::vec2 offset_j = glm::vec2(0.f, 2.f * (j + 1) * height / (*n_ports + 1));
-					portsSide[j]->setOffset(offset_side + offset_j);
-				}
-				break;
-
-			case 2:
-				//Set north offsets
-				offset_side = glm::vec2(-width, height);
-				for (int j = 0; j < *n_ports; j++) 
-				{
-					glm::vec2 offset_j = glm::vec2(2.f * (j + 1) * width / (*n_ports + 1), 0.f);
-					portsSide[j]->setOffset(offset_side + offset_j);
-				}
-				break;
-
-			case 3:
-				//Set south offsets
-				offset_side = glm::vec2(-width, -height);
-				for (int j = 0; j < *n_ports; j++) 
-				{
-					glm::vec2 offset_j = glm::vec2(2.f * (j + 1) * width / (*n_ports + 1), 0.f);
-					portsSide[j]->setOffset(offset_side + offset_j);
-				}
-				break;
-			}
-		}
-	}
-
-}
 
 void Component2D::translateTitle(glm::vec2 translation)
 {
@@ -450,6 +356,17 @@ void Component2D::updateText()
 {
 	std::string textString = equipType + std::string(": ") + titleString;
 	title->updateText(textString);
+}
+
+void Component2D::setColour(const glm::vec4& colour)
+{
+	shapeColour = colour;
+	for (auto poly : m_polygons) {
+		poly->setColor(shapeColour);
+	}
+	for (auto circ : m_circles) {
+		circ->setColor(shapeColour);
+	}
 }
 
 void Component2D::addPoly(Polygon2D* poly)

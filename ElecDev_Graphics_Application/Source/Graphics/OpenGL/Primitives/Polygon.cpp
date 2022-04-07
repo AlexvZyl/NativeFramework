@@ -163,6 +163,16 @@ void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec2 position)
 	translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
 }
 
+void Polygon2D::translateVertex(VertexData* vertex, const glm::vec3 translation)
+{
+	translateVertexTo(vertex, vertex->data.position + translation);
+}
+
+void Polygon2D::translateVertex(VertexData* vertex, const glm::vec2 translation)
+{
+	translateVertex(vertex, glm::vec3{ translation, 0.f });
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

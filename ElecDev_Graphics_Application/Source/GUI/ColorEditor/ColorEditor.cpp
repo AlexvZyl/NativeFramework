@@ -56,8 +56,7 @@ void ColorEditor::onRender()
 		{
 			if (component)
 			{
-				component->shape->m_colour = *color;
-				component->shape->setColor(*color);
+				component->setColour(*color);
 			}
 			if (cable)
 			{

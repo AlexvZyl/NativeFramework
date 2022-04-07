@@ -209,6 +209,18 @@ void Primitive<VertexType>::translateVertexTo(VertexType* vertex, const glm::vec
 	translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
 }
 
+template<typename VertexType>
+void Primitive<VertexType>::translateVertex(VertexType* vertex, const glm::vec3 translation)
+{
+	translateVertexTo(vertex, vertex->data.position + translation);
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::translateVertex(VertexType* vertex, const glm::vec2 translation)
+{
+	translateVertex(vertex, glm::vec3{ translation, 0.f });
+}
+
 //=============================================================================================================================================//
 //  Vertex.																																	   //
 //=============================================================================================================================================//

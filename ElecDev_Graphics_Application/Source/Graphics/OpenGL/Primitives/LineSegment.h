@@ -40,6 +40,7 @@ public:
     // Move the end of a line closest to the given vertex
     // Note: This function sets the start/end point of a line, rather than manipulating indivudual vertices. This is intended bahavior.
     void translateVertexTo(VertexData* vertex, const glm::vec2 position) override;
+    void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
 };
 
 //==============================================================================================================================================//
