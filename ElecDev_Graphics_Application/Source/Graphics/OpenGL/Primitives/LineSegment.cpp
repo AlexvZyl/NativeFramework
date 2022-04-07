@@ -76,7 +76,15 @@ void LineSegment::translateVertexTo(VertexData* vertex, const glm::vec2 position
 
 void LineSegment::translateVertex(VertexData* vertex, const glm::vec2 translation)
 {
-	translateVertexTo(vertex, glm::vec2{ vertex->data.position } + translation);
+	//check if we should move the end or the start of the line
+	if (glm::length(glm::vec2(vertex->data.position) - m_end) < glm::length(glm::vec2(vertex->data.position) - m_start)) {
+		//move the end
+		setEnd(m_end + translation);
+	}
+	else {
+		//move the sart
+		setStart(m_start + translation);
+	}
 }
 
 //==============================================================================================================================================//
