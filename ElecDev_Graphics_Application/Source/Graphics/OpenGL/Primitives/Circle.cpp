@@ -20,6 +20,7 @@ Circle::Circle(VertexArrayObject<VertexDataCircle>* VAO, const glm::vec3& center
 	m_colour = color;
 	m_thickness = thickness;
 	m_fade = fade;
+	m_radius = radius;
 
 	// Create the vertices.
 	std::vector<VertexDataCircle> vertices;

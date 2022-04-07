@@ -31,12 +31,14 @@ class PrimitivePtr : public Entity
 {
 public:
 
-	unsigned m_vertexCount = 0;			// Counts the amount of vertices.
-	unsigned m_indexCount = 0;			// Counts the amount of indices.
-	unsigned m_vertexBufferPos = 0;		// The start position of the entity in the VAO.
-	unsigned m_indexBufferPos = 0;		// The position in the indices buffer.
-	unsigned m_primitiveBufferPos = 0;	// The primitive position in the VAO buffer.
-	bool	 m_queuedForSync = false;	// Has the primitive been synced?
+	unsigned m_vertexCount = 0;						// Counts the amount of vertices.
+	unsigned m_indexCount = 0;						// Counts the amount of indices.
+	unsigned m_vertexBufferPos = 0;					// The start position of the entity in the VAO.
+	unsigned m_indexBufferPos = 0;					// The position in the indices buffer.
+	unsigned m_primitiveBufferPos = 0;				// The primitive position in the VAO buffer.
+	bool	 m_queuedForSync = false;				// Has the primitive been synced?
+	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the entity.
+	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the entity.
 
 	// Destructor.
 	virtual ~PrimitivePtr() = default;
@@ -63,8 +65,6 @@ public:
 	// ------------------- //
 
 	VertexArrayObject<VertexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
-	glm::vec4 m_colour = {0.f, 0.f, 0.f, 1.f};		// Saves the global color for the entity.
-	glm::vec3 m_trackedCenter = {0.f,0.f,0.f};		// Gives the option to track the center of the entity.
 													// Useful for rotation, scaling and moving to a point.
 	VertexType* m_vertices;							// Pointer to the first vertex in memory.
 

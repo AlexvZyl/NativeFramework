@@ -49,8 +49,6 @@ public:
 	// Currently the text box layer is automatically set to be right behind the text.
 	virtual void setLayer(float layer) override;
 
-private:
-
 	// Data.
 	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
 	Font* m_font = nullptr;

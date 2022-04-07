@@ -26,6 +26,9 @@ class Port;
 class Component2D;
 class Cable;
 class LineSegment;
+class Circle;
+class Polygon2D;
+class Text;
 
 // Enums.
 enum class PortType;
@@ -113,6 +116,30 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ca
 
 // Deserialise a single cable.
 void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable>& cable);
+
+//=============================================================================================================================================//
+//  Primitives.																																   //
+//=============================================================================================================================================//
+
+// Text.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Text* text);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<Text>& text);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Text>& text);
+
+// Polygon2D.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<Polygon2D> polygon2D);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Polygon2D> polygon2D);
+
+// Circle.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Circle* circle);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<Circle> circle);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circle> circle);
+
+// Line Segment.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, LineSegment* lineSegment);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<LineSegment> lineSegment);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<LineSegment> lineSegment);
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

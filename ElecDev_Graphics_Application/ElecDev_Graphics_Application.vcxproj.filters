@@ -133,6 +133,10 @@
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
     <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\LineSegmentSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\CircleSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\Polygon2DSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\TextSerialiser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
