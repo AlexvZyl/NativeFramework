@@ -108,7 +108,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        Lumen::getApp().pushGuiLayer<CircuitEditor>("Circuit Editor", LumenDockPanel::Left);
+        Lumen::getApp().pushEngineLayer<Design2DEngine>("Untitled");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
