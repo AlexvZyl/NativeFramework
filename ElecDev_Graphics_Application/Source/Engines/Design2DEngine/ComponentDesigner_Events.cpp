@@ -45,7 +45,7 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 				else {
 					m_activePoly = Renderer::addPolygon2DClear({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
 				}
-				m_activeComponent->addPoly(m_activePoly);
+				//m_activeComponent->addPoly(m_activePoly);
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else
