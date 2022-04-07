@@ -39,8 +39,13 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 
 			if (!m_activePoly)
 			{
-				m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
-				m_activeComponent->addPoly(m_activePoly);
+				if (drawFilled) {
+					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+				}
+				else {
+					m_activePoly = Renderer::addPolygon2DClear({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+				}
+				//m_activeComponent->addPoly(m_activePoly);
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else
@@ -68,12 +73,17 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		{
 			if (!m_activeCircle) 
 			{
-				//start new line
-				m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
+				//start new circle
+				if (drawFilled) {
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
+				}
+				else {
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, .02f, 0.f, m_activeComponent.get());
+				}
 			}
 			else 
 			{
-				//end the line
+				//set the circle rarius
 				m_activeComponent->addCircle(m_activeCircle);
 				m_activeCircle = nullptr;
 			}
