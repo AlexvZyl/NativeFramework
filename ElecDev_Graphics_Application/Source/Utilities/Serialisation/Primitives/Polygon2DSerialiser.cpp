@@ -17,6 +17,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D)
 	for (int i = polygon2D->m_vertexBufferPos; i < polygon2D->m_vertexCount + polygon2D->m_vertexBufferPos; i++)
 	{
 		emitter << YAML::Key << "Vertex " + std::to_string(index) << YAML::Value << vao->m_vertexCPU[i].data.position;
+		index++;
 	}
 	emitter << YAML::EndMap;
 	// Color.
