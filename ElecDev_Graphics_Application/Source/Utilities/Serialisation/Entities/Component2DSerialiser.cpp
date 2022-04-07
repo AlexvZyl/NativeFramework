@@ -50,6 +50,17 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 		emitter << YAML::Key << "South Ports" << YAML::Value << comp->portsSouth;
 	emitter << YAML::EndMap;
 
+	// Polygons.
+	emitter << YAML::Key << "Polygons" << YAML::Value;
+	emitter << YAML::BeginMap;
+	int index = 0;
+	for (auto& poly : comp->m_polygons)
+	{
+		emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
+		index++;
+	}
+	emitter << YAML::EndMap;
+
 	// End componenet data.
 	emitter << YAML::EndMap;
 	return emitter;

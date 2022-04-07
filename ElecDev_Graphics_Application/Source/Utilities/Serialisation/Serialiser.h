@@ -125,6 +125,7 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable>& cable);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Text* text);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<Text>& text);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Text>& text);
+//std::unique_ptr<Text>&& deserialiseText(YAML::Node& node) {};
 
 // Polygon2D.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D);
