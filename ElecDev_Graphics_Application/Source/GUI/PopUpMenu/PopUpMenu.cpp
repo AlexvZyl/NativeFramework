@@ -143,7 +143,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Load Circuit", "", "", "Load");
             if (path.string().size())
             {
-                EventLog::log<FileLoadEvent>(FileLoadEvent(path.string()));
+                EventLog::log<FileLoadEvent>(FileLoadEvent(path.string(), EventType_Application));
             }
             // Remove popup.
             app.queuePopLayer(m_name);
@@ -154,7 +154,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Save Circuit", "", design_engine->m_circuit->m_label, "Save");
             if (path.string().size())
             {
-                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), design_engine));
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), design_engine, EventType_Application));
             }
             // Remove popup.
             app.queuePopLayer(m_layer);
@@ -209,7 +209,7 @@ void PopUpMenu::onRender()
             auto path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
             if (path.string().size())
             {
-                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), dynamic_cast<ComponentDesigner*>(m_engine)));
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), dynamic_cast<ComponentDesigner*>(m_engine), EventType_Application));
             }
                 // Remove popup.
                 app.queuePopLayer(m_name);

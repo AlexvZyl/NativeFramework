@@ -142,6 +142,8 @@ public:
 	glm::vec2 m_contentRegionPos = { 0, 0 };
 	// Convert screen pixel distance to distance in the world.
 	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
+	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
+	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& coords);
 
 protected:
 

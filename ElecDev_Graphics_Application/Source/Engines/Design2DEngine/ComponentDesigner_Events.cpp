@@ -16,7 +16,7 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 
@@ -130,7 +130,7 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	uint64_t eventID = event.ID;
 
 	glm::vec2 pixelCoords = event.mousePosition;
-	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 	if (designerState == CompDesignState::DRAW_POLY)
@@ -210,7 +210,7 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		switch (event.key)
@@ -263,7 +263,7 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 	uint64_t eventID = event.ID;
 
 	glm::vec2 pixelCoords = event.mousePosition;
-	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == CompDesignState::SELECT) {
 		//User is dragging a component.

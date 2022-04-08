@@ -16,6 +16,7 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Utilities/Logger/Logger.h"
+#include "Utilities/Serialisation/Serialiser.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //
@@ -69,12 +70,12 @@ Component2D::Component2D(Circuit* parent)
 	//addPort(1, PortType::PORT_OUT, "RX1");
 	highlight();
 
-	// Dictionary for GUI of component for data automation.ToTagNumber	DBRef	Comments	Metric	Type	Unit
-	dataDict.insert(std::pair<std::string, std::string>("ToTagNumber", "From(Circuit Database)"));
-	dataDict.insert(std::pair<std::string, std::string>("Metric", "1"));
-	dataDict.insert(std::pair<std::string, std::string>("Description", "From(Circuit Database)"));
-	dataDict.insert(std::pair<std::string, std::string>("Unit", "ea"));
-	dataDict.insert(std::pair<std::string, std::string>("DBRef", "From(Circuit Database)"));
+	// General dictionary data.
+	dataDict.insert({ "ToTagNumber", "From(Circuit Database)" });
+	dataDict.insert({ "Metric", "1" });
+	dataDict.insert({ "Description", "From(Circuit Database)" });
+	dataDict.insert({ "Unit", "ea" });
+	dataDict.insert({ "DBRef", "From(Circuit Database)" });
 }
 
 Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
@@ -83,26 +84,46 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	moveTo(centreCoords);
 }
 
-Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityType::COMPONENT, parent)
+Component2D::Component2D(const YAML::Node& lmcpFile, Circuit* parent) 
+	: Entity(EntityType::COMPONENT, parent)
 {
-
-	//check that the node is from a .lmcp file
-	if (lmcpFile["Lumen File Info"]["Type"].as<std::string>() != "Component") {
+	// Check that the node is from a .lmcp file
+	if (lmcpFile["Lumen File Info"]["Type"].as<std::string>() != "Component") 
+	{
 		LUMEN_LOG_ERROR("Components can only be constructed from a .lmcp file.", "Component2D");
 	}
-	YAML::Node componentNode = lmcpFile["Component"];
-	shapeColour = glm::vec4(componentNode["Shape"]["Colour"][0].as<float>(),
-							componentNode["Shape"]["Colour"][1].as<float>(),
-							componentNode["Shape"]["Colour"][2].as<float>(),
-							componentNode["Shape"]["Colour"][3].as<float>());
-
 
 	// ----------- //
 	//  S E T U P  //
 	// ----------- //
+	
+	// Load the component node.
+	YAML::Node componentNode = lmcpFile["Component"];
 
-	// Create vertices.
-	centre = glm::vec2(0.0f, 0.0f);
+	// General data.
+	borderLayerOffset = componentNode["Border layer offset"].as<float>();
+	m_internalCircuit = componentNode["Internal circuit"].as<std::string>();
+
+	// The data dictionary.
+	YAML::Node dictNode = componentNode["Dictionary"];
+	for (const auto& node : dictNode) 
+	{
+		dataDict.insert({node.first.as<std::string>(), node.second.as<std::string>()});
+	}
+
+	// Add the title.
+	title = Renderer::addText2D(componentNode["Title"]);
+
+
+
+
+	//shapeColour = glm::vec4(componentNode["Shape"]["Colour"][0].as<float>(),
+	//						componentNode["Shape"]["Colour"][1].as<float>(),
+	//						componentNode["Shape"]["Colour"][2].as<float>(),
+	//						componentNode["Shape"]["Colour"][3].as<float>());
+
+	//// Create vertices.
+	//centre = glm::vec2(0.0f, 0.0f);
 	//vertices.reserve(4);
 	//vertices.emplace_back(glm::vec3(centre.x - width, centre.y - height, 0.0f));
 	//vertices.emplace_back(glm::vec3(centre.x + width, centre.y - height, 0.0f));
@@ -122,64 +143,66 @@ Component2D::Component2D(YAML::Node& lmcpFile, Circuit* parent) : Entity(EntityT
 	//border->setColor(borderColour);
 	//border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
-	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
-	titleString = componentNode["Title"]["String"].as<std::string>();
-	equipType = componentNode["Title"]["EquipType"].as<std::string>();
-	std::string textString = equipType + std::string(": ") + titleString;
-	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
-	title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
+	//glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
+	//titleString = componentNode["Title"]["String"].as<std::string>();
+	//equipType = componentNode["Title"]["EquipType"].as<std::string>();
+	//std::string textString = equipType + std::string(": ") + titleString;
+	//title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "C", "B", this);
+	//title = Renderer::addText2D(titleString, titlePos, titleColour, titleSize, "C", "B", this);
 
-	//Load dictionary.
-	YAML::Node componentDict = componentNode["Dictionary"];
-	for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
-	{
-		dataDict.insert({ it->first.as<std::string>(), it->second.as<std::string>() });
-	}
+	////Load dictionary.
+	//YAML::Node componentDict = componentNode["Dictionary"];
+	//for (YAML::iterator it = componentDict.begin(); it != componentDict.end(); ++it)
+	//{
+	//	dataDict.insert({ it->first.as<std::string>(), it->second.as<std::string>() });
+	//}
 
-	// ----------- //
-	//  P O R T S  //
-	// ----------- //
+	//// ----------- //
+	////  P O R T S  //
+	//// ----------- //
 
-	// Load the ports.
-	YAML::Node portList = componentNode["Ports"];
+	//// Load the ports.
+	//YAML::Node portList = componentNode["Ports"];
 
-	// East ports.
-	YAML::Node eastPortList = portList["East Ports"];
-	for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
-	{
-		YAML::Node portNode = portIterator->second;
-		//unsigned entityID = addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
-		// Add entity ID to table.
-		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
-	}
-	// West ports.
-	YAML::Node westPortList = portList["West Ports"];
-	for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
-	{
-		YAML::Node portNode = portIterator->second;
-		//unsigned entityID = addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
-		// Add entity ID to table.
-		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
-	}
-	// West ports.
-	YAML::Node northPortList = portList["North Ports"];
-	for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
-	{
-		YAML::Node portNode = portIterator->second;
-		//unsigned entityID = addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
-		// Add entity ID to table.
-		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
-	}
-	// South ports.
-	YAML::Node southPortList = portList["South Ports"];
-	for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
-	{
-		YAML::Node portNode = portIterator->second;
-		//unsigned entityID = addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
-		// Add entity ID to table.
-		//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	//// East ports.
+	//YAML::Node eastPortList = portList["East Ports"];
+	//for (YAML::iterator portIterator = eastPortList.begin(); portIterator != eastPortList.end(); ++portIterator)
+	//{
+	//	YAML::Node portNode = portIterator->second;
+	//	//unsigned entityID = addPort(1, getPortType(portNode), portNode["Label"].as<std::string>());
+	//	// Add entity ID to table.
+	//	//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	//}
+	//// West ports.
+	//YAML::Node westPortList = portList["West Ports"];
+	//for (YAML::iterator portIterator = westPortList.begin(); portIterator != westPortList.end(); ++portIterator)
+	//{
+	//	YAML::Node portNode = portIterator->second;
+	//	//unsigned entityID = addPort(0, getPortType(portNode), portNode["Label"].as<std::string>());
+	//	// Add entity ID to table.
+	//	//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	//}
+	//// West ports.
+	//YAML::Node northPortList = portList["North Ports"];
+	//for (YAML::iterator portIterator = northPortList.begin(); portIterator != northPortList.end(); ++portIterator)
+	//{
+	//	YAML::Node portNode = portIterator->second;
+	//	//unsigned entityID = addPort(2, getPortType(portNode), portNode["Label"].as<std::string>());
+	//	// Add entity ID to table.
+	//	//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
+	//}
+	//// South ports.
+	//YAML::Node southPortList = portList["South Ports"];
+	//for (YAML::iterator portIterator = southPortList.begin(); portIterator != southPortList.end(); ++portIterator)
+	//{
+	//	YAML::Node portNode = portIterator->second;
+	//	//unsigned entityID = addPort(3, getPortType(portNode), portNode["Label"].as<std::string>());
+	//	// Add entity ID to table.
+	//	//idTable.insert({ portNode["Entity ID"].as<unsigned>(), entityID });
 
-	}
+	//}
+
+	highlight();
 }
 
 Component2D::~Component2D() 

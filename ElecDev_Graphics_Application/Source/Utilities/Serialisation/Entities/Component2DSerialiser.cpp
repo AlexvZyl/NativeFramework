@@ -16,23 +16,15 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	emitter << YAML::BeginMap;
 
 	// Component data.
-	emitter << YAML::Key << "Centre" << YAML::Value << comp->centre;
-	emitter << YAML::Key << "Entity ID" << YAML::Value << comp->m_entityID;
-	emitter << YAML::Key << "Component Layer" << YAML::Value << comp->componentLayer;
 	emitter << YAML::Key << "Border layer offset" << YAML::Value << comp->borderLayerOffset;
-	emitter << YAML::Key << "Layer offset" << YAML::Value << comp->portLayerOffset;
-	emitter << YAML::Key << "Number of ports" << YAML::Value << comp->numPorts;
 	emitter << YAML::Key << "Internal circuit" << YAML::Value << "Test AE 234";
 	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
 
-	// Title.
+	// Title (Equipment type).
 	emitter << YAML::Key << "Title" << YAML::Value << comp->title;
-
+	
 	// Ports.
-	emitter << YAML::Key << "Ports" << YAML::Value;
-	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Ports" << YAML::Value << comp->ports;
-	emitter << YAML::EndMap;
+	emitter << YAML::Key << "Ports" << YAML::Value << comp->ports;
 
 	// Polygons.
 	emitter << YAML::Key << "Polygons" << YAML::Value;
@@ -41,6 +33,28 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& 
 	for (auto& poly : comp->m_polygons)
 	{
 		emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
+		index++;
+	}
+	emitter << YAML::EndMap;
+
+	// Line Segments.
+	emitter << YAML::Key << "Line Segments" << YAML::Value;
+	emitter << YAML::BeginMap;
+	index = 0;
+	for (auto& line : comp->m_lines)
+	{
+		emitter << YAML::Key << "Line Segment " + std::to_string(index) << YAML::Value << line;
+		index++;
+	}
+	emitter << YAML::EndMap;
+
+	// Circles.
+	emitter << YAML::Key << "Circles" << YAML::Value;
+	emitter << YAML::BeginMap;
+	index = 0;
+	for (auto& circle : comp->m_circles)
+	{
+		emitter << YAML::Key << "Circle " + std::to_string(index) << YAML::Value << circle;
 		index++;
 	}
 	emitter << YAML::EndMap;

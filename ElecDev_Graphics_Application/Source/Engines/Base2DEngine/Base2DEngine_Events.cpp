@@ -22,7 +22,7 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		// Find current click in world coords.
-		glm::vec3 m_prevMouseEventWorldVec = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
+		glm::vec3 m_prevMouseEventWorldVec = pixelCoordsToCameraCoords(event.mousePosition);
 	}
 
 	// ----------------------- //
@@ -41,7 +41,7 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	else if (event.isType(EventType_MousePress | EventType_MouseButtonMiddle))
 	{
 		// Find current click in world coords.
-		m_prevMouseEventWorldVec = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
+		m_prevMouseEventWorldVec = pixelCoordsToCameraCoords(event.mousePosition);
 	}
 }
 
@@ -50,7 +50,7 @@ void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	EngineCore::onMouseMoveEvent(event);
 
 	// Find current click in world coords.
-	glm::vec3 currmousePosVec = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
+	glm::vec3 currmousePosVec = pixelCoordsToCameraCoords(event.mousePosition);
 
 	// ------------------------- //
 	//  M I D D L E   P R E S S  //
@@ -86,12 +86,12 @@ void Base2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 	//  Apply scale and translate to keep zoom around mouse.
 	//----------------------------------------------------------
 	// Calculate mouse world coords before scaling.
-	glm::vec3 mouseWorldCoordsPre = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
+	glm::vec3 mouseWorldCoordsPre = pixelCoordsToCameraCoords(event.mousePosition);
 	// Apply scaling.
 	glm::vec3 scaleVector = glm::vec3(zoomScaleValue, zoomScaleValue, 1);
 	m_scene->m_camera->m_scalingMatrix = glm::scale(m_scene->m_camera->m_scalingMatrix, scaleVector);
 	// Calculate mouse world coordinates after scaling.
-	glm::vec3 mouseWorldCoordsPost = m_scene->pixelCoordsToCameraCoords(event.mousePosition);
+	glm::vec3 mouseWorldCoordsPost = pixelCoordsToCameraCoords(event.mousePosition);
 	// Translate the world so that the zoom happens on the mouse position. 
 	glm::vec3 translateVector = glm::vec3(mouseWorldCoordsPost.x - mouseWorldCoordsPre.x, mouseWorldCoordsPost.y - mouseWorldCoordsPre.y, 0);
 	//  Apply translation vector.

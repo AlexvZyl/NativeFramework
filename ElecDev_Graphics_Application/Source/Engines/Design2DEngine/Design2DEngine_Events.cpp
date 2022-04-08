@@ -30,7 +30,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		if (designerState == COMPONENT_PLACE)
@@ -114,7 +114,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	Base2DEngine::onMouseMoveEvent(event);
 
 	glm::vec2 coords = event.mousePosition;
-	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(coords);
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(coords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == COMPONENT_PLACE)
 	{
@@ -182,7 +182,7 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		switch (event.key)
@@ -225,10 +225,18 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 
 void Design2DEngine::onFileDropEvent(FileDropEvent& event) 
 {
+	Renderer::storeAndBindScene(m_scene.get());
+
 	for (auto& path : event.fileData)
 	{
 		LUMEN_LOG_DEBUG(path.string(), "FileDropEvent");
+
+		// Create component from file.
+		m_circuit->m_components.push_back(std::make_shared<Component2D>(YAML::LoadFile(path.string())));
+		m_circuit->m_components.back()->move(pixelCoordsToWorldCoords(getMouseLocalPosition()));
 	}
+
+	Renderer::restoreAndUnbindScene();
 }
 
 //==============================================================================================================================================//

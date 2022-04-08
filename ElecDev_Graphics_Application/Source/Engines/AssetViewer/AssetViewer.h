@@ -34,6 +34,7 @@ public:
     // Asset viewing functions.
     void clearAssets();
     void viewCircuit(YAML::Node& node);
+    void viewComponent(YAML::Node& node);
     void viewAsset(const std::filesystem::path& path);
 
     // Assets that can be viewed.

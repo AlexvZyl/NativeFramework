@@ -78,7 +78,7 @@ void Toolbar::onRender()
             auto fsPath = selectFile("Lumen Load Circuit", "", "", "Load");
             if (fsPath.string().size())
             {
-                EventLog::log<FileLoadEvent>(FileLoadEvent(fsPath.string()));
+                EventLog::log<FileLoadEvent>(FileLoadEvent(fsPath.string(), EventType_Application));
             }
         }
 

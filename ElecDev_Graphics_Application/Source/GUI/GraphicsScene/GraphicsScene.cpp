@@ -14,6 +14,7 @@
 #include "Application/Application.h"
 #include "Lumen.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "Application/Events/EventLog.h"
 
 //==============================================================================================================================================//
 //  Constructor.																																//
@@ -110,8 +111,8 @@ void GraphicsScene::onRender()
 			std::wstring wPath(path);
 			std::string sPath;
 			sPath.insert(sPath.end(), wPath.begin(), wPath.end());
-			FileDropEvent event(sPath);
-			Lumen::getApp().getActiveEngine()->onEvent(event);
+			FileDropEvent event(sPath, EventType_FileDrop);
+			m_engine->onEvent(event);
 			ImGui::EndDragDropTarget();
 		}
 	}

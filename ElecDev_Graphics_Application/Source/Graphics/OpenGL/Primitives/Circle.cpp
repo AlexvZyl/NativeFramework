@@ -62,6 +62,8 @@ void Circle::setRadius(float radius)
 	// Add to VAO.
 	m_VAO->popPrimitive(this);
 	m_VAO->pushPrimitive(this, vertices, indices);
+
+	m_radius = radius;
 }
 
 

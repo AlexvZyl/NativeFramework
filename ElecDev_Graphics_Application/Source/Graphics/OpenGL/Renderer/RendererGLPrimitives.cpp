@@ -80,5 +80,25 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 }
 
 //==============================================================================================================================================//
+//  Adding 2D Primitives from YAML.																												//
+//==============================================================================================================================================//
+
+Text* Renderer::addText2D(const YAML::Node& node)
+{
+	Text* text = Renderer::addText2D(
+		node["String"].as<std::string>(),
+		{ node["Position"][0].as<float>(), node["Position"][1].as<float>(), node["Position"][2].as<float>() },
+		{ node["Color"][0].as<float>(), node["Color"][1].as<float>(), node["Color"][2].as<float>(),  node["Color"][3].as<float>() },
+		node["Scale"].as<float>(),
+		node["Horizontal Alignment"].as<std::string>(),
+		node["Vertical Alignment"].as<std::string>()
+	);
+
+	text->setBoxColour({ node["Box Color"][0].as<float>(), node["Box Color"][1].as<float>(), node["Box Color"][2].as<float>(),  node["Box Color"][3].as<float>() });
+
+	return text;
+}
+
+//==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

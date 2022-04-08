@@ -49,15 +49,15 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 		YAML::Node yamlFile = YAML::LoadFile(path.string());
 
 		// Circuits.
-		if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+		if (path.extension() == ".lmct")
 		{
 			viewCircuit(yamlFile);
 		}
 
 		// Components.
-		else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
+		else if (path.extension() == ".lmcp")
 		{
-
+			viewComponent(yamlFile);
 		}
 
 		m_currentAsset = path.filename().string();
@@ -76,6 +76,13 @@ void AssetViewer::viewCircuit(YAML::Node& yamlNode)
 	clearAssets();
 	m_circuit = deserialiseCircuit(yamlNode);
 }
+
+void AssetViewer::viewComponent(YAML::Node& yamlNode)
+{
+	clearAssets();
+	m_component = std::make_unique<Component2D>(yamlNode);
+}
+
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

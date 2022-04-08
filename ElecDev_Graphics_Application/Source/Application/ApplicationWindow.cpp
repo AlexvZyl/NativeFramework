@@ -261,7 +261,7 @@ void Application::glfwInitCallbacks()
                 filePaths.emplace_back(std::string(paths[i])); 
 
             // Log the event.
-            EventLog::log<FileDropEvent>(FileDropEvent(filePaths));
+            EventLog::log<FileDropEvent>(FileDropEvent(filePaths, EventType_Application));
         });
 
     // --------------------- //
