@@ -15,7 +15,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
-	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
+	m_colour = { 14.f / 255.f, 63.f / 255.f, 174.f / 255.f, 1.f };
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
 
@@ -49,9 +49,6 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	// --------------- //
 	//  I N D I C E S  //
 	// --------------- //
-
-
-
 
 	if (m_VAO->getBufferType() == GL_TRIANGLES)
 	{

@@ -361,20 +361,13 @@ void Cable::setColour(glm::vec4 colour, bool save)
 	}
 }
 
-void Cable::highlight()
+void Cable::enableOutline()
 {
-	setColour(glm::vec4{ 0.f, 0.f, 1.0f, 1.f }, false);
-
-	for (int i = 0; i < m_lines.size(); i++)
-	{
-		LineSegment* line = m_lines[i];
+	for (auto& line : m_lines)
 		line->enableOutline();
-	}
-	for (int i = 0; i < m_nodes.size(); i++)
-	{
-		Circle* circ = m_nodes[i];
-		circ->enableOutline();
-	}
+
+	for (auto& node : m_nodes)
+		node->enableOutline();
 
 	m_title1->enableOutline();
 	m_title2->enableOutline();
@@ -451,20 +444,14 @@ void Cable::setActivePrimitive(Entity* primative)
 	m_activeNode = dynamic_cast<Circle*>(primative);
 }
 
-void Cable::unhighlight()
+void Cable::disableOutline()
 {
-	setColour(m_colour);
-
-	for (int i = 0; i < m_lines.size(); i++)
-	{
-		LineSegment* line = m_lines[i];
+	for (auto& line : m_lines)
 		line->disableOutline();
-	}
-	for (int i = 0; i < m_nodes.size(); i++)
-	{
-		Circle* circ = m_nodes[i];
-		circ->disableOutline();
-	}
+
+	for (auto& node : m_nodes)
+		node->disableOutline();
+
 	m_title1->disableOutline();
 	m_title2->disableOutline();
 }

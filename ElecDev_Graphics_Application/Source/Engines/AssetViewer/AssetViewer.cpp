@@ -81,8 +81,8 @@ void AssetViewer::viewComponent(YAML::Node& yamlNode)
 {
 	clearAssets();
 	m_component = std::make_unique<Component2D>(yamlNode);
+	m_component->disableOutline();
 }
-
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

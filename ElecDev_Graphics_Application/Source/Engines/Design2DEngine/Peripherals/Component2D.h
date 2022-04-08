@@ -116,9 +116,9 @@ public:
 	//set the clickedZone.component flag in the GUIState.
 	void setContext(GUIState* guiState);
 	//Highlight the component.
-	void highlight();
+	void enableOutline();
 	//Remove the component highlighting.
-	void unhighlight();
+	void disableOutline();
 	//Add a port with the given definition to the component.
 	//unsigned addPort(int side, PortType type, const std::string& name);
 	//remove a specified port from the component.
@@ -145,7 +145,4 @@ public:
 private:
 	PortType getPortType(YAML::Node node);
 	//void destroy();
-
-	void enableOutline();
-	void disableOutline();
 };

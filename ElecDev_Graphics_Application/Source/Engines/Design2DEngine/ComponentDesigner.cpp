@@ -49,11 +49,13 @@ void ComponentDesigner::switchState(CompDesignState state)
 				Renderer::remove(m_activeLine);
 			}
 		}
-		if (m_activeText) {
+		if (m_activeText) 
+		{
 			m_activeText->disableOutline();
 		}
-		if (m_activePort.get()) {
-			m_activePort->unhighlight();
+		if (m_activePort.get()) 
+		{
+			m_activePort->disableOutline();
 		}
 		m_activeLine = nullptr;
 		m_activePoly = nullptr;
@@ -62,7 +64,6 @@ void ComponentDesigner::switchState(CompDesignState state)
 		designerState = CompDesignState::SELECT;
 		break;
 	}
-
 }
 
 void ComponentDesigner::pushActivePrimitives()
@@ -84,21 +85,27 @@ void ComponentDesigner::pushActivePrimitives()
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
 	//Remove outline of current entity
-	if (m_activePoly) {
+	if (m_activePoly) 
+	{
 		m_activePoly->disableOutline();
 	}
-	if (m_activeLine) {
+	if (m_activeLine) 
+	{
 		m_activeLine->disableOutline();
 	}
-	if (m_activeCircle) {
+	if (m_activeCircle) 
+	{
 		m_activeCircle->disableOutline();
 	}
-	if (m_activeText) {
+	if (m_activeText) 
+	{
 		m_activeText->disableOutline();
 	}
-	if (m_activePort.get()) {
-		m_activePort->unhighlight();
+	if (m_activePort.get()) 
+	{
+		m_activePort->disableOutline();
 	}
+
 	//remove previous selection
 	m_activeLine = nullptr;
 	m_activePoly = nullptr;
@@ -149,8 +156,9 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 					{
 						return current.get() == cur;
 					});
-				if (m_activePort) {
-					m_activePort->highlight();
+				if (m_activePort) 
+				{
+					m_activePort->disableOutline();
 				}
 			 }
 		}
@@ -204,11 +212,12 @@ void ComponentDesigner::deleteActivePrimitive()
 	m_activeText = nullptr;
 }
 
-ComponentDesigner::ComponentDesigner():Base2DEngine()
+ComponentDesigner::ComponentDesigner()
+	: Base2DEngine()
 {
 	m_activeComponent = std::make_shared<Component2D>(nullptr);
 	m_activeComponent->place(glm::vec2(0.f));
-	m_activeComponent->unhighlight();
+	m_activeComponent->disableOutline();
 	enableDesignPalette();
 }
 

@@ -129,8 +129,13 @@ public:
 	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
 
 	// Add text from a YAML file.
-	static Text* addText2D(const YAML::Node& node);
-
+	static Text* addText2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add line segment from a YAML file.
+	static LineSegment* addLineSegment2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add Polygon2D from a YAML file.
+	static Polygon2D* addPolygon2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add circle from a YAML file.
+	static Circle* addCircle2D(const YAML::Node& node, Entity* parent = nullptr);
 	
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //

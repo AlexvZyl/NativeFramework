@@ -93,9 +93,43 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	border->setColor(borderColour);
 	setLayer(portLayer);
 
-	if (parent->m_highlighted) {
-		highlight();
+	if (parent->m_highlighted)
+	{
+		enableOutline();
 	}
+}
+
+Port::Port(const YAML::Node& node, Component2D* parent)
+	: Entity(EntityType::PORT, parent)
+{
+	// General data.
+	m_label = node["Label"].as<std::string>();
+	portLayer = parent->componentLayer + parent->portLayerOffset;
+
+	// Set the port type.
+	std::string type = node["Type"].as<std::string>();
+	if (type == "PORT_INOUT")
+	{
+		m_type = PortType::PORT_INOUT;
+	}
+	else if (type == "PORT_IN")
+	{
+		m_type = PortType::PORT_IN;
+	}
+	else if (type == "PORT_OUT")
+	{
+		m_type = PortType::PORT_OUT;
+	}
+
+	// Add shapes.
+	body = Renderer::addCircle2D(node["Body"]);
+	border = Renderer::addCircle2D(node["Border"]);
+	title = Renderer::addText2D(node["Title"]);
+	bodyColour = body->m_colour;
+	borderColour = border->m_colour;
+	centre = body->m_trackedCenter;
+	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
+	setLayer(portLayer);
 }
 
 Port::~Port()
@@ -167,19 +201,15 @@ void Port::setLayer(float layer)
 	title->setLayer(layer);
 }
 
-void Port::highlight()
+void Port::enableOutline()
 {
-	borderColour = { 0.f, 0.f, 1.0f, 1.f };
-	border->setColor(borderColour);
 	border->enableOutline();
 	body->enableOutline();
 	title->enableOutline();
 }
 
-void Port::unhighlight()
+void Port::disableOutline()
 {
-	borderColour = { 0.f, 0.f, 0.f, 1.f };
-	border->setColor(borderColour);
 	border->disableOutline();
 	body->disableOutline();
 	title->disableOutline();

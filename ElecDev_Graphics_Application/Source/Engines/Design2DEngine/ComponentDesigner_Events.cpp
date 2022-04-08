@@ -23,13 +23,15 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		if (designerState == CompDesignState::SELECT)
 		{
 			m_currentEntityID = getEntityID(pixelCoords);
-			if (m_activePoly || m_activeCircle || m_activeLine) {
+			if (m_activePoly || m_activeCircle || m_activeLine) 
+			{
 				//If we already have an active primitive, we need to check for vertex selection.
 				//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
 				setActiveVertex(screenCoords);
 
 			}
-			if (!m_activeVertex) {
+			if (!m_activeVertex) 
+			{
 				//If we did not select a vertex, then we can check for a new primitive selection
 				setActivePrimitives(m_currentEntityID);
 			}
@@ -39,7 +41,8 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 
 			if (!m_activePoly)
 			{
-				if (drawFilled) {
+				if (drawFilled) 
+				{
 					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
 				}
 				else {
@@ -57,7 +60,8 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
-			if (!m_activeLine) {
+			if (!m_activeLine) 
+			{
 				//start new line
 				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), 0.001f, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
 			}

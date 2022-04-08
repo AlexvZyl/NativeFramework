@@ -29,7 +29,7 @@ public:
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
     float clickTol = 0.01f;
-    bool drawFilled = false;
+    bool drawFilled = true;
 
     CompDesignState designerState = CompDesignState::SELECT;
 
