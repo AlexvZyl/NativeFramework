@@ -260,7 +260,7 @@ void AssetExplorer::onRender()
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
 						m_assetViewerEngine->clearAssets();
-						EventLog::log<FileLoadEvent>(FileLoadEvent(p.path().string(), EventType_Application));
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
 					}
 				}
 
@@ -276,6 +276,11 @@ void AssetExplorer::onRender()
 						{
 							m_assetViewerEngine->viewAsset(p);
 						}
+					}
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						m_assetViewerEngine->clearAssets();
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
 					}
 					// File drag & drop.
 					if (ImGui::BeginDragDropSource())

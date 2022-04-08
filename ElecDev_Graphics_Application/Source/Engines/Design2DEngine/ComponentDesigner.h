@@ -33,8 +33,10 @@ public:
 
     CompDesignState designerState = CompDesignState::SELECT;
 
-    //Constructor
+    // Constructor.
     ComponentDesigner();
+
+    void setComponent(const YAML::Node& node, Circuit* parent = nullptr);
 
     // Mouse events.
     virtual void onMouseButtonEvent(MouseButtonEvent& event) override;

@@ -101,7 +101,7 @@ public:
 	// Creates a generic component centred at the specified coordinates.
 	Component2D(const glm::vec2& centreCoords, Circuit* parent);
 	// Creates a component from a .lmcp file definition
-	Component2D(const YAML::Node& lmcpFile, Circuit* parent = nullptr);
+	Component2D(const YAML::Node& componentNode, Circuit* parent = nullptr);
 
 	// Deconstructor.s
 	~Component2D();

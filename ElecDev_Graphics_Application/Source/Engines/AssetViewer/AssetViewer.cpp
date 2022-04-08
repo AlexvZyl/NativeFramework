@@ -74,13 +74,13 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 void AssetViewer::viewCircuit(YAML::Node& yamlNode)
 {
 	clearAssets();
-	m_circuit = deserialiseCircuit(yamlNode);
+	m_circuit = std::make_unique<Circuit>(yamlNode);
 }
 
 void AssetViewer::viewComponent(YAML::Node& yamlNode)
 {
 	clearAssets();
-	m_component = std::make_unique<Component2D>(yamlNode);
+	m_component = std::make_unique<Component2D>(yamlNode["Component"]);
 	m_component->disableOutline();
 }
 

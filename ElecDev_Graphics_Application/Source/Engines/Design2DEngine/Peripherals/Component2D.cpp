@@ -84,18 +84,9 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	moveTo(centreCoords);
 }
 
-Component2D::Component2D(const YAML::Node& lmcpFile, Circuit* parent) 
+Component2D::Component2D(const YAML::Node& componentNode, Circuit* parent)
 	: Entity(EntityType::COMPONENT, parent)
-{
-	// Check that the node is from a .lmcp file
-	if (lmcpFile["Lumen File Info"]["Type"].as<std::string>() != "Component") 
-	{
-		LUMEN_LOG_ERROR("Components can only be constructed from a .lmcp file.", "Component2D");
-	}
-	
-	// Load the component node.
-	YAML::Node componentNode = lmcpFile["Component"];
-
+{	
 	// General data.
 	borderLayerOffset = componentNode["Border layer offset"].as<float>();
 	m_internalCircuit = componentNode["Internal circuit"].as<std::string>();

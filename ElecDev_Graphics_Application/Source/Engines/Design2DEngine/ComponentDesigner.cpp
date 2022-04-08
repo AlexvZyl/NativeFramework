@@ -267,3 +267,15 @@ void ComponentDesigner::renderDesignPalette()
 		m_ports = true;
 	}
 }
+
+void ComponentDesigner::setComponent(const YAML::Node& node, Circuit* parent)
+{
+	m_activeComponent.reset();
+	m_activePoly = nullptr;
+	m_activeLine = nullptr;
+	m_activeCircle = nullptr;
+	m_activeText = nullptr;
+	m_activePort.reset();
+	m_activeComponent = std::make_shared<Component2D>(node, parent);
+	m_activeComponent->disableOutline();
+}
