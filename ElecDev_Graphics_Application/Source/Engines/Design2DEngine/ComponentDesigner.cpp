@@ -293,9 +293,7 @@ void ComponentDesigner::renderDesignPalette()
 
 	if (ImGui::MenuItem("Color Editor"))
 	{
-		Lumen::getApp().pushGuiLayer<ComponentDesignerColorEditor>("Color Editor", LumenDockPanel::Floating)->getGui()
-																											->setEngine(this)
-																										    .setInitialPosition(getMouseGlobalPosition());
+		Lumen::getApp().pushGuiLayer<ComponentDesignerColorEditor>("Color Editor", LumenDockPanel::Floating)->getGui()->setInitialPosition(getMouseGlobalPosition());
 	}
 }
 

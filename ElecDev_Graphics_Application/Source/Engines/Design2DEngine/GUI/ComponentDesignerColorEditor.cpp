@@ -27,33 +27,40 @@ void ComponentDesignerColorEditor::begin()
 
 void ComponentDesignerColorEditor::onRender()
 {
+	ComponentDesigner* engine = Lumen::getApp().getActiveEngine<ComponentDesigner>();
+	if (!engine) 
+	{
+		ImGui::Text("No active engine.");
+		return;
+	}
+
 	// Get the active element.
 	PrimitivePtr* activePrimitive = nullptr;
 	Port* activePort = nullptr;
 	Cable* activeCable = nullptr;
-	if (m_engine->m_activeCircle)
+	if (engine->m_activeCircle)
 	{
-		activePrimitive = m_engine->m_activeCircle;
+		activePrimitive = engine->m_activeCircle;
 	}
-	else if(m_engine->m_activeLine) 
+	else if(engine->m_activeLine) 
 	{
-		activePrimitive = m_engine->m_activeLine;
+		activePrimitive = engine->m_activeLine;
 	}
-	else if (m_engine->m_activePoly) 
+	else if (engine->m_activePoly) 
 	{
-		activePrimitive = m_engine->m_activePoly;
+		activePrimitive = engine->m_activePoly;
 	}
-	else if (m_engine->m_activeText) 
+	else if (engine->m_activeText) 
 	{
-		activePrimitive = m_engine->m_activeText;
+		activePrimitive = engine->m_activeText;
 	}
-	else if (m_engine->m_activeLine) 
+	else if (engine->m_activeLine) 
 	{
-		activePrimitive = m_engine->m_activeLine;
+		activePrimitive = engine->m_activeLine;
 	}
-	else if(m_engine->m_activePort)
+	else if(engine->m_activePort)
 	{
-		activePort = m_engine->m_activePort.get();
+		activePort = engine->m_activePort.get();
 	}
 	else if (false) 
 	{

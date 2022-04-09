@@ -41,17 +41,8 @@ public:
 		return *this;
 	}
 
-	// Set the engine related to this editor.
-	inline ComponentDesignerColorEditor& setEngine(ComponentDesigner* engine)
-	{
-		m_engine = engine;
-		return *this;
-	}
-
 private:
 
-	// The engine related to this editor.
-	ComponentDesigner* m_engine;
 
 	// The position that the window starts up at.
 	glm::vec2 m_initialPosition;
