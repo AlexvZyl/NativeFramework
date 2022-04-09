@@ -39,9 +39,9 @@ public:
 	};
 
 	// Set the name of the elements.
-	inline virtual void setName(std::string name) override 
+	inline virtual void setNamesOfChildren(std::string name) override
 	{
-		GuiLayer::setName(name);
+		GuiLayer::setNamesOfChildren(name);
 		m_engine->setName(name);
 	}
 

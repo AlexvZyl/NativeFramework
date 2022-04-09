@@ -26,9 +26,8 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& 
 	// Change the circuit name if a file name is supplied.
 	if (path.filename().string().size())
 	{
-		std::string newName = path.filename().string();
+		std::string newName = path.filename().stem().string();
 		circuit->m_label = newName;
-		Lumen::getApp().getActiveEngine()->m_layer->setName(newName);
 	}
 
 	// Create yaml file.
@@ -66,10 +65,9 @@ void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::
 	// Change the component name if a file name is supplied.
 	if (path.filename().string().size())
 	{
-		std::string newName = path.filename().string();
+		std::string newName = path.filename().stem().string();
 		component->titleString = newName;
 		component->title->updateText(newName);
-		Lumen::getApp().getActiveEngine()->m_layer->setName(newName);
 	}
 
 	// Create yaml file.
@@ -108,8 +106,8 @@ void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::
 
 void loadFromYAML(const std::filesystem::path& path)
 {
-	/*try
-	{*/
+	try
+	{
 		// Create yaml node from file.
 		YAML::Node yamlFile = YAML::LoadFile(path.string());
 
@@ -127,12 +125,12 @@ void loadFromYAML(const std::filesystem::path& path)
 			ComponentDesigner* engine = Lumen::getApp().pushEngineLayer<ComponentDesigner>(path.stem().string())->getEngine();
 			engine->setComponent(yamlFile["Component"]);
 		}
-	/*}
+	}
 	catch (...)
 	{
 		LUMEN_LOG_ERROR("Could not load file.  It may contain invalid content or be an unsupported version.", "YAML Serialiser");
 		return;
-	}*/
+	}
 }
 
 //=============================================================================================================================================//
