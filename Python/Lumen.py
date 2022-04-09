@@ -140,6 +140,7 @@ class LumenGui(_LumenScriptEntity):
         self._AddLine("-- Gui Name: '" + guiName + "'.")
         # Used to set the server message callback function.
         self.ServerHandler = 0
+        self._GuiDictionary = None
 
     def Clear(self):
         _LumenScriptEntity.Clear(self)
