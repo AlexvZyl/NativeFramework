@@ -51,8 +51,8 @@ public:
     Circle* m_activeNode = nullptr;
 
     std::string m_titleString ="Cable";
-    Text* m_title1 = nullptr;
-    Text* m_title2 = nullptr;
+    //Text* m_title1 = nullptr;
+    //Text* m_title2 = nullptr;
     static Font m_titleFont;
     float m_titleOffset = 0.01f;
     glm::vec4 m_titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);

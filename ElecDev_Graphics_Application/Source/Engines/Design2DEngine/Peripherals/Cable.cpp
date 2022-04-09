@@ -51,7 +51,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	glm::vec2 endPt = m_startPort->centre;
 	glm::vec2 endPt2 = m_startPort->centre;
 	float initial_length = m_titleOffset;
-	switch (startPort->m_position) 
+	/*switch (startPort->m_position)
 	{
 	case PortPosition::TOP:
 		m_curOrientation = LineOrientation::VERTICAL;
@@ -79,7 +79,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 		endPt2 += glm::vec2(0.f, initial_length);
 		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(endPt + glm::vec2(0.f, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
 		break;
-	}
+	}*/
 
 	// --------------------- //
 	//  P R I M I T I V E S  //
@@ -119,6 +119,7 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	m_lines.emplace_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
 
 	//Add title
+	/*
 	switch (endPort->m_position) {
 	case PortPosition::TOP:
 		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
@@ -158,6 +159,7 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 		//endPt += glm::vec2(initial_length, 0.f);
 		break;
 	}
+	*/
 
 
 }
@@ -176,12 +178,13 @@ Cable::~Cable()
 	m_lines.clear();
 	m_lines.shrink_to_fit();
 	
-
+	/*/
 	//remove title text
 	Renderer::remove(m_title1);
 	if (m_title2) {
 		Renderer::remove(m_title2);
 	}
+	*/
 }
 
 //==============================================================================================================================================//
@@ -250,7 +253,8 @@ void Cable::attach(Port* endPort)
 	m_endPort = endPort;
 
 	// Test to see ensure the cable enters perpendicular to the component edge.
-	LineOrientation portOrientation = LineOrientation::VERTICAL;;
+	LineOrientation portOrientation = LineOrientation::VERTICAL;
+	/*
 	switch (endPort->m_position) {
 	case PortPosition::TOP:
 		portOrientation = LineOrientation::VERTICAL;
@@ -284,12 +288,14 @@ void Cable::attach(Port* endPort)
 		// Line is already perpendicular, so we can extend to the port.
 		extendSegment(m_endPort->centre);
 	}
+	*/
 	setColour(m_colour);
 	endPort->attachCable(this);
 }
 
 void Cable::followPort(Port* movedPort)
 {
+	/*
 	glm::vec3 titlePos;
 	switch (movedPort->m_position)
 	{
@@ -310,11 +316,12 @@ void Cable::followPort(Port* movedPort)
 		titlePos = glm::vec3(movedPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f);
 		break;
 	}
+	*/
 
 	if (movedPort == m_endPort) 
 	{
 		extendSegment(movedPort->centre);
-		m_title2->translateTo(titlePos);
+		//m_title2->translateTo(titlePos);
 	}
 
 	else if (movedPort == m_startPort) 
@@ -322,6 +329,7 @@ void Cable::followPort(Port* movedPort)
 		glm::vec2 startPoint = movedPort->centre;
 		// Move second segment.
 		glm::vec2 startPt = m_lines[1]->m_end;
+		/*
 		switch (m_curOrientation) 
 		{
 		// Update X-values for horizontal lines.
@@ -333,6 +341,7 @@ void Cable::followPort(Port* movedPort)
 			startPt.y = startPoint.y;
 			break;
 		}
+		*/
 
 		m_lines[1]->setStart(startPt);
 		// Move the first node.
@@ -342,7 +351,8 @@ void Cable::followPort(Port* movedPort)
 		m_lines[0]->setEnd(m_lines[1]->m_start);
 
 		//move the title
-		m_title1->translateTo(titlePos);
+		//m_title1->translateTo(titlePos);
+
 	}
 }
 
@@ -369,8 +379,8 @@ void Cable::enableOutline()
 	for (auto& node : m_nodes)
 		node->enableOutline();
 
-	m_title1->enableOutline();
-	m_title2->enableOutline();
+	//m_title1->enableOutline();
+	//m_title2->enableOutline();
 }
 
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
@@ -517,8 +527,8 @@ void Cable::disableOutline()
 	for (auto& node : m_nodes)
 		node->disableOutline();
 
-	m_title1->disableOutline();
-	m_title2->disableOutline();
+	//m_title1->disableOutline();
+	//m_title2->disableOutline();
 }
 
 //==============================================================================================================================================//
