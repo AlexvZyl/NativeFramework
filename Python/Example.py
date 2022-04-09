@@ -31,7 +31,7 @@ script.DrawQuad2D((2,2,2), (3,3,3), (1,0,0,1))
 script.DrawLine2D((2,1,4), (2,2,1), 0.1, (1,0,0,1))
 print(script.GetLua())
 
-# Execute second script and clear it.
+# # Execute second script and clear it.
 instance.ExecuteScript(script)
 script.Clear()
 

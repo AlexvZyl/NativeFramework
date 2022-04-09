@@ -1,6 +1,7 @@
 #pragma once
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Peripherals/Component2D.h"
+#include <filesystem>
 
 enum class CompDesignState
 {
@@ -36,7 +37,7 @@ public:
     // Constructor.
     ComponentDesigner();
 
-    void setComponent(const YAML::Node& node, Circuit* parent = nullptr);
+    void setComponent(const std::filesystem::path& path, Circuit* parent = nullptr);
 
     // Mouse events.
     virtual void onMouseButtonEvent(MouseButtonEvent& event) override;

@@ -106,7 +106,7 @@ public:
 	// Stores the vector that goes into the world.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
 	// Set the name elements of the engine.
-	inline virtual void setName(std::string& name) {}
+	inline virtual void setName(const std::string& name) {}
 
 	// The layer the engine belongs to.
 	Layer* m_layer;

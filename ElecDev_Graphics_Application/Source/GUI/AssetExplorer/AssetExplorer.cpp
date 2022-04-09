@@ -254,7 +254,7 @@ void AssetExplorer::onRender()
 					{
 						if (!ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 						{
-							m_assetViewerEngine->viewAsset(p);
+							//m_assetViewerEngine->viewAsset(p);
 						}
 					}
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())

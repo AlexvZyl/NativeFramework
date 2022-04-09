@@ -317,7 +317,6 @@ GuiLayer<GuiType>* Application::pushGuiLayer(const std::string layerName, LumenD
 	dockLayerToPanel(newName, panel);
 	// Return the layer.
 	return ptr;
-	return nullptr;
 }
 
 template<class LayerType>

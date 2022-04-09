@@ -282,7 +282,7 @@ void Design2DEngine::onFileDropEvent(FileDropEvent& event)
 			m_activeComponent->disableOutline();
 		if (m_activeCable)
 			m_activeCable->disableOutline();
-		m_circuit->m_components.push_back(std::make_shared<Component2D>(YAML::LoadFile(path.string())["Component"], m_circuit.get()));
+		m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
 		m_circuit->m_components.back()->move(getNearestGridVertex(pixelCoordsToWorldCoords(getMouseLocalPosition())));
 		m_activeComponent = m_circuit->m_components.back();
 		designerState = ENTITY_SELECT;

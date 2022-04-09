@@ -8,6 +8,7 @@
 #include "Cable.h"
 #include "Component2D.h"
 #include "yaml-cpp/yaml.h"
+#include <filesystem>
 
 //=============================================================================================================================================//
 //  Circuit Class.    																														   //
@@ -21,7 +22,7 @@ public:
     std::string m_label;
     std::string m_type;
     Circuit(std::string label, std::string type);
-    Circuit(const YAML::Node& node);
+    Circuit(const std::filesystem::path& path);
     ~Circuit();
 };
 

@@ -42,7 +42,7 @@ public:
 	inline virtual void setNamesOfChildren(std::string name) override
 	{
 		GuiLayer::setNamesOfChildren(name);
-		m_engine->setName(name);
+		m_engine->setName(getRawName());
 	}
 
 	// Get the engine in the layer.

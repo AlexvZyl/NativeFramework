@@ -84,9 +84,11 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	moveTo(centreCoords);
 }
 
-Component2D::Component2D(const YAML::Node& componentNode, Circuit* parent)
+Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 	: Entity(EntityType::COMPONENT, parent)
 {	
+	YAML::Node componentNode = YAML::LoadFile(path.string())["Component"];
+
 	// General data.
 	borderLayerOffset = componentNode["Border layer offset"].as<float>();
 	m_internalCircuit = componentNode["Internal circuit"].as<std::string>();
@@ -124,6 +126,8 @@ Component2D::Component2D(const YAML::Node& componentNode, Circuit* parent)
 	{
 		ports.push_back(std::make_shared<Port>(port.second, this));
 	}
+
+	titleString = title->m_string;
 
 	enableOutline();
 }

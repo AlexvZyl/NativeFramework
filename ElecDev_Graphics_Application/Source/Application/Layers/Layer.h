@@ -42,6 +42,12 @@ public:
 	// Focus the layer.
 	inline virtual void focus() = 0;
 
+	// Get the name without the Lumen extensions.
+	inline std::string getRawName() 
+	{
+		return m_nameRaw;
+	}
+
 	// Destructor.
 	inline virtual ~Layer() = default;
 
@@ -60,6 +66,8 @@ protected:
 
 	// Protected constructor.
 	inline Layer() = default;	
+
+	std::string m_nameRaw = "";
 	
 	// The ID given to the layer for ImGui rendering.
 	unsigned m_ID = 0;
