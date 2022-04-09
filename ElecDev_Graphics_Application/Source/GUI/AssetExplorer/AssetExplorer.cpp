@@ -260,7 +260,7 @@ void AssetExplorer::onRender()
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
 						m_assetViewerEngine->clearAssets();
-						EventLog::log<FileLoadEvent>(FileLoadEvent(p.path().string()));
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
 					}
 				}
 
@@ -270,10 +270,17 @@ void AssetExplorer::onRender()
 
 				else if (p.path().extension() == ".lmcp")
 				{
-					ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
+					if(ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+					{
+						if (!ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+						{
+							m_assetViewerEngine->viewAsset(p);
+						}
+					}
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
-						// Open component builder.
+						m_assetViewerEngine->clearAssets();
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
 					}
 					// File drag & drop.
 					if (ImGui::BeginDragDropSource())

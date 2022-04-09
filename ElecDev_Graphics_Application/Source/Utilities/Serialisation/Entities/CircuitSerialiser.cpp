@@ -166,7 +166,7 @@ std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine
 		}
 
 		// Remove compoennt highlightes.
-		component->unhighlight();
+		component->disableOutline();
 	}
 
 	// ------------- //
@@ -204,7 +204,7 @@ std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine
 															   nodeVector,
 															   endPort,
 															   circuit.get(), titleString);
-		cable->unhighlight();
+		cable->disableOutline();
 
 		// Dictionary.
 		cable->cableDict.clear();

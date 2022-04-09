@@ -55,6 +55,12 @@ void Application::onUpdate()
 			Application::onEvent(*event.get()); 
 			continue;
 		}
+		// File drop should go to the hovered layer.
+		else if (event->isType(EventType_FileDrop)) 
+		{
+			m_hoveredLayer->onEvent(*event.get());
+			continue;
+		}
 		
 		// On a mouse press we need to change the focused layer.
 		// This also allows us to modify how dear imgui sets focused layers.

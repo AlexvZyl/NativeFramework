@@ -20,32 +20,16 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Port>& port)
 	emitter << YAML::Key << "Entity ID" << YAML::Value << port->m_entityID;
 	emitter << YAML::Key << "Centre" << YAML::Value << port->centre;
 	emitter << YAML::Key << "Layer" << YAML::Value << port->portLayer;
-	emitter << YAML::Key << "Offset" << YAML::Value << port->m_offset;
 	emitter << YAML::Key << "Type" << YAML::Value << port->m_type;
 
 	// Border.
-	emitter << YAML::Key << "Border" << YAML::Value;
-	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Thickness" << YAML::Value << port->border->m_thickness;
-		emitter << YAML::Key << "Fade" << YAML::Value << port->border->m_fade;
-		emitter << YAML::Key << "Colour" << YAML::Value << port->borderColour;
-	emitter << YAML::EndMap;
+	emitter << YAML::Key << "Border" << YAML::Value << port->border;
 
 	// Body.
-	emitter << YAML::Key << "Body" << YAML::Value;
-	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Thickness" << YAML::Value << port->body->m_thickness;
-		emitter << YAML::Key << "Fade" << YAML::Value << port->body->m_fade;
-		emitter << YAML::Key << "Colour" << YAML::Value << port->bodyColour;
-	emitter << YAML::EndMap;
+	emitter << YAML::Key << "Body" << YAML::Value << port->body;
 
 	// Title.
-	emitter << YAML::Key << "Title" << YAML::Value;
-	emitter << YAML::BeginMap;
-		emitter << YAML::Key << "Size" << YAML::Value << port->titleSize;
-		emitter << YAML::Key << "Offset" << YAML::Value << port->titleOffset;
-		emitter << YAML::Key << "Colour" << YAML::Value << port->titleColour;
-	emitter << YAML::EndMap;
+	emitter << YAML::Key << "Title" << YAML::Value << port->title;
 
 	// End the port map.
 	emitter << YAML::EndMap;

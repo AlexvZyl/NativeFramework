@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include "glm/glm.hpp"
+#include "yaml-cpp/yaml.h"
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Primitives/Vertex.h"
@@ -72,6 +73,7 @@ public:
 
 	// Constructor.
 	Port(const glm::vec2& pos, PortType type, Component2D* parent, const std::string& label = "default");
+	Port(const YAML::Node& node, Component2D* parent = nullptr);
 	// Destructor.
 	~Port();
 
@@ -82,8 +84,8 @@ public:
 	void move(const glm::vec2& translation);
 	void setLayer(float layer);
 	void setContext(GUIState* guiState);
-	void highlight();
-	void unhighlight();
+	void enableOutline();
+	void disableOutline();
 	void setOffset(const glm::vec2& offset);
 	void attachCable(Cable* cable);
 	void detachCable(Cable* cable);

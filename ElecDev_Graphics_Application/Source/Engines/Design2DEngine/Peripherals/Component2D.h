@@ -38,22 +38,21 @@ class Component2D : public Entity
 {
 public:
 
-	// Shape and edge data.
+	// Entites & Primitives describing the component.
 	std::vector<Polygon2D*> m_polygons;
 	std::vector<LineSegment*> m_lines;
 	std::vector<Circle*> m_circles;
-
-	//Polygon2D* shape;
-	//Polygon2D* border;
 	Text* title;
+	std::vector<std::shared_ptr<Port>> ports;
 
 	static unsigned componentID;
 
 	// Specify the type of the equipment
 	std::string equipType = "Block";
 
-	// 
+	// Data for ElecDec software.
 	std::unordered_map<std::string, std::string> dataDict;
+	std::string m_internalCircuit;
 
 	// Component shape attributes.
 	float height = 0.08f;
@@ -89,7 +88,7 @@ public:
 	//std::vector<std::shared_ptr<Port>> portsEast;
 	//std::vector<std::shared_ptr<Port>> portsWest;
 
-	std::vector<std::shared_ptr<Port>> ports;
+	
 	unsigned numPorts = 0;
 
 	float componentLayer = 0.9f;
@@ -102,7 +101,7 @@ public:
 	// Creates a generic component centred at the specified coordinates.
 	Component2D(const glm::vec2& centreCoords, Circuit* parent);
 	// Creates a component from a .lmcp file definition
-	Component2D(YAML::Node& lmcpFile, Circuit* parent);
+	Component2D(const YAML::Node& componentNode, Circuit* parent = nullptr);
 
 	// Deconstructor.s
 	~Component2D();
@@ -117,9 +116,9 @@ public:
 	//set the clickedZone.component flag in the GUIState.
 	void setContext(GUIState* guiState);
 	//Highlight the component.
-	void highlight();
+	void enableOutline();
 	//Remove the component highlighting.
-	void unhighlight();
+	void disableOutline();
 	//Add a port with the given definition to the component.
 	//unsigned addPort(int side, PortType type, const std::string& name);
 	//remove a specified port from the component.
@@ -146,7 +145,4 @@ public:
 private:
 	PortType getPortType(YAML::Node node);
 	//void destroy();
-
-	void enableOutline();
-	void disableOutline();
 };

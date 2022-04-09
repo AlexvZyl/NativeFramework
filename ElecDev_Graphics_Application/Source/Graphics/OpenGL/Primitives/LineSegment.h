@@ -21,11 +21,11 @@ private:
 
     typedef boost::base_from_member<glm::vec2, 1> m_direction;
     typedef boost::base_from_member<glm::vec2, 2> m_perpendicular;
-    float m_thickness;
 
 public:
 
     // Data.
+    float m_thickness;
     glm::vec2 m_start;
     glm::vec2 m_end;
 

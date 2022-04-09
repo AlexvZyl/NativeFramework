@@ -32,6 +32,7 @@ public:
 	// Circle data.
 	float m_thickness = 0;
 	float m_fade = 0;
+	float m_radius = 0;
 
 	// Constructors. 
 	Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);

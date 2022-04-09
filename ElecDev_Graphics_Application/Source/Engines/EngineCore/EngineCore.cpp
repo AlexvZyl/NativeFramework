@@ -77,7 +77,6 @@ void EngineCore::setContentRegionPos(const glm::vec2& pos)
 
 glm::vec2 EngineCore::getMouseLocalPosition()
 {
-	// Get the cursor position.
 	double cursorX, cursorY;
 	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
 	return { cursorX - m_contentRegionPos.x, cursorY - m_contentRegionPos.y };
@@ -85,10 +84,19 @@ glm::vec2 EngineCore::getMouseLocalPosition()
 
 glm::vec2 EngineCore::getMouseGlobalPosition()
 {
-	// Get the cursor position.
 	double cursorX, cursorY;
 	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
 	return { cursorX, cursorY };
+}
+
+glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords) 
+{
+	return m_scene->pixelCoordsToWorldCoords(coords);
+}
+
+glm::vec3 EngineCore::pixelCoordsToCameraCoords(const glm::vec2& coords) 
+{
+	return m_scene->pixelCoordsToCameraCoords(coords);
 }
 
 //=============================================================================================================================================//

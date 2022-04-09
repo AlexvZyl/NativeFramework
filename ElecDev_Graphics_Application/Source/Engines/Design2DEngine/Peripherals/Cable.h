@@ -72,10 +72,10 @@ public:
     void attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);
-    void highlight();
     void moveActivePrimitiveTo(glm::vec2 screenCoords);
     void setActivePrimitive(Entity* primitive);
-    void unhighlight();
+    void enableOutline();
+    void disableOutline();
 };
 
 //==============================================================================================================================================//

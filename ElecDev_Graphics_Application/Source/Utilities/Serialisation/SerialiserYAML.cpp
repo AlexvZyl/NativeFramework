@@ -15,6 +15,7 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
+#include "Engines/Design2DEngine/ComponentDesigner.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //
@@ -107,36 +108,31 @@ void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::
 
 void loadFromYAML(const std::filesystem::path& path)
 {
-	try
-	{
+	/*try
+	{*/
 		// Create yaml node from file.
 		YAML::Node yamlFile = YAML::LoadFile(path.string());
 
 		// Circuits.
-		if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+		if (path.extension() == ".lmct")
 		{
-			deserialiseCircuit(yamlFile, true);
+			//deserialiseCircuit(yamlFile, true);
+			Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(path.stem().string())->getEngine();
+			engine->createCircuit(yamlFile);
 		}
 
 		// Components.
-		else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
+		else if (path.extension() == ".lmcp")
 		{
-			//deserialiseCircuit(yamlFile);
-			if (Lumen::getApp().getActiveEngine<Design2DEngine>())
-			{
-				// Handle component import.
-			}
-			else
-			{
-				// Open component in component designer.
-			}
+			ComponentDesigner* engine = Lumen::getApp().pushEngineLayer<ComponentDesigner>(path.stem().string())->getEngine();
+			engine->setComponent(yamlFile["Component"]);
 		}
-	}
+	/*}
 	catch (...)
 	{
 		LUMEN_LOG_ERROR("Could not load file.  It may contain invalid content or be an unsupported version.", "YAML Serialiser");
 		return;
-	}
+	}*/
 }
 
 //=============================================================================================================================================//
