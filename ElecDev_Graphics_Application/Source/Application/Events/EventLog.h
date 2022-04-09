@@ -43,6 +43,10 @@ public:
 		{
 			mouseScroll = std::make_unique<MouseScrollEvent>(dynamic_cast<const MouseScrollEvent&>(event));
 		}
+		else if (typeid(EventType) == typeid(NotifyEvent))
+		{
+			notifyEvents.emplace_back(std::make_unique<NotifyEvent>(dynamic_cast<const NotifyEvent&>(event)));
+		}
 		else
 		{
 			events.emplace_back(std::make_unique<EventType>(dynamic_cast<const EventType&>(event)));
@@ -59,6 +63,7 @@ public:
 	inline static void clear() 
 	{
 		events.clear();
+		notifyEvents.clear();
 		mouseMove = nullptr;
 		mouseDrag = nullptr;
 		mouseScroll = nullptr;
@@ -66,6 +71,9 @@ public:
 
 	// Store all of the events that occurred.
 	inline static std::vector<std::unique_ptr<Event>> events;
+
+	// Store the notify events.
+	inline static std::vector<std::unique_ptr<NotifyEvent>> notifyEvents;
 
 	// These events are kept seperate, since we only want to 
 	// handle one of them per frame.

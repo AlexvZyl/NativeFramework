@@ -22,8 +22,6 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
-	//Application::setGuiTheme();
-
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
 
@@ -83,6 +81,15 @@ void Application::onUpdate()
 
 		if (EventLog::mouseDrag)
 			m_hoveredLayer->onEvent(*EventLog::mouseDrag.get());
+	}
+
+	// Dispatch notify events after all of the other events are done.
+	if (m_focusedLayer)
+	{
+		for (auto& event : EventLog::notifyEvents)
+		{
+			m_focusedLayer->onEvent(*event.get());
+		}
 	}
 
 	// Pop layers that are queued from GLFW events.
