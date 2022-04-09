@@ -49,8 +49,18 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 	emitter << YAML::EndMap;
 
 	// Cables.
+	emitter << YAML::Key << "Cables" << YAML::Value;
+	emitter << YAML::BeginMap;
+	int cablesIndex = 0;
+	for (auto& cable : circuit->m_cables)
+	{
+		emitter << YAML::Key << "Cable " + std::to_string(cablesIndex) << YAML::Value;
+		serialiseCable(emitter, cable.get(), circuit);
+		cablesIndex++;
+	}
+	// End cables.
+	emitter << YAML::EndMap;
 
-	emitter << YAML::Key << "Cables" << YAML::Value << circuit->m_cables;
 	return emitter;
 }
 

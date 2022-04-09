@@ -45,6 +45,12 @@ Circuit::Circuit(const std::filesystem::path& path)
 		currentComponent->titleString = label;
 		currentComponent->title->updateText(label);
 	}
+
+	// Load cables.
+	for (const auto& cable : node["Cables"]) 
+	{
+		m_cables.push_back(std::make_shared<Cable>(cable.second, this));
+	}
 }
 
 //==============================================================================================================================================//

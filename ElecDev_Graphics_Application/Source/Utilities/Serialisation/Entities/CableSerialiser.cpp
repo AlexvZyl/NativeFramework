@@ -5,6 +5,7 @@
 #include "../Serialiser.h"
 #include "Engines/Design2DEngine/Peripherals/Cable.h"
 #include "OpenGL/Primitives/Circle.h"
+#include "Engines/Design2DEngine/Peripherals/Circuit.h"
 
 //=============================================================================================================================================//
 //  Cable serialiser.     																													   //
@@ -12,17 +13,14 @@
 
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable) 
 {
-	// Begin cable data.
-	emitter << YAML::BeginMap;
-
 	// General data.
-	emitter << YAML::Key << "Entity ID" << YAML::Value << cable->m_entityID;
 	emitter << YAML::Key << "Thickness" << YAML::Value << cable->m_thickness;
-	emitter << YAML::Key << "Start port" << cable->m_startPort->m_entityID;
-	emitter << YAML::Key << "End port" << cable->m_endPort->m_entityID;
-	//emitter << YAML::Key << "Title1 pos" << YAML::Value << cable->m_title1->m_trackedCenter;
-	//emitter << YAML::Key << "Title2 pos" << YAML::Value << cable->m_title2->m_trackedCenter;
-	emitter << YAML::Key << "Title" << YAML::Value << cable->m_titleString;
+
+	// Title entities.
+	//emitter << YAML::Key << "Title 1" << YAML::Value << cable->m_title1;
+	//emitter << YAML::Key << "Title 2" << YAML::Value << cable->m_title2;
+
+	// Data dictionary.
 	emitter << YAML::Key << "Dictionary" << YAML::Value << cable->cableDict;
 
 	// Nodes.
@@ -36,9 +34,69 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 	}
 	emitter << YAML::EndMap;
 
-	// End cable data.
-	emitter << YAML::EndMap;
 	return emitter;
+}
+
+void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
+{
+	// Begin the port Map.
+	emitter << YAML::BeginMap;
+
+	//  Port general data.
+	emitter << cable;
+
+	// Find the start port indices.
+	int startComponentIndex = 0;
+	int startPortIndex = 0;
+	bool found = false;
+	for (auto& component : circuit->m_components)
+	{
+		for (auto& port : component->ports)
+		{
+			if (port.get() == cable->m_startPort)
+			{
+				found = true;
+				break;
+			}
+			startPortIndex++;
+		}
+		if (found)
+			break;
+		startPortIndex = 0;
+		startComponentIndex++;
+	}
+
+	// Store the indices.
+	emitter << YAML::Key << "Start Component Index" << YAML::Value << startComponentIndex;
+	emitter << YAML::Key << "Start Port Index" << YAML::Value << startPortIndex;
+
+	// Find the end port indices.
+	int endComponentIndex = 0;
+	int endPortIndex = 0;
+	found = false;
+	for (auto& component : circuit->m_components)
+	{
+		for (auto& port : component->ports)
+		{
+			if (port.get() == cable->m_endPort)
+			{
+				found = true;
+				break;
+			}
+			endPortIndex++;
+		}
+		if (found)
+			break;
+		endPortIndex = 0;
+		endComponentIndex++;
+	}
+
+	// Store the indices.
+	emitter << YAML::Key << "End Component Index" << YAML::Value << endComponentIndex;
+	emitter << YAML::Key << "End Port Index" << YAML::Value << endPortIndex;
+
+	// End the port map.
+	emitter << YAML::EndMap;
 }
 
 //=============================================================================================================================================//

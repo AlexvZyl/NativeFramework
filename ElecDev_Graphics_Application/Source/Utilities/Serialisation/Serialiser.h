@@ -99,6 +99,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable);
 // Serialise a Cable vector.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Cable>>& cableVector);
 
+// We need this special function so taht we can store the port indices.
+void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit);
+
 //=============================================================================================================================================//
 //  Primitives.																																   //
 //=============================================================================================================================================//

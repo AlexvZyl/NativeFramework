@@ -7,12 +7,11 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 
-
 unsigned Cable::cableID = 0;
+
 //==============================================================================================================================================//
 //  Constructor & Destructor.  																													//
 //==============================================================================================================================================//
-
 
 Cable::Cable(Port* startPort, Circuit* parent) 
 	: Entity(EntityType::CABLE, parent)
@@ -91,6 +90,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	m_nodes.emplace_back(Renderer::addCircle2D(endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	// Add the second (perpendicular) line segment.
 	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, endPt2, m_thickness, m_colour, this));
+
 }
 
 Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent, std::string titleString)
@@ -98,10 +98,70 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 {
 	m_startPort = startPort;
 	m_endPort = endPort;
-
 	m_titleString = titleString;
 
+	constructCable(startPort, nodeList, endPort);
+}
+
+Cable::Cable(const YAML::Node& node, Circuit* parent) 
+	: Entity(EntityType::CABLE, parent)
+{
+	// Find ports.
+	int startComponentIndex = node["Start Component Index"].as<int>();
+	int startPortIndex = node["Start Port Index"].as<int>();
+	Port* startPort = parent->m_components[startComponentIndex]->ports[startPortIndex].get();
+	int endComponentIndex = node["End Component Index"].as<int>();
+	int endPortIndex = node["End Port Index"].as<int>();
+	Port* endPort = parent->m_components[endComponentIndex]->ports[endPortIndex].get();
+
+	// Load all of the nodes belonging to the cable.
+	std::vector<glm::vec2> nodeVector;
+	nodeVector.reserve(node["Nodes"].size());
+	for (const auto& nodeIt : node["Nodes"])
+	{
+		// Add to node vector.
+		glm::vec2 node = { nodeIt.second[0].as<float>(), nodeIt.second[1].as<float>() };
+		nodeVector.emplace_back(node);
+	}
+
+	// Call constructor with data.
+	constructCable(startPort, nodeVector, endPort);
+
+	// Dictionary.
+	cableDict.clear();
+	for (const auto& entry : node["Dictionary"])
+	{
+		cableDict.insert({ entry.first.as<std::string>(), entry.second.as<std::string>() });
+	}
+}
+
+Cable::~Cable()
+{
+	// Remove the cable from the start and end ports.
+	if (m_startPort) m_startPort->detachCable(this);
+	if (m_endPort)   m_endPort->detachCable(this); 
+
+	// Remove the renderer primitives.
+	for (Circle* circle : m_nodes) Renderer::remove(circle);
+	m_nodes.clear();
+	m_nodes.shrink_to_fit();
+	for (LineSegment* lineSegment : m_lines) Renderer::remove(lineSegment);
+	m_lines.clear();
+	m_lines.shrink_to_fit();
+	
+
+	//remove title text
+	Renderer::remove(m_title1);
+	if (m_title2) {
+		Renderer::remove(m_title2);
+	}
+}
+
+void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort) 
+{
 	// Attach the ports
+	m_startPort = startPort;
+	m_endPort = endPort;
 	m_startPort->attachCable(this);
 	m_endPort->attachCable(this);
 
@@ -110,7 +170,7 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	m_nodes.emplace_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
 
 	// Add all inter-node line segments, and the rest of the nodes.
-	for (int i = 1; i < nodeList.size(); i++) 
+	for (int i = 1; i < nodeList.size(); i++)
 	{
 		m_lines.emplace_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
 		m_nodes.emplace_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
@@ -157,30 +217,6 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
 		//endPt += glm::vec2(initial_length, 0.f);
 		break;
-	}
-
-
-}
-
-Cable::~Cable()
-{
-	// Remove the cable from the start and end ports.
-	if (m_startPort) m_startPort->detachCable(this);
-	if (m_endPort)   m_endPort->detachCable(this); 
-
-	// Remove the renderer primitives.
-	for (Circle* circle : m_nodes) Renderer::remove(circle);
-	m_nodes.clear();
-	m_nodes.shrink_to_fit();
-	for (LineSegment* lineSegment : m_lines) Renderer::remove(lineSegment);
-	m_lines.clear();
-	m_lines.shrink_to_fit();
-	
-
-	//remove title text
-	Renderer::remove(m_title1);
-	if (m_title2) {
-		Renderer::remove(m_title2);
 	}
 }
 
