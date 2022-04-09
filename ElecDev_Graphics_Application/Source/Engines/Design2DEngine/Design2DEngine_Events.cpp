@@ -143,7 +143,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 			m_currentEntityID = getEntityID(coords);
 			if (m_activeCable.get()) m_activeCable->extendSegment(getNearestGridVertex(screenCoords));
 		}
-		else if (designerState == ENTITY_SELECT)
+		/*/else if (designerState == ENTITY_SELECT)
 		{
 			if (event.isType(EventType_MouseButtonLeft))
 			{
@@ -153,6 +153,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 				if (m_activeCable.get())     m_activeCable->moveActivePrimitiveTo(getNearestGridVertex(screenCoords));
 			}
 		}
+		*/
 	}
 
 	// Store state.
@@ -161,12 +162,57 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 }
 
 //==============================================================================================================================================//
-//  Mouse Scrol.																																//
+//  Mouse Scroll.																																//
 //==============================================================================================================================================//
 
 void Design2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
+}
+
+//==============================================================================================================================================//
+//  Mouse Drag.																																//
+//==============================================================================================================================================//
+
+void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
+{
+	Base2DEngine::onMouseDragEvent(event);
+
+	uint64_t eventID = event.ID;
+	glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
+	if (designerState == ENTITY_SELECT) {
+		
+			if (m_activeComponent.get()) {
+				m_activeComponent->move(translation);
+			}
+			if (m_activeCable.get()) {
+				m_activeCable->moveActivePrimitive(translation);
+			}
+	}
+}
+
+//==============================================================================================================================================//
+//  Notify event.																																	//
+//==============================================================================================================================================//
+
+void Design2DEngine::onNotifyEvent(NotifyEvent& event)
+{
+	if (event.isType(EventType_MouseDragStart))
+	{
+		LUMEN_LOG_DEBUG("Mouse Drag Start", "Component Designer Notify");
+	}
+	else if (event.isType(EventType_MouseDragStop))
+	{
+		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
+		if (m_activeComponent.get()) {
+			glm::vec2 vert = getNearestGridVertex(m_activeComponent->centre);
+			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
+			m_activeComponent->moveTo(getNearestGridVertex(m_activeComponent->centre));
+		}
+		if (m_activeCable) {
+			m_activeCable->moveActivePrimitiveTo(getNearestGridVertex(pixelCoordsToWorldCoords(getMouseLocalPosition())));
+		}
+	}
 }
 
 //==============================================================================================================================================//

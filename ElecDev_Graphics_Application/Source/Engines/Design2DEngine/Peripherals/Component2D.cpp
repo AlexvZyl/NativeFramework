@@ -150,6 +150,9 @@ Component2D::~Component2D()
 
 void Component2D::moveTo(const glm::vec2& pointerPos)
 {
+	glm::vec2 translation = pointerPos - centre;
+	move(translation);
+	/*
 	//shape->translateTo(pointerPos);
 	//border->translateTo(pointerPos);
 	glm::vec2 titleDest = pointerPos + titleOffset;
@@ -170,6 +173,7 @@ void Component2D::moveTo(const glm::vec2& pointerPos)
 	}
 	
 	centre = glm::vec2(pointerPos[0], pointerPos[1]);
+	*/
 }
 
 void Component2D::move(const glm::vec2& translation)
