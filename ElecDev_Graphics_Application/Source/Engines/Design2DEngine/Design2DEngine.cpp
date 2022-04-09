@@ -34,10 +34,10 @@ Design2DEngine::~Design2DEngine()
 	m_circuit.reset();
 }
 
-void Design2DEngine::createCircuit(const YAML::Node& node) 
+void Design2DEngine::createCircuit(const std::filesystem::path& path) 
 {
 	m_circuit.reset();
-	m_circuit = std::make_shared<Circuit>(node);
+	m_circuit = std::make_shared<Circuit>(path);
 }
 
 //=============================================================================================================================================//

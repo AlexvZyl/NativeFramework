@@ -228,7 +228,7 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	for (auto& path : event.fileData)
 	{
 		if (path.string().size())
-			loadFromYAML(path.string());
+			loadFromYAML(path);
 	}
 }
 
@@ -263,7 +263,7 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	for (auto& path : event.fileData)
 	{
 		if (path.string().size())
-			loadFromYAML(path.string());
+			loadFromYAML(path);
 	}
 }
 

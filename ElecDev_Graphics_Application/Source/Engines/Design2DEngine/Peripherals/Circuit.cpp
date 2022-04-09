@@ -19,14 +19,28 @@ Circuit::~Circuit()
 	m_cables.clear();
 }
 
-Circuit::Circuit(const YAML::Node& node) 
+Circuit::Circuit(const std::filesystem::path& path) 
 	: Entity(EntityType::CIRCUIT)
 {
+	YAML::Node node = YAML::LoadFile(path.string());
+
 	// Load components.
 	for (const auto& component : node["Components"])
 	{
-		m_components.emplace_back(std::make_shared<Component2D>(component.second, this));
-		m_components.back()->disableOutline();
+		// Create the component from the node.
+		std::string compPath = path.parent_path().string() + "\\" + component.second["File"].as<std::string>();
+		m_components.emplace_back(std::make_shared<Component2D>(compPath, this));
+
+		// Update component.
+		auto& currentComponent = m_components.back();
+		currentComponent->disableOutline();
+		currentComponent->moveTo({ component.second["Position"][0].as<float>(), component.second["Position"][1].as<float>() });
+		currentComponent->dataDict.clear();
+		YAML::Node dictNode = component.second["Dictionary"];
+		for (const auto& node : dictNode)
+		{
+			currentComponent->dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
+		}
 	}
 }
 

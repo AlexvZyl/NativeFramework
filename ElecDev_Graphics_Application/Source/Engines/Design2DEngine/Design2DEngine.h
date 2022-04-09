@@ -7,6 +7,7 @@
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include <iostream>
 #include "yaml-cpp/yaml.h"
+#include <filesystem>
 
 //=============================================================================================================================================//
 //  Forward declerations																													   //
@@ -83,8 +84,8 @@ public:
 	void deleteActiveComponent();
 	void deleteActiveCable();
 	Port* getPort(unsigned eID);
-	virtual void setName(std::string& name) override;
-	void createCircuit(const YAML::Node& node);
+	virtual void setName(const std::string& name) override;
+	void createCircuit(const std::filesystem::path& path);
 };
 
 //=============================================================================================================================================//

@@ -15,6 +15,7 @@
 void Layer::setName(const std::string& newName, bool updateStackKey)
 {
 	// New name with ID.
+	m_nameRaw = newName;
 	std::string newNameWithID = newName + "###LumenLayer" + std::to_string(m_ID);
 	
 	if (updateStackKey)
