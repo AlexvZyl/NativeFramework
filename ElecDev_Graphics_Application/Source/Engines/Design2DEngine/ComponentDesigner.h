@@ -12,6 +12,8 @@ enum class CompDesignState
     PLACE_PORT
 };
 
+class ComponentDesignerColorEditor;
+
 class ComponentDesigner : public Base2DEngine
 {
 protected:

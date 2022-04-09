@@ -440,7 +440,6 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 
 void Cable::moveActivePrimitive(glm::vec2 translation)
 {
-
 	// Add code to move necessary primatives around.
 	// Move line segment if user grabs a line.
 	if (m_activeLine)
@@ -457,7 +456,6 @@ void Cable::moveActivePrimitive(glm::vec2 translation)
 			// Could print a warning to the user here for now. Ideally we should handle this by addin an additional segment. For now, just return.
 			return;
 		}
-
 
 		// Get the line orientation -  We move horizontal lines vertically and we move vertical lines horizontally.
 		if (m_activeLine->m_start.x == m_activeLine->m_end.x)

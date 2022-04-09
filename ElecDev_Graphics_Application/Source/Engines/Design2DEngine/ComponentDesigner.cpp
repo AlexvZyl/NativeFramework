@@ -6,7 +6,7 @@
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Graphics/Entities/EntityManager.h"
-
+#include "GUI/ComponentDesignerColorEditor.h"
 
 void ComponentDesigner::switchState(CompDesignState state)
 {
@@ -289,6 +289,13 @@ void ComponentDesigner::renderDesignPalette()
 	{
 		clearStates();
 		m_ports = true;
+	}
+
+	if (ImGui::MenuItem("Color Editor"))
+	{
+		Lumen::getApp().pushGuiLayer<ComponentDesignerColorEditor>("Color Editor", LumenDockPanel::Floating)->getGui()
+																											->setEngine(this)
+																										    .setInitialPosition(getMouseGlobalPosition());
 	}
 }
 
