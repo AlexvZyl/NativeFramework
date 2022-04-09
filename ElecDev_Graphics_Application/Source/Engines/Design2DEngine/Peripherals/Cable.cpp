@@ -162,8 +162,10 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 	// Attach the ports
 	m_startPort = startPort;
 	m_endPort = endPort;
-	m_startPort->attachCable(this);
-	m_endPort->attachCable(this);
+	if(m_startPort)
+		m_startPort->attachCable(this);
+	if(m_endPort)
+		m_endPort->attachCable(this);
 
 	// Add the first line segment and first node.
 	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
@@ -551,8 +553,8 @@ void Cable::disableOutline()
 	for (auto& node : m_nodes)
 		node->disableOutline();
 
-	m_title1->disableOutline();
-	m_title2->disableOutline();
+	//m_title1->disableOutline();
+	//m_title2->disableOutline();
 }
 
 //==============================================================================================================================================//
