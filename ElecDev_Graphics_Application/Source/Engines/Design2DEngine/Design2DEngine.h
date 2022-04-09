@@ -62,11 +62,15 @@ public:
 	virtual void onMouseButtonEvent(MouseButtonEvent& event) override;
 	virtual void onMouseMoveEvent(MouseMoveEvent& event) override;
 	virtual void onMouseScrollEvent(MouseScrollEvent& event) override;
+	virtual void onMouseDragEvent(MouseDragEvent& event) override;
 	// Key events.
 	virtual void onKeyEvent(KeyEvent& event) override;
 
 	// File events.
 	virtual void onFileDropEvent(FileDropEvent& event) override;
+
+	//Notify event.
+	virtual void onNotifyEvent(NotifyEvent& event) override;
 	
 	// ------------------- //
 	//  U T I L I T I E S  //

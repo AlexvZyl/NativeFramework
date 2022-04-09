@@ -73,6 +73,7 @@ public:
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);
     void moveActivePrimitiveTo(glm::vec2 screenCoords);
+    void moveActivePrimitive(glm::vec2 translation);
     void setActivePrimitive(Entity* primitive);
     void enableOutline();
     void disableOutline();

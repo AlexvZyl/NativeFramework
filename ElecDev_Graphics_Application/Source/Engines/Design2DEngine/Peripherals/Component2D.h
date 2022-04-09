@@ -94,7 +94,7 @@ public:
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
-	glm::vec2 centre;
+	glm::vec2 centre = {0.f, 0.f};
 	
 	// Creates a generic component centred at (0, 0).
 	Component2D(Circuit* parent);

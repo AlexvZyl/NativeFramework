@@ -438,6 +438,71 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 	}
 }
 
+void Cable::moveActivePrimitive(glm::vec2 translation)
+{
+
+	// Add code to move necessary primatives around.
+	// Move line segment if user grabs a line.
+	if (m_activeLine)
+	{
+		// First check that we are not moving the first or last line. At the monemt this is not supported, as it requires the line segments to be added.
+		// This should be fixed in the future.
+		auto it = std::find_if(begin(m_lines), end(m_lines), [&](LineSegment* current)
+			{
+				return current == m_activeLine;
+			});
+		if (it == m_lines.begin() || it >= (m_lines.end() - 1))
+		{
+			// The active line is the first or last line segment.
+			// Could print a warning to the user here for now. Ideally we should handle this by addin an additional segment. For now, just return.
+			return;
+		}
+
+
+		// Get the line orientation -  We move horizontal lines vertically and we move vertical lines horizontally.
+		if (m_activeLine->m_start.x == m_activeLine->m_end.x)
+		{
+			// Vertical line
+			translation.y = 0;
+		}
+		else
+		{
+			// Horizontal line
+			translation.x = 0;
+		}
+
+		// Translate the line.
+		m_activeLine->translate(translation);
+
+		// Extend the adjacent lines.
+		(*std::prev(it))->setEnd(m_activeLine->m_start);
+		(*std::next(it))->setStart(m_activeLine->m_end);
+
+		//Move the adjacent nodes
+		m_nodes.at(it - m_lines.begin() - 1)->translate(translation);
+		m_nodes.at(it - m_lines.begin())->translate(translation);
+	}
+	else if (m_activeNode)
+	{
+		// Handle node movement.
+
+		// This is the same as dragging the two adjacent line segments.
+
+		// Get an iterator to the node.
+		auto it = std::find_if(begin(m_nodes), end(m_nodes), [&](Circle* current)
+			{
+				return current == m_activeNode;
+			});
+
+		// Translate the adjacent lines.
+		m_activeLine = m_lines.at(it - m_nodes.begin());
+		moveActivePrimitive(translation);
+		m_activeLine = m_lines.at(it - m_nodes.begin() + 1);
+		moveActivePrimitive(translation);
+		m_activeLine = nullptr;
+	}
+}
+
 void Cable::setActivePrimitive(Entity* primative)
 {
 	m_activeLine = dynamic_cast<LineSegment*>(primative);
