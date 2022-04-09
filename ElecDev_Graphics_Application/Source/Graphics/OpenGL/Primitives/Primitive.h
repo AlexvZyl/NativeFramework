@@ -43,6 +43,19 @@ public:
 	// Destructor.
 	virtual ~PrimitivePtr() = default;
 
+	// --------------------- //
+	//  A T T R I B U T E S  //
+	// --------------------- //
+
+	// Sets the color for all of the vertices.
+	inline virtual void setColor(const glm::vec4& color) = 0;
+	// Sets the entty ID of the entity.
+	inline virtual void setEntityID(unsigned int eID) = 0;
+	// Set the entity later.
+	inline virtual void setLayer(float layer) = 0;
+	// Set context.
+	inline virtual void setContext(GUIState* guiState) = 0;
+
 protected:
 
 	// Constructor.

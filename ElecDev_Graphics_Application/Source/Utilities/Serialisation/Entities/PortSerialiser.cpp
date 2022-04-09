@@ -10,7 +10,7 @@
 //  Single port.		     																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Port>& port)
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Port* port)
 {
 	// Begin the port Map.
 	emitter << YAML::BeginMap;
@@ -50,7 +50,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Po
 	// Iterate through all of the ports.
 	for (std::shared_ptr<Port> port : portVector)
 	{
-		emitter << YAML::Key << "Port " + std::to_string(portIndex) << YAML::Value << port;
+		emitter << YAML::Key << "Port " + std::to_string(portIndex) << YAML::Value << port.get();
 		portIndex++;
 	}
 	
@@ -58,15 +58,6 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Po
 	emitter << YAML::EndMap;
 
 	return emitter;
-}
-
-//=============================================================================================================================================//
-//  Single Port deserialiser.																												   //
-//=============================================================================================================================================//
-
-void deserialise(YAML::Node yamlNode, std::shared_ptr<Port>& port)
-{
-
 }
 
 //=============================================================================================================================================//

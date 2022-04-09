@@ -8,6 +8,7 @@
 #include "Graphics/Entities/Entity.h"
 #include "Port.h"
 #include <unordered_map>
+#include "yaml-cpp/yaml.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.  																													    //
@@ -59,9 +60,15 @@ public:
     float m_titleSize = 0.02f;
 
 public:
+
+    int startComponentIndex = 0;
+    int endComponentIndex = 0;
+    int startPortIndex = 0;
+    int endPortIndex = 0;
     
     //Create a new cable attached to the start port.
     Cable(Port* startPort, Circuit* parent);
+    Cable(const YAML::Node& node, Circuit* parent);
     //Create a new cable from one port to another that gots through each node in the node list
     Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent, std::string titleString);
     ~Cable();
@@ -77,6 +84,8 @@ public:
     void setActivePrimitive(Entity* primitive);
     void enableOutline();
     void disableOutline();
+
+    void constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort);
 };
 
 //==============================================================================================================================================//

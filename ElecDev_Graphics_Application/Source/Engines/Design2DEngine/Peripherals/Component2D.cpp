@@ -129,6 +129,8 @@ Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 
 	titleString = title->m_string;
 
+	equipType = componentNode["Equipment Type"].as<std::string>();
+
 	enableOutline();
 }
 

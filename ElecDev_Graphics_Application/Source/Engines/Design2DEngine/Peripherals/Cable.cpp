@@ -7,12 +7,11 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 
-
 unsigned Cable::cableID = 0;
+
 //==============================================================================================================================================//
 //  Constructor & Destructor.  																													//
 //==============================================================================================================================================//
-
 
 Cable::Cable(Port* startPort, Circuit* parent) 
 	: Entity(EntityType::CABLE, parent)
@@ -91,6 +90,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	m_nodes.emplace_back(Renderer::addCircle2D(endPt, m_thickness, m_colour, 1.f, 0.f, this));
 	// Add the second (perpendicular) line segment.
 	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, endPt2, m_thickness, m_colour, this));
+
 }
 
 Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Circuit* parent, std::string titleString)
@@ -98,70 +98,68 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 {
 	m_startPort = startPort;
 	m_endPort = endPort;
-
 	m_titleString = titleString;
 
-	// Attach the ports
-	m_startPort->attachCable(this);
-	m_endPort->attachCable(this);
+	constructCable(startPort, nodeList, endPort);
+}
 
-	// Add the first line segment and first node.
-	m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
-	m_nodes.emplace_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+Cable::Cable(const YAML::Node& node, Circuit* parent) 
+	: Entity(EntityType::CABLE, parent)
+{
+	Port* startPort = nullptr;
+	Port* endPort = nullptr;
 
-	// Add all inter-node line segments, and the rest of the nodes.
-	for (int i = 1; i < nodeList.size(); i++) 
+	// Find indces.
+	int startComponentIndex = node["Start Component Index"].as<int>();
+	int endComponentIndex = node["End Component Index"].as<int>();
+	int startPortIndex = node["Start Port Index"].as<int>();
+	int endPortIndex = node["End Port Index"].as<int>();
+	// Total components in the circuit.
+	int totalComponents = parent->m_components.size();
+	
+	// Start port.
+	if (startComponentIndex < totalComponents)
 	{
-		m_lines.emplace_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
-		m_nodes.emplace_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
-	}
-	//Add final line segment.
-	m_lines.emplace_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
-
-	//Add title
-	/*
-	switch (endPort->m_position) {
-	case PortPosition::TOP:
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
-		m_title2->rotate(90);
-		//endPt += glm::vec2(0.f, initial_length);
-		break;
-	case PortPosition::BOTTOM:
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
-		m_title2->rotate(-90);
-		//endPt += glm::vec2(0.f, -initial_length);
-		break;
-	case PortPosition::LEFT:
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
-		//endPt += glm::vec2(-initial_length, 0.f);
-		break;
-	case PortPosition::RIGHT:
-		m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
-		//endPt += glm::vec2(initial_length, 0.f);
-		break;
+		// Get total ports belonging to component.
+		int startComponentPortCount = parent->m_components[startComponentIndex]->ports.size();
+		// Get port.
+		if (startPortIndex < startComponentPortCount)
+		{
+			startPort = parent->m_components[startComponentIndex]->ports[startPortIndex].get();
+		}
 	}
 
-	switch (startPort->m_position) {
-	case PortPosition::TOP:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
-		//endPt += glm::vec2(0.f, initial_length);
-		break;
-	case PortPosition::BOTTOM:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
-		//endPt += glm::vec2(0.f, -initial_length);
-		break;
-	case PortPosition::LEFT:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
-		//endPt += glm::vec2(-initial_length, 0.f);
-		break;
-	case PortPosition::RIGHT:
-		m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
-		//endPt += glm::vec2(initial_length, 0.f);
-		break;
+	// End port.
+	if (endComponentIndex < totalComponents)
+	{
+		// Get total ports belonging to component.
+		int endComponentPortCount = parent->m_components[endComponentIndex]->ports.size();
+		// Get port.
+		if (endPortIndex < endComponentPortCount)
+		{
+			endPort = parent->m_components[endComponentIndex]->ports[endPortIndex].get();
+		}
 	}
-	*/
+	
+	// Load all of the nodes belonging to the cable.
+	std::vector<glm::vec2> nodeVector;
+	nodeVector.reserve(node["Nodes"].size());
+	for (const auto& nodeIt : node["Nodes"])
+	{
+		// Add to node vector.
+		glm::vec2 node = { nodeIt.second[0].as<float>(), nodeIt.second[1].as<float>() };
+		nodeVector.emplace_back(node);
+	}
 
+	// Call constructor with data.
+	constructCable(startPort, nodeVector, endPort);
 
+	// Dictionary.
+	cableDict.clear();
+	for (const auto& entry : node["Dictionary"])
+	{
+		cableDict.insert({ entry.first.as<std::string>(), entry.second.as<std::string>() });
+	}
 }
 
 Cable::~Cable()
@@ -185,6 +183,85 @@ Cable::~Cable()
 		Renderer::remove(m_title2);
 	}
 	*/
+}
+
+void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort) 
+{
+	// Attach the ports
+	m_startPort = startPort;
+	m_endPort = endPort;
+	if(m_startPort)
+		m_startPort->attachCable(this);
+	if(m_endPort)
+		m_endPort->attachCable(this);
+
+	// Add the first line segment and first node.
+	if (startPort)
+	{
+		m_lines.emplace_back(Renderer::addLineSegment2D(m_startPort->centre, nodeList[0], m_thickness, m_colour, this));
+	}
+	m_nodes.emplace_back(Renderer::addCircle2D(nodeList[0], m_thickness, m_colour, 1.f, 0.f, this));
+
+	// Add all inter-node line segments, and the rest of the nodes.
+	for (int i = 1; i < nodeList.size(); i++)
+	{
+		m_lines.emplace_back(Renderer::addLineSegment2D(nodeList[i - 1], nodeList[i], m_thickness, m_colour, this));
+		m_nodes.emplace_back(Renderer::addCircle2D(nodeList[i], m_thickness, m_colour, 1.f, 0.f, this));
+	}
+	
+	// Add final line segment.
+	if (endPort)
+	{
+		m_lines.emplace_back(Renderer::addLineSegment2D(nodeList.back(), m_endPort->centre, m_thickness, m_colour, this));
+	}
+
+	if (endPort)
+	{
+		switch (endPort->m_position)
+		{
+		case PortPosition::TOP:
+			m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+			m_title2->rotate(90);
+			//endPt += glm::vec2(0.f, initial_length);
+			break;
+		case PortPosition::BOTTOM:
+			m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+			m_title2->rotate(-90);
+			//endPt += glm::vec2(0.f, -initial_length);
+			break;
+		case PortPosition::LEFT:
+			m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
+			//endPt += glm::vec2(-initial_length, 0.f);
+			break;
+		case PortPosition::RIGHT:
+			m_title2 = Renderer::addText2D(m_titleString, glm::vec3(endPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
+			//endPt += glm::vec2(initial_length, 0.f);
+			break;
+		}
+	}
+
+	if (startPort)
+	{
+		switch (startPort->m_position)
+		{
+		case PortPosition::TOP:
+			m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(-m_thickness, m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+			//endPt += glm::vec2(0.f, initial_length);
+			break;
+		case PortPosition::BOTTOM:
+			m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_thickness, -m_titleOffset), 0.f), m_titleColour, m_titleSize, "L", "U");
+			//endPt += glm::vec2(0.f, -initial_length);
+			break;
+		case PortPosition::LEFT:
+			m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(-m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "R", "U");
+			//endPt += glm::vec2(-initial_length, 0.f);
+			break;
+		case PortPosition::RIGHT:
+			m_title1 = Renderer::addText2D(m_titleString, glm::vec3(startPort->centre + glm::vec2(m_titleOffset, m_thickness), 0.f), m_titleColour, m_titleSize, "L", "U");
+			//endPt += glm::vec2(initial_length, 0.f);
+			break;
+		}
+	}
 }
 
 //==============================================================================================================================================//
@@ -450,7 +527,6 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 
 void Cable::moveActivePrimitive(glm::vec2 translation)
 {
-
 	// Add code to move necessary primatives around.
 	// Move line segment if user grabs a line.
 	if (m_activeLine)
@@ -467,7 +543,6 @@ void Cable::moveActivePrimitive(glm::vec2 translation)
 			// Could print a warning to the user here for now. Ideally we should handle this by addin an additional segment. For now, just return.
 			return;
 		}
-
 
 		// Get the line orientation -  We move horizontal lines vertically and we move vertical lines horizontally.
 		if (m_activeLine->m_start.x == m_activeLine->m_end.x)

@@ -190,6 +190,7 @@
     <ClCompile Include="External\implot\implot.cpp" />
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
@@ -301,7 +302,6 @@
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\LineSegmentSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\Polygon2DSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\TextSerialiser.cpp" />
-    <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
@@ -622,6 +622,7 @@
     <ClInclude Include="External\lua\Windows\include\lua.hpp" />
     <ClInclude Include="External\lua\Windows\include\luaconf.h" />
     <ClInclude Include="External\lua\Windows\include\lualib.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />

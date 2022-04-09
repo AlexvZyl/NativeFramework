@@ -21,7 +21,7 @@
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path)
+void saveToYAML(Circuit* circuit, const std::filesystem::path& path)
 {
 	// Change the circuit name if a file name is supplied.
 	if (path.filename().string().size())
@@ -48,7 +48,7 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& 
 		saveLocation += circuit->m_label + ".lmct";
 	}
 	// Check if a file extension was supplied.
-	else if (path.extension().string() != ".lmct")
+	else if (path.filename().extension().string() != ".lmct")
 	{
 		saveLocation += ".lmct";
 	}
@@ -60,7 +60,7 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& 
 	yamlStream.close();
 }
 
-void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::path& path)
+void saveToYAML(Component2D* component, const std::filesystem::path& path)
 {
 	// Change the component name if a file name is supplied.
 	if (path.filename().string().size())
@@ -68,6 +68,7 @@ void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::
 		std::string newName = path.filename().stem().string();
 		component->titleString = newName;
 		component->title->updateText(newName);
+		component->equipType = component->titleString;
 	}
 
 	// Create yaml file.
