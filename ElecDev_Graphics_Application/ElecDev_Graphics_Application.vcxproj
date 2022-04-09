@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
     <ClCompile Include="External\glm\glm\detail\glm.cpp" />

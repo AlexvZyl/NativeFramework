@@ -1,6 +1,12 @@
 #pragma once
 
 //==============================================================================================================================================//
+//  Includes.																																	//
+//==============================================================================================================================================//
+
+#include <string>
+
+//==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
@@ -24,8 +30,8 @@ public:
 	// in the layer that has to do this.
 	inline virtual void onUpdate() = 0; 
 
-	// Set the name of all the elements in the layer.
-	inline virtual void setName(std::string newName) = 0;
+	// Set the name of the layer as well as change the key in the layerstack.
+	void setName(const std::string& newName, bool updateStackKey = false);
 
 	// Get the name of the layer.
 	inline virtual std::string getName() = 0;
@@ -40,9 +46,17 @@ public:
 	inline virtual ~Layer() = default;
 
 	// Set the layer ID.
-	inline void setID(unsigned ID) { m_ID = ID; }
+	// This also has to rename it.
+	inline void setID(unsigned ID, bool updateStackKey = false)
+	{ 
+		m_ID = ID;
+		setName(getName(), updateStackKey);
+	}
 
 protected:
+
+	// Sets the names of all of the layers children.
+	inline virtual void setNamesOfChildren(std::string newName) = 0;
 
 	// Protected constructor.
 	inline Layer() = default;	

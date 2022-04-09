@@ -10,7 +10,6 @@
 #include "Application/Application.h"
 #include "Application/Layers/Layer.h"
 #include "Application/Events/Events.h"
-#include "Application/Layers/LayerStack.h"
 #include "GUI/GuiElementCore/GuiElementCore.h"
 #include "External/Misc/ConsoleColor.h"
 
@@ -39,7 +38,7 @@ public:
 	virtual void onEvent(Event& event) override;
 	virtual void onRender() override;
 	virtual void onUpdate() override;
-	virtual void setName(std::string newName) override;
+	virtual void setNamesOfChildren(std::string newName) override;
 	virtual std::string getName() override;
 	virtual bool isHovered() override;
 	virtual void focus() override;
@@ -72,10 +71,9 @@ GuiType* GuiLayer<GuiType>::getGui()
 }
 
 template<class GuiType>
-void GuiLayer<GuiType>::setName(std::string newName)
+void GuiLayer<GuiType>::setNamesOfChildren(std::string newName)
 {
-	std::string name = newName + "###LumenLayer" + std::to_string(m_ID);
-	m_guiElement->m_name = name;
+	m_guiElement->m_name = newName;
 }
 
 template<class GuiType>

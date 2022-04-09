@@ -68,12 +68,10 @@ std::string LayerStack::pushLayer(std::unique_ptr<LayerType>& layer)
 	// This allows us to have windows with the same name.
 	layer->setID(m_totalLayerCount);
 	m_totalLayerCount++;
-	// Resets the name with the ID.
-	layer->setName(layer->getName());
 	// We want to return the new name with the ID.
 	std::string newName = layer->getName();
 
-	// Push the layer.
+	// Insert the layer on the stack.
 	m_layers.insert({ layer->getName(), std::move(layer) });
 
 	// Resize the layer pop queue.

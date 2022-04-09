@@ -184,7 +184,7 @@ void Application::glfwInitCallbacks()
             }
 
             // If currently dragging, log an event.
-            if (s_draggingLeftbutton)
+            if (s_draggingLeftbutton && !isEventOfType(eventState, EventType_MouseButtonMiddle))
             {
                 EventLog::log<MouseDragEvent>(MouseDragEvent(s_mouseDragInitialPosition, mousePos, mousePos - s_lastMouseMovePosition, EventType_MouseDrag | eventState));
             }

@@ -13,6 +13,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/notify/imgui_notify.h"
 #include "Lumen.h"
+#include "Application/Layers/LayerStack.h"
 
 // TO BE DEPRECATED!
 #include "GuiState.h"
@@ -176,6 +177,7 @@ private:
 	friend class LayerStack;
 	friend class SettingsWidget;
 	friend class RendererStats;
+	friend class Layer;
 
 	// The window containing the application.
 	GLFWwindow* m_window = nullptr;
