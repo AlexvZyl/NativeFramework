@@ -8,6 +8,7 @@
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Utilities/Logger/Logger.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
 
 void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 {
@@ -217,6 +218,8 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
+		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
+		PolyLine* polyline = nullptr;
 		switch (event.key)
 		{
 			// --------------------------------------------------------------------------------------------------------------- //
@@ -246,6 +249,12 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 			switchState(CompDesignState::SELECT);
 			break;
 
+		case GLFW_KEY_K:
+			//test add polyLine
+			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
+			polyline = new PolyLine(vertices, m_activeComponent.get());
+			polyline->addSegment({ -0.5f, 0.f });
+			break;
 			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_DELETE:

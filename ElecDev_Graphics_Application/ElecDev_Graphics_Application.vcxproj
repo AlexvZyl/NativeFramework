@@ -192,6 +192,7 @@
     <ClCompile Include="External\implot\implot_items.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
@@ -624,6 +625,7 @@
     <ClInclude Include="External\lua\Windows\include\lualib.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
