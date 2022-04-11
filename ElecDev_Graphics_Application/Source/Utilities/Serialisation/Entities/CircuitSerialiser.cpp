@@ -22,7 +22,7 @@ PortType getPortType(YAML::Node node);
 //  Serialise single circuit.  																												   //
 //=============================================================================================================================================//
 
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit>& circuit) 
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit) 
 {
 	// Circuit data.
 	emitter << YAML::Key << "Circuit Info" << YAML::Value;
@@ -39,17 +39,28 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit>& circ
 	{
 		emitter << YAML::Key << "Component " + std::to_string(index) << YAML::Value;
 		emitter << YAML::BeginMap;
-			emitter << YAML::Key << "File" << YAML::Value <<  comp->titleString + ".lmcp";
+			emitter << YAML::Key << "File" << YAML::Value <<  comp->equipType + ".lmcp";
 			emitter << YAML::Key << "Position" << YAML::Value << comp->centre;
 			emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
+			emitter << YAML::Key << "Label" << YAML::Value << comp->titleString;
 		emitter << YAML::EndMap;
 		index++;
 	}
 	emitter << YAML::EndMap;
 
 	// Cables.
+	emitter << YAML::Key << "Cables" << YAML::Value;
+	emitter << YAML::BeginMap;
+	int cablesIndex = 0;
+	for (auto& cable : circuit->m_cables)
+	{
+		emitter << YAML::Key << "Cable " + std::to_string(cablesIndex) << YAML::Value;
+		serialiseCable(emitter, cable.get(), circuit);
+		cablesIndex++;
+	}
+	// End cables.
+	emitter << YAML::EndMap;
 
-	emitter << YAML::Key << "Cables" << YAML::Value << circuit->m_cables;
 	return emitter;
 }
 
@@ -65,7 +76,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Ci
 	for (std::shared_ptr<Circuit> circuit : circuitVector)
 	{
 		// Begin component.
-		emitter << YAML::Key << "Circuit " + std::to_string(circuitIndex) << YAML::Value << circuit;
+		emitter << YAML::Key << "Circuit " + std::to_string(circuitIndex) << YAML::Value << circuit.get();
 		circuitIndex++;
 	}
 	// Done.

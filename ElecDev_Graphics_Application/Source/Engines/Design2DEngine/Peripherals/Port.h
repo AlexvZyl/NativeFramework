@@ -78,7 +78,7 @@ public:
 	~Port();
 
 	Port& operator = (const Port &t);
-	
+
 	// Helper methods.
 	void moveTo(const glm::vec2& destination);
 	void move(const glm::vec2& translation);

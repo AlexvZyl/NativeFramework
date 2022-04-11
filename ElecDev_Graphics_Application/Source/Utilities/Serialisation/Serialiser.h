@@ -51,31 +51,21 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string
 //  General.																																   //
 //=============================================================================================================================================//
 
-// The saving function is not a generic function, but it should be.
-
 // Serialise a circuit to a YAML file.
-void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path);
+void saveToYAML(Circuit* circuit, const std::filesystem::path& path);
 // Serialise a component to a YAML file
-void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::path& path);
+void saveToYAML(Component2D* component, const std::filesystem::path& path);
 // Load a circuit from a YAML file.
 void loadFromYAML(const std::filesystem::path& path);
-
-// Serialise a circuit to a BIN file.
-void saveToBIN(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path);
-// Deserialise a circuit from a BIN file.
-void loadFromBIN(const std::filesystem::path& path);
 
 //=============================================================================================================================================//
 //  Circuits.																																   //
 //=============================================================================================================================================//
 
 // Overloads the << operator so that YAML-cpp can work with circuits.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Circuit>& circuit);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit);
 // Overloads the << operator so that YAML-cpp can work with circuits.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Circuit>>& circuitVector);
-
-// Deserialise a single circuit.
-std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine = false);
 
 //=============================================================================================================================================//
 //  Ports.																																	   //
@@ -84,12 +74,10 @@ std::shared_ptr<Circuit> deserialiseCircuit(YAML::Node& yamlNode, bool newEngine
 // Overloads the << operator so that YAML-cpp can work with port types.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, PortType type);
 // Serialise a single port.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Port>& port);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Port* port);
 // Serialise a port vector.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Port>>& portVector);
 
-// Deserialise a single port.
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Port>& port);
 // Helper to get the port type.
 PortType getPortType(YAML::Node node);
 
@@ -98,24 +86,21 @@ PortType getPortType(YAML::Node node);
 //=============================================================================================================================================//
 
 // Serialise a single Component2D.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Component2D>& comp);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp);
 // Serialise a Component2D vecrtor.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Component2D>>& compVector);
-
-// Deserialise a single Componenet2D.
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Component2D>& component);
 
 //=============================================================================================================================================//
 //  Cables.																																	   //
 //=============================================================================================================================================//
 
 // Serialise a single cable.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Cable>& cable);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable);
 // Serialise a Cable vector.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::vector<std::shared_ptr<Cable>>& cableVector);
 
-// Deserialise a single cable.
-void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable>& cable);
+// We need this special function so taht we can store the port indices.
+void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit);
 
 //=============================================================================================================================================//
 //  Primitives.																																   //
@@ -125,7 +110,6 @@ void deserialise(YAML::Node& yamlNode, std::shared_ptr<Cable>& cable);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Text* text);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<Text>& text);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Text>& text);
-//std::unique_ptr<Text>&& deserialiseText(YAML::Node& node) {};
 
 // Polygon2D.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D);

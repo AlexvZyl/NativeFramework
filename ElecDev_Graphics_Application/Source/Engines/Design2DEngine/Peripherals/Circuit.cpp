@@ -41,6 +41,15 @@ Circuit::Circuit(const std::filesystem::path& path)
 		{
 			currentComponent->dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 		}
+		std::string label = component.second["Label"].as<std::string>();
+		currentComponent->titleString = label;
+		currentComponent->title->updateText(label);
+	}
+
+	// Load cables.
+	for (const auto& cable : node["Cables"]) 
+	{
+		m_cables.push_back(std::make_shared<Cable>(cable.second, this));
 	}
 }
 
