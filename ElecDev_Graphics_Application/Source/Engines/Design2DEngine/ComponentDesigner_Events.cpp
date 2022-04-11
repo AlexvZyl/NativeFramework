@@ -218,7 +218,7 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
+		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.1f} };
 		PolyLine* polyline = nullptr;
 		switch (event.key)
 		{
@@ -252,7 +252,7 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 		case GLFW_KEY_K:
 			//test add polyLine
 			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
-			polyline = new PolyLine(vertices, m_activeComponent.get());
+			polyline = Renderer::addPolyLine(vertices, m_activeComponent.get());
 			polyline->addSegment({ -0.5f, 0.f });
 			break;
 			// --------------------------------------------------------------------------------------------------------------- //

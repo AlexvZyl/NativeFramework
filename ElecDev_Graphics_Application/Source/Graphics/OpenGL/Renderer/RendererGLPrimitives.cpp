@@ -80,10 +80,13 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
 
-/*PolyLine Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, const Entity* parent)
+PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent)
 {
-	return PolyLine();
-}*/
+	unsigned id = EntityManager::peakNextID();
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices,
+															  s_scene->m_trianglesVAO.get(), parent) });
+	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
+}
 
 //==============================================================================================================================================//
 //  Adding 2D Primitives from YAML.																												//
