@@ -13,6 +13,3 @@
 [submodule "ElecDev_Graphics_Application/External/Clipper"]
 	path = ElecDev_Graphics_Application/External/Clipper
 	url = https://github.com/Cullen-Enerdyne/Clipper
-[submodule "ElecDev_Graphics_Application/External/CavalierContours"]
-	path = ElecDev_Graphics_Application/External/CavalierContours
-	url = https://github.com/Cullen-Enerdyne/CavalierContours
