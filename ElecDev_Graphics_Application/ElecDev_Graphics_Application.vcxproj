@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
     <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
@@ -309,6 +310,7 @@
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
