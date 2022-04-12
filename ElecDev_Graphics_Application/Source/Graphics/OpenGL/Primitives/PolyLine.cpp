@@ -84,6 +84,12 @@ void PolyLine::pushVertex(const glm::vec3& vertex)
 	update();
 }
 
+void PolyLine::pushVertex(const glm::vec2& vertex)
+{
+	m_vertices.push_back(vertex);
+	update();
+}
+
 void PolyLine::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
 {
 	translateVertexAtIndex(index, glm::vec2{ translation });
@@ -142,4 +148,26 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 	}
 	*it += translation;
 	update();
+}
+
+void PolyLine::translate(const glm::vec3& translation)
+{
+	translate(glm::vec2(translation));
+}
+
+void PolyLine::translate(const glm::vec2& translation)
+{
+	//update the internal vertices
+	for (auto& vert : m_vertices) {
+		vert += translation;
+	}
+	Polygon2D::translate(translation);
+}
+
+void PolyLine::translateTo(const glm::vec3& position)
+{
+}
+
+void PolyLine::translateTo(const glm::vec2& position)
+{
 }

@@ -253,7 +253,7 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 			//test add polyLine
 			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
 			polyline = Renderer::addPolyLine(vertices, m_activeComponent.get());
-			polyline->addSegment({ -0.5f, 0.f });
+			polyline->pushVertex({ -0.5f, 0.f });
 			break;
 			// --------------------------------------------------------------------------------------------------------------- //
 

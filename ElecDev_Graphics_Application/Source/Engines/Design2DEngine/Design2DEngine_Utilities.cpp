@@ -134,7 +134,6 @@ void Design2DEngine::setActiveCable(unsigned eID)
 					{
 						return current.get() == cur;
 					});
-				m_activeCable->setActivePrimitive(currentEntity);
 				m_activeCable->disableOutline();
 
 				Lumen::getApp().m_guiState->active_cable = m_activeCable.get();

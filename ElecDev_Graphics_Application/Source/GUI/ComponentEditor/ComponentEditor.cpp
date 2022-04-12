@@ -383,8 +383,8 @@ void ComponentEditor::onRender()
 			activeTitleString = activeCable->m_titleString;
 			if (ImGui::InputText("##ComponentName", &activeCable->m_titleString))
 			{
-				activeCable->m_title1->updateText(activeCable->m_titleString);
-				activeCable->m_title2->updateText(activeCable->m_titleString);
+				//activeCable->m_title1->updateText(activeCable->m_titleString);
+				//activeCable->m_title2->updateText(activeCable->m_titleString);
 			}
 			ImGui::Text(" Type:\t Cable");
 		}

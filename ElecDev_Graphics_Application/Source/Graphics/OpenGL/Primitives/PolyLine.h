@@ -17,8 +17,8 @@ class PolyLine :
     
     PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent);
     //Calculates the offset and runs the triangulation function
-    void update();
 	virtual void pushVertex(const glm::vec3& vertex) override;
+	virtual void pushVertex(const glm::vec2& vertex);
 	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation) override;
 	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
 	// Translate to.
@@ -32,6 +32,18 @@ class PolyLine :
 	virtual void translateVertex(VertexData* vertex, const glm::vec3 translation) override;
 	// Move a vertex
 	virtual void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
+	// Translate the entity by the given vector.
+	virtual void translate(const glm::vec3& translation) override;
+	// Translate the entity by the given vector.
+	virtual void translate(const glm::vec2& translation) override;
+	// Translate the entity to the given position.
+	virtual void translateTo(const glm::vec3& position) override;
+	//Translates the entity in the XY plane, keeping the same Z value.
+	virtual void translateTo(const glm::vec2& position) override;
+
+protected:
+
+	void update();
 
 
 
