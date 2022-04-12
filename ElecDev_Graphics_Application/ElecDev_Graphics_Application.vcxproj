@@ -194,6 +194,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
+    <ClCompile Include="Source\GUI\CableEditor\CableEditor.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
@@ -626,6 +627,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
+    <ClInclude Include="Source\GUI\CableEditor\CableEditor.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
     <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
@@ -1021,6 +1023,7 @@
     <Image Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
+    <Image Include="Source\Resources\Icons\Cable.png" />
     <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
     <Image Include="Source\Resources\Icons\ComponentFileIcon.png" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />

@@ -14,6 +14,7 @@
 #include "Engines/Design2DEngine/Peripherals/Cable.h"
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "Resources/ResourceHandler.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -21,7 +22,14 @@
 
 ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags)
-{}
+{
+	if (!s_iconCreated)
+	{
+		s_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
+		s_iconCreated = true;
+		s_textHeight = ImGui::CalcTextSize("A").y;
+	}
+}
 
 void ComponentEditor::begin()
 {
@@ -248,7 +256,6 @@ void ComponentEditor::onRender()
 					toRemove.clear();
 				}
 
-
 				// --------------------- //
 				//     FROM SELECTION    //
 				// --------------------- //
@@ -326,7 +333,8 @@ void ComponentEditor::onRender()
 
 		ImGui::EndChild();
 	}
-	if (design_engine) {
+	if (design_engine) 
+	{
 
 		// Fetch all the component names.
 
@@ -375,9 +383,13 @@ void ComponentEditor::onRender()
 
 		}
 
-		// Cable properties.
+		// ------------------------------- //
+		//  C A B L E   S P E C I F I C S  //
+		// ------------------------------- //
+
 		if (activeCable)
 		{
+			// General info.
 			ImGui::Text(" Name:\t");
 			ImGui::SameLine();
 			activeTitleString = activeCable->m_titleString;
@@ -386,11 +398,58 @@ void ComponentEditor::onRender()
 				activeCable->m_title1->updateText(activeCable->m_titleString);
 				activeCable->m_title2->updateText(activeCable->m_titleString);
 			}
-			ImGui::Text(" Type:\t Cable");
+
+			// --------------------------------------- //
+			//  C A B L E   T Y P E   D R O P P I N G  //
+			// --------------------------------------- //
+
+			static glm::vec2 windowPadding = { 15.f, 15.f };
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding);
+			static float iconTextSeperation = 10.f;
+			// Original setup.
+			glm::vec2 iconSize = { 80, 80 };
+			// Now adjust for the wrapped text.
+			float childHeight = iconSize.y + s_textHeight + 2 * windowPadding.y + iconTextSeperation;
+			float textX = ImGui::CalcTextSize(activeCable->m_cableType.c_str()).x;
+			if (ImGui::BeginChild("CableDrop", {0.f, childHeight}, true, ImGuiWindowFlags_NoScrollbar))
+			{
+				if (activeCable->m_cableType.size())
+				{
+					float childContentRegionX = ImGui::GetContentRegionMax().x;
+					ImGui::SetCursorPosX(childContentRegionX/2 - iconSize.x/2);
+					ImGui::Image((void*)s_cableIcon, iconSize, { 0, 1 }, { 1, 0 });
+					if (textX < childContentRegionX)
+					{
+						ImGui::SetCursorPosX(childContentRegionX/2 - textX/2);
+					}
+					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + iconTextSeperation);
+					ImGui::TextWrapped(activeCable->m_cableType.c_str());
+				}
+				else
+				{
+					ImGui::TextWrapped("No assigned type.");
+				}
+			}
+			ImGui::PopStyleVar();
+			ImGui::EndChild();
+			// Receive dropped files.
+			if (ImGui::BeginDragDropTarget())
+			{
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					// Pass FileDropEvent to engine.
+					std::filesystem::path fsPath((const wchar_t*)payload->Data);
+					if (fsPath.filename().extension().string() == ".lmcb")
+					{
+						activeCable->m_cableType = fsPath.filename().stem().string();
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
 		}
 
 		// Get the current component as the initial selection for the data selection
-
 		if (equipmentSelector == -1) {
 			for (int num = 0; num < numCom; num++) {
 				equipmentSelector = num;

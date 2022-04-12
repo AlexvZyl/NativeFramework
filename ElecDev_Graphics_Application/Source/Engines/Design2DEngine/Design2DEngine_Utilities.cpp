@@ -122,7 +122,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 		if (!currentEntity) {
 			return;
 		}
-	currentEntity->setContext();
+		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
 			if (currentEntity->m_parent->m_type == EntityType::CABLE) 
@@ -135,7 +135,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 						return current.get() == cur;
 					});
 				m_activeCable->setActivePrimitive(currentEntity);
-				m_activeCable->disableOutline();
+				m_activeCable->enableOutline();
 
 				Lumen::getApp().m_guiState->active_cable = m_activeCable.get();
 			}

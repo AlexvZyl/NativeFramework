@@ -109,6 +109,8 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	Port* startPort = nullptr;
 	Port* endPort = nullptr;
 
+	m_cableType = std::filesystem::path(node["File"].as<std::string>()).filename().stem().string();
+
 	// Find indces.
 	int startComponentIndex = node["Start Component Index"].as<int>();
 	int endComponentIndex = node["End Component Index"].as<int>();
@@ -285,6 +287,7 @@ void Cable::extendPrevSegment(glm::vec2 nextPoint)
 	m_nodes.back()->translateTo(endPt);
 	m_lines.back()->setStart(endPt);
 	m_nodes.back()->translateTo(endPt);
+	enableOutline();
 }
 
 void Cable::extendSegment(glm::vec2 nextPoint)
@@ -421,7 +424,7 @@ void Cable::followPort(Port* movedPort)
 		m_lines[0]->setEnd(m_lines[1]->m_start);
 
 		//move the title
-		m_title1->translateTo(titlePos);
+		//m_title1->translateTo(titlePos);
 	}
 }
 
@@ -448,8 +451,8 @@ void Cable::enableOutline()
 	for (auto& node : m_nodes)
 		node->enableOutline();
 
-	m_title1->enableOutline();
-	m_title2->enableOutline();
+	//m_title1->enableOutline();
+	//m_title2->enableOutline();
 }
 
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)

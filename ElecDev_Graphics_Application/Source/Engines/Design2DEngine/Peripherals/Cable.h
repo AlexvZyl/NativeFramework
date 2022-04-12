@@ -42,6 +42,8 @@ public:
     // Data Automation
     std::unordered_map<std::string, std::string> cableDict;
 
+    std::string m_cableType = "";
+
     float m_thickness = 0.005f;
     glm::vec4 m_colour = { 00.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
     //std::vector<glm::vec2> m_vertices;
@@ -51,7 +53,7 @@ public:
     LineSegment* m_activeLine = nullptr;
     Circle* m_activeNode = nullptr;
 
-    std::string m_titleString ="Cable";
+    std::string m_titleString = "Cable";
     Text* m_title1 = nullptr;
     Text* m_title2 = nullptr;
     static Font m_titleFont;
@@ -84,7 +86,6 @@ public:
     void setActivePrimitive(Entity* primitive);
     void enableOutline();
     void disableOutline();
-
     void constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort);
 };
 
