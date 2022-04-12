@@ -84,7 +84,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	// --------------------- //
 
 	// First line.
-	m_polyLine = Renderer::addPolyLine({ m_startPort->centre }, this);
+	m_polyLine = Renderer::addPolyLine({ m_startPort->centre,  m_startPort->centre }, this);
 
 }
 
@@ -199,7 +199,7 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 void Cable::extendSegment(glm::vec2 nextPoint)
 {
 	// Extend the pevious segment. 
-	m_polyLine->translateVertexAtIndex(m_polyLine->m_vertices.size() - 1, nextPoint);
+	m_polyLine->translateToVertexAtIndex(m_polyLine->m_vertices.size() - 1, nextPoint);
 }
 
 void Cable::addSegment(glm::vec2 nextPoint)
@@ -231,13 +231,13 @@ void Cable::followPort(Port* movedPort)
 	if (movedPort == m_endPort) 
 	{
 		// Extend the pevious segment. 
-		m_polyLine->translateVertexAtIndex(m_polyLine->m_vertices.size() - 1, movedPort->centre);
+		m_polyLine->translateToVertexAtIndex(m_polyLine->m_vertices.size() - 1, movedPort->centre);
 	}
 
 	else if (movedPort == m_startPort) 
 	{
 		// Extend the first segment. 
-		m_polyLine->translateVertexAtIndex(0, movedPort->centre);
+		m_polyLine->translateToVertexAtIndex(0, movedPort->centre);
 	}
 }
 
