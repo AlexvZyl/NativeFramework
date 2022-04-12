@@ -15,7 +15,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
-	m_colour = glm::vec4(1.f, 0.f, 0.f, 0.5f);
+	m_colour = { 14.f / 255.f, 63.f / 255.f, 174.f / 255.f, 1.f };
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
 
@@ -49,9 +49,6 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	// --------------- //
 	//  I N D I C E S  //
 	// --------------- //
-
-
-
 
 	if (m_VAO->getBufferType() == GL_TRIANGLES)
 	{
@@ -102,14 +99,27 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 	}
 	// Add new vertex.
 	currentVertices.emplace_back(VertexData(vertex, m_colour, m_entityID));
-	vertices.emplace_back(vertex);
 
 	// Pop and push the primitive.
 	m_VAO->popPrimitive(this);
 	m_vertexCount++;
-	std::vector < std::vector<glm::vec3>> vertices_with_holes;
-	vertices_with_holes.push_back(vertices);
-	std::vector<unsigned> indices = mapbox::earcut<unsigned>(vertices_with_holes);
+	std::vector<unsigned> indices;
+	if (m_VAO->getBufferType() == GL_TRIANGLES) {
+		vertices.emplace_back(vertex);
+		std::vector < std::vector<glm::vec3>> vertices_with_holes;
+		vertices_with_holes.push_back(vertices);
+		indices = mapbox::earcut<unsigned>(vertices_with_holes);
+	}
+	else if (m_VAO->getBufferType() == GL_LINES) {
+		indices.reserve(2 * m_vertexCount);
+		for (int i = 1; i < m_vertexCount; i++)
+		{
+			indices.push_back(i - 1);
+			indices.push_back(i);
+		}
+		indices.push_back(0);
+		indices.push_back(m_vertexCount - 1);
+	}
 	m_indexCount = indices.size();
 	m_VAO->pushPrimitive(this, currentVertices, indices);
 }
@@ -141,14 +151,50 @@ void Polygon2D::translateToVertexAtIndex(unsigned index, const glm::vec2& positi
 
 void Polygon2D::updateIndices()
 {
-	std::vector<glm::vec3> vertices;
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++) {
-		vertices.emplace_back((m_VAO->m_vertexCPU[i].data.position));
+	std::vector<unsigned> indices;
+	if (m_VAO->getBufferType() == GL_TRIANGLES) {
+		std::vector<glm::vec3> vertices;
+		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++) {
+			vertices.emplace_back((m_VAO->m_vertexCPU[i].data.position));
+		}
+		std::vector < std::vector<glm::vec3>> vertices_with_holes;
+		vertices_with_holes.push_back(vertices);
+		indices = mapbox::earcut<unsigned>(vertices_with_holes);
 	}
-	std::vector < std::vector<glm::vec3>> vertices_with_holes;
-	vertices_with_holes.push_back(vertices);
-	std::vector<unsigned> indices = mapbox::earcut<unsigned>(vertices_with_holes);
+	else if (m_VAO->getBufferType() == GL_LINES) {
+		indices.reserve(2 * m_vertexCount);
+		for (int i = 1; i < m_vertexCount; i++)
+		{
+			indices.push_back(i - 1);
+			indices.push_back(i);
+		}
+		indices.push_back(0);
+		indices.push_back(m_vertexCount - 1);
+	}
 	m_VAO->updateIndices(this, indices);
+
+}
+
+void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec3 position)
+{
+	vertex->data.position = position;
+	updateIndices();
+	syncWithGPU();
+}
+
+void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec2 position)
+{
+	translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
+}
+
+void Polygon2D::translateVertex(VertexData* vertex, const glm::vec3 translation)
+{
+	translateVertexTo(vertex, vertex->data.position + translation);
+}
+
+void Polygon2D::translateVertex(VertexData* vertex, const glm::vec2 translation)
+{
+	translateVertex(vertex, glm::vec3{ translation, 0.f });
 }
 
 //=============================================================================================================================================//

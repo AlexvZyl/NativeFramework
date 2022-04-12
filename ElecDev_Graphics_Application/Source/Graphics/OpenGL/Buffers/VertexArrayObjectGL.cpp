@@ -334,50 +334,64 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 {	
 	// NOTE: Counts have to be updated before calling this function.
 
-	// ----------------- //
-	//  C A P A C I T Y  //
-	// ----------------- //
+	// ------------------------- //
+	//  V B O   C A P A C I T Y  //
+	// ------------------------- //
 
-	// Increase capacity.
+	bool vertexBufferResized = false;
+
+	// Increase.
 	if (m_vertexCount > m_vertexBufferSize)
 	{
-		// GPU.
 		while (m_vertexCount > m_vertexBufferSize)
 			m_vertexBufferSize += m_bufferIncrementSize;
-		// Calculate IBO size based on index/vertex ratio.
-		m_indexBufferSize = (int)((float)m_vertexBufferSize * ((float)m_indexCount / (float)m_vertexCount));
-
-		// CPU.
 		m_vertexCPU.reserve(m_vertexBufferSize);
-		m_indexCPU.reserve(m_indexBufferSize);
+		vertexBufferResized = true;
 	}
-
-	// Reduce capacity.
+	// Reduce.
 	else if (m_vertexCount < (m_vertexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
 	{
 		while (m_vertexCount < (m_vertexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
 			m_vertexBufferSize -= m_bufferIncrementSize;
-		// Calculate IBO size based on index/vertex ratio.
-		m_indexBufferSize = (int)((float)m_vertexBufferSize * ((float)m_indexCount / (float)m_vertexCount));
-
-		// CPU.
 		m_vertexCPU.shrink_to_fit();
 		m_vertexCPU.reserve(m_vertexBufferSize);
-		m_indexCPU.shrink_to_fit();
-		m_indexCPU.reserve(m_indexBufferSize);
-		// Find a better way to do this.
-		// Should be fixed when we implement our own freelist...
+		vertexBufferResized = true;
 	}
 
-	// No resize occured.
-	else return false;
+	// ------------------------- //
+	//  I B O   C A P A C I T Y  //
+	// ------------------------- //
+
+	bool indexBufferResized = false;
+
+	// Increase.
+	if (m_indexCount > m_indexBufferSize)
+	{
+		while (m_indexCount > m_indexBufferSize)
+			m_indexBufferSize += m_bufferIncrementSize;
+		m_indexCPU.reserve(m_indexBufferSize);
+		indexBufferResized = true;
+	}
+	// Reduce.
+	else if (m_indexCount < (m_indexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
+	{
+		while (m_indexCount < (m_indexBufferSize - (VERTEX_BUFFER_REDUCTION_SCALE * m_bufferIncrementSize)))
+			m_indexBufferSize -= m_bufferIncrementSize;
+		m_indexCPU.shrink_to_fit();
+		m_indexCPU.reserve(m_indexBufferSize);
+		indexBufferResized = true;
+	}
+
+	// If no resized occured, return.
+	if (!indexBufferResized && !vertexBufferResized)
+		return false;
 
 	// --------------------------- //
 	//  V E R T E X   B U F F E R  //
 	// --------------------------- //
 
-	// Resize buffers.
-	if (m_vertexCount)
+	// Resize buffers with data.
+	if (m_vertexCount && vertexBufferResized)
 	{
 		// VBO GPU.
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
@@ -391,34 +405,34 @@ bool VertexArrayObject<VertexType>::queryBufferResize()
 			GLCall(glBufferSubData(GL_ARRAY_BUFFER, index * vertex.getTotalSize() + vertex.getIDOffset(), vertex.getIDSize(), vertex.getID()));
 			index++;
 		}
+		m_vertexBufferSynced = true;
 	}
-	// Clear buffer.
-	else
+	// Buffers are resized and empty.
+	else if(vertexBufferResized)
 	{
 		m_vertexCPU.clear();
 		m_vertexCPU.shrink_to_fit();
 		m_vertexBufferSize = 0;
 		GLCall(glNamedBufferData(m_VBOID, 0, NULL, GL_DYNAMIC_DRAW));
+		m_vertexBufferSynced = true;
 	}
 
 	// ------------------------- //
 	//  I N D E X   B U F F E R  //
 	// ------------------------- //
 
-	// Resize buffers.
-	if (m_indexCount)
+	// Resize buffers with data.
+	if (m_indexCount && indexBufferResized)
 	{
 		GLCall(glNamedBufferData(m_IBOID, m_indexBufferSize * sizeof(GLuint), m_indexCPU.data(), GL_DYNAMIC_DRAW));
+		m_indexBufferSynced = true;
 	}
-	// Clear buffer.
-	else
+	// Buffers are resized and empty.
+	else if(indexBufferResized)
 	{
 		GLCall(glNamedBufferData(m_IBOID, 0, NULL, GL_DYNAMIC_DRAW));
+		m_indexBufferSynced = true;
 	}
-
-	// Update flags.
-	m_indexBufferSynced = true;
-	m_vertexBufferSynced = true;
 
 	// Resize occured.
 	return true;

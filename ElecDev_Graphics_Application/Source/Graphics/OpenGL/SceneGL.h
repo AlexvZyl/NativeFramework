@@ -45,10 +45,6 @@ public:
 	void setViewport(int width, int height);
 	// Returns the viewport dimensions.
 	glm::vec4& getViewport();
-	// Calculate the world coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
-	// Calculate the camera coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& pixelCoords);
 	// Returns the ID of the entity at the coordinates.
 	unsigned getEntityID(const glm::vec2& pixelCoords);
 	// Resizes the scene based on a viewport change.
@@ -77,6 +73,11 @@ private:
 
 	// Map containing all of the different primitives.
 	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
+
+	// Calculate the world coordinates from the pixel coordinates.
+	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
+	// Calculate the camera coordinates from the pixel coordinates.
+	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& pixelCoords);
 
 	// Friends.
 	friend class Renderer;

@@ -15,19 +15,19 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
+#include "Engines/Design2DEngine/ComponentDesigner.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //
 //=============================================================================================================================================//
 
-void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& path)
+void saveToYAML(Circuit* circuit, const std::filesystem::path& path)
 {
 	// Change the circuit name if a file name is supplied.
 	if (path.filename().string().size())
 	{
-		std::string newName = path.filename().string();
+		std::string newName = path.filename().stem().string();
 		circuit->m_label = newName;
-		Lumen::getApp().getActiveEngine()->m_layer->setName(newName);
 	}
 
 	// Create yaml file.
@@ -48,7 +48,7 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& 
 		saveLocation += circuit->m_label + ".lmct";
 	}
 	// Check if a file extension was supplied.
-	else if (path.extension().string() != ".lmct")
+	else if (path.filename().extension().string() != ".lmct")
 	{
 		saveLocation += ".lmct";
 	}
@@ -60,15 +60,15 @@ void saveToYAML(std::shared_ptr<Circuit>& circuit, const std::filesystem::path& 
 	yamlStream.close();
 }
 
-void saveToYAML(std::shared_ptr<Component2D>& component, const std::filesystem::path& path)
+void saveToYAML(Component2D* component, const std::filesystem::path& path)
 {
 	// Change the component name if a file name is supplied.
 	if (path.filename().string().size())
 	{
-		std::string newName = path.filename().string();
+		std::string newName = path.filename().stem().string();
 		component->titleString = newName;
 		component->title->updateText(newName);
-		Lumen::getApp().getActiveEngine()->m_layer->setName(newName);
+		component->equipType = component->titleString;
 	}
 
 	// Create yaml file.
@@ -109,27 +109,19 @@ void loadFromYAML(const std::filesystem::path& path)
 {
 	try
 	{
-		// Create yaml node from file.
-		YAML::Node yamlFile = YAML::LoadFile(path.string());
-
 		// Circuits.
-		if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+		if (path.extension() == ".lmct")
 		{
-			deserialiseCircuit(yamlFile, true);
+			//deserialiseCircuit(yamlFile, true);
+			Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(path.stem().string())->getEngine();
+			engine->createCircuit(path);
 		}
 
 		// Components.
-		else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
+		else if (path.extension() == ".lmcp")
 		{
-			//deserialiseCircuit(yamlFile);
-			if (Lumen::getApp().getActiveEngine<Design2DEngine>())
-			{
-				// Handle component import.
-			}
-			else
-			{
-				// Open component in component designer.
-			}
+			ComponentDesigner* engine = Lumen::getApp().pushEngineLayer<ComponentDesigner>(path.stem().string())->getEngine();
+			engine->setComponent(path);
 		}
 	}
 	catch (...)

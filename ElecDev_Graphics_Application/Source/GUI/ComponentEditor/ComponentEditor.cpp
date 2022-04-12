@@ -14,6 +14,8 @@
 #include "Engines/Design2DEngine/Peripherals/Cable.h"
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "Resources/ResourceHandler.h"
+#include "Lumen.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -21,7 +23,14 @@
 
 ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	: GuiElementCore(name, windowFlags)
-{}
+{
+	if (!s_iconCreated)
+	{
+		s_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
+		s_iconCreated = true;
+		s_textHeight = ImGui::CalcTextSize("A").y;
+	}
+}
 
 void ComponentEditor::begin()
 {
@@ -39,8 +48,8 @@ void ComponentEditor::onRender()
 	Design2DEngine* design_engine = app.getActiveEngine<Design2DEngine>();
 	ComponentDesigner* component_designer = app.getActiveEngine<ComponentDesigner>();
 
-	if (component_designer) {
-
+	if (component_designer) 
+	{
 		Component2D* activeComponent = component_designer->m_activeComponent.get();
 
 		// Check that the active component exists. Close if not.
@@ -50,48 +59,34 @@ void ComponentEditor::onRender()
 			ImGui::SameLine();
 			ImGui::InputText("##Equipment Type", &activeComponent->equipType);
 			activeComponent->updateText();
-
 		}
 
 		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))
 		{
 			// Setup table.
-			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
-			ImGui::TableSetupColumn("Location    ", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::BeginTable("Current ports", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 			ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
-			ImGui::TableSetupColumn("I/O Type       ", ImGuiTableColumnFlags_WidthFixed);
-			ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("I/O Type      ", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("Action      ", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableHeadersRow();
 
 			ImGui::TableNextRow();
-			std::vector<std::vector<std::shared_ptr<Port>>> allPorts = { activeComponent->portsWest,
-																		 activeComponent->portsEast,
-																		 activeComponent->portsNorth,
-																		 activeComponent->portsSouth };
 
 			static std::vector<std::string> portPositions = { "Left", "Right", "Top", "Bottom" };
-			for (int i = 0; i < allPorts.size(); i++)
-			{
-				std::vector<std::shared_ptr<Port>> portsSide = allPorts[i];
-				int j = 0;
-				for (std::shared_ptr<Port> port : portsSide)
+				int i = 0;
+				for (std::shared_ptr<Port> port : activeComponent->ports)
 				{
 					// Table labels.
 					char labelName[20];
-					sprintf_s(labelName, "##N%d,%d", i, j);
+					sprintf_s(labelName, "##N%d", i);
 					char labelPos[20];
-					sprintf_s(labelPos, "##P%d,%d", i, j);
+					sprintf_s(labelPos, "##P%d", i);
 					char labelType[20];
-					sprintf_s(labelType, "##T%d,%d", i, j);
+					sprintf_s(labelType, "##T%d", i);
 					char labelRemove[20];
-					sprintf_s(labelRemove, "Remove##%d,%d", i, j++);
+					sprintf_s(labelRemove, "Remove##%d", i++);
 					// Port entry in table.
 					ImGui::TableNextRow();
-					ImGui::TableNextColumn();
-					// Position.
-					ImGui::PushItemWidth(-1);
-					ImGui::Text(portPositions[i].c_str());
-					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 					// Name.
 					ImGui::PushItemWidth(-1);
@@ -107,50 +102,15 @@ void ComponentEditor::onRender()
 					ImGui::TableNextColumn();
 					// Remove.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::Button(labelRemove))
+					if (ImGui::Button(labelRemove)) {
 						activeComponent->removePort(port);
+						ImGui::PopItemWidth();
+						break;//Stop iterating through the ports if the port vector changes.
+					}
 					ImGui::PopItemWidth();
 				}
-				if (j) ImGui::Separator();
-			}
 
-			if (addingPort)
-			{
-				//create a table entry for the port to be added
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				//Add the position
-				ImGui::PushItemWidth(-1);
-				ImGui::Combo("##newPos", &newPos, "Left\0Right\0Top\0Bottom");
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add the Name
-				ImGui::PushItemWidth(-1);
-				ImGui::InputText("##newName", &newName);
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add the type
-				ImGui::PushItemWidth(-1);
-				ImGui::Combo("##newType", &newType, "IN\0OUT\0IN/OUT");
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add a "Confirm" button
-				ImGui::PushItemWidth(-1);
-				if (ImGui::Button("Confirm"))
-				{
-					// Add the port to the component.
-					activeComponent->addPort(newPos, (PortType)newType, newName);
-					addingPort = false;
-				}
-				ImGui::PopItemWidth();
-			}
-			ImGui::EndTable();
-
-			if (!addingPort)
-			{
-				if (ImGui::Button("New Port"))
-					addingPort = true;
-			}
+				ImGui::EndTable();
 		}
 		ImGui::EndChild();
 
@@ -160,8 +120,7 @@ void ComponentEditor::onRender()
 
 			if (activeComponent)
 			{
-				std::unordered_map<std::string, std::string> dataDict;
-				dataDict = activeComponent->dataDict;
+				std::unordered_map<std::string, std::string>& dataDict = activeComponent->dataDict;
 
 				const char* buffer[100];
 				int numKeys = 0;
@@ -258,7 +217,6 @@ void ComponentEditor::onRender()
 					toRemove.clear();
 				}
 
-
 				// --------------------- //
 				//     FROM SELECTION    //
 				// --------------------- //
@@ -332,14 +290,12 @@ void ComponentEditor::onRender()
 				}
 			}
 		}
-
-
 		ImGui::EndChild();
 	}
-	if (design_engine) {
+	if (design_engine) 
+	{
 
 		// Fetch all the component names.
-
 		auto& numComponents = design_engine->m_circuit->m_components;
 		auto& numCables = design_engine->m_circuit->m_cables;
 		const char* componentNames[100];
@@ -381,26 +337,75 @@ void ComponentEditor::onRender()
 			ImGui::Text((std::string(" Type:\t  ") + activeComponent->equipType).c_str());
 			//ImGui::SameLine();
 			//ImGui::InputText("##Equipment Type", &activeComponent->equipType);
-
-
 		}
 
-		// Cable properties.
+		// ------------------------------- //
+		//  C A B L E   S P E C I F I C S  //
+		// ------------------------------- //
+
 		if (activeCable)
 		{
+			// General info.
 			ImGui::Text(" Name:\t");
 			ImGui::SameLine();
 			activeTitleString = activeCable->m_titleString;
 			if (ImGui::InputText("##ComponentName", &activeCable->m_titleString))
 			{
-				activeCable->m_title1->updateText(activeCable->m_titleString);
-				activeCable->m_title2->updateText(activeCable->m_titleString);
+				//activeCable->m_title1->updateText(activeCable->m_titleString);
+				//activeCable->m_title2->updateText(activeCable->m_titleString);
 			}
-			ImGui::Text(" Type:\t Cable");
+
+			// --------------------------------------- //
+			//  C A B L E   T Y P E   D R O P P I N G  //
+			// --------------------------------------- //
+
+			static glm::vec2 windowPadding = { 15.f, 15.f };
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, windowPadding);
+			static float iconTextSeperation = 10.f;
+			// Original setup.
+			glm::vec2 iconSize = { 80, 80 };
+			// Now adjust for the wrapped text.
+			float childHeight = iconSize.y + s_textHeight + 2 * windowPadding.y + iconTextSeperation;
+			float textX = ImGui::CalcTextSize(activeCable->m_cableType.c_str()).x;
+			if (ImGui::BeginChild("CableDrop", {0.f, childHeight}, true, ImGuiWindowFlags_NoScrollbar))
+			{
+				if (activeCable->m_cableType.size())
+				{
+					float childContentRegionX = ImGui::GetContentRegionMax().x;
+					ImGui::SetCursorPosX(childContentRegionX/2 - iconSize.x/2);
+					ImGui::Image((void*)s_cableIcon, iconSize, { 0, 1 }, { 1, 0 });
+					if (textX < childContentRegionX)
+					{
+						ImGui::SetCursorPosX(childContentRegionX/2 - textX/2);
+					}
+					ImGui::SetCursorPosY(ImGui::GetCursorPosY() + iconTextSeperation);
+					ImGui::TextWrapped(activeCable->m_cableType.c_str());
+				}
+				else
+				{
+					ImGui::TextWrapped("No assigned type.");
+				}
+			}
+			ImGui::PopStyleVar();
+			ImGui::EndChild();
+			// Receive dropped files.
+			if (ImGui::BeginDragDropTarget())
+			{
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					// Pass FileDropEvent to engine.
+					std::filesystem::path fsPath((const wchar_t*)payload->Data);
+					if (fsPath.filename().extension().string() == ".lmcb")
+					{
+						activeCable->m_cableType = fsPath.filename().stem().string();
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
 		}
 
 		// Get the current component as the initial selection for the data selection
-
 		if (equipmentSelector == -1) {
 			for (int num = 0; num < numCom; num++) {
 				equipmentSelector = num;
@@ -454,6 +459,58 @@ void ComponentEditor::onRender()
 	// --------------------- //
 	//  D A T A   T A B L E  //
 	// --------------------- //
+
+	// Copy and paste dictiopnaries.
+	if (activeComponent || activeCable)
+	{
+		if (ImGui::BeginChild("Copy&Paste", { 0.f, 35.f }, true))
+		{
+			// Copy button.
+			if (ImGui::Button("Copy"))
+			{
+				if (activeComponent)
+				{
+					m_copiedDict = activeComponent->dataDict;
+					m_copiedDictComponent = true;
+					m_copiedDictCable = false;
+					m_copiedDictFrom = activeComponent->titleString;
+					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
+				}
+				else if (activeCable)
+				{
+					m_copiedDict = activeCable->cableDict;
+					m_copiedDictComponent = false;
+					m_copiedDictCable = true;
+					m_copiedDictFrom = activeCable->m_cableType;
+					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
+				}
+			}
+			ImGui::SameLine();
+
+			// Check if paste should be available.
+			bool canPaste = true;
+			canPaste = (bool)m_copiedDict.size();
+			canPaste = canPaste && ( (activeCable && m_copiedDictCable) || (activeComponent && m_copiedDictComponent) );
+
+			// Paste button.
+			if (!canPaste)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Paste"))
+			{
+				if		(activeComponent)  activeComponent->dataDict = m_copiedDict;
+				else if (activeCable)	   activeCable->cableDict	 = m_copiedDict;
+				Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully pasted data dictionary.", "Component Editor");
+			}
+			if (!canPaste)
+				ImGui::EndDisabled();
+
+			ImGui::SameLine();
+			ImGui::Text("  Copied from:");
+			ImGui::SameLine();
+			ImGui::Text(m_copiedDictFrom.c_str());
+		}
+		ImGui::EndChild();
+	}
 
 	ImGui::PushID("CompEdChildData");
 	if (ImGui::BeginChild("DataChild", { 0,0 }, true))

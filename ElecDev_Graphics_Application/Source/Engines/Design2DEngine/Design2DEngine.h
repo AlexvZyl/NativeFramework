@@ -6,6 +6,8 @@
 
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include <iostream>
+#include "yaml-cpp/yaml.h"
+#include <filesystem>
 
 //=============================================================================================================================================//
 //  Forward declerations																													   //
@@ -53,6 +55,8 @@ public:
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;
 
+	float clickTol = 0.01f;
+
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
@@ -61,11 +65,15 @@ public:
 	virtual void onMouseButtonEvent(MouseButtonEvent& event) override;
 	virtual void onMouseMoveEvent(MouseMoveEvent& event) override;
 	virtual void onMouseScrollEvent(MouseScrollEvent& event) override;
+	virtual void onMouseDragEvent(MouseDragEvent& event) override;
 	// Key events.
 	virtual void onKeyEvent(KeyEvent& event) override;
 
 	// File events.
 	virtual void onFileDropEvent(FileDropEvent& event) override;
+
+	//Notify event.
+	virtual void onNotifyEvent(NotifyEvent& event) override;
 	
 	// ------------------- //
 	//  U T I L I T I E S  //
@@ -78,7 +86,8 @@ public:
 	void deleteActiveComponent();
 	void deleteActiveCable();
 	Port* getPort(unsigned eID);
-	virtual void setName(std::string& name) override;
+	virtual void setName(const std::string& name) override;
+	void createCircuit(const std::filesystem::path& path);
 };
 
 //=============================================================================================================================================//

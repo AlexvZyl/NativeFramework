@@ -22,6 +22,7 @@ class KeyEvent;
 class WindowEvent;
 class NotifyEvent;
 class FileDropEvent;
+class GraphicsScene;
 class Layer;
 
 //=============================================================================================================================================//
@@ -43,6 +44,11 @@ public:
 	// Destructor.
 	virtual ~EngineCore();
 
+	// Display window as a saved document.
+	void unsavedDocument();
+	// Display window as an unsaved document.
+	void savedDocument();
+	
 	// ---------- //
 	//  S C E N E //
 	// ---------- //
@@ -106,10 +112,11 @@ public:
 	// Stores the vector that goes into the world.
 	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };	
 	// Set the name elements of the engine.
-	inline virtual void setName(std::string& name) {}
+	inline virtual void setName(const std::string& name) {}
 
 	// The layer the engine belongs to.
-	Layer* m_layer;
+	Layer* m_layer = nullptr;
+	GraphicsScene* m_gui = nullptr;
 
 	// ------------- //
 	//  S T A T E S  //
@@ -142,13 +149,16 @@ public:
 	glm::vec2 m_contentRegionPos = { 0, 0 };
 	// Convert screen pixel distance to distance in the world.
 	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
+	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
+	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& coords);
 
-protected:
-
+	// Enables the design palette for this engine.
 	inline void enableDesignPalette() 
 	{
 		m_hasDesignPalette = true;
 	}
+
+	// Disables the design palette for this engine.
 	inline void disableDesignPalette()
 	{
 		m_hasDesignPalette = false;

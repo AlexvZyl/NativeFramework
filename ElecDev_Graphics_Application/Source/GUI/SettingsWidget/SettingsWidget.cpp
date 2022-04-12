@@ -48,7 +48,7 @@ void SettingsWidget::onRender()
     static int fps = (int)app.m_targetFPS;
     ImGui::Text("FPS:");
     ImGui::SameLine();
-    if (ImGui::SliderInt("##TargetFPS", &fps, 10, 144, "%d", ImGuiSliderFlags_AlwaysClamp))
+    if (ImGui::SliderInt("##TargetFPS", &fps, 10, 144, "%d"))
     {
         // Scale timeout FPS with FPS if at max.
         if (app.m_targetFPS == timeoutFPS)

@@ -22,8 +22,6 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
-	//Application::setGuiTheme();
-
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
 
@@ -55,6 +53,12 @@ void Application::onUpdate()
 			Application::onEvent(*event.get()); 
 			continue;
 		}
+		// File drop should go to the hovered layer.
+		else if (event->isType(EventType_FileDrop) && m_hoveredLayer) 
+		{
+			m_hoveredLayer->onEvent(*event.get());
+			continue;
+		}
 		
 		// On a mouse press we need to change the focused layer.
 		// This also allows us to modify how dear imgui sets focused layers.
@@ -69,7 +73,7 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer)
 	{
-		if (EventLog::mouseMove)   
+		if (EventLog::mouseMove)
 			m_hoveredLayer->onEvent(*EventLog::mouseMove.get());
 
 		if (EventLog::mouseScroll) 
@@ -77,6 +81,15 @@ void Application::onUpdate()
 
 		if (EventLog::mouseDrag)
 			m_hoveredLayer->onEvent(*EventLog::mouseDrag.get());
+	}
+
+	// Dispatch notify events after all of the other events are done.
+	if (m_focusedLayer)
+	{
+		for (auto& event : EventLog::notifyEvents)
+		{
+			m_focusedLayer->onEvent(*event.get());
+		}
 	}
 
 	// Pop layers that are queued from GLFW events.
@@ -101,8 +114,6 @@ Layer* Application::findHoveredLayer()
 {
 	// Find the layer that is being hovered.
 	// We do not have to worry about order, since dear imgui handles it.
-	// This could be optimized by ordering the layer (finding the
-	// layer will happen faster) but we will always have very few layers.
 	for (auto& [name, layer] : m_layerStack->getLayers())
 	{
 		if (layer->isHovered())
@@ -217,7 +228,7 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	for (auto& path : event.fileData)
 	{
 		if (path.string().size())
-			loadFromYAML(path.string());
+			loadFromYAML(path);
 	}
 }
 
@@ -234,11 +245,13 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 
 			if (designEngine) 
 			{
-				saveToYAML(designEngine->m_circuit, path);
+				saveToYAML(designEngine->m_circuit.get(), path);
+				designEngine->m_layer->setName(path.filename().stem().string(), true);
 			}
 			else if (component_designer) 
 			{
-				saveToYAML(component_designer->m_activeComponent, path);
+				saveToYAML(component_designer->m_activeComponent.get(), path);
+				component_designer->m_layer->setName(path.filename().stem().string(), true);
 			}
 		}
 	}
@@ -250,7 +263,7 @@ void Application::onFileLoadEvent(FileLoadEvent& event)
 	for (auto& path : event.fileData)
 	{
 		if (path.string().size())
-			loadFromYAML(path.string());
+			loadFromYAML(path);
 	}
 }
 

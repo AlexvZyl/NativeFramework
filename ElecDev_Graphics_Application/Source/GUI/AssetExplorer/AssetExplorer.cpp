@@ -35,6 +35,7 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	s_componentFileIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 	s_reloadIcon = loadBitmapToGL(loadImageFromResource(RELOAD_ICON));
 	s_upArrowIcon = loadBitmapToGL(loadImageFromResource(UP_ARROW_ICON));
+	s_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
 	loadDirectories();
 
 	// Start asset viewer engine.
@@ -160,33 +161,36 @@ void AssetExplorer::onRender()
 	}
 	ImGui::EndChild();
 
-	ImGui::SameLine();
 
-	// Actions bar.
-	static bool addFolder = false;
-	if (ImGui::BeginChild("Actions", {50.f, headerHeight}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
-	{
-		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
-		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 3.f);
-		ImGui::SetWindowFontScale(1.2f);
-		if (ImGui::Button(ICON_FA_FOLDER_PLUS))
-		{
-			addFolder = true;
-		}
-		ImGui::SetWindowFontScale(1.f);
-	}
-	ImGui::EndChild();
+	//// Actions bar.
+	//ImGui::SameLine();
+	//static bool addFolder = false;
+	//if (ImGui::BeginChild("Actions", {50.f, headerHeight}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	//{
+	//	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
+	//	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 3.f);
+	//	ImGui::SetWindowFontScale(1.2f);
+	//	if (ImGui::Button(ICON_FA_FOLDER_PLUS))
+	//	{
+	//		addFolder = true;
+	//	}
+	//	ImGui::SetWindowFontScale(1.f);
+	//}
+	//ImGui::EndChild();
 
 	ImGui::SameLine();
 
 	// Filter options.
-	if (ImGui::BeginChild("AssetFilter", { 140.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("AssetFilter", { 210.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
 		if (ImGui::Checkbox(" .lmcp ", &m_displayComponents))
 			loadDirectories();
 		ImGui::SameLine();
 		if (ImGui::Checkbox(" .lmct ", &m_displayCircuits))
+			loadDirectories();
+		ImGui::SameLine();
+		if (ImGui::Checkbox(" .lmcb ", &m_displayCables))
 			loadDirectories();
 	}
 	ImGui::EndChild();
@@ -254,13 +258,13 @@ void AssetExplorer::onRender()
 					{
 						if (!ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 						{
-							m_assetViewerEngine->viewAsset(p);
+							//m_assetViewerEngine->viewAsset(p);
 						}
 					}
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
 						m_assetViewerEngine->clearAssets();
-						EventLog::log<FileLoadEvent>(FileLoadEvent(p.path().string()));
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
 					}
 				}
 
@@ -270,10 +274,36 @@ void AssetExplorer::onRender()
 
 				else if (p.path().extension() == ".lmcp")
 				{
-					ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 });
+					if(ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+					{
+						if (!ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+						{
+							m_assetViewerEngine->viewAsset(p);
+						}
+					}
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
-						// Open component builder.
+						m_assetViewerEngine->clearAssets();
+						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
+					}
+					// File drag & drop.
+					if (ImGui::BeginDragDropSource())
+					{
+						const wchar_t* itemPath = p.path().c_str();
+						ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
+						ImGui::EndDragDropSource();
+					}
+				}
+
+				// ------------ //
+				//  C A B L E S //
+				// ------------ //
+
+				else if (p.path().extension() == ".lmcb")
+				{
+					if (ImGui::ImageButton((void*)s_cableIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+					{
+						
 					}
 					// File drag & drop.
 					if (ImGui::BeginDragDropSource())
@@ -312,21 +342,21 @@ void AssetExplorer::onRender()
 	// Done with icons.
 	ImGui::Columns(1);
 
-	// Open popup.
-	if (addFolder)
-	{
-		ImGui::OpenPopup("Add Folder##AFPOPUP");
-		addFolder = false;
-	}
-	// Write to popup.
-	if (ImGui::BeginPopup("AddFolderPopup", ImGuiPopupFlags_NoOpenOverExistingPopup))
-	{
-		if (ImGui::Button("Add"))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
+	//// Open popup.
+	//if (addFolder)
+	//{
+	//	ImGui::OpenPopup("Add Folder##AFPOPUP");
+	//	addFolder = false;
+	//}
+	//// Write to popup.
+	//if (ImGui::BeginPopup("AddFolderPopup", ImGuiPopupFlags_NoOpenOverExistingPopup))
+	//{
+	//	if (ImGui::Button("Add"))
+	//	{
+	//		ImGui::CloseCurrentPopup();
+	//	}
+	//	ImGui::EndPopup();
+	//}
 }
 
 void AssetExplorer::end()
@@ -364,8 +394,12 @@ void AssetExplorer::loadDirectories()
 		{
 			shouldDisplay = true;
 		}
+		else if (m_displayCables && extension == ".lmcb")
+		{
+			shouldDisplay = true;
+		}
 		// If no flags are set we want to display.
-		else if (!m_displayCircuits && !m_displayComponents)
+		else if (!m_displayCircuits && !m_displayComponents && !m_displayCables)
 		{
 			shouldDisplay = true;
 		}

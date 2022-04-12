@@ -41,23 +41,24 @@ void AssetViewer::renderDesignPalette()
 
 void AssetViewer::viewAsset(const std::filesystem::path& path)
 {
+	// Check if asset is already being viewed.
+	if (path.filename().string() == m_currentAsset)
+		return;
+	
 	Renderer::storeAndBindScene(m_scene.get());
 
 	try
 	{
-		// Create yaml node from file.
-		YAML::Node yamlFile = YAML::LoadFile(path.string());
-
 		// Circuits.
-		if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Circuit")
+		if (path.extension() == ".lmct")
 		{
-			viewCircuit(yamlFile);
+			viewCircuit(path);
 		}
 
 		// Components.
-		else if (yamlFile["Lumen File Info"]["Type"].as<std::string>() == "Component")
+		else if (path.extension() == ".lmcp")
 		{
-
+			viewComponent(path);
 		}
 
 		m_currentAsset = path.filename().string();
@@ -71,10 +72,17 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 	Renderer::restoreAndUnbindScene();
 }
 
-void AssetViewer::viewCircuit(YAML::Node& yamlNode)
+void AssetViewer::viewCircuit(const std::filesystem::path& path)
 {
 	clearAssets();
-	m_circuit = deserialiseCircuit(yamlNode);
+	m_circuit = std::make_unique<Circuit>(path);
+}
+
+void AssetViewer::viewComponent(const std::filesystem::path& path)
+{
+	clearAssets();
+	m_component = std::make_unique<Component2D>(path);
+	m_component->disableOutline();
 }
 
 //=============================================================================================================================================//

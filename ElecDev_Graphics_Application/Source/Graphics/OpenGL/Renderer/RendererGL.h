@@ -10,6 +10,7 @@
 #include <string>
 #include <map>
 #include <unordered_map>
+#include "yaml-cpp/yaml.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -29,6 +30,7 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
 class VertexArrayObjectPtr;
+class PolyLine;
 
 template<typename VertexType>
 class VertexArrayObject;
@@ -126,6 +128,18 @@ public:
 	static LineSegment* addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Add a 2D text string.
 	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
+	//Add a polyline
+	static PolyLine* addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent = nullptr);
+
+	// Add text from a YAML file.
+	static Text* addText2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add line segment from a YAML file.
+	static LineSegment* addLineSegment2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add Polygon2D from a YAML file.
+	static Polygon2D* addPolygon2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add circle from a YAML file.
+	static Circle* addCircle2D(const YAML::Node& node, Entity* parent = nullptr);
+
 	
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //

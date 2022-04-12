@@ -13,6 +13,7 @@
 #include "OpenGL/ErrorHandlerGL.h"
 #include "Utilities/Logger/Logger.h"
 #include "glm/glm.hpp"
+#include "Utilities/Profiler/Profiler.h"
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -183,7 +184,7 @@ void Application::glfwInitCallbacks()
             }
 
             // If currently dragging, log an event.
-            if (s_draggingLeftbutton)
+            if (s_draggingLeftbutton && !isEventOfType(eventState, EventType_MouseButtonMiddle))
             {
                 EventLog::log<MouseDragEvent>(MouseDragEvent(s_mouseDragInitialPosition, mousePos, mousePos - s_lastMouseMovePosition, EventType_MouseDrag | eventState));
             }
@@ -260,7 +261,7 @@ void Application::glfwInitCallbacks()
                 filePaths.emplace_back(std::string(paths[i])); 
 
             // Log the event.
-            EventLog::log<FileDropEvent>(FileDropEvent(filePaths));
+            EventLog::log<FileDropEvent>(FileDropEvent(filePaths, EventType_Application));
         });
 
     // --------------------- //

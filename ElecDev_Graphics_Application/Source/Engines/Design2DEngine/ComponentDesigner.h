@@ -1,19 +1,22 @@
 #pragma once
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Peripherals/Component2D.h"
+#include <filesystem>
 
 enum class CompDesignState
 {
     SELECT,
     DRAW_POLY,
     DRAW_LINE,
-    DRAW_CIRCLE
+    DRAW_CIRCLE,
+    PLACE_PORT
 };
+
+class ComponentDesignerColorEditor;
 
 class ComponentDesigner : public Base2DEngine
 {
 protected:
-    
 
 public:
 
@@ -21,10 +24,22 @@ public:
     Polygon2D* m_activePoly;
     LineSegment* m_activeLine;
     Circle* m_activeCircle;
+    Text* m_activeText;
+    std::shared_ptr<Port> m_activePort;
+    VertexData* m_activeVertex;
+    PortType next_port_type = PortType::PORT_INOUT;
+
+    glm::vec2 m_lastDragPos = { 0.f, 0.f };
+    unsigned int m_currentEntityID = 0;
+    float clickTol = 0.01f;
+    bool drawFilled = true;
+
     CompDesignState designerState = CompDesignState::SELECT;
 
-    //Constructor
+    // Constructor.
     ComponentDesigner();
+
+    void setComponent(const std::filesystem::path& path, Circuit* parent = nullptr);
 
     // Mouse events.
     virtual void onMouseButtonEvent(MouseButtonEvent& event) override;
@@ -37,6 +52,12 @@ public:
 
     // Design palette.
     virtual void renderDesignPalette() override;
+
+    void switchState(CompDesignState state);
+    void pushActivePrimitives();
+    void setActiveVertex(glm::vec2 coords);
+    void setActivePrimitives(unsigned eID);
+    void deleteActivePrimitive();
     // Buttons state.
     bool m_polygon = false;
     bool m_lines = false;

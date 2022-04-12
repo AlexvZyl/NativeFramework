@@ -269,11 +269,11 @@ public:
 protected:
 
 	inline FileEvent(LumenEventID eventID, const std::vector<std::filesystem::path>& files) 
-		: Event(eventID | EventType_Application), fileData(files)
+		: Event(eventID), fileData(files)
 	{}
 
 	inline FileEvent(LumenEventID eventID, const std::filesystem::path& file)
-		: Event(eventID | EventType_Application)
+		: Event(eventID)
 	{
 		fileData.emplace_back(file);
 	}
@@ -288,12 +288,12 @@ class FileLoadEvent : public FileEvent
 
 public: 
 
-	inline FileLoadEvent(const std::vector<std::filesystem::path>& files) 
-		: FileEvent(EventType_FileLoad, files)
+	inline FileLoadEvent(const std::vector<std::filesystem::path>& files, LumenEventID ID = 0) 
+		: FileEvent(EventType_FileLoad | ID, files)
 	{}
 
-	inline FileLoadEvent(const std::filesystem::path& file) 
-		: FileEvent(EventType_FileLoad, file)
+	inline FileLoadEvent(const std::filesystem::path& file, LumenEventID ID = 0) 
+		: FileEvent(EventType_FileLoad | ID, file)
 	{}
 };
 
@@ -306,12 +306,12 @@ class FileSaveEvent : public FileEvent
 
 public:
 
-	inline FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine) 
-		: FileEvent(EventType_FileSave, files), engine(engine)
+	inline FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine, LumenEventID ID = 0)
+		: FileEvent(EventType_FileSave | ID, files), engine(engine)
 	{}
 
-	inline FileSaveEvent(const std::filesystem::path& file, EngineCore* engine) 
-		: FileEvent(EventType_FileSave, file), engine(engine)
+	inline FileSaveEvent(const std::filesystem::path& file, EngineCore* engine, LumenEventID ID = 0)
+		: FileEvent(EventType_FileSave | ID, file), engine(engine)
 	{}
 
 	template<class EngineType>
@@ -340,12 +340,12 @@ class FileDropEvent : public FileEvent
 
 public:
 
-	inline FileDropEvent(const std::vector<std::filesystem::path>& files) 
-		: FileEvent(EventType_FileDrop, files)
+	inline FileDropEvent(const std::vector<std::filesystem::path>& files, LumenEventID ID = 0) 
+		: FileEvent(EventType_FileDrop | ID, files)
 	{}
 
-	inline FileDropEvent(const std::filesystem::path& file) 
-		: FileEvent(EventType_FileDrop, file)
+	inline FileDropEvent(const std::filesystem::path& file, LumenEventID ID = 0) 
+		: FileEvent(EventType_FileDrop | ID, file)
 	{}
 };
 

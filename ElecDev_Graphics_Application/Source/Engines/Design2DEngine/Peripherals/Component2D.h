@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include "Graphics/Entities/Entity.h"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
+#include <filesystem>
+
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
@@ -38,22 +40,21 @@ class Component2D : public Entity
 {
 public:
 
-	// Shape and edge data.
+	// Entites & Primitives describing the component.
 	std::vector<Polygon2D*> m_polygons;
 	std::vector<LineSegment*> m_lines;
 	std::vector<Circle*> m_circles;
-
-	Polygon2D* shape;
-	Polygon2D* border;
 	Text* title;
+	std::vector<std::shared_ptr<Port>> ports;
 
 	static unsigned componentID;
 
 	// Specify the type of the equipment
 	std::string equipType = "Block";
 
-	// 
+	// Data for ElecDec software.
 	std::unordered_map<std::string, std::string> dataDict;
+	std::string m_internalCircuit;
 
 	// Component shape attributes.
 	float height = 0.08f;
@@ -84,24 +85,25 @@ public:
 	bool selected = true;
 
 	// Port lists.
-	std::vector<std::shared_ptr<Port>> portsNorth;
-	std::vector<std::shared_ptr<Port>> portsSouth;
-	std::vector<std::shared_ptr<Port>> portsEast;
-	std::vector<std::shared_ptr<Port>> portsWest;
+	//std::vector<std::shared_ptr<Port>> portsNorth;
+	//std::vector<std::shared_ptr<Port>> portsSouth;
+	//std::vector<std::shared_ptr<Port>> portsEast;
+	//std::vector<std::shared_ptr<Port>> portsWest;
 
+	
 	unsigned numPorts = 0;
 
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
-	glm::vec2 centre;
+	glm::vec2 centre = {0.f, 0.f};
 	
 	// Creates a generic component centred at (0, 0).
 	Component2D(Circuit* parent);
 	// Creates a generic component centred at the specified coordinates.
 	Component2D(const glm::vec2& centreCoords, Circuit* parent);
 	// Creates a component from a .lmcp file definition
-	Component2D(YAML::Node& lmcpFile, Circuit* parent);
+	Component2D(const std::filesystem::path& path, Circuit* parent = nullptr);
 
 	// Deconstructor.s
 	~Component2D();
@@ -116,29 +118,33 @@ public:
 	//set the clickedZone.component flag in the GUIState.
 	void setContext(GUIState* guiState);
 	//Highlight the component.
-	void highlight();
+	void enableOutline();
 	//Remove the component highlighting.
-	void unhighlight();
+	void disableOutline();
 	//Add a port with the given definition to the component.
-	unsigned addPort(int side, PortType type, const std::string& name);
+	//unsigned addPort(int side, PortType type, const std::string& name);
 	//remove a specified port from the component.
 	void removePort(std::shared_ptr<Port> port);
 	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.
-	void updatePortPositions();
+	//void updatePortPositions();
 	//move the title text relative to the component
 	void translateTitle(glm::vec2 translation);
 	//updates the Component label
 	void updateText();
+	//Set the colour of the polygons and circles belonging to the component
+	void setColour(const glm::vec4& colour);
 	//Adds a new polygon to the polygon list
-	 Polygon2D* addPoly(std::vector<glm::vec2> vertices);
-	void addCircle(Circle*);
-	void addLine(LineSegment*);
+	void addPoly(Polygon2D* poly);
+	void addCircle(Circle* circle);
+	void addLine(LineSegment* line);
+	void addPort(std::shared_ptr<Port> port);
+
+	void removePoly(Polygon2D* poly);
+	void removeCircle(Circle* circle);
+	void removeLine(LineSegment* line);
 	
 
 private:
 	PortType getPortType(YAML::Node node);
 	//void destroy();
-
-	void enableOutline();
-	void disableOutline();
 };

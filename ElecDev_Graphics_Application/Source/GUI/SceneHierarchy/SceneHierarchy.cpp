@@ -60,23 +60,16 @@ void SceneHierarchy::onRender()
 				ImGui::TableHeadersRow();
 
 				// Ports.
-				auto allPorts = { component->portsWest,
-								  component->portsEast,
-								  component->portsNorth,
-								  component->portsSouth };
-				for (auto& portsVec : allPorts)
+				for (auto& port : component->ports)
 				{
-					for (auto& port : portsVec)
-					{
-						ImGui::PushID(portCount++);
-						ImGui::TableNextRow();
-						ImGui::TableSetColumnIndex(0);
-						ImGui::Text(port->m_label.c_str());
-						ImGui::TableSetColumnIndex(1);
-						if(port->m_cables.size())
-							ImGui::Text(port->m_cables[0]->m_titleString.c_str());
-						ImGui::PopID();		
-					}
+					ImGui::PushID(portCount++);
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text(port->m_label.c_str());
+					ImGui::TableSetColumnIndex(1);
+					if(port->m_cables.size())
+						ImGui::Text(port->m_cables[0]->m_titleString.c_str());
+					ImGui::PopID();		
 				}
 				ImGui::EndTable();
 			}

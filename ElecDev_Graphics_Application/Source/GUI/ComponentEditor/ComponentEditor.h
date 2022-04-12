@@ -5,6 +5,7 @@
 //=======================================================================================================================================//
 
 #include "GUI/GuiElementCore/GuiElementCore.h"
+#include <unordered_map>
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
@@ -45,6 +46,16 @@ private:
 	std::string newName = "Untitled";
 	int newType = 2;
 	int newPos = 0;
+
+	inline static unsigned s_cableIcon = 0;
+	inline static bool s_iconCreated = false;
+	inline static float s_textHeight = 0;
+
+	// Allows the user to copy and paste the current dictionary.
+	inline static std::unordered_map<std::string, std::string> m_copiedDict;
+	inline static bool m_copiedDictCable = false;
+	inline static bool m_copiedDictComponent = false;
+	inline static std::string m_copiedDictFrom = "";
 };
 
 //=======================================================================================================================================//

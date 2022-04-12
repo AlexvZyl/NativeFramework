@@ -37,6 +37,7 @@ public:
 
 	// Updates the text of the text entity.
 	void updateText(const std::string& text);
+	void updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment = "B");
 
 	// Sets the text box colour.
 	void setBoxColour(const glm::vec4& colour);
@@ -48,14 +49,13 @@ public:
 	// Currently the text box layer is automatically set to be right behind the text.
 	virtual void setLayer(float layer) override;
 
-private:
-
 	// Data.
 	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
 	Font* m_font = nullptr;
 	float m_textScale = 1;
 	std::string m_verticalAlign = "L";
 	std::string m_horizontalAlign = "B";
+	std::string m_string = "";
 	float m_textLength = 0;
 
 	// Generates the textured quads.

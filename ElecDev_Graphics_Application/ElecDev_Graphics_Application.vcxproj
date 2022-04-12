@@ -173,6 +173,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
+    <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
     <ClCompile Include="External\glm\glm\detail\glm.cpp" />
@@ -189,9 +191,13 @@
     <ClCompile Include="External\implot\implot.cpp" />
     <ClCompile Include="External\implot\implot_demo.cpp" />
     <ClCompile Include="External\implot\implot_items.cpp" />
+    <ClCompile Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
+    <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
+    <ClCompile Include="Source\GUI\CableEditor\CableEditor.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
@@ -296,13 +302,17 @@
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\Component2DSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\PortSerialiser.cpp" />
-    <ClCompile Include="Source\Utilities\Serialisation\SerialiserBIN.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\CircleSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\LineSegmentSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\Polygon2DSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\TextSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
@@ -617,9 +627,13 @@
     <ClInclude Include="External\lua\Windows\include\lua.hpp" />
     <ClInclude Include="External\lua\Windows\include\luaconf.h" />
     <ClInclude Include="External\lua\Windows\include\lualib.h" />
+    <ClInclude Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
+    <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />
+    <ClInclude Include="Source\GUI\CableEditor\CableEditor.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
     <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
@@ -1015,6 +1029,7 @@
     <Image Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.png" />
     <Image Include="Source\Resources\Fonts\Arial_SDF_BMP_32.bmp" />
     <Image Include="Source\Resources\Fonts\Roboto-Medium\Roboto-Medium.png" />
+    <Image Include="Source\Resources\Icons\Cable.png" />
     <Image Include="Source\Resources\Icons\CircuitFileIcon.png" />
     <Image Include="Source\Resources\Icons\ComponentFileIcon.png" />
     <Image Include="Source\Resources\Icons\circuitIcon128.ico" />

@@ -22,7 +22,7 @@ void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords)
 	{
 		designerState = COMPONENT_PLACE;
 		// Add a dummy component.
-		if (m_activeComponent) m_activeComponent->unhighlight();
+		if (m_activeComponent) m_activeComponent->disableOutline();
 
 		m_activeComponent = std::make_shared<Component2D>(screenCoords, m_circuit.get());
 	}
@@ -31,7 +31,7 @@ void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords)
 void Design2DEngine::ComponentPlaceMode()
 {
 	glm::vec2 pos = getMouseLocalPosition();
-	pos = m_scene->pixelCoordsToWorldCoords(pos);
+	pos = pixelCoordsToWorldCoords(pos);
 	ComponentPlaceMode(pos);
 }
 
@@ -69,7 +69,7 @@ void Design2DEngine::setActiveComponent(unsigned eID) {
 
 	if (m_activeComponent)
 	{
-		m_activeComponent->unhighlight();
+		m_activeComponent->disableOutline();
 		m_activeComponent = NULL;
 	}
 	if ((eID == 0) || (eID == -1))
@@ -97,7 +97,7 @@ void Design2DEngine::setActiveComponent(unsigned eID) {
 			{
 				return current.get() == cur;
 			});
-		m_activeComponent->highlight();
+		m_activeComponent->enableOutline();
 
 		// Pass the active component to the GUI state for editing.
 		Lumen::getApp().m_guiState->active_component = m_activeComponent.get();
@@ -107,7 +107,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 {
 	if (m_activeCable)
 	{
-		m_activeCable->unhighlight();
+		m_activeCable->disableOutline();
 		m_activeCable = NULL;
 		Lumen::getApp().m_guiState->active_cable = nullptr;
 	}
@@ -122,7 +122,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 		if (!currentEntity) {
 			return;
 		}
-	currentEntity->setContext();
+		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
 			if (currentEntity->m_parent->m_type == EntityType::CABLE) 
@@ -134,8 +134,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 					{
 						return current.get() == cur;
 					});
-				m_activeCable->setActivePrimitive(currentEntity);
-				m_activeCable->highlight();
+				m_activeCable->enableOutline();
 
 				Lumen::getApp().m_guiState->active_cable = m_activeCable.get();
 			}
@@ -169,7 +168,7 @@ Port* Design2DEngine::getPort(unsigned eID)
 	}
 }
 
-void Design2DEngine::setName(std::string& name) 
+void Design2DEngine::setName(const std::string& name) 
 {
 	m_circuit->m_label = name;
 }

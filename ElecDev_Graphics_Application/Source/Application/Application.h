@@ -13,6 +13,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/notify/imgui_notify.h"
 #include "Lumen.h"
+#include "Application/Layers/LayerStack.h"
 
 // TO BE DEPRECATED!
 #include "GuiState.h"
@@ -176,6 +177,7 @@ private:
 	friend class LayerStack;
 	friend class SettingsWidget;
 	friend class RendererStats;
+	friend class Layer;
 
 	// The window containing the application.
 	GLFWwindow* m_window = nullptr;
@@ -303,7 +305,7 @@ EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, Lum
 }
 
 template<typename GuiType>
-GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
+GuiLayer<GuiType>* Application::pushGuiLayer(const std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
 {
 	// Create and push the layer.
 	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
@@ -315,7 +317,6 @@ GuiLayer<GuiType>* Application::pushGuiLayer(std::string layerName, LumenDockPan
 	dockLayerToPanel(newName, panel);
 	// Return the layer.
 	return ptr;
-	return nullptr;
 }
 
 template<class LayerType>

@@ -21,11 +21,11 @@ private:
 
     typedef boost::base_from_member<glm::vec2, 1> m_direction;
     typedef boost::base_from_member<glm::vec2, 2> m_perpendicular;
-    float m_thickness;
 
 public:
 
     // Data.
+    float m_thickness;
     glm::vec2 m_start;
     glm::vec2 m_end;
 
@@ -37,6 +37,10 @@ public:
     void translate(const glm::vec2& translation) override;
     void setStart(const glm::vec2& start);
     void setEnd(const glm::vec2& end);
+    // Move the end of a line closest to the given vertex
+    // Note: This function sets the start/end point of a line, rather than manipulating indivudual vertices. This is intended bahavior.
+    void translateVertexTo(VertexData* vertex, const glm::vec2 position) override;
+    void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
 };
 
 //==============================================================================================================================================//

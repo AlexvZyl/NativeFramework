@@ -8,6 +8,7 @@
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Utilities/Logger/Logger.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
 
 void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 {
@@ -16,15 +17,39 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		if (designerState == CompDesignState::DRAW_POLY)
+
+		if (designerState == CompDesignState::SELECT)
+		{
+			m_currentEntityID = getEntityID(pixelCoords);
+			if (m_activePoly || m_activeCircle || m_activeLine) 
+			{
+				//If we already have an active primitive, we need to check for vertex selection.
+				//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
+				setActiveVertex(screenCoords);
+
+			}
+			if (!m_activeVertex) 
+			{
+				//If we did not select a vertex, then we can check for a new primitive selection
+				setActivePrimitives(m_currentEntityID);
+			}
+		}
+		else if (designerState == CompDesignState::DRAW_POLY)
 		{
 
 			if (!m_activePoly)
 			{
-				m_activePoly = m_activeComponent->addPoly({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) });
+				if (drawFilled) 
+				{
+					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+				}
+				else {
+					m_activePoly = Renderer::addPolygon2DClear({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+				}
+				//m_activeComponent->addPoly(m_activePoly);
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else
@@ -36,7 +61,8 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
-			if (!m_activeLine) {
+			if (!m_activeLine) 
+			{
 				//start new line
 				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), 0.001f, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
 			}
@@ -52,15 +78,24 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 		{
 			if (!m_activeCircle) 
 			{
-				//start new line
-				m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
+				//start new circle
+				if (drawFilled) {
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
+				}
+				else {
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, .02f, 0.f, m_activeComponent.get());
+				}
 			}
 			else 
 			{
-				//end the line
+				//set the circle rarius
 				m_activeComponent->addCircle(m_activeCircle);
 				m_activeCircle = nullptr;
 			}
+		}
+		else if (designerState == CompDesignState::PLACE_PORT) {
+			m_activeComponent->addPort(m_activePort);
+			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
 		}
 	}
 
@@ -97,9 +132,10 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
+	uint64_t eventID = event.ID;
 
 	glm::vec2 pixelCoords = event.mousePosition;
-	glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 	if (designerState == CompDesignState::DRAW_POLY)
@@ -126,6 +162,42 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 			m_activeCircle->setRadius(glm::length(glm::vec2(m_activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
 	}
+	else if (designerState == CompDesignState::PLACE_PORT)
+	{
+		if (m_activePort.get()) {
+			//update the title location based on the positioning for user convenience
+			if (m_activePort->centre.x >= 0 && getNearestGridVertex(screenCoords).x < 0) {
+				m_activePort->titleOffset = -m_activePort->titleOffset;
+				m_activePort->title->updateAlignment("R");
+			}
+			if (m_activePort->centre.x < 0 && getNearestGridVertex(screenCoords).x >= 0) {
+				m_activePort->titleOffset = -m_activePort->titleOffset;
+				m_activePort->title->updateAlignment("L");
+			}
+			//update port location
+			m_activePort->moveTo(getNearestGridVertex(screenCoords));
+		}
+	}
+
+	else if (designerState == CompDesignState::SELECT)
+	{
+		if (event.isNotType(EventType_MouseButtonLeft)) {
+			m_lastDragPos = screenCoords;
+		}
+	}
+
+	// Store state.
+	//m_lastDragPos = screenCoords;
+	m_currentEntityID = getEntityID(pixelCoords);
+
+	if (event.isType(EventType_MouseDrag))
+	{
+		LUMEN_LOG_DEBUG("Dragging...","Move Event");
+	}
+	else 
+	{
+		LUMEN_LOG_DEBUG("Not dragging.", "Move Event");
+	}
 }
 
 void ComponentDesigner::onMouseScrollEvent(MouseScrollEvent& event)
@@ -143,59 +215,53 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = m_scene->pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
+		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.1f} };
+		PolyLine* polyline = nullptr;
 		switch (event.key)
 		{
 			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_P:
 			//Add new polygon
-			designerState = CompDesignState::DRAW_POLY;
-			m_activePoly = nullptr;
+			switchState(CompDesignState::DRAW_POLY);
 			break;
 
 		case GLFW_KEY_L:
 			//Add new line
-			designerState = CompDesignState::DRAW_LINE;
-			m_activeLine = nullptr;
+			switchState(CompDesignState::DRAW_LINE);
 			break;
 
 		case GLFW_KEY_C:
 			//Add new circle
-			designerState = CompDesignState::DRAW_CIRCLE;
-			m_activeCircle = nullptr;
+			switchState(CompDesignState::DRAW_CIRCLE);
 			break;
 
 		case GLFW_KEY_O:
 			//Add new port
-			designerState = CompDesignState::DRAW_CIRCLE;
-			m_activeCircle = nullptr;
+			switchState(CompDesignState::PLACE_PORT);
 			break;
 			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_ESCAPE:
-			if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE) {
-				if (m_activeCircle) {
-					Renderer::remove(m_activeCircle);
-				}
-				if (m_activePoly) {
-					Renderer::remove(m_activePoly);
-				}
-				if (m_activeLine) {
-					Renderer::remove(m_activeLine);
-				}
-			}
-			m_activeLine = nullptr;
-			m_activePoly = nullptr;
-			m_activeCircle = nullptr;
-			designerState = CompDesignState::SELECT;
+			switchState(CompDesignState::SELECT);
 			break;
 
+		case GLFW_KEY_K:
+			//test add polyLine
+			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
+			polyline = Renderer::addPolyLine(vertices, m_activeComponent.get());
+			polyline->pushVertex({ -0.5f, 0.f });
+			break;
 			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_DELETE:
+			if (designerState == CompDesignState::SELECT)
+			{
+				deleteActivePrimitive();
+			}
 			break;
 
 			// --------------------------------------------------------------------------------------------------------------- //
@@ -205,6 +271,51 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 
 void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
 {
+
+	Base2DEngine::onMouseDragEvent(event);
+	uint64_t eventID = event.ID;
+
+	glm::vec2 pixelCoords = event.mousePosition;
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+	if (designerState == CompDesignState::SELECT) {
+		//User is dragging a component.
+		glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
+		if (m_activeVertex) {
+			//First check if we should move a vertex
+			//We need to move a vertex
+			if (m_activePoly) {
+				m_activePoly->translateVertex(m_activeVertex, translation);
+			}
+			else if (m_activeLine) {
+				m_activeLine->translateVertex(m_activeVertex, translation);
+			}
+		}
+		else {
+			//If we are not moving a vertex, then check to move primitives
+			if (m_activePoly) {
+				m_activePoly->translate(translation);
+				m_lastDragPos = screenCoords;
+			}
+			if (m_activeLine) {
+				m_activeLine->translate(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+			if (m_activeCircle) {
+				m_activeCircle->translate(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+			if (m_activeText) {
+				//Consideration: Should we keep track of the text position in the parent port/component? If so, this should be updated here.
+				m_activeText->translate(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+			if (m_activePort.get()) {
+				m_activePort->move(translation);
+				m_lastDragPos = getNearestGridVertex(screenCoords);
+			}
+		}
+	}
 	std::string msg = "Delta: " + std::to_string(event.currentFrameDelta.x) + " + " + std::to_string(event.currentFrameDelta.y);
 	LUMEN_LOG_DEBUG(msg, "Comp Design Drag");
 }
@@ -218,5 +329,25 @@ void ComponentDesigner::onNotifyEvent(NotifyEvent& event)
 	else if (event.isType(EventType_MouseDragStop))
 	{
 		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
+		if (m_activePoly) {
+			m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
+		}
+		if (m_activeLine) {
+			m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
+		}
+		if (m_activeCircle) {
+			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
+		}
+		if (m_activeVertex) {
+			if (m_activePoly) {
+				m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			}
+			else if (m_activeLine) {
+				m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			}
+		}
+		if (m_activePort) {
+			m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
+		}
 	}
 }
