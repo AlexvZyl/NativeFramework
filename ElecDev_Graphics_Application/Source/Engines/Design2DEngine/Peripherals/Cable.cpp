@@ -209,7 +209,6 @@ void Cable::addSegment(glm::vec2 nextPoint)
 	m_polyLine->pushVertex(nextPoint);
 }
 
-
 void Cable::setContext(GUIState* guiState)
 {
 	//DEPRECATED

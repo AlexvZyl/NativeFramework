@@ -78,7 +78,11 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 
 				designerState = ENTITY_SELECT;
 			}
-			else m_activeCable->addSegment(getNearestGridVertex(screenCoords));
+			else
+			{
+				m_activeCable->addSegment(getNearestGridVertex(screenCoords));
+				m_activeCable->enableOutline();
+			}
 		}
 
 		LUMEN_LOG_DEBUG(std::to_string(getEntityID(event.mousePosition)), "Design Engine EID");
@@ -131,7 +135,6 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	else
 	{
 		// Port hover indicator.
-
 		m_hoveredID = getEntityID(coords);
 		auto lastHoveredPort = m_hoveredPort;
 		m_hoveredPort = getPort(m_hoveredID);
@@ -149,6 +152,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		{
 			m_currentEntityID = getEntityID(coords);
 			if (m_activeCable.get()) m_activeCable->extendSegment(getNearestGridVertex(screenCoords));
+			m_activeCable->enableOutline();
 		}
 		/*/else if (designerState == ENTITY_SELECT)
 		{

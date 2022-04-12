@@ -15,6 +15,7 @@
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Port.h"
 #include "Resources/ResourceHandler.h"
+#include "Lumen.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -47,8 +48,8 @@ void ComponentEditor::onRender()
 	Design2DEngine* design_engine = app.getActiveEngine<Design2DEngine>();
 	ComponentDesigner* component_designer = app.getActiveEngine<ComponentDesigner>();
 
-	if (component_designer) {
-
+	if (component_designer) 
+	{
 		Component2D* activeComponent = component_designer->m_activeComponent.get();
 
 		// Check that the active component exists. Close if not.
@@ -110,45 +111,6 @@ void ComponentEditor::onRender()
 				}
 
 				ImGui::EndTable();
-			/*
-			if (addingPort)
-			{
-				//create a table entry for the port to be added
-				ImGui::TableNextRow();
-				ImGui::TableNextColumn();
-				//Add the position
-				ImGui::PushItemWidth(-1);
-				ImGui::Combo("##newPos", &newPos, "Left\0Right\0Top\0Bottom");
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add the Name
-				ImGui::PushItemWidth(-1);
-				ImGui::InputText("##newName", &newName);
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add the type
-				ImGui::PushItemWidth(-1);
-				ImGui::Combo("##newType", &newType, "IN\0OUT\0IN/OUT");
-				ImGui::PopItemWidth();
-				ImGui::TableNextColumn();
-				//Add a "Confirm" button
-				ImGui::PushItemWidth(-1);
-				if (ImGui::Button("Confirm"))
-				{
-					// Add the port to the component.
-					activeComponent->addPort(newPos, (PortType)newType, newName);
-					addingPort = false;
-				}
-				ImGui::PopItemWidth();
-			}
-			ImGui::EndTable();
-
-			if (!addingPort)
-			{
-				if (ImGui::Button("New Port"))
-					addingPort = true;
-			}
-			*/
 		}
 		ImGui::EndChild();
 
@@ -158,8 +120,7 @@ void ComponentEditor::onRender()
 
 			if (activeComponent)
 			{
-				std::unordered_map<std::string, std::string> dataDict;
-				dataDict = activeComponent->dataDict;
+				std::unordered_map<std::string, std::string>& dataDict = activeComponent->dataDict;
 
 				const char* buffer[100];
 				int numKeys = 0;
@@ -329,15 +290,12 @@ void ComponentEditor::onRender()
 				}
 			}
 		}
-
-
 		ImGui::EndChild();
 	}
 	if (design_engine) 
 	{
 
 		// Fetch all the component names.
-
 		auto& numComponents = design_engine->m_circuit->m_components;
 		auto& numCables = design_engine->m_circuit->m_cables;
 		const char* componentNames[100];
@@ -379,8 +337,6 @@ void ComponentEditor::onRender()
 			ImGui::Text((std::string(" Type:\t  ") + activeComponent->equipType).c_str());
 			//ImGui::SameLine();
 			//ImGui::InputText("##Equipment Type", &activeComponent->equipType);
-
-
 		}
 
 		// ------------------------------- //
@@ -503,6 +459,51 @@ void ComponentEditor::onRender()
 	// --------------------- //
 	//  D A T A   T A B L E  //
 	// --------------------- //
+
+	// Copy and paste dictiopnaries.
+	if (activeComponent || activeCable)
+	{
+		if (ImGui::BeginChild("Copy&Paste", { 0.f, 35.f }, true))
+		{
+			// Copy button.
+			if (ImGui::Button("Copy"))
+			{
+				if (activeComponent)
+				{
+					m_copiedDict = activeComponent->dataDict;
+					m_copiedDictComponent = true;
+					m_copiedDictCable = false;
+					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
+				}
+				else if (activeCable)
+				{
+					m_copiedDict = activeCable->cableDict;
+					m_copiedDictComponent = false;
+					m_copiedDictCable = true;
+					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
+				}
+			}
+			ImGui::SameLine();
+
+			// Check if paste should be available.
+			bool canPaste = true;
+			canPaste = (bool)m_copiedDict.size();
+			canPaste = canPaste && ( (activeCable && m_copiedDictCable) || (activeComponent && m_copiedDictComponent) );
+
+			// Paste button.
+			if (!canPaste)
+				ImGui::BeginDisabled();
+			if (ImGui::Button("Paste"))
+			{
+				if		(activeComponent)  activeComponent->dataDict = m_copiedDict;
+				else if (activeCable)	   activeCable->cableDict	 = m_copiedDict;
+				Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully pasted data dictionary.", "Component Editor");
+			}
+			if (!canPaste)
+				ImGui::EndDisabled();
+		}
+		ImGui::EndChild();
+	}
 
 	ImGui::PushID("CompEdChildData");
 	if (ImGui::BeginChild("DataChild", { 0,0 }, true))
