@@ -7,6 +7,7 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Primitives/Polygon.h"
+#include "OpenGL/Primitives/PolyLine.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Primitives/LineSegment.h"
@@ -77,6 +78,14 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 															  s_scene->m_texturedTrianglesVAO.get(), s_defaultFont.get(),
 															  parent, horizontalAlignment, verticalAlignment) });
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
+}
+
+PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent)
+{
+	unsigned id = EntityManager::peakNextID();
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices,
+															  s_scene->m_trianglesVAO.get(), parent) });
+	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 
 //==============================================================================================================================================//

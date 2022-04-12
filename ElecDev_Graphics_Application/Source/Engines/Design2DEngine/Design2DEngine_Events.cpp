@@ -183,6 +183,12 @@ void Design2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 
 void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 {
+	Base2DEngine::onMouseDragEvent(event);
+	
+	glm::vec2 pixelCoords = event.mousePosition;
+	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+
 	uint64_t eventID = event.ID;
 	glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
 	if (designerState == ENTITY_SELECT) 
@@ -193,7 +199,16 @@ void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 			}
 			if (m_activeCable.get()) 
 			{
-				m_activeCable->moveActivePrimitive(translation);
+				auto [vertexPtr, distance] = m_activeCable->getNearestVertex(screenCoords);
+				VertexData* activeVertex = nullptr;
+				if (distance < clickTol)
+				{
+					activeVertex = vertexPtr;
+				}
+				if (activeVertex) 
+				{
+					m_activeCable->translateVertex(activeVertex, translation);
+				}
 			}
 	}
 }
@@ -204,6 +219,8 @@ void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 
 void Design2DEngine::onNotifyEvent(NotifyEvent& event)
 {
+
+	glm::vec2 screenCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
 	if (event.isType(EventType_MouseDragStart))
 	{
 
@@ -218,7 +235,16 @@ void Design2DEngine::onNotifyEvent(NotifyEvent& event)
 		}
 		if (m_activeCable) 
 		{
-			m_activeCable->moveActivePrimitiveTo(getNearestGridVertex(pixelCoordsToWorldCoords(getMouseLocalPosition())));
+			auto [vertexPtr, distance] = m_activeCable->getNearestVertex(screenCoords);
+			VertexData* activeVertex = nullptr;
+			if (distance < clickTol)
+			{
+				activeVertex = vertexPtr;
+			}
+			if (activeVertex) 
+			{
+				m_activeCable->translateVertexTo(activeVertex, getNearestGridVertex(screenCoords));
+			}
 		}
 	}
 }

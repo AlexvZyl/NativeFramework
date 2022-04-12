@@ -31,13 +31,13 @@ public:
 	Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent);
 
 	// Adds a new vertex and handles the required manipulation of data.
-	void pushVertex(const glm::vec3& vertex);
-	void translateVertexAtIndex(unsigned index, const glm::vec3& translation) override;
-	void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
+	virtual void pushVertex(const glm::vec3& vertex);
+	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation) override;
+	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
 	// Translate to.
-	void translateToVertexAtIndex(unsigned index, const glm::vec3& position) override;
-	void translateToVertexAtIndex(unsigned index, const glm::vec2& position) override;
-	void updateIndices();
+	virtual void translateToVertexAtIndex(unsigned index, const glm::vec3& position) override;
+	virtual void translateToVertexAtIndex(unsigned index, const glm::vec2& position) override;
+	virtual void updateIndices();
 	// Move a vertex
 	virtual void translateVertexTo(VertexData* vertex, const glm::vec3 position) override;
 	// Move a vertex

@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
     <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="External\implot\implot_items.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
     <ClCompile Include="Source\GUI\CableEditor\CableEditor.cpp" />
@@ -309,6 +311,7 @@
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
@@ -625,6 +628,7 @@
     <ClInclude Include="External\lua\Windows\include\lualib.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
     <ClInclude Include="Source\GUI\CableEditor\CableEditor.h" />
