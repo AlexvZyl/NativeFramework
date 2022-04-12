@@ -473,6 +473,7 @@ void ComponentEditor::onRender()
 					m_copiedDict = activeComponent->dataDict;
 					m_copiedDictComponent = true;
 					m_copiedDictCable = false;
+					m_copiedDictFrom = activeComponent->titleString;
 					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
 				}
 				else if (activeCable)
@@ -480,6 +481,7 @@ void ComponentEditor::onRender()
 					m_copiedDict = activeCable->cableDict;
 					m_copiedDictComponent = false;
 					m_copiedDictCable = true;
+					m_copiedDictFrom = activeCable->m_cableType;
 					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
 				}
 			}
@@ -501,6 +503,11 @@ void ComponentEditor::onRender()
 			}
 			if (!canPaste)
 				ImGui::EndDisabled();
+
+			ImGui::SameLine();
+			ImGui::Text("  Copied from:");
+			ImGui::SameLine();
+			ImGui::Text(m_copiedDictFrom.c_str());
 		}
 		ImGui::EndChild();
 	}

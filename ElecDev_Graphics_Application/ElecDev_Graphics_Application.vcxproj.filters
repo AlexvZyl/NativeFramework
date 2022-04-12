@@ -141,6 +141,7 @@
     <ClCompile Include="Source\GUI\CableEditor\CableEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
+    <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -833,6 +834,7 @@
     <ClInclude Include="Source\GUI\CableEditor\CableEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
+    <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

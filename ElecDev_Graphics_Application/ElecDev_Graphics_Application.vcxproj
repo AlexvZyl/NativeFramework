@@ -196,6 +196,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
+    <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
     <ClCompile Include="Source\GUI\CableEditor\CableEditor.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
@@ -631,6 +632,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
+    <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />
     <ClInclude Include="Source\GUI\CableEditor\CableEditor.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />

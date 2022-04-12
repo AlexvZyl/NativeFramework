@@ -23,7 +23,7 @@
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "GUI/SettingsWidget/SettingsWidget.h"
 #include "Application/Events/EventLog.h"
-//#include "GUI/CableCreator/CableCreator.h"
+#include "GUI/CableCreator/CableCreator.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -129,7 +129,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_cableIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        //app.pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Left);
+        app.pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Floating);
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
