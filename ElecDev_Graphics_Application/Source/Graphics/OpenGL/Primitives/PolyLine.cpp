@@ -76,6 +76,9 @@ void PolyLine::update()
 
 	m_vertexCount = vertexVector.size();
 	m_VAO->pushPrimitive(this, vertexVector, indices);
+	if (outlined) {
+		enableOutline();
+	}
 }
 
 void PolyLine::pushVertex(const glm::vec3& vertex)
@@ -175,6 +178,18 @@ void PolyLine::translateTo(const glm::vec3& position)
 
 void PolyLine::translateTo(const glm::vec2& position)
 {
+}
+
+void PolyLine::enableOutline()
+{
+	outlined = true;
+	Polygon2D::enableOutline();
+}
+
+void PolyLine::disableOutline()
+{
+	outlined = false;
+	Polygon2D::disableOutline();
 }
 
 std::tuple<unsigned, float> PolyLine::getNearestVertexIdx(const glm::vec2& position)

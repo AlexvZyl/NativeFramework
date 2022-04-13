@@ -171,12 +171,13 @@ Cable::~Cable()
 	// Remove the renderer primitives.
 	Renderer::remove(m_polyLine);
 	
-
+	/*/
 	//remove title text
-	/*/Renderer::remove(m_title1);
+	//Renderer::remove(m_title1);
 	if (m_title2) {
 		Renderer::remove(m_title2);
-	}*/
+	}
+	*/
 }
 
 void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort) 
@@ -225,16 +226,13 @@ void Cable::attach(Port* endPort)
 
 void Cable::followPort(Port* movedPort)
 {
-	glm::vec3 titlePos;
-	
-
-	if (movedPort == m_endPort) 
+	if (movedPort == m_endPort)
 	{
 		// Extend the pevious segment. 
 		m_polyLine->translateToVertexAtIndex(m_polyLine->m_vertices.size() - 1, movedPort->centre);
 	}
 
-	else if (movedPort == m_startPort) 
+	else if (movedPort == m_startPort)
 	{
 		// Extend the first segment. 
 		m_polyLine->translateToVertexAtIndex(0, movedPort->centre);
