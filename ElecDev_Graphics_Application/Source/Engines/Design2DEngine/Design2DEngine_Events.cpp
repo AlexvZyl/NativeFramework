@@ -51,18 +51,19 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 				if (distance < clickTol)
 				{
 					m_activeVertexIdx = idx;
-					LUMEN_LOG_DEBUG("Setting vertex", "Design Engine EID");
 				}
 			}
 			if (m_activeVertexIdx == -1) {
 				setActiveComponent(m_currentEntityID);
 				setActiveCable(m_currentEntityID);
 				Port* clickedPort = getPort(m_currentEntityID);
-				if (clickedPort != nullptr)
+				if (clickedPort)
 				{
 					m_activeCable = nullptr;
 					designerState = CABLE_PLACE;
 					m_activeCable = std::make_shared<Cable>(clickedPort, m_circuit.get());
+					m_activeCable->enableOutline();
+					m_activeComponent->disableOutline();
 				}
 			}
 		}
@@ -71,7 +72,8 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			glm::vec2 coords = { pixelCoords[0], pixelCoords[1] };
 			m_currentEntityID = getEntityID(coords);
 			Port* clickedPort = getPort(m_currentEntityID);
-			if (clickedPort != nullptr)
+
+			if (clickedPort)
 			{
 				// Only add the cable if the end port is different to the start port.
 				if (clickedPort != m_activeCable->m_startPort)
@@ -79,10 +81,18 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 					m_activeCable->attach(clickedPort);
 					m_circuit->m_cables.push_back(m_activeCable);
 				}
+				m_activeCable->disableOutline();
 				m_activeCable = nullptr;
+				m_activeComponent->disableOutline();
+				m_activeComponent = nullptr;
+
 				designerState = ENTITY_SELECT;
 			}
-			else m_activeCable->addSegment(getNearestGridVertex(screenCoords));
+			else
+			{
+				m_activeCable->addSegment(getNearestGridVertex(screenCoords));
+				m_activeCable->enableOutline();
+			}
 		}
 
 		LUMEN_LOG_DEBUG(std::to_string(getEntityID(event.mousePosition)), "Design Engine EID");
@@ -135,7 +145,6 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	else
 	{
 		// Port hover indicator.
-
 		m_hoveredID = getEntityID(coords);
 		auto lastHoveredPort = m_hoveredPort;
 		m_hoveredPort = getPort(m_hoveredID);
@@ -153,6 +162,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 		{
 			m_currentEntityID = getEntityID(coords);
 			if (m_activeCable.get()) m_activeCable->extendSegment(getNearestGridVertex(screenCoords));
+			m_activeCable->enableOutline();
 		}
 		/*/else if (designerState == ENTITY_SELECT)
 		{
@@ -188,15 +198,17 @@ void Design2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
+	
 	glm::vec2 pixelCoords = event.mousePosition;
 	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 	uint64_t eventID = event.ID;
 	glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
-	if (designerState == ENTITY_SELECT) {
-		
-			if (m_activeComponent.get()) {
+	if (designerState == ENTITY_SELECT) 
+	{
+			if (m_activeComponent.get()) 
+			{
 				m_activeComponent->move(translation);
 			}	
 			if (m_activeVertexIdx != -1) {
@@ -215,12 +227,12 @@ void Design2DEngine::onNotifyEvent(NotifyEvent& event)
 	glm::vec2 screenCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
 	if (event.isType(EventType_MouseDragStart))
 	{
-		LUMEN_LOG_DEBUG("Mouse Drag Start", "Component Designer Notify");
+
 	}
 	else if (event.isType(EventType_MouseDragStop))
 	{
-		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
-		if (m_activeComponent.get()) {
+		if (m_activeComponent.get()) 
+		{
 			glm::vec2 vert = getNearestGridVertex(m_activeComponent->centre);
 			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
 			m_activeComponent->moveTo(getNearestGridVertex(m_activeComponent->centre));
@@ -291,17 +303,18 @@ void Design2DEngine::onFileDropEvent(FileDropEvent& event)
 
 	for (auto& path : event.fileData)
 	{
-		LUMEN_LOG_DEBUG(path.string(), "FileDropEvent");
-
-		// Create component from file.
-		if(m_activeComponent)
-			m_activeComponent->disableOutline();
-		if (m_activeCable)
-			m_activeCable->disableOutline();
-		m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
-		m_circuit->m_components.back()->move(getNearestGridVertex(pixelCoordsToWorldCoords(getMouseLocalPosition())));
-		m_activeComponent = m_circuit->m_components.back();
-		designerState = ENTITY_SELECT;
+		if (path.filename().extension().string() == ".lmcp")
+		{
+			// Create component from file.
+			if (m_activeComponent)
+				m_activeComponent->disableOutline();
+			if (m_activeCable)
+				m_activeCable->disableOutline();
+			m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
+			m_circuit->m_components.back()->move(getNearestGridVertex(pixelCoordsToWorldCoords(getMouseLocalPosition())));
+			m_activeComponent = m_circuit->m_components.back();
+			designerState = ENTITY_SELECT;
+		}
 	}
 
 	Renderer::restoreAndUnbindScene();

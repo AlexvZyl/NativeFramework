@@ -47,7 +47,7 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
 				}
 				else {
-					m_activePoly = Renderer::addPolygon2DClear({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, m_activeComponent.get());
 				}
 				//m_activeComponent->addPoly(m_activePoly);
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
@@ -218,7 +218,7 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.1f} };
+		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} };
 		PolyLine* polyline = nullptr;
 		switch (event.key)
 		{
@@ -252,8 +252,8 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 		case GLFW_KEY_K:
 			//test add polyLine
 			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
-			polyline = Renderer::addPolyLine(vertices, m_activeComponent.get());
-			polyline->pushVertex({ -0.5f, 0.f });
+			polyline = Renderer::addPolygon2DClear(vertices, m_activeComponent.get());
+			//polyline->pushVertex({ -0.5f, 0.f });
 			break;
 			// --------------------------------------------------------------------------------------------------------------- //
 
