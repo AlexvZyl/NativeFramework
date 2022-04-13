@@ -113,8 +113,8 @@ void GraphicsScene::onRender()
 			sPath.insert(sPath.end(), wPath.begin(), wPath.end());
 			FileDropEvent event(sPath, EventType_FileDrop);
 			m_engine->onEvent(event);
+			ImGui::EndDragDropTarget();
 		}
-		ImGui::EndDragDropTarget();
 	}
 }
 

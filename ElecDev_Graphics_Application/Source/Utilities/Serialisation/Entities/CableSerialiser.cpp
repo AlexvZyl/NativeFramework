@@ -66,16 +66,6 @@ void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
 		startComponentIndex++;
 	}
 
-	// Store the cable type, if one is supplied.
-	if (cable->m_cableType.size())
-	{
-		emitter << YAML::Key << "File" << YAML::Value << (cable->m_cableType + ".lmcb");
-	}
-	else 
-	{
-		emitter << YAML::Key << "File" << YAML::Value << "";
-	}
-
 	// Store the indices.
 	emitter << YAML::Key << "Start Component Index" << YAML::Value << startComponentIndex;
 	emitter << YAML::Key << "Start Port Index" << YAML::Value << startPortIndex;

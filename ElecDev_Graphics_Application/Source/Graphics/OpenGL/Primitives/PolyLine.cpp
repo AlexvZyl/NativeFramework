@@ -38,7 +38,6 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 		resultVec.push_back(temp);
 	}*/
 	update();
-	setColor({0.f, 0.f, 0.f, 1.f});
 }
 
 void PolyLine::update()
@@ -74,8 +73,12 @@ void PolyLine::update()
 			vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
 	}
 
+
 	m_vertexCount = vertexVector.size();
 	m_VAO->pushPrimitive(this, vertexVector, indices);
+	if (outlined) {
+		enableOutline();
+	}
 }
 
 void PolyLine::pushVertex(const glm::vec3& vertex)
@@ -144,10 +147,13 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 		{
 			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
 		});
+
 	if (it == end(m_vertices)) {
 		LUMEN_LOG_WARN("Tried to move an invlaid vertex.", "PolyLine");
 		return;
 	}
+
+	LUMEN_LOG_DEBUG("idx = " + std::to_string(it - m_vertices.begin()), "PolyLine");
 	*it += translation;
 	update();
 }
@@ -172,4 +178,31 @@ void PolyLine::translateTo(const glm::vec3& position)
 
 void PolyLine::translateTo(const glm::vec2& position)
 {
+}
+
+void PolyLine::enableOutline()
+{
+	outlined = true;
+	Polygon2D::enableOutline();
+}
+
+void PolyLine::disableOutline()
+{
+	outlined = false;
+	Polygon2D::disableOutline();
+}
+
+std::tuple<unsigned, float> PolyLine::getNearestVertexIdx(const glm::vec2& position)
+{
+	unsigned i = 0;
+	unsigned idx = 0;
+	float min = INFINITY;
+	for (glm::vec2 vert : m_vertices) {
+		if (glm::length(vert - position) < min) {
+			idx = i;
+			min = glm::length(vert - position);
+		}
+		i++;
+	}
+	return { idx, min };
 }

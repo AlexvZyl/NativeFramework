@@ -25,11 +25,11 @@ public:
 	EngineLayer(std::string name, int imguiWindowFLags = 0)
 		: GuiLayer<GraphicsScene>(name, imguiWindowFLags)
 	{
-		// Create and setup engine.
+		// Create the engine.
 		m_engine = std::make_unique<EngineType>();
+		// Set the texture.
 		m_guiElement->setEngine(m_engine.get());
 		m_engine->m_layer = this;
-		m_engine->m_gui = m_guiElement.get();
 	}
 
 	// Destructor.

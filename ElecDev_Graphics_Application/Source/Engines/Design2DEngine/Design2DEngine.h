@@ -49,6 +49,7 @@ public:
 	designState designerState = ENTITY_SELECT;
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
+	unsigned m_activeVertexIdx = -1;
 	std::shared_ptr<Circuit> m_circuit;
 	glm::vec2 m_lastDragPos = {0.f, 0.f};
 	unsigned int m_currentEntityID = 0;

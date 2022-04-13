@@ -54,7 +54,7 @@ void Application::onUpdate()
 			continue;
 		}
 		// File drop should go to the hovered layer.
-		else if (event->isType(EventType_FileDrop) && m_hoveredLayer) 
+		else if (event->isType(EventType_FileDrop)) 
 		{
 			m_hoveredLayer->onEvent(*event.get());
 			continue;

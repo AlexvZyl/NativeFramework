@@ -16,7 +16,6 @@
 #include "GUI/ColorEditor/ColorEditor.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
-#include "GUI/CableEditor/CableEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -68,7 +67,6 @@ void PopUpMenu::onRender()
     // --------------------- //
     //  B A C K G R O U N D  //
     // --------------------- //
-
     if (dynamic_cast<Design2DEngine*>(m_engine)) {
         Design2DEngine* design_engine = dynamic_cast<Design2DEngine*>(m_engine);
         // Render menu items.
@@ -95,14 +93,6 @@ void PopUpMenu::onRender()
                 // defocus event, which removes the popup event.
                 app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
             }
-
-            if (ImGui::MenuItem("Cable Editor"))
-            {
-                // Pushing this GUI layer defocuses the popup, causing a 
-                // defocus event, which removes the popup event.
-                app.pushGuiLayer<CableEditor>("Cable Editor", LumenDockPanel::Floating);
-            }
-
             if (ImGui::MenuItem("Color Editor"))
             {
                 ColorEditor* editor = app.pushGuiLayer<ColorEditor>("Color Editor", LumenDockPanel::Floating)->getGui();
@@ -165,14 +155,13 @@ void PopUpMenu::onRender()
             if (path.string().size())
             {
                 EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), design_engine, EventType_Application));
-                design_engine->savedDocument();
             }
             // Remove popup.
             app.queuePopLayer(m_layer);
         }
     }
-    else if (dynamic_cast<ComponentDesigner*>(m_engine)) 
-    {
+    else if (dynamic_cast<ComponentDesigner*>(m_engine)) {
+
         ComponentDesigner* component_designer = dynamic_cast<ComponentDesigner*>(m_engine);
 
         if (component_designer->designerState == CompDesignState::SELECT) {
@@ -186,38 +175,43 @@ void PopUpMenu::onRender()
                 if (ImGui::MenuItem("Delete", "DEL"))
                 {
                     component_designer->deleteActivePrimitive();
+                    // Remove popup.
                     app.queuePopLayer(m_name);
                 }
             }
             if (ImGui::MenuItem("Add Polygon", "P"))
             {
                 component_designer->switchState(CompDesignState::DRAW_POLY);
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
             if (ImGui::MenuItem("Add Line", "L"))
             {
                 component_designer->switchState(CompDesignState::DRAW_LINE);
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
             if (ImGui::MenuItem("Add Circle", "C"))
             {
                 component_designer->switchState(CompDesignState::DRAW_CIRCLE);
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
             if (ImGui::MenuItem("Add Port", "O"))
             {
                 component_designer->switchState(CompDesignState::PLACE_PORT);
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
             if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
             {
-                // Create and log save event.
-                auto path = selectFile("Lumen Save Component", "", active_component->equipType, "Save");
-                if (path.string().size())
-                {
-                    EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), component_designer, EventType_Application));
-                    component_designer->savedDocument();
-                }
+            // Create and log save event.
+            auto path = selectFile("Lumen Save Component", "",active_component->equipType, "Save");
+            if (path.string().size())
+            {
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), dynamic_cast<ComponentDesigner*>(m_engine), EventType_Application));
+            }
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
         }
@@ -226,11 +220,13 @@ void PopUpMenu::onRender()
             {
                 component_designer->pushActivePrimitives();
                 component_designer->switchState(CompDesignState::SELECT);
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
             if (ImGui::MenuItem("Cancel", "ESC"))
             {
                 component_designer->switchState(CompDesignState::SELECT);
+                // Remove popup.
                 app.queuePopLayer(m_name);
             }
         }

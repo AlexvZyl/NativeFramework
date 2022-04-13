@@ -43,10 +43,8 @@ public:
     // Data Automation
     std::unordered_map<std::string, std::string> cableDict;
 
-    std::string m_cableType = "";
-
-    float m_thickness = 0.01f;
-    glm::vec4 m_colour = { 0.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
+    float m_thickness = 0.005f;
+    glm::vec4 m_colour = { 00.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
     PolyLine* m_polyLine;
     //std::vector<glm::vec2> m_vertices;
     //std::vector<LineSegment*> m_lines;
@@ -82,11 +80,11 @@ public:
     void attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);
-    void translateVertex(VertexData* vertex, glm::vec2 translation);
-    void translateVertexTo(VertexData* vertex, glm::vec2 position);
+    void translateVertexAtIndex(unsigned vertexIdx, glm::vec2 translation);
+    void translateVertexAtIndexTo(unsigned vertexIdx, glm::vec2 position);
     void enableOutline();
     void disableOutline();
-    std::tuple<VertexData*, float>  getNearestVertex(glm::vec2 pos);
+    std::tuple<unsigned, float>  getNearestVertexIdx(glm::vec2 pos);
 
     void constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort);
 };
