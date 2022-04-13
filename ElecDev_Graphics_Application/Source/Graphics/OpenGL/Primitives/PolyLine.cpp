@@ -38,6 +38,7 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 		resultVec.push_back(temp);
 	}*/
 	update();
+	setColor({0.f, 0.f, 0.f, 1.f});
 }
 
 void PolyLine::update()
@@ -74,7 +75,6 @@ void PolyLine::update()
 		for (auto& vertex : path)
 			vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
 	}
-
 
 	m_vertexCount = vertexVector.size();
 	m_VAO->pushPrimitive(this, vertexVector, indices);
