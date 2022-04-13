@@ -33,6 +33,7 @@ void Renderer::shutdown()
 	s_shaders.clear();
 	m_default2DScene.reset();
 	s_defaultFont.reset();
+	s_unitQuad.reset();
 }
 
 void Renderer::initialise()
