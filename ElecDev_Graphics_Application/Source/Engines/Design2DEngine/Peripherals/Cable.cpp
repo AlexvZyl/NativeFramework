@@ -104,6 +104,8 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	Port* startPort = nullptr;
 	Port* endPort = nullptr;
 
+	m_cableType = std::filesystem::path(node["File"].as<std::string>()).filename().stem().string();
+
 	// Find indces.
 	int startComponentIndex = node["Start Component Index"].as<int>();
 	int endComponentIndex = node["End Component Index"].as<int>();
@@ -208,7 +210,6 @@ void Cable::addSegment(glm::vec2 nextPoint)
 	m_polyLine->pushVertex(nextPoint);
 }
 
-
 void Cable::setContext(GUIState* guiState)
 {
 	//DEPRECATED
@@ -267,6 +268,7 @@ void Cable::enableOutline()
 {
 	m_polyLine->enableOutline();
 }
+
 /*
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 {

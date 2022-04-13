@@ -22,6 +22,7 @@ class KeyEvent;
 class WindowEvent;
 class NotifyEvent;
 class FileDropEvent;
+class GraphicsScene;
 class Layer;
 
 //=============================================================================================================================================//
@@ -43,6 +44,11 @@ public:
 	// Destructor.
 	virtual ~EngineCore();
 
+	// Display window as a saved document.
+	void unsavedDocument();
+	// Display window as an unsaved document.
+	void savedDocument();
+	
 	// ---------- //
 	//  S C E N E //
 	// ---------- //
@@ -109,7 +115,8 @@ public:
 	inline virtual void setName(const std::string& name) {}
 
 	// The layer the engine belongs to.
-	Layer* m_layer;
+	Layer* m_layer = nullptr;
+	GraphicsScene* m_gui = nullptr;
 
 	// ------------- //
 	//  S T A T E S  //
@@ -145,12 +152,13 @@ public:
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
 	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& coords);
 
-protected:
-
+	// Enables the design palette for this engine.
 	inline void enableDesignPalette() 
 	{
 		m_hasDesignPalette = true;
 	}
+
+	// Disables the design palette for this engine.
 	inline void disableDesignPalette()
 	{
 		m_hasDesignPalette = false;

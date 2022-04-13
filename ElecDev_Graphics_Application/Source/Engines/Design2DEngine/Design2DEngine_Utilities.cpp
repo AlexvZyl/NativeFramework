@@ -122,7 +122,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 		if (!currentEntity) {
 			return;
 		}
-	currentEntity->setContext();
+		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
 			if (currentEntity->m_parent->m_type == EntityType::CABLE) 
