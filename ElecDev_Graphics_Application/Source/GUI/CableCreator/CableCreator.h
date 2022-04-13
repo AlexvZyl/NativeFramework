@@ -25,7 +25,7 @@ public:
 	// Cable properties.
 	int m_coreCount= 0;
 	std::string m_metal = "";
-	std::string m_name = "";
+	std::string m_cableName = "";
 	std::string m_isolation = "";
 };
 
