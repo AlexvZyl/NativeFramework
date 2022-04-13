@@ -307,7 +307,6 @@ void ComponentEditor::onRender()
 		}
 
 		int numEquip = numCom;
-
 		for (auto& key : numCables)
 		{
 			componentNames[numCom] = key->m_titleString.c_str();
@@ -432,7 +431,8 @@ void ComponentEditor::onRender()
 				}
 			}
 		}
-		else {
+		else 
+		{
 			for (auto& key : numCables)
 			{
 				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {

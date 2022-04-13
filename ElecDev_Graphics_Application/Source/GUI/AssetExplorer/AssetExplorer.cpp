@@ -11,6 +11,7 @@
 #include "imgui/notify/notify_icons_define.h"
 #include "imgui/imgui_internal.h"
 #include "Engines/AssetViewer/AssetViewer.h" 
+#include "GUI/CableCreator/CableCreator.h"
 
 //==============================================================================================================================================//
 //  Statics.																																	//
@@ -304,6 +305,11 @@ void AssetExplorer::onRender()
 					if (ImGui::ImageButton((void*)s_cableIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
 					{
 						
+					}
+					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						CableCreator* gui =  Lumen::getApp().pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Floating)->getGui();
+						gui->setCable(p);
 					}
 					// File drag & drop.
 					if (ImGui::BeginDragDropSource())

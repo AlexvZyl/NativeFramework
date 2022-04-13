@@ -24,6 +24,7 @@ public:
 	virtual void end() override;
 
 private:
+
 	int fromSelector = 0;
 	int databaseSelector = 0;
 	int sizeSelector = 0;
@@ -36,11 +37,8 @@ private:
 	int combineSelectorVariable = 0;
 	const char* comparatorSelection[6] = { "==", "!=", "<=", ">=", "<", ">" };
 	std::string comparisonValue = "0";
-
 	std::string trueStatement = "True";
-
 	std::string falseStatement = "False";
-
 	std::string combineTextString = "";
 	bool addingPort = false;
 	std::string newName = "Untitled";

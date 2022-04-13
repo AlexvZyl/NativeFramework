@@ -138,7 +138,6 @@
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\TextSerialiser.cpp" />
     <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.cpp" />
-    <ClCompile Include="Source\GUI\CableEditor\CableEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
     <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
@@ -831,7 +830,6 @@
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.h" />
-    <ClInclude Include="Source\GUI\CableEditor\CableEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
     <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />

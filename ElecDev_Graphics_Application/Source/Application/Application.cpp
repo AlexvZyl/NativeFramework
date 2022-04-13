@@ -266,9 +266,11 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_DockingEmptyBg] = colors[ImGuiCol_Separator];
 
 	colors[ImGuiCol_MenuBarBg] = (glm::vec4)colors[ImGuiCol_WindowBg] / 1.3f;
-	colors[ImGuiCol_TitleBg] = colors[ImGuiCol_WindowBg];
+	colors[ImGuiCol_MenuBarBg].w = 1.f;
+	colors[ImGuiCol_TitleBg] = colors[ImGuiCol_MenuBarBg];
+	colors[ImGuiCol_TitleBgActive] = colors[ImGuiCol_MenuBarBg];
+
 	colors[ImGuiCol_Tab] = colors[ImGuiCol_WindowBg];
-	colors[ImGuiCol_TitleBgActive] = colors[ImGuiCol_WindowBg];
 	colors[ImGuiCol_TabUnfocused] = colors[ImGuiCol_WindowBg];
 	colors[ImGuiCol_PopupBg] = colors[ImGuiCol_WindowBg];
 	colors[ImGuiCol_TitleBgCollapsed] = colors[ImGuiCol_WindowBg];

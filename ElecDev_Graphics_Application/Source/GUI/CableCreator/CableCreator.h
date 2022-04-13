@@ -5,6 +5,8 @@
 //=======================================================================================================================================//
 
 #include "GUI/GuiElementCore/GuiElementCore.h"
+#include <unordered_map>
+#include <filesystem>
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
@@ -23,10 +25,17 @@ public:
 	virtual void end() override;
 
 	// Cable properties.
-	int m_coreCount= 0;
-	std::string m_metal = "";
+	glm::vec4 m_cableColor = {0.f, 0.f, 0.f, 1.f};
 	std::string m_cableName = "";
-	std::string m_isolation = "";
+	std::unordered_map<std::string, std::string> m_dataDict;
+
+	// Set the data that is contained in the provided file.
+	void setCable(const std::filesystem::path& path);
+
+private:
+
+	// Saves the cable to file.
+	void serialiseCable(const std::filesystem::path& path);
 };
 
 //=======================================================================================================================================//

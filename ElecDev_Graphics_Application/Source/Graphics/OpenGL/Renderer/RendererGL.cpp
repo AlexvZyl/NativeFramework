@@ -47,19 +47,14 @@ void Renderer::initialise()
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
 	Renderer::setClearColor(Renderer::baseColor);
 
-	// Compiles the shaders used by the renderer and the FBO.
+	// Initial setup.
 	Renderer::compileShaders();
-	// Loads the default font to be used by the renderer.
 	Renderer::loadDefaultFont();
-
-	// Setup pipeline controls.
 	s_pipelineControls.insert({ "Background"		, true });
 	s_pipelineControls.insert({ "Geometry"			, true });
 	s_pipelineControls.insert({ "Outline"			, true });
 	s_pipelineControls.insert({ "OutlinePostProc"   , true });
 	s_pipelineControls.insert({ "Grid"				, true });
-
-	// Used for texture rendering.
 	Renderer::createUnitQuad();
 }
 

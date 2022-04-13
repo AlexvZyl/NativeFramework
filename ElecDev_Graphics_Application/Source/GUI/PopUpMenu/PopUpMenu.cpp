@@ -16,7 +16,6 @@
 #include "GUI/ColorEditor/ColorEditor.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
-#include "GUI/CableEditor/CableEditor.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */
@@ -94,13 +93,6 @@ void PopUpMenu::onRender()
                 // Pushing this GUI layer defocuses the popup, causing a 
                 // defocus event, which removes the popup event.
                 app.pushGuiLayer<ComponentEditor>("Component Editor", LumenDockPanel::Left);
-            }
-
-            if (ImGui::MenuItem("Cable Editor"))
-            {
-                // Pushing this GUI layer defocuses the popup, causing a 
-                // defocus event, which removes the popup event.
-                app.pushGuiLayer<CableEditor>("Cable Editor", LumenDockPanel::Floating);
             }
 
             if (ImGui::MenuItem("Color Editor"))
