@@ -27,9 +27,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 	emitter << YAML::Key << "Nodes" << YAML::Value;
 	emitter << YAML::BeginMap;
 	int nodeIndex = 0;
-	for (Circle* circle : cable->m_nodes)
+	for (glm::vec2 node : cable->m_polyLine->m_vertices)
 	{
-		emitter << YAML::Key << "Node " + std::to_string(nodeIndex) << YAML::Value << circle->m_trackedCenter;
+		emitter << YAML::Key << "Node " + std::to_string(nodeIndex) << YAML::Value << node;
 		nodeIndex++;
 	}
 	emitter << YAML::EndMap;
@@ -64,6 +64,16 @@ void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
 			break;
 		startPortIndex = 0;
 		startComponentIndex++;
+	}
+
+	// Store the cable type, if one is supplied.
+	if (cable->m_cableType.size())
+	{
+		emitter << YAML::Key << "File" << YAML::Value << (cable->m_cableType + ".lmcb");
+	}
+	else 
+	{
+		emitter << YAML::Key << "File" << YAML::Value << "";
 	}
 
 	// Store the indices.

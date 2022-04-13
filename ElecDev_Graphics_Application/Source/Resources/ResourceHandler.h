@@ -24,59 +24,45 @@
 #endif
 
 /*=======================================================================================================================================*/
-/* Resources.                                                                                                                            */
+/* Resource IDs.                                                                                                                            */
 /*=======================================================================================================================================*/
 
-//-------------------------------------------------------------------------------------------------
-// Resource Types
 #define TEXTFILE 255
-#define PNG 254
-//-------------------------------------------------------------------------------------------------
-// Shaders
-#define BASIC_SHADER 253
-#define BACKGROUND_SHADER 251
-#define TEXTURE_SHADER 250
-#define STATIC_TEXTURE_SHADER 235
-#define CIRCLE_SHADER 237
-#define OUTLINE_SHADER 200
-#define OUTLINE_SHADER_TEXTURES 201
-#define OUTLINE_SHADER_CIRCLE 202
-#define OUTLINE_SHADER_POSTPROC 203
-#define OUTLINE_SHADER_BACKGROUND 204
-//-------------------------------------------------------------------------------------------------
-// ImGui images.
-#define COMPONENT_PNG 249				
-#define DRAW_CIRCUIT_BUCKETS_PNG 248
-#define DRAW_MCC_PNG 247				
-//-------------------------------------------------------------------------------------------------
-// OpenGL Textures.
-#define CIRCUIT_TREE_PNG 246
-//-------------------------------------------------------------------------------------------------
-// OpenGL Fonts. 
-#define ARIAL_NORMAL_PNG 245
-#define ARIAL_NORMAL_JSON 244
-#define ARIAL_NORMAL_TTF 220
-#define ROBOTO_REGULAR_TTF 243
-#define ARIAL_BOLD_MSDF_PNG 237
-#define ARIAL_BOLD_MSDF_JSON 236
-//-------------------------------------------------------------------------------------------------
-// Application icon.
-#define IDI_ICON1 240			// Exe icon.
-#define ICON_PNG 239			// GLFW icon.
-#define CIRCUIT_CIRCLE_JPEG 238	// Circle circuit for design engine button.
-//-------------------------------------------------------------------------------------------------
-//  File system.
-#define FILE_ICON 231
-#define FOLDER_ICON 230
-#define CIRCUIT_FILE_ICON 229
-#define LEFT_ARROW_ICON 228
-#define UP_ARROW_ICON 222
-#define COMPONENT_FILE_ICON 227
-#define RELOAD_ICON 226
-#define LOAD_FILE_ICON 225
-#define SETTINGS_ICON 224
-#define USER_ICON 223
-//-------------------------------------------------------------------------------------------------
+#define PNG 256
+#define BASIC_SHADER 257
+#define BACKGROUND_SHADER 258
+#define TEXTURE_SHADER 259
+#define STATIC_TEXTURE_SHADER 260
+#define CIRCLE_SHADER 261
+#define OUTLINE_SHADER 262
+#define OUTLINE_SHADER_TEXTURES 263
+#define OUTLINE_SHADER_CIRCLE 264
+#define OUTLINE_SHADER_POSTPROC 265
+#define OUTLINE_SHADER_BACKGROUND 266
+#define COMPONENT_PNG 268
+#define DRAW_CIRCUIT_BUCKETS_PNG 269
+#define DRAW_MCC_PNG 270
+#define CIRCUIT_TREE_PNG 271
+#define ARIAL_NORMAL_PNG 272
+#define ARIAL_NORMAL_JSON 273
+#define ARIAL_NORMAL_TTF 274
+#define ROBOTO_REGULAR_TTF 275
+#define ARIAL_BOLD_MSDF_PNG 276
+#define ARIAL_BOLD_MSDF_JSON 277
+#define IDI_ICON1 278
+#define ICON_PNG 279		
+#define CIRCUIT_CIRCLE_JPEG 280
+#define FILE_ICON 281
+#define FOLDER_ICON 282
+#define CIRCUIT_FILE_ICON 283
+#define LEFT_ARROW_ICON 284
+#define UP_ARROW_ICON 285
+#define COMPONENT_FILE_ICON 286
+#define RELOAD_ICON 287
+#define LOAD_FILE_ICON 289
+#define SETTINGS_ICON 290
+#define USER_ICON 291
+#define CABLE_ICON 292
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */

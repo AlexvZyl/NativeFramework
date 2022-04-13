@@ -55,6 +55,8 @@ public:
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;
 
+	float clickTol = 0.01f;
+
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
