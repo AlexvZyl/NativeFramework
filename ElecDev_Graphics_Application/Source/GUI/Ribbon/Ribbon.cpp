@@ -23,7 +23,6 @@
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "GUI/SettingsWidget/SettingsWidget.h"
 #include "Application/Events/EventLog.h"
-#include "GUI/CableCreator/CableCreator.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//
@@ -42,7 +41,6 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     m_loadFileIcon = loadBitmapToGL(loadImageFromResource(LOAD_FILE_ICON));
     m_settingsIcon = loadBitmapToGL(loadImageFromResource(SETTINGS_ICON));
     m_userIcon = loadBitmapToGL(loadImageFromResource(USER_ICON));
-    m_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
 }
 
 void Ribbon::begin()
@@ -93,8 +91,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_componentIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        ComponentDesigner* engine =  Lumen::getApp().pushEngineLayer<ComponentDesigner>("Component Designer")->getEngine();
-        engine->unsavedDocument();
+        Lumen::getApp().pushEngineLayer<ComponentDesigner>("Component Designer");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
@@ -111,8 +108,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>("Untitled")->getEngine();
-        engine->unsavedDocument();
+        Lumen::getApp().pushEngineLayer<Design2DEngine>("Untitled");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
@@ -122,23 +118,6 @@ void Ribbon::onRender()
         ImGui::EndTooltip();
     }
     
-    // --------------------------- //
-    //  C A B L E   C R E A T O R  //
-    // --------------------------- //
-
-    // Button.
-    if (ImGui::ImageButton((void*)m_cableIcon, buttonSize, { 0, 1 }, { 1, 0 }))
-    {
-        app.pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Floating);
-    }
-    // Tooltip.
-    if (ImGui::IsItemHovered())
-    {
-        ImGui::BeginTooltip();
-        ImGui::Text("Cable Creator");
-        ImGui::EndTooltip();
-    }
-
     ImGui::Separator();
 
     ////

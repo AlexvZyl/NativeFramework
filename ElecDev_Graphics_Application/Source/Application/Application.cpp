@@ -265,7 +265,7 @@ void Application::setGuiTheme()
 	colors[ImGuiCol_ScrollbarBg].w = 0.6f;
 	colors[ImGuiCol_DockingEmptyBg] = colors[ImGuiCol_Separator];
 
-	colors[ImGuiCol_MenuBarBg] = (glm::vec4)colors[ImGuiCol_WindowBg] / 1.3f;
+	colors[ImGuiCol_MenuBarBg] = colors[ImGuiCol_WindowBg];
 	colors[ImGuiCol_TitleBg] = colors[ImGuiCol_WindowBg];
 	colors[ImGuiCol_Tab] = colors[ImGuiCol_WindowBg];
 	colors[ImGuiCol_TitleBgActive] = colors[ImGuiCol_WindowBg];

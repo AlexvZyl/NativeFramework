@@ -5,13 +5,13 @@
 class VertexData;
 
 
-class PolyLine : public Polygon2D
+class PolyLine :
+    public Polygon2D
 {
 
-public:
-
-    float m_thickness = 0.014f;
-    // We need to retain a copy of the raw vertices for editing.
+    public:
+    float m_thickness = 0.005f;
+    //we need to retain a copy of the raw vertices for editing
     std::vector<glm::vec2> m_vertices;
 	float m_layer = 0.f;
     
@@ -44,6 +44,8 @@ public:
 protected:
 
 	void update();
+
+
 
 };
 
