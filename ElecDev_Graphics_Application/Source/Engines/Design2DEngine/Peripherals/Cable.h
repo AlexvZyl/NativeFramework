@@ -80,11 +80,11 @@ public:
     void attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);
-    void translateVertex(VertexData* vertex, glm::vec2 translation);
-    void translateVertexTo(VertexData* vertex, glm::vec2 position);
+    void translateVertexAtIndex(unsigned vertexIdx, glm::vec2 translation);
+    void translateVertexAtIndexTo(unsigned vertexIdx, glm::vec2 position);
     void enableOutline();
     void disableOutline();
-    std::tuple<VertexData*, float>  getNearestVertex(glm::vec2 pos);
+    std::tuple<unsigned, float>  getNearestVertexIdx(glm::vec2 pos);
 
     void constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort);
 };

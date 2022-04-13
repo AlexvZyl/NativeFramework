@@ -46,14 +46,15 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			m_currentEntityID = getEntityID(coords);
 
 			if (m_activeCable.get()) {
-				auto [vertexPtr, distance] = m_activeCable->getNearestVertex(screenCoords);
-				m_activeVertex = nullptr;
+				auto [idx, distance] = m_activeCable->getNearestVertexIdx(screenCoords);
+				m_activeVertexIdx = -1;
 				if (distance < clickTol)
 				{
-					m_activeVertex = vertexPtr;
+					m_activeVertexIdx = idx;
+					LUMEN_LOG_DEBUG("Setting vertex", "Design Engine EID");
 				}
 			}
-			if (!m_activeVertex) {
+			if (m_activeVertexIdx == -1) {
 				setActiveComponent(m_currentEntityID);
 				setActiveCable(m_currentEntityID);
 				Port* clickedPort = getPort(m_currentEntityID);
@@ -198,8 +199,8 @@ void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 			if (m_activeComponent.get()) {
 				m_activeComponent->move(translation);
 			}	
-			if (m_activeVertex) {
-				m_activeCable->translateVertex(m_activeVertex, translation);
+			if (m_activeVertexIdx != -1) {
+				m_activeCable->translateVertexAtIndex(m_activeVertexIdx, translation);
 			}
 	}
 }
@@ -224,16 +225,8 @@ void Design2DEngine::onNotifyEvent(NotifyEvent& event)
 			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
 			m_activeComponent->moveTo(getNearestGridVertex(m_activeComponent->centre));
 		}
-		if (m_activeCable) {
-			auto [vertexPtr, distance] = m_activeCable->getNearestVertex(screenCoords);
-			VertexData* activeVertex = nullptr;
-			if (distance < clickTol)
-			{
-				activeVertex = vertexPtr;
-			}
-			if (activeVertex) {
-				m_activeCable->translateVertexTo(activeVertex, getNearestGridVertex(screenCoords));
-			}
+		if (m_activeVertexIdx != -1) {
+			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(screenCoords));
 		}
 	}
 }
