@@ -130,17 +130,17 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 		if (currentEntity->m_parent == m_activeComponent.get()) 
 		{
 			//Entity is a primitive belonging to the component
-			if (dynamic_cast<Polygon2D*>(currentEntity)) 
-			{
-				//Polygon
-				m_activePoly = dynamic_cast<Polygon2D*>(currentEntity);
-				m_activePoly->enableOutline();
-			}
-			else if (dynamic_cast<LineSegment*>(currentEntity)) 
+			if (dynamic_cast<LineSegment*>(currentEntity))
 			{
 				//Line
 				m_activeLine = dynamic_cast<LineSegment*>(currentEntity);
 				m_activeLine->enableOutline();
+			}
+			else if (dynamic_cast<Polygon2D*>(currentEntity)) 
+			{
+				//Polygon
+				m_activePoly = dynamic_cast<Polygon2D*>(currentEntity);
+				m_activePoly->enableOutline();
 			}
 			else if (dynamic_cast<Circle*>(currentEntity)) 
 			{
@@ -174,7 +174,7 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 					});
 				if (m_activePort) 
 				{
-					m_activePort->disableOutline();
+					m_activePort->enableOutline();
 				}
 			}
 		}
@@ -210,6 +210,11 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 
 void ComponentDesigner::deleteActivePrimitive()
 {
+
+	if (m_activeLine)
+	{
+		m_activeComponent->removeLine(m_activeLine);
+	}
 	if (m_activePoly) 
 	{
 		m_activeComponent->removePoly(m_activePoly);
@@ -217,10 +222,6 @@ void ComponentDesigner::deleteActivePrimitive()
 	if (m_activeCircle) 
 	{
 		m_activeComponent->removeCircle(m_activeCircle);
-	}
-	if (m_activeLine) 
-	{
-		m_activeComponent->removeLine(m_activeLine);
 	}
 	if (m_activePort) 
 	{

@@ -45,8 +45,24 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			glm::vec2 coords = { pixelCoords[0], pixelCoords[1] };
 			m_currentEntityID = getEntityID(coords);
 
-			setActiveComponent(m_currentEntityID);
-			setActiveCable(m_currentEntityID);
+			if (m_activeCable.get()) {
+				auto [vertexPtr, distance] = m_activeCable->getNearestVertex(screenCoords);
+				m_activeVertex = nullptr;
+				if (distance < clickTol)
+				{
+					m_activeVertex = vertexPtr;
+				}
+			}
+			if (!m_activeVertex) {
+				setActiveComponent(m_currentEntityID);
+				setActiveCable(m_currentEntityID);
+				Port* clickedPort = getPort(m_currentEntityID);
+				if (clickedPort != nullptr)
+				{
+					m_activeCable = nullptr;
+					designerState = CABLE_PLACE;
+					m_activeCable = std::make_shared<Cable>(clickedPort, m_circuit.get());
+				}
 			Port* clickedPort = getPort(m_currentEntityID);
 			if (clickedPort)
 			{
@@ -56,6 +72,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 				m_activeCable->enableOutline();
 				m_activeComponent->disableOutline();
 			}
+      }
 		}
 		else if (designerState == CABLE_PLACE)
 		{
@@ -200,19 +217,9 @@ void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 			if (m_activeComponent.get()) 
 			{
 				m_activeComponent->move(translation);
-			}
-			if (m_activeCable.get()) 
-			{
-				auto [vertexPtr, distance] = m_activeCable->getNearestVertex(screenCoords);
-				VertexData* activeVertex = nullptr;
-				if (distance < clickTol)
-				{
-					activeVertex = vertexPtr;
-				}
-				if (activeVertex) 
-				{
-					m_activeCable->translateVertex(activeVertex, translation);
-				}
+			}	
+			if (m_activeVertex) {
+				m_activeCable->translateVertex(m_activeVertex, translation);
 			}
 	}
 }
