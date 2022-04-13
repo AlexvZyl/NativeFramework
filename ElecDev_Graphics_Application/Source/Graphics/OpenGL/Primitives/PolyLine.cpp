@@ -4,7 +4,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 #include <Clipper/cpp/clipper.hpp>
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent) :Polygon2D({}, VAO, parent), m_vertices(vertices)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -50,7 +50,9 @@ void PolyLine::update()
 		return ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(in.x * sf), static_cast<ClipperLib::cInt>(in.y * sf));
 		});
 	ClipperLib::ClipperOffset co;
-	co.AddPath(subj, ClipperLib::jtSquare, ClipperLib::etOpenSquare);
+	ClipperLib::EndType et = ClipperLib::etOpenSquare;
+	if (m_closed) et = ClipperLib::etClosedLine;
+	co.AddPath(subj, ClipperLib::jtSquare, et);
 	co.Execute(solution, m_thickness / 2 * sf);
 
 	std::vector<std::vector<glm::vec3>> resultVec;

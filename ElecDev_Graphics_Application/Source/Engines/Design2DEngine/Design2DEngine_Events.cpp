@@ -51,7 +51,6 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 				if (distance < clickTol)
 				{
 					m_activeVertexIdx = idx;
-					LUMEN_LOG_DEBUG("Setting vertex", "Design Engine EID");
 				}
 			}
 			if (m_activeVertexIdx == -1) {
