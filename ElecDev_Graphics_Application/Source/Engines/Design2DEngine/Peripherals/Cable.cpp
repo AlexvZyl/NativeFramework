@@ -226,8 +226,17 @@ void Cable::attach(Port* endPort)
 
 void Cable::followPort(Port* movedPort)
 {
-	// Extend the first segment. 
-	m_polyLine->translateToVertexAtIndex(0, movedPort->centre);
+	if (movedPort == m_endPort)
+	{
+		// Extend the pevious segment. 
+		m_polyLine->translateToVertexAtIndex(m_polyLine->m_vertices.size() - 1, movedPort->centre);
+	}
+
+	else if (movedPort == m_startPort)
+	{
+		// Extend the first segment. 
+		m_polyLine->translateToVertexAtIndex(0, movedPort->centre);
+	}
 }
 
 void Cable::setColour(glm::vec4 colour, bool save)
