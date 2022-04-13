@@ -57,22 +57,15 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 				setActiveComponent(m_currentEntityID);
 				setActiveCable(m_currentEntityID);
 				Port* clickedPort = getPort(m_currentEntityID);
-				if (clickedPort != nullptr)
+				if (clickedPort)
 				{
 					m_activeCable = nullptr;
 					designerState = CABLE_PLACE;
 					m_activeCable = std::make_shared<Cable>(clickedPort, m_circuit.get());
+					m_activeCable->enableOutline();
+					m_activeComponent->disableOutline();
 				}
-			Port* clickedPort = getPort(m_currentEntityID);
-			if (clickedPort)
-			{
-				m_activeCable = nullptr;
-				designerState = CABLE_PLACE;
-				m_activeCable = std::make_shared<Cable>(clickedPort, m_circuit.get());
-				m_activeCable->enableOutline();
-				m_activeComponent->disableOutline();
 			}
-      }
 		}
 		else if (designerState == CABLE_PLACE)
 		{
