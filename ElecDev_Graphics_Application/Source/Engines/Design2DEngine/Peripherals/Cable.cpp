@@ -104,8 +104,6 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	Port* startPort = nullptr;
 	Port* endPort = nullptr;
 
-	m_cableType = std::filesystem::path(node["File"].as<std::string>()).filename().stem().string();
-
 	// Find indces.
 	int startComponentIndex = node["Start Component Index"].as<int>();
 	int endComponentIndex = node["End Component Index"].as<int>();
@@ -210,6 +208,7 @@ void Cable::addSegment(glm::vec2 nextPoint)
 	m_polyLine->pushVertex(nextPoint);
 }
 
+
 void Cable::setContext(GUIState* guiState)
 {
 	//DEPRECATED
@@ -237,21 +236,28 @@ void Cable::setColour(glm::vec4 colour, bool save)
 	m_polyLine->setColor(colour);
 }
 
-void Cable::translateVertex(VertexData* vertex, glm::vec2 translation)
+void Cable::translateVertexAtIndex(unsigned vertexIdx, glm::vec2 translation)
 {
-	m_polyLine->translateVertex(vertex, translation);
+	if (vertexIdx == 0 || vertexIdx == m_polyLine->m_vertices.size() - 1) {
+		//Don't allow the ends to be moved off the port
+		return;
+	}
+	m_polyLine->translateVertexAtIndex(vertexIdx, translation);
 }
 
-void Cable::translateVertexTo(VertexData* vertex, glm::vec2 position)
+void Cable::translateVertexAtIndexTo(unsigned vertexIdx, glm::vec2 position)
 {
-	m_polyLine->translateVertexTo(vertex, position);
+	if (vertexIdx == 0 || vertexIdx == m_polyLine->m_vertices.size() - 1) {
+		//Don't allow the ends to be moved off the port
+		return;
+	}
+	m_polyLine->translateToVertexAtIndex(vertexIdx, position);
 }
 
 void Cable::enableOutline()
 {
 	m_polyLine->enableOutline();
 }
-
 /*
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 {
@@ -392,9 +398,9 @@ void Cable::disableOutline()
 	m_polyLine->disableOutline();
 }
 
-std::tuple<VertexData*, float>  Cable::getNearestVertex(glm::vec2 pos)
+std::tuple<unsigned, float>  Cable::getNearestVertexIdx(glm::vec2 pos)
 {
-	return m_polyLine->getNearestVertex(pos);
+	return m_polyLine->getNearestVertexIdx(pos);
 }
 
 //==============================================================================================================================================//

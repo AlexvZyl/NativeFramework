@@ -43,7 +43,6 @@ private:
 	// Icons.
 	inline static unsigned s_folderIcon = NULL;
 	inline static unsigned s_fileIcon = NULL;
-	inline static unsigned s_cableIcon = NULL;
 	inline static unsigned s_circuitFileIcon = NULL;
 	inline static unsigned s_leftArrowIcon = NULL;
 	inline static unsigned s_upArrowIcon = NULL;
@@ -52,7 +51,6 @@ private:
 	
 	bool m_displayComponents = true;
 	bool m_displayCircuits = true;
-	bool m_displayCables = true;
 
 	// Reload the files in the current directory.
 	void loadDirectories();

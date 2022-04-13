@@ -116,30 +116,13 @@ public:
 	inline virtual void onHoverEvent(NotifyEvent& event) {};
 	inline virtual void onDehoverEvent(NotifyEvent& event) {};
 
-
-	// The layer that the GUI belongs to.
-	Layer* m_layer;
-
-	// ------------------- //
-	//  U T I L I T I E S  //
-	// ------------------- //
-	
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.
 	glm::vec2 getMouseLocalPosition();
 	glm::vec2 getMouseGlobalPosition();
 
-	// Display window as a saved document.
-	inline void unsavedDocument() 
-	{
-		m_imguiWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
-	}
-
-	// Display window as an unsaved document.
-	inline void savedDocument() 
-	{
-		m_imguiWindowFlags &= ~ImGuiWindowFlags_UnsavedDocument;
-	}
+	// The layer that the GUI belongs to.
+	Layer* m_layer;
 };
 
 //==============================================================================================================================================//

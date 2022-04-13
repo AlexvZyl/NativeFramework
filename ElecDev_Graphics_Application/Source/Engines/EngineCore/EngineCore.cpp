@@ -19,7 +19,6 @@ and notify the user via the terminal interface.
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "OpenGL/Primitives/Grid.h"
-#include "GUI/GraphicsScene/GraphicsScene.h"
 
 //=============================================================================================================================================//
 //  Rendering.																																   //
@@ -98,17 +97,6 @@ glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords)
 glm::vec3 EngineCore::pixelCoordsToCameraCoords(const glm::vec2& coords) 
 {
 	return m_scene->pixelCoordsToCameraCoords(coords);
-}
-
-void EngineCore::unsavedDocument()
-{
-	m_gui->unsavedDocument();
-
-}
-
-void EngineCore::savedDocument()
-{
-	m_gui->savedDocument();
 }
 
 //=============================================================================================================================================//

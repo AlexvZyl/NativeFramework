@@ -39,7 +39,6 @@ private:
 	unsigned m_componentIcon = NULL;
 	unsigned m_settingsIcon = NULL;
 	unsigned m_userIcon = NULL;
-	unsigned m_cableIcon = NULL;
 };
 
 //==============================================================================================================================================//
