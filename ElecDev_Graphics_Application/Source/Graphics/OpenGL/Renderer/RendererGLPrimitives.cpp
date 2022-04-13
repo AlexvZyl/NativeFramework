@@ -83,8 +83,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices,
-															  s_scene->m_trianglesVAO.get(), parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 

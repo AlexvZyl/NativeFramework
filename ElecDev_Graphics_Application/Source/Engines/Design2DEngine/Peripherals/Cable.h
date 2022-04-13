@@ -43,8 +43,10 @@ public:
     // Data Automation
     std::unordered_map<std::string, std::string> cableDict;
 
-    float m_thickness = 0.005f;
-    glm::vec4 m_colour = { 00.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
+    std::string m_cableType = "";
+
+    float m_thickness = 0.01f;
+    glm::vec4 m_colour = { 0.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
     PolyLine* m_polyLine;
     //std::vector<glm::vec2> m_vertices;
     //std::vector<LineSegment*> m_lines;
