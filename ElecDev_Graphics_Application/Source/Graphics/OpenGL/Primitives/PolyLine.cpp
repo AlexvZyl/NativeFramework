@@ -46,14 +46,14 @@ void PolyLine::update()
 
 	ClipperLib::Path subj;
 	ClipperLib::Paths solution;
-	float sf = 1000;
+	float sf = 100000;
 	std::transform(m_vertices.begin(), m_vertices.end(), std::back_inserter(subj), [&](glm::vec2 in) {
 		return ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(in.x * sf), static_cast<ClipperLib::cInt>(in.y * sf));
 		});
 	ClipperLib::ClipperOffset co;
-	ClipperLib::EndType et = ClipperLib::etOpenSquare;
+	ClipperLib::EndType et = ClipperLib::etOpenRound;
 	if (m_closed) et = ClipperLib::etClosedLine;
-	co.AddPath(subj, ClipperLib::jtSquare, et);
+	co.AddPath(subj, ClipperLib::jtRound, et);
 	co.Execute(solution, m_thickness / 2 * sf);
 
 	std::vector<std::vector<glm::vec3>> resultVec;
