@@ -16,10 +16,6 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 	// General data.
 	emitter << YAML::Key << "Thickness" << YAML::Value << cable->m_thickness;
 
-	// Title entities.
-	//emitter << YAML::Key << "Title 1" << YAML::Value << cable->m_title1;
-	//emitter << YAML::Key << "Title 2" << YAML::Value << cable->m_title2;
-
 	// Data dictionary.
 	emitter << YAML::Key << "Dictionary" << YAML::Value << cable->cableDict;
 
@@ -34,6 +30,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 	}
 	emitter << YAML::EndMap;
 
+	// Color.
+	emitter << YAML::Key << "Color" << YAML::Value << cable->m_colour;
+
 	return emitter;
 }
 
@@ -42,7 +41,7 @@ void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
 	// Begin the port Map.
 	emitter << YAML::BeginMap;
 
-	//  Port general data.
+	//  Cable general data.
 	emitter << cable;
 
 	// Find the start port indices.

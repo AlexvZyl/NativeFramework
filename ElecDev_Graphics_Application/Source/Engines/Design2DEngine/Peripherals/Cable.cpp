@@ -162,6 +162,14 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	{
 		cableDict.insert({ entry.first.as<std::string>(), entry.second.as<std::string>() });
 	}
+
+	// Color.
+	setColour({
+		node["Color"][0].as<float>(), 
+		node["Color"][1].as<float>(), 
+		node["Color"][2].as<float>(), 
+		node["Color"][3].as<float>()
+	});
 }
 
 Cable::~Cable()

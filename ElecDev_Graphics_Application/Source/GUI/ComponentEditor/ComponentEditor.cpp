@@ -398,6 +398,23 @@ void ComponentEditor::onRender()
 					if (fsPath.filename().extension().string() == ".lmcb")
 					{
 						activeCable->m_cableType = fsPath.filename().stem().string();
+
+						// Load the data received from the file.
+						YAML::Node node = YAML::LoadFile(fsPath.string())["Cable"];
+						// Load color.
+						activeCable->setColour({ 
+							node["Color"][0].as<float>(), 
+							node["Color"][1].as<float>(), 
+							node["Color"][2].as<float>() , 
+							node["Color"][3].as<float>() 
+						});
+						// Load dictionary.
+						activeCable->cableDict.clear();
+						for (const auto& keyValPair : node["Dictionary"])
+						{
+							activeCable->cableDict.insert({keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>()});
+						}
+
 					}
 				}
 				ImGui::EndDragDropTarget();
