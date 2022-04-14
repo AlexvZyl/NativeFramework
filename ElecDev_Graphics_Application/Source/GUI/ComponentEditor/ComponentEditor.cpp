@@ -535,9 +535,9 @@ void ComponentEditor::onRender()
 
 		if (activeComponent || activeCable)
 		{
-			std::unordered_map<std::string, std::string> dataDict;
-			if (activeComponent) dataDict = activeComponent->dataDict;
-			else if (activeCable) dataDict = activeCable->cableDict;
+			std::unordered_map<std::string, std::string>* dataDict = nullptr;
+			if (activeComponent) dataDict = &activeComponent->dataDict;
+			else if (activeCable) dataDict = &activeCable->cableDict;
 
 			const char* buffer[100];
 			int numKeys = 0;
@@ -602,7 +602,7 @@ void ComponentEditor::onRender()
 
 				// Table.
 				int keyCount = 0;
-				for (auto& [key, val] : dataDict)
+				for (auto& [key, val] : *dataDict)
 				{
 					// ID.
 					ImGui::PushID(keyCount++);
@@ -662,7 +662,7 @@ void ComponentEditor::onRender()
 			if (ImGui::CollapsingHeader("From"))
 			{
 				// int* typeval2 = (int*)&dataDict;
-				ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict->size());
 
 				ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 				// ImGui::Text("Hello World");
@@ -688,7 +688,7 @@ void ComponentEditor::onRender()
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Size"))
 			{
-				ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict->size());
 				// ImGui::Text(std::to_string(typeval3).c_str());
 				if (ImGui::Button("Insert Size function"))
 				{
@@ -718,7 +718,7 @@ void ComponentEditor::onRender()
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("IF"))
 			{
-				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict->size());
 				ImGui::Combo("Select Somponent##if2", &equipmentSelector, componentNames, numCom);
 				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, possibleInformation, posKeys);
 				ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
@@ -757,7 +757,7 @@ void ComponentEditor::onRender()
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Combine Text"))
 			{
-				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict->size());
 				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, possibleInformation, posKeys))
 				{
 					combineTextString += possibleInformation[combineSelectorVariable] + plusString;
