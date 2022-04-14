@@ -65,8 +65,8 @@ void Design2DEngine::deleteActiveCable()
 	}
 }
 
-void Design2DEngine::setActiveComponent(unsigned eID) {
-
+void Design2DEngine::setActiveComponent(unsigned eID) 
+{
 	if (m_activeComponent)
 	{
 		m_activeComponent->disableOutline();
@@ -119,9 +119,9 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
-		if (!currentEntity) {
-			return;
-		}
+
+		if (!currentEntity) return;
+
 		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
