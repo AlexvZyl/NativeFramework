@@ -120,7 +120,10 @@ void PopUpMenu::onRender()
             }*/
             if (ImGui::MenuItem("Remove component", "DEL"))
             {
-                design_engine->deleteActiveComponent();
+                if (design_engine->m_activeComponent)
+                    design_engine->deleteActiveComponent();
+                else if (design_engine->m_activeCable)
+                    design_engine->deleteActiveCable();
 
                 // Remove popup.
                 app.queuePopLayer(m_name);
