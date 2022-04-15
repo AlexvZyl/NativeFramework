@@ -29,7 +29,16 @@ public:
 
 	inline static void logMouseMove(const glm::vec2& mousePositionPixels, LumenEventID ID)
 	{
-		mouseMove = std::make_unique<MouseMoveEvent>(mousePositionPixels, ID);
+		// If event already exists update the existing data.
+		if (mouseMove)
+		{
+			mouseMove->ID = ID;
+			mouseMove->mousePosition = mousePositionPixels;
+		}
+		else
+		{
+			mouseMove = std::make_unique<MouseMoveEvent>(mousePositionPixels, ID);
+		}
 	}
 
 	inline static void logMouseDrag(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
@@ -50,7 +59,17 @@ public:
 
 	inline static void logMouseScroll(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID)
 	{
-		mouseScroll = std::make_unique<MouseScrollEvent>(mousePositionPixels, yOffset, xOffset, ID);
+		// If event already exists update the existing data.
+		if (mouseScroll)
+		{
+			mouseScroll->ID = ID;
+			mouseScroll->mousePosition = mousePositionPixels;
+			mouseScroll->xOffset = xOffset;
+			mouseScroll->yOffset = yOffset;
+		}
+		{
+			mouseScroll = std::make_unique<MouseScrollEvent>(mousePositionPixels, yOffset, xOffset, ID);
+		}
 	}
 
 	// Setup the event log.
