@@ -36,8 +36,4 @@ This is the graphics application that is to be used with the ElecDev software.  
 
 ### Long Term
 
-Port to Vulkan, [https://www.vulkan.org/].
-
----
-
-*Estimated money to be made = Baie^Baie = Mal Baie.*
+Implement Vulkan renderer, [https://www.vulkan.org/].
