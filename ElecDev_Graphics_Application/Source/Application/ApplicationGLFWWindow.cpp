@@ -216,7 +216,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            EventLog::logMouseScroll(glm::vec2(cursorX, cursorY), (float)yoffset, (float)xoffset, eventID);
+            EventLog::logMouseScroll({ cursorX, cursorY }, (float)yoffset, (float)xoffset, eventID);
 
             // Reset double press on a scroll.
             resetDoublePressData();

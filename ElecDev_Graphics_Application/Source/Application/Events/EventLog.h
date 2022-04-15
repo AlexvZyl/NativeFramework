@@ -11,7 +11,6 @@
 //  Event Log.																																	//
 //==============================================================================================================================================//
 
-// This is used to log the events as they happen per frame.
 class EventLog
 {
 
@@ -23,44 +22,42 @@ public:
 		events.emplace_back(std::make_unique<EventType>(args...));
 	}
 
-	template <class ... Args>
-	inline static void logNotify(const Args&... args)
+	inline static void logNotify(LumenEventID ID, const std::string& msg = "")
 	{
-		notifyEvents.emplace_back(std::make_unique<NotifyEvent>(args...));
+		notifyEvents.emplace_back(std::make_unique<NotifyEvent>(ID, msg));
 	}
 
-	template <class ... Args>
-	inline static void logMouseMove(const Args&... args) 
+	inline static void logMouseMove(const glm::vec2& mousePositionPixels, LumenEventID ID)
 	{
-		mouseMove = std::make_unique<MouseMoveEvent>(args...);
+		mouseMove = std::make_unique<MouseMoveEvent>(mousePositionPixels, ID);
 	}
 
-	template <class ... Args>
-	inline static void logMouseDrag(const Args&... args) 
+	inline static void logMouseDrag(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
 	{
-		// If event exists, increment delta.
+		// If event already exists update the existing data.
 		if (mouseDrag)
 		{
-			glm::vec2 delta = mouseDrag->currentFrameDelta;
-			mouseDrag = std::make_unique<MouseDragEvent>(args...);
+			mouseDrag->initialPosition = init;
 			mouseDrag->currentFrameDelta += delta;
+			mouseDrag->mousePosition = current;
+			mouseDrag->ID = ID;
 		}
 		else
 		{
-			mouseDrag = std::make_unique<MouseDragEvent>(args...);
+			mouseDrag = std::make_unique<MouseDragEvent>(init, current, delta, ID);
 		}
 	}
 
-	template <class ... Args>
-	inline static void logMouseScroll(const Args&... args) 
+	inline static void logMouseScroll(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID)
 	{
-		mouseScroll = std::make_unique<MouseScrollEvent>(args...);
+		mouseScroll = std::make_unique<MouseScrollEvent>(mousePositionPixels, yOffset, xOffset, ID);
 	}
 
 	// Setup the event log.
 	inline static void init() 
 	{
-		events.reserve(15);
+		events.reserve(10);
+		notifyEvents.reserve(10);
 	}
 	
 	// Clears all of the events from the event log.

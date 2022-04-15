@@ -358,11 +358,7 @@ class NotifyEvent : public Event
 
 public:
 
-	inline NotifyEvent(LumenEventID ID) 
-		: Event(ID | EventType_Notify)
-	{}
-
-	inline NotifyEvent(LumenEventID ID, const std::string& msg) 
+	inline NotifyEvent(LumenEventID ID, const std::string& msg = "")
 		: Event(ID | EventType_Notify), msg(msg)	
 	{}
 
