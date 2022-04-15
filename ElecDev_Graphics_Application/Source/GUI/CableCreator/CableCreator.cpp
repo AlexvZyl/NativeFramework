@@ -133,6 +133,17 @@ void CableCreator::onRender()
 	std::vector<std::string> toRemoveKeys;
 	if (ImGui::BeginChild("DataDict", {0.f, 0.f}, true))
 	{
+		// Add dict entry.
+		static std::string entryToAdd;
+		ImGui::Text("Add an attribute to the dictionary:");
+		ImGui::InputText("##DictEntry", &entryToAdd);
+		ImGui::SameLine();
+		if (ImGui::Button("Add"))
+		{
+			m_dataDict.insert({ entryToAdd, "From(Circuit Database)" });
+			entryToAdd = "";
+		}
+
 		// Setup table.
 		ImGui::BeginTable("CableDictTable", 3,   ImGuiTableFlags_Resizable
 											   | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp
@@ -146,10 +157,11 @@ void CableCreator::onRender()
 		int entryIndex = 0;
 		for (auto& [key, value] : m_dataDict)
 		{
+			ImGui::PushID(std::to_string(entryIndex).c_str());
 			ImGui::TableSetColumnIndex(0);
 			ImGui::Text(key.c_str());
 			ImGui::TableSetColumnIndex(1);
-			ImGui::Text(value.c_str());
+			ImGui::InputText("##Input", &value);
 			ImGui::TableSetColumnIndex(2);
 			std::string buttonID = "Remove##" + std::to_string(entryIndex++);
 			if (ImGui::Button(buttonID.c_str()))
@@ -157,6 +169,7 @@ void CableCreator::onRender()
 				toRemoveKeys.push_back(key);
 			}
 			ImGui::TableNextRow();
+			ImGui::PopID();
 		}
 		ImGui::EndTable();
 

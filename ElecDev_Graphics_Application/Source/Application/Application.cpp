@@ -56,7 +56,7 @@ Application::Application()
 	buildDocks();
 
 	// Create the main GUI layers.
-	auto* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", LumenDockPanel::Fixed)->getGui();
+	Toolbar* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", LumenDockPanel::Fixed)->getGui();
 	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", LumenDockPanel::Bottom, 0, false);
 	pushGuiLayer<Ribbon>("Main Ribbon", LumenDockPanel::Ribbon, 0, false);
 	pushGuiLayer<BottomBar>("Bottom Bar", LumenDockPanel::Fixed, 0, false);

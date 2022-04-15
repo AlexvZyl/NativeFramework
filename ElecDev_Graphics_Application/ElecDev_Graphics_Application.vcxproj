@@ -205,7 +205,7 @@
     <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
-    <ClCompile Include="Source\Application\ApplicationWindow.cpp" />
+    <ClCompile Include="Source\Application\ApplicationGLFWWindow.cpp" />
     <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Events.cpp" />

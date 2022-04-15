@@ -17,40 +17,44 @@ class EventLog
 
 public:
 
-	// Log an event to be handled in the next frame.
-	template <typename EventType>
-	inline static void log(const Event& event) 
+	template <class EventType, class ... Args>
+	inline static void log(const Args&... args)
 	{
-		if (typeid(EventType) == typeid(MouseMoveEvent))
+		events.emplace_back(std::make_unique<EventType>(args...));
+	}
+
+	template <class ... Args>
+	inline static void logNotify(const Args&... args)
+	{
+		notifyEvents.emplace_back(std::make_unique<NotifyEvent>(args...));
+	}
+
+	template <class ... Args>
+	inline static void logMouseMove(const Args&... args) 
+	{
+		mouseMove = std::make_unique<MouseMoveEvent>(args...);
+	}
+
+	template <class ... Args>
+	inline static void logMouseDrag(const Args&... args) 
+	{
+		// If event exists, increment delta.
+		if (mouseDrag)
 		{
-			mouseMove = std::make_unique<MouseMoveEvent>(dynamic_cast<const MouseMoveEvent&>(event));
-		}
-		else if (typeid(EventType) == typeid(MouseDragEvent))
-		{
-			// If event exists, increment delta.
-			if (mouseDrag)
-			{
-				glm::vec2 delta = mouseDrag->currentFrameDelta;
-				mouseDrag = std::make_unique<MouseDragEvent>(dynamic_cast<const MouseDragEvent&>(event));
-				mouseDrag->currentFrameDelta += delta;
-			}
-			else 
-			{
-				mouseDrag = std::make_unique<MouseDragEvent>(dynamic_cast<const MouseDragEvent&>(event));
-			}
-		}
-		else if (typeid(EventType) == typeid(MouseScrollEvent))
-		{
-			mouseScroll = std::make_unique<MouseScrollEvent>(dynamic_cast<const MouseScrollEvent&>(event));
-		}
-		else if (typeid(EventType) == typeid(NotifyEvent))
-		{
-			notifyEvents.emplace_back(std::make_unique<NotifyEvent>(dynamic_cast<const NotifyEvent&>(event)));
+			glm::vec2 delta = mouseDrag->currentFrameDelta;
+			mouseDrag = std::make_unique<MouseDragEvent>(args...);
+			mouseDrag->currentFrameDelta += delta;
 		}
 		else
 		{
-			events.emplace_back(std::make_unique<EventType>(dynamic_cast<const EventType&>(event)));
+			mouseDrag = std::make_unique<MouseDragEvent>(args...);
 		}
+	}
+
+	template <class ... Args>
+	inline static void logMouseScroll(const Args&... args) 
+	{
+		mouseScroll = std::make_unique<MouseScrollEvent>(args...);
 	}
 
 	// Setup the event log.

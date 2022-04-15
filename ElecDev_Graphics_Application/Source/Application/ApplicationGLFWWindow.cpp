@@ -105,36 +105,35 @@ void Application::glfwInitCallbacks()
             LumenEventID buttonEventID = eventState;
             if      (action == GLFW_PRESS)      { buttonEventID |= EventType_MousePress; }
             else if (action == GLFW_RELEASE)    { buttonEventID |= EventType_MouseRelease; }
-            MouseButtonEvent mouseButtonEvent({ cursorX, cursorY }, buttonEventID);
 
             // Double press.
             double currentTime = glfwGetTime();
-            if ( (currentTime - s_buttonReleaseTimes[currentButton] < MOUSE_DOUBLE_PRESS_TIMEOUT) && mouseButtonEvent.isType(EventType_MousePress))
+            if ( (currentTime - s_buttonReleaseTimes[currentButton] < MOUSE_DOUBLE_PRESS_TIMEOUT) && isEventOfType(buttonEventID, EventType_MousePress))
             {
                 // Remove mouse press ID so that double presses are seperate.
-                mouseButtonEvent.ID &= ~(EventType_MousePress);
-                mouseButtonEvent.ID |= EventType_MouseDoublePress;
-                EventLog::log<MouseButtonEvent>(mouseButtonEvent);
+                buttonEventID &= ~(EventType_MousePress);
+                buttonEventID |= EventType_MouseDoublePress;
+                EventLog::log<MouseButtonEvent>(glm::vec2(cursorX, cursorY), buttonEventID);
                 // Ignore next release for double press.
                 s_buttonReleaseIgnore[currentButton] = true;
             }
             // Not a double press.
             else 
             {
-                EventLog::log<MouseButtonEvent>(mouseButtonEvent);
+                EventLog::log<MouseButtonEvent>(glm::vec2(cursorX, cursorY), buttonEventID);
             }
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 
             // Store the latest pressed location for the mouse drag.
-            if ( mouseButtonEvent.isType(EventType_MouseButtonLeft | EventType_MousePress) )
+            if (isEventOfType(buttonEventID, EventType_MouseButtonLeft | EventType_MousePress) )
             {
                 s_latestLeftButtonPressPosition = { cursorX, cursorY };
             }
 
             // Store the last time the button was released for tracking double click.
-            if (mouseButtonEvent.isType(EventType_MouseRelease))
+            if (isEventOfType(buttonEventID, EventType_MouseRelease))
             {    
                 // Ignore release after a double press.
                 if (s_buttonReleaseIgnore[currentButton])
@@ -148,14 +147,14 @@ void Application::glfwInitCallbacks()
                     // Reset times to ensure different mouse buttons stop double press.
                     for (auto& [button, time] : s_buttonReleaseTimes) time = 0;
                     // Set current time.
-                    s_buttonReleaseTimes[currentButton] = glfwGetTime();
+                    s_buttonReleaseTimes[currentButton] = currentTime;
                 }
             }
 
             // Mouse drag event stops.
-            if (mouseButtonEvent.isType(EventType_MouseButtonLeft | EventType_MouseRelease) && s_draggingLeftbutton)
+            if (isEventOfType(buttonEventID, EventType_MouseButtonLeft | EventType_MouseRelease) && s_draggingLeftbutton)
             {
-                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStop | eventState));
+                EventLog::logNotify(EventType_MouseDragStop | eventState);
                 s_draggingLeftbutton = false;
             }
         });
@@ -178,7 +177,7 @@ void Application::glfwInitCallbacks()
             if ( !s_draggingLeftbutton 
                 && isEventOfType(eventState, EventType_MouseButtonLeft) )
             {
-                EventLog::log<NotifyEvent>(NotifyEvent(EventType_MouseDragStart | eventState));
+                EventLog::logNotify(EventType_MouseDragStart | eventState);
                 s_draggingLeftbutton = true;
                 s_mouseDragInitialPosition = s_latestLeftButtonPressPosition;
             }
@@ -186,13 +185,13 @@ void Application::glfwInitCallbacks()
             // If currently dragging, log an event.
             if (s_draggingLeftbutton && !isEventOfType(eventState, EventType_MouseButtonMiddle))
             {
-                EventLog::log<MouseDragEvent>(MouseDragEvent(s_mouseDragInitialPosition, mousePos, mousePos - s_lastMouseMovePosition, EventType_MouseDrag | eventState));
+                EventLog::logMouseDrag(s_mouseDragInitialPosition, mousePos, mousePos - s_lastMouseMovePosition, EventType_MouseDrag | eventState);
             }
 
             // Log move event.
             LumenEventID moveEventID = EventType_MouseMove | eventState;
             if (s_draggingLeftbutton)   moveEventID |= EventType_MouseDrag;
-            EventLog::log<MouseMoveEvent>(MouseMoveEvent(mousePos, moveEventID));
+            EventLog::logMouseMove(mousePos, moveEventID);
 
             // Reset double press on a move.
             resetDoublePressData();
@@ -217,7 +216,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            EventLog::log<MouseScrollEvent>(MouseScrollEvent({ cursorX, cursorY }, (float)yoffset, (float)xoffset, eventID));
+            EventLog::logMouseScroll(glm::vec2(cursorX, cursorY), (float)yoffset, (float)xoffset, eventID);
 
             // Reset double press on a scroll.
             resetDoublePressData();
@@ -242,7 +241,7 @@ void Application::glfwInitCallbacks()
             glfwGetCursorPos(window, &cursorX, &cursorY);
 
             // Log event.
-            EventLog::log<KeyEvent>(KeyEvent(key, eventID, { cursorX, cursorY }));
+            EventLog::log<KeyEvent>(key, eventID, glm::vec2(cursorX, cursorY));
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
@@ -261,7 +260,7 @@ void Application::glfwInitCallbacks()
                 filePaths.emplace_back(std::string(paths[i])); 
 
             // Log the event.
-            EventLog::log<FileDropEvent>(FileDropEvent(filePaths, EventType_Application));
+            EventLog::log<FileDropEvent>(filePaths, EventType_Application);
         });
 
     // --------------------- //
@@ -270,7 +269,7 @@ void Application::glfwInitCallbacks()
 
     glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height)
         {
-            EventLog::log<WindowEvent>(WindowEvent({ width, height }, EventType_Application | EventType_WindowResize));
+            EventLog::log<WindowEvent>(glm::vec2(width, height), EventType_Application | EventType_WindowResize);
         });
 
     // ----------- //
