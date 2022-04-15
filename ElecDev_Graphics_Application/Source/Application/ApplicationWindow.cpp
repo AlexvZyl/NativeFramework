@@ -49,21 +49,21 @@ inline void resetDoublePressData()
 inline LumenEventID getMouseButtonState(GLFWwindow* window) 
 {
     LumenEventID eventState = 0;
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))     { eventState |= EventType_MouseButtonLeft;  }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))    { eventState |= EventType_MouseButtonRight; }
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE))   { eventState |= EventType_MouseButtonMiddle;}
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT))     { eventState |= EventType_MouseButtonLeft;   }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT))    { eventState |= EventType_MouseButtonRight;  }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE))   { eventState |= EventType_MouseButtonMiddle; }
     return eventState;
 }
 
 inline LumenEventID getKeyState(GLFWwindow* window)
 {
     LumenEventID eventState = 0;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl; }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl; }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift; }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL))  { eventState |= EventType_LeftCtrl;   }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL)) { eventState |= EventType_RightCtrl;  }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT))    { eventState |= EventType_LeftShift;  }
     if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt; }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt; }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;   }
     return eventState;
 }
 
