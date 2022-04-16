@@ -33,7 +33,7 @@ void Application::onUpdate()
 	popLayers();
 
 	// Find the hovered layer on a mouse move event.
-	if (EventLog::mouseMove)
+	if (EventLog::mouseMoveOccured())
 	{
 		// If there is no hovered layer, we need to check if a layer is hovered.
 		if (!m_hoveredLayer) 
@@ -45,7 +45,7 @@ void Application::onUpdate()
 	}
 	
 	// Dispatch GLFW events.
-	for (auto& event : EventLog::events)
+	for (auto& event : EventLog::getEvents())
 	{
 		// Application events are dispatched explicitly (since it is not a part of the layers).
 		if (event->isType(EventType_Application))
@@ -73,22 +73,22 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredLayer)
 	{
-		if (EventLog::mouseMove)
-			m_hoveredLayer->onEvent(*EventLog::mouseMove.get());
+		if (EventLog::mouseMoveOccured())
+			m_hoveredLayer->onEvent(EventLog::getMouseMove());
 
-		if (EventLog::mouseScroll) 
-			m_hoveredLayer->onEvent(*EventLog::mouseScroll.get());
+		if (EventLog::mouseScrollOccured()) 
+			m_hoveredLayer->onEvent(EventLog::getMouseScroll());
 
-		if (EventLog::mouseDrag)
-			m_hoveredLayer->onEvent(*EventLog::mouseDrag.get());
+		if (EventLog::mouseDragOccured())
+			m_hoveredLayer->onEvent(EventLog::getMouseDrag());
 	}
 
 	// Dispatch notify events after all of the other events are done.
 	if (m_focusedLayer)
 	{
-		for (auto& event : EventLog::notifyEvents)
+		for (auto& event : EventLog::getNotifyEvents())
 		{
-			m_focusedLayer->onEvent(*event.get());
+			m_focusedLayer->onEvent(event);
 		}
 	}
 
@@ -129,10 +129,16 @@ void Application::imguiOnUpdate()
 
 	// Pass events to ImGui.
 	// Thess events are called here so that ImGui is not hammered with more that one per frame.
-	if (EventLog::mouseScroll)
-		ImGui_ImplGlfw_ScrollCallback(m_window, EventLog::mouseScroll->xOffset, EventLog::mouseScroll->yOffset);
-	if (EventLog::mouseMove)
-		ImGui_ImplGlfw_CursorPosCallback(m_window, EventLog::mouseMove->mousePosition.x, EventLog::mouseMove->mousePosition.y);
+	if (EventLog::mouseScrollOccured())
+	{
+		MouseScrollEvent& event = EventLog::getMouseScroll();
+		ImGui_ImplGlfw_ScrollCallback(m_window, event.xOffset, event.yOffset);
+	}
+	if (EventLog::mouseMoveOccured())
+	{
+		MouseMoveEvent& event = EventLog::getMouseMove();
+		ImGui_ImplGlfw_CursorPosCallback(m_window, event.mousePosition.x, event.mousePosition.y);
+	}
 }
 
 //==============================================================================================================================================//
