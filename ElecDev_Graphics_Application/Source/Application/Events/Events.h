@@ -93,17 +93,12 @@ public:
 	}
 	// Destructor (for polymorphic type).
 	virtual ~Event() = default;
+
 	// Check if the event is of a certain type.
 	// Does NOT check if it ONLY belongs to the specific ID.
 	inline bool isType(LumenEventID compareID) const 
 	{
 		return ( compareID & ID ) == compareID;
-	}
-	// Check if the event is not of a certain type.
-	// Does NOT check if it ONLY belongs to the specific ID.
-	inline bool isNotType(LumenEventID compareID) const
-	{
-		return (compareID & ID) != compareID;
 	}
 
 	// ID describing the event.

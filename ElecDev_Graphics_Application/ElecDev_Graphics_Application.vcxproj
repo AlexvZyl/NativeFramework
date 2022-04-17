@@ -174,7 +174,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
-    <ClCompile Include="Source\Application\Layers\Layer.cpp" />
     <ClCompile Include="Source\Engines\AssetViewer\AssetViewer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
     <ClCompile Include="External\glm\glm\detail\glm.cpp" />
@@ -200,13 +199,12 @@
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
-    <ClCompile Include="Source\Application\ApplicationLayers.cpp" />
+    <ClCompile Include="Source\Application\ApplicationLumenWindows.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
-    <ClCompile Include="Source\Application\Layers\LayerStack.cpp" />
+    <ClCompile Include="Source\Application\LumenWindow\WindowStack.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Application\ApplicationGLFWWindow.cpp" />
-    <ClCompile Include="Source\Application\ApplicationNotifications.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner_Events.cpp" />
@@ -283,7 +281,6 @@
     <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
-    <ClCompile Include="Source\GUI\GuiElementCore\GuiElementCore.cpp" />
     <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
     <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
@@ -634,10 +631,8 @@
     <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
-    <ClInclude Include="Source\Application\Layers\GuiLayer.h" />
-    <ClInclude Include="Source\Application\Layers\EngineLayer.h" />
-    <ClInclude Include="Source\Application\Layers\LayerStack.h" />
-    <ClInclude Include="Source\Application\Layers\Layer.h" />
+    <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
+    <ClInclude Include="Source\Application\LumenWindow\LumenWindow.h" />
     <ClInclude Include="Source\Application\Events\EventLog.h" />
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
@@ -756,7 +751,6 @@
     <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
-    <ClInclude Include="Source\GUI\GuiElementCore\GuiElementCore.h" />
     <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
     <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />

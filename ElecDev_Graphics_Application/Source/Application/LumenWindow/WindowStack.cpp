@@ -2,57 +2,43 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include <iostream>
-#include "External/Misc/ConsoleColor.h"
-#include "Application/Layers/LayerStack.h"
-#include "Application/Layers/Layer.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/LumenWindow/WindowStack.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
 
 //==============================================================================================================================================//
 //  Layer management.																															//
-//==============================================================================================================================================//
+//==============================================================================================================================================/
 
-std::unordered_map<std::string, std::unique_ptr<Layer>>& LayerStack::getLayers()
-{
-	return m_layers;
-}
-
-void LayerStack::queuePopLayer(Layer& layer)
-{
-	m_layerPopQueue.push_back(&layer);
-}
-
-void LayerStack::popLayers()
+void WindowStack::popWindows()
 {
 	// Check if there are layers to remove.
-	if (!m_layerPopQueue.size()) return;
+	if (!m_windowPopQueue.size()) return;
 
 	Application& app = Lumen::getApp();
 
 	// Get active layers.
-	Layer* hoveredLayer = app.m_hoveredLayer;
-	Layer* focusedLayer = app.m_focusedLayer;
+	LumenWindow* hoveredWindow = app.m_hoveredWindow;
+	LumenWindow* focusedWindow = app.m_focusedWindow;
 
-	// Remove layers.
-	for (Layer* layer : m_layerPopQueue)
+	// Remove layers in queue.
+	for (LumenWindow* window : m_windowPopQueue)
 	{
 		// Check for active layer change.
-		if (layer == hoveredLayer) app.m_hoveredLayer = nullptr;
-		if (layer == focusedLayer)
+		if (window == hoveredWindow) app.m_hoveredWindow = nullptr;
+		if (window == focusedWindow)
 		{
 			// Reset.
-			app.m_focusedLayer = nullptr;
+			app.m_focusedWindow = nullptr;
 			ImGui::SetWindowFocus(NULL);
 		}
 		// Remove layer.
-		m_layers.erase(layer->getName());
+		m_windows.erase(window->getID());
 	}
 
 	// All the layers have been removed.
-	m_layerPopQueue.clear();
-	m_layerPopQueue.reserve(m_layers.size()-2);
+	m_windowPopQueue.clear();
 }
 
 //==============================================================================================================================================//

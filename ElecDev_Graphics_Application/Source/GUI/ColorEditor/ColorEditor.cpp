@@ -14,17 +14,17 @@
 //==============================================================================================================================================//
 
 ColorEditor::ColorEditor(std::string name, int imguiWindowFlags) 
-	: GuiElementCore(name, imguiWindowFlags)
+	: LumenWindow(name, imguiWindowFlags)
 {}
 
-void ColorEditor::begin()
+void ColorEditor::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(400, 350), ImGuiCond_Once);
 	ImGui::SetNextWindowPos(m_initialPosition, ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void ColorEditor::onRender()
+void ColorEditor::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
@@ -71,7 +71,7 @@ void ColorEditor::onRender()
 	}
 }
 
-void ColorEditor::end() 
+void ColorEditor::onImGuiEnd() 
 {
 	ImGui::End();
 }

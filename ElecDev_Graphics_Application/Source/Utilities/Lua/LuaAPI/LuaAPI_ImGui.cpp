@@ -82,7 +82,7 @@ int lua_imgui_CloseButton(lua_State* L)
 		std::string msg = "[CloseButton] " + text + " : Pressed.";
 		ScriptGui* gui = Lumen::getActiveScriptGui();
 		gui->callbackMessage(msg);
-		app.queuePopLayer(gui->m_layer);
+		app.queueWindowPop(gui->m_layer);
 		return 1;
 	}
 

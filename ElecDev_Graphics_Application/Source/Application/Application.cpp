@@ -6,8 +6,8 @@
 #include <iostream>
 #include <memory>
 #include "Application/Application.h"
-#include "Application/Layers/Layer.h"
-#include "Application/Layers/GuiLayer.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/LumenWindow/WindowStack.h"
 #include "Application/Events/EventLog.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
@@ -34,15 +34,15 @@ Application::Application()
 	LUMEN_LOG_INFO("Application started!", "");
 
 	// Create GLFW window.
-	m_window = Application::glfwInitWindow();
+	m_glfwWindow = Application::glfwInitWindow();
 
 	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
-	// Events & Layers.
+	// Events & windows.
 	Application::glfwInitCallbacks();
 	EventLog::init();
-	m_layerStack = std::make_unique<LayerStack>();
+	m_windowStack = std::make_unique<WindowStack>();
 
 	// NOTE: TO BE DEPRECATED!
 	m_guiState = std::make_unique<GUIState>();
@@ -55,24 +55,20 @@ Application::Application()
 	// Initialisation frame.
 	buildDocks();
 
-	// Create the main GUI layers.
-	Toolbar* toolbar = pushGuiLayer<Toolbar>("Main Toolbar", LumenDockPanel::Fixed)->getGui();
-	toolbar->m_assetExplorerLayer = pushGuiLayer<AssetExplorer>("Asset Explorer", LumenDockPanel::Bottom, 0, false);
-	pushGuiLayer<Ribbon>("Main Ribbon", LumenDockPanel::Ribbon, 0, false);
-	pushGuiLayer<BottomBar>("Bottom Bar", LumenDockPanel::Fixed, 0, false);
+	// Create the main GUI windows.
+	Toolbar* toolbar = pushWindow<Toolbar>(LumenDockPanel::Fixed, "Main Toolbar");
+	toolbar->m_assetExplorerWindow = pushWindow<AssetExplorer>(LumenDockPanel::Bottom, "Asset Explorer");
+	pushWindow<Ribbon>(LumenDockPanel::Ribbon, "Main Ribbon");
+	pushWindow<BottomBar>(LumenDockPanel::Fixed, "Bottom Bar");
 
 	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();
-
-	// Flush the buffer after the app has started.
-	// This allows external programs (python server) to read.
-	std::cout.flush();
 }
 
 Application::~Application()
 {
-	// Clear layers.
-	m_layerStack->getLayers().clear();
+	// Clear windows.
+	m_windowStack->clear();
 
 	// ImGUI cleanup.
 	ImGui_ImplOpenGL3_Shutdown();
@@ -80,7 +76,7 @@ Application::~Application()
 	ImGui::DestroyContext();
 
 	// GLFW cleanup.
-	glfwDestroyWindow(m_window);
+	glfwDestroyWindow(getGLFWWindow());
 	glfwTerminate();
 
 	// Log termination.
@@ -97,9 +93,9 @@ void Application::stopRunning()
 	m_isRunning = false;
 }
 
-GLFWwindow* Application::getWindow()
+GLFWwindow* Application::getGLFWWindow()
 {
-	return m_window;
+	return m_glfwWindow;
 }
 
 void Application::setActiveEngine(EngineCore* engine) 
@@ -142,12 +138,12 @@ void Application::pushLuaScript(const std::string& script)
 void Application::setGuiTheme()
 {
 	// Used for initial setup.
+	// This allows us to continuously update the them without breaking it.
 	static bool first = true;
 
 	// ----------- //
 	//  S T Y L E  //
 	// ----------- //
-
 
 	if (first)
 	{

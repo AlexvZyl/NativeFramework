@@ -15,7 +15,7 @@
 //==============================================================================================================================================//
 
 ComponentDesignerColorEditor::ComponentDesignerColorEditor(std::string name, int imguiWindowFlags)
-	: GuiElementCore(name, imguiWindowFlags)
+	: LumenWindow(name, imguiWindowFlags)
 {}
 
 void ComponentDesignerColorEditor::begin()

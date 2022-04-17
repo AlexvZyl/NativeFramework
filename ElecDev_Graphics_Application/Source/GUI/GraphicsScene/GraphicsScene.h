@@ -5,7 +5,7 @@
 //==============================================================================================================================================//
 
 #include <memory>
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "Engines/EngineCore/EngineCore.h"
 
 //==============================================================================================================================================//
@@ -19,7 +19,7 @@ class Event;
 //  Graphics Scene.																																//
 //==============================================================================================================================================//
 
-class GraphicsScene : public GuiElementCore
+class GraphicsScene : public LumenWindow
 {
 public:
 
@@ -28,13 +28,13 @@ public:
 	// Destructor.
 	virtual ~GraphicsScene() = default;
 
-	// Rendering functions.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	// Rendering.
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 	// Override the on event so that we pass it to the engine.
-	virtual void onEvent(Event& event) override;
+	virtual void onEvent(const Event& event) override;
 
 	// Event handler for when the render state changes.
 	virtual void onRenderStateChange(bool newState) override;
@@ -52,8 +52,8 @@ private:
 	EngineCore* m_engine = nullptr;
 
 	// Content region events.  These need to be passed onto the engine.
-	virtual void onContentRegionResizeEvent(WindowEvent& event) override;
-	virtual void onContentRegionMoveEvent(WindowEvent& event) override;
+	virtual void onWindowResizeEvent(const WindowEvent& event) override;
+	virtual void onWindowMoveEvent(const WindowEvent& event) override;
 };
 
 //==============================================================================================================================================//

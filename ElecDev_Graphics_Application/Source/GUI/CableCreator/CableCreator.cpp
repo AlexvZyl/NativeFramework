@@ -17,7 +17,7 @@
 //=======================================================================================================================================//
 
 CableCreator::CableCreator(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: LumenWindow(name, windowFlags)
 {
 	// Create default dectionary.
 	m_dataDict.insert({"FromTagNumber", "From(Circuit Database)"});
@@ -42,15 +42,15 @@ CableCreator::CableCreator(std::string name, int windowFlags)
 	m_dataDict.insert({ "CableMass", "From(Circuit Database)" });
 }
 
-void CableCreator::begin()
+void CableCreator::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize({500, 700}, ImGuiCond_Once);
 	glm::vec2 vpSize = ImGui::GetMainViewport()->Size;
 	ImGui::SetNextWindowPos({ vpSize.x / 2, vpSize.y / 2 }, ImGuiCond_Once, {0.5f, 0.5f});
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void CableCreator::onRender()
+void CableCreator::onImGuiRender()
 {
 	// ------------------------- //
 	//  G E N E R A L   D A T A  //
@@ -278,7 +278,7 @@ void CableCreator::onRender()
 	ImGui::EndChild();
 }
 
-void CableCreator::end()
+void CableCreator::onImGuiEnd()
 {
 	ImGui::End();
 }

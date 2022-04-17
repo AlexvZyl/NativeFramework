@@ -12,7 +12,7 @@
 //  Logger Functions.																															//
 //==============================================================================================================================================//
 
-void Logger::pushMessage(LoggerMessage& msg)
+void Logger::pushMessage(const LoggerMessage& msg)
 {
 	s_messageQueue.push_back(msg);
 }

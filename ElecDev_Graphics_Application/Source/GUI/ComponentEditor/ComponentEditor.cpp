@@ -7,7 +7,7 @@
 #include "ComponentEditor.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Application.h"	
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
@@ -22,7 +22,7 @@
 /*=======================================================================================================================================*/
 
 ComponentEditor::ComponentEditor(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: LumenWindow(name, windowFlags)
 {
 	if (!s_iconCreated)
 	{
@@ -32,16 +32,16 @@ ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	}
 }
 
-void ComponentEditor::begin()
+void ComponentEditor::onImGuiBegin()
 {
 	// Place editor at correct position.
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The window size should be set dynamically
 	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void ComponentEditor::onRender()
+void ComponentEditor::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
@@ -785,7 +785,7 @@ void ComponentEditor::onRender()
 	}
 }
 
-void ComponentEditor::end()
+void ComponentEditor::onImGuiEnd()
 {
 	ImGui::End();
 }

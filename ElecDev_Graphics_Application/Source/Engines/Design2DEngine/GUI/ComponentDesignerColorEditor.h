@@ -4,7 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "GUI/LumenWindow/LumenWindow.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "glm/glm.hpp"
 
@@ -20,7 +20,7 @@ class Cable;
 //  Color Editor.																																//
 //==============================================================================================================================================//
 
-class ComponentDesignerColorEditor : public GuiElementCore
+class ComponentDesignerColorEditor : public LumenWindow
 {
 public:
 

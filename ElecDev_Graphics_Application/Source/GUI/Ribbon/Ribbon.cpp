@@ -31,7 +31,7 @@
 
 // Constructor.
 Ribbon::Ribbon(std::string name, int windowFlags)
-    : GuiElementCore(name, windowFlags)
+    : LumenWindow(name, windowFlags)
 {
     m_imguiWindowFlags  |=  ImGuiWindowFlags_NoMove
                         |   ImGuiWindowFlags_NoDecoration
@@ -45,7 +45,7 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     m_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
 }
 
-void Ribbon::begin()
+void Ribbon::onImGuiBegin()
 {
     // Remove rounding so that it docks nicely.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
@@ -54,10 +54,10 @@ void Ribbon::begin()
     ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
-    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+    ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void Ribbon::onRender()
+void Ribbon::onImGuiRender()
 {
     Application& app = Lumen::getApp();
     static glm::vec2 buttonSize(30,30); 
@@ -186,7 +186,7 @@ void Ribbon::onRender()
     }
 }
 
-void Ribbon::end() 
+void Ribbon::onImGuiEnd() 
 {
     ImGui::End();
     // Pop Window rounding.

@@ -4,7 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "glm/glm.hpp"
 
 //==============================================================================================================================================//
@@ -17,7 +17,7 @@ class Base2DEngine;
 //  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class PopUpMenu : public GuiElementCore
+class PopUpMenu : public LumenWindow
 {
 public:
 
@@ -32,10 +32,13 @@ public:
 	// Set the engine that the popup is in.
 	void setEngine(Base2DEngine* engine);
 
+	// Dispatch events.
+	virtual void onEvent(const Event& event) override;
+
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 private:
 
@@ -46,7 +49,7 @@ private:
 	Base2DEngine* m_engine = nullptr;
 
 	// We need to close the popup on a defocus.
-	virtual void onDefocusEvent(NotifyEvent& event) override;
+	virtual void onDefocusEvent(const NotifyEvent& event);
 };
 
 //==============================================================================================================================================//

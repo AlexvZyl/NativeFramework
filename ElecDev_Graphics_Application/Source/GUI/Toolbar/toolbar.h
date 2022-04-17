@@ -4,7 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -12,14 +12,11 @@
 
 class AssetExplorer;
 
-template<class GuiType>
-class GuiLayer;
-
 //==============================================================================================================================================//
 //  Toolbar.																																	//
 //==============================================================================================================================================//
 
-class Toolbar : public GuiElementCore
+class Toolbar : public LumenWindow
 {
 
 public:
@@ -28,9 +25,9 @@ public:
     Toolbar(std::string& name, int windowFlags);
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 	//  Data for the lumen logo.
 	float m_texWidth = 0;
@@ -40,7 +37,7 @@ public:
 	glm::vec4 m_colour;
 
 	// Asset explorer.
-	GuiLayer<AssetExplorer>* m_assetExplorerLayer = nullptr;
+	AssetExplorer* m_assetExplorerWindow = nullptr;
 };
 
 //==============================================================================================================================================//

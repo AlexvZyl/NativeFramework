@@ -4,14 +4,14 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class BackgroundColorEditor : public GuiElementCore
+class BackgroundColorEditor : public LumenWindow
 {
 public:
 
@@ -21,12 +21,11 @@ public:
 	inline virtual ~BackgroundColorEditor() = default;
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 	glm::vec2 m_initialPosition;
-
 };
 
 //==============================================================================================================================================//

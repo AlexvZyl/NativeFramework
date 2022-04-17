@@ -4,13 +4,13 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //==============================================================================================================================================//
 //  Ribbon.																																		//
 //==============================================================================================================================================//
 
-class BottomBar : public GuiElementCore
+class BottomBar : public LumenWindow
 {
 public:
 
@@ -18,9 +18,9 @@ public:
 	BottomBar(std::string name, int windowFlags);
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 private:
 

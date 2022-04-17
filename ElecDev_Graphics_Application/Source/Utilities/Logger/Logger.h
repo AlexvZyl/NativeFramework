@@ -112,7 +112,7 @@ class Logger
 public:
 
 	// Push a message into the queue.
-	static void pushMessage(LoggerMessage& msg);
+	static void pushMessage(const LoggerMessage& msg);
 
 	// Log all of the messages in the queue.
 	static void flushQueue();

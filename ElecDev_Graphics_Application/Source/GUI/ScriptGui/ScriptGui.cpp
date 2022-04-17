@@ -15,7 +15,7 @@ using boost_ip_address = boost::asio::ip::address;
 //==============================================================================================================================================//
 
 ScriptGui::ScriptGui(std::string name, int windowFlags)
-    : GuiElementCore(name, windowFlags)
+    : LumenWindow(name, windowFlags)
 {
     m_luaState = lua_CreateNewLuaState();
 }
@@ -45,18 +45,18 @@ void ScriptGui::setSctipt(std::string& script)
     m_script = script;
 }
 
-void ScriptGui::begin()
+void ScriptGui::onImGuiBegin()
 {
     Lumen::setAvtiveScriptGui(this);
-    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+    ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void ScriptGui::onRender()
+void ScriptGui::onImGuiRender()
 {
     lua_ExecuteScript(m_luaState, m_script.c_str());
 }
 
-void ScriptGui::end()
+void ScriptGui::onImGuiEnd()
 {
     ImGui::End();
 }

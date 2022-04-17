@@ -4,23 +4,23 @@
 // Includes.																															 //
 //=======================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
 //=======================================================================================================================================//
 
-class ImGuiDebugWindow : public GuiElementCore
+class ImGuiDebugWindow : public LumenWindow
 {
 public:
 
 	// Constructor.
 	ImGuiDebugWindow(std::string name, int windowFlags);
 
-	// Rendering functions.
-	virtual void begin() override {};
-	virtual void onRender() override;
-	virtual void end() override {};
+	// Rendering.
+	virtual void onImGuiBegin() override {};
+	inline virtual void onImGuiRender() override;
+	inline virtual void onImGuiEnd() override {};
 
 	bool showDemoWindow = false;
 	bool showStyleEditor = false;

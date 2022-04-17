@@ -15,16 +15,16 @@
 //==============================================================================================================================================//
 
 SceneHierarchy::SceneHierarchy(std::string name, int imguiWindowFlags)
-	: GuiElementCore(name, imguiWindowFlags)
+	: LumenWindow(name, imguiWindowFlags)
 {}
 
-void SceneHierarchy::begin()
+void SceneHierarchy::onImGuiBegin()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
-	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), NULL, m_imguiWindowFlags);
 }
 
-void SceneHierarchy::onRender()
+void SceneHierarchy::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
@@ -106,7 +106,7 @@ void SceneHierarchy::onRender()
 
 }
 
-void SceneHierarchy::end()
+void SceneHierarchy::onImGuiEnd()
 {
 	ImGui::End();
 	ImGui::PopStyleVar();

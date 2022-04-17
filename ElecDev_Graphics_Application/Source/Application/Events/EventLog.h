@@ -5,7 +5,6 @@
 //==============================================================================================================================================//
 
 #include "Events.h"
-#include <memory>
 #include <queue>
 
 //==============================================================================================================================================//
@@ -17,6 +16,7 @@ class EventLog
 
 public:
 
+	// Log any type of event.
 	template <class EventType, class ... Args>
 	inline static void log(const Args&... args)
 	{
@@ -30,23 +30,27 @@ public:
 
 	inline static void logMouseMove(const glm::vec2& mousePositionPixels, LumenEventID ID)
 	{
-		mouseMove.ID = ID;
+		mouseMove.ID = ID | EventType_MouseMove;
 		mouseMove.mousePosition = mousePositionPixels;
 		mouseMoveOccuredFlag = true;
 	}
 
 	inline static void logMouseDrag(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
 	{
+		// On first mouse drag event the delta has to be reset.
+		if (!mouseDragOccuredFlag)
+			mouseDrag.currentFrameDelta = {0.f, 0.f};
+
+		mouseDrag.ID = ID | EventType_MouseDrag;
 		mouseDrag.initialPosition = init;
 		mouseDrag.currentFrameDelta += delta;
 		mouseDrag.mousePosition = current;
-		mouseDrag.ID = ID;
 		mouseDragOccuredFlag = true;
 	}
 
 	inline static void logMouseScroll(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID)
 	{
-		mouseScroll.ID = ID;
+		mouseScroll.ID = ID | EventType_MouseScroll;
 		mouseScroll.mousePosition = mousePositionPixels;
 		mouseScroll.xOffset = xOffset;
 		mouseScroll.yOffset = yOffset;
@@ -70,9 +74,6 @@ public:
 		mouseMoveOccuredFlag = false;
 		mouseScrollOccuredFlag = false;
 		mouseDragOccuredFlag = false;
-
-		// Reset incremental values.
-		mouseDrag.currentFrameDelta = { 0.f, 0.f };
 	}
 
 	// Getters.

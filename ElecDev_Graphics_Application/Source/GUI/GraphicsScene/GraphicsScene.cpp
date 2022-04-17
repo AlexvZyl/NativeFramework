@@ -24,7 +24,7 @@
 // Temporarily fixed by adjusting the texture and disabling scrolling.
 
 GraphicsScene::GraphicsScene(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
+	: LumenWindowCore(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 {
 	m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
 }
@@ -43,7 +43,7 @@ EngineCore* GraphicsScene::getEngine()
 void GraphicsScene::onEvent(Event& event) 
 {
 	// Pass evevnts to the GUI.
-	GuiElementCore::onEvent(event);
+	LumenWindowCore::onEvent(event);
 
 	// We need to pass events on to the engine as well.
 	m_engine->onEvent(event);
@@ -149,7 +149,7 @@ void GraphicsScene::onRenderStateChange(bool newState)
 
 void GraphicsScene::onContentRegionMoveEvent(WindowEvent& event) 
 {
-	GuiElementCore::onContentRegionMoveEvent(event);
+	LumenWindowCore::onContentRegionMoveEvent(event);
 
 	// Pass data to engine.
 	m_engine->setContentRegionPos(glm::vec2(event.windowData.x, event.windowData.y));
@@ -158,7 +158,7 @@ void GraphicsScene::onContentRegionMoveEvent(WindowEvent& event)
 void GraphicsScene::onContentRegionResizeEvent(WindowEvent& event) 
 {
 	// Adjust the event so that the scene fits correctly.
-	GuiElementCore::onContentRegionResizeEvent(event);
+	LumenWindowCore::onContentRegionResizeEvent(event);
 
 	// Pass data to engine.
 	WindowEvent resizeEvent({ event.windowData.x, event.windowData.y}, EventType_WindowResize);
