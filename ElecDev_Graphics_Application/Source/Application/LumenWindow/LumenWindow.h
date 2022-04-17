@@ -11,12 +11,6 @@
 #include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
-//  Forward declerations.																														//
-//==============================================================================================================================================//
-
-class Event;
-
-//==============================================================================================================================================//
 //  Layer Base Class.																															//
 //==============================================================================================================================================//
 
@@ -53,6 +47,8 @@ public:
 	inline void onRender() 
 	{
 		onImGuiBegin();
+
+		updateRenderStateFlags();
 
 		if (shouldRender())
 			onImGuiRender();
@@ -151,6 +147,7 @@ public:
 		m_isCollapsed = m_imguiWindow->Collapsed;
 		m_isDocked = m_imguiWindow->DockIsActive;
 		m_isHidden = m_imguiWindow->Hidden;
+		m_skipItems = m_imguiWindow->SkipItems;
 		detectRenderStateChange();
 	}
 
@@ -158,7 +155,7 @@ public:
 	inline void detectRenderStateChange() 
 	{
 		// Check for shouldRender state change.
-		bool newState = !m_isCollapsed && !m_isHidden && m_isOpen;
+		bool newState = !m_isCollapsed && !m_isHidden && !m_skipItems && m_isOpen;
 		if (m_shouldRender != newState)
 		{
 			onRenderStateChange(newState);
@@ -261,6 +258,7 @@ private:
 	bool m_isCollapsed = false;
 	bool m_isHidden = false;
 	bool m_isDocked = false;
+	bool m_skipItems = false;
 	bool m_shouldRender = true;
 	std::string m_windowName = "";
 	std::string m_imguiName = "";

@@ -28,7 +28,7 @@ Grid::~Grid()
 	Renderer::remove(m_helperCircle);
 }
 
-glm::vec2 Grid::getClosestGridVertex(const glm::vec2& coords) 
+glm::vec2 Grid::getNearestGridVertex(const glm::vec2& coords) 
 {
 	if (m_enabled)
 	{
@@ -40,7 +40,7 @@ glm::vec2 Grid::getClosestGridVertex(const glm::vec2& coords)
 
 void Grid::updateHelperCircle(const glm::vec2& coords) 
 {
-	m_helperCircle->translateTo(getClosestGridVertex(coords));
+	m_helperCircle->translateTo(getNearestGridVertex(coords));
 }
 
 Grid& Grid::createGrid() 

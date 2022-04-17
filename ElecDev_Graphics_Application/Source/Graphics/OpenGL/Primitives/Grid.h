@@ -119,7 +119,7 @@ public:
 	Grid& createGrid();
 	Grid& destroyGrid();
 	// Find the grid vertex closest to the given coordinates.
-	glm::vec2 getClosestGridVertex(const glm::vec2& coords);
+	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 	// This function should be called when data has been changed and needs to be updated.
 	//  TODO!
 	inline void updateGridData(){}

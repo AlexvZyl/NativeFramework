@@ -29,6 +29,9 @@ class Event;
 class FileLoadEvent;
 class FileSaveEvent;
 
+template<class EngineType>
+class GraphicsScene;
+
 struct ImFont;
 struct GLFWwindow;
 struct RendererData;
@@ -95,7 +98,7 @@ public:
 
 	// Push an engine onto Lumen's window stack.
 	template<class EngineType, class ... Args>
-	EngineType* pushEngine(LumenDockPanel panel, const Args& ... args);
+	EngineType* pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args);
 	
 	// Queue a window to be popped.
 	void queueWindowPop(LumenWindow* window);
@@ -295,9 +298,12 @@ WindowType* Application::pushWindow(LumenDockPanel panel, const Args& ... args)
 }
 
 template<class EngineType, class ... Args>
-EngineType* Application::pushEngine(LumenDockPanel panel, const Args& ... args) 
+EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args) 
 {
-
+	GraphicsScene<EngineType>* window = m_windowStack->pushWindow<GraphicsScene<EngineType>>(name);
+	dockWindowToPanel(window, panel);
+	window->constructEngine(args...);
+	return window->getEngine();
 }
 
 template<class EngineType>
