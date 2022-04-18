@@ -13,7 +13,6 @@
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
-#include "GUI/ColorEditor/ColorEditor.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
 
@@ -24,9 +23,9 @@
 PopUpMenu::PopUpMenu(std::string name, int imguiWindowFlags)
     : LumenWindow(name.c_str(), imguiWindowFlags)
 {
-    m_imguiWindowFlags |= ImGuiWindowFlags_NoDecoration
+    addImGuiWindowFlags( ImGuiWindowFlags_NoDecoration
                        | ImGuiWindowFlags_NoMove
-                       | ImGuiWindowFlags_NoDocking;
+                       | ImGuiWindowFlags_NoDocking);
 }
 
 PopUpMenu::~PopUpMenu() 
@@ -51,8 +50,8 @@ void PopUpMenu::onImGuiBegin()
 {
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 8.f, 5.f });
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 6.f, 6.f });
-    ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y));
-    ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+    ImGui::SetNextWindowPos(ImVec2(m_initialPos.x, m_initialPos.y), ImGuiCond_Once);
+    ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void PopUpMenu::onEvent(const Event& event) 
@@ -98,12 +97,6 @@ void PopUpMenu::onImGuiRender()
             if (ImGui::MenuItem("Component Editor", "E"))
             {
                 app.pushWindow<ComponentEditor>(LumenDockPanel::Left, "Component Editor");
-            }
-
-            if (ImGui::MenuItem("Color Editor"))
-            {
-                ColorEditor* editor = app.pushWindow<ColorEditor>(LumenDockPanel::Floating, "Color Editor");
-                editor->m_initialPosition = getMouseGlobalPosition();
             }
 
             if (ImGui::MenuItem("Remove component", "DEL"))
@@ -230,7 +223,7 @@ void PopUpMenu::onImGuiEnd()
 
 void PopUpMenu::onDefocusEvent(const NotifyEvent& event) 
 {
-    Lumen::getApp().queueWindowPop(this);
+    closeWindow();
 }
 
 /*=======================================================================================================================================*/

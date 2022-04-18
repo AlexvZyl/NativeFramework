@@ -279,7 +279,6 @@
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />
-    <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
     <ClCompile Include="Source\GUI\PopUpMenu\PopUpMenu.cpp" />
@@ -748,7 +747,6 @@
     <ClInclude Include="Source\Application\GuiState.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
-    <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />

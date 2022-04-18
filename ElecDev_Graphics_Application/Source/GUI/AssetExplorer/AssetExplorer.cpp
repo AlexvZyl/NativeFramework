@@ -52,7 +52,7 @@ AssetExplorer::~AssetExplorer()
 
 void AssetExplorer::onImGuiBegin()
 {
-	ImGui::Begin(getImGuiName(), NULL, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), NULL, getImGuiWindowFlags());
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {2.f, 10.f});
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
 	ImGui::PushStyleColor(ImGuiCol_Button, {0.f, 0.f, 0.f, 0.f});

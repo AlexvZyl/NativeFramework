@@ -110,7 +110,6 @@
     <ClCompile Include="Source\GUI\RendererStats\RendererStats.cpp" />
     <ClCompile Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.cpp" />
     <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
-    <ClCompile Include="Source\GUI\ColorEditor\ColorEditor.cpp" />
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
@@ -794,7 +793,6 @@
     <ClInclude Include="Source\GUI\RendererStats\RendererStats.h" />
     <ClInclude Include="Source\GUI\ImGuiDemoWindow\ImGuiDebugWindow.h" />
     <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
-    <ClInclude Include="Source\GUI\ColorEditor\ColorEditor.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
     <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />

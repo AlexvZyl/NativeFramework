@@ -20,7 +20,7 @@ RendererStats::RendererStats(std::string name, int windowFlags)
 
 void RendererStats::onImGuiBegin()
 {
-	ImGui::Begin(getImGuiName(), NULL, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), NULL, getImGuiWindowFlags());
 	ImGui::PushItemWidth(-1);
 }
 

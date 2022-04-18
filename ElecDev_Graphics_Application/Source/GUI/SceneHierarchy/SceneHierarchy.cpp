@@ -21,7 +21,7 @@ SceneHierarchy::SceneHierarchy(std::string name, int imguiWindowFlags)
 void SceneHierarchy::onImGuiBegin()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
-	ImGui::Begin(getImGuiName(), NULL, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), NULL, getImGuiWindowFlags());
 }
 
 void SceneHierarchy::onImGuiRender()

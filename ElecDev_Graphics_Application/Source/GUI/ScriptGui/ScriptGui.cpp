@@ -48,7 +48,7 @@ void ScriptGui::setSctipt(std::string& script)
 void ScriptGui::onImGuiBegin()
 {
     Lumen::setAvtiveScriptGui(this);
-    ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+    ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void ScriptGui::onImGuiRender()

@@ -15,12 +15,12 @@
 CircuitEditor::CircuitEditor(std::string name, int windowFlags)
 	: LumenWindow(name, windowFlags)
 {
-	m_imguiWindowFlags |= ImGuiWindowFlags_AlwaysAutoResize;
+	addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
 void CircuitEditor::onImGuiBegin() 
 {
-	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void CircuitEditor::onImGuiRender() 

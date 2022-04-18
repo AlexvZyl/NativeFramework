@@ -297,6 +297,7 @@ WindowType* Application::pushWindow(LumenDockPanel panel, const Args& ... args)
 {
 	WindowType* window = m_windowStack->pushWindow<WindowType>(args...);
 	dockWindowToPanel(window, panel);
+	window->focus();
 	return window;
 }
 
@@ -307,6 +308,7 @@ EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& nam
 	dockWindowToPanel(window, panel);
 	window->constructEngine(args...);
 	window->getEngine()->m_parentWindow = window;
+	window->focus();
 	return window->getEngine();
 }
 

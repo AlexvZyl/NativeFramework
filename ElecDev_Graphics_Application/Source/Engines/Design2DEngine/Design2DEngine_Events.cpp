@@ -118,6 +118,7 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 			// Update current entity ID.
 			m_currentEntityID = getEntityID(event.mousePosition);
 			setActiveComponent(m_currentEntityID);
+			setActiveCable(m_currentEntityID);
 
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");

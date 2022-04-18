@@ -63,11 +63,26 @@ void Application::onUpdate()
 		// On a mouse press we need to change the focused window.
 		// This also allows us to modify how dear imgui sets focused windows.
 		if (event->isType(EventType_MousePress))
-			onFocusedWindowChange(m_hoveredWindow); 
+		{
+			// Change focus.
+			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow)
+			{
+				m_hoveredWindow->focus();
+			}
+			else if(!ImGui::GetItemID())
+			{
+				ImGui::SetWindowFocus(NULL);
+				m_focusedWindow = nullptr;
+			}
+
+			if(m_focusedWindow)	m_focusedWindow->onEvent(*event.get());
+		}
 
 		// Pass events to focused window.
-		if (m_focusedWindow) 
+		else if (m_focusedWindow)
+		{
 			m_focusedWindow->onEvent(*event.get());
+		}
 	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
@@ -147,51 +162,21 @@ void Application::imguiOnUpdate()
 
 void Application::onHoveredWindowChange(LumenWindow* newWindow)
 {
-	// Ensure change actually ocurred.
 	if(newWindow == m_hoveredWindow) return;
 
-	// Create a dehover event.
-	if (m_hoveredWindow)
-	{
-		NotifyEvent dehoverEvent(EventType_Dehover);
-		m_hoveredWindow->onEvent(dehoverEvent);
-	}
+	if (m_hoveredWindow) m_hoveredWindow->onEvent(NotifyEvent(EventType_Dehover));
+	if (newWindow)		 newWindow->onEvent(NotifyEvent(EventType_Hover));
 
-	// Create a hover event.
-	if (newWindow)
-	{
-		NotifyEvent hoverEvent(EventType_Hover);
-		newWindow->onEvent(hoverEvent);
-	}
-
-	// Set the new hovered window.
 	m_hoveredWindow = newWindow;
 }
 
 void Application::onFocusedWindowChange(LumenWindow* newWindow)
 {
-	// Ensure change actually ocurred.
 	if (newWindow == m_focusedWindow) return;
 
-	// Let ImGui set focus in this case.
-	if (!newWindow && ImGui::GetItemID()) return;
+	if (m_focusedWindow)  m_focusedWindow->onEvent(NotifyEvent(EventType_Defocus));
+	if (newWindow)		  newWindow->onEvent(NotifyEvent(EventType_Focus));
 
-	// Create a defocus event.
-	if (m_focusedWindow)
-	{
-		m_focusedWindow->onEvent(NotifyEvent(EventType_Defocus));
-	}
-
-	// Create a focus event.
-	if (newWindow)
-	{
-		newWindow->onEvent(NotifyEvent(EventType_Focus));
-		newWindow->focus();
-	}
-	// No window is being hovered.
-	else ImGui::SetWindowFocus(NULL);
-
-	// Assign new focused window.
 	m_focusedWindow = newWindow;
 }
 

@@ -24,7 +24,7 @@ class WindowEvent;
 //  Layer Base Class.																															//
 //==============================================================================================================================================//
 
-// LumenWindow is a wrapper class around a dear imgui window so that 
+// LumenWindow is a wrapper class around an ImGuiWindow so that 
 // Lumen can work with it in an OOP fashion.
 class LumenWindow
 {
@@ -32,10 +32,10 @@ public:
 
 	// Constructor.
 	// IMPORTANT: onAttach() has to be called when the layer is pushed onto the stack.
-	inline LumenWindow(const char* name, int imguiWindowFlags)
+	inline LumenWindow(const char* name, int imguiWindowFlags = 0)
 		: m_windowName(name), m_imguiWindowFlags(imguiWindowFlags)
 	{}
-	inline LumenWindow(const std::string& name , int imguiWindowFlags)
+	inline LumenWindow(const std::string& name , int imguiWindowFlags = 0)
 		: m_windowName(name), m_imguiWindowFlags(imguiWindowFlags)
 	{}
 
@@ -47,7 +47,6 @@ private:
 	// If this function is not called the Layer will not work.
 	friend class WindowStack;
 	void onAttach(unsigned ID);
-
 public:
 
 	// Called by Lumen to render the window.
@@ -73,6 +72,21 @@ public:
 	inline virtual void onImGuiRender() = 0;
 	inline virtual void onImGuiEnd() = 0;
 
+	// Get the flags related to the ImGuiWindow.
+	int getImGuiWindowFlags() const;
+
+	// Sets the imgui flags used when rendering.
+	// Overwrites current flags.
+	void setImGuiWindowFlags(int flags);
+
+	// Adds the imgui flags used when rendering.
+	// Adds to the existing flags.
+	void addImGuiWindowFlags(int flags);
+
+	// Removes the imgui flags used when rendering.
+	// Removes from the existing flags.
+	void removeImGuiWindowFlags(int flags);
+
 	// Checks if the layer is hovered.
 	bool isHovered() const;
 
@@ -81,8 +95,12 @@ public:
 	// window does not exist on a layer creation.
 	ImGuiWindow* findImGuiWindow();
 
+private:
+	friend class Application;
 	// Focus the window.
-	void focus() const;
+	// This function notifies the app of a focus change.
+	void focus();
+public:
 
 	// Display window with a saved document.
 	void unsavedDocument();
@@ -143,9 +161,11 @@ public:
 	void detectWindowMove();
 
 	// Convert global mouse cordinates to local coordinates.
+	// GLFW window to Lumen window.
 	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
 
 	// Convert local mouse cordinates to global coordinates.
+	// Lumen window to GLFW window.
 	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
 
 	// Return the mouse position in the local scene coordinates (pixels).
@@ -159,14 +179,15 @@ public:
 
 private:
 
+	int m_imguiWindowFlags = 0;
 	bool m_isCollapsed = false;
 	bool m_isHidden = false;
 	bool m_isDocked = false;
 	bool m_skipItems = false;
 	bool m_shouldRender = true;
+	unsigned m_lumenWindowID = 0;
 	std::string m_windowName = "";
 	std::string m_imguiName = "";
-	unsigned m_lumenWindowID = 0;
 	ImGuiWindow* m_imguiWindow = nullptr;
 
 protected:
@@ -174,7 +195,6 @@ protected:
 	glm::vec2 m_contentRegionSize = { 0.f, 0.f };
 	glm::vec2 m_contentRegionPosition = { 0.f, 0.f };
 	bool m_isOpen = true;
-	int m_imguiWindowFlags = 0;
 };
 
 //==============================================================================================================================================//

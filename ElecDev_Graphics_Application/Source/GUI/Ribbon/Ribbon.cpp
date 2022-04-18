@@ -33,9 +33,9 @@
 Ribbon::Ribbon(std::string name, int windowFlags)
     : LumenWindow(name, windowFlags)
 {
-    m_imguiWindowFlags  |=  ImGuiWindowFlags_NoMove
-                        |   ImGuiWindowFlags_NoDecoration
-                        |   ImGuiWindowFlags_NoResize;        
+    addImGuiWindowFlags(  ImGuiWindowFlags_NoMove
+                        | ImGuiWindowFlags_NoDecoration
+                        | ImGuiWindowFlags_NoResize);        
 
     m_circuitIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
     m_componentIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
@@ -54,7 +54,7 @@ void Ribbon::onImGuiBegin()
     ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
-    ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+    ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void Ribbon::onImGuiRender()

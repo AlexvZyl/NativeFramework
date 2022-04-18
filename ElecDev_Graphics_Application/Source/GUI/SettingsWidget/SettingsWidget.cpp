@@ -21,7 +21,7 @@ SettingsWidget::SettingsWidget(std::string name, int imguiWindowFlags)
 void SettingsWidget::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(350, 200), ImGuiCond_Once);
-	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void SettingsWidget::onImGuiRender()

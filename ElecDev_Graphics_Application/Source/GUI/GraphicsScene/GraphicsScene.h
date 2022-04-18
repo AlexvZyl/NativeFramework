@@ -22,7 +22,7 @@ public:
 	inline GraphicsScene(const std::string& name, int windowFlags = 0) 
 		: LumenWindow(name, windowFlags | ImGuiWindowFlags_NoScrollbar)
 	{
-		m_imguiWindowFlags |= ImGuiWindowFlags_NoScrollWithMouse;
+		addImGuiWindowFlags(ImGuiWindowFlags_NoScrollWithMouse);
 	}
 
 	// Destructor.
@@ -37,14 +37,14 @@ public:
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
-		ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+		ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 	}
 
 	inline virtual void onImGuiRender() override 
 	{
 		// Set flag for design palette.
-		if (m_engine->hasDesignPalette())  { m_imguiWindowFlags |= ImGuiWindowFlags_MenuBar;  }
-		else							   { m_imguiWindowFlags &= ~ImGuiWindowFlags_MenuBar; }
+		if (m_engine->hasDesignPalette())  { addImGuiWindowFlags(ImGuiWindowFlags_MenuBar);		}
+		else							   { removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);	}
 
 		// Render design palette.
 		if (m_engine->hasDesignPalette())

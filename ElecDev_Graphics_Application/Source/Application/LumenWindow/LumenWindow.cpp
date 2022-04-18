@@ -58,6 +58,26 @@ void LumenWindow::onUpdate()
 //  ImGui API.																																	//
 //==============================================================================================================================================//
 
+int LumenWindow::getImGuiWindowFlags() const
+{
+	return m_imguiWindowFlags;
+}
+
+void LumenWindow::setImGuiWindowFlags(int flags) 
+{
+	m_imguiWindowFlags = flags;
+}
+
+void LumenWindow::addImGuiWindowFlags(int flags)
+{
+	m_imguiWindowFlags |= flags;
+}
+
+void LumenWindow::removeImGuiWindowFlags(int flags)
+{
+	m_imguiWindowFlags &= ~flags;
+}
+
 bool LumenWindow::isHovered() const
 {
 	if (!m_imguiWindow) return false; // No window currently exists.
@@ -71,19 +91,20 @@ ImGuiWindow* LumenWindow::findImGuiWindow()
 	return m_imguiWindow;
 }
 
-void LumenWindow::focus() const
+void LumenWindow::focus()
 {
 	ImGui::SetWindowFocus(getImGuiName());
+	Lumen::getApp().onFocusedWindowChange(this);
 }
 
 void LumenWindow::unsavedDocument()
 {
-	m_imguiWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
+	addImGuiWindowFlags(ImGuiWindowFlags_UnsavedDocument);
 }
 
 void LumenWindow::savedDocument()
 {
-	m_imguiWindowFlags &= ~ImGuiWindowFlags_UnsavedDocument;
+	removeImGuiWindowFlags(ImGuiWindowFlags_UnsavedDocument);
 }
 
 const char* LumenWindow::getImGuiName() const

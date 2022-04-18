@@ -22,7 +22,7 @@ void ComponentDesignerColorEditor::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(400, 350), ImGuiCond_Once);
 	ImGui::SetNextWindowPos(m_initialPosition, ImGuiCond_Once);
-	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void ComponentDesignerColorEditor::onImGuiRender()

@@ -8,36 +8,35 @@
 #include "Application/Application.h"
 
 //==============================================================================================================================================//
-//  Layer management.																															//
+//  window management.																															//
 //==============================================================================================================================================/
 
 void WindowStack::popWindows()
 {
-	// Check if there are layers to remove.
+	// Check if there are windows to remove.
 	if (!m_windowPopQueue.size()) return;
 
 	Application& app = Lumen::getApp();
 
-	// Get active layers.
+	// Get active windows.
 	LumenWindow* hoveredWindow = app.m_hoveredWindow;
 	LumenWindow* focusedWindow = app.m_focusedWindow;
 
-	// Remove layers in queue.
+	// Remove windows in queue.
 	for (LumenWindow* window : m_windowPopQueue)
 	{
-		// Check for active layer change.
+		// Check for active window change.
 		if (window == hoveredWindow) app.m_hoveredWindow = nullptr;
 		if (window == focusedWindow)
 		{
-			// Reset.
 			app.m_focusedWindow = nullptr;
 			ImGui::SetWindowFocus(NULL);
 		}
-		// Remove layer.
+		// Remove window.
 		m_windows.erase(window->getID());
 	}
 
-	// All the layers have been removed.
+	// All the windows have been removed.
 	m_windowPopQueue.clear();
 }
 

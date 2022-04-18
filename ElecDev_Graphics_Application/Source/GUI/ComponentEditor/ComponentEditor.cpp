@@ -38,7 +38,7 @@ void ComponentEditor::onImGuiBegin()
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The window size should be set dynamically
 	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
-	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void ComponentEditor::onImGuiRender()

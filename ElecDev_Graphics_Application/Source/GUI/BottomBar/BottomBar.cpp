@@ -14,9 +14,9 @@
 BottomBar::BottomBar(std::string name, int windowFlags)
     : LumenWindow(name.c_str(), windowFlags)
 {
-    m_imguiWindowFlags |= ImGuiWindowFlags_NoMove
+    addImGuiWindowFlags( ImGuiWindowFlags_NoMove
                        | ImGuiWindowFlags_NoDecoration
-                       | ImGuiWindowFlags_NoResize;
+                       | ImGuiWindowFlags_NoResize);
     m_defaultColor = ImGui::GetStyle().Colors[ImGuiCol_Separator];
     getNotificationColour();
 }
@@ -26,7 +26,7 @@ void BottomBar::onImGuiBegin()
     getNotificationColour();
     ImGui::PushStyleColor(ImGuiCol_WindowBg, m_color);
     ImGui::PushStyleColor(ImGuiCol_Border, m_color);
-    ImGui::BeginViewportSideBar(getImGuiName(), ImGui::GetMainViewport(), ImGuiDir_Down, 16.f, m_imguiWindowFlags);
+    ImGui::BeginViewportSideBar(getImGuiName(), ImGui::GetMainViewport(), ImGuiDir_Down, 16.f, getImGuiWindowFlags());
 }
 
 void BottomBar::onImGuiRender()

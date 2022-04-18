@@ -47,7 +47,7 @@ void CableCreator::onImGuiBegin()
 	ImGui::SetNextWindowSize({500, 700}, ImGuiCond_Once);
 	glm::vec2 vpSize = ImGui::GetMainViewport()->Size;
 	ImGui::SetNextWindowPos({ vpSize.x / 2, vpSize.y / 2 }, ImGuiCond_Once, {0.5f, 0.5f});
-	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void CableCreator::onImGuiRender()

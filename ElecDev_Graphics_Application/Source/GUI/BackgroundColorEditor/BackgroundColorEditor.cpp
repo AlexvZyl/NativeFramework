@@ -21,7 +21,7 @@ BackgroundColorEditor::BackgroundColorEditor(std::string name, int imguiWindowFl
 void BackgroundColorEditor::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(400, 350), ImGuiCond_Once);
-	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
 void BackgroundColorEditor::onImGuiRender()
