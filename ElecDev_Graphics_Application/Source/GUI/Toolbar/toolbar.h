@@ -22,7 +22,7 @@ class Toolbar : public LumenWindow
 public:
 
 	// Constructor.
-    Toolbar(std::string& name, int windowFlags);
+    Toolbar(const std::string& name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override;

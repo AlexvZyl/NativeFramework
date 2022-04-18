@@ -93,7 +93,7 @@ void Ribbon::onImGuiRender()
     // Button.
     if (ImGui::ImageButton((void*)m_componentIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        ComponentDesigner* engine =  Lumen::getApp().pushEngineLayer<ComponentDesigner>("Component Designer")->getEngine();
+        ComponentDesigner* engine =  Lumen::getApp().pushEngine<ComponentDesigner>(LumenDockPanel::Scene, "Component Designer");
         engine->unsavedDocument();
     }
     // Tooltip.
@@ -111,7 +111,7 @@ void Ribbon::onImGuiRender()
     // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>("Untitled")->getEngine();
+        Design2DEngine* engine = Lumen::getApp().pushEngine<Design2DEngine>(LumenDockPanel::Scene, "Untitled");
         engine->unsavedDocument();
     }
     // Tooltip.
@@ -129,7 +129,7 @@ void Ribbon::onImGuiRender()
     // Button.
     if (ImGui::ImageButton((void*)m_cableIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        app.pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Floating);
+        app.pushWindow<CableCreator>(LumenDockPanel::Floating, "Cable Creator");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
@@ -156,7 +156,7 @@ void Ribbon::onImGuiRender()
     // Button.
     if (ImGui::ImageButton((void*)m_settingsIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        app.pushGuiLayer<SettingsWidget>("Settings", LumenDockPanel::Floating);
+        app.pushWindow<SettingsWidget>(LumenDockPanel::Floating, "Settings");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())

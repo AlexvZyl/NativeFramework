@@ -28,6 +28,17 @@ EngineCore::~EngineCore()
 		app.setActiveEngine(nullptr);
 }
 
+void EngineCore::setName(const std::string& name) 
+{
+	m_parentWindow->setName(name.c_str());
+	setNameOfElements(name); 
+}
+
+const glm::vec2& EngineCore::getWindowContentRegionSize() const 
+{
+	return m_parentWindow->getContentRegionSize();
+}
+
 //=============================================================================================================================================//
 //  Scene wrappers.																															   //
 //=============================================================================================================================================//
@@ -37,7 +48,7 @@ unsigned EngineCore::getRenderTexture()
 	return m_scene->getRenderTexture(); 
 }
 
-unsigned EngineCore::getEntityID(glm::vec2& pixelCoords) 
+unsigned EngineCore::getEntityID(const glm::vec2& pixelCoords) 
 { 
 	return m_scene->getEntityID(pixelCoords); 
 }

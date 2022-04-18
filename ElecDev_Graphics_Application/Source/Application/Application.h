@@ -9,8 +9,13 @@
 #include <vector>
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 #include "imgui/notify/imgui_notify.h"
 #include "Lumen.h"
+#include "OpenGL/Renderer/RendererGL.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/LumenWindow/WindowStack.h"
+#include "GUI/GraphicsScene/GraphicsScene.h"
 
 // TO BE DEPRECATED!
 #include "GuiState.h"
@@ -19,8 +24,6 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class LumenWindow;
-class WindowStack;
 class LumenWebSocket;
 class EngineCore;
 class WindowEvent;
@@ -303,6 +306,7 @@ EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& nam
 	GraphicsScene<EngineType>* window = m_windowStack->pushWindow<GraphicsScene<EngineType>>(name);
 	dockWindowToPanel(window, panel);
 	window->constructEngine(args...);
+	window->getEngine()->m_parentWindow = window;
 	return window->getEngine();
 }
 

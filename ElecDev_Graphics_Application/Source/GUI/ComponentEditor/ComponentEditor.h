@@ -16,7 +16,7 @@ class ComponentEditor : public LumenWindow
 public:
 
 	// Constructor.
-	ComponentEditor(std::string name, int windowFlags);
+	ComponentEditor(std::string name, int windowFlags = 0);
 	
 	// Rendering.
 	virtual void onImGuiBegin() override;

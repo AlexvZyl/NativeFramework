@@ -6,6 +6,7 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/ShaderGL.h" 
+#include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "Application/Application.h"
 #include "Lumen.h"
 

@@ -32,7 +32,7 @@ class ScriptGui : public LumenWindow
 public:
 
 	// Constructor.
-	ScriptGui(std::string name, int windowFlags);
+	ScriptGui(std::string name, int windowFlags = 0);
 	// Destructor.
 	~ScriptGui();
 

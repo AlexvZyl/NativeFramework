@@ -14,12 +14,13 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
+void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 {
 	Base2DEngine::onMouseButtonEvent(event);
 
@@ -119,7 +120,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 			setActiveComponent(m_currentEntityID);
 
 			// Create a popup menu on a right click on a graphics scene.
-			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", LumenDockPanel::Floating)->getGui();
+			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
 			menu->setInitialPosition(getMouseGlobalPosition());
 			menu->setEngine(this);
 		}
@@ -130,7 +131,7 @@ void Design2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 //  Mouse Move.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
+void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
 
@@ -186,7 +187,7 @@ void Design2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 //  Mouse Scroll.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
+void Design2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
 }
@@ -195,7 +196,7 @@ void Design2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 //  Mouse Drag.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
+void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 	
@@ -221,7 +222,7 @@ void Design2DEngine::onMouseDragEvent(MouseDragEvent& event)
 //  Notify event.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onNotifyEvent(NotifyEvent& event)
+void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 {
 
 	glm::vec2 screenCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
@@ -247,7 +248,7 @@ void Design2DEngine::onNotifyEvent(NotifyEvent& event)
 //  Key Events.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onKeyEvent(KeyEvent& event)
+void Design2DEngine::onKeyEvent(const KeyEvent& event)
 {
 	Base2DEngine::onKeyEvent(event);
 
@@ -297,7 +298,7 @@ void Design2DEngine::onKeyEvent(KeyEvent& event)
 //  Files.																																		//
 //==============================================================================================================================================//
 
-void Design2DEngine::onFileDropEvent(FileDropEvent& event) 
+void Design2DEngine::onFileDropEvent(const FileDropEvent& event) 
 {
 	Renderer::storeAndBindScene(m_scene.get());
 

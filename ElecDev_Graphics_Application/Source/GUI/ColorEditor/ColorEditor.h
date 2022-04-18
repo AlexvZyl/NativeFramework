@@ -16,7 +16,7 @@ class ColorEditor : public LumenWindow
 public:
 
 	// Constructor.
-	ColorEditor(std::string name, int imguiWindowFlags);
+	ColorEditor(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~ColorEditor() = default;
 

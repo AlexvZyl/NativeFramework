@@ -22,7 +22,7 @@ class CircuitEditor : public LumenWindow
 public:
 
 	// Constructor.
-	CircuitEditor(std::string name, int windowFlags);
+	CircuitEditor(std::string name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override;

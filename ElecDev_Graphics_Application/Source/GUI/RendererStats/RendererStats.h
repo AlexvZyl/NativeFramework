@@ -16,7 +16,7 @@ class RendererStats : public LumenWindow
 public:
 
 	// Constructor.
-	RendererStats(std::string name, int windowFlags);
+	RendererStats(std::string name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override;

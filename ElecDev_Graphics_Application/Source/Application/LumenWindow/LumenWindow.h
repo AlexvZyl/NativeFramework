@@ -5,10 +5,20 @@
 //==============================================================================================================================================//
 
 #include <string>
-#include "Application/Application.h"
-#include "Lumen.h"
+#include "glm/glm.hpp"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 #include "Application/Events/Events.h"
-#include "GLFW/glfw3.h"
+
+//==============================================================================================================================================//
+//  Forward Declerations.																														//
+//==============================================================================================================================================//
+
+struct ImGuiWindow;
+
+class Event;
+class WindowEvent;
 
 //==============================================================================================================================================//
 //  Layer Base Class.																															//
@@ -36,34 +46,15 @@ private:
 	// Set the window ID.
 	// If this function is not called the Layer will not work.
 	friend class WindowStack;
-	inline void onAttach(unsigned ID)
-	{
-		m_lumenWindowID = ID;
-		updateImGuiName();
-	}
+	void onAttach(unsigned ID);
+
 public:
 
 	// Called by Lumen to render the window.
-	inline void onRender() 
-	{
-		onImGuiBegin();
-
-		updateRenderStateFlags();
-
-		if (shouldRender())
-			onImGuiRender();
-
-		onImGuiEnd();
-
-		if (!m_isOpen)
-			closeWindow();
-	}
+	void onRender();
 
 	// Removes the window from Lumen.
-	inline virtual void closeWindow() 
-	{
-		Lumen::getApp().queueWindowPop(this);
-	}
+	void closeWindow();
 
 	// By defult LumenWindows do not need events to be dispatched, since
 	// dear imgui handles the events.  Is is provided to be able to pass
@@ -71,19 +62,7 @@ public:
 	inline virtual void onEvent(const Event& event) {};
 
 	// Called per frame to update the window and certain events. 
-	inline void onUpdate() 
-	{
-		// If no window is found it should not be updated.
-		if (!findImGuiWindow()) return;
-
-		updateRenderStateFlags();
-
-		// Do not check for events if it is not being rendererd.
-		if (!shouldRender()) return;
-
-		detectWindowMove();
-		detectWindowResize();
-	}
+	void onUpdate();
 
 	// ------------------- //
 	//  I M G U I   A P I  //
@@ -95,159 +74,84 @@ public:
 	inline virtual void onImGuiEnd() = 0;
 
 	// Checks if the layer is hovered.
-	inline bool isHovered() const
-	{
-		if (!m_imguiWindow) return false; // No window currently exists.
-		return ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows | ImGuiHoveredFlags_DockHierarchy, m_imguiWindow);
-	}
+	bool isHovered() const;
 
 	// Get the pointer to the imgui window.
 	// Curently this has to be called every frame, since the
 	// window does not exist on a layer creation.
-	inline ImGuiWindow* findImGuiWindow() 
-	{
-		if (m_imguiWindow) return m_imguiWindow;  // Window already found.
-		m_imguiWindow = ImGui::FindWindowByName(getImGuiName());
-		return m_imguiWindow;
-	}
+	ImGuiWindow* findImGuiWindow();
 
 	// Focus the window.
-	inline void focus() const
-	{
-		ImGui::SetWindowFocus(getImGuiName());
-	}
+	void focus() const;
 
 	// Display window with a saved document.
-	inline void unsavedDocument()
-	{
-		m_imguiWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
-	}
+	void unsavedDocument();
 
 	// Display window with an unsaved document.
-	inline void savedDocument()
-	{
-		m_imguiWindowFlags &= ~ImGuiWindowFlags_UnsavedDocument;
-	}
+	void savedDocument();
 
 	// Return the name of the layer as a string ID for imgui.
-	inline const char* getImGuiName() const
-	{
-		return m_imguiName.c_str();
-	}
+	const char* getImGuiName() const;
+
+	// Updates the name that imgui uses with appropriate ID's.
+	void updateImGuiName();
 
 	// Checks if the Window contents should be rendererd based on certain imgui states.
-	inline bool shouldRender() const
-	{
-		return m_shouldRender;
-	}
+	bool shouldRender() const;
 
 	// Updates render state flags and check for a change.
-	inline void updateRenderStateFlags() 
-	{
-		m_isCollapsed = m_imguiWindow->Collapsed;
-		m_isDocked = m_imguiWindow->DockIsActive;
-		m_isHidden = m_imguiWindow->Hidden;
-		m_skipItems = m_imguiWindow->SkipItems;
-		detectRenderStateChange();
-	}
+	void updateRenderStateFlags();
 
 	// Checks if the render state has changed.
-	inline void detectRenderStateChange() 
-	{
-		// Check for shouldRender state change.
-		bool newState = !m_isCollapsed && !m_isHidden && !m_skipItems && m_isOpen;
-		if (m_shouldRender != newState)
-		{
-			onRenderStateChange(newState);
-			m_shouldRender = newState;
-		}
-	}
+	void detectRenderStateChange();
 
 	// Event handler called when the render state changes.
 	// Hepful for when certain intensive resources can be cleared and recreated.
 	// (For example, FBO's)
 	inline virtual void onRenderStateChange(bool newState) {};
 
+	// Get the available size for rendering.
+	const glm::vec2& getContentRegionSize() const;
+
 	// ------------------- //
 	//  W I N D O W   I D  //
 	// ------------------- //
 
 	// Get the name of the layer.
-	inline const std::string& getName() const
-	{
-		return m_windowName;
-	}
+	const std::string& getName() const;
 
 	// Set & update the window name.
-	inline virtual void setName(const char* name)
-	{
-		m_windowName = name;
-		updateImGuiName();
-	}
-
-	// Updates the name that imgui uses with appropriate ID's.
-	inline void updateImGuiName() 
-	{
-		m_imguiName = m_windowName + "###LumenLayer" + std::to_string(m_lumenWindowID);
-	}
+	virtual void setName(const char* name);
 
 	// Get the window's Lumen ID.
-	inline unsigned getID() const
-	{
-		return m_lumenWindowID;
-	}
+	unsigned getID() const;
 
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //
 
 	// Window resize event handler.
-	inline virtual void onWindowResizeEvent(const WindowEvent& event) 
-	{
-		m_contentRegionSize = { event.windowData.x, event.windowData.y };
-	}
+	virtual void onWindowResizeEvent(const WindowEvent& event);
 
 	// Window move event handler.
-	inline virtual void onWindowMoveEvent(const WindowEvent& event) 
-	{
-		m_contentRegionPosition = { event.windowData.x, event.windowData.y };
-	}
+	virtual void onWindowMoveEvent(const WindowEvent& event);
 
 	// Check if window has resized.
-	inline void detectWindowResize()
-	{
-		glm::vec2 contentRegionSize = m_imguiWindow->WorkRect.GetSize();
-		if (m_contentRegionSize.x != contentRegionSize.x || m_contentRegionSize.y != contentRegionSize.y)
-		{
-			onWindowResizeEvent(WindowEvent(contentRegionSize, EventType_WindowResize));
-		}
-	}
+	void detectWindowResize();
 
 	// Check if window has moved.
-	inline void detectWindowMove() 
-	{
-		glm::vec2 contentRegionPos = m_imguiWindow->WorkRect.Min;
-		if (m_contentRegionPosition.x != contentRegionPos.x || m_contentRegionPosition.y != contentRegionPos.y)
-		{
-			onWindowMoveEvent(WindowEvent(contentRegionPos, EventType_WindowMove));
-		}
-	}
+	void detectWindowMove();
+
+	// Convert global mouse cordinates to local coordinates.
+	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
+
+	// Convert local mouse cordinates to global coordinates.
+	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
 
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.
-	inline glm::vec2 getMouseLocalPosition() const
-	{
-		double cursorX, cursorY;
-		glfwGetCursorPos(Lumen::getApp().getGLFWWindow(), &cursorX, &cursorY);
-		return { cursorX - m_contentRegionPosition.x, cursorY - m_contentRegionPosition.y };
-	}
-
-	inline glm::vec2 getMouseGlobalPosition() const
-	{
-		double cursorX, cursorY;
-		glfwGetCursorPos(Lumen::getApp().getGLFWWindow(), &cursorX, &cursorY);
-		return { cursorX, cursorY };
-	}
+	glm::vec2 getMouseLocalPosition() const;
+	glm::vec2 getMouseGlobalPosition() const;
 
 	// --------- //
 	//  D A T A  //

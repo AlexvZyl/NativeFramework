@@ -10,7 +10,7 @@
 #include "Utilities/Logger/Logger.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
 
-void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
+void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
 	Base2DEngine::onMouseButtonEvent(event);
 
@@ -102,13 +102,8 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonRight))
 	{
 			// Create a popup menu on a right click on a graphics scene.
-			PopUpMenu* menu = Lumen::getApp().pushGuiLayer<PopUpMenu>("Popup Menu", LumenDockPanel::Floating)->getGui();
-			glm::vec2 pos = {
-
-				event.mousePosition.x + m_contentRegionPos.x,
-				event.mousePosition.y + m_contentRegionPos.y
-			};
-			menu->setInitialPosition(pos);
+			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
+			menu->setInitialPosition(getMouseGlobalPosition());
 			menu->setEngine(this);
 	}
 
@@ -129,7 +124,7 @@ void ComponentDesigner::onMouseButtonEvent(MouseButtonEvent& event)
 	}
 }
 
-void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
+void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 {
 	Base2DEngine::onMouseMoveEvent(event);
 	uint64_t eventID = event.ID;
@@ -181,7 +176,8 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 
 	else if (designerState == CompDesignState::SELECT)
 	{
-		if (event.isNotType(EventType_MouseButtonLeft)) {
+		if (event.isNotType(EventType_MouseButtonLeft)) 
+		{
 			m_lastDragPos = screenCoords;
 		}
 	}
@@ -200,12 +196,12 @@ void ComponentDesigner::onMouseMoveEvent(MouseMoveEvent& event)
 	}
 }
 
-void ComponentDesigner::onMouseScrollEvent(MouseScrollEvent& event)
+void ComponentDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
 }
 
-void ComponentDesigner::onKeyEvent(KeyEvent& event)
+void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 {
 	Base2DEngine::onKeyEvent(event);
 
@@ -269,9 +265,8 @@ void ComponentDesigner::onKeyEvent(KeyEvent& event)
 	}
 }
 
-void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event) 
+void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event) 
 {
-
 	Base2DEngine::onMouseDragEvent(event);
 	uint64_t eventID = event.ID;
 
@@ -320,7 +315,7 @@ void ComponentDesigner::onMouseDragEvent(MouseDragEvent& event)
 	LUMEN_LOG_DEBUG(msg, "Comp Design Drag");
 }
 
-void ComponentDesigner::onNotifyEvent(NotifyEvent& event) 
+void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
 {
 	if (event.isType(EventType_MouseDragStart))
 	{
@@ -329,24 +324,31 @@ void ComponentDesigner::onNotifyEvent(NotifyEvent& event)
 	else if (event.isType(EventType_MouseDragStop))
 	{
 		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
-		if (m_activePoly) {
+		if (m_activePoly) 
+		{
 			m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
 		}
-		if (m_activeLine) {
+		if (m_activeLine) 
+		{
 			m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
 		}
-		if (m_activeCircle) {
+		if (m_activeCircle) 
+		{
 			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 		}
-		if (m_activeVertex) {
-			if (m_activePoly) {
+		if (m_activeVertex) 
+		{
+			if (m_activePoly) 
+			{
 				m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
 			}
-			else if (m_activeLine) {
+			else if (m_activeLine) 
+			{
 				m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
 			}
 		}
-		if (m_activePort) {
+		if (m_activePort) 
+		{
 			m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
 		}
 	}

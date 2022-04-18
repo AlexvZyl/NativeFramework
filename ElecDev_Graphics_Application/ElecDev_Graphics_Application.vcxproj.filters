@@ -85,7 +85,6 @@
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
-    <ClCompile Include="Source\GUI\GraphicsScene\GraphicsScene.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
@@ -138,6 +137,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
     <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
+    <ClCompile Include="Source\Application\LumenWindow\LumenWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">

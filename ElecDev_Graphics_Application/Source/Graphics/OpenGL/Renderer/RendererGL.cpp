@@ -10,6 +10,7 @@
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/SceneGL.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "Application/Application.h"
 

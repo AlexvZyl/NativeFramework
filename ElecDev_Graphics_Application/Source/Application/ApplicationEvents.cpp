@@ -250,12 +250,12 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 			if (designEngine) 
 			{
 				saveToYAML(designEngine->m_circuit.get(), path);
-				designEngine->m_window->setName(path.filename().stem().string(), true);
+				designEngine->setName(path.filename().stem().string());
 			}
 			else if (component_designer) 
 			{
 				saveToYAML(component_designer->m_activeComponent.get(), path);
-				component_designer->m_window->setName(path.filename().stem().string(), true);
+				component_designer->setName(path.filename().stem().string());
 			}
 		}
 	}

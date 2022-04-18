@@ -4,7 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/LumenWindow/LumenWindow.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "glm/glm.hpp"
 
@@ -25,14 +25,14 @@ class ComponentDesignerColorEditor : public LumenWindow
 public:
 
 	// Constructor.
-	ComponentDesignerColorEditor(std::string name, int imguiWindowFlags);
+	ComponentDesignerColorEditor(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~ComponentDesignerColorEditor() = default;
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 	// Set the position of the editor.
 	inline ComponentDesignerColorEditor& setInitialPosition(const glm::vec2& pos)

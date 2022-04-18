@@ -134,14 +134,13 @@ void CableCreator::onImGuiRender()
 	if (ImGui::BeginChild("DataDict", {0.f, 0.f}, true))
 	{
 		// Add dict entry.
-		static std::string entryToAdd;
 		ImGui::Text("Add an attribute to the dictionary:");
-		ImGui::InputText("##DictEntry", &entryToAdd);
+		ImGui::InputText("##DictEntry", &m_entryToAdd);
 		ImGui::SameLine();
 		if (ImGui::Button("Add"))
 		{
-			m_dataDict.insert({ entryToAdd, "From(Circuit Database)" });
-			entryToAdd = "";
+			m_dataDict.insert({ m_entryToAdd, "From(Circuit Database)" });
+			m_entryToAdd = "";
 		}
 
 		// Setup table.

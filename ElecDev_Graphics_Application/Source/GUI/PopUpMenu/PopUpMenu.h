@@ -22,7 +22,7 @@ class PopUpMenu : public LumenWindow
 public:
 
 	// Constructor.
-	PopUpMenu(std::string name, int imguiWindowFlags);
+	PopUpMenu(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	virtual ~PopUpMenu();
 	

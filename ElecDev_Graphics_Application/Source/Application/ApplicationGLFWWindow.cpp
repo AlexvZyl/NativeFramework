@@ -41,12 +41,6 @@ inline bool isIdOfType(LumenEventID eventID, LumenEventID compareID)
     return (eventID & compareID) == compareID;
 }
 
-inline void resetDoublePressData() 
-{
-    resetDoublePressReleaseTimes();
-    resetDoublePressReleaseIgnore();
-}
-
 inline void resetDoublePressReleaseIgnore() 
 {
     for (auto& pair : s_buttonReleaseIgnore) pair.second = false;
@@ -55,6 +49,12 @@ inline void resetDoublePressReleaseIgnore()
 inline void resetDoublePressReleaseTimes() 
 {
     for (auto& pair : s_buttonReleaseTimes)  pair.second = 0;
+}
+
+inline void resetDoublePressData() 
+{
+    resetDoublePressReleaseTimes();
+    resetDoublePressReleaseIgnore();
 }
 
 inline LumenEventID getMouseButtonState(GLFWwindow* window) 

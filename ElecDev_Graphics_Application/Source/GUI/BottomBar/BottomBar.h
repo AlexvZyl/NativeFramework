@@ -15,7 +15,7 @@ class BottomBar : public LumenWindow
 public:
 
 	// Constructor.
-	BottomBar(std::string name, int windowFlags);
+	BottomBar(std::string name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override;

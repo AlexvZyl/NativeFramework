@@ -15,7 +15,7 @@ class ImGuiDebugWindow : public LumenWindow
 public:
 
 	// Constructor.
-	ImGuiDebugWindow(std::string name, int windowFlags);
+	ImGuiDebugWindow(std::string name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override {};

@@ -25,7 +25,7 @@ std::filesystem::path AssetExplorer::m_currentDirectory;
 //==============================================================================================================================================//
 
 AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
-	: LumenWindow(name.c_str(), imguiWindowFlags)
+	: LumenWindow(name, imguiWindowFlags)
 {
 	m_currentDirectory = s_startingDirectory;
 	// Load resources.
@@ -40,7 +40,7 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	loadDirectories();
 
 	// Start asset viewer engine.
-	m_assetViewerEngine = Lumen::getApp().pushEngineLayer<AssetViewer>("Asset Viewer", LumenDockPanel::AssetViewer)->getEngine();
+	m_assetViewerEngine = Lumen::getApp().pushEngine<AssetViewer>(LumenDockPanel::AssetViewer, "Asset Viewer");
 }
 
 AssetExplorer::~AssetExplorer() 

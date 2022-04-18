@@ -15,7 +15,7 @@ class SceneHierarchy : public LumenWindow
 public:
 
 	// Constructor.
-	SceneHierarchy(std::string name, int imguiWindowFlags);
+	SceneHierarchy(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~SceneHierarchy() = default;
 

@@ -18,7 +18,7 @@ class CableCreator : public LumenWindow
 public:
 
 	// Constructor.
-	CableCreator(std::string name, int windowFlags);
+	CableCreator(std::string name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override;
@@ -55,6 +55,8 @@ private:
 	std::string newName = "Untitled";
 	int newType = 2;
 	int newPos = 0;
+
+	std::string m_entryToAdd = "";
 
 	// Saves the cable to file.
 	void serialiseCable(const std::filesystem::path& path);

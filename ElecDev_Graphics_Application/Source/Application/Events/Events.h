@@ -100,6 +100,10 @@ public:
 	{
 		return ( compareID & ID ) == compareID;
 	}
+	inline bool isNotType(LumenEventID compareID) const
+	{
+		return !isType(compareID);
+	}
 
 	// ID describing the event.
 	LumenEventID ID;

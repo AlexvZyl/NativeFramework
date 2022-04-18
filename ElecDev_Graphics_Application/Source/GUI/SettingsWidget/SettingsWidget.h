@@ -16,7 +16,7 @@ class SettingsWidget : public LumenWindow
 public:
 
 	// Constructor.
-	SettingsWidget(std::string name, int imguiWindowFlags);
+	SettingsWidget(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~SettingsWidget() = default;
 

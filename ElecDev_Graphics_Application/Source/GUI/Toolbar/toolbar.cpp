@@ -25,7 +25,7 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(std::string& name, int windowFlags)
+Toolbar::Toolbar(const std::string& name, int windowFlags)
     : LumenWindow(name, windowFlags)
 {
     // Load texture 1. 

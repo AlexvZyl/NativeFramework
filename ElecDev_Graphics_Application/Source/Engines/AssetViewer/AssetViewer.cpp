@@ -3,14 +3,16 @@
 //=============================================================================================================================================//
 
 #include "Engines/AssetViewer/AssetViewer.h"
-#include "OpenGL/Primitives/Grid.h"
 #include "Engines/Design2DEngine/Peripherals/Component2D.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
 #include "Graphics/Entities/EntityManager.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Utilities/Logger/Logger.h"
+#include "OpenGL/Primitives/Grid.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "OpenGL/SceneGL.h"
 #include "imgui/imgui.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //=============================================================================================================================================//
 //  Methods.																														           //
@@ -35,7 +37,7 @@ void AssetViewer::clearAssets()
 
 void AssetViewer::renderDesignPalette() 
 {
-	ImGui::SetCursorPosX(m_contentRegionSize.x / 2 - ImGui::CalcTextSize(m_currentAsset.c_str()).x / 2);
+	ImGui::SetCursorPosX(getWindowContentRegionSize().x / 2 - ImGui::CalcTextSize(m_currentAsset.c_str()).x / 2);
 	ImGui::Text(m_currentAsset.c_str());
 }
 

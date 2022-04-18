@@ -7,7 +7,6 @@
 #include "Application/Application.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Application/Layers/EngineLayer.h"
 
 //=======================================================================================================================================//
 // Circuit editor.																														 //
@@ -43,8 +42,8 @@ void CircuitEditor::onImGuiRender()
 		ImGui::InputText("##circuitName", &m_circuitNameOnCreation);
 		if (ImGui::Button("Create Circuit##CircuitCreatorButton"))
 		{
-			app.pushEngineLayer<Design2DEngine>(m_circuitNameOnCreation);
-			app.queueWindowPop(m_name);
+			app.pushEngine<Design2DEngine>(LumenDockPanel::Scene, m_circuitNameOnCreation);
+			closeWindow();
 		}
 	}
 
@@ -58,8 +57,7 @@ void CircuitEditor::onImGuiRender()
 		ImGui::SameLine();
 		if (ImGui::InputText("##circuitName", &m_engine->m_circuit->m_label)) 
 		{
-			auto* layer = Lumen::getApp().getEngineLayer<Design2DEngine>(m_engine);
-			layer->setName(m_engine->m_circuit->m_label);
+			m_engine->setName(m_engine->m_circuit->m_label);
 		}
 	}
 

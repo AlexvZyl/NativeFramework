@@ -21,7 +21,7 @@ class Ribbon : public LumenWindow
 public:
 	
 	// Constructor.
-	Ribbon(std::string name, int windowFlags);
+	Ribbon(std::string name, int windowFlags = 0);
 
 	// Rendering.
 	virtual void onImGuiBegin() override;

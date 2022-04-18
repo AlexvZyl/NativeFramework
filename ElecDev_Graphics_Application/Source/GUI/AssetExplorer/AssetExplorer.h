@@ -23,7 +23,7 @@ class AssetExplorer : public LumenWindow
 public:
 
 	// Constructor.
-	AssetExplorer(std::string name, int imguiWindowFlags);
+	AssetExplorer(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	virtual ~AssetExplorer();
 	

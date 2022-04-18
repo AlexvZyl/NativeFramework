@@ -18,14 +18,14 @@ ComponentDesignerColorEditor::ComponentDesignerColorEditor(std::string name, int
 	: LumenWindow(name, imguiWindowFlags)
 {}
 
-void ComponentDesignerColorEditor::begin()
+void ComponentDesignerColorEditor::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(400, 350), ImGuiCond_Once);
 	ImGui::SetNextWindowPos(m_initialPosition, ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, m_imguiWindowFlags);
 }
 
-void ComponentDesignerColorEditor::onRender()
+void ComponentDesignerColorEditor::onImGuiRender()
 {
 	ComponentDesigner* engine = Lumen::getApp().getActiveEngine<ComponentDesigner>();
 	if (!engine) 
@@ -109,7 +109,7 @@ void ComponentDesignerColorEditor::onRender()
 	}
 }
 
-void ComponentDesignerColorEditor::end()
+void ComponentDesignerColorEditor::onImGuiEnd()
 {
 	ImGui::End();
 }

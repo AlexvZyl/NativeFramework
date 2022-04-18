@@ -42,6 +42,14 @@ public:
 	inline EngineCore() = default;
 	// Destructor.
 	virtual ~EngineCore();
+	// Sets the name of the engine (and elements that have names.)
+	void setName(const std::string& name);
+
+protected:
+	// Set the name of elements in the engine.
+	// This should be overridden in the child classes but not called by the user.
+	inline virtual void setNameOfElements(const std::string& name) {};
+public:
 
 	// ------------------------- //
 	//  L U M E N   W I N D O W  //
@@ -53,17 +61,14 @@ public:
 	void unsavedDocument();
 	// Display window as an unsaved document.
 	void savedDocument();
-	// Set the name elements of the engine.
-	inline virtual void setName(const std::string& name) = 0;
 	// Is the mouse hovering the engine?
 	bool m_isHovered = false;
 	// Is the engine focused?
 	bool m_isFocused = false;
 	// Get the window the egine is in.
-	inline LumenWindow* getLumenWindow() 
-	{
-		return m_parentWindow;
-	}
+	inline LumenWindow* getLumenWindow() { return m_parentWindow; }
+	// Get the content region in the parent window.
+	const glm::vec2& getWindowContentRegionSize() const;
 
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -76,7 +81,7 @@ public:
 	// Returns the FBO texture ID that can be rendered.
 	unsigned int getRenderTexture();
 	// Returns the ID of the entity in the pixel coords.
-	unsigned int getEntityID(glm::vec2& pixelCoords);
+	unsigned int getEntityID(const glm::vec2& pixelCoords);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -100,10 +105,10 @@ public:
 	//  C O O R D I N A T E S  //
 	// ----------------------- //
 
-	// Get the vertex nearest to the provided coordinates.
+	// Get the grid vertex nearest to the provided coordinates.
 	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 
-	// Get the mouse position in the LumenWindow window.
+	// Get the mouse position in the Lumen Window.
 	glm::vec2 getMouseLocalPosition();
 	// Get the mouse position in the glfw window.
 	glm::vec2 getMouseGlobalPosition();
@@ -133,6 +138,9 @@ public:
 
 private:
 
+	template <class EngineType>
+	friend class GraphicsScene;
+
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
 
@@ -145,7 +153,6 @@ private:
 	virtual void onHoverEventForce(const NotifyEvent& event);
 	virtual void onDehoverEventForce(const NotifyEvent& event);
 	virtual void onWindowResizeEventForce(const WindowEvent& event);
-
 };
 
 //=============================================================================================================================================//
