@@ -105,6 +105,13 @@ public:
 		return !isType(compareID);
 	}
 
+	// Cast the event to the requested type.
+	template<class EventType>
+	inline const EventType& cast() const 
+	{
+		return dynamic_cast<const EventType&>(*this);
+	}
+
 	// ID describing the event.
 	LumenEventID ID;
 

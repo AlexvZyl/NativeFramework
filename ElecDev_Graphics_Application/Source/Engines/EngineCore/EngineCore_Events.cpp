@@ -20,26 +20,26 @@ void EngineCore::onEvent(const Event& event)
 	if (event.isConsumed()) return;
 
 	// Mouse events.
-	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(dynamic_cast<const MouseMoveEvent&>(event)); }
-	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEvent(dynamic_cast<const MouseDragEvent&>(event)); }
-	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEvent(dynamic_cast<const MouseButtonEvent&>(event)); }
-	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEvent(dynamic_cast<const MouseButtonEvent&>(event)); }
-	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(dynamic_cast<const MouseButtonEvent&>(event)); }
-	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(dynamic_cast<const MouseScrollEvent&>(event)); }
+	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(event.cast<MouseMoveEvent>()); }
+	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEvent(event.cast<MouseDragEvent>()); }
+	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
+	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
+	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
+	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(event.cast<MouseScrollEvent>()); }
 
 	// Key events.
-	else if (event.isType(EventType_KeyPress))			{ onKeyEvent(dynamic_cast<const KeyEvent&>(event)); }
-	else if (event.isType(EventType_KeyRelease))		{ onKeyEvent(dynamic_cast<const KeyEvent&>(event)); }
+	else if (event.isType(EventType_KeyPress))			{ onKeyEvent(event.cast<KeyEvent>()); }
+	else if (event.isType(EventType_KeyRelease))		{ onKeyEvent(event.cast<KeyEvent>()); }
 
 	// Window events.
-	else if (event.isType(EventType_WindowResize))		{ onWindowResizeEventForce(dynamic_cast<const WindowEvent&>(event)); }
+	else if (event.isType(EventType_WindowResize))		{ onWindowResizeEventForce(event.cast<WindowEvent>()); }
 	else if (event.isType(EventType_WindowMove))		{}
 
 	// Notify.
-	else if (event.isType(EventType_Notify))			{ onNotifyEventForce(dynamic_cast<const NotifyEvent&>(event)); }
+	else if (event.isType(EventType_Notify))			{ onNotifyEventForce(event.cast<NotifyEvent>()); }
 
 	// File events.
-	else if (event.isType(EventType_FileDrop))			{ onFileDropEvent(dynamic_cast<const FileDropEvent&>(event)); }
+	else if (event.isType(EventType_FileDrop))			{ onFileDropEvent(event.cast<FileDropEvent>()); }
 
 	// Event unhandled.
 	else LUMEN_LOG_WARN("No handler for event.", "Engine Core");

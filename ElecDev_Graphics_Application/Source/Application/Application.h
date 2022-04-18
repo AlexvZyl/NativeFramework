@@ -115,7 +115,7 @@ public:
 	// Handles all of the events in the event log.
 	void onUpdate();
 	// Handle events specifically for the Application Window.
-	void onEvent(Event& event);
+	void onEvent(const Event& event);
 	// Should the app close?
 	bool isRunning();
 	// Close the app.
@@ -239,13 +239,13 @@ private:
 	// ------------- //
 
 	// Handle window events.
-	void onWindowResizeEvent(WindowEvent& event);
+	void onWindowResizeEvent(const WindowEvent& event);
 	// Handle serialisation events.
-	void onFileDropEvent(FileDropEvent& event);
+	void onFileDropEvent(const FileDropEvent& event);
 	// Load files.
-	void onFileLoadEvent(FileLoadEvent& event);
+	void onFileLoadEvent(const FileLoadEvent& event);
 	// Save files.
-	void onFileSaveEvent(FileSaveEvent& event);
+	void onFileSaveEvent(const FileSaveEvent& event);
 	// Update the ImGui state.
 	// Lumen controls some of the state changes (for optimisation).
 	void imguiOnUpdate();

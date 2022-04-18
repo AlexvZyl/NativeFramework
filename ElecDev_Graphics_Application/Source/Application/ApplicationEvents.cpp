@@ -184,15 +184,15 @@ void Application::onFocusedWindowChange(LumenWindow* newWindow)
 //  Application events.																															//
 //==============================================================================================================================================//
 
-void Application::onEvent(Event& event)
+void Application::onEvent(const Event& event)
 {
 	// Window events.																	 
-	if      (event.isType(EventType_WindowResize))	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	if      (event.isType(EventType_WindowResize))	{ onWindowResizeEvent(event.cast<WindowEvent>()); }
 												 								 
 	// File events.					 								 
-	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
-	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
-	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
+	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(event.cast<FileDropEvent>()); }
+	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(event.cast<FileSaveEvent>()); }
+	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(event.cast<FileLoadEvent>()); }
 
 	// Event unhandled.
 	else LUMEN_LOG_WARN("No handler for event.", "Application");
@@ -202,7 +202,7 @@ void Application::onEvent(Event& event)
 //  Window events.																																//
 //==============================================================================================================================================//
 
-void Application::onWindowResizeEvent(WindowEvent& event)
+void Application::onWindowResizeEvent(const WindowEvent& event)
 {
 	// This should pass a scaled window resize event to all of the windows.  I think...
 }
@@ -211,7 +211,7 @@ void Application::onWindowResizeEvent(WindowEvent& event)
 //  File events.																																//
 //==============================================================================================================================================//
 
-void Application::onFileDropEvent(FileDropEvent& event)
+void Application::onFileDropEvent(const FileDropEvent& event)
 {
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
@@ -221,7 +221,7 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	}
 }
 
-void Application::onFileSaveEvent(FileSaveEvent& event) 
+void Application::onFileSaveEvent(const FileSaveEvent& event) 
 {
 	// Iterate through the paths.
 	for (auto& path : event.fileData)
@@ -246,7 +246,7 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 	}
 }
 
-void Application::onFileLoadEvent(FileLoadEvent& event)
+void Application::onFileLoadEvent(const FileLoadEvent& event)
 {
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)

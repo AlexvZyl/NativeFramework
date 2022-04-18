@@ -58,7 +58,7 @@ void PopUpMenu::onEvent(const Event& event)
 {
     if (event.isConsumed()) return;
 
-    if (event.isType(EventType_Defocus)) onDefocusEvent(dynamic_cast<const NotifyEvent&>(event));
+    if (event.isType(EventType_Defocus)) onDefocusEvent(event.cast<NotifyEvent>());
 }
 
 /*=======================================================================================================================================*/

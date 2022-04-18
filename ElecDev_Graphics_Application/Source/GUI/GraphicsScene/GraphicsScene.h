@@ -108,7 +108,7 @@ public:
 		// Mouse events.
 		if (event.isType(EventType_MouseMove))
 		{
-			const MouseMoveEvent& mouseEvent = dynamic_cast<const MouseMoveEvent&>(event);
+			const MouseMoveEvent& mouseEvent = event.cast<MouseMoveEvent>();
 			m_engine->onEvent(MouseMoveEvent(
 				globalToLocalCoords(mouseEvent.mousePosition), 
 				mouseEvent.ID
@@ -116,7 +116,7 @@ public:
 		}
 		else if (event.isType(EventType_MouseDrag))
 		{
-			const MouseDragEvent& mouseEvent = dynamic_cast<const MouseDragEvent&>(event);
+			const MouseDragEvent& mouseEvent = event.cast<MouseDragEvent>();
 			m_engine->onEvent(MouseDragEvent(
 				globalToLocalCoords(mouseEvent.initialPosition), 
 				globalToLocalCoords(mouseEvent.mousePosition),
@@ -126,7 +126,7 @@ public:
 		}
 		else if (event.isType(EventType_MouseScroll))
 		{
-			const MouseScrollEvent& mouseEvent = dynamic_cast<const MouseScrollEvent&>(event);
+			const MouseScrollEvent& mouseEvent = event.cast<MouseScrollEvent>();
 			m_engine->onEvent(MouseScrollEvent(
 				globalToLocalCoords(mouseEvent.mousePosition),
 				mouseEvent.yOffset,
@@ -136,7 +136,7 @@ public:
 		}
 		else if (event.isType(EventType_MousePress) || event.isType(EventType_MouseRelease || event.isType(EventType_MouseDoublePress)))
 		{
-			const MouseButtonEvent& mouseEvent = dynamic_cast<const MouseButtonEvent&>(event);
+			const MouseButtonEvent& mouseEvent = event.cast<MouseButtonEvent>();
 			m_engine->onEvent(MouseButtonEvent(
 				globalToLocalCoords(mouseEvent.mousePosition),
 				mouseEvent.ID
@@ -146,7 +146,7 @@ public:
 		// Key events.
 		else if (event.isType(EventType_KeyPress) || event.isType(EventType_KeyRelease) || event.isType(EventType_KeyRepeat))
 		{
-			const KeyEvent& keyEvent = dynamic_cast<const KeyEvent&>(event);
+			const KeyEvent& keyEvent = event.cast<KeyEvent>();
 			m_engine->onEvent(KeyEvent(
 				keyEvent.key,
 				keyEvent.ID,
