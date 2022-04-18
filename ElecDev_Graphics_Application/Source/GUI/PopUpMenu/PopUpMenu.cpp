@@ -108,7 +108,10 @@ void PopUpMenu::onImGuiRender()
 
             if (ImGui::MenuItem("Remove component", "DEL"))
             {
-                design_engine->deleteActiveComponent();
+                if (design_engine->m_activeComponent)
+                    design_engine->deleteActiveComponent();
+                else if (design_engine->m_activeCable)
+                    design_engine->deleteActiveCable();
                 closeWindow();
             }
         }
