@@ -28,7 +28,7 @@ public:
 	inline WindowType* pushWindow(const Args& ... args)
 	{
 		m_windows.insert({m_totalLayerCount, std::make_unique<WindowType>(args...)});
-		WindowType* window = dynamic_cast<WindowType*>(getWindow(m_totalLayerCount));
+		WindowType* window = getWindow<WindowType>(m_totalLayerCount);
 		window->onAttach(m_totalLayerCount++);
 		return window;
 	}
