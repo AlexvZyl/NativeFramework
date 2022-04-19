@@ -43,6 +43,11 @@ const glm::vec2& EngineCore::getWindowContentRegionSize() const
 //  Scene wrappers.																															   //
 //=============================================================================================================================================//
 
+Scene& EngineCore::getScene() 
+{
+	return *m_scene.get();
+}
+
 unsigned EngineCore::getRenderTexture() 
 { 
 	return m_scene->getRenderTexture(); 
@@ -60,17 +65,18 @@ glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords)
 
 glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
 {
-	return m_scene->pixelCoordsToWorldCoords(distance) - m_scene->pixelCoordsToWorldCoords({ 0.f, 0.f });
+	Camera& camera = m_scene->getCamera();
+	return camera.pixelCoordsToWorldCoords(distance) - camera.pixelCoordsToWorldCoords({ 0.f, 0.f });
 }
 
 glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords) 
 {
-	return m_scene->pixelCoordsToWorldCoords(coords);
+	return m_scene->getCamera().pixelCoordsToWorldCoords(coords);
 }
 
 glm::vec3 EngineCore::pixelCoordsToCameraCoords(const glm::vec2& coords) 
 {
-	return m_scene->pixelCoordsToCameraCoords(coords);
+	return m_scene->getCamera().pixelCoordsToCameraCoords(coords);
 }
 
 //=============================================================================================================================================//

@@ -12,8 +12,6 @@
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
-	Base2DEngine::onMouseButtonEvent(event);
-
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
@@ -126,12 +124,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 
 void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 {
-	Base2DEngine::onMouseMoveEvent(event);
-	uint64_t eventID = event.ID;
-
-	glm::vec2 pixelCoords = event.mousePosition;
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+	glm::vec2 screenCoords = pixelCoordsToWorldCoords(event.mousePosition);
 
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
@@ -183,8 +176,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 	}
 
 	// Store state.
-	//m_lastDragPos = screenCoords;
-	m_currentEntityID = getEntityID(pixelCoords);
+	m_currentEntityID = getEntityID(event.mousePosition);
 
 	if (event.isType(EventType_MouseDrag))
 	{
@@ -203,9 +195,6 @@ void ComponentDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 
 void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 {
-	Base2DEngine::onKeyEvent(event);
-
-
 	// Events based on key type.
 	if (event.isType(EventType_KeyPress))
 	{
@@ -268,49 +257,62 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event) 
 {
 	Base2DEngine::onMouseDragEvent(event);
-	uint64_t eventID = event.ID;
 
-	glm::vec2 pixelCoords = event.mousePosition;
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
-	if (designerState == CompDesignState::SELECT) {
-		//User is dragging a component.
-		glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
-		if (m_activeVertex) {
-			//First check if we should move a vertex
-			//We need to move a vertex
-			if (m_activePoly) {
-				m_activePoly->translateVertex(m_activeVertex, translation);
+	if (event.isType(EventType_MouseButtonLeft))
+	{
+		glm::vec2 pixelCoords = event.mousePosition;
+		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+		if (designerState == CompDesignState::SELECT) 
+		{
+			// User is dragging a component.
+			glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
+			if (m_activeVertex) 
+			{
+				// First check if we should move a vertex
+				// We need to move a vertex
+				if (m_activePoly) 
+				{
+					m_activePoly->translateVertex(m_activeVertex, translation);
+				}
+				else if (m_activeLine) 
+				{
+					m_activeLine->translateVertex(m_activeVertex, translation);
+				}
 			}
-			else if (m_activeLine) {
-				m_activeLine->translateVertex(m_activeVertex, translation);
-			}
-		}
-		else {
-			//If we are not moving a vertex, then check to move primitives
-			if (m_activePoly) {
-				m_activePoly->translate(translation);
-				m_lastDragPos = screenCoords;
-			}
-			if (m_activeLine) {
-				m_activeLine->translate(translation);
-				m_lastDragPos = getNearestGridVertex(screenCoords);
-			}
-			if (m_activeCircle) {
-				m_activeCircle->translate(translation);
-				m_lastDragPos = getNearestGridVertex(screenCoords);
-			}
-			if (m_activeText) {
-				//Consideration: Should we keep track of the text position in the parent port/component? If so, this should be updated here.
-				m_activeText->translate(translation);
-				m_lastDragPos = getNearestGridVertex(screenCoords);
-			}
-			if (m_activePort.get()) {
-				m_activePort->move(translation);
-				m_lastDragPos = getNearestGridVertex(screenCoords);
+			else 
+			{
+				// If we are not moving a vertex, then check to move primitives
+				if (m_activePoly) 
+				{
+					m_activePoly->translate(translation);
+					m_lastDragPos = screenCoords;
+				}
+				if (m_activeLine) 
+				{
+					m_activeLine->translate(translation);
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+				if (m_activeCircle) 
+				{
+					m_activeCircle->translate(translation);
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+				if (m_activeText) 
+				{
+					// Consideration: Should we keep track of the text position in the parent port/component? If so, this should be updated here.
+					m_activeText->translate(translation);
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
+				if (m_activePort.get()) 
+				{
+					m_activePort->move(translation);
+					m_lastDragPos = getNearestGridVertex(screenCoords);
+				}
 			}
 		}
 	}
+
 	std::string msg = "Delta: " + std::to_string(event.currentFrameDelta.x) + " + " + std::to_string(event.currentFrameDelta.y);
 	LUMEN_LOG_DEBUG(msg, "Comp Design Drag");
 }

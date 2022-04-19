@@ -74,8 +74,8 @@ public:
 	//  R E N D E R I N G  //
 	// ------------------- //
 
-	// The scene rendered to.
-	std::unique_ptr<Scene> m_scene = nullptr;
+	// Get the engine's scene.
+	Scene& getScene();
 	// Main loop where the rendering happens.
 	virtual void onRender();
 	// Returns the FBO texture ID that can be rendered.
@@ -118,11 +118,6 @@ public:
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
 	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& coords);
 
-	// Stores the previous mouse event information.
-	glm::vec2 m_prevMouseEventPixelCoords = { NULL, NULL };
-	// Stores the vector that goes into the world.
-	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };
-
 	// ----------------------------- //
 	//  D E S I G N   P A L E T T E  //
 	// ----------------------------- //
@@ -140,6 +135,12 @@ private:
 
 	template <class EngineType>
 	friend class GraphicsScene;
+
+	friend class Base2DEngine;
+	friend class Base3DEngine;
+
+	// The scene rendered to.
+	std::unique_ptr<Scene> m_scene = nullptr;
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;

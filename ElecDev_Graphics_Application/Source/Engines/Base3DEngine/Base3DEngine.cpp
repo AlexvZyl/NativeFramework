@@ -16,14 +16,10 @@
 //  Constructor and Destructor.																												   //
 //=============================================================================================================================================//
 
-// Constructor.  Init with BaseEngineGL constructor.
-// Constructor.  Init with BaseEngineGL constructor.
 Base3DEngine::Base3DEngine() 
 	: EngineCore()
 {
-	// Create and bind a 3D scene.
-	m_scene = std::make_unique<Scene>(CameraType::Standard3D, 500, 500);
-	Renderer::bindScene(m_scene.get());
+	m_scene = std::make_unique<Scene>(CameraType::Standard3D, glm::vec2(500, 500));
 }
 
 //=============================================================================================================================================//

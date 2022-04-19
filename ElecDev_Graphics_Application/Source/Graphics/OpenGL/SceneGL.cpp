@@ -21,21 +21,25 @@
 //  Constructor & Destructor.																													//
 //==============================================================================================================================================//
 
-Scene::Scene(CameraType cameraType, float width, float height) 
+Scene::Scene(CameraType cameraType, const glm::vec2& size) 
 {
 	// FBO.
-	m_FBO					= std::make_unique<FrameBufferObject>(width, height);
+	m_FBO					= std::make_unique<FrameBufferObject>((int)size.x, (int)size.y);
 	// Camera.
-	m_camera				= std::make_unique<Camera>(cameraType, width, height);
+	m_camera				= std::make_unique<Camera>(cameraType, size);
+	// Grid.
 	// VAO's.
 	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
 	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_texturedTrianglesVAO  = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
+
+	Renderer::storeAndBindScene(this);
+	m_grid					= std::make_unique<Grid>();
+	Renderer::restoreAndUnbindScene();
+
 	// Background.
 	createDefaultBackground();
-	Renderer::bindScene(this);
-	m_grid = std::make_unique<Grid>();
 }
 
 Scene::~Scene() 
@@ -49,29 +53,19 @@ Scene::~Scene()
 //  Camera Methods.																																//
 //==============================================================================================================================================//
 
-glm::mat4* Scene::getViewMatrix() 
-{ 
-	return &m_camera->m_viewMatrix; 
+Camera& Scene::getCamera()
+{
+	return *m_camera.get();
 }
 
-glm::mat4* Scene::getProjectionMatrix() 
+void Scene::setViewport(const glm::vec2& size) 
 { 
-	return &m_camera->m_projectionMatrix; 
+	m_camera->setViewport(size); 
 }
 
-void Scene::onUpdate() 
-{ 
-	m_camera->onUpdate(); 
-}
-
-glm::vec4& Scene::getViewport() 
-{ 
-	return m_camera->m_viewportVec;
-}
-
-void Scene::setViewport(int width, int height) 
-{ 
-	m_camera->setViewport(width, height); 
+void Scene::setViewport(const glm::vec4& size)
+{
+	m_camera->setViewport(size);
 }
 
 //==============================================================================================================================================//
@@ -82,8 +76,8 @@ void Scene::onRenderInit()
 {
 	m_FBO->bind();
 	m_FBO->clear();
-	onUpdate();
-	Renderer::setViewport(getViewport());
+	getCamera().onUpdate();
+	Renderer::setViewport(getCamera().getViewport());
 	m_FBO->setDrawBuffers();
 }
 
@@ -100,7 +94,7 @@ unsigned Scene::getRenderTexture()
 unsigned Scene::getEntityID(const glm::vec2& pixelCoords)
 {
 	// Adjust the pixel coords.
-	return m_FBO->getEntityID({pixelCoords.x, m_camera->m_viewportVec[3] - pixelCoords.y});
+	return m_FBO->getEntityID({pixelCoords.x, getCamera().getViewport()[3] - pixelCoords.y});
 }
 
 void Scene::deleteGPUResources() 
@@ -110,21 +104,7 @@ void Scene::deleteGPUResources()
 
 void Scene::recreateGPUResources() 
 {
-	m_FBO->createResources(m_camera->m_viewportVec[2], m_camera->m_viewportVec[3]);
-}
-
-//==============================================================================================================================================//
-//  Coordinates.																															    //
-//==============================================================================================================================================//
-
-glm::vec3 Scene::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
-{
-	return m_camera->pixelCoordsToWorldCoords(pixelCoords);
-}
-
-glm::vec3 Scene::pixelCoordsToCameraCoords(const glm::vec2& pixelCoords) 
-{ 
-	return m_camera->pixelCoordsToCameraCoords(pixelCoords); 
+	m_FBO->createResources(getCamera().getViewport()[2], getCamera().getViewport()[3]);
 }
 
 //==============================================================================================================================================//
@@ -133,8 +113,8 @@ glm::vec3 Scene::pixelCoordsToCameraCoords(const glm::vec2& pixelCoords)
 
 void Scene::createDefaultBackground() 
 {
-	if      (m_camera->m_type == CameraType::Standard2D) create2DBackground();
-	else if (m_camera->m_type == CameraType::Standard3D) create2DBackground();
+	if      (getCamera().getType() == CameraType::Standard2D) create2DBackground();
+	else if (getCamera().getType() == CameraType::Standard3D) create2DBackground();
 }
 
 void Scene::create2DBackground()
@@ -191,7 +171,7 @@ void Scene::create3DBackground()
 
 void Scene::resize(const glm::vec2& size) 
 {
-	m_camera->resize((int)size.x, (int)size.y);
+	getCamera().resize(size);
 	m_FBO->resize((int)size.x, (int)size.y);
 }
 

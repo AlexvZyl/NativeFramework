@@ -21,12 +21,12 @@
 AssetViewer::AssetViewer() 
 {
 	enableDesignPalette();
-	m_scene->m_grid->disableHelperCircle();
+	getScene().m_grid->disableHelperCircle();
 }
 
 void AssetViewer::clearAssets()
 {
-	Renderer::storeAndBindScene(m_scene.get());
+	Renderer::storeAndBindScene(&getScene());
 
 	m_currentAsset = "No Asset.";
 	m_circuit.reset();
@@ -47,7 +47,7 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 	if (path.filename().string() == m_currentAsset)
 		return;
 	
-	Renderer::storeAndBindScene(m_scene.get());
+	Renderer::storeAndBindScene(&getScene());
 
 	try
 	{
