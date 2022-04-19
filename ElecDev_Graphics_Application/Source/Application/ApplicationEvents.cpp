@@ -4,8 +4,8 @@
 
 #include "Application.h"
 #include "Events/EventLog.h"
-#include "Layers/Layer.h"
-#include "Layers/LayerStack.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/LumenWindow/WindowStack.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
@@ -15,7 +15,7 @@
 #include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
-//  Layer event dispatching.																													//
+//  window event dispatching.																													//
 //==============================================================================================================================================//
 
 void Application::onUpdate()
@@ -28,98 +28,113 @@ void Application::onUpdate()
 	// Log messages.
 	Logger::flushQueue();
 
-	// Pop the layers queued from the previous frame's rendering.
+	// Pop the windows queued from the previous frame's rendering.
 	// Dispatched here so that they do not get GLFW events.
-	popLayers();
+	popWindows();
 
-	// Find the hovered layer on a mouse move event.
-	if (EventLog::mouseMove)
+	// Find the hovered window on a mouse move event.
+	if (EventLog::mouseMoveOccured())
 	{
-		// If there is no hovered layer, we need to check if a layer is hovered.
-		if (!m_hoveredLayer) 
-			onHoveredLayerChange(findHoveredLayer());
+		// If there is no hovered window, we need to check if a window is hovered.
+		if (!m_hoveredWindow) 
+			onHoveredWindowChange(findHoveredWindow());
 
-		// If the currently hovered layer is no longer being hovered, we need to find the new layer.
-		else if(!m_hoveredLayer->isHovered()) 
-			onHoveredLayerChange(findHoveredLayer());
+		// If the currently hovered window is no longer being hovered, we need to find the new window.
+		else if(!m_hoveredWindow->isHovered()) 
+			onHoveredWindowChange(findHoveredWindow());
 	}
 	
 	// Dispatch GLFW events.
-	for (auto& event : EventLog::events)
+	for (auto& event : EventLog::getEvents())
 	{
-		// Application events are dispatched explicitly (since it is not a part of the layers).
+		// Application events are dispatched explicitly (since it is not a part of the windows).
 		if (event->isType(EventType_Application))
 		{
 			Application::onEvent(*event.get()); 
 			continue;
 		}
-		// File drop should go to the hovered layer.
-		else if (event->isType(EventType_FileDrop) && m_hoveredLayer) 
+		// File drop should go to the hovered window.
+		else if (event->isType(EventType_FileDrop) && m_hoveredWindow) 
 		{
-			m_hoveredLayer->onEvent(*event.get());
+			m_hoveredWindow->onEvent(*event.get());
 			continue;
 		}
 		
-		// On a mouse press we need to change the focused layer.
-		// This also allows us to modify how dear imgui sets focused layers.
-		if (event->isType(EventType_MousePress))
-			onFocusedLayerChange(m_hoveredLayer); 
-
-		// Pass events to focused layer.
-		if (m_focusedLayer) 
-			m_focusedLayer->onEvent(*event.get());
-	}
-
-	// These mouse events are kept seperate to prevent handling events more than once per frame.
-	if (m_hoveredLayer)
-	{
-		if (EventLog::mouseMove)
-			m_hoveredLayer->onEvent(*EventLog::mouseMove.get());
-
-		if (EventLog::mouseScroll) 
-			m_hoveredLayer->onEvent(*EventLog::mouseScroll.get());
-
-		if (EventLog::mouseDrag)
-			m_hoveredLayer->onEvent(*EventLog::mouseDrag.get());
-	}
-
-	// Dispatch notify events after all of the other events are done.
-	if (m_focusedLayer)
-	{
-		for (auto& event : EventLog::notifyEvents)
+		// On a mouse press we need to change the focused window.
+		// This also allows us to modify how dear imgui sets focused windows.
+		else if (event->isType(EventType_MousePress))
 		{
-			m_focusedLayer->onEvent(*event.get());
+			// Change focus.
+			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow)
+			{
+				m_hoveredWindow->focus();
+			}
+			else if(!ImGui::GetItemID())
+			{
+				ImGui::SetWindowFocus(NULL);
+				m_focusedWindow = nullptr;
+			}
+
+			if(m_focusedWindow)	m_focusedWindow->onEvent(*event.get());
+		}
+
+		// Pass events to focused window.
+		else if (m_focusedWindow)
+		{
+			m_focusedWindow->onEvent(*event.get());
 		}
 	}
 
-	// Pop layers that are queued from GLFW events.
-	// We pop them here so that they do not get dispatched for onUpdate.
-	popLayers();
+	// These mouse events are kept seperate to prevent handling events more than once per frame.
+	if (m_hoveredWindow)
+	{
+		if (EventLog::mouseMoveOccured())
+			m_hoveredWindow->onEvent(EventLog::getMouseMove());
 
-	// Dispatch the events that are handled by the layers.
+		if (EventLog::mouseScrollOccured()) 
+			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
+
+		if (EventLog::mouseDragOccured())
+			m_hoveredWindow->onEvent(EventLog::getMouseDrag());
+	}
+
+	// Dispatch notify events after all of the other events are done.
+	if (m_focusedWindow)
+	{
+		for (auto& event : EventLog::getNotifyEvents())
+		{
+			m_focusedWindow->onEvent(event);
+		}
+	}
+
+	// Pop windows that are queued from GLFW events.
+	// We pop them here so that they do not get dispatched for onUpdate.
+	popWindows();
+
+	// Dispatch the events that are handled by the windows.
 	// These include things such as window resizes and docking state changes.
-	// They are events that occur and GLFW is not aware of, since layers essentially 
-	// are their own windows.  Currently every layer is checked every frame.  This is not 
-	// necessary.  The only thing preventing us from only updating only the focused layer is 
+	// They are events that occur and GLFW is not aware of, since windows essentially 
+	// are their own windows.  Currently every window is checked every frame.  This is not 
+	// necessary.  The only thing preventing us from only updating only the focused window is 
 	// due to how resizing works when windows are docked.  They do not necessarily
 	// come into focus, missing the resize event.
-	for (auto& [name, layer] : m_layerStack->getLayers())
-		layer->onUpdate();
+	for (auto& [ID, window] : m_windowStack->getWindows())
+		window->onUpdate();
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	EventLog::clear();
 }
 
-Layer* Application::findHoveredLayer()
+LumenWindow* Application::findHoveredWindow()
 {
-	// Find the layer that is being hovered.
+	// Find the window that is being hovered.
 	// We do not have to worry about order, since dear imgui handles it.
-	for (auto& [name, layer] : m_layerStack->getLayers())
+	for (auto& [ID, window] : m_windowStack->getWindows())
 	{
-		if (layer->isHovered())
-			return layer.get();
+		if (window->isHovered())
+			return window.get();
 	}
-	// No layer is found.
+	// No window is found.
 	return nullptr;
 }
 
@@ -129,81 +144,55 @@ void Application::imguiOnUpdate()
 
 	// Pass events to ImGui.
 	// Thess events are called here so that ImGui is not hammered with more that one per frame.
-	if (EventLog::mouseScroll)
-		ImGui_ImplGlfw_ScrollCallback(m_window, EventLog::mouseScroll->xOffset, EventLog::mouseScroll->yOffset);
-	if (EventLog::mouseMove)
-		ImGui_ImplGlfw_CursorPosCallback(m_window, EventLog::mouseMove->mousePosition.x, EventLog::mouseMove->mousePosition.y);
+	if (EventLog::mouseScrollOccured())
+	{
+		MouseScrollEvent& event = EventLog::getMouseScroll();
+		ImGui_ImplGlfw_ScrollCallback(getGLFWWindow(), event.xOffset, event.yOffset);
+	}
+	if (EventLog::mouseMoveOccured())
+	{
+		MouseMoveEvent& event = EventLog::getMouseMove();
+		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, event.mousePosition.y);
+	}
 }
 
 //==============================================================================================================================================//
-//  Layer events.																																//
+//  Window events.																																//
 //==============================================================================================================================================//
 
-void Application::onHoveredLayerChange(Layer* newLayer)
+void Application::onHoveredWindowChange(LumenWindow* newWindow)
 {
-	// Ensure change actually ocurred.
-	if(newLayer == m_hoveredLayer) return;
+	if(newWindow == m_hoveredWindow) return;
 
-	// Create a dehover event.
-	if (m_hoveredLayer)
-	{
-		NotifyEvent dehoverEvent(EventType_Dehover);
-		m_hoveredLayer->onEvent(dehoverEvent);
-	}
+	if (m_hoveredWindow) m_hoveredWindow->onEvent(NotifyEvent(EventType_Dehover));
+	if (newWindow)		 newWindow->onEvent(NotifyEvent(EventType_Hover));
 
-	// Create a hover event.
-	if (newLayer)
-	{
-		NotifyEvent hoverEvent(EventType_Hover);
-		newLayer->onEvent(hoverEvent);
-	}
-
-	// Set the new hovered layer.
-	m_hoveredLayer = newLayer;
+	m_hoveredWindow = newWindow;
 }
 
-void Application::onFocusedLayerChange(Layer* newLayer)
+void Application::onFocusedWindowChange(LumenWindow* newWindow)
 {
-	// Ensure change actually ocurred.
-	if (newLayer == m_focusedLayer) return;
+	if (newWindow == m_focusedWindow) return;
 
-	// Let ImGui set focus in this case.
-	if (!newLayer && ImGui::GetItemID()) return;
+	if (m_focusedWindow)  m_focusedWindow->onEvent(NotifyEvent(EventType_Defocus));
+	if (newWindow)		  newWindow->onEvent(NotifyEvent(EventType_Focus));
 
-	// Create a defocus event.
-	if (m_focusedLayer)
-	{
-		NotifyEvent defocusEvent(EventType_Defocus);
-		m_focusedLayer->onEvent(defocusEvent);
-	}
-
-	// Create a focus event.
-	if (newLayer)
-	{
-		NotifyEvent focusEvent(EventType_Focus);
-		newLayer->onEvent(focusEvent);
-		newLayer->focus();
-	}
-	// No layer is being hovered.
-	else ImGui::SetWindowFocus(NULL);
-
-	// Assign new focused layer.
-	m_focusedLayer = newLayer;
+	m_focusedWindow = newWindow;
 }
 
 //==============================================================================================================================================//
 //  Application events.																															//
 //==============================================================================================================================================//
 
-void Application::onEvent(Event& event)
+void Application::onEvent(const Event& event)
 {
 	// Window events.																	 
-	if      (event.isType(EventType_WindowResize))	{ onWindowResizeEvent(dynamic_cast<WindowEvent&>(event)); }
+	if      (event.isType(EventType_WindowResize))	{ onWindowResizeEvent(event.cast<WindowEvent>()); }
 												 								 
 	// File events.					 								 
-	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(dynamic_cast<FileDropEvent&>(event)); }
-	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(dynamic_cast<FileSaveEvent&>(event)); }
-	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(dynamic_cast<FileLoadEvent&>(event)); }
+	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(event.cast<FileDropEvent>()); }
+	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(event.cast<FileSaveEvent>()); }
+	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(event.cast<FileLoadEvent>()); }
 
 	// Event unhandled.
 	else LUMEN_LOG_WARN("No handler for event.", "Application");
@@ -213,16 +202,16 @@ void Application::onEvent(Event& event)
 //  Window events.																																//
 //==============================================================================================================================================//
 
-void Application::onWindowResizeEvent(WindowEvent& event)
+void Application::onWindowResizeEvent(const WindowEvent& event)
 {
-	// This should pass a scaled window resize event to all of the layers.  I think...
+	// This should pass a scaled window resize event to all of the windows.  I think...
 }
 
 //==============================================================================================================================================//
 //  File events.																																//
 //==============================================================================================================================================//
 
-void Application::onFileDropEvent(FileDropEvent& event)
+void Application::onFileDropEvent(const FileDropEvent& event)
 {
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
@@ -232,7 +221,7 @@ void Application::onFileDropEvent(FileDropEvent& event)
 	}
 }
 
-void Application::onFileSaveEvent(FileSaveEvent& event) 
+void Application::onFileSaveEvent(const FileSaveEvent& event) 
 {
 	// Iterate through the paths.
 	for (auto& path : event.fileData)
@@ -246,18 +235,18 @@ void Application::onFileSaveEvent(FileSaveEvent& event)
 			if (designEngine) 
 			{
 				saveToYAML(designEngine->m_circuit.get(), path);
-				designEngine->m_layer->setName(path.filename().stem().string(), true);
+				designEngine->setName(path.filename().stem().string());
 			}
 			else if (component_designer) 
 			{
 				saveToYAML(component_designer->m_activeComponent.get(), path);
-				component_designer->m_layer->setName(path.filename().stem().string(), true);
+				component_designer->setName(path.filename().stem().string());
 			}
 		}
 	}
 }
 
-void Application::onFileLoadEvent(FileLoadEvent& event)
+void Application::onFileLoadEvent(const FileLoadEvent& event)
 {
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)

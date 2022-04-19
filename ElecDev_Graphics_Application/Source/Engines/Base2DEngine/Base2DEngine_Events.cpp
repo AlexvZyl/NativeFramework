@@ -8,12 +8,13 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
+#include "OpenGL/SceneGL.h"
 
 //==============================================================================================================================================//
 //  Mouse events.																																//
 //==============================================================================================================================================//
 
-void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
+void Base2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 {
 	// --------------------- //
 	//  L E F T   P R E S S  //
@@ -45,7 +46,7 @@ void Base2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
 	}
 }
 
-void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
+void Base2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 {
 	EngineCore::onMouseMoveEvent(event);
 
@@ -72,7 +73,7 @@ void Base2DEngine::onMouseMoveEvent(MouseMoveEvent& event)
 	m_prevMouseEventWorldVec = currmousePosVec;
 }
 
-void Base2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
+void Base2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	// Calculate zoom value based on mouse wheel scroll.
 	//----------------------------------------------------------
@@ -105,7 +106,7 @@ void Base2DEngine::onMouseScrollEvent(MouseScrollEvent& event)
 //  Key Events.																																	//
 //==============================================================================================================================================//
 
-void Base2DEngine::onKeyEvent(KeyEvent& event) 
+void Base2DEngine::onKeyEvent(const KeyEvent& event) 
 {
 
 }

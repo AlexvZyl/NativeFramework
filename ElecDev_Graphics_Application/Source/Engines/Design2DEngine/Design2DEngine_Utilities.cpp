@@ -168,7 +168,7 @@ Port* Design2DEngine::getPort(unsigned eID)
 	}
 }
 
-void Design2DEngine::setName(const std::string& name) 
+void Design2DEngine::setNameOfElements(const std::string& name) 
 {
 	m_circuit->m_label = name;
 }

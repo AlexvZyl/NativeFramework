@@ -4,24 +4,24 @@
 // Includes.																															 //
 //=======================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include <unordered_map>
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
 //=======================================================================================================================================//
 
-class ComponentEditor : public GuiElementCore
+class ComponentEditor : public LumenWindow
 {
 public:
 
 	// Constructor.
-	ComponentEditor(std::string name, int windowFlags);
+	ComponentEditor(std::string name, int windowFlags = 0);
 	
-	// Rendering functions.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	// Rendering.
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 private:
 

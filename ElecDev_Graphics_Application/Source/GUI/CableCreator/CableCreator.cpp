@@ -17,7 +17,7 @@
 //=======================================================================================================================================//
 
 CableCreator::CableCreator(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: LumenWindow(name, windowFlags)
 {
 	// Create default dectionary.
 	m_dataDict.insert({"FromTagNumber", "From(Circuit Database)"});
@@ -42,15 +42,15 @@ CableCreator::CableCreator(std::string name, int windowFlags)
 	m_dataDict.insert({ "CableMass", "From(Circuit Database)" });
 }
 
-void CableCreator::begin()
+void CableCreator::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize({500, 700}, ImGuiCond_Once);
 	glm::vec2 vpSize = ImGui::GetMainViewport()->Size;
 	ImGui::SetNextWindowPos({ vpSize.x / 2, vpSize.y / 2 }, ImGuiCond_Once, {0.5f, 0.5f});
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
-void CableCreator::onRender()
+void CableCreator::onImGuiRender()
 {
 	// ------------------------- //
 	//  G E N E R A L   D A T A  //
@@ -134,14 +134,13 @@ void CableCreator::onRender()
 	if (ImGui::BeginChild("DataDict", {0.f, 0.f}, true))
 	{
 		// Add dict entry.
-		static std::string entryToAdd;
 		ImGui::Text("Add an attribute to the dictionary:");
-		ImGui::InputText("##DictEntry", &entryToAdd);
+		ImGui::InputText("##DictEntry", &m_entryToAdd);
 		ImGui::SameLine();
 		if (ImGui::Button("Add"))
 		{
-			m_dataDict.insert({ entryToAdd, "From(Circuit Database)" });
-			entryToAdd = "";
+			m_dataDict.insert({ m_entryToAdd, "From(Circuit Database)" });
+			m_entryToAdd = "";
 		}
 
 		// Setup table.
@@ -278,7 +277,7 @@ void CableCreator::onRender()
 	ImGui::EndChild();
 }
 
-void CableCreator::end()
+void CableCreator::onImGuiEnd()
 {
 	ImGui::End();
 }

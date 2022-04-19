@@ -25,7 +25,7 @@ std::filesystem::path AssetExplorer::m_currentDirectory;
 //==============================================================================================================================================//
 
 AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
-	: GuiElementCore(name, imguiWindowFlags)
+	: LumenWindow(name, imguiWindowFlags)
 {
 	m_currentDirectory = s_startingDirectory;
 	// Load resources.
@@ -40,25 +40,25 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 	loadDirectories();
 
 	// Start asset viewer engine.
-	m_assetViewerEngine = Lumen::getApp().pushEngineLayer<AssetViewer>("Asset Viewer", LumenDockPanel::AssetViewer)->getEngine();
+	m_assetViewerEngine = Lumen::getApp().pushEngine<AssetViewer>(LumenDockPanel::AssetViewer, "Asset Viewer");
 }
 
 AssetExplorer::~AssetExplorer() 
 {
 	s_startingDirectory = m_currentDirectory.string();
-	Lumen::getApp().queuePopLayer(m_assetViewerEngine->m_layer);
+	closeWindow();
 	m_assetViewerEngine = nullptr;
 };
 
-void AssetExplorer::begin()
+void AssetExplorer::onImGuiBegin()
 {
-	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), NULL, getImGuiWindowFlags());
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {2.f, 10.f});
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
 	ImGui::PushStyleColor(ImGuiCol_Button, {0.f, 0.f, 0.f, 0.f});
 }
 
-void AssetExplorer::onRender()
+void AssetExplorer::onImGuiRender()
 {
 	// Filter.
 	static ImGuiTextFilter filter;
@@ -308,7 +308,7 @@ void AssetExplorer::onRender()
 					}
 					if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 					{
-						CableCreator* gui =  Lumen::getApp().pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Floating)->getGui();
+						CableCreator* gui =  Lumen::getApp().pushWindow<CableCreator>(LumenDockPanel::Floating, "Cable Creator");
 						gui->setCable(p);
 					}
 					// File drag & drop.
@@ -365,7 +365,7 @@ void AssetExplorer::onRender()
 	//}
 }
 
-void AssetExplorer::end()
+void AssetExplorer::onImGuiEnd()
 {
 	ImGui::PopStyleVar();
 	ImGui::PopStyleVar();

@@ -39,12 +39,12 @@ public:
 	// ------------- //
 
 	// Mouse events.
-	inline void onMouseButtonEvent(MouseButtonEvent& event) {};
-	inline void onMouseMoveEvent(MouseMoveEvent& event) {};
-	inline void onMouseScrollEvent(MouseScrollEvent& event) {};
+	inline void onMouseButtonEvent(const MouseButtonEvent& event) override {};
+	inline void onMouseMoveEvent(const MouseMoveEvent& event) override {};
+	inline void onMouseScrollEvent(const MouseScrollEvent& event) override {};
 
 	// Key events.
-	inline void onKeyEvent(KeyEvent& event) {};
+	inline void onKeyEvent(const KeyEvent& event) override {};
 };
 
 //=============================================================================================================================================//

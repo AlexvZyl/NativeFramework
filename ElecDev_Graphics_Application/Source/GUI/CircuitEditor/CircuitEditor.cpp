@@ -7,24 +7,23 @@
 #include "Application/Application.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Application/Layers/EngineLayer.h"
 
 //=======================================================================================================================================//
 // Circuit editor.																														 //
 //=======================================================================================================================================//
 
 CircuitEditor::CircuitEditor(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: LumenWindow(name, windowFlags)
 {
-	m_imguiWindowFlags |= ImGuiWindowFlags_AlwaysAutoResize;
+	addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
 
-void CircuitEditor::begin() 
+void CircuitEditor::onImGuiBegin() 
 {
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
-void CircuitEditor::onRender() 
+void CircuitEditor::onImGuiRender() 
 {
 	Application& app = Lumen::getApp();
 
@@ -43,8 +42,8 @@ void CircuitEditor::onRender()
 		ImGui::InputText("##circuitName", &m_circuitNameOnCreation);
 		if (ImGui::Button("Create Circuit##CircuitCreatorButton"))
 		{
-			app.pushEngineLayer<Design2DEngine>(m_circuitNameOnCreation);
-			app.queuePopLayer(m_name);
+			app.pushEngine<Design2DEngine>(LumenDockPanel::Scene, m_circuitNameOnCreation);
+			closeWindow();
 		}
 	}
 
@@ -58,8 +57,7 @@ void CircuitEditor::onRender()
 		ImGui::SameLine();
 		if (ImGui::InputText("##circuitName", &m_engine->m_circuit->m_label)) 
 		{
-			auto* layer = Lumen::getApp().getEngineLayer<Design2DEngine>(m_engine);
-			layer->setName(m_engine->m_circuit->m_label);
+			m_engine->setName(m_engine->m_circuit->m_label);
 		}
 	}
 
@@ -69,7 +67,7 @@ void CircuitEditor::onRender()
 	}
 }
 
-void CircuitEditor::end() 
+void CircuitEditor::onImGuiEnd() 
 {
 	ImGui::End();
 }

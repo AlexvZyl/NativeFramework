@@ -8,25 +8,25 @@
 #include <glad/glad.h>
 #include <imgui/imgui.h>
 #include <string>
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "Resources/ResourceHandler.h"
 
 //==============================================================================================================================================//
 //  Ribbon.																																		//
 //==============================================================================================================================================//
 
-class Ribbon : public GuiElementCore
+class Ribbon : public LumenWindow
 {
 
 public:
 	
 	// Constructor.
-	Ribbon(std::string name, int windowFlags);
+	Ribbon(std::string name, int windowFlags = 0);
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 private:
 

@@ -11,11 +11,10 @@
 //=======================================================================================================================================//
 
 ImGuiDebugWindow::ImGuiDebugWindow(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
-{
-}
+	: LumenWindow(name, windowFlags)
+{}
 
-void ImGuiDebugWindow::onRender()
+void ImGuiDebugWindow::onImGuiRender()
 {
 	if(showStyleEditor)
 		ImGui::ShowStyleEditor();

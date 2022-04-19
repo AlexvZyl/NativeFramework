@@ -4,25 +4,25 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class SceneHierarchy : public GuiElementCore
+class SceneHierarchy : public LumenWindow
 {
 public:
 
 	// Constructor.
-	SceneHierarchy(std::string name, int imguiWindowFlags);
+	SceneHierarchy(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~SceneHierarchy() = default;
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 };
 
 //==============================================================================================================================================//

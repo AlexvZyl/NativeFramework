@@ -48,7 +48,7 @@ struct RendererData
 	unsigned renderPasses = 0;
 
 	// Methods.
-	inline void drawCall()	 { drawCalls++; }
+	inline void drawCall()	 { drawCalls++;	   }
 	inline void renderPass() { renderPasses++; }
 	inline void reset() 
 	{

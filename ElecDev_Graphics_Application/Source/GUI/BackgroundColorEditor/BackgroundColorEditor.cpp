@@ -15,16 +15,16 @@
 //==============================================================================================================================================//
 
 BackgroundColorEditor::BackgroundColorEditor(std::string name, int imguiWindowFlags)
-	: GuiElementCore(name, imguiWindowFlags)
+	: LumenWindow(name.c_str(), imguiWindowFlags)
 {}
 
-void BackgroundColorEditor::begin()
+void BackgroundColorEditor::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(400, 350), ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
-void BackgroundColorEditor::onRender()
+void BackgroundColorEditor::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
@@ -64,7 +64,7 @@ void BackgroundColorEditor::onRender()
 	}
 }
 
-void BackgroundColorEditor::end()
+void BackgroundColorEditor::onImGuiEnd()
 {
 	ImGui::End();
 }
