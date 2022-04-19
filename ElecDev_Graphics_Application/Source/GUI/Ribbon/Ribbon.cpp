@@ -73,7 +73,7 @@ void Ribbon::onImGuiRender()
         auto path = selectFile("Lumen Load Circuit", "", "", "Load");
         if (path.string().size())
         {
-            EventLog::log<FileLoadEvent>(FileLoadEvent(path.string()));
+            EventLog::log<FileLoadEvent>(path, EventType_Application);
         }
     }
     // Tooltip.

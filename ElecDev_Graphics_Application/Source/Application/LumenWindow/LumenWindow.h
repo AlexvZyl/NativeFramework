@@ -52,16 +52,16 @@ public:
 	// Called by Lumen to render the window.
 	void onRender();
 
-	// Removes the window from Lumen.
-	void closeWindow();
+	// Called per frame to update the window and certain events. 
+	void onUpdate();
 
 	// By defult LumenWindows do not need events to be dispatched, since
 	// dear imgui handles the events.  Is is provided to be able to pass
 	// events to elements contained within the window, for example, engines.
 	inline virtual void onEvent(const Event& event) {};
 
-	// Called per frame to update the window and certain events. 
-	void onUpdate();
+	// Removes the window from Lumen.
+	void closeWindow();
 
 	// ------------------- //
 	//  I M G U I   A P I  //
@@ -189,6 +189,8 @@ private:
 	std::string m_windowName = "";
 	std::string m_imguiName = "";
 	ImGuiWindow* m_imguiWindow = nullptr;
+	LumenWindow* m_parentWindow = nullptr;
+	LumenWindow* m_childWindow = nullptr;
 
 protected:
 

@@ -114,7 +114,7 @@ const char* LumenWindow::getImGuiName() const
 
 void LumenWindow::updateImGuiName()
 {
-	m_imguiName = m_windowName + "###LumenLayer" + std::to_string(m_lumenWindowID);
+	m_imguiName = m_windowName + "###LumenWindow" + std::to_string(m_lumenWindowID);
 }
 
 bool LumenWindow::shouldRender() const
