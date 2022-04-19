@@ -62,7 +62,7 @@ void Application::onUpdate()
 		
 		// On a mouse press we need to change the focused window.
 		// This also allows us to modify how dear imgui sets focused windows.
-		if (event->isType(EventType_MousePress))
+		else if (event->isType(EventType_MousePress))
 		{
 			// Change focus.
 			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow)
