@@ -323,7 +323,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 	{
 		LUMEN_LOG_DEBUG("Mouse Drag Start","Component Designer Notify");
 	}
-	else if (event.isType(EventType_MouseDragStop))
+	else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
 		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
 		if (m_activePoly) 

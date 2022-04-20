@@ -23,15 +23,16 @@
 
 // Mouse double press information.
 #define MOUSE_DOUBLE_PRESS_TIMEOUT 0.4
-static std::unordered_map<LumenEventID, double> s_buttonReleaseTimes;
-static std::unordered_map<LumenEventID, bool> s_buttonReleaseIgnore;
+std::unordered_map<LumenEventID, double> s_buttonReleaseTimes;
+std::unordered_map<LumenEventID, bool> s_buttonReleaseIgnore;
 
 // Mouse dragging information.
-static std::unordered_map<LumenEventID, bool> s_buttonPressedForDragging;
 glm::vec2 s_latestMouseButtonPressPosition;
-static glm::vec2 s_mouseDragInitialPosition;
-static glm::vec2 s_lastMouseMovePosition;
-static LumenEventID s_currentlyDraggingButton = NULL;
+glm::vec2 s_lastMouseMovePosition;
+LumenEventID s_currentlyDraggingButton = NULL;
+std::unordered_map<LumenEventID, bool> s_buttonDragActive;
+std::unordered_map<LumenEventID, glm::vec2> s_buttonDragInitialPos;
+std::vector<LumenEventID> s_heldButtons;
 
 //==============================================================================================================================================//
 //  Helpers.																																	//
@@ -58,9 +59,28 @@ inline void resetDoublePressData()
     resetDoublePressReleaseIgnore();
 }
 
-inline void resetButtonPressedForDragging() 
+inline void removeHeldButton(LumenEventID buttonToRemove) 
 {
-    for (auto& pair : s_buttonPressedForDragging) pair.second = false;
+    int index = 0;
+    for (auto& button : s_heldButtons)
+    {
+        if (button == buttonToRemove)
+        {
+            s_heldButtons.erase(s_heldButtons.begin() + index);
+            break;
+        }
+        index += 1;
+    }
+}
+
+inline void addHeldButton(LumenEventID button) 
+{
+    s_heldButtons.push_back(button);
+}
+
+inline LumenEventID getLatestHeldButton() 
+{
+    return s_heldButtons.back();
 }
 
 inline LumenEventID getMouseButtonState(GLFWwindow* window) 
@@ -91,17 +111,21 @@ inline LumenEventID getKeyState(GLFWwindow* window)
 void Application::glfwInitCallbacks()
 {
     // Setup double press data.
-    s_buttonReleaseTimes.insert({ EventType_MouseButtonLeft,   0 });
-    s_buttonReleaseTimes.insert({ EventType_MouseButtonRight,  0 });
-    s_buttonReleaseTimes.insert({ EventType_MouseButtonMiddle, 0 });
-    s_buttonReleaseIgnore.insert({ EventType_MouseButtonLeft,   false });
-    s_buttonReleaseIgnore.insert({ EventType_MouseButtonRight,  false });
-    s_buttonReleaseIgnore.insert({ EventType_MouseButtonMiddle, false });
+    s_buttonReleaseTimes[EventType_MouseButtonLeft]     = 0;
+    s_buttonReleaseTimes[EventType_MouseButtonRight]    = 0;
+    s_buttonReleaseTimes[EventType_MouseButtonMiddle]   = 0;
+    s_buttonReleaseIgnore[EventType_MouseButtonLeft]    = false;
+    s_buttonReleaseIgnore[EventType_MouseButtonRight]   = false;
+    s_buttonReleaseIgnore[EventType_MouseButtonMiddle]  = false;
 
     // Setup dragging data.
-    s_buttonPressedForDragging.insert({ EventType_MouseButtonLeft,   false });
-    s_buttonPressedForDragging.insert({ EventType_MouseButtonMiddle, false });
-    s_buttonPressedForDragging.insert({ EventType_MouseButtonRight,  false });
+    s_buttonDragActive[EventType_MouseButtonLeft]       = false;
+    s_buttonDragActive[EventType_MouseButtonMiddle]     = false;
+    s_buttonDragActive[EventType_MouseButtonRight]      = false;
+    s_buttonDragInitialPos[EventType_MouseButtonLeft]   = { 0.f, 0.f };
+    s_buttonDragInitialPos[EventType_MouseButtonMiddle] = { 0.f, 0.f };
+    s_buttonDragInitialPos[EventType_MouseButtonRight]  = { 0.f, 0.f };
+    s_heldButtons.reserve(3);
 
     // ------------------------- //
     //  M O U S E   B U T T O N  //
@@ -148,7 +172,7 @@ void Application::glfwInitCallbacks()
             if (isIdOfType(buttonEventID, EventType_MousePress))
             {
                 s_latestMouseButtonPressPosition = {cursorX, cursorY};
-                s_buttonPressedForDragging[currentButton] = true;
+                addHeldButton(currentButton); 
             }
 
             // Dragging & double press.
@@ -168,14 +192,14 @@ void Application::glfwInitCallbacks()
                     s_buttonReleaseTimes[currentButton] = currentTime;
                 }
 
-                // Dragging event stops.
-                if (s_currentlyDraggingButton == currentButton)
+                // Dragging event stops on button release.
+                if (s_buttonDragActive[currentButton])
                 {
                     EventLog::logNotify(EventType_MouseDragStop | eventState);
-                    s_currentlyDraggingButton = NULL;
+                    s_buttonDragActive[currentButton] = false;
                 }
 
-                s_buttonPressedForDragging[currentButton] = false;
+                removeHeldButton(currentButton);
             }
 
             // Pass event to ImGUI.
@@ -198,21 +222,30 @@ void Application::glfwInitCallbacks()
             glm::vec2 mousePos(cursorX, cursorY);
 
             // Dragging logic.
-            for (auto& [button, pressed] : s_buttonPressedForDragging)
+            if(s_heldButtons.size())
             {
-                // Was not dragging but button is now pressed.
-                if (pressed)
+                // Get the button that should be dragging.
+                LumenEventID currentButton = getLatestHeldButton();
+
+                // On button draging change / start.
+                if (s_currentlyDraggingButton != currentButton)
                 {
-                    EventLog::logNotify(EventType_MouseDragStart | keyState | button);
-                    s_currentlyDraggingButton = button;
-                    s_mouseDragInitialPosition = s_latestMouseButtonPressPosition;
-                    resetButtonPressedForDragging();
+                    // Log the start and set data.
+                    if (!s_buttonDragActive[currentButton])
+                    {
+                        EventLog::logNotify(EventType_MouseDragStart | keyState | currentButton);
+                        s_buttonDragActive[currentButton] = true;
+                        s_buttonDragInitialPos[currentButton] = s_latestMouseButtonPressPosition;
+                    }
+                    
+                    // Update dragging button.
+                    s_currentlyDraggingButton = currentButton;
                 }
 
                 // Is currently dragging.
-                else if (button == s_currentlyDraggingButton)
+                if (currentButton == s_currentlyDraggingButton)
                 {
-                    EventLog::logMouseDrag(s_mouseDragInitialPosition, mousePos, mousePos - s_lastMouseMovePosition, EventType_MouseDrag | keyState | button);
+                    EventLog::logMouseDrag(s_buttonDragInitialPos[currentButton], mousePos, mousePos - s_lastMouseMovePosition, EventType_MouseDrag | keyState | s_currentlyDraggingButton);
                 }
             }
             

@@ -227,7 +227,7 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 	{
 
 	}
-	else if (event.isType(EventType_MouseDragStop))
+	else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
 		if (m_activeComponent.get()) 
 		{
