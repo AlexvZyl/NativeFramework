@@ -197,6 +197,7 @@ void Application::glfwInitCallbacks()
                 {
                     EventLog::logNotify(EventType_MouseDragStop | eventState);
                     s_buttonDragActive[currentButton] = false;
+                    s_currentlyDraggingButton = NULL;
                 }
 
                 removeHeldButton(currentButton);

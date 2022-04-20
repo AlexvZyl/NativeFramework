@@ -66,9 +66,9 @@ void Camera::onUpdate()
 
 void Camera::resize(const glm::vec2& size) 
 {
-	setViewport(size);
 	// Scale projection values.
 	glm::vec2 scalingFactor = { size.x / m_viewportVec[2], size.y / m_viewportVec[3]};
+	setViewport(size);
 	m_projectionValues = { m_projectionValues[0] * scalingFactor.x, m_projectionValues[1] * scalingFactor.x,
 						   m_projectionValues[2] * scalingFactor.y, m_projectionValues[3] * scalingFactor.y,
 						   m_projectionValues[4],				    m_projectionValues[5] };
