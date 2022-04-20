@@ -98,7 +98,7 @@ private:
 	glm::mat4 m_projectionMatrix	  = glm::mat4(1.0f);			
 	glm::mat4 m_viewProjectionMatrix  = glm::mat4(1.0f);
 	glm::mat4 m_scalingMatrix		  = glm::mat4(1.0f);			
-	glm::mat4 m_translationMatrix	  = glm::mat4(1.0f);		
+	glm::vec3 m_position			  = glm::vec3(0.f);
 	glm::mat4 m_rotationMatrix		  = glm::mat4(1.0f);			
 	glm::vec4 m_viewport			  = glm::vec4(1.0f);					
 	std::array<float, 6> m_projectionValues;				

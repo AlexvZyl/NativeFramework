@@ -27,7 +27,6 @@ Camera::Camera(CameraType cameraType, const glm::vec2& size)
 	}
 
 	updateAllMatrices();
-
 	setScaleRate(1.f);
 }
 
@@ -85,7 +84,7 @@ void Camera::onUpdate()
 
 void Camera::setPosition(const glm::vec3& position)
 {
-	m_translationMatrix = glm::translate(glm::mat4(1.f), position);
+	m_position = position;
 	viewChanged();
 }
 
@@ -103,7 +102,7 @@ void Camera::translate(const glm::vec2& translation)
 
 void Camera::translate(const glm::vec3& translation) 
 {
-	m_translationMatrix = glm::translate(m_translationMatrix, translation);
+	m_position += translation;
 	viewChanged();
 }
 
@@ -119,10 +118,7 @@ void Camera::scaleAroundCursor2D(float scale, const glm::vec2& cursor)
 	m_scalingMatrix = glm::scale(m_scalingMatrix, {scale, scale, 1.f});
 	viewChanged();
 	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
-	m_translationMatrix = glm::translate(
-		m_translationMatrix,
-		{ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f}
-	);
+	m_position += glm::vec3( coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f );
 	viewChanged();
 }
 
@@ -142,10 +138,7 @@ void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor)
 	m_scalingMatrix = glm::scale(m_scalingMatrix, { scale, scale, 1.f });
 	viewChanged();
 	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
-	m_translationMatrix = glm::translate(
-		m_translationMatrix,
-		{ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f }
-	);
+	m_position += glm::vec3(coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f);
 	viewChanged();
 }
 
@@ -169,7 +162,7 @@ void Camera::updateViewMatrix()
 {
 	if (!m_viewMatrixChanged) return;
 
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * glm::translate(glm::mat4(1.f), m_position);
 	m_viewMatrixChanged = false;
 }
 
