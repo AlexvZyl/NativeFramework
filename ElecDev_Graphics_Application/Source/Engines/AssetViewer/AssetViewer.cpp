@@ -22,6 +22,7 @@ AssetViewer::AssetViewer()
 {
 	enableDesignPalette();
 	getScene().m_grid->disableHelperCircle();
+	getScene().getCamera().scale2D(0.5f);
 }
 
 void AssetViewer::clearAssets()

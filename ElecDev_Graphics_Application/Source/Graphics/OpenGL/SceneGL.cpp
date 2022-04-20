@@ -25,20 +25,23 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 {
 	// FBO.
 	m_FBO					= std::make_unique<FrameBufferObject>((int)size.x, (int)size.y);
+
 	// Camera.
 	m_camera				= std::make_unique<Camera>(cameraType, size);
-	// Grid.
+
 	// VAO's.
 	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
 	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
 	m_texturedTrianglesVAO  = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
 	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
 
+	// Grid.
 	Renderer::storeAndBindScene(this);
 	m_grid					= std::make_unique<Grid>();
 	Renderer::restoreAndUnbindScene();
 
 	// Background.
+	// Currently not in use.
 	createDefaultBackground();
 }
 

@@ -74,11 +74,6 @@ glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords)
 	return m_scene->getCamera().pixelCoordsToWorldCoords(coords);
 }
 
-glm::vec3 EngineCore::pixelCoordsToCameraCoords(const glm::vec2& coords) 
-{
-	return m_scene->getCamera().pixelCoordsToCameraCoords(coords);
-}
-
 //=============================================================================================================================================//
 //  Window wrappers.																														   //
 //=============================================================================================================================================//

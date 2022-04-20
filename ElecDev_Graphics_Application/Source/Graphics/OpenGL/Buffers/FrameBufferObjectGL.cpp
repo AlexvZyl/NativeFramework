@@ -135,8 +135,7 @@ void FrameBufferObject::resize(int width, int height)
 	if (m_resourcesDeleted) return;
 
 	// Depth/Stencil.
-	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilID));
-	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
+	GLCall(glNamedRenderbufferStorage(m_depthStencilID, GL_DEPTH24_STENCIL8, width, height));
 	// Color.
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_colorTextureID));
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
@@ -187,10 +186,10 @@ unsigned int FrameBufferObject::getEntityID(const glm::vec2& pixelCoords)
 {
 	if (m_resourcesDeleted) return -1;
 
-	int entityID = -1; 
-	// Read the pixel value.
 	bind();
-	GLCall(glReadBuffer(GL_COLOR_ATTACHMENT1));
+	// Read the pixel value.
+	int entityID = -1; 
+	GLCall(glNamedFramebufferReadBuffer(m_frameBufferID, GL_COLOR_ATTACHMENT1));
 	GLCall(glReadPixels((int)pixelCoords.x, (int)pixelCoords.y, 1, 1, GL_RED_INTEGER, GL_UNSIGNED_INT, &entityID));
 	return entityID;
 }

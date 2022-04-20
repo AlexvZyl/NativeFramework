@@ -41,8 +41,6 @@ public:
 
 	// Calculate the world coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
-	// Calculate the camera coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& pixelCoords);
 
 	// Get the type of camera.
 	const CameraType& getType() const;
@@ -50,49 +48,66 @@ public:
 	// Get matrices.
 	const glm::mat4& getViewMatrix() const;
 	const glm::mat4& getProjectionMatrix() const;
-
+	const glm::mat4& getViewProjectionMatrix() const;
 
 	// ----------------- //
 	//  C O N T R O L S  //
 	// ----------------- //
 
+	// Set the position of the camera.
+	void setPosition(const glm::vec3& position);
+	// Set the rate by which the camera should scale.
+	void setScaleRate(float rate);
+	// Translate the camera by the given vector.
 	void translate(const glm::vec3& translation);
 	void translate(const glm::vec2& translation);
-
+	// Manually scale the camera.
+	void scale2D(float scale);
+	// Manually scale the camera, around the provided position.
+	void scaleAroundCursor2D(float scale, const glm::vec2& cursor);
+	// Inrement the zoom, based on the scale rate set.
+	void incrementZoomLevel2D(int increment);
+	// Inrement the zoom, based on the scale rate set, around the provided position.
+	void incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor);
+	// Make the camera look at a point.
+	void lookAt(const glm::vec3& position) {}
 
 private:
 
 	CameraType m_type;
 
-	// Construct camera types.
+	// ------------------- //
+	//  U T I L I T I E S  //
+	// ------------------- //
+
 	void construct2DCamera(const glm::vec2& size);
 	void construct3DCamera(const glm::vec2& size);
-	void moved();
+	void viewChanged();
+	void projectionChanged();
+	void updateViewMatrix();
+	void updateProjectionMatrix();
+	void updateViewProjectionMatrix();
+	void updateAllMatrices();
 
 	// ----------------- //
 	//  M A T R I C E S  //
 	// ----------------- //
 
 	// MVP Matrices.
-	glm::mat4 m_viewMatrix = glm::mat4(1.0f);					// The matrix that handles the camera movement.
-																// viewMatrix = translatinMatrix * rotationMatrix * scalingMatrix;
-	glm::mat4 m_projectionMatrix = glm::mat4(1.0f);				// The matrix that handles the clipping plane (which part of the world is
-																// going to be visible to the screen?)
-	glm::vec4 m_viewportVec = glm::vec4(1.0f);					// The vector that handles the viewport transform.  Converts screen pixel
-																// coordinates to the OpenGL uniform coordinate system.
-	// View matrix components.W
-	glm::mat4 m_scalingMatrix = glm::mat4(1.0f);				// Handles camera scaling.
-	glm::mat4 m_translationMatrix = glm::mat4(1.0f);			// Handles camera translations.
-	glm::mat4 m_rotationMatrix = glm::mat4(1.0f);				// Handles camera rotations.
-
-	// We need matrices to store the base view of the drawing.  This is to fall back to when restoring to home view, and this has to 
-	// be updated with resizing and when auto sizing and scaling funtions are called.
-	glm::mat4 m_scalingMatrixHome = glm::mat4(1.0f);			// Stores base matrix for camera scaling.
-	glm::mat4 m_translationMatrixHome = glm::mat4(1.0f);		// Stores base matrix for camera translation.
-	glm::mat4 m_rotationMatrixHome = glm::mat4(1.0f);			// Stores base matrix for camera rotation.
-	std::array<float, 6> m_projectionValues;					// Stores the valaues that is used to calculate the projection matrix.
-	float m_scaleRate = 0.2f;									// How fast the camera scales.
-	bool m_viewMatrixUpToDate = true;							// Is the viewmatrix up to date with the latest changes?
+	glm::mat4 m_viewMatrix			  = glm::mat4(1.0f);				
+	glm::mat4 m_projectionMatrix	  = glm::mat4(1.0f);			
+	glm::mat4 m_viewProjectionMatrix  = glm::mat4(1.0f);
+	glm::mat4 m_scalingMatrix		  = glm::mat4(1.0f);			
+	glm::mat4 m_translationMatrix	  = glm::mat4(1.0f);		
+	glm::mat4 m_rotationMatrix		  = glm::mat4(1.0f);			
+	glm::vec4 m_viewport			  = glm::vec4(1.0f);					
+	std::array<float, 6> m_projectionValues;				
+	float m_scaleRate = 1.f;			
+	float m_zoomInRate = 1.f;
+	float m_zoomOutRate = 1.f;
+	bool m_viewMatrixChanged		  = false;
+	bool m_projectionMatrixChanged	  = false;
+	bool m_viewProjectionMatrixChanged = false;
 };
 
 //==============================================================================================================================================//

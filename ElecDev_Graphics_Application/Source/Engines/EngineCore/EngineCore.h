@@ -116,7 +116,6 @@ public:
 	// Coorinate conversions.
 	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
-	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& coords);
 
 	// ----------------------------- //
 	//  D E S I G N   P A L E T T E  //
