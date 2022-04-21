@@ -4,26 +4,27 @@
 // Includes.																															 //
 //=======================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include <unordered_map>
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
 //=======================================================================================================================================//
 
-class ComponentEditor : public GuiElementCore
+class ComponentEditor : public LumenWindow
 {
 public:
 
 	// Constructor.
-	ComponentEditor(std::string name, int windowFlags);
+	ComponentEditor(std::string name, int windowFlags = 0);
 	
-	// Rendering functions.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	// Rendering.
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 private:
+
 	int fromSelector = 0;
 	int databaseSelector = 0;
 	int sizeSelector = 0;
@@ -36,11 +37,8 @@ private:
 	int combineSelectorVariable = 0;
 	const char* comparatorSelection[6] = { "==", "!=", "<=", ">=", "<", ">" };
 	std::string comparisonValue = "0";
-
 	std::string trueStatement = "True";
-
 	std::string falseStatement = "False";
-
 	std::string combineTextString = "";
 	bool addingPort = false;
 	std::string newName = "Untitled";

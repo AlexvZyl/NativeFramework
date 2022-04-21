@@ -31,11 +31,11 @@
 
 // Constructor.
 Ribbon::Ribbon(std::string name, int windowFlags)
-    : GuiElementCore(name, windowFlags)
+    : LumenWindow(name, windowFlags)
 {
-    m_imguiWindowFlags  |=  ImGuiWindowFlags_NoMove
-                        |   ImGuiWindowFlags_NoDecoration
-                        |   ImGuiWindowFlags_NoResize;        
+    addImGuiWindowFlags(  ImGuiWindowFlags_NoMove
+                        | ImGuiWindowFlags_NoDecoration
+                        | ImGuiWindowFlags_NoResize);        
 
     m_circuitIcon = loadBitmapToGL(loadImageFromResource(CIRCUIT_FILE_ICON));
     m_componentIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
@@ -45,7 +45,7 @@ Ribbon::Ribbon(std::string name, int windowFlags)
     m_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
 }
 
-void Ribbon::begin()
+void Ribbon::onImGuiBegin()
 {
     // Remove rounding so that it docks nicely.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
@@ -54,10 +54,10 @@ void Ribbon::begin()
     ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
     // Setup ribbon.
     ImGui::SetNextWindowBgAlpha(1);
-    ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+    ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
-void Ribbon::onRender()
+void Ribbon::onImGuiRender()
 {
     Application& app = Lumen::getApp();
     static glm::vec2 buttonSize(30,30); 
@@ -73,7 +73,7 @@ void Ribbon::onRender()
         auto path = selectFile("Lumen Load Circuit", "", "", "Load");
         if (path.string().size())
         {
-            EventLog::log<FileLoadEvent>(FileLoadEvent(path.string()));
+            EventLog::log<FileLoadEvent>(path, EventType_Application);
         }
     }
     // Tooltip.
@@ -93,7 +93,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_componentIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        ComponentDesigner* engine =  Lumen::getApp().pushEngineLayer<ComponentDesigner>("Component Designer")->getEngine();
+        ComponentDesigner* engine =  Lumen::getApp().pushEngine<ComponentDesigner>(LumenDockPanel::Scene, "Component Designer");
         engine->unsavedDocument();
     }
     // Tooltip.
@@ -111,7 +111,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>("Untitled")->getEngine();
+        Design2DEngine* engine = Lumen::getApp().pushEngine<Design2DEngine>(LumenDockPanel::Scene, "Untitled");
         engine->unsavedDocument();
     }
     // Tooltip.
@@ -129,7 +129,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_cableIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        app.pushGuiLayer<CableCreator>("Cable Creator", LumenDockPanel::Floating);
+        app.pushWindow<CableCreator>(LumenDockPanel::Floating, "Cable Creator");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
@@ -156,7 +156,7 @@ void Ribbon::onRender()
     // Button.
     if (ImGui::ImageButton((void*)m_settingsIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        app.pushGuiLayer<SettingsWidget>("Settings", LumenDockPanel::Floating);
+        app.pushWindow<SettingsWidget>(LumenDockPanel::Floating, "Settings");
     }
     // Tooltip.
     if (ImGui::IsItemHovered())
@@ -186,7 +186,7 @@ void Ribbon::onRender()
     }
 }
 
-void Ribbon::end() 
+void Ribbon::onImGuiEnd() 
 {
     ImGui::End();
     // Pop Window rounding.

@@ -15,16 +15,16 @@
 //=======================================================================================================================================//
 
 RendererStats::RendererStats(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: LumenWindow(name, windowFlags)
 {}
 
-void RendererStats::begin()
+void RendererStats::onImGuiBegin()
 {
-	ImGui::Begin(m_name.c_str(), NULL, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), NULL, getImGuiWindowFlags());
 	ImGui::PushItemWidth(-1);
 }
 
-void RendererStats::onRender()
+void RendererStats::onImGuiRender()
 {
 	Scene* scene = Renderer::getScene();
 	Application& app = Lumen::getApp();
@@ -472,7 +472,7 @@ void RendererStats::onRender()
 	ImGui::PopID();
 }
 
-void RendererStats::end()
+void RendererStats::onImGuiEnd()
 {
 	ImGui::PopItemWidth();
 	ImGui::End();

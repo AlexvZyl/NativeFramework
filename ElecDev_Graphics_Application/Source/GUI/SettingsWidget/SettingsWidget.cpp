@@ -15,16 +15,16 @@
 //==============================================================================================================================================//
 
 SettingsWidget::SettingsWidget(std::string name, int imguiWindowFlags)
-	: GuiElementCore(name, imguiWindowFlags)
+	: LumenWindow(name, imguiWindowFlags)
 {}
 
-void SettingsWidget::begin()
+void SettingsWidget::onImGuiBegin()
 {
 	ImGui::SetNextWindowSize(glm::vec2(350, 200), ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
-void SettingsWidget::onRender()
+void SettingsWidget::onImGuiRender()
 {
     Application& app = Lumen::getApp();
 
@@ -68,7 +68,7 @@ void SettingsWidget::onRender()
     // Window decorations.
     static bool windowDecorations = true;
     if (ImGui::Checkbox("  Window Decorations", &windowDecorations))
-        glfwSetWindowAttrib(app.getWindow(), GLFW_DECORATED, windowDecorations);
+        glfwSetWindowAttrib(app.getGLFWWindow(), GLFW_DECORATED, windowDecorations);
 
     ImGui::Separator();
 
@@ -98,7 +98,7 @@ void SettingsWidget::onRender()
     }
 }
 
-void SettingsWidget::end()
+void SettingsWidget::onImGuiEnd()
 {
 	ImGui::End();
 }

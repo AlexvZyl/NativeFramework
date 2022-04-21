@@ -1,11 +1,3 @@
-/*
-All of the CoreEngineGL functions.  Some are general enough to be implemented here.
-The rest of the functions are going to be implementd in the respective engines.
-If a function is called that is not implemented in the child engine an error is
-thrown via functionNotImplementedError().  This also makes it easier to catch errors
-and notify the user via the terminal interface.
-*/
-
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
@@ -15,14 +7,13 @@ and notify the user via the terminal interface.
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "Engines/EngineCore/EngineCore.h"
-#include "External/GLFW/Includes/GLFW/glfw3.h"
-#include "Lumen.h"
 #include "Application/Application.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include "Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
-#include "GUI/GraphicsScene/GraphicsScene.h"
 
 //=============================================================================================================================================//
-//  Rendering.																																   //
+//  Engine Core.																															   //
 //=============================================================================================================================================//
 
 void EngineCore::onRender()
@@ -34,60 +25,42 @@ EngineCore::~EngineCore()
 {
 	Application& app = Lumen::getApp();
 	if (this == app.getActiveEngine())
-	{
 		app.setActiveEngine(nullptr);
-	}
 }
+
+void EngineCore::setName(const std::string& name) 
+{
+	m_parentWindow->setName(name.c_str());
+	setNameOfElements(name); 
+}
+
+const glm::vec2& EngineCore::getWindowContentRegionSize() const 
+{
+	return m_parentWindow->getContentRegionSize();
+}
+
+//=============================================================================================================================================//
+//  Scene wrappers.																															   //
+//=============================================================================================================================================//
 
 unsigned EngineCore::getRenderTexture() 
 { 
 	return m_scene->getRenderTexture(); 
 }
 
-unsigned EngineCore::getEntityID(glm::vec2& pixelCoords) 
+unsigned EngineCore::getEntityID(const glm::vec2& pixelCoords) 
 { 
 	return m_scene->getEntityID(pixelCoords); 
 }
 
-float EngineCore::deltaTime()
-{
-	float currentFrame = glfwGetTime();
-	m_deltaTime = currentFrame - m_lastFrame;
-	m_lastFrame = currentFrame;
-	return m_deltaTime;
-}
-
 glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords) 
 {
-	return m_scene->m_grid->getClosestGridVertex(coords);
+	return m_scene->m_grid->getNearestGridVertex(coords);
 }
 
 glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
 {
 	return m_scene->pixelCoordsToWorldCoords(distance) - m_scene->pixelCoordsToWorldCoords({ 0.f, 0.f });
-}
-
-//=============================================================================================================================================//
-//  Content Region.																															   //
-//=============================================================================================================================================//
-
-void EngineCore::setContentRegionPos(const glm::vec2& pos)
-{
-	m_contentRegionPos = pos;
-}
-
-glm::vec2 EngineCore::getMouseLocalPosition()
-{
-	double cursorX, cursorY;
-	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
-	return { cursorX - m_contentRegionPos.x, cursorY - m_contentRegionPos.y };
-}
-
-glm::vec2 EngineCore::getMouseGlobalPosition()
-{
-	double cursorX, cursorY;
-	glfwGetCursorPos(Lumen::getApp().getWindow(), &cursorX, &cursorY);
-	return { cursorX, cursorY };
 }
 
 glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords) 
@@ -100,15 +73,28 @@ glm::vec3 EngineCore::pixelCoordsToCameraCoords(const glm::vec2& coords)
 	return m_scene->pixelCoordsToCameraCoords(coords);
 }
 
+//=============================================================================================================================================//
+//  Window wrappers.																														   //
+//=============================================================================================================================================//
+
+glm::vec2 EngineCore::getMouseLocalPosition()
+{
+	return m_parentWindow->getMouseLocalPosition();
+}
+
+glm::vec2 EngineCore::getMouseGlobalPosition()
+{
+	return m_parentWindow->getMouseGlobalPosition();
+}
+
 void EngineCore::unsavedDocument()
 {
-	m_gui->unsavedDocument();
-
+	m_parentWindow->unsavedDocument();
 }
 
 void EngineCore::savedDocument()
 {
-	m_gui->savedDocument();
+	m_parentWindow->savedDocument();
 }
 
 //=============================================================================================================================================//

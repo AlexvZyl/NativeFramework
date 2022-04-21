@@ -4,26 +4,26 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
 //==============================================================================================================================================//
 
-class SettingsWidget : public GuiElementCore
+class SettingsWidget : public LumenWindow
 {
 public:
 
 	// Constructor.
-	SettingsWidget(std::string name, int imguiWindowFlags);
+	SettingsWidget(std::string name, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~SettingsWidget() = default;
 
 	// Rendering.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 };
 
 //==============================================================================================================================================//

@@ -12,30 +12,30 @@
 //==============================================================================================================================================//
 
 BottomBar::BottomBar(std::string name, int windowFlags)
-    : GuiElementCore(name, windowFlags)
+    : LumenWindow(name.c_str(), windowFlags)
 {
-    m_imguiWindowFlags |= ImGuiWindowFlags_NoMove
+    addImGuiWindowFlags( ImGuiWindowFlags_NoMove
                        | ImGuiWindowFlags_NoDecoration
-                       | ImGuiWindowFlags_NoResize;
+                       | ImGuiWindowFlags_NoResize);
     m_defaultColor = ImGui::GetStyle().Colors[ImGuiCol_Separator];
     getNotificationColour();
 }
 
-void BottomBar::begin()
+void BottomBar::onImGuiBegin()
 {
     getNotificationColour();
     ImGui::PushStyleColor(ImGuiCol_WindowBg, m_color);
     ImGui::PushStyleColor(ImGuiCol_Border, m_color);
-    ImGui::BeginViewportSideBar(m_name.c_str(), ImGui::GetMainViewport(), ImGuiDir_Down, 16.f, m_imguiWindowFlags);
+    ImGui::BeginViewportSideBar(getImGuiName(), ImGui::GetMainViewport(), ImGuiDir_Down, 16.f, getImGuiWindowFlags());
 }
 
-void BottomBar::onRender()
+void BottomBar::onImGuiRender()
 {
     ImGui::SetCursorPos({8.f, 0.f});
     ImGui::Text("v0.1");
 }
 
-void BottomBar::end()
+void BottomBar::onImGuiEnd()
 {
     ImGui::End();
     ImGui::PopStyleColor();

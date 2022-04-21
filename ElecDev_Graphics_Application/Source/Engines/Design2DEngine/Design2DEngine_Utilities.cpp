@@ -65,8 +65,8 @@ void Design2DEngine::deleteActiveCable()
 	}
 }
 
-void Design2DEngine::setActiveComponent(unsigned eID) {
-
+void Design2DEngine::setActiveComponent(unsigned eID) 
+{
 	if (m_activeComponent)
 	{
 		m_activeComponent->disableOutline();
@@ -119,9 +119,9 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	{
 		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
-		if (!currentEntity) {
-			return;
-		}
+
+		if (!currentEntity) return;
+
 		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
@@ -168,7 +168,7 @@ Port* Design2DEngine::getPort(unsigned eID)
 	}
 }
 
-void Design2DEngine::setName(const std::string& name) 
+void Design2DEngine::setNameOfElements(const std::string& name) 
 {
 	m_circuit->m_label = name;
 }

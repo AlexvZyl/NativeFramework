@@ -93,17 +93,23 @@ public:
 	}
 	// Destructor (for polymorphic type).
 	virtual ~Event() = default;
+
 	// Check if the event is of a certain type.
 	// Does NOT check if it ONLY belongs to the specific ID.
 	inline bool isType(LumenEventID compareID) const 
 	{
 		return ( compareID & ID ) == compareID;
 	}
-	// Check if the event is not of a certain type.
-	// Does NOT check if it ONLY belongs to the specific ID.
 	inline bool isNotType(LumenEventID compareID) const
 	{
-		return (compareID & ID) != compareID;
+		return !isType(compareID);
+	}
+
+	// Cast the event to the requested type.
+	template<class EventType>
+	inline const EventType& cast() const 
+	{
+		return dynamic_cast<const EventType&>(*this);
 	}
 
 	// ID describing the event.
@@ -358,11 +364,7 @@ class NotifyEvent : public Event
 
 public:
 
-	inline NotifyEvent(LumenEventID ID) 
-		: Event(ID | EventType_Notify)
-	{}
-
-	inline NotifyEvent(LumenEventID ID, const std::string& msg) 
+	inline NotifyEvent(LumenEventID ID, const std::string& msg = "")
 		: Event(ID | EventType_Notify), msg(msg)	
 	{}
 

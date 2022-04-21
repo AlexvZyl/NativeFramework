@@ -25,8 +25,8 @@
 /*=======================================================================================================================================*/
 
 // Constructor.
-Toolbar::Toolbar(std::string& name, int windowFlags)
-    : GuiElementCore(name, windowFlags)
+Toolbar::Toolbar(const std::string& name, int windowFlags)
+    : LumenWindow(name, windowFlags)
 {
     // Load texture 1. 
     static BITMAP textureBM = loadImageFromResource(ICON_PNG);
@@ -40,7 +40,7 @@ Toolbar::Toolbar(std::string& name, int windowFlags)
 /* Rendering                                                                                                                             */
 /*=======================================================================================================================================*/
 
-void Toolbar::begin()
+void Toolbar::onImGuiBegin()
 {
     // Style.
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
@@ -52,7 +52,7 @@ void Toolbar::begin()
     m_isOpen = ImGui::BeginMainMenuBar();
 }
 
-void Toolbar::onRender()
+void Toolbar::onImGuiRender()
 {
     static glm::vec2 dropdownItemSpacing = {4.f, 4.f};
 
@@ -140,17 +140,17 @@ void Toolbar::onRender()
         static bool profilerState = false;
         if (ImGui::Checkbox(" Renderer Info", &profilerState))
         {
-            static std::string statsName;
+            static RendererStats* stats = nullptr;
             if (profilerState)
             {
-                auto* layer = app.pushGuiLayer<RendererStats>("Renderer Info", LumenDockPanel::Right, 0, false);
-                statsName = layer->getName();
+                stats = app.pushWindow<RendererStats>(LumenDockPanel::Right, "Renderer Info");
                 app.m_profilerActive = true;
             }
             else 
             {
                 app.m_profilerActive = false;
-                app.queuePopLayer(statsName);
+                app.queueWindowPop(stats);
+                stats = nullptr;
             }
         }   
 
@@ -158,15 +158,15 @@ void Toolbar::onRender()
         static bool sceneHierarchy = false;
         if (ImGui::Checkbox(" Scene Hierarchy", &sceneHierarchy))
         {
-            static std::string sceneHierarchyname;
+            static SceneHierarchy* sceneHierarchy = nullptr;
             if (sceneHierarchy)
             {
-                auto* layer = app.pushGuiLayer<SceneHierarchy>("Scene Hierarchy", LumenDockPanel::Right, 0, false);
-                sceneHierarchyname = layer->getName();
+                sceneHierarchy = app.pushWindow<SceneHierarchy>(LumenDockPanel::Right, "Scene Hierarchy");
             }
             else
             {
-                app.queuePopLayer(sceneHierarchyname);
+                app.queueWindowPop(sceneHierarchy);
+                sceneHierarchy = nullptr;
             }
         }
 
@@ -174,15 +174,14 @@ void Toolbar::onRender()
         static bool assetExplorer = true;
         if (ImGui::Checkbox(" Asset Explorer", &assetExplorer))
         {
-            static std::string assetExplorerName;
             if (assetExplorer)
             {
-                m_assetExplorerLayer = app.pushGuiLayer<AssetExplorer>("Asset Explorer", LumenDockPanel::Bottom, 0, false);
+                m_assetExplorerWindow = app.pushWindow<AssetExplorer>(LumenDockPanel::Bottom, "Asset Explorer");
             }
             else
             {
-                app.queuePopLayer(m_assetExplorerLayer);
-                m_assetExplorerLayer = nullptr;
+                app.queueWindowPop(m_assetExplorerWindow);
+                m_assetExplorerWindow = nullptr;
             }
         }
 
@@ -192,16 +191,16 @@ void Toolbar::onRender()
         static bool style = false;
         if (ImGui::Checkbox(" Style Editor", &style)) 
         {
-            static std::string styleLayernName;
+            static ImGuiDebugWindow* styleWindow = nullptr;
             if (style)
             {
-                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Style Editor", LumenDockPanel::Floating, 0, false);
-                layer->getGui()->showStyleEditor = true;
-                styleLayernName = layer->getName();
+                styleWindow = app.pushWindow<ImGuiDebugWindow>(LumenDockPanel::Floating, "Style Editor");
+                styleWindow->showStyleEditor = true;
             }
             else
             {
-                app.queuePopLayer(styleLayernName);
+                app.queueWindowPop(styleWindow);
+                styleWindow = nullptr;
             }
         }
 
@@ -209,16 +208,16 @@ void Toolbar::onRender()
         static bool demo = false;
         if (ImGui::Checkbox(" Demo Window", &demo))
         {
-            static std::string demoLayerName;
+            static ImGuiDebugWindow* demoWindow = nullptr;
             if (demo)
             {
-                auto* layer = app.pushGuiLayer<ImGuiDebugWindow>("Demo Window", LumenDockPanel::Floating, 0, false);
-                layer->getGui()->showDemoWindow = true;
-                demoLayerName = layer->getName();
+                demoWindow = app.pushWindow<ImGuiDebugWindow>(LumenDockPanel::Floating, "Demo Window");
+                demoWindow->showDemoWindow = true;
             }
             else
             {
-                app.queuePopLayer(demoLayerName);
+                app.queueWindowPop(demoWindow);
+                demoWindow = nullptr;
             }
         }
 
@@ -226,7 +225,7 @@ void Toolbar::onRender()
 
         if (ImGui::MenuItem("Add BGCE"))
         {
-            app.pushGuiLayer<BackgroundColorEditor>("BGCE", LumenDockPanel::Floating);
+            app.pushWindow<BackgroundColorEditor>(LumenDockPanel::Floating, "BGCE");
         }
 
         // End.
@@ -236,7 +235,7 @@ void Toolbar::onRender()
     }
 };
 
-void Toolbar::end()
+void Toolbar::onImGuiEnd()
 {
     // End.
     ImGui::EndMainMenuBar();

@@ -4,29 +4,62 @@
 // Includes.																															 //
 //=======================================================================================================================================//
 
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include <unordered_map>
+#include <filesystem>
+#include <string>
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
 //=======================================================================================================================================//
 
-class CableCreator : public GuiElementCore
+class CableCreator : public LumenWindow
 {
 public:
 
 	// Constructor.
-	CableCreator(std::string name, int windowFlags);
+	CableCreator(std::string name, int windowFlags = 0);
 
-	// Rendering functions.
-	virtual void begin() override;
-	virtual void onRender() override;
-	virtual void end() override;
+	// Rendering.
+	virtual void onImGuiBegin() override;
+	virtual void onImGuiRender() override;
+	virtual void onImGuiEnd() override;
 
 	// Cable properties.
-	int m_coreCount= 0;
-	std::string m_metal = "";
+	glm::vec4 m_cableColor = {0.f, 0.f, 0.f, 1.f};
 	std::string m_cableName = "";
-	std::string m_isolation = "";
+	std::unordered_map<std::string, std::string> m_dataDict;
+
+	// Set the data that is contained in the provided file.
+	void setCable(const std::filesystem::path& path);
+
+private:
+
+	// Data for creating cable properties.
+	int fromSelector = 0;
+	int databaseSelector = 0;
+	int sizeSelector = 0;
+	int ifRowSelector = 0;
+	int comparatorSelector = 0;
+	int ifSelector = 0;
+	int ifSelector2 = 0;
+	int equipmentSelector = -1;
+	int combineSelector = 0;
+	int combineSelectorVariable = 0;
+	const char* comparatorSelection[6] = { "==", "!=", "<=", ">=", "<", ">" };
+	std::string comparisonValue = "0";
+	std::string trueStatement = "True";
+	std::string falseStatement = "False";
+	std::string combineTextString = "";
+	bool addingPort = false;
+	std::string newName = "Untitled";
+	int newType = 2;
+	int newPos = 0;
+
+	std::string m_entryToAdd = "";
+
+	// Saves the cable to file.
+	void serialiseCable(const std::filesystem::path& path);
 };
 
 //=======================================================================================================================================//

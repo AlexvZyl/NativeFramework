@@ -7,7 +7,7 @@
 #include "ComponentEditor.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Application.h"	
-#include "GUI/GuiElementCore/GuiElementCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 #include "Engines/Design2DEngine/Design2DEngine.h"
 #include "Engines/Design2DEngine/ComponentDesigner.h"
 #include "Engines/Design2DEngine/Peripherals/Circuit.h"
@@ -22,7 +22,7 @@
 /*=======================================================================================================================================*/
 
 ComponentEditor::ComponentEditor(std::string name, int windowFlags)
-	: GuiElementCore(name, windowFlags)
+	: LumenWindow(name, windowFlags)
 {
 	if (!s_iconCreated)
 	{
@@ -32,16 +32,16 @@ ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	}
 }
 
-void ComponentEditor::begin()
+void ComponentEditor::onImGuiBegin()
 {
 	// Place editor at correct position.
 	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
 	// FIX ME!! The window size should be set dynamically
 	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
-	ImGui::Begin(m_name.c_str(), &m_isOpen, m_imguiWindowFlags);
+	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
-void ComponentEditor::onRender()
+void ComponentEditor::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
@@ -307,7 +307,6 @@ void ComponentEditor::onRender()
 		}
 
 		int numEquip = numCom;
-
 		for (auto& key : numCables)
 		{
 			componentNames[numCom] = key->m_titleString.c_str();
@@ -399,6 +398,23 @@ void ComponentEditor::onRender()
 					if (fsPath.filename().extension().string() == ".lmcb")
 					{
 						activeCable->m_cableType = fsPath.filename().stem().string();
+
+						// Load the data received from the file.
+						YAML::Node node = YAML::LoadFile(fsPath.string())["Cable"];
+						// Load color.
+						activeCable->setColour({ 
+							node["Color"][0].as<float>(), 
+							node["Color"][1].as<float>(), 
+							node["Color"][2].as<float>() , 
+							node["Color"][3].as<float>() 
+						});
+						// Load dictionary.
+						activeCable->cableDict.clear();
+						for (const auto& keyValPair : node["Dictionary"])
+						{
+							activeCable->cableDict.insert({keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>()});
+						}
+
 					}
 				}
 				ImGui::EndDragDropTarget();
@@ -432,7 +448,8 @@ void ComponentEditor::onRender()
 				}
 			}
 		}
-		else {
+		else 
+		{
 			for (auto& key : numCables)
 			{
 				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {
@@ -518,9 +535,9 @@ void ComponentEditor::onRender()
 
 		if (activeComponent || activeCable)
 		{
-			std::unordered_map<std::string, std::string> dataDict;
-			if (activeComponent) dataDict = activeComponent->dataDict;
-			else if (activeCable) dataDict = activeCable->cableDict;
+			std::unordered_map<std::string, std::string>* dataDict = nullptr;
+			if (activeComponent) dataDict = &activeComponent->dataDict;
+			else if (activeCable) dataDict = &activeCable->cableDict;
 
 			const char* buffer[100];
 			int numKeys = 0;
@@ -585,7 +602,7 @@ void ComponentEditor::onRender()
 
 				// Table.
 				int keyCount = 0;
-				for (auto& [key, val] : dataDict)
+				for (auto& [key, val] : *dataDict)
 				{
 					// ID.
 					ImGui::PushID(keyCount++);
@@ -645,7 +662,7 @@ void ComponentEditor::onRender()
 			if (ImGui::CollapsingHeader("From"))
 			{
 				// int* typeval2 = (int*)&dataDict;
-				ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##From", &fromSelector, buffer, dataDict->size());
 
 				ImGui::Combo("Select Database##From2", &databaseSelector, fromSelection, IM_ARRAYSIZE(fromSelection));
 				// ImGui::Text("Hello World");
@@ -671,7 +688,7 @@ void ComponentEditor::onRender()
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Size"))
 			{
-				ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##size", &sizeSelector, buffer, dataDict->size());
 				// ImGui::Text(std::to_string(typeval3).c_str());
 				if (ImGui::Button("Insert Size function"))
 				{
@@ -701,7 +718,7 @@ void ComponentEditor::onRender()
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("IF"))
 			{
-				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##IF", &ifSelector, buffer, dataDict->size());
 				ImGui::Combo("Select Somponent##if2", &equipmentSelector, componentNames, numCom);
 				ImGui::Combo("Select Variable To Compare##IF", &ifSelector2, possibleInformation, posKeys);
 				ImGui::Combo("Select Comparator##IF3", &comparatorSelector, comparatorSelection, IM_ARRAYSIZE(comparatorSelection));
@@ -740,7 +757,7 @@ void ComponentEditor::onRender()
 			ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 			if (ImGui::CollapsingHeader("Combine Text"))
 			{
-				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict.size());
+				ImGui::Combo("Select Column##Combine", &combineSelector, buffer, dataDict->size());
 				if (ImGui::Combo("Select Variable##Combine", &combineSelectorVariable, possibleInformation, posKeys))
 				{
 					combineTextString += possibleInformation[combineSelectorVariable] + plusString;
@@ -768,7 +785,7 @@ void ComponentEditor::onRender()
 	}
 }
 
-void ComponentEditor::end()
+void ComponentEditor::onImGuiEnd()
 {
 	ImGui::End();
 }

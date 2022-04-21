@@ -96,7 +96,7 @@ void LumenWebSocket::createGuiFromScript(std::string& script)
 		guiName.push_back(script[pos++]);
 	}
 
-	ScriptGui* scriptGui = app.pushGuiLayer<ScriptGui>(guiName, LumenDockPanel::Left)->getGui();
+	ScriptGui* scriptGui = app.pushWindow<ScriptGui>(LumenDockPanel::Left, guiName);
 	scriptGui->setSctipt(script);
 
 	// Find the websocket url and connect GUI.

@@ -22,7 +22,7 @@ int lua_BeginScene2D(lua_State* L)
 	std::string name = lua_tostring(L, 1);
 
 	// Execute function.
-	Lumen::getApp().pushEngineLayer<Base2DEngine>(name);
+	Lumen::getApp().pushEngine<Base2DEngine>(LumenDockPanel::Scene, name);
 
 	return 1;
 }

@@ -7,13 +7,15 @@
 #include <memory>
 #include <iostream>
 #include <vector>
-#include "Application/Layers/GuiLayer.h"
-#include "Application/Layers/EngineLayer.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 #include "imgui/notify/imgui_notify.h"
 #include "Lumen.h"
-#include "Application/Layers/LayerStack.h"
+#include "OpenGL/Renderer/RendererGL.h"
+#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/LumenWindow/WindowStack.h"
+#include "GUI/GraphicsScene/GraphicsScene.h"
 
 // TO BE DEPRECATED!
 #include "GuiState.h"
@@ -22,9 +24,16 @@
 //  Forward declerations.																														//
 //==============================================================================================================================================//
 
-class Layer;
 class LumenWebSocket;
-class LayerStack;
+class EngineCore;
+class WindowEvent;
+class FileDropEvent;
+class Event;
+class FileLoadEvent;
+class FileSaveEvent;
+
+template<class EngineType>
+class GraphicsScene;
 
 struct ImFont;
 struct GLFWwindow;
@@ -82,26 +91,22 @@ public:
 	// Renders the next frame.
 	void renderFrame();
 	
-	// ------------- //
-	//  L A Y E R S  //
-	// ------------- //
+	// --------------- //
+	//  W I N D O W S  //
+	// --------------- //
 
-	// Push an engine onto the layerstack.
-	template<typename EngineType>
-	EngineLayer<EngineType>* pushEngineLayer(std::string layerName,  LumenDockPanel panel = LumenDockPanel::Scene, int imguiWindowFlags = 0, bool focus = true);
-	// Push a gui onto the layerstack.
-	template<typename GuiType>
-	GuiLayer<GuiType>* pushGuiLayer(std::string layerName, LumenDockPanel panel = LumenDockPanel::Floating, int imguiWindowFlags = 0, bool focus = true);
-	// Pop a layer from the layerstack using the pointer.
-	void queuePopLayer(Layer* layer);
-	// Pop a layer from the layerstack using the layer name.
-	void queuePopLayer(std::string& layerName);
-	// Get the layer, given the name.
-	template<class LayerType>
-	LayerType* getLayer(std::string& name);
-	// Find the layer that this engine belongs to.
-	template<class EngineType>
-	EngineLayer<EngineType>* getEngineLayer(EngineCore* engine);
+	// Push a window onto Lumen's window stack.
+	template<class WindowType, class ... Args>
+	WindowType* pushWindow(LumenDockPanel panel, const Args& ... args);
+
+	// Push an engine onto Lumen's window stack.
+	template<class EngineType, class ... Args>
+	EngineType* pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args);
+	
+	// Queue a window to be popped.
+	void queueWindowPop(LumenWindow* window);
+	// Queue a window to be popped.
+	void queueWindowPop(unsigned ID);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -109,14 +114,14 @@ public:
 
 	// Handles all of the events in the event log.
 	void onUpdate();
-	// Handle events specifically for the Application layer.
-	void onEvent(Event& event);
+	// Handle events specifically for the Application Window.
+	void onEvent(const Event& event);
 	// Should the app close?
 	bool isRunning();
 	// Close the app.
 	void stopRunning();
 	// Get the GLFW window.
-	GLFWwindow* getWindow();
+	GLFWwindow* getGLFWWindow();
 
 	// ----------------------- //
 	//  G L F W   W I N D O W  //
@@ -174,13 +179,13 @@ private:
 	// --------------- //
 
 	// Friends.
-	friend class LayerStack;
+	friend class WindowStack;
 	friend class SettingsWidget;
 	friend class RendererStats;
-	friend class Layer;
+	friend class LumenWindow;
 
 	// The window containing the application.
-	GLFWwindow* m_window = nullptr;
+	GLFWwindow* m_glfwWindow = nullptr;
 
 	// The active engine.
 	EngineCore* m_activeEngine = nullptr;
@@ -189,7 +194,7 @@ private:
 	//  L O O P  //
 	// --------- //
 
-	// Is the app running.
+	// Data.
 	bool m_isRunning = true;
 	bool m_waitForEvents = true;
 	double m_targetFPS = 60.f;
@@ -197,33 +202,32 @@ private:
 	double m_totalFrameTime = 0;
 	double m_currentFrameTime = 0;
 	double m_eventsTimeout = m_targetFrameTime * 2;
+
 	// Update the current frame time.
 	void updateFrametime();
 	// Checks if the frame has to be started based on the frametime.
 	bool startFrame();
 
 	// ------------- //
-	//  L A Y E R S  //
+	//  W I N O W S  //
 	// ------------- //
 	
-	// The layers in the application.
-	std::unique_ptr<LayerStack> m_layerStack = nullptr;
-	// The layer that has the most recent interaction.
-	Layer* m_focusedLayer = nullptr;
-	// The layer that the mouse is hovering over.
-	Layer* m_hoveredLayer = nullptr;
-	// Handle when the hovered layer changes.
-	void onHoveredLayerChange(Layer* newLayer);
-	// Handle when the focused layer changes.
-	// This allows us to control when windows are focused
-	// in imgui.
-	void onFocusedLayerChange(Layer* newLayer);
-	// Find the layer that is being hovered.
-	Layer* findHoveredLayer();
-	// Dock a layer to the panel.
-	void dockLayerToPanel(std::string& name, LumenDockPanel panel);
-	// Pop the layers queued for removal.
-	void popLayers();
+	// The Windows in the application.
+	std::unique_ptr<WindowStack> m_windowStack = nullptr;
+	// The Window that has the most recent interaction.
+	LumenWindow* m_focusedWindow = nullptr;
+	// The Window that the mouse is hovering over.
+	LumenWindow* m_hoveredWindow = nullptr;
+	// Handle when the hovered Window changes.
+	void onHoveredWindowChange(LumenWindow* newWindow);
+	// Handle when the focused Window changes.
+	void onFocusedWindowChange(LumenWindow* newWindow);
+	// Find the Window that is being hovered.
+	LumenWindow* findHoveredWindow();
+	// Dock a Window to the panel.
+	void dockWindowToPanel(LumenWindow* window, LumenDockPanel panel);
+	// Pop the Windows queued for removal.
+	void popWindows();
 	
 	// Functions used to get data regarding the docking child nodes.
 	ImGuiID findLargestChildNode(ImGuiID nodeID);
@@ -235,13 +239,13 @@ private:
 	// ------------- //
 
 	// Handle window events.
-	void onWindowResizeEvent(WindowEvent& event);
+	void onWindowResizeEvent(const WindowEvent& event);
 	// Handle serialisation events.
-	void onFileDropEvent(FileDropEvent& event);
+	void onFileDropEvent(const FileDropEvent& event);
 	// Load files.
-	void onFileLoadEvent(FileLoadEvent& event);
+	void onFileLoadEvent(const FileLoadEvent& event);
 	// Save files.
-	void onFileSaveEvent(FileSaveEvent& event);
+	void onFileSaveEvent(const FileSaveEvent& event);
 	// Update the ImGui state.
 	// Lumen controls some of the state changes (for optimisation).
 	void imguiOnUpdate();
@@ -254,7 +258,7 @@ private:
 	void onRenderInit();
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
-	// Render the Lumen layers.
+	// Render the Lumen Windows.
 	void onRender();
 	// Renders the initial frame that is required for the dock builder.
 	void buildDocks();
@@ -288,57 +292,24 @@ private:
 //  Templates.																																	//
 //==============================================================================================================================================//
 
-
-template<typename EngineType>
-EngineLayer<EngineType>* Application::pushEngineLayer(std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
+template<class WindowType, class ... Args>
+WindowType* Application::pushWindow(LumenDockPanel panel, const Args& ... args)
 {
-	// Create and push the layer.
-	std::unique_ptr<EngineLayer<EngineType>> layer = std::make_unique<EngineLayer<EngineType>>(layerName, imguiWindowFlags);
-	std::string newName = m_layerStack->pushLayer<EngineLayer<EngineType>>(layer);
-	EngineLayer<EngineType>* ptr = m_layerStack->getLayer<EngineLayer<EngineType>>(newName);
-	if(focus)
-		onFocusedLayerChange(ptr);
-	// Dock the layer.
-	dockLayerToPanel(newName, panel);
-	// Return the layer.
-	return ptr;
+	WindowType* window = m_windowStack->pushWindow<WindowType>(args...);
+	dockWindowToPanel(window, panel);
+	window->focus();
+	return window;
 }
 
-template<typename GuiType>
-GuiLayer<GuiType>* Application::pushGuiLayer(const std::string layerName, LumenDockPanel panel, int imguiWindowFlags, bool focus)
+template<class EngineType, class ... Args>
+EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args) 
 {
-	// Create and push the layer.
-	std::unique_ptr<GuiLayer<GuiType>> layer = std::make_unique<GuiLayer<GuiType>>(layerName, imguiWindowFlags);
-	std::string newName = m_layerStack->pushLayer<GuiLayer<GuiType>>(layer);
-	GuiLayer<GuiType>* ptr = m_layerStack->getLayer<GuiLayer<GuiType>>(newName);
-	if(focus)
-		onFocusedLayerChange(ptr);
-	// Dock the layer.
-	dockLayerToPanel(newName, panel);
-	// Return the layer.
-	return ptr;
-}
-
-template<class LayerType>
-LayerType* Application::getLayer(std::string& name)
-{
-	return m_layerStack->getLayer<LayerType>(name);
-}
-
-template<class EngineType>
-EngineLayer<EngineType>* Application::getEngineLayer(EngineCore* engine)
-{
-	// Find the layer with the engine.
-	for (auto& [name, layer] : m_layerStack->getLayers())
-	{
-		EngineLayer<EngineType>* engineLayer = dynamic_cast<EngineLayer<EngineType>*>(layer.get());
-		// Valid cast?
-		if (!engineLayer) continue;
-		// Does it contain the engine?
-		if (engineLayer->getEngine() == engine) return engineLayer;
-	}
-	// Engine not found.
-	return nullptr;
+	GraphicsScene<EngineType>* window = m_windowStack->pushWindow<GraphicsScene<EngineType>>(name);
+	dockWindowToPanel(window, panel);
+	window->constructEngine(args...);
+	window->getEngine()->m_parentWindow = window;
+	window->focus();
+	return window->getEngine();
 }
 
 template<class EngineType>

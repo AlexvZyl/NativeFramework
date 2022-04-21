@@ -112,15 +112,14 @@ void loadFromYAML(const std::filesystem::path& path)
 		// Circuits.
 		if (path.extension() == ".lmct")
 		{
-			//deserialiseCircuit(yamlFile, true);
-			Design2DEngine* engine = Lumen::getApp().pushEngineLayer<Design2DEngine>(path.stem().string())->getEngine();
+			Design2DEngine* engine = Lumen::getApp().pushEngine<Design2DEngine>(LumenDockPanel::Scene, path.stem().string());
 			engine->createCircuit(path);
 		}
 
 		// Components.
 		else if (path.extension() == ".lmcp")
 		{
-			ComponentDesigner* engine = Lumen::getApp().pushEngineLayer<ComponentDesigner>(path.stem().string())->getEngine();
+			ComponentDesigner* engine = Lumen::getApp().pushEngine<ComponentDesigner>(LumenDockPanel::Scene, path.stem().string());
 			engine->setComponent(path);
 		}
 	}
