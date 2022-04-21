@@ -42,7 +42,7 @@ public:
     // Set a float variable in the shader.
     void setFloat(const std::string& name, float value);
     // Set a mat4 variable in the shader.
-    void setMat4(const std::string& name, glm::mat4* value);
+    void setMat4(const std::string& name, const glm::mat4& value);
     // Set a multisampled sampler vaue.
     void setSamplerMSAA(const std::string& name, int* textureID, unsigned count);
 

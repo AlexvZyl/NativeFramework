@@ -22,8 +22,6 @@
 
 void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 {
-	Base2DEngine::onMouseButtonEvent(event);
-
 	// --------------------- //
 	//  L E F T   P R E S S  //
 	// --------------------- //
@@ -134,8 +132,6 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 
 void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 {
-	Base2DEngine::onMouseMoveEvent(event);
-
 	glm::vec2 coords = event.mousePosition;
 	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(coords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
@@ -152,11 +148,13 @@ void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 		m_hoveredPort = getPort(m_hoveredID);
 		if (m_hoveredPort != lastHoveredPort)
 		{
-			if (m_hoveredPort)   
+			if (m_hoveredPort)
+			{
 				m_hoveredPort->showAttachIndicator();
+			}
 			else if (lastHoveredPort) 
 			{
-					lastHoveredPort->hideAttachIndicator();
+				lastHoveredPort->hideAttachIndicator();
 			}
 		}
 
@@ -200,22 +198,21 @@ void Design2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
-	
-	glm::vec2 pixelCoords = event.mousePosition;
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
-	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-	uint64_t eventID = event.ID;
-	glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
-	if (designerState == ENTITY_SELECT) 
+	if (event.isType(EventType_MouseButtonLeft))
 	{
-			if (m_activeComponent.get()) 
+		glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
+		if (designerState == ENTITY_SELECT)
+		{
+			if (m_activeComponent.get())
 			{
 				m_activeComponent->move(translation);
-			}	
-			if (m_activeVertexIdx != -1) {
+			}
+			if (m_activeVertexIdx != -1) 
+			{
 				m_activeCable->translateVertexAtIndex(m_activeVertexIdx, translation);
 			}
+		}
 	}
 }
 
@@ -225,13 +222,7 @@ void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 
 void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 {
-
-	glm::vec2 screenCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
-	if (event.isType(EventType_MouseDragStart))
-	{
-
-	}
-	else if (event.isType(EventType_MouseDragStop))
+	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
 		if (m_activeComponent.get()) 
 		{
@@ -239,8 +230,10 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
 			m_activeComponent->moveTo(getNearestGridVertex(m_activeComponent->centre));
 		}
-		if (m_activeVertexIdx != -1) {
-			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(screenCoords));
+		if (m_activeVertexIdx != -1) 
+		{
+			glm::vec2 worldCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
+			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(worldCoords));
 		}
 	}
 }
@@ -251,8 +244,6 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 
 void Design2DEngine::onKeyEvent(const KeyEvent& event)
 {
-	Base2DEngine::onKeyEvent(event);
-
 	// Events based on key type.
 	if (event.isType(EventType_KeyPress))
 	{
@@ -301,7 +292,7 @@ void Design2DEngine::onKeyEvent(const KeyEvent& event)
 
 void Design2DEngine::onFileDropEvent(const FileDropEvent& event) 
 {
-	Renderer::storeAndBindScene(m_scene.get());
+	Renderer::storeAndBindScene(&getScene());
 
 	for (auto& path : event.fileData)
 	{

@@ -22,10 +22,10 @@ void EngineCore::onEvent(const Event& event)
 	// Mouse events.
 	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(event.cast<MouseMoveEvent>()); }
 	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEvent(event.cast<MouseDragEvent>()); }
+	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(event.cast<MouseScrollEvent>()); }
 	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
 	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
 	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
-	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(event.cast<MouseScrollEvent>()); }
 
 	// Key events.
 	else if (event.isType(EventType_KeyPress))			{ onKeyEvent(event.cast<KeyEvent>()); }
@@ -99,7 +99,7 @@ void EngineCore::onNotifyEventForce(const NotifyEvent& event)
 
 void EngineCore::onMouseMoveEventForce(const MouseMoveEvent& event)
 {
-	m_scene->m_grid->updateHelperCircle(m_scene->pixelCoordsToWorldCoords(getMouseLocalPosition()));
+	m_scene->m_grid->updateHelperCircle(m_scene->getCamera().pixelCoordsToWorldCoords(getMouseLocalPosition()));
 	onMouseMoveEvent(event);
 }
 

@@ -84,7 +84,7 @@ void SettingsWidget::onImGuiRender()
     if (engine) 
     {
         ImGui::Separator();
-        int gridLines = engine->m_scene->m_grid->getTotalCoarseLines();
+        int gridLines = engine->getScene().getGrid().getTotalCoarseLines();
         std::string gridCount = "Scene current grid lines: " + std::to_string(gridLines);
         ImGui::Text(gridCount.c_str());
         ImGui::Text("New Grid Count: ");
@@ -92,7 +92,7 @@ void SettingsWidget::onImGuiRender()
         ImGui::SliderInt("##SceneGridLines", &newGridCount, 1, 100);
         if (ImGui::Button("Update Grid"))
         {
-            engine->m_scene->m_grid->destroyGrid().setTotalCoarseLines(newGridCount).createGrid();
+            engine->getScene().getGrid().destroyGrid().setTotalCoarseLines(newGridCount).createGrid();
         }
         ImGui::Separator();
     }

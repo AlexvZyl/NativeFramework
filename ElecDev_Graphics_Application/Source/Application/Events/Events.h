@@ -207,6 +207,10 @@ class MouseDragEvent : public MouseEvent
 {
 public:
 
+	inline MouseDragEvent()
+		: MouseEvent({ 0.f, 0.f }, 0 | EventType_MouseDrag), initialPosition({ 0.f, 0.f }), currentFrameDelta({ 0.f, 0.f })
+	{}
+
 	inline MouseDragEvent(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
 		: MouseEvent(current, ID | EventType_MouseDrag), initialPosition(init), currentFrameDelta(delta)
 	{}

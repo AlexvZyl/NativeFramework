@@ -33,7 +33,7 @@ void BackgroundColorEditor::onImGuiRender()
 	Scene* scene = nullptr;
 	if (engine)
 	{
-		scene = engine->m_scene.get();
+		scene = &engine->getScene();
 	}
 
 	// Open color editor.

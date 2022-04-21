@@ -160,7 +160,9 @@ void CableCreator::onImGuiRender()
 			ImGui::TableSetColumnIndex(0);
 			ImGui::Text(key.c_str());
 			ImGui::TableSetColumnIndex(1);
+			ImGui::PushItemWidth(-1.f);
 			ImGui::InputText("##Input", &value);
+			ImGui::PopItemWidth();
 			ImGui::TableSetColumnIndex(2);
 			std::string buttonID = "Remove##" + std::to_string(entryIndex++);
 			if (ImGui::Button(buttonID.c_str()))

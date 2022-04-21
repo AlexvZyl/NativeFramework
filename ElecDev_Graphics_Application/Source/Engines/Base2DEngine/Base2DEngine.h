@@ -20,17 +20,9 @@ public:
 	// Destructor.
 	inline virtual ~Base2DEngine() override = default;
 
-	// ------------- //
-	//  E V E N T S  //
-	// ------------- //
-
-	// Mouse events.
-	void onMouseButtonEvent(const MouseButtonEvent& event) override;
-	void onMouseMoveEvent(const MouseMoveEvent& event) override;
+	// Mouse event basic controls.
+	void onMouseDragEvent(const MouseDragEvent& event) override;
 	void onMouseScrollEvent(const MouseScrollEvent& event) override;
-
-	// Key events.
-	void onKeyEvent(const KeyEvent& event) override;
 };
 
 //=============================================================================================================================================//

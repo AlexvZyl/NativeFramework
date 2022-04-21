@@ -43,34 +43,35 @@ const glm::vec2& EngineCore::getWindowContentRegionSize() const
 //  Scene wrappers.																															   //
 //=============================================================================================================================================//
 
+Scene& EngineCore::getScene() 
+{
+	return *m_scene.get();
+}
+
 unsigned EngineCore::getRenderTexture() 
 { 
-	return m_scene->getRenderTexture(); 
+	return getScene().getRenderTexture(); 
 }
 
 unsigned EngineCore::getEntityID(const glm::vec2& pixelCoords) 
 { 
-	return m_scene->getEntityID(pixelCoords); 
+	return getScene().getEntityID(pixelCoords); 
 }
 
 glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords) 
 {
-	return m_scene->m_grid->getNearestGridVertex(coords);
+	return getScene().getGrid().getNearestGridVertex(coords);
 }
 
 glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
 {
-	return m_scene->pixelCoordsToWorldCoords(distance) - m_scene->pixelCoordsToWorldCoords({ 0.f, 0.f });
+	Camera& camera = getScene().getCamera();
+	return camera.pixelCoordsToWorldCoords(distance) - camera.pixelCoordsToWorldCoords({ 0.f, 0.f });
 }
 
-glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords) 
+glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords)
 {
-	return m_scene->pixelCoordsToWorldCoords(coords);
-}
-
-glm::vec3 EngineCore::pixelCoordsToCameraCoords(const glm::vec2& coords) 
-{
-	return m_scene->pixelCoordsToCameraCoords(coords);
+	return getScene().getCamera().pixelCoordsToWorldCoords(coords);
 }
 
 //=============================================================================================================================================//

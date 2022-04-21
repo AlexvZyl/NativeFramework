@@ -9,89 +9,237 @@
 //  Functions.																																	//
 //==============================================================================================================================================//
 
-Camera::Camera(CameraType cameraType, int width, int height) 
+Camera::Camera(CameraType cameraType, const glm::vec2& size)
 	: m_type(cameraType)
 {
-	setViewport(width, height);
+	setViewport(size);
 
+	// Create the camera.
+	switch (cameraType) 
+	{
+	case CameraType::Standard2D:
+		construct2DCamera(size);
+		break;
+
+	case CameraType::Standard3D:
+		construct3DCamera(size);
+		break;
+	}
+
+	updateAllMatrices();
+	setScaleRate(1.f);
+}
+
+void Camera::construct2DCamera(const glm::vec2& size)
+{
 	// Find the minimum value of the viewport dimensions.
-	float minValue;
-	if (m_viewportVec[2] < m_viewportVec[3]) { minValue = m_viewportVec[2]; }
-	else { minValue = m_viewportVec[3]; }
-	// Scale the projection values according to the ImGUI viewport.
-	float projValuesTemp[6] = { (float)-m_viewportVec[2] / minValue, (float)m_viewportVec[2] / minValue, (float)-m_viewportVec[3] / minValue, (float)m_viewportVec[3] / minValue,-1.0, 1.0 };
+	float minValue = 0.f;
+	if (m_viewport[2] < m_viewport[3]) { minValue = m_viewport[2]; }
+	else							   { minValue = m_viewport[3]; }
 
-	// Save projection values to be used with resizing of the window.
-	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
+	// Scale the projection values according to the viewport.
+	m_projectionValues = { -m_viewport[2] / minValue, m_viewport[2] / minValue,
+						   -m_viewport[3] / minValue, m_viewport[3] / minValue,
+						   -1.0,						 1.0 };
+
 	// Create projection matrix.
-	m_projectionValues[4] = -1.0f;
-	m_projectionValues[5] = 1.0f;
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
+	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], 
+									m_projectionValues[2], m_projectionValues[3], 
+									m_projectionValues[4], m_projectionValues[5]);
+	projectionChanged();
 }
 
-void Camera::onUpdate() 
+void Camera::construct3DCamera(const glm::vec2& size)
 {
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix; 
+	// TODO.
 }
-
-void Camera::resize(int width, int height) 
+void Camera::resize(const glm::vec2& size) 
 {
-	// Calculate the value of the scaling.
-	float scalingFactor[2] = { (float)width / (float)m_viewportVec[2], (float)height / (float)m_viewportVec[3]};
-	m_viewportVec[2] = (float)width;
-	m_viewportVec[3] = (float)height;
-
 	// Scale projection values.
-	m_projectionValues[0] *= scalingFactor[0];
-	m_projectionValues[1] *= scalingFactor[0];
-	m_projectionValues[2] *= scalingFactor[1];
-	m_projectionValues[3] *= scalingFactor[1];
-
-	// Scale with the y scaling.
-	//m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
-	// Update base matrix.
-	m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
+	glm::vec2 scalingFactor = { size.x / m_viewport[2], size.y / m_viewport[3]};
+	setViewport(size);
+	m_projectionValues = { m_projectionValues[0] * scalingFactor.x, m_projectionValues[1] * scalingFactor.x,
+						   m_projectionValues[2] * scalingFactor.y, m_projectionValues[3] * scalingFactor.y,
+						   m_projectionValues[4],				    m_projectionValues[5] };
+	
 	// Create new projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
+	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], 
+									m_projectionValues[2], m_projectionValues[3], 
+									m_projectionValues[4], m_projectionValues[5]);
+}
+
+const CameraType& Camera::getType() const
+{
+	return m_type;
+}
+
+void Camera::onUpdate()
+{
+	updateAllMatrices();
 }
 
 //==============================================================================================================================================//
 //  Controls.																																	//
 //==============================================================================================================================================//
 
+void Camera::setPosition(const glm::vec3& position)
+{
+	m_position = position;
+	viewChanged();
+}
 
+void Camera::setScaleRate(float rate)
+{
+	m_scaleRate = rate;
+	m_zoomInRate = 1 + m_scaleRate;
+	m_zoomOutRate = 1 / (1 + m_scaleRate);
+}
 
-//==============================================================================================================================================\//
+void Camera::translate(const glm::vec2& translation) 
+{
+	translate({ translation.x, translation.y, 0.f });
+}
+
+void Camera::translate(const glm::vec3& translation) 
+{
+	m_position += translation;
+	viewChanged();
+}
+
+void Camera::scale2D(float scale)
+{
+	Camera::scale({ scale, scale, 1.f });
+}
+
+void Camera::scale(const glm::vec3& scale) 
+{
+	m_scalingMatrix = glm::scale(m_scalingMatrix, scale);
+	viewChanged();
+}
+
+void Camera::scaleAroundCursor2D(float scale, const glm::vec2& cursor)
+{
+	glm::vec2 coordsBeforeScaling = pixelCoordsToWorldCoords(cursor);
+	Camera::scale({scale, scale, 1.f});
+	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
+	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+}
+
+void Camera::incrementZoomLevel2D(int increment)
+{
+	float scale = getScaleFromIncrement(increment);
+	Camera::scale({ scale, scale, 1.f });
+}
+
+void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor)
+{
+	glm::vec2 coordsBeforeScaling = pixelCoordsToWorldCoords(cursor);
+	float scale = getScaleFromIncrement(increment);
+	Camera::scale({ scale, scale, 1.f });
+	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
+	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+}
+
+float Camera::getScaleFromIncrement(int increment) 
+{
+	if (increment >= 0)	return      increment * m_zoomInRate;
+	else				return -1 * increment * m_zoomOutRate;
+}
+
+//==============================================================================================================================================//
+//  Matrices.																																	//
+//==============================================================================================================================================//
+
+void Camera::viewChanged() 
+{
+	m_viewMatrixChanged = true;
+	m_viewProjectionMatrixChanged = true;
+}
+
+void Camera::projectionChanged()
+{
+	m_projectionMatrixChanged = true;
+	m_viewProjectionMatrixChanged = true;
+}
+
+void Camera::updateViewMatrix()
+{
+	if (!m_viewMatrixChanged) return;
+
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * glm::translate(glm::mat4(1.f), m_position);
+	m_viewMatrixChanged = false;
+}
+
+void Camera::updateProjectionMatrix()
+{
+	if (!m_projectionMatrixChanged) return;
+
+	m_projectionMatrixChanged = false;
+}
+
+void Camera::updateViewProjectionMatrix()
+{
+	if (!m_viewProjectionMatrixChanged) return;
+
+	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
+	m_viewProjectionMatrixChanged = false;
+}
+
+void Camera::updateAllMatrices() 
+{
+	updateViewMatrix();
+	updateProjectionMatrix();
+	updateViewProjectionMatrix();
+}
+
+void Camera::setViewport(const glm::vec2& viewport)
+{
+	m_viewport = { 0.f, 0.f, viewport.x, viewport.y };
+}
+
+void Camera::setViewport(const glm::vec4& viewport)
+{
+	m_viewport = viewport;
+}
+
+const glm::vec4& Camera::getViewport() const
+{
+	return m_viewport;
+}
+
+const glm::vec2& Camera::getViewportSize() const
+{
+	return { m_viewport[2] - m_viewport[0],
+			 m_viewport[3] - m_viewport[1] };
+}
+
+const glm::mat4& Camera::getViewMatrix() const
+{
+	return m_viewMatrix;
+}
+
+const glm::mat4& Camera::getProjectionMatrix() const
+{
+	return m_projectionMatrix;
+}
+
+const glm::mat4& Camera::getViewProjectionMatrix() const
+{
+	return m_viewProjectionMatrix;
+}
+
+//==============================================================================================================================================//
 //  Coordinate systems.																															//
 //==============================================================================================================================================//
 
-void Camera::setViewport(int width, int height) 
-{
-	m_viewportVec[2] = (float)width;
-	m_viewportVec[3] = (float)height;
-}
-
+// This will most likely not work with 3D, need to calculate the z value.
 glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
 {
-	// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
-	glm::vec3 pixelCoords3 = glm::vec3{ pixelCoords.x, m_viewportVec[3] - pixelCoords.y, 0.0f };
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;  // Do we want this to be updated?
-	return glm::unProject(pixelCoords3, m_viewMatrix, m_projectionMatrix, m_viewportVec);
-}
+	if (m_viewMatrixChanged) updateViewMatrix();
 
-// TODO: This function needs to be checked.
-glm::vec3 Camera::pixelCoordsToCameraCoords(const glm::vec2& pixelCoords)
-{
-	glm::vec2 viewport = { m_viewportVec[2], m_viewportVec[3]};
 	// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
-	glm::vec2 pixelCoordsTemp = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
-	glm::vec2 normalizedScreenCoords = {
-		(pixelCoordsTemp.x - viewport.x / 2) / (viewport.x / 2),
-		(pixelCoordsTemp.y - viewport.y / 2) / (viewport.y / 2)
-	};
-	glm::vec4 screenVec = { normalizedScreenCoords.x, normalizedScreenCoords.y, 0.0f, 1.0f };
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;  // Do we want this to be updated?
-	return screenVec * glm::inverse(m_modelMatrix * m_viewMatrix * m_projectionMatrix);
+	return glm::unProject({ pixelCoords.x, m_viewport[3] - pixelCoords.y, 0.0f }, 
+						    m_viewMatrix, m_projectionMatrix, m_viewport);
 }
 
 //==============================================================================================================================================//
