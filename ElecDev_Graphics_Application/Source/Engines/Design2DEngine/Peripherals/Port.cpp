@@ -122,8 +122,8 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	}
 
 	// Add shapes.
-	body = Renderer::addCircle2D(node["Body"]);
-	border = Renderer::addCircle2D(node["Border"]);
+	body = Renderer::addCircle2D(node["Body"], this);
+	border = Renderer::addCircle2D(node["Border"], this);
 	title = Renderer::addText2D(node["Title"]);
 	bodyColour = body->m_colour;
 	borderColour = border->m_colour;
