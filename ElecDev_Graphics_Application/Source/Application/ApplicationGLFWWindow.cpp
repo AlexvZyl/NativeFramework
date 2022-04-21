@@ -387,6 +387,7 @@ GLFWwindow* Application::glfwInitWindow()
 
     // Enable MSAA.
     glfwWindowHint(GLFW_SAMPLES, 8);
+
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);
     glfwSetTime(0);
@@ -408,6 +409,9 @@ GLFWwindow* Application::glfwInitWindow()
     icon.width = bitmap.bmWidth;
     // Set icon.
     glfwSetWindowIcon(window, 1, &icon);
+
+    if (glfwRawMouseMotionSupported())
+        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
     // --------------------------- //
     //  O P E N G L   L O A D E R  //

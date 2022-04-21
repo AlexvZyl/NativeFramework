@@ -14,6 +14,7 @@ This is where the interactive 2D design engine is implemented.
 #include <iostream>
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "OpenGL/Primitives/Grid.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -23,8 +24,8 @@ This is where the interactive 2D design engine is implemented.
 Design2DEngine::Design2DEngine()
 	: Base2DEngine()
 {
-	// Default circuit (In this case handled like a default scene).
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
+	getScene().getGrid().disableHelperCircle();
 }
 
 Design2DEngine::~Design2DEngine()

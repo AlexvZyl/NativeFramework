@@ -12,60 +12,30 @@
 Camera::Camera(CameraType cameraType, const glm::vec2& size)
 	: m_type(cameraType)
 {
-	setViewport(size);
+	float aspectRatio = size.x / size.y;
 
-	// Create the camera.
 	switch (cameraType) 
 	{
 	case CameraType::Standard2D:
-		construct2DCamera(size);
+		m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
 		break;
 
 	case CameraType::Standard3D:
-		construct3DCamera(size);
 		break;
 	}
 
-	updateAllMatrices();
-	setScaleRate(1.f);
-}
-
-void Camera::construct2DCamera(const glm::vec2& size)
-{
-	// Find the minimum value of the viewport dimensions.
-	float minValue = 0.f;
-	if (m_viewport[2] < m_viewport[3]) { minValue = m_viewport[2]; }
-	else							   { minValue = m_viewport[3]; }
-
-	// Scale the projection values according to the viewport.
-	m_projectionValues = { -m_viewport[2] / minValue, m_viewport[2] / minValue,
-						   -m_viewport[3] / minValue, m_viewport[3] / minValue,
-						   -1.0,						 1.0 };
-
-	// Create projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], 
-									m_projectionValues[2], m_projectionValues[3], 
-									m_projectionValues[4], m_projectionValues[5]);
 	projectionChanged();
+	setViewport(size);
+	setScaleRate(1.f);
+	updateAllMatrices();
 }
 
-void Camera::construct3DCamera(const glm::vec2& size)
-{
-	// TODO.
-}
 void Camera::resize(const glm::vec2& size) 
 {
-	// Scale projection values.
-	glm::vec2 scalingFactor = { size.x / m_viewport[2], size.y / m_viewport[3]};
+	float aspectRatio = size.x / size.y;
+	m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
 	setViewport(size);
-	m_projectionValues = { m_projectionValues[0] * scalingFactor.x, m_projectionValues[1] * scalingFactor.x,
-						   m_projectionValues[2] * scalingFactor.y, m_projectionValues[3] * scalingFactor.y,
-						   m_projectionValues[4],				    m_projectionValues[5] };
-	
-	// Create new projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], 
-									m_projectionValues[2], m_projectionValues[3], 
-									m_projectionValues[4], m_projectionValues[5]);
+	projectionChanged();
 }
 
 const CameraType& Camera::getType() const
