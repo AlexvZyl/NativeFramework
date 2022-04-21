@@ -197,6 +197,8 @@ protected:
 	glm::vec2 m_contentRegionSize = { 0.f, 0.f };
 	glm::vec2 m_contentRegionPosition = { 0.f, 0.f };
 	bool m_isOpen = true;
+	inline static float WIDTH_OF_SPACE = 0.f;
+	inline const static float MIN_TAB_WIDTH = 75.f;
 };
 
 //==============================================================================================================================================//

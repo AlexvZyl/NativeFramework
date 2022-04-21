@@ -222,12 +222,7 @@ void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 
 void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 {
-	glm::vec2 screenCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
-	if (event.isType(EventType_MouseDragStart))
-	{
-
-	}
-	else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
+	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
 		if (m_activeComponent.get()) 
 		{
@@ -235,8 +230,10 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
 			m_activeComponent->moveTo(getNearestGridVertex(m_activeComponent->centre));
 		}
-		if (m_activeVertexIdx != -1) {
-			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(screenCoords));
+		if (m_activeVertexIdx != -1) 
+		{
+			glm::vec2 worldCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
+			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(worldCoords));
 		}
 	}
 }

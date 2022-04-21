@@ -108,38 +108,42 @@ void Camera::translate(const glm::vec3& translation)
 
 void Camera::scale2D(float scale)
 {
-	m_scalingMatrix = glm::scale(m_scalingMatrix, { scale, scale, 1.f });
+	Camera::scale({ scale, scale, 1.f });
+}
+
+void Camera::scale(const glm::vec3& scale) 
+{
+	m_scalingMatrix = glm::scale(m_scalingMatrix, scale);
 	viewChanged();
 }
 
 void Camera::scaleAroundCursor2D(float scale, const glm::vec2& cursor)
 {
 	glm::vec2 coordsBeforeScaling = pixelCoordsToWorldCoords(cursor);
-	m_scalingMatrix = glm::scale(m_scalingMatrix, {scale, scale, 1.f});
-	viewChanged();
+	Camera::scale({scale, scale, 1.f});
 	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
-	m_position += glm::vec3( coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f );
-	viewChanged();
+	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
 }
 
 void Camera::incrementZoomLevel2D(int increment)
 {
-	float scale = increment * m_scaleRate;
-	m_scalingMatrix = glm::scale(m_scalingMatrix, { scale, scale, 1.f });
-	viewChanged();
+	float scale = getScaleFromIncrement(increment);
+	Camera::scale({ scale, scale, 1.f });
 }
 
 void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor)
 {
 	glm::vec2 coordsBeforeScaling = pixelCoordsToWorldCoords(cursor);
-	float scale = 1.f;
-	if (increment >= 0)	scale = increment * m_zoomInRate;
-	else				scale = -1 * increment * m_zoomOutRate;
-	m_scalingMatrix = glm::scale(m_scalingMatrix, { scale, scale, 1.f });
-	viewChanged();
+	float scale = getScaleFromIncrement(increment);
+	Camera::scale({ scale, scale, 1.f });
 	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
-	m_position += glm::vec3(coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f);
-	viewChanged();
+	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+}
+
+float Camera::getScaleFromIncrement(int increment) 
+{
+	if (increment >= 0)	return      increment * m_zoomInRate;
+	else				return -1 * increment * m_zoomOutRate;
 }
 
 //==============================================================================================================================================//

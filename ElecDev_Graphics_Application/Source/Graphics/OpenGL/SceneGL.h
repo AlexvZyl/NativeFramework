@@ -44,16 +44,12 @@ public:
 	// Returns the rendered texture.
 	unsigned getRenderTexture();
 
-	// Set the viewport dimensions.
-	void setViewport(const glm::vec2& size);
-	void setViewport(const glm::vec4& size);
-
 	// Returns the ID of the entity at the coordinates.
 	unsigned getEntityID(const glm::vec2& pixelCoords);
 	// Resizes the scene based on a viewport change.
 	void resize(const glm::vec2& size);
 
-
+	// Events.
 	void onRenderInit();
 	void onRenderCleanup();
 
@@ -62,13 +58,14 @@ public:
 	// Recreate the resources once it has been deleted.
 	void recreateGPUResources();
 
-	// Get the camera in the scene.
+	// Getters.
 	Camera& getCamera();
+	Grid& getGrid();
+
+private:
 
 	// The grid drawn on the scene.
 	std::unique_ptr<Grid> m_grid;
-
-private:
 
 	friend class EngineCore;
 	friend class Renderer;
