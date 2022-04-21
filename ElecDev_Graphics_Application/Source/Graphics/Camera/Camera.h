@@ -74,8 +74,6 @@ private:
 
 	void setViewport(const glm::vec2& viewport);
 	void setViewport(const glm::vec4& viewport);
-	void construct2DCamera(const glm::vec2& size);
-	void construct3DCamera(const glm::vec2& size);
 	void viewChanged();
 	void projectionChanged();
 	void updateViewMatrix();
@@ -88,7 +86,6 @@ private:
 	//  D A T A  //
 	// --------- //
 
-	// MVP Matrices.
 	glm::mat4 m_viewMatrix			   = glm::mat4(1.0f);				
 	glm::mat4 m_projectionMatrix	   = glm::mat4(1.0f);			
 	glm::mat4 m_viewProjectionMatrix   = glm::mat4(1.0f);
@@ -96,13 +93,12 @@ private:
 	glm::vec3 m_position			   = glm::vec3(0.f);
 	glm::mat4 m_rotationMatrix		   = glm::mat4(1.0f);			
 	glm::vec4 m_viewport			   = glm::vec4(1.0f);					
-	std::array<float, 6> m_projectionValues;				
 	float m_scaleRate = 1.f;			
 	float m_zoomInRate = 1.f;
 	float m_zoomOutRate = 1.f;
-	bool m_viewMatrixChanged		   = false;
-	bool m_projectionMatrixChanged	   = false;
-	bool m_viewProjectionMatrixChanged = false;
+	bool m_viewMatrixChanged		   = true;
+	bool m_projectionMatrixChanged	   = true;
+	bool m_viewProjectionMatrixChanged = true;
 	CameraType m_type;
 };
 

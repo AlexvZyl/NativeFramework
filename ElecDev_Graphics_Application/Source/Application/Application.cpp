@@ -51,6 +51,8 @@ Application::Application()
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	setGuiTheme();
+	//ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+	//ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
 	// Initialisation frame.
 	buildDocks();
