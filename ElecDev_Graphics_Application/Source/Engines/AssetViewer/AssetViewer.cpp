@@ -22,7 +22,7 @@ AssetViewer::AssetViewer()
 {
 	enableDesignPalette();
 	getScene().getGrid().disableHelperCircle();
-	getScene().getCamera().scale2D(0.5f);
+	getScene().getCamera().scale2D(1.f);
 }
 
 void AssetViewer::clearAssets()
@@ -63,8 +63,11 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 		{
 			viewComponent(path);
 		}
-
-		m_currentAsset = path.filename().string();
+		// Error.
+		else 
+		{
+			LUMEN_LOG_ERROR("Unsupported file extension.", "YAML Serialiser");
+		}
 	}
 	catch (...)
 	{
@@ -79,6 +82,7 @@ void AssetViewer::viewCircuit(const std::filesystem::path& path)
 {
 	clearAssets();
 	m_circuit = std::make_unique<Circuit>(path);
+	m_currentAsset = path.filename().string();
 }
 
 void AssetViewer::viewComponent(const std::filesystem::path& path)
@@ -86,6 +90,7 @@ void AssetViewer::viewComponent(const std::filesystem::path& path)
 	clearAssets();
 	m_component = std::make_unique<Component2D>(path);
 	m_component->disableOutline();
+	m_currentAsset = path.filename().string();
 }
 
 //=============================================================================================================================================//

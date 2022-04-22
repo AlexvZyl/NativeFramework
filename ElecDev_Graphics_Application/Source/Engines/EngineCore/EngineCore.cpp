@@ -63,7 +63,7 @@ glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords)
 	return getScene().getGrid().getNearestGridVertex(coords);
 }
 
-glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
+glm::vec3 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
 {
 	Camera& camera = getScene().getCamera();
 	return camera.pixelCoordsToWorldCoords(distance) - camera.pixelCoordsToWorldCoords({ 0.f, 0.f });
@@ -72,6 +72,17 @@ glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
 glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords)
 {
 	return getScene().getCamera().pixelCoordsToWorldCoords(coords);
+}
+
+glm::vec2 EngineCore::worldCoordsToPixelCoords(const glm::vec3& worldCoords) 
+{
+	return getScene().getCamera().worldCoordsToPixelCoords(worldCoords);
+}
+
+glm::vec2 EngineCore::worldDistanceToPixelDistance(const glm::vec3& distance) 
+{
+	Camera& camera = getScene().getCamera();
+	return camera.worldCoordsToPixelCoords(distance) - camera.worldCoordsToPixelCoords({ 0.f, 0.f, 0.f });
 }
 
 //=============================================================================================================================================//

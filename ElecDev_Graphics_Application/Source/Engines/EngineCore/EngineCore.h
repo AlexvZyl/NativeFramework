@@ -114,8 +114,10 @@ public:
 	glm::vec2 getMouseGlobalPosition();
 
 	// Coorinate conversions.
-	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
+	glm::vec3 pixelDistanceToWorldDistance(const glm::vec2& distance);
+	glm::vec2 worldDistanceToPixelDistance(const glm::vec3& distance);
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
+	glm::vec2 worldCoordsToPixelCoords(const glm::vec3& worldCoords);
 
 	// ----------------------------- //
 	//  D E S I G N   P A L E T T E  //

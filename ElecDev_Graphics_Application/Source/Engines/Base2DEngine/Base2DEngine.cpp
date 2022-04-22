@@ -17,8 +17,9 @@ Base2DEngine::Base2DEngine()
 	: EngineCore()
 {
 	m_scene = std::make_unique<Scene>(CameraType::Standard2D, glm::vec2(500, 500));
-	m_scene->getCamera().setScaleRate(0.4f);
-	m_scene->getCamera().scale2D(3.f);
+	Renderer::storeAndBindScene(&getScene());
+	getScene().getCamera().setScaleRate(0.4f);
+	getScene().getCamera().scale2D(3.f);
 };
 
 //=============================================================================================================================================//

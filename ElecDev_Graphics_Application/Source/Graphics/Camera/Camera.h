@@ -32,6 +32,7 @@ public:
 	void resize(const glm::vec2& size);
 	// Calculate the world coordinates from the pixel coordinates.
 	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
+	glm::vec2 worldCoordsToPixelCoords(const glm::vec3& worldCoords);
 
 	// Getters.
 	const glm::vec4& getViewport() const;

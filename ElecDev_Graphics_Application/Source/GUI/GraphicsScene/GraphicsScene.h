@@ -8,6 +8,7 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/SceneGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Graphics Scene.																																//
@@ -189,6 +190,7 @@ public:
 	{
 		m_engine = std::make_unique<EngineType>(args...);
 		m_textureID = (void*)m_engine->getRenderTexture();
+		Renderer::restoreAndUnbindScene();  // Scene is bound in EngineCore.
 	}
 
 	// Pass the resize to the engine.

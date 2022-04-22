@@ -107,7 +107,7 @@ void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor)
 	float scale = getScaleFromIncrement(increment);
 	Camera::scale({ scale, scale, 1.f });
 	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
-	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	//Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
 }
 
 float Camera::getScaleFromIncrement(int increment) 
@@ -210,6 +210,13 @@ glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
 	// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
 	return glm::unProject({ pixelCoords.x, m_viewport[3] - pixelCoords.y, 0.0f }, 
 						    m_viewMatrix, m_projectionMatrix, m_viewport);
+}
+
+glm::vec2 Camera::worldCoordsToPixelCoords(const glm::vec3& worldCoords) 
+{
+	if (m_viewMatrixChanged) updateViewMatrix();
+
+	return glm::project(worldCoords, m_viewMatrix, m_projectionMatrix, m_viewport);
 }
 
 //==============================================================================================================================================//

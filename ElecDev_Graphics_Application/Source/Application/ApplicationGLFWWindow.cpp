@@ -386,7 +386,7 @@ GLFWwindow* Application::glfwInitWindow()
     // --------------------- //
 
     // Enable MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 8);
+    glfwWindowHint(GLFW_SAMPLES, 1);
 
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);

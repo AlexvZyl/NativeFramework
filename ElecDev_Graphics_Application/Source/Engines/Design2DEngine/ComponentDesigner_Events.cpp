@@ -1,4 +1,5 @@
 #include "ComponentDesigner.h"
+#include "Application/Events/EventLog.h"
 #include "Application/Events/Events.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Lumen.h"
@@ -104,22 +105,6 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			menu->setInitialPosition(getMouseGlobalPosition());
 			menu->setEngine(this);
 	}
-
-	if (event.isType(EventType_MouseDoublePress))
-	{
-		if (event.isType(EventType_MouseButtonLeft))
-		{
-			LUMEN_LOG_DEBUG("Left Double Press", "Component Designer Button Event");
-		}
-		else if (event.isType(EventType_MouseButtonRight))
-		{
-			LUMEN_LOG_DEBUG("Right Double Press", "Component Designer Button Event");
-		}
-		else if (event.isType(EventType_MouseButtonMiddle))
-		{
-			LUMEN_LOG_DEBUG("Middle Double Press", "Component Designer Button Event");
-		}
-	}
 }
 
 void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
@@ -177,15 +162,6 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 
 	// Store state.
 	m_currentEntityID = getEntityID(event.mousePosition);
-
-	if (event.isType(EventType_MouseDrag))
-	{
-		LUMEN_LOG_DEBUG("Dragging...","Move Event");
-	}
-	else 
-	{
-		LUMEN_LOG_DEBUG("Not dragging.", "Move Event");
-	}
 }
 
 void ComponentDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
@@ -232,6 +208,16 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 
 		case GLFW_KEY_ESCAPE:
 			switchState(CompDesignState::SELECT);
+			break;
+
+		case GLFW_KEY_S:
+			glm::vec2 center = m_activePoly->m_trackedCenter;
+			EventLog::logMouseScroll(center, 1.f, 0.f, 0);
+			EventLog::logMouseDrag(center, center + glm::vec2{ 100.f, 0.f }, { 100.f, 0.f }, EventType_MouseButtonLeft);
+			glm::vec2 expectedPos = center + glm::vec2(pixelDistanceToWorldDistance(glm::vec2{100.f, 0.f}));
+			Renderer::addCircle2D(glm::vec3{ glm::vec2(expectedPos), 0.6f }, 0.01f, { 1.f, 0.f, 1.f, 1.f });
+			// Red = tracked center
+			// Pink = expected position
 			break;
 
 		case GLFW_KEY_K:
@@ -313,8 +299,12 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 		}
 	}
 
-	std::string msg = "Delta: " + std::to_string(event.currentFrameDelta.x) + " + " + std::to_string(event.currentFrameDelta.y);
-	LUMEN_LOG_DEBUG(msg, "Comp Design Drag");
+	if (m_activePoly)
+	{
+		Renderer::addCircle2D(glm::vec3{ glm::vec2(m_activePoly->m_trackedCenter), 0.5f }, 0.02f, { 1.f, 0.f, 0.f, 1.f });
+		std::string msg = std::to_string(worldDistanceToPixelDistance(m_activePoly->m_trackedCenter).x);
+		LUMEN_LOG_ERROR(msg, "");
+	}
 }
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
