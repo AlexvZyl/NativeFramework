@@ -113,8 +113,8 @@ LineSegment* Renderer::addLineSegment2D(const YAML::Node& node, Entity* parent)
 {
 	return Renderer::addLineSegment2D(
 		{ node["Start"][0].as<float>(), node["Start"][1].as<float>() },
-		{ node["End"][0].as<float>(), node["End"][1].as<float>() },
-		node["Thickness"].as<float>(),
+		{ node["End"][0].as<float>()  , node["End"][1].as<float>()   },
+		node["Thickness"].as<float>() ,
 		{ node["Color"][0].as<float>(), node["Color"][1].as<float>(), node["Color"][2].as<float>(), node["Color"][3].as<float>() },
 		parent
 	);

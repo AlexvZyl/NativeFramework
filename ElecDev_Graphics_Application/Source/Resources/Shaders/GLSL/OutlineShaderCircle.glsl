@@ -10,8 +10,7 @@ layout(location = 4) in float v_thickness;
 layout(location = 5) in float v_fade;
 layout(location = 6) in uint v_entityID;
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
+uniform mat4 viewProjMatrix;
 
 struct VertexOutput
 {
@@ -36,7 +35,7 @@ void main()
     Output.Color         = v_color;
     Output.Thickness     = v_thickness;
     Output.Fade          = v_fade;
-    gl_Position = projectionMatrix * viewMatrix * vec4(v_pos, 1.0);
+    gl_Position = viewProjMatrix * vec4(v_pos, 1.0);
     f_entityID = v_entityID;
 }
 
