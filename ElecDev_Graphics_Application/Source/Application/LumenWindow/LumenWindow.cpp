@@ -210,11 +210,11 @@ void LumenWindow::detectWindowMove()
 	}
 }
 
-glm::vec2 LumenWindow::getMouseLocalPosition() const
+glm::vec2 LumenWindow::getMouseLocalPosition() const 
 {
 	double cursorX, cursorY;
 	glfwGetCursorPos(Lumen::getApp().getGLFWWindow(), &cursorX, &cursorY);
-	return { cursorX - m_contentRegionPosition.x, cursorY - m_contentRegionPosition.y };
+	return globalToLocalCoords({ cursorX, getMainViewportSize().y - cursorY });
 }
 
 glm::vec2 LumenWindow::getMouseGlobalPosition() const
@@ -224,16 +224,21 @@ glm::vec2 LumenWindow::getMouseGlobalPosition() const
 	return { cursorX, cursorY };
 }
 
-glm::vec2 LumenWindow::globalToLocalCoords(const glm::vec2& coords) 
+glm::vec2 LumenWindow::globalToLocalCoords(const glm::vec2& coords) const 
 {
 	return { coords.x - m_contentRegionPosition.x,
-			 coords.y - m_contentRegionPosition.y, };
+			 coords.y - (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)), };
 }
 
-glm::vec2 LumenWindow::localToGlobalCoords(const glm::vec2& coords)
+glm::vec2 LumenWindow::localToGlobalCoords(const glm::vec2& coords) const
 {
 	return { coords.x + m_contentRegionPosition.x,
-			 coords.y + m_contentRegionPosition.y, };
+			 coords.y + (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)), };
+}
+
+glm::vec2 LumenWindow::getMainViewportSize() const 
+{
+	return Lumen::getApp().getMainViewportSize();
 }
 
 //==============================================================================================================================================//

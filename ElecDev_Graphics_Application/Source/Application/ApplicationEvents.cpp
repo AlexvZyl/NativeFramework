@@ -152,7 +152,7 @@ void Application::imguiOnUpdate()
 	if (EventLog::mouseMoveOccurred())
 	{
 		MouseMoveEvent& event = EventLog::getMouseMove();
-		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, event.mousePosition.y);
+		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, getMainViewportSize().y - event.mousePosition.y);
 	}
 }
 

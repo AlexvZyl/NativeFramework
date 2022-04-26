@@ -29,7 +29,7 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		if (designerState == COMPONENT_PLACE)
@@ -133,7 +133,7 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 {
 	glm::vec2 coords = event.mousePosition;
-	glm::vec3 WorldCoords = pixelCoordsToWorldCoords(coords);
+	glm::vec3 WorldCoords = pixelToWorldCoords(coords);
 	glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 	if (designerState == COMPONENT_PLACE)
 	{
@@ -201,7 +201,7 @@ void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 
 	if (event.isType(EventType_MouseButtonLeft))
 	{
-		glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
+		glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
 		if (designerState == ENTITY_SELECT)
 		{
 			if (m_activeComponent.get())
@@ -232,7 +232,7 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 		}
 		if (m_activeVertexIdx != -1) 
 		{
-			glm::vec2 worldCoords = pixelCoordsToWorldCoords(getMouseLocalPosition());
+			glm::vec2 worldCoords = pixelToWorldCoords(getMouseLocalPosition());
 			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(worldCoords));
 		}
 	}
@@ -249,7 +249,7 @@ void Design2DEngine::onKeyEvent(const KeyEvent& event)
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		switch (event.key)
@@ -304,7 +304,7 @@ void Design2DEngine::onFileDropEvent(const FileDropEvent& event)
 			if (m_activeCable)
 				m_activeCable->disableOutline();
 			m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
-			m_circuit->m_components.back()->move(getNearestGridVertex(pixelCoordsToWorldCoords(getMouseLocalPosition())));
+			m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(getMouseLocalPosition())));
 			m_activeComponent = m_circuit->m_components.back();
 			designerState = ENTITY_SELECT;
 		}

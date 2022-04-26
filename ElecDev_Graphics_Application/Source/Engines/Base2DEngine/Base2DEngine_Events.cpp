@@ -2,6 +2,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "Utilities/Logger/Logger.h"
 #include "Engines/Base2DEngine/Base2DEngine.h"
 #include "Application/Events/Events.h"
 #include "glm/gtc/matrix_transform.hpp"
@@ -18,7 +19,7 @@ void Base2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 {
 	if (event.isType(EventType_MouseButtonMiddle))
 	{
-		getScene().getCamera().translate(pixelDistanceToWorldDistance(event.currentFrameDelta));
+		getScene().getCamera().translate(pixelToWorldDistance(event.currentFrameDelta));
 	}
 }
 

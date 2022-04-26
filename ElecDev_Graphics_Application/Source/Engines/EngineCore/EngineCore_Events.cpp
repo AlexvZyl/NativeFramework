@@ -99,7 +99,7 @@ void EngineCore::onNotifyEventForce(const NotifyEvent& event)
 
 void EngineCore::onMouseMoveEventForce(const MouseMoveEvent& event)
 {
-	m_scene->m_grid->updateHelperCircle(m_scene->getCamera().pixelCoordsToWorldCoords(getMouseLocalPosition()));
+	getScene().getGrid().updateHelperCircle(pixelToWorldCoords(getMouseLocalPosition()));
 	onMouseMoveEvent(event);
 }
 

@@ -16,7 +16,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 	if (event.isType(EventType_MousePress | EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 
@@ -78,10 +78,12 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (!m_activeCircle) 
 			{
 				//start new circle
-				if (drawFilled) {
+				if (drawFilled) 
+				{
 					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
 				}
-				else {
+				else 
+				{
 					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, .02f, 0.f, m_activeComponent.get());
 				}
 			}
@@ -109,7 +111,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 
 void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 {
-	glm::vec2 screenCoords = pixelCoordsToWorldCoords(event.mousePosition);
+	glm::vec2 screenCoords = pixelToWorldCoords(event.mousePosition);
 
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
@@ -176,11 +178,12 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 	{
 		// Event mouse coordinates.
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
 		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} };
 		PolyLine* polyline = nullptr;
+		std::string msg = "";
 		switch (event.key)
 		{
 			// --------------------------------------------------------------------------------------------------------------- //
@@ -211,17 +214,19 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			break;
 
 		case GLFW_KEY_S:
+			if (!m_activePoly) return;
 			glm::vec2 center = m_activePoly->m_trackedCenter;
-			EventLog::logMouseScroll(center, 1.f, 0.f, 0);
-			EventLog::logMouseDrag(center, center + glm::vec2{ 100.f, 0.f }, { 100.f, 0.f }, EventType_MouseButtonLeft);
-			glm::vec2 expectedPos = center + glm::vec2(pixelDistanceToWorldDistance(glm::vec2{100.f, 0.f}));
+			glm::vec2 centerGlobalPixelCoords = localToGlobalCoords(worldToPixelCoords(center));
+			EventLog::logMouseScroll(centerGlobalPixelCoords, 1.f, 0.f, 0);
+			EventLog::logMouseDrag(centerGlobalPixelCoords, centerGlobalPixelCoords + glm::vec2{ 100.f, 0.f }, { 100.f, 0.f }, EventType_MouseButtonLeft);
+			glm::vec2 expectedPos = center + glm::vec2(pixelToWorldDistance({100.f, 0.f}));
 			Renderer::addCircle2D(glm::vec3{ glm::vec2(expectedPos), 0.6f }, 0.01f, { 1.f, 0.f, 1.f, 1.f });
 			// Red = tracked center
 			// Pink = expected position
 			break;
 
 		case GLFW_KEY_K:
-			//test add polyLine
+			// Test add polyLine.
 			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
 			polyline = Renderer::addPolygon2DClear(vertices, m_activeComponent.get());
 			//polyline->pushVertex({ -0.5f, 0.f });
@@ -247,12 +252,12 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 	if (event.isType(EventType_MouseButtonLeft))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = pixelCoordsToWorldCoords(pixelCoords);
+		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 		if (designerState == CompDesignState::SELECT) 
 		{
 			// User is dragging a component.
-			glm::vec2 translation = pixelDistanceToWorldDistance(event.currentFrameDelta);
+			glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
 			if (m_activeVertex) 
 			{
 				// First check if we should move a vertex
@@ -302,8 +307,6 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 	if (m_activePoly)
 	{
 		Renderer::addCircle2D(glm::vec3{ glm::vec2(m_activePoly->m_trackedCenter), 0.5f }, 0.02f, { 1.f, 0.f, 0.f, 1.f });
-		std::string msg = std::to_string(worldDistanceToPixelDistance(m_activePoly->m_trackedCenter).x);
-		LUMEN_LOG_ERROR(msg, "");
 	}
 }
 

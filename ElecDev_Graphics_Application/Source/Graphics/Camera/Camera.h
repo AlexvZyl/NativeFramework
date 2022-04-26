@@ -31,8 +31,8 @@ public:
 	// Resize the camera (viewport).
 	void resize(const glm::vec2& size);
 	// Calculate the world coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
-	glm::vec2 worldCoordsToPixelCoords(const glm::vec3& worldCoords);
+	glm::vec3 pixelToWorldCoords(const glm::vec2& pixelCoords, bool useUpdatedView = false);
+	glm::vec2 worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView = false);
 
 	// Getters.
 	const glm::vec4& getViewport() const;
@@ -60,9 +60,9 @@ public:
 	// Manually scale the camera, around the provided position.
 	void scaleAroundCursor2D(float scale, const glm::vec2& cursor);
 	// Inrement the zoom, based on the scale rate set.
-	void incrementZoomLevel2D(int increment);
+	void incrementZoomLevel2D(int increment, float deltaTime = 1.f);
 	// Inrement the zoom, based on the scale rate set, around the provided position.
-	void incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor);
+	void incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor, float deltaTime = 1.f);
 	// Make the camera look at a point.
 	void lookAt(const glm::vec3& position) {}
 
@@ -87,7 +87,8 @@ private:
 	//  D A T A  //
 	// --------- //
 
-	glm::mat4 m_viewMatrix			   = glm::mat4(1.0f);				
+	glm::mat4 m_viewMatrix			   = glm::mat4(1.0f);
+	glm::mat4 m_prevViewMatrix		   = glm::mat4(1.0f);
 	glm::mat4 m_projectionMatrix	   = glm::mat4(1.0f);			
 	glm::mat4 m_viewProjectionMatrix   = glm::mat4(1.0f);
 	glm::mat4 m_scalingMatrix		   = glm::mat4(1.0f);			

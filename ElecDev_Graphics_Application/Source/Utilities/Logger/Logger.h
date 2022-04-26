@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include "glm/glm.hpp"
 
 //=============================================================================================================================================//
 //  Data.																																	   //
@@ -114,7 +115,7 @@ public:
 	// Push a message into the queue.
 	static void pushMessage(const LoggerMessage& msg);
 
-	// Log all of the messages in the queue.
+	// Log all of the messages in the queue and clear it.
 	static void flushQueue();
 
 	// Clear all of the messgages in the queue.
@@ -129,6 +130,28 @@ private:
 	inline static std::vector<LoggerMessage> s_messageQueue;
 
 };
+
+//=============================================================================================================================================//
+//  Overloads.																																   //
+//=============================================================================================================================================//
+
+namespace std 
+{
+	_NODISCARD inline string to_string(const glm::vec4& vec)
+	{
+		return "[ " + to_string(vec.x) + " , " + to_string(vec.y) + " , " + to_string(vec.z) + to_string(vec.w) + " ]";
+	}
+
+	_NODISCARD inline string to_string(const glm::vec3& vec)
+	{
+		return "[ " + to_string(vec.x) + " , " + to_string(vec.y) + " , " + to_string(vec.z) + " ]";
+	}
+
+	_NODISCARD inline string to_string(const glm::vec2& vec)
+	{
+		return "[ " + to_string(vec.x) + " , " + to_string(vec.y) + " ]";
+	}
+}
 
 //=============================================================================================================================================//
 // EOF.																																		   //

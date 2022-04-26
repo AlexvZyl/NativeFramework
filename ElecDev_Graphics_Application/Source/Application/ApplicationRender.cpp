@@ -58,7 +58,12 @@ void Application::updateFrametime()
 
 bool Application::startFrame() 
 {
-	return m_totalFrameTime >= m_targetFrameTime;
+	if (m_totalFrameTime >= m_targetFrameTime)
+	{
+		// Update delta time.
+		return true;
+	}
+	return false;
 }
 
 //==============================================================================================================================================//

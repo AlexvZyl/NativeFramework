@@ -4,6 +4,7 @@
 
 #include "Camera.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
@@ -45,6 +46,7 @@ const CameraType& Camera::getType() const
 
 void Camera::onUpdate()
 {
+	m_prevViewMatrix = m_viewMatrix;
 	updateAllMatrices();
 }
 
@@ -89,24 +91,24 @@ void Camera::scale(const glm::vec3& scale)
 
 void Camera::scaleAroundCursor2D(float scale, const glm::vec2& cursor)
 {
-	glm::vec2 coordsBeforeScaling = pixelCoordsToWorldCoords(cursor);
+	glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor);
 	Camera::scale({scale, scale, 1.f});
-	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
+	glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
 	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
 }
 
-void Camera::incrementZoomLevel2D(int increment)
+void Camera::incrementZoomLevel2D(int increment, float deltaTime)
 {
-	float scale = getScaleFromIncrement(increment);
+	float scale = getScaleFromIncrement(increment) * deltaTime;
 	Camera::scale({ scale, scale, 1.f });
 }
 
-void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor)
+void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor, float deltaTime)
 {
-	glm::vec2 coordsBeforeScaling = pixelCoordsToWorldCoords(cursor);
+	glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor, true) * deltaTime;
 	float scale = getScaleFromIncrement(increment);
 	Camera::scale({ scale, scale, 1.f });
-	glm::vec2 coordsAfterScaling = pixelCoordsToWorldCoords(cursor);
+	glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
 	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
 }
 
@@ -202,21 +204,35 @@ const glm::mat4& Camera::getViewProjectionMatrix() const
 //  Coordinate systems.																															//
 //==============================================================================================================================================//
 
-// This will most likely not work with 3D, need to calculate the z value.
-glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
-{
-	updateViewMatrix();
+// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
 
-	// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
-	return glm::unProject({ pixelCoords.x, m_viewport[3] - pixelCoords.y, 0.0f }, 
-						    m_viewMatrix, m_projectionMatrix, m_viewport);
+// This will most likely not work with 3D, need to calculate the z value.
+glm::vec3 Camera::pixelToWorldCoords(const glm::vec2& pixelCoords, bool useUpdatedView)
+{
+	if (useUpdatedView)
+	{
+		updateViewMatrix();
+		return glm::unProject({ pixelCoords.x, pixelCoords.y, 0.0f },
+								m_viewMatrix, m_projectionMatrix, m_viewport);
+	}
+	else 
+	{
+		return glm::unProject({ pixelCoords.x, pixelCoords.y, 0.0f },
+								m_prevViewMatrix, m_projectionMatrix, m_viewport);
+	}
 }
 
-glm::vec2 Camera::worldCoordsToPixelCoords(const glm::vec3& worldCoords) 
+glm::vec2 Camera::worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView)
 {
-	updateViewMatrix();
-
-	return glm::project(worldCoords, m_viewMatrix, m_projectionMatrix, m_viewport);
+	if (useUpdatedView)
+	{
+		updateViewMatrix();
+		return glm::project(worldCoords, m_viewMatrix, m_projectionMatrix, m_viewport);
+	}
+	else 
+	{
+		return glm::project(worldCoords, m_prevViewMatrix, m_projectionMatrix, m_viewport);
+	}
 }
 
 //==============================================================================================================================================//

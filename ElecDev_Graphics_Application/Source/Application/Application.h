@@ -120,8 +120,6 @@ public:
 	bool isRunning();
 	// Close the app.
 	void stopRunning();
-	// Get the GLFW window.
-	GLFWwindow* getGLFWWindow();
 
 	// ----------------------- //
 	//  G L F W   W I N D O W  //
@@ -131,6 +129,10 @@ public:
 	static GLFWwindow* glfwInitWindow();
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
+	// Get the GLFW window.
+	GLFWwindow* getGLFWWindow() const;
+	// Get the size of the application.
+	glm::vec2 getMainViewportSize() const;
 
 	// TO BE DEPRECATED!
 	std::unique_ptr<GUIState> m_guiState = nullptr;
