@@ -28,8 +28,9 @@ void EngineCore::onEvent(const Event& event)
 	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
 
 	// Key events.
-	else if (event.isType(EventType_KeyPress))			{ onKeyEvent(event.cast<KeyEvent>()); }
-	else if (event.isType(EventType_KeyRelease))		{ onKeyEvent(event.cast<KeyEvent>()); }
+	else if (event.isType(EventType_KeyPress)
+		  || event.isType(EventType_KeyRelease)
+		  || event.isType(EventType_KeyRepeat))			{ onKeyEvent(event.cast<KeyEvent>()); }
 
 	// Window events.
 	else if (event.isType(EventType_WindowResize))		{ onWindowResizeEventForce(event.cast<WindowEvent>()); }

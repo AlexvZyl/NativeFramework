@@ -58,12 +58,7 @@ void Application::updateFrametime()
 
 bool Application::startFrame() 
 {
-	if (m_totalFrameTime >= m_targetFrameTime)
-	{
-		// Update delta time.
-		return true;
-	}
-	return false;
+	return m_totalFrameTime >= m_targetFrameTime;
 }
 
 //==============================================================================================================================================//
@@ -89,6 +84,9 @@ void Application::onRenderInit()
 		// Push custom font.
 		ImGui::PushFont(m_defaultFont);
 	}
+
+	// Update the delta time.
+	m_deltaTime = ImGui::GetIO().DeltaTime;
 }
 
 void Application::renderFrame()

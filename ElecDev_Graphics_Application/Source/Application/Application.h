@@ -90,6 +90,9 @@ public:
 
 	// Renders the next frame.
 	void renderFrame();
+	// Get the delta time for the current frame.
+	// This is updated when a new frame start.
+	inline float getDeltaTime() const { return m_deltaTime; }
 	
 	// --------------- //
 	//  W I N D O W S  //
@@ -204,6 +207,7 @@ private:
 	double m_totalFrameTime = 0;
 	double m_currentFrameTime = 0;
 	double m_eventsTimeout = m_targetFrameTime * 2;
+	float m_deltaTime = 0.f;
 
 	// Update the current frame time.
 	void updateFrametime();

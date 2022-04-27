@@ -82,6 +82,8 @@ public:
 	unsigned int getRenderTexture();
 	// Returns the ID of the entity in the pixel coords.
 	unsigned int getEntityID(const glm::vec2& pixelCoords);
+	// Get the delta time from the app.
+	float getDeltaTime() const;
 
 	// ------------- //
 	//  E V E N T S  //

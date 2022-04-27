@@ -88,14 +88,14 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredWindow)
 	{
+		if (EventLog::mouseScrollOccurred()) 
+			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
+
 		if (EventLog::mouseDragOccurred())
 			m_hoveredWindow->onEvent(EventLog::getMouseDrag());
 
 		if (EventLog::mouseMoveOccurred())
 			m_hoveredWindow->onEvent(EventLog::getMouseMove());
-
-		if (EventLog::mouseScrollOccurred()) 
-			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
 	}
 
 	// Dispatch notify events after all of the other events are done.

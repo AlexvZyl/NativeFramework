@@ -12,6 +12,7 @@
 #define FPS_FRAME_COUNT 60
 //#define PROFILE_IMGUI_OVERHEAD
 #define LUMEN_PROFILING_FUNCTIONS
+#define LUMEN_DETAILED_LOGGING
 
 //==============================================================================================================================================//
 //  Macros.																																		//

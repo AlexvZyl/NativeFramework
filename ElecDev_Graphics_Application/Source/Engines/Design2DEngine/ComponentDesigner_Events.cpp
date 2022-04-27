@@ -312,39 +312,16 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
 {
-	if (event.isType(EventType_MouseDragStart))
+	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
-		LUMEN_LOG_DEBUG("Mouse Drag Start","Component Designer Notify");
-	}
-	else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
-	{
-		LUMEN_LOG_DEBUG("Mouse Drag Stop", "Component Designer Notify");
-		if (m_activePoly) 
-		{
-			m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
-		}
-		if (m_activeLine) 
-		{
-			m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
-		}
-		if (m_activeCircle) 
-		{
-			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
-		}
+		if (m_activePoly)		   m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
+		if (m_activeLine)		   m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
+		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 		if (m_activeVertex) 
 		{
-			if (m_activePoly) 
-			{
-				m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
-			}
-			else if (m_activeLine) 
-			{
-				m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
-			}
+			if (m_activePoly)	   m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			else if (m_activeLine) m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
 		}
-		if (m_activePort) 
-		{
-			m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
-		}
+		if (m_activePort)		   m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
 	}
 }

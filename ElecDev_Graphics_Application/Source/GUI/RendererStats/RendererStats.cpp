@@ -116,9 +116,9 @@ void RendererStats::onImGuiRender()
 				}
 
 				// ImGui functions.
-				else if (result.name == "ImGui NewFrame" ||
-						 result.name == "ImGui OnUpdate" ||
-						 result.name == "ImGui Draw")
+				else if (name == "ImGui NewFrame" ||
+						 name == "ImGui OnUpdate" ||
+						 name == "ImGui Draw")
 				{
 					imGuiTime += time;
 					continue;

@@ -39,6 +39,11 @@ const glm::vec2& EngineCore::getWindowContentRegionSize() const
 	return m_parentWindow->getContentRegionSize();
 }
 
+float EngineCore::getDeltaTime() const 
+{
+	return Lumen::getApp().getDeltaTime();
+}
+
 //=============================================================================================================================================//
 //  Scene wrappers.																															   //
 //=============================================================================================================================================//

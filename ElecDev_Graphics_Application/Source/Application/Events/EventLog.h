@@ -7,6 +7,8 @@
 #include "Events.h"
 #include <queue>
 
+#define MAX_SCROLL_PER_FRAME 5
+
 //==============================================================================================================================================//
 //  Event Log.																																	//
 //==============================================================================================================================================//
@@ -37,7 +39,7 @@ public:
 
 	inline static void logMouseDrag(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
 	{
-		// On first mouse drag event the delta has to be reset.
+		// Reset drag delta on first event.
 		if (!mouseDragOccurredFlag)
 			mouseDrag.currentFrameDelta = {0.f, 0.f};
 
@@ -50,10 +52,19 @@ public:
 
 	inline static void logMouseScroll(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID)
 	{
+		// Reset scroll values on first event.
+		if (!mouseScrollOccurredFlag)
+		{
+			mouseScroll.xOffset = 0;
+			mouseScroll.yOffset = 0;
+		}
+
 		mouseScroll.ID = ID | EventType_MouseScroll;
 		mouseScroll.mousePosition = mousePositionPixels;
-		mouseScroll.xOffset = xOffset;
-		mouseScroll.yOffset = yOffset;
+		if(mouseScroll.xOffset < MAX_SCROLL_PER_FRAME)
+			mouseScroll.xOffset += xOffset;
+		if (mouseScroll.yOffset < MAX_SCROLL_PER_FRAME)
+			mouseScroll.yOffset += yOffset;
 		mouseScrollOccurredFlag = true;
 	}
 

@@ -17,15 +17,15 @@
 
 void Base2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 {
-	if (event.isType(EventType_MouseButtonMiddle))
+	if (event.isType(EventType_MouseButtonMiddle) || event.isType(EventType_MouseButtonLeft | EventType_LeftCtrl))
 	{
-		getScene().getCamera().translate(pixelToWorldDistance(event.currentFrameDelta));
+		getScene().getCamera().translate(pixelToWorldDistance(event.currentFrameDelta)); 
 	}
 }
 
 void Base2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 {
-	getScene().getCamera().incrementZoomAroundCursor2D(event.yOffset, event.mousePosition);
+	getScene().getCamera().incrementZoomAroundCursor(event.yOffset, event.mousePosition);
 }
 
 //==============================================================================================================================================//

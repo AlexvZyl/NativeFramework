@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "glm/glm.hpp"
+#include "Lumen.h"
 
 //=============================================================================================================================================//
 //  Data.																																	   //
@@ -25,6 +26,7 @@ struct LoggerMessage
 {
 	std::string content = "";
 	std::string title = "";
+	std::string function = "";
 	LoggerLevel level = LoggerLevel::Info;
 };
 
@@ -45,6 +47,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Debug;	\
 	Logger::pushMessage(loggerMessage);			\
 }		
@@ -61,6 +64,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Info;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -74,6 +78,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Success;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -87,6 +92,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Warning;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -100,6 +106,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Error;	\
 	Logger::pushMessage(loggerMessage);			\
 }

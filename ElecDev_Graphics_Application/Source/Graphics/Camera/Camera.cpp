@@ -39,6 +39,14 @@ void Camera::resize(const glm::vec2& size)
 	projectionChanged();
 }
 
+void Camera::resize(const glm::vec4& viewport)
+{
+	float aspectRatio = (viewport[2] - viewport[0]) / (viewport[3] - viewport[1]);
+	m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
+	setViewport(viewport);
+	projectionChanged();
+}
+
 const CameraType& Camera::getType() const
 {
 	return m_type;
@@ -63,8 +71,6 @@ void Camera::setPosition(const glm::vec3& position)
 void Camera::setScaleRate(float rate)
 {
 	m_scaleRate = rate;
-	m_zoomInRate = 1 + m_scaleRate;
-	m_zoomOutRate = 1 / (1 + m_scaleRate);
 }
 
 void Camera::translate(const glm::vec2& translation) 
@@ -89,33 +95,60 @@ void Camera::scale(const glm::vec3& scale)
 	viewChanged();
 }
 
-void Camera::scaleAroundCursor2D(float scale, const glm::vec2& cursor)
+void Camera::scaleAroundCursor(float scale, const glm::vec2& cursor)
 {
-	glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor);
-	Camera::scale({scale, scale, 1.f});
-	glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
-	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	if (m_type == CameraType::Standard2D)
+	{
+		glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor);
+		Camera::scale({ scale, scale, 1.f });
+		glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
+		Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	}
+	else 
+	{
+		LUMEN_LOG_WARN("Unknown type.", "Camera");
+	}
 }
 
-void Camera::incrementZoomLevel2D(int increment, float deltaTime)
+void Camera::incrementZoomLevel(int increment)
 {
-	float scale = getScaleFromIncrement(increment) * deltaTime;
-	Camera::scale({ scale, scale, 1.f });
+	if (m_type == CameraType::Standard2D)
+	{
+		float scale = getScaleFromIncrement(increment);
+		Camera::scale({ scale, scale, 1.f });
+	}
+	else
+	{
+		LUMEN_LOG_WARN("Unknown type.", "Camera");
+	}
 }
 
-void Camera::incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor, float deltaTime)
+void Camera::incrementZoomAroundCursor(int increment, const glm::vec2& cursor)
 {
-	glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor, true) * deltaTime;
-	float scale = getScaleFromIncrement(increment);
-	Camera::scale({ scale, scale, 1.f });
-	glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
-	Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	if (m_type == CameraType::Standard2D)
+	{
+		glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor, true);
+		float scale = getScaleFromIncrement(increment);
+		Camera::scale({ scale, scale, 1.f });
+		glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
+		Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	}
+	else
+	{
+		LUMEN_LOG_WARN("Unknown type.", "Camera");
+	}
 }
 
-float Camera::getScaleFromIncrement(int increment) 
+float Camera::getScaleFromIncrement(int increment)
 {
-	if (increment >= 0)	return      increment * m_zoomInRate;
-	else				return -1 * increment * m_zoomOutRate;
+	if (increment >= 0)
+	{
+		return 1 + (m_scaleRate * increment);
+	}
+	else
+	{
+		return 1 / (1 + m_scaleRate * -1 * increment);
+	}
 }
 
 //==============================================================================================================================================//
@@ -203,8 +236,6 @@ const glm::mat4& Camera::getViewProjectionMatrix() const
 //==============================================================================================================================================//
 //  Coordinate systems.																															//
 //==============================================================================================================================================//
-
-// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
 
 // This will most likely not work with 3D, need to calculate the z value.
 glm::vec3 Camera::pixelToWorldCoords(const glm::vec2& pixelCoords, bool useUpdatedView)
