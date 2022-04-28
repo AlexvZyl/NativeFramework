@@ -84,6 +84,9 @@ void Application::onRenderInit()
 		// Push custom font.
 		ImGui::PushFont(m_defaultFont);
 	}
+
+	// Update the delta time.
+	m_deltaTime = ImGui::GetIO().DeltaTime;
 }
 
 void Application::renderFrame()

@@ -104,6 +104,17 @@ inline LumenEventID getKeyState(GLFWwindow* window)
     return eventState;
 }
 
+// GLFW passes mouse coodinates with (0,0) as the top left.  Lumen has (0,0) in the bottom left,
+// so the coordinates are converted here.
+inline glm::vec2 getLumenCursorPos(GLFWwindow* window) 
+{
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+    double cursorX, cursorY;
+    glfwGetCursorPos(window, &cursorX, &cursorY);
+    return { cursorX, display_h - cursorY };
+}
+
 //==============================================================================================================================================//
 //  Callbacks.																																	//
 //==============================================================================================================================================//
@@ -144,8 +155,7 @@ void Application::glfwInitCallbacks()
             eventState |= currentButton;    
 
             // Get the cursor position.
-            double cursorX, cursorY;
-            glfwGetCursorPos(window, &cursorX, &cursorY);
+            glm::vec2 cursorPos = getLumenCursorPos(window);
 
             // Create button event.
             LumenEventID buttonEventID = eventState;
@@ -158,20 +168,20 @@ void Application::glfwInitCallbacks()
             {
                 // Remove mouse press ID so that double presses are seperate.
                 buttonEventID = (buttonEventID & ~EventType_MousePress) | EventType_MouseDoublePress;
-                EventLog::log<MouseButtonEvent>(glm::vec2(cursorX, cursorY), buttonEventID);
+                EventLog::log<MouseButtonEvent>(cursorPos, buttonEventID);
                 // Ignore next release for double press.
                 s_buttonReleaseIgnore[currentButton] = true;
             }
             // Not a double press.
             else 
             {
-                EventLog::log<MouseButtonEvent>(glm::vec2(cursorX, cursorY), buttonEventID);
+                EventLog::log<MouseButtonEvent>(cursorPos, buttonEventID);
             }
 
             // Store the latest pressed location for the mouse drag.
             if (isIdOfType(buttonEventID, EventType_MousePress))
             {
-                s_latestMouseButtonPressPosition = {cursorX, cursorY};
+                s_latestMouseButtonPressPosition = cursorPos;
                 addHeldButton(currentButton); 
             }
 
@@ -218,9 +228,7 @@ void Application::glfwInitCallbacks()
             LumenEventID buttonState = getMouseButtonState(window);
 
             // Get the cursor position.
-            double cursorX, cursorY;
-            glfwGetCursorPos(window, &cursorX, &cursorY);
-            glm::vec2 mousePos(cursorX, cursorY);
+            glm::vec2 mousePos = getLumenCursorPos(window);
 
             // Dragging logic.
             if(s_heldButtons.size())
@@ -275,11 +283,10 @@ void Application::glfwInitCallbacks()
             LumenEventID eventID = getKeyState(window) | getMouseButtonState(window) | EventType_MouseScroll;
 
             // Get the cursor position.
-            double cursorX, cursorY;
-            glfwGetCursorPos(window, &cursorX, &cursorY);
+            glm::vec2 cursorPos = getLumenCursorPos(window);
 
             // Log event.
-            EventLog::logMouseScroll({ cursorX, cursorY }, (float)yoffset, (float)xoffset, eventID);
+            EventLog::logMouseScroll(cursorPos, (float)yoffset, (float)xoffset, eventID);
 
             // Double press should not log after a scroll.
             resetDoublePressData();
@@ -300,11 +307,10 @@ void Application::glfwInitCallbacks()
             else if (action == GLFW_REPEAT)  { eventID |= EventType_KeyRepeat;  }
 
             // Get the cursor position.
-            double cursorX, cursorY;
-            glfwGetCursorPos(window, &cursorX, &cursorY);
+            glm::vec2 cursorPos = getLumenCursorPos(window);
 
             // Log event.
-            EventLog::log<KeyEvent>(key, eventID, glm::vec2(cursorX, cursorY));
+            EventLog::log<KeyEvent>(key, eventID, cursorPos);
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
@@ -386,7 +392,7 @@ GLFWwindow* Application::glfwInitWindow()
     // --------------------- //
 
     // Enable MSAA.
-    glfwWindowHint(GLFW_SAMPLES, 8);
+    glfwWindowHint(GLFW_SAMPLES, 1);
 
     // Create GLFW window.
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Lumen", NULL, NULL);

@@ -46,7 +46,7 @@ void Timer::stop()
 		// Add result to be displayed.
 		Lumen::getApp().m_profilerResults.push_back(ProfileResult(m_name, duration));
 	}
-	else 
+	else if(m_profilerActiveOnStart)
 	{
 		// Add null result.
 		Lumen::getApp().m_profilerResults.push_back(ProfileResult(m_name, 0));

@@ -5,7 +5,6 @@
 //==============================================================================================================================================//
 
 #include "glm/glm.hpp"
-#include <array>
 
 //==============================================================================================================================================//
 //  Camera Types.																																//
@@ -28,10 +27,14 @@ public:
 	Camera(CameraType cameraType, const glm::vec2& size);
 	// Updates the camera components.
 	void onUpdate();
-	// Resize the camera (viewport).
+	// Resize the camera by size.
 	void resize(const glm::vec2& size);
+	// Resize the camera by viewport.
+	void resize(const glm::vec4& viewport);
 	// Calculate the world coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
+	glm::vec3 pixelToWorldCoords(const glm::vec2& pixelCoords, bool useUpdatedView = false);
+	// Calculate the pixel coordinates from the world coordinates.
+	glm::vec2 worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView = false);
 
 	// Getters.
 	const glm::vec4& getViewport() const;
@@ -57,11 +60,11 @@ public:
 	// Manually scale the camera in all dimensions.
 	void scale(const glm::vec3& scale);
 	// Manually scale the camera, around the provided position.
-	void scaleAroundCursor2D(float scale, const glm::vec2& cursor);
+	void scaleAroundCursor(float scale, const glm::vec2& cursor);
 	// Inrement the zoom, based on the scale rate set.
-	void incrementZoomLevel2D(int increment);
+	void incrementZoom(int increment);
 	// Inrement the zoom, based on the scale rate set, around the provided position.
-	void incrementZoomAroundCursor2D(int increment, const glm::vec2& cursor);
+	void incrementZoomAroundCursor(int increment, const glm::vec2& cursor);
 	// Make the camera look at a point.
 	void lookAt(const glm::vec3& position) {}
 
@@ -86,19 +89,19 @@ private:
 	//  D A T A  //
 	// --------- //
 
-	glm::mat4 m_viewMatrix			   = glm::mat4(1.0f);				
+	glm::mat4 m_viewMatrix			   = glm::mat4(1.0f);
+	glm::mat4 m_prevViewMatrix		   = glm::mat4(1.0f);
 	glm::mat4 m_projectionMatrix	   = glm::mat4(1.0f);			
 	glm::mat4 m_viewProjectionMatrix   = glm::mat4(1.0f);
 	glm::mat4 m_scalingMatrix		   = glm::mat4(1.0f);			
 	glm::vec3 m_position			   = glm::vec3(0.f);
 	glm::mat4 m_rotationMatrix		   = glm::mat4(1.0f);			
 	glm::vec4 m_viewport			   = glm::vec4(1.0f);					
-	float m_scaleRate = 1.f;			
-	float m_zoomInRate = 1.f;
-	float m_zoomOutRate = 1.f;
+	float m_scaleRate				   = 1.f;			
 	bool m_viewMatrixChanged		   = true;
 	bool m_projectionMatrixChanged	   = true;
 	bool m_viewProjectionMatrixChanged = true;
+	float m_aspectRatio				   = 1.f;
 	CameraType m_type;
 };
 

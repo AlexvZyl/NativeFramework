@@ -39,6 +39,11 @@ const glm::vec2& EngineCore::getWindowContentRegionSize() const
 	return m_parentWindow->getContentRegionSize();
 }
 
+float EngineCore::getDeltaTime() const 
+{
+	return Lumen::getApp().getDeltaTime();
+}
+
 //=============================================================================================================================================//
 //  Scene wrappers.																															   //
 //=============================================================================================================================================//
@@ -63,15 +68,31 @@ glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords)
 	return getScene().getGrid().getNearestGridVertex(coords);
 }
 
-glm::vec2 EngineCore::pixelDistanceToWorldDistance(const glm::vec2& distance)
+glm::vec3 EngineCore::pixelToWorldDistance(const glm::vec2& distance)
 {
 	Camera& camera = getScene().getCamera();
-	return camera.pixelCoordsToWorldCoords(distance) - camera.pixelCoordsToWorldCoords({ 0.f, 0.f });
+	return camera.pixelToWorldCoords(distance) - camera.pixelToWorldCoords({ 0.f, 0.f });
 }
 
-glm::vec3 EngineCore::pixelCoordsToWorldCoords(const glm::vec2& coords)
+glm::vec3 EngineCore::pixelToWorldCoords(const glm::vec2& coords, bool useUpdatedView)
 {
-	return getScene().getCamera().pixelCoordsToWorldCoords(coords);
+	return getScene().getCamera().pixelToWorldCoords(coords, useUpdatedView);
+}
+
+glm::vec2 EngineCore::worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView)
+{
+	return getScene().getCamera().worldToPixelCoords(worldCoords, useUpdatedView);
+}
+
+glm::vec2 EngineCore::worldToPixelCoords(const glm::vec2& worldCoords, bool useUpdatedView)
+{
+	return getScene().getCamera().worldToPixelCoords({worldCoords, 0.f}, useUpdatedView);
+}
+
+glm::vec2 EngineCore::worldToPixelDistance(const glm::vec3& distance)
+{
+	Camera& camera = getScene().getCamera();
+	return camera.worldToPixelCoords(distance) - camera.worldToPixelCoords({ 0.f, 0.f, 0.f });
 }
 
 //=============================================================================================================================================//
@@ -96,6 +117,16 @@ void EngineCore::unsavedDocument()
 void EngineCore::savedDocument()
 {
 	m_parentWindow->savedDocument();
+}
+
+glm::vec2 EngineCore::localToGlobalCoords(const glm::vec2& coords) 
+{
+	return m_parentWindow->localToGlobalCoords(coords);
+}
+
+glm::vec2 EngineCore::globalToLocalCoords(const glm::vec2& coords) 
+{
+	return m_parentWindow->globalToLocalCoords(coords);
 }
 
 //=============================================================================================================================================//

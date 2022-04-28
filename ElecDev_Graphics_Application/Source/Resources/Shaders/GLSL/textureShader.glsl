@@ -8,8 +8,7 @@ layout(location = 3) in float v_outline;
 layout(location = 4) in float v_texID;
 layout(location = 5) in uint v_entityID;
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
+uniform mat4 viewProjMatrix;
 
 out vec4 f_color;
 out vec2 f_texCoord;
@@ -21,7 +20,7 @@ void main()
 	f_color =v_color;
 	f_texCoord = v_texCoord;
 	f_texID = v_texID;
-	gl_Position = projectionMatrix * viewMatrix * vec4(pos, 1.0);
+	gl_Position = viewProjMatrix * vec4(pos, 1.0);
 	f_entityID = v_entityID;
 }
 

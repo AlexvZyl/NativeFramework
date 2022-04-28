@@ -88,14 +88,14 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredWindow)
 	{
-		if (EventLog::mouseMoveOccurred())
-			m_hoveredWindow->onEvent(EventLog::getMouseMove());
-
 		if (EventLog::mouseScrollOccurred()) 
 			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
 
 		if (EventLog::mouseDragOccurred())
 			m_hoveredWindow->onEvent(EventLog::getMouseDrag());
+
+		if (EventLog::mouseMoveOccurred())
+			m_hoveredWindow->onEvent(EventLog::getMouseMove());
 	}
 
 	// Dispatch notify events after all of the other events are done.
@@ -152,7 +152,7 @@ void Application::imguiOnUpdate()
 	if (EventLog::mouseMoveOccurred())
 	{
 		MouseMoveEvent& event = EventLog::getMouseMove();
-		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, event.mousePosition.y);
+		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, getMainViewportSize().y - event.mousePosition.y);
 	}
 }
 

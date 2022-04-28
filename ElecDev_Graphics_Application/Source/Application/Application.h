@@ -90,6 +90,9 @@ public:
 
 	// Renders the next frame.
 	void renderFrame();
+	// Get the delta time for the current frame.
+	// This is updated when a new frame start.
+	inline float getDeltaTime() const { return m_deltaTime; }
 	
 	// --------------- //
 	//  W I N D O W S  //
@@ -120,8 +123,6 @@ public:
 	bool isRunning();
 	// Close the app.
 	void stopRunning();
-	// Get the GLFW window.
-	GLFWwindow* getGLFWWindow();
 
 	// ----------------------- //
 	//  G L F W   W I N D O W  //
@@ -131,6 +132,10 @@ public:
 	static GLFWwindow* glfwInitWindow();
 	// Sets up the GLFW callbacks.
 	void glfwInitCallbacks();
+	// Get the GLFW window.
+	GLFWwindow* getGLFWWindow() const;
+	// Get the size of the application.
+	glm::vec2 getMainViewportSize() const;
 
 	// TO BE DEPRECATED!
 	std::unique_ptr<GUIState> m_guiState = nullptr;
@@ -202,6 +207,7 @@ private:
 	double m_totalFrameTime = 0;
 	double m_currentFrameTime = 0;
 	double m_eventsTimeout = m_targetFrameTime * 2;
+	float m_deltaTime = 0.f;
 
 	// Update the current frame time.
 	void updateFrametime();

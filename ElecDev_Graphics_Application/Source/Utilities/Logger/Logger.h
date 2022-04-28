@@ -6,6 +6,8 @@
 
 #include <string>
 #include <vector>
+#include "glm/glm.hpp"
+#include "Lumen.h"
 
 //=============================================================================================================================================//
 //  Data.																																	   //
@@ -24,6 +26,7 @@ struct LoggerMessage
 {
 	std::string content = "";
 	std::string title = "";
+	std::string function = "";
 	LoggerLevel level = LoggerLevel::Info;
 };
 
@@ -44,6 +47,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Debug;	\
 	Logger::pushMessage(loggerMessage);			\
 }		
@@ -60,6 +64,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Info;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -73,6 +78,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Success;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -86,6 +92,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Warning;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -99,6 +106,7 @@ struct LoggerMessage
 	LoggerMessage loggerMessage;				\
 	loggerMessage.content = contentStr;			\
 	loggerMessage.title = titleStr;				\
+	loggerMessage.function = __FUNCTION__;		\
 	loggerMessage.level = LoggerLevel::Error;	\
 	Logger::pushMessage(loggerMessage);			\
 }
@@ -114,7 +122,7 @@ public:
 	// Push a message into the queue.
 	static void pushMessage(const LoggerMessage& msg);
 
-	// Log all of the messages in the queue.
+	// Log all of the messages in the queue and clear it.
 	static void flushQueue();
 
 	// Clear all of the messgages in the queue.
@@ -129,6 +137,28 @@ private:
 	inline static std::vector<LoggerMessage> s_messageQueue;
 
 };
+
+//=============================================================================================================================================//
+//  Overloads.																																   //
+//=============================================================================================================================================//
+
+namespace std 
+{
+	_NODISCARD inline string to_string(const glm::vec4& vec)
+	{
+		return "[ " + to_string(vec.x) + " , " + to_string(vec.y) + " , " + to_string(vec.z) + to_string(vec.w) + " ]";
+	}
+
+	_NODISCARD inline string to_string(const glm::vec3& vec)
+	{
+		return "[ " + to_string(vec.x) + " , " + to_string(vec.y) + " , " + to_string(vec.z) + " ]";
+	}
+
+	_NODISCARD inline string to_string(const glm::vec2& vec)
+	{
+		return "[ " + to_string(vec.x) + " , " + to_string(vec.y) + " ]";
+	}
+}
 
 //=============================================================================================================================================//
 // EOF.																																		   //

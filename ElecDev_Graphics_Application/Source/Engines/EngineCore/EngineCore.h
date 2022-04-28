@@ -82,6 +82,8 @@ public:
 	unsigned int getRenderTexture();
 	// Returns the ID of the entity in the pixel coords.
 	unsigned int getEntityID(const glm::vec2& pixelCoords);
+	// Get the delta time from the app.
+	float getDeltaTime() const;
 
 	// ------------- //
 	//  E V E N T S  //
@@ -114,8 +116,15 @@ public:
 	glm::vec2 getMouseGlobalPosition();
 
 	// Coorinate conversions.
-	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
-	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
+	glm::vec3 pixelToWorldDistance(const glm::vec2& distance);
+	glm::vec2 worldToPixelDistance(const glm::vec3& distance);
+	glm::vec3 pixelToWorldCoords(const glm::vec2& coords, bool useUpdatedView = false);
+	glm::vec2 worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView = false);
+	glm::vec2 worldToPixelCoords(const glm::vec2& worldCoords, bool useUpdatedView = false);
+
+	// Convert window coordinates.
+	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
+	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
 
 	// ----------------------------- //
 	//  D E S I G N   P A L E T T E  //

@@ -88,7 +88,7 @@ unsigned Scene::getRenderTexture()
 unsigned Scene::getEntityID(const glm::vec2& pixelCoords)
 {
 	// Adjust the pixel coords.
-	return m_FBO->getEntityID({pixelCoords.x, getCamera().getViewport()[3] - pixelCoords.y});
+	return m_FBO->getEntityID(pixelCoords);
 }
 
 void Scene::deleteGPUResources() 

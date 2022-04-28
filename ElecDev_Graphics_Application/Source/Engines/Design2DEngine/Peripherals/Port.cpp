@@ -164,13 +164,13 @@ Port::~Port()
 void Port::moveTo(const glm::vec2& destination)
 {
 	//update the port centre
+	title->translate(destination - centre);
 	centre = destination + m_offset;
 	glm::vec2 titlePos = centre + titleOffset;
 	//move each primative
 	body->translateTo(centre);
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
-	title->translateTo(titlePos);
 	for (Cable* cable: m_cables)
 		cable->followPort(this);
 }
