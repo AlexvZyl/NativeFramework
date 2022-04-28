@@ -63,7 +63,7 @@ public:
 	// Manually scale the camera, around the provided position.
 	void scaleAroundCursor(float scale, const glm::vec2& cursor);
 	// Inrement the zoom, based on the scale rate set.
-	void incrementZoomLevel(int increment);
+	void incrementZoom(int increment);
 	// Inrement the zoom, based on the scale rate set, around the provided position.
 	void incrementZoomAroundCursor(int increment, const glm::vec2& cursor);
 	// Make the camera look at a point.

@@ -110,7 +110,7 @@ void Camera::scaleAroundCursor(float scale, const glm::vec2& cursor)
 	}
 }
 
-void Camera::incrementZoomLevel(int increment)
+void Camera::incrementZoom(int increment)
 {
 	if (m_type == CameraType::Standard2D)
 	{

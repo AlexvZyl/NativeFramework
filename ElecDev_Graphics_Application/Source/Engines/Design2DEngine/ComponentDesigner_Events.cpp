@@ -186,8 +186,6 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		std::string msg = "";
 		switch (event.key)
 		{
-			// --------------------------------------------------------------------------------------------------------------- //
-
 		case GLFW_KEY_P:
 			//Add new polygon
 			switchState(CompDesignState::DRAW_POLY);
@@ -207,7 +205,6 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			//Add new port
 			switchState(CompDesignState::PLACE_PORT);
 			break;
-			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_ESCAPE:
 			switchState(CompDesignState::SELECT);
@@ -231,16 +228,10 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			polyline = Renderer::addPolygon2DClear(vertices, m_activeComponent.get());
 			//polyline->pushVertex({ -0.5f, 0.f });
 			break;
-			// --------------------------------------------------------------------------------------------------------------- //
 
 		case GLFW_KEY_DELETE:
-			if (designerState == CompDesignState::SELECT)
-			{
-				deleteActivePrimitive();
-			}
+			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
 			break;
-
-			// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
 }
