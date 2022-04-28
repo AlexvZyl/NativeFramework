@@ -101,6 +101,7 @@ private:
 	bool m_viewMatrixChanged		   = true;
 	bool m_projectionMatrixChanged	   = true;
 	bool m_viewProjectionMatrixChanged = true;
+	float m_aspectRatio				   = 1.f;
 	CameraType m_type;
 };
 

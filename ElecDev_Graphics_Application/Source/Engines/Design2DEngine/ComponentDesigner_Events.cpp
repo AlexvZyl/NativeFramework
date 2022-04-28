@@ -211,13 +211,13 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			break;
 
 		case GLFW_KEY_S:
-			if (!m_activePoly) return;
+			/*if (!m_activePoly) return;
 			glm::vec2 center = m_activePoly->m_trackedCenter;
 			glm::vec2 centerGlobalPixelCoords = localToGlobalCoords(worldToPixelCoords(center));
 			EventLog::logMouseScroll(centerGlobalPixelCoords, 1.f, 0.f, 0);
 			EventLog::logMouseDrag(centerGlobalPixelCoords, centerGlobalPixelCoords + glm::vec2{ 100.f, 0.f }, { 100.f, 0.f }, EventType_MouseButtonLeft);
 			glm::vec2 expectedPos = center + glm::vec2(pixelToWorldDistance({100.f, 0.f}));
-			Renderer::addCircle2D(glm::vec3{ glm::vec2(expectedPos), 0.6f }, 0.01f, { 1.f, 0.f, 1.f, 1.f });
+			Renderer::addCircle2D(glm::vec3{ glm::vec2(expectedPos), 0.6f }, 0.01f, { 1.f, 0.f, 1.f, 1.f });*/
 			// Red = tracked center
 			// Pink = expected position
 			break;
@@ -295,10 +295,10 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 		}
 	}
 
-	if (m_activePoly)
+	/*if (m_activePoly)
 	{
 		Renderer::addCircle2D(glm::vec3{ glm::vec2(m_activePoly->m_trackedCenter), 0.5f }, 0.02f, { 1.f, 0.f, 0.f, 1.f });
-	}
+	}*/
 }
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 

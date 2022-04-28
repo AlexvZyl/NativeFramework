@@ -13,58 +13,18 @@
 Camera::Camera(CameraType cameraType, const glm::vec2& size)
 	: m_type(cameraType)
 {
-	float aspectRatio = size.x / size.y;
-
-	switch (cameraType) 
-	{
-	case CameraType::Standard2D:
-		m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
-		break;
-
-	case CameraType::Standard3D:
-		break;
-	}
-
-	projectionChanged();
 	setViewport(size);
 	setScaleRate(1.f);
-	updateAllMatrices();
 }
 
 void Camera::resize(const glm::vec2& size) 
 {
-	float aspectRatio = size.x / size.y;
-	
-	switch (m_type) 
-	{
-	case CameraType::Standard2D:
-		m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
-		break;
-
-	case CameraType::Standard3D:
-		break;
-	}
-	
 	setViewport(size);
-	projectionChanged();
 }
 
 void Camera::resize(const glm::vec4& viewport)
 {
-	float aspectRatio = (viewport[2] - viewport[0]) / (viewport[3] - viewport[1]);
-	
-	switch (m_type) 
-	{
-	case CameraType::Standard2D:
-		m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
-		break;
-
-	case CameraType::Standard3D:
-		break;
-	}
-	
 	setViewport(viewport);
-	projectionChanged();
 }
 
 const CameraType& Camera::getType() const
@@ -199,6 +159,16 @@ void Camera::updateProjectionMatrix()
 {
 	if (!m_projectionMatrixChanged) return;
 
+	switch (m_type)
+	{
+	case CameraType::Standard2D:
+		m_projectionMatrix = glm::ortho(-m_aspectRatio, m_aspectRatio, -1.f, 1.f);
+		break;
+
+	case CameraType::Standard3D:
+		break;
+	}
+
 	m_projectionMatrixChanged = false;
 }
 
@@ -220,11 +190,16 @@ void Camera::updateAllMatrices()
 void Camera::setViewport(const glm::vec2& viewport)
 {
 	m_viewport = { 0.f, 0.f, viewport.x, viewport.y };
+	m_aspectRatio = viewport.x / viewport.y;
+	projectionChanged();
 }
 
 void Camera::setViewport(const glm::vec4& viewport)
 {
 	m_viewport = viewport;
+	glm::vec2 size = getViewportSize();
+	m_aspectRatio = size.x / size.y;
+	projectionChanged();
 }
 
 const glm::vec4& Camera::getViewport() const
