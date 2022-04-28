@@ -34,7 +34,17 @@ Camera::Camera(CameraType cameraType, const glm::vec2& size)
 void Camera::resize(const glm::vec2& size) 
 {
 	float aspectRatio = size.x / size.y;
-	m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
+	
+	switch (m_type) 
+	{
+	case CameraType::Standard2D:
+		m_projectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.f, 1.f);
+		break;
+
+	case CameraType::Standard3D:
+		break;
+	}
+	
 	setViewport(size);
 	projectionChanged();
 }
