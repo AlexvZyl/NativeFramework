@@ -8,6 +8,7 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/SceneGL.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Graphics Scene.																																//
@@ -68,10 +69,10 @@ public:
 		}
 
 		// Render engine scene.
-		ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 1.f);
+		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 1.f);
 		m_engine->onRender();
 		if (!m_textureID) return;
-		ImGui::Image(m_textureID, { m_contentRegionSize.x + 1.f, m_contentRegionSize.y + 1.f }, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image(m_textureID, { m_contentRegionSize.x, m_contentRegionSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
 		// Receive dropped files.
 		if (ImGui::BeginDragDropTarget())
@@ -102,7 +103,7 @@ public:
 	{
 		if (event.isConsumed()) return;
 
-		// LumenWindow receives events in global window coordinates.  These have to be converted to local
+		// LumenWindows receive events in global window coordinates.  These have to be converted to local
 		// coordinates before being passed to the engine.
 
 		// Mouse events.
@@ -189,6 +190,7 @@ public:
 	{
 		m_engine = std::make_unique<EngineType>(args...);
 		m_textureID = (void*)m_engine->getRenderTexture();
+		Renderer::restoreAndUnbindScene();  // Scene is bound in EngineCore.
 	}
 
 	// Pass the resize to the engine.

@@ -36,20 +36,20 @@ class Scene
 public:
 
 	// Constructor.
-	Scene(CameraType cameraType, float width, float height);
+	Scene(CameraType cameraType, const glm::vec2& size);
+
 	// Destructor.
 	virtual ~Scene();
+
 	// Returns the rendered texture.
 	unsigned getRenderTexture();
-	// Set the viewport dimensions.
-	void setViewport(int width, int height);
-	// Returns the viewport dimensions.
-	glm::vec4& getViewport();
+
 	// Returns the ID of the entity at the coordinates.
 	unsigned getEntityID(const glm::vec2& pixelCoords);
 	// Resizes the scene based on a viewport change.
 	void resize(const glm::vec2& size);
 
+	// Events.
 	void onRenderInit();
 	void onRenderCleanup();
 
@@ -58,32 +58,26 @@ public:
 	// Recreate the resources once it has been deleted.
 	void recreateGPUResources();
 
-	// Update the scene.
-	void onUpdate();
+	// Getters.
+	Camera& getCamera();
+	Grid& getGrid();
 
-	// The camera.
-	std::unique_ptr<Camera> m_camera;
+private:
 
 	// The grid drawn on the scene.
 	std::unique_ptr<Grid> m_grid;
 
-private:
-
 	friend class EngineCore;
-
-	// Map containing all of the different primitives.
-	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
-
-	// Calculate the world coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& pixelCoords);
-	// Calculate the camera coordinates from the pixel coordinates.
-	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& pixelCoords);
-
-	// Friends.
 	friend class Renderer;
 	friend class Shader;
 	friend class RendererStats;
 	friend class BackgroundColorEditor;
+
+	// The camera.
+	std::unique_ptr<Camera> m_camera;
+
+	// Map containing all of the different primitives.
+	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();
@@ -91,11 +85,6 @@ private:
 	void create2DBackground();
 	// Creates a default 3D background.
 	void create3DBackground();
-
-	// Return the view matrix of the scene camera.
-	glm::mat4* getViewMatrix();
-	// Return the projection matrix.
-	glm::mat4* getProjectionMatrix();
 
 	// Map containing all of the textures used in the scene.
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;

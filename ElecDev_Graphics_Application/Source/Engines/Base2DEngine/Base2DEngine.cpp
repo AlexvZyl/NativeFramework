@@ -16,9 +16,10 @@
 Base2DEngine::Base2DEngine() 
 	: EngineCore()
 {
-	// Create and bind a 2D scene.
-	m_scene = std::make_unique<Scene>(CameraType::Standard2D, 500, 500);
-	Renderer::bindScene(m_scene.get());
+	m_scene = std::make_unique<Scene>(CameraType::Standard2D, glm::vec2(500, 500));
+	Renderer::storeAndBindScene(&getScene());
+	getScene().getCamera().setScaleRate(0.5f);
+	getScene().getCamera().scale2D(3.f);
 };
 
 //=============================================================================================================================================//

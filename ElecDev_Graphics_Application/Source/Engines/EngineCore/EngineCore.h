@@ -74,14 +74,16 @@ public:
 	//  R E N D E R I N G  //
 	// ------------------- //
 
-	// The scene rendered to.
-	std::unique_ptr<Scene> m_scene = nullptr;
+	// Get the engine's scene.
+	Scene& getScene();
 	// Main loop where the rendering happens.
 	virtual void onRender();
 	// Returns the FBO texture ID that can be rendered.
 	unsigned int getRenderTexture();
 	// Returns the ID of the entity in the pixel coords.
 	unsigned int getEntityID(const glm::vec2& pixelCoords);
+	// Get the delta time from the app.
+	float getDeltaTime() const;
 
 	// ------------- //
 	//  E V E N T S  //
@@ -114,14 +116,15 @@ public:
 	glm::vec2 getMouseGlobalPosition();
 
 	// Coorinate conversions.
-	glm::vec2 pixelDistanceToWorldDistance(const glm::vec2& distance);
-	glm::vec3 pixelCoordsToWorldCoords(const glm::vec2& coords);
-	glm::vec3 pixelCoordsToCameraCoords(const glm::vec2& coords);
+	glm::vec3 pixelToWorldDistance(const glm::vec2& distance);
+	glm::vec2 worldToPixelDistance(const glm::vec3& distance);
+	glm::vec3 pixelToWorldCoords(const glm::vec2& coords, bool useUpdatedView = false);
+	glm::vec2 worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView = false);
+	glm::vec2 worldToPixelCoords(const glm::vec2& worldCoords, bool useUpdatedView = false);
 
-	// Stores the previous mouse event information.
-	glm::vec2 m_prevMouseEventPixelCoords = { NULL, NULL };
-	// Stores the vector that goes into the world.
-	glm::vec3 m_prevMouseEventWorldVec = { NULL, NULL, NULL };
+	// Convert window coordinates.
+	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
+	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
 
 	// ----------------------------- //
 	//  D E S I G N   P A L E T T E  //
@@ -140,6 +143,12 @@ private:
 
 	template <class EngineType>
 	friend class GraphicsScene;
+
+	friend class Base2DEngine;
+	friend class Base3DEngine;
+
+	// The scene rendered to.
+	std::unique_ptr<Scene> m_scene = nullptr;
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;

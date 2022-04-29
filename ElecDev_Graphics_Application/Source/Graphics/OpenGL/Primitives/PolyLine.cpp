@@ -43,7 +43,6 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 
 void PolyLine::update()
 {
-
 	ClipperLib::Path subj;
 	ClipperLib::Paths solution;
 	float sf = 100000;
@@ -69,7 +68,6 @@ void PolyLine::update()
 	std::vector<unsigned> indices = mapbox::earcut<unsigned>(resultVec);
 	m_indexCount = indices.size();
 
-
 	std::vector<VertexData> vertexVector;
 	for (auto& path : resultVec) {
 		for (auto& vertex : path)
@@ -78,7 +76,8 @@ void PolyLine::update()
 
 	m_vertexCount = vertexVector.size();
 	m_VAO->pushPrimitive(this, vertexVector, indices);
-	if (outlined) {
+	if (outlined) 
+	{
 		enableOutline();
 	}
 }

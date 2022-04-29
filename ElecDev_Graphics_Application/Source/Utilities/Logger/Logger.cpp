@@ -27,34 +27,42 @@ void Logger::flushQueue()
 	// Log all of the messages.
 	for (auto& msg : s_messageQueue)
 	{
+		// Default color.
+		auto color = white;
+
 		switch (msg.level)
 		{
 		case LoggerLevel::Debug:
 			if (!msg.title.size()) msg.title = "Debug";
-			std::cout << white << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
 			break;
 
 		case LoggerLevel::Info:
 			if (!msg.title.size()) msg.title = "Info";
-			std::cout << blue << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
+			color = blue;
 			break;
 
 		case LoggerLevel::Success:
 			if (!msg.title.size()) msg.title = "Success";
-			std::cout << green << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
+			color = green;
 			break;
 
 		case LoggerLevel::Warning:
 			if (!msg.title.size()) msg.title = "Warning";
-			std::cout << yellow << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
+			color = yellow;
 			break;
 
 		case LoggerLevel::Error:
 			if (!msg.title.size()) msg.title = "Error";
-			std::cout << red << "[Lumen] [" << msg.title << "] : " << white << msg.content << "\n";
+			color = red;
 			app.pushNotification(NotificationType::Error, 10000, msg.content, msg.title);
 			break;
 		}
+
+		std::cout << color << "[Lumen] [" << msg.title << "] ";
+#ifdef LUMEN_DETAILED_LOGGING
+		std::cout << "[" << msg.function << "] ";
+#endif
+		std::cout << ": " << white << msg.content << "\n";
 	}
 
 	std::cout.flush();

@@ -6,8 +6,7 @@ layout(location = 1) in vec4 v_color;
 layout(location = 2) in float v_outline;
 layout(location = 3) in uint v_entityID;
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
+uniform mat4 viewProjMatrix;
 
 out float f_outline;
 out vec4 f_color;
@@ -19,7 +18,7 @@ void main()
 		return;
 
 	f_color = v_color;
-    gl_Position = projectionMatrix * viewMatrix * vec4(v_pos, 1.0f);
+    gl_Position = viewProjMatrix * vec4(v_pos, 1.0f);
 }
 
 #shader fragment

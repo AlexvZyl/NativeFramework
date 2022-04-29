@@ -201,6 +201,7 @@ private:
 	static void loadDefaultFont();
 	// Load the current scenes textures to OpenGL.
 	static void loadTextures(Scene* scene);
+
 	// Enables the OpenGL attribute.
 	static void enable(unsigned attribute);
 	// Disables the OpenGL attribute.
@@ -215,6 +216,8 @@ private:
 	static void setClearColor(const glm::vec4& color);
 	// Set the line width (in pixels) of a GL_LINE.
 	static void setLineSize(int size);
+	// Clears the bits set.
+	static void clear(int bitplane);
 
 	// ------------- //
 	//  S C E N E S  //

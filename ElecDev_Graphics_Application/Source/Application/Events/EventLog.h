@@ -7,6 +7,8 @@
 #include "Events.h"
 #include <queue>
 
+#define MAX_SCROLL_PER_FRAME 5
+
 //==============================================================================================================================================//
 //  Event Log.																																	//
 //==============================================================================================================================================//
@@ -32,35 +34,44 @@ public:
 	{
 		mouseMove.ID = ID | EventType_MouseMove;
 		mouseMove.mousePosition = mousePositionPixels;
-		mouseMoveOccuredFlag = true;
+		mouseMoveOccurredFlag = true;
 	}
 
 	inline static void logMouseDrag(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
 	{
-		// On first mouse drag event the delta has to be reset.
-		if (!mouseDragOccuredFlag)
+		// Reset drag delta on first event.
+		if (!mouseDragOccurredFlag)
 			mouseDrag.currentFrameDelta = {0.f, 0.f};
 
 		mouseDrag.ID = ID | EventType_MouseDrag;
 		mouseDrag.initialPosition = init;
 		mouseDrag.currentFrameDelta += delta;
 		mouseDrag.mousePosition = current;
-		mouseDragOccuredFlag = true;
+		mouseDragOccurredFlag = true;
 	}
 
 	inline static void logMouseScroll(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID)
 	{
+		// Reset scroll values on first event.
+		if (!mouseScrollOccurredFlag)
+		{
+			mouseScroll.xOffset = 0;
+			mouseScroll.yOffset = 0;
+		}
+
 		mouseScroll.ID = ID | EventType_MouseScroll;
 		mouseScroll.mousePosition = mousePositionPixels;
-		mouseScroll.xOffset = xOffset;
-		mouseScroll.yOffset = yOffset;
-		mouseScrollOccuredFlag = true;
+		if(mouseScroll.xOffset < MAX_SCROLL_PER_FRAME)
+			mouseScroll.xOffset += xOffset;
+		if (mouseScroll.yOffset < MAX_SCROLL_PER_FRAME)
+			mouseScroll.yOffset += yOffset;
+		mouseScrollOccurredFlag = true;
 	}
 
 	// Setup the event log.
 	inline static void init() 
 	{
-		// Currently nothing has to be set up, but keeping this here for now.
+		// ...
 	}
 	
 	// Clears all of the events from the event log.
@@ -71,9 +82,9 @@ public:
 		notifyEvents.clear();
 
 		// Reset flags.
-		mouseMoveOccuredFlag = false;
-		mouseScrollOccuredFlag = false;
-		mouseDragOccuredFlag = false;
+		mouseMoveOccurredFlag = false;
+		mouseScrollOccurredFlag = false;
+		mouseDragOccurredFlag = false;
 	}
 
 	// Getters.
@@ -82,9 +93,9 @@ public:
 	inline static MouseMoveEvent& getMouseMove()					{ return mouseMove; }
 	inline static MouseScrollEvent& getMouseScroll()				{ return mouseScroll; }
 	inline static MouseDragEvent& getMouseDrag()					{ return mouseDrag; }
-	inline static bool mouseMoveOccured()							{ return mouseMoveOccuredFlag; }
-	inline static bool mouseDragOccured()							{ return mouseDragOccuredFlag; }
-	inline static bool mouseScrollOccured()							{ return mouseScrollOccuredFlag; }
+	inline static bool mouseMoveOccurred()							{ return mouseMoveOccurredFlag; }
+	inline static bool mouseScrollOccurred()						{ return mouseScrollOccurredFlag; }
+	inline static bool mouseDragOccurred()							{ return mouseDragOccurredFlag; }
 
 private:
 
@@ -99,12 +110,12 @@ private:
 	// more than once per frame.
 	inline static MouseMoveEvent mouseMove		= MouseMoveEvent({ 0.f, 0.f }, 0);
 	inline static MouseScrollEvent mouseScroll	= MouseScrollEvent({ 0.f, 0.f }, 0.f, 0.f, 0);
-	inline static MouseDragEvent mouseDrag		= MouseDragEvent({ 0.f, 0.f }, { 0.f, 0.f }, { 0.f, 0.f }, 0);
+	inline static MouseDragEvent mouseDrag		= MouseDragEvent();
 
 	// Flags for if the seperate events occured.
-	inline static bool mouseMoveOccuredFlag = false;
-	inline static bool mouseDragOccuredFlag = false;
-	inline static bool mouseScrollOccuredFlag = false;
+	inline static bool mouseMoveOccurredFlag = false;
+	inline static bool mouseScrollOccurredFlag = false;
+	inline static bool mouseDragOccurredFlag = false;
 
 	// No instance.
 	EventLog();

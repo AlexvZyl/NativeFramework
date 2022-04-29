@@ -18,6 +18,7 @@ void LumenWindow::onAttach(unsigned ID)
 {
 	m_lumenWindowID = ID;
 	updateImGuiName();
+	WIDTH_OF_SPACE = ImGui::CalcTextSize(" ").x;
 }
 
 void LumenWindow::onRender()
@@ -26,13 +27,11 @@ void LumenWindow::onRender()
 
 	updateRenderStateFlags();
 
-	if (shouldRender())
-		onImGuiRender();
+	if (shouldRender()) onImGuiRender();
 
 	onImGuiEnd();
 
-	if (!m_isOpen)
-		closeWindow();
+	if (!m_isOpen) closeWindow();
 }
 
 void LumenWindow::closeWindow()
@@ -42,12 +41,10 @@ void LumenWindow::closeWindow()
 
 void LumenWindow::onUpdate()
 {
-	// If no window is found it should not be updated.
 	if (!findImGuiWindow()) return;
 
 	updateRenderStateFlags();
 
-	// Do not check for events if it is not being rendererd.
 	if (!shouldRender()) return;
 
 	detectWindowMove();
@@ -80,13 +77,13 @@ void LumenWindow::removeImGuiWindowFlags(int flags)
 
 bool LumenWindow::isHovered() const
 {
-	if (!m_imguiWindow) return false; // No window currently exists.
+	if (!m_imguiWindow) return false;
 	return ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows | ImGuiHoveredFlags_DockHierarchy, m_imguiWindow);
 }
 
 ImGuiWindow* LumenWindow::findImGuiWindow()
 {
-	if (m_imguiWindow) return m_imguiWindow;  // Window already found.
+	if (m_imguiWindow) return m_imguiWindow;
 	m_imguiWindow = ImGui::FindWindowByName(getImGuiName());
 	return m_imguiWindow;
 }
@@ -114,7 +111,20 @@ const char* LumenWindow::getImGuiName() const
 
 void LumenWindow::updateImGuiName()
 {
-	m_imguiName = m_windowName + "###LumenWindow" + std::to_string(m_lumenWindowID);
+	float currentWidth = ImGui::CalcTextSize(m_windowName.c_str()).x;
+
+	// Wider than min width.
+	if (currentWidth > MIN_TAB_WIDTH)
+	{
+		m_imguiName = m_windowName + "###LumenWindow" + std::to_string(m_lumenWindowID);
+		return;
+	}
+
+	// Need to add white space so that it is at least the minimum width.
+	int spacesToAdd = std::ceil((MIN_TAB_WIDTH - currentWidth)/WIDTH_OF_SPACE);
+	std::string spaces = "";
+	for (int i = 0; i < spacesToAdd; i++) spaces.push_back(' ');
+	m_imguiName = m_windowName + spaces + "###LumenWindow" + std::to_string(m_lumenWindowID);
 }
 
 bool LumenWindow::shouldRender() const
@@ -200,11 +210,11 @@ void LumenWindow::detectWindowMove()
 	}
 }
 
-glm::vec2 LumenWindow::getMouseLocalPosition() const
+glm::vec2 LumenWindow::getMouseLocalPosition() const 
 {
 	double cursorX, cursorY;
 	glfwGetCursorPos(Lumen::getApp().getGLFWWindow(), &cursorX, &cursorY);
-	return { cursorX - m_contentRegionPosition.x, cursorY - m_contentRegionPosition.y };
+	return globalToLocalCoords({ cursorX, getMainViewportSize().y - cursorY });
 }
 
 glm::vec2 LumenWindow::getMouseGlobalPosition() const
@@ -214,16 +224,21 @@ glm::vec2 LumenWindow::getMouseGlobalPosition() const
 	return { cursorX, cursorY };
 }
 
-glm::vec2 LumenWindow::globalToLocalCoords(const glm::vec2& coords) 
+glm::vec2 LumenWindow::globalToLocalCoords(const glm::vec2& coords) const 
 {
 	return { coords.x - m_contentRegionPosition.x,
-			 coords.y - m_contentRegionPosition.y, };
+			 coords.y - (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)), };
 }
 
-glm::vec2 LumenWindow::localToGlobalCoords(const glm::vec2& coords)
+glm::vec2 LumenWindow::localToGlobalCoords(const glm::vec2& coords) const
 {
 	return { coords.x + m_contentRegionPosition.x,
-			 coords.y + m_contentRegionPosition.y, };
+			 coords.y + (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)), };
+}
+
+glm::vec2 LumenWindow::getMainViewportSize() const 
+{
+	return Lumen::getApp().getMainViewportSize();
 }
 
 //==============================================================================================================================================//

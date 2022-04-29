@@ -4,94 +4,261 @@
 
 #include "Camera.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
 //==============================================================================================================================================//
 
-Camera::Camera(CameraType cameraType, int width, int height) 
+Camera::Camera(CameraType cameraType, const glm::vec2& size)
 	: m_type(cameraType)
 {
-	setViewport(width, height);
-
-	// Find the minimum value of the viewport dimensions.
-	float minValue;
-	if (m_viewportVec[2] < m_viewportVec[3]) { minValue = m_viewportVec[2]; }
-	else { minValue = m_viewportVec[3]; }
-	// Scale the projection values according to the ImGUI viewport.
-	float projValuesTemp[6] = { (float)-m_viewportVec[2] / minValue, (float)m_viewportVec[2] / minValue, (float)-m_viewportVec[3] / minValue, (float)m_viewportVec[3] / minValue,-1.0, 1.0 };
-
-	// Save projection values to be used with resizing of the window.
-	for (int i = 0; i < 6; i++) { m_projectionValues[i] = projValuesTemp[i]; }
-	// Create projection matrix.
-	m_projectionValues[4] = -1.0f;
-	m_projectionValues[5] = 1.0f;
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
+	setViewport(size);
+	setScaleRate(1.f);
 }
 
-void Camera::onUpdate() 
+void Camera::resize(const glm::vec2& size) 
 {
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix; 
+	setViewport(size);
 }
 
-void Camera::resize(int width, int height) 
+void Camera::resize(const glm::vec4& viewport)
 {
-	// Calculate the value of the scaling.
-	float scalingFactor[2] = { (float)width / (float)m_viewportVec[2], (float)height / (float)m_viewportVec[3]};
-	m_viewportVec[2] = (float)width;
-	m_viewportVec[3] = (float)height;
+	setViewport(viewport);
+}
 
-	// Scale projection values.
-	m_projectionValues[0] *= scalingFactor[0];
-	m_projectionValues[1] *= scalingFactor[0];
-	m_projectionValues[2] *= scalingFactor[1];
-	m_projectionValues[3] *= scalingFactor[1];
+const CameraType& Camera::getType() const
+{
+	return m_type;
+}
 
-	// Scale with the y scaling.
-	//m_scalingMatrix = glm::scale(m_scalingMatrix, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
-	// Update base matrix.
-	m_scalingMatrixBase = glm::scale(m_scalingMatrixBase, glm::vec3(scalingFactor[1], scalingFactor[1], 1.0f));
-	// Create new projection matrix.
-	m_projectionMatrix = glm::ortho(m_projectionValues[0], m_projectionValues[1], m_projectionValues[2], m_projectionValues[3], m_projectionValues[4], m_projectionValues[5]);
+void Camera::onUpdate()
+{
+	m_prevViewMatrix = m_viewMatrix;
+	updateAllMatrices();
 }
 
 //==============================================================================================================================================//
 //  Controls.																																	//
 //==============================================================================================================================================//
 
+void Camera::setPosition(const glm::vec3& position)
+{
+	m_position = position;
+	viewChanged();
+}
 
+void Camera::setScaleRate(float rate)
+{
+	m_scaleRate = rate;
+}
 
-//==============================================================================================================================================\//
+void Camera::translate(const glm::vec2& translation) 
+{
+	translate({ translation.x, translation.y, 0.f });
+}
+
+void Camera::translate(const glm::vec3& translation) 
+{
+	m_position += translation;
+	viewChanged();
+}
+
+void Camera::scale2D(float scale)
+{
+	Camera::scale({ scale, scale, 1.f });
+}
+
+void Camera::scale(const glm::vec3& scale) 
+{
+	m_scalingMatrix = glm::scale(m_scalingMatrix, scale);
+	viewChanged();
+}
+
+void Camera::scaleAroundCursor(float scale, const glm::vec2& cursor)
+{
+	if (m_type == CameraType::Standard2D)
+	{
+		glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor);
+		Camera::scale({ scale, scale, 1.f });
+		glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
+		Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	}
+	else 
+	{
+		LUMEN_LOG_WARN("Unknown type.", "Camera");
+	}
+}
+
+void Camera::incrementZoom(int increment)
+{
+	if (m_type == CameraType::Standard2D)
+	{
+		float scale = getScaleFromIncrement(increment);
+		Camera::scale({ scale, scale, 1.f });
+	}
+	else
+	{
+		LUMEN_LOG_WARN("Unknown type.", "Camera");
+	}
+}
+
+void Camera::incrementZoomAroundCursor(int increment, const glm::vec2& cursor)
+{
+	if (m_type == CameraType::Standard2D)
+	{
+		glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor, true);
+		float scale = getScaleFromIncrement(increment);
+		Camera::scale({ scale, scale, 1.f });
+		glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
+		Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
+	}
+	else
+	{
+		LUMEN_LOG_WARN("Unknown type.", "Camera");
+	}
+}
+
+float Camera::getScaleFromIncrement(int increment)
+{
+	if (increment >= 0)
+	{
+		return 1 + (m_scaleRate * increment);
+	}
+	else
+	{
+		return 1 / (1 + m_scaleRate * -1 * increment);
+	}
+}
+
+//==============================================================================================================================================//
+//  Matrices.																																	//
+//==============================================================================================================================================//
+
+void Camera::viewChanged() 
+{
+	m_viewMatrixChanged = true;
+	m_viewProjectionMatrixChanged = true;
+}
+
+void Camera::projectionChanged()
+{
+	m_projectionMatrixChanged = true;
+	m_viewProjectionMatrixChanged = true;
+}
+
+void Camera::updateViewMatrix()
+{
+	if (!m_viewMatrixChanged) return;
+
+	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * glm::translate(glm::mat4(1.f), m_position);
+	m_viewMatrixChanged = false;
+}
+
+void Camera::updateProjectionMatrix()
+{
+	if (!m_projectionMatrixChanged) return;
+
+	switch (m_type)
+	{
+	case CameraType::Standard2D:
+		m_projectionMatrix = glm::ortho(-m_aspectRatio, m_aspectRatio, -1.f, 1.f);
+		break;
+
+	case CameraType::Standard3D:
+		break;
+	}
+
+	m_projectionMatrixChanged = false;
+}
+
+void Camera::updateViewProjectionMatrix()
+{
+	if (!m_viewProjectionMatrixChanged) return;
+
+	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
+	m_viewProjectionMatrixChanged = false;
+}
+
+void Camera::updateAllMatrices() 
+{
+	updateViewMatrix();
+	updateProjectionMatrix();
+	updateViewProjectionMatrix();
+}
+
+void Camera::setViewport(const glm::vec2& viewport)
+{
+	m_viewport = { 0.f, 0.f, viewport.x, viewport.y };
+	m_aspectRatio = viewport.x / viewport.y;
+	projectionChanged();
+}
+
+void Camera::setViewport(const glm::vec4& viewport)
+{
+	m_viewport = viewport;
+	glm::vec2 size = getViewportSize();
+	m_aspectRatio = size.x / size.y;
+	projectionChanged();
+}
+
+const glm::vec4& Camera::getViewport() const
+{
+	return m_viewport;
+}
+
+const glm::vec2& Camera::getViewportSize() const
+{
+	return { m_viewport[2] - m_viewport[0],
+			 m_viewport[3] - m_viewport[1] };
+}
+
+const glm::mat4& Camera::getViewMatrix() const
+{
+	return m_viewMatrix;
+}
+
+const glm::mat4& Camera::getProjectionMatrix() const
+{
+	return m_projectionMatrix;
+}
+
+const glm::mat4& Camera::getViewProjectionMatrix() const
+{
+	return m_viewProjectionMatrix;
+}
+
+//==============================================================================================================================================//
 //  Coordinate systems.																															//
 //==============================================================================================================================================//
 
-void Camera::setViewport(int width, int height) 
+// This will most likely not work with 3D, need to calculate the z value.
+glm::vec3 Camera::pixelToWorldCoords(const glm::vec2& pixelCoords, bool useUpdatedView)
 {
-	m_viewportVec[2] = (float)width;
-	m_viewportVec[3] = (float)height;
+	if (useUpdatedView)
+	{
+		updateViewMatrix();
+		return glm::unProject({ pixelCoords.x, pixelCoords.y, 0.0f },
+								m_viewMatrix, m_projectionMatrix, m_viewport);
+	}
+	else 
+	{
+		return glm::unProject({ pixelCoords.x, pixelCoords.y, 0.0f },
+								m_prevViewMatrix, m_projectionMatrix, m_viewport);
+	}
 }
 
-glm::vec3 Camera::pixelCoordsToWorldCoords(const glm::vec2& pixelCoords)
+glm::vec2 Camera::worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView)
 {
-	// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
-	glm::vec3 pixelCoords3 = glm::vec3{ pixelCoords.x, m_viewportVec[3] - pixelCoords.y, 0.0f };
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;  // Do we want this to be updated?
-	return glm::unProject(pixelCoords3, m_viewMatrix, m_projectionMatrix, m_viewportVec);
-}
-
-// TODO: This function needs to be checked.
-glm::vec3 Camera::pixelCoordsToCameraCoords(const glm::vec2& pixelCoords)
-{
-	glm::vec2 viewport = { m_viewportVec[2], m_viewportVec[3]};
-	// GLFW passes (0,0) as top left.  Lumen has (0,0) has bottom left.
-	glm::vec2 pixelCoordsTemp = { pixelCoords[0] , (float)viewport[1] - pixelCoords[1] };
-	glm::vec2 normalizedScreenCoords = {
-		(pixelCoordsTemp.x - viewport.x / 2) / (viewport.x / 2),
-		(pixelCoordsTemp.y - viewport.y / 2) / (viewport.y / 2)
-	};
-	glm::vec4 screenVec = { normalizedScreenCoords.x, normalizedScreenCoords.y, 0.0f, 1.0f };
-	m_viewMatrix = m_scalingMatrix * m_rotationMatrix * m_translationMatrix;  // Do we want this to be updated?
-	return screenVec * glm::inverse(m_modelMatrix * m_viewMatrix * m_projectionMatrix);
+	if (useUpdatedView)
+	{
+		updateViewMatrix();
+		return glm::project(worldCoords, m_viewMatrix, m_projectionMatrix, m_viewport);
+	}
+	else 
+	{
+		return glm::project(worldCoords, m_prevViewMatrix, m_projectionMatrix, m_viewport);
+	}
 }
 
 //==============================================================================================================================================//

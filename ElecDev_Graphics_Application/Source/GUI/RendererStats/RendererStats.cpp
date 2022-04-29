@@ -45,7 +45,7 @@ void RendererStats::onImGuiRender()
 	// ----------------- //
 
 	ImGui::PushID("ProfilerResults");
-	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 4.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 3.f }, true, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		// Ensure profilder is enabled.
 		app.m_profilerActive = true;
@@ -116,9 +116,9 @@ void RendererStats::onImGuiRender()
 				}
 
 				// ImGui functions.
-				else if (result.name == "ImGui NewFrame" ||
-						 result.name == "ImGui OnUpdate" ||
-						 result.name == "ImGui Draw")
+				else if (name == "ImGui NewFrame" ||
+						 name == "ImGui OnUpdate" ||
+						 name == "ImGui Draw")
 				{
 					imGuiTime += time;
 					continue;
@@ -161,13 +161,19 @@ void RendererStats::onImGuiRender()
 			app.m_profilerResults.clear();
 
 			// Display fps.
-			 static glm::vec4 fpsCol = {0.4f, 0.4f, 1.f, 1.f};
-			ImGui::Text("Estimated FPS (CPU): ");
+			static glm::vec4 fpsCol = {0.4f, 0.4f, 1.f, 1.f};
+			// CPU. 
+			ImGui::Text("Max FPS (CPU): ");
 			ImGui::SameLine();
 			ImGui::TextColored(fpsCol, std::to_string((int)fpsCPU).c_str());
-			ImGui::Text("Estimated FPS (App): ");
+			// App.
+			ImGui::Text("Max FPS (App): ");
 			ImGui::SameLine();
 			ImGui::TextColored(fpsCol, std::to_string((int)fpsApp).c_str());
+			// ImGui.
+			ImGui::Text("Avg FPS (App): ");
+			ImGui::SameLine();
+			ImGui::TextColored(fpsCol, std::to_string(ImGui::GetIO().Framerate).c_str());
 			ImGui::TextWrapped("Disable 'Wait Events' for more accurate results.");
 			ImGui::Checkbox("  Wait Events", &app.m_waitForEvents);
 		}		
@@ -190,7 +196,7 @@ void RendererStats::onImGuiRender()
 	// ----------------- //
 
 	ImGui::PushID("RendererData");
-	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 5.f }, true))
+	if (ImGui::BeginChild("Child", { 0, m_contentRegionSize.y / 4.5f }, true))
 	{
 		// Setup table
 		ImGui::BeginTable("RendererTable", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
@@ -297,6 +303,14 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_linesVAO->syncVertexBuffer();
+					scene->m_linesVAO->syncIndexBuffer();
+				}
+
 			}
 			ImGui::PopID();
 
@@ -351,6 +365,13 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_trianglesVAO->syncVertexBuffer();
+					scene->m_trianglesVAO->syncIndexBuffer();
+				}
 			}
 			ImGui::PopID();
 
@@ -405,6 +426,13 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_texturedTrianglesVAO->syncVertexBuffer();
+					scene->m_texturedTrianglesVAO->syncIndexBuffer();
+				}
 			}
 			ImGui::PopID();
 
@@ -459,6 +487,13 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_circlesVAO->syncVertexBuffer();
+					scene->m_circlesVAO->syncIndexBuffer();
+				}
 			}
 			ImGui::PopID();
 		}

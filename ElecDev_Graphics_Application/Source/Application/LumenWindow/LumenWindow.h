@@ -162,16 +162,19 @@ public:
 
 	// Convert global mouse cordinates to local coordinates.
 	// GLFW window to Lumen window.
-	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
+	glm::vec2 globalToLocalCoords(const glm::vec2& coords) const;
 
 	// Convert local mouse cordinates to global coordinates.
 	// Lumen window to GLFW window.
-	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
+	glm::vec2 localToGlobalCoords(const glm::vec2& coords) const;
 
 	// Return the mouse position in the local scene coordinates (pixels).
 	// (0,0) is in the top left.
 	glm::vec2 getMouseLocalPosition() const;
 	glm::vec2 getMouseGlobalPosition() const;
+
+	// Get the size of the main viewport.
+	glm::vec2 getMainViewportSize() const;
 
 	// --------- //
 	//  D A T A  //
@@ -194,9 +197,13 @@ private:
 
 protected:
 
+	// These coodinates use the ImGui system!
 	glm::vec2 m_contentRegionSize = { 0.f, 0.f };
 	glm::vec2 m_contentRegionPosition = { 0.f, 0.f };
+
 	bool m_isOpen = true;
+	inline static float WIDTH_OF_SPACE = 0.f;
+	inline const static float MIN_TAB_WIDTH = 75.f;
 };
 
 //==============================================================================================================================================//

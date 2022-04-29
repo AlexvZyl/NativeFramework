@@ -122,9 +122,9 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	}
 
 	// Add shapes.
-	body = Renderer::addCircle2D(node["Body"]);
-	border = Renderer::addCircle2D(node["Border"]);
-	title = Renderer::addText2D(node["Title"]);
+	body = Renderer::addCircle2D(node["Body"], this);
+	border = Renderer::addCircle2D(node["Border"], this);
+	title = Renderer::addText2D(node["Title"], this);
 	bodyColour = body->m_colour;
 	borderColour = border->m_colour;
 	centre = body->m_trackedCenter;
@@ -164,13 +164,13 @@ Port::~Port()
 void Port::moveTo(const glm::vec2& destination)
 {
 	//update the port centre
+	title->translate(destination - centre);
 	centre = destination + m_offset;
 	glm::vec2 titlePos = centre + titleOffset;
 	//move each primative
 	body->translateTo(centre);
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
-	title->translateTo(titlePos);
 	for (Cable* cable: m_cables)
 		cable->followPort(this);
 }

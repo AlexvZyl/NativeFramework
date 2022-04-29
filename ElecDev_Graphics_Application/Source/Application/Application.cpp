@@ -51,6 +51,8 @@ Application::Application()
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	setGuiTheme();
+	//ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+	//ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
 	// Initialisation frame.
 	buildDocks();
@@ -93,9 +95,16 @@ void Application::stopRunning()
 	m_isRunning = false;
 }
 
-GLFWwindow* Application::getGLFWWindow()
+GLFWwindow* Application::getGLFWWindow() const
 {
 	return m_glfwWindow;
+}
+
+glm::vec2 Application::getMainViewportSize() const 
+{
+	int display_w, display_h;
+	glfwGetFramebufferSize(getGLFWWindow(), &display_w, &display_h);
+	return { display_w, display_h };
 }
 
 void Application::setActiveEngine(EngineCore* engine) 

@@ -167,7 +167,7 @@ void VertexArrayObject<VertexType>::pushPrimitive(PrimitivePtr* primitive, const
 	m_primitives.push_back(primitive);
 	// Reserve data for the sync vector.
 	m_primitivesToSync.reserve(m_primitives.size());  // FIX.
-	// Syn CPU data with GPU.
+	// Sync CPU data with GPU.
 	syncPrimitiveData(primitive);
 }	
 
@@ -205,6 +205,7 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 			if (m_primitivesToSync[i] == primitive)
 			{
 				m_primitivesToSync.erase(m_primitivesToSync.begin() + i);
+				primitive->m_queuedForSync = false;
 				break;
 			}
 		}
@@ -230,11 +231,9 @@ void VertexArrayObject<VertexType>::popPrimitive(PrimitivePtr* primitive)
 	// TODO: We do not need to reload all of the data.
 	// We only have to reload data that sits after the removed primitive.
 	// FreeLists will make this easier as well.
-	if (!queryBufferResize()) 
-	{
-		m_indexBufferSynced = false;
-		m_vertexBufferSynced = false;
-	}
+	queryBufferResize();
+	m_indexBufferSynced = false;
+	m_vertexBufferSynced = false;
 }
 
 template<class VertexType>
@@ -247,49 +246,55 @@ void VertexArrayObject<VertexType>::updateIndices(PrimitivePtr* primitive, const
 	unsigned indexPos = primitive->m_indexBufferPos;
 	unsigned primitiveIndex = primitive->m_primitiveBufferPos;
 
-	//Check if new index list is the same length
-	if (std::size(indices) == indexCount) {
-		for (unsigned i = 0; i < indexCount; i++) {
+	// Check if new index list is the same length.
+	if (indices.size() == indexCount)
+	{
+		for (unsigned i = 0; i < indexCount; i++) 
+		{
 			m_indexCPU.at(indexPos + i) = indices[i] + vertexPos;
 		}
 	}
-	else {
-		//handle new index list resize
 
-		//handle situations where the number of indices is decreasing
-		if (indices.size() < indexCount) {
-			for (unsigned i = 0; i < indices.size(); i++) {
+	// Handle indices resize.
+	else 
+	{
+		// Indices decrease.
+		if (indices.size() < indexCount) 
+		{
+			for (unsigned i = 0; i < indices.size(); i++) 
+			{
 				m_indexCPU.at(indexPos + i) = indices[i] + vertexPos;
 			}
 
 			// Remove extra indices.
-			if (indexCount)
-				m_indexCPU.erase(m_indexCPU.begin() + indexPos + indices.size(), m_indexCPU.begin() + indexPos + indexCount);
+			if (indexCount)	m_indexCPU.erase(m_indexCPU.begin() + indexPos + indices.size(), m_indexCPU.begin() + indexPos + indexCount);
 		}
 
-		//handle situations where the number of indices is increasing
-		else {
-			for (unsigned i = 0; i < indexCount; i++) {
-				m_indexCPU.at(indexPos + i) = indices[i] + vertexPos;
+		// Indices increase.
+		else 
+		{
+			for (unsigned i = 0; i < indexCount; i++) 
+			{
+				m_indexCPU[indexPos + i] = indices[i] + vertexPos;
 			}
 			
-			//add in additional indices
-			for (unsigned i = indexCount; i < indices.size(); i++) {
+			// Add in additional indices.
+			for (unsigned i = indexCount; i < indices.size(); i++) 
+			{
 				m_indexCPU.emplace(m_indexCPU.begin() + indexPos + i, indices[i] + vertexPos);
 			}
-
 		}
-		//change the index count
+
+		// Change the index count.
 		m_indexCount -= indexCount - indices.size();
 
-		// Change metadata of primitives that sit after the popped primitive.
+		// Change metadata of primitives that sit after the changed incides.
 		for (int i = primitiveIndex + 1; i < m_primitives.size(); i++)
 		{
-			PrimitivePtr* primitive = m_primitives[i];
-			primitive->m_indexBufferPos -= indexCount - indices.size();
+			m_primitives[i]->m_indexBufferPos -= indexCount - indices.size();
 		}
 
-		//update the current primitive metadata
+		// Update the current primitive metadata.
 		primitive->m_indexCount = indices.size();
 	}
 
@@ -297,10 +302,8 @@ void VertexArrayObject<VertexType>::updateIndices(PrimitivePtr* primitive, const
 	// TODO: We do not need to reload all of the data.
 	// We only have to reload data that sits after the removed primitive.
 	// FreeLists will make this easier as well.
-	if (!queryBufferResize())
-	{
-		m_indexBufferSynced = false;
-	}
+	queryBufferResize();
+	m_indexBufferSynced = false;
 }
 
 template <typename VertexType>

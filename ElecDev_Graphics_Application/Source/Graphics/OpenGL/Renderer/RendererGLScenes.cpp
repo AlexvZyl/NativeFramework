@@ -89,7 +89,7 @@ void Renderer::renderScene(Scene* scene)
 	scene->onRenderInit();
 
 	// Dispatch pipeline.
-	switch (scene->m_camera->m_type)
+	switch (scene->getCamera().getType())
 	{
 		case CameraType::Standard2D:
 			renderingPipeline2D(scene);
@@ -132,9 +132,9 @@ void Renderer::gridPass(Scene* scene)
 
 	// Setup shader.
 	Shader* shader = s_shaders["BasicShader"].get();
+	Camera& camera = scene->getCamera();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());	
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 
 	// Draw grid.	
 	Grid* grid = scene->m_grid.get();
@@ -189,28 +189,26 @@ void Renderer::geometryPass2D(Scene* scene)
 
 	// The shader used in rendering.
 	Shader* shader = nullptr;
+	Camera& camera = scene->getCamera();
 
 	// Draw basic primitives.
 	shader = s_shaders["BasicShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
 
 	// Draw Circles.
 	shader = s_shaders["CircleShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 }
 
@@ -224,7 +222,7 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 
 	Renderer::enable(GL_DEPTH_TEST);
 	Renderer::enable(GL_BLEND);
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+	Renderer::clear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -232,28 +230,26 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 
 	// The shader used in rendering.
 	Shader* shader = nullptr;
+	Camera& camera = scene->getCamera();
 
 	// Draw basic primitives.
 	shader = s_shaders["OutlineShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
 	// Draw textured primitives.
 	shader = s_shaders["OutlineShaderTextures"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
 
 	// Draw Circles.
 	shader = s_shaders["OutlineShaderCircle"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 
 	// Render outline with post processing.
@@ -262,8 +258,8 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	{
 		shader = s_shaders["OutlinePostProc"].get();
 		shader->bind();
-		shader->setFloat("width", scene->getViewport()[2]);
-		shader->setFloat("height", scene->getViewport()[3]);
+		shader->setFloat("width",  camera.getViewportSize().x);
+		shader->setFloat("height", camera.getViewportSize().y);
 		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, shader);
 	}
 	// Render outline texture directly.
@@ -292,7 +288,7 @@ void Renderer::geometryPass3D(Scene* scene)
 	// ----------- //
 
 	Renderer::enable(GL_BLEND);
-	Renderer::setViewport(scene->getViewport());
+	Renderer::setViewport(scene->getCamera().getViewport());
 	
 	// ------------------- //
 	//  R E N D E R I N G  //
@@ -300,28 +296,26 @@ void Renderer::geometryPass3D(Scene* scene)
 
 	// The shader used in rendering.
 	Shader* shader = nullptr;
+	Camera& camera = scene->getCamera();
 
 	// Draw basic primitives.
 	shader = s_shaders["BasicShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
 
 	// Draw Circles.
 	shader = s_shaders["CircleShader"].get();
 	shader->bind();
-	shader->setMat4("viewMatrix", scene->getViewMatrix());
-	shader->setMat4("projectionMatrix", scene->getProjectionMatrix());
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 }
 
@@ -331,7 +325,7 @@ void Renderer::geometryPass3D(Scene* scene)
 
 void Renderer::generateDefaultScenes()
 {
-	m_default2DScene = std::make_unique<Scene>(CameraType::Standard2D, 900, 900);
+	m_default2DScene = std::make_unique<Scene>(CameraType::Standard2D, glm::vec2(500,500));
 	// Render the scene once so that the background can be generated.
 	Renderer::renderScene(m_default2DScene.get());
 }

@@ -33,7 +33,7 @@ void Application::onUpdate()
 	popWindows();
 
 	// Find the hovered window on a mouse move event.
-	if (EventLog::mouseMoveOccured())
+	if (EventLog::mouseMoveOccurred())
 	{
 		// If there is no hovered window, we need to check if a window is hovered.
 		if (!m_hoveredWindow) 
@@ -88,14 +88,14 @@ void Application::onUpdate()
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredWindow)
 	{
-		if (EventLog::mouseMoveOccured())
-			m_hoveredWindow->onEvent(EventLog::getMouseMove());
-
-		if (EventLog::mouseScrollOccured()) 
+		if (EventLog::mouseScrollOccurred()) 
 			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
 
-		if (EventLog::mouseDragOccured())
+		if (EventLog::mouseDragOccurred())
 			m_hoveredWindow->onEvent(EventLog::getMouseDrag());
+
+		if (EventLog::mouseMoveOccurred())
+			m_hoveredWindow->onEvent(EventLog::getMouseMove());
 	}
 
 	// Dispatch notify events after all of the other events are done.
@@ -144,15 +144,15 @@ void Application::imguiOnUpdate()
 
 	// Pass events to ImGui.
 	// Thess events are called here so that ImGui is not hammered with more that one per frame.
-	if (EventLog::mouseScrollOccured())
+	if (EventLog::mouseScrollOccurred())
 	{
 		MouseScrollEvent& event = EventLog::getMouseScroll();
 		ImGui_ImplGlfw_ScrollCallback(getGLFWWindow(), event.xOffset, event.yOffset);
 	}
-	if (EventLog::mouseMoveOccured())
+	if (EventLog::mouseMoveOccurred())
 	{
 		MouseMoveEvent& event = EventLog::getMouseMove();
-		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, event.mousePosition.y);
+		ImGui_ImplGlfw_CursorPosCallback(getGLFWWindow(), event.mousePosition.x, getMainViewportSize().y - event.mousePosition.y);
 	}
 }
 
