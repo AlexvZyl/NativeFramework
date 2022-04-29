@@ -303,6 +303,14 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_linesVAO->syncVertexBuffer();
+					scene->m_linesVAO->syncIndexBuffer();
+				}
+
 			}
 			ImGui::PopID();
 
@@ -357,6 +365,13 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_trianglesVAO->syncVertexBuffer();
+					scene->m_trianglesVAO->syncIndexBuffer();
+				}
 			}
 			ImGui::PopID();
 
@@ -411,6 +426,13 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_texturedTrianglesVAO->syncVertexBuffer();
+					scene->m_texturedTrianglesVAO->syncIndexBuffer();
+				}
 			}
 			ImGui::PopID();
 
@@ -465,6 +487,13 @@ void RendererStats::onImGuiRender()
 
 				// Done.
 				ImGui::EndTable();
+
+				// Sync button.
+				if (ImGui::Button("Sync With GPU"))
+				{
+					scene->m_circlesVAO->syncVertexBuffer();
+					scene->m_circlesVAO->syncIndexBuffer();
+				}
 			}
 			ImGui::PopID();
 		}
