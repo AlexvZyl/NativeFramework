@@ -34,8 +34,8 @@ const CameraType& Camera::getType() const
 
 void Camera::onUpdate()
 {
-	m_prevViewMatrix = m_viewMatrix;
 	updateAllMatrices();
+	m_prevViewMatrix = m_viewMatrix;
 }
 
 //==============================================================================================================================================//
