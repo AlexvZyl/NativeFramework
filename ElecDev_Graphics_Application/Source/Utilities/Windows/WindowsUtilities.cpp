@@ -14,7 +14,7 @@
 // Files supported by Lumen.
 const COMDLG_FILTERSPEC fileSpec[] =
 {
-    { L"Lumen File", L"*.lmct; *.lmcp;" }
+    { L"Lumen File", L"*.lmct; *.lmcp; *.lmcb;" }
 };
 
 //=============================================================================================================================================//
