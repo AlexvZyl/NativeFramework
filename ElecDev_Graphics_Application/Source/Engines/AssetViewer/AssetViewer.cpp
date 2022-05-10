@@ -3,8 +3,8 @@
 //=============================================================================================================================================//
 
 #include "Engines/AssetViewer/AssetViewer.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Graphics/Entities/EntityManager.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Utilities/Logger/Logger.h"
@@ -28,11 +28,9 @@ AssetViewer::AssetViewer()
 void AssetViewer::clearAssets()
 {
 	Renderer::storeAndBindScene(&getScene());
-
 	m_currentAsset = "No Asset.";
 	m_circuit.reset();
 	m_component.reset();
-
 	Renderer::restoreAndUnbindScene();
 }
 
@@ -45,10 +43,7 @@ void AssetViewer::renderDesignPalette()
 void AssetViewer::viewAsset(const std::filesystem::path& path)
 {
 	// Check if asset is already being viewed.
-	if (path.filename().string() == m_currentAsset)
-		return;
-	
-	Renderer::storeAndBindScene(&getScene());
+	if (path.filename().string() == m_currentAsset) return;
 
 	try
 	{
@@ -64,7 +59,7 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 			viewComponent(path);
 		}
 		// Error.
-		else 
+		else
 		{
 			LUMEN_LOG_ERROR("Unsupported file extension.", "YAML Serialiser");
 		}
@@ -74,23 +69,50 @@ void AssetViewer::viewAsset(const std::filesystem::path& path)
 		LUMEN_LOG_ERROR("Could not load file.  It may contain invalid content or be an unsupported version.", "YAML Serialiser");
 		return;
 	}
-
-	Renderer::restoreAndUnbindScene();
 }
 
 void AssetViewer::viewCircuit(const std::filesystem::path& path)
 {
+	Renderer::storeAndBindScene(&getScene());
 	clearAssets();
 	m_circuit = std::make_unique<Circuit>(path);
 	m_currentAsset = path.filename().string();
+	Renderer::restoreAndUnbindScene();
+}
+
+void AssetViewer::viewCircuit(const YAML::Node& node)
+{
+	Renderer::storeAndBindScene(&getScene());
+	clearAssets();
+	m_circuit = std::make_unique<Circuit>(node);
+	m_currentAsset = m_circuit->m_label + ".lmct";
+	Renderer::restoreAndUnbindScene();
 }
 
 void AssetViewer::viewComponent(const std::filesystem::path& path)
 {
+	Renderer::storeAndBindScene(&getScene());
 	clearAssets();
 	m_component = std::make_unique<Component2D>(path);
 	m_component->disableOutline();
 	m_currentAsset = path.filename().string();
+	Renderer::restoreAndUnbindScene();
+}
+
+void AssetViewer::viewComponent(const YAML::Node& node)
+{
+	Renderer::storeAndBindScene(&getScene());
+	clearAssets();
+	m_component = std::make_unique<Component2D>(node);
+	m_component->disableOutline();
+	m_currentAsset = m_component->titleString + ".lmcp";
+	Renderer::restoreAndUnbindScene();
+}
+
+void AssetViewer::onFocusEventForce(const NotifyEvent& event) 
+{
+	m_isFocused = true;
+	onFocusEvent(event);
 }
 
 //=============================================================================================================================================//

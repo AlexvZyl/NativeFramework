@@ -21,7 +21,7 @@ storing circuit templates/diagrams in a YAML format.
 
 // Classes.
 class Circuit;
-class Design2DEngine;
+class CircuitDesigner;
 class Port;
 class Component2D;
 class Cable;

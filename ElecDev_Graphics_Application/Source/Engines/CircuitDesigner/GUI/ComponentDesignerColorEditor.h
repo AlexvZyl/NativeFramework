@@ -5,7 +5,7 @@
 //==============================================================================================================================================//
 
 #include "Application/LumenWindow/LumenWindow.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
 #include "glm/glm.hpp"
 
 //==============================================================================================================================================//

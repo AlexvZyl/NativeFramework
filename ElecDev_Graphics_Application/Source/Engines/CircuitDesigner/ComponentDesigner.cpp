@@ -7,6 +7,17 @@
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Graphics/Entities/EntityManager.h"
 #include "GUI/ComponentDesignerColorEditor.h"
+#include "OpenGL/Primitives/Grid.h"
+
+ComponentDesigner::ComponentDesigner()
+	: Base2DEngine()
+{
+	m_activeComponent = std::make_shared<Component2D>(nullptr);
+	m_activeComponent->place(glm::vec2(0.f));
+	m_activeComponent->disableOutline();
+	enableDesignPalette();
+	getScene().getGrid().disableHelperCircle();
+}
 
 void ComponentDesigner::switchState(CompDesignState state)
 {
@@ -235,15 +246,6 @@ void ComponentDesigner::deleteActivePrimitive()
 	m_activePort = nullptr;
 	m_activeVertex = nullptr;
 	m_activeText = nullptr;
-}
-
-ComponentDesigner::ComponentDesigner()
-	: Base2DEngine()
-{
-	m_activeComponent = std::make_shared<Component2D>(nullptr);
-	m_activeComponent->place(glm::vec2(0.f));
-	m_activeComponent->disableOutline();
-	enableDesignPalette();
 }
 
 void ComponentDesigner::renderDesignPalette() 

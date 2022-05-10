@@ -8,6 +8,7 @@
 #include <iostream>
 #include "yaml-cpp/yaml.h"
 #include <filesystem>
+#include <unordered_map>
 
 //=============================================================================================================================================//
 //  Forward declerations																													   //
@@ -33,14 +34,15 @@ enum designState
 	CABLE_PLACE
 };
 
-class Design2DEngine : public Base2DEngine
+class CircuitDesigner : public Base2DEngine
 {
+
 public:
 
 	// Constructor
-	Design2DEngine();
+	CircuitDesigner();
 	// Destructor.
-	virtual ~Design2DEngine() override;
+	virtual ~CircuitDesigner() override;
 	
 	// ------------------ //
 	//  V A R I A B L E S //
@@ -55,25 +57,18 @@ public:
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;
-
 	float clickTol = 0.01f;
 
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
 
-	// Mouse events.
 	virtual void onMouseButtonEvent(const MouseButtonEvent& event) override;
 	virtual void onMouseMoveEvent(const MouseMoveEvent& event) override;
 	virtual void onMouseScrollEvent(const MouseScrollEvent& event) override;
 	virtual void onMouseDragEvent(const MouseDragEvent& event) override;
-	// Key events.
 	virtual void onKeyEvent(const KeyEvent& event) override;
-
-	// File events.
 	virtual void onFileDropEvent(const FileDropEvent& event) override;
-
-	//Notify event.
 	virtual void onNotifyEvent(const NotifyEvent& event) override;
 	
 	// ------------------- //
@@ -89,6 +84,22 @@ public:
 	Port* getPort(unsigned eID);
 	virtual void setNameOfElements(const std::string& name) override;
 	void createCircuit(const std::filesystem::path& path);
+	void loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos);
+
+
+	// -------------- //
+	//  P RO J E C T  //
+	// -------------- //
+
+	// Imports a component if it does not already exist.
+	bool importComponent(const std::filesystem::path& name);
+	// Imports a cable if it does not already exist.
+	bool importCable(const std::filesystem::path& name);
+
+private:
+
+	friend class CircuitEditor;
+	friend class CircuitDesignerPopupModal;
 };
 
 //=============================================================================================================================================//

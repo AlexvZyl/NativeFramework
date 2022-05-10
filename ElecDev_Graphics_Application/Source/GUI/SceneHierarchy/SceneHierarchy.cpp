@@ -5,10 +5,10 @@
 #include "SceneHierarchy.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -29,7 +29,7 @@ void SceneHierarchy::onImGuiRender()
 	Application& app = Lumen::getApp();
 
 	// Check for active engine.
-	Design2DEngine* engine = app.getActiveEngine<Design2DEngine>();
+	CircuitDesigner* engine = app.getActiveEngine<CircuitDesigner>();
 	if (!engine)
 	{
 		ImGui::Text("No active engine.");

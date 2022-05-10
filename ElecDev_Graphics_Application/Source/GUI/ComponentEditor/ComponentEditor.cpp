@@ -8,12 +8,12 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Application.h"	
 #include "Application/LumenWindow/LumenWindow.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Resources/ResourceHandler.h"
 #include "Lumen.h"
 
@@ -27,17 +27,13 @@ ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	if (!s_iconCreated)
 	{
 		s_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
-		s_iconCreated = true;
 		s_textHeight = ImGui::CalcTextSize("A").y;
+		s_iconCreated = true;
 	}
 }
 
 void ComponentEditor::onImGuiBegin()
 {
-	// Place editor at correct position.
-	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
-	// FIX ME!! The window size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
 	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
@@ -45,7 +41,7 @@ void ComponentEditor::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
-	Design2DEngine* design_engine = app.getActiveEngine<Design2DEngine>();
+	CircuitDesigner* design_engine = app.getActiveEngine<CircuitDesigner>();
 	ComponentDesigner* component_designer = app.getActiveEngine<ComponentDesigner>();
 
 	if (component_designer) 

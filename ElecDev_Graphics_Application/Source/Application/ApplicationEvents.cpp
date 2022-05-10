@@ -7,9 +7,9 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Application/LumenWindow/WindowStack.h"
 #include "Utilities/Serialisation/Serialiser.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "Utilities/Logger/Logger.h"
@@ -24,6 +24,8 @@ void Application::onUpdate()
 
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
+
+	//setGuiTheme();
 
 	// Log messages.
 	Logger::flushQueue();
@@ -229,7 +231,7 @@ void Application::onFileSaveEvent(const FileSaveEvent& event)
 		// Check if operation did not fail.
 		if (path.string().size())
 		{
-			Design2DEngine* designEngine = event.getEngine<Design2DEngine>();
+			CircuitDesigner* designEngine = event.getEngine<CircuitDesigner>();
 			ComponentDesigner* component_designer = event.getEngine<ComponentDesigner>();
 
 			if (designEngine) 

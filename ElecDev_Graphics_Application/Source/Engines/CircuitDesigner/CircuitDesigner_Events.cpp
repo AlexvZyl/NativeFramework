@@ -3,10 +3,10 @@
 //==============================================================================================================================================//
 
 #include <iostream>
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Application/Events/Events.h"
 #include "OpenGL/SceneGL.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
@@ -20,7 +20,7 @@
 //  Mouse Button.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
+void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
 	// --------------------- //
 	//  L E F T   P R E S S  //
@@ -130,7 +130,7 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 //  Mouse Move.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
+void CircuitDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 {
 	glm::vec2 coords = event.mousePosition;
 	glm::vec3 WorldCoords = pixelToWorldCoords(coords);
@@ -186,7 +186,7 @@ void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 //  Mouse Scroll.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
+void CircuitDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
 }
@@ -195,7 +195,7 @@ void Design2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 //  Mouse Drag.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
+void CircuitDesigner::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 
@@ -220,7 +220,7 @@ void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 //  Notify event.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
+void CircuitDesigner::onNotifyEvent(const NotifyEvent& event)
 {
 	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
@@ -242,7 +242,7 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 //  Key Events.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onKeyEvent(const KeyEvent& event)
+void CircuitDesigner::onKeyEvent(const KeyEvent& event)
 {
 	// Events based on key type.
 	if (event.isType(EventType_KeyPress))
@@ -290,7 +290,7 @@ void Design2DEngine::onKeyEvent(const KeyEvent& event)
 //  Files.																																		//
 //==============================================================================================================================================//
 
-void Design2DEngine::onFileDropEvent(const FileDropEvent& event) 
+void CircuitDesigner::onFileDropEvent(const FileDropEvent& event) 
 {
 	Renderer::storeAndBindScene(&getScene());
 
@@ -298,15 +298,15 @@ void Design2DEngine::onFileDropEvent(const FileDropEvent& event)
 	{
 		if (path.filename().extension().string() == ".lmcp")
 		{
-			// Create component from file.
-			if (m_activeComponent)
-				m_activeComponent->disableOutline();
-			if (m_activeCable)
-				m_activeCable->disableOutline();
-			m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
-			m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(getMouseLocalPosition())));
-			m_activeComponent = m_circuit->m_components.back();
-			designerState = ENTITY_SELECT;
+			// Reset active entities.
+			if (m_activeComponent) m_activeComponent->disableOutline();
+			if (m_activeCable)	   m_activeCable->disableOutline();
+
+			// Check if component can be imported.
+			if (importComponent(path)) 
+			{
+				loadAndPlaceComponent(path, getMouseLocalPosition());
+			}
 		}
 	}
 

@@ -9,13 +9,13 @@
 #include "Serialiser.h"
 #include <Windows.h>
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //
@@ -112,7 +112,7 @@ void loadFromYAML(const std::filesystem::path& path)
 		// Circuits.
 		if (path.extension() == ".lmct")
 		{
-			Design2DEngine* engine = Lumen::getApp().pushEngine<Design2DEngine>(LumenDockPanel::Scene, path.stem().string());
+			CircuitDesigner* engine = Lumen::getApp().pushEngine<CircuitDesigner>(LumenDockPanel::Scene, path.stem().string());
 			engine->createCircuit(path);
 		}
 

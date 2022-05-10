@@ -7,13 +7,13 @@
 #include "imgui/imgui.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Utilities/Serialisation/Serialiser.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
 
 /*=======================================================================================================================================*/
@@ -74,9 +74,9 @@ void PopUpMenu::onImGuiRender()
     //  B A C K G R O U N D  //
     // --------------------- //
 
-    if (dynamic_cast<Design2DEngine*>(m_engine)) 
+    if (dynamic_cast<CircuitDesigner*>(m_engine)) 
     {
-        Design2DEngine* design_engine = dynamic_cast<Design2DEngine*>(m_engine);
+        CircuitDesigner* design_engine = dynamic_cast<CircuitDesigner*>(m_engine);
         // Render menu items.
         if (!design_engine->m_activeComponent && !design_engine->m_activeCable)
         {
@@ -116,9 +116,7 @@ void PopUpMenu::onImGuiRender()
 
         if (ImGui::MenuItem("Circuit Editor..."))
         {
-            CircuitEditor* editor = app.pushWindow<CircuitEditor>(LumenDockPanel::Right, "Circuit Editor");
-            editor->setEngine(design_engine);
-            editor->setActiveEngineTracking(true);
+            CircuitEditor* editor = app.pushWindow<CircuitEditor>(LumenDockPanel::Left, "Circuit Editor");
         }
 
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))

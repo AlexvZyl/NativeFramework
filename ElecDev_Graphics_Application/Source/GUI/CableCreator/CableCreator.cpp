@@ -5,8 +5,8 @@
 #include "CableCreator.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "Resources/ResourceHandler.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include <fstream>

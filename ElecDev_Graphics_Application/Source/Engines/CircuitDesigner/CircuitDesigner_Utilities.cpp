@@ -3,7 +3,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Design2DEngine.h"
+#include "CircuitDesigner.h"
 #include "Peripherals/Component2D.h"
 #include "Peripherals/Circuit.h"
 #include "OpenGL/Renderer/RendererGL.h"
@@ -11,12 +11,13 @@
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "Graphics/Entities/EntityManager.h"
 #include "Application/Application.h"
+#include "GUI/CircuitDesignerPopupModal.h"
 
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords)
+void CircuitDesigner::ComponentPlaceMode(glm::vec2 screenCoords)
 {
 	if (designerState != COMPONENT_PLACE)
 	{
@@ -28,14 +29,14 @@ void Design2DEngine::ComponentPlaceMode(glm::vec2 screenCoords)
 	}
 }
 
-void Design2DEngine::ComponentPlaceMode()
+void CircuitDesigner::ComponentPlaceMode()
 {
 	glm::vec2 pos = getMouseLocalPosition();
 	pos = pixelToWorldCoords(pos);
 	ComponentPlaceMode(pos);
 }
 
-void Design2DEngine::deleteActiveComponent()
+void CircuitDesigner::deleteActiveComponent()
 {
 	if (!m_activeComponent) return;
 
@@ -53,7 +54,7 @@ void Design2DEngine::deleteActiveComponent()
 	}
 }
 
-void Design2DEngine::deleteActiveCable()
+void CircuitDesigner::deleteActiveCable()
 {
 	if (!m_activeCable) return;
 
@@ -65,7 +66,7 @@ void Design2DEngine::deleteActiveCable()
 	}
 }
 
-void Design2DEngine::setActiveComponent(unsigned eID) 
+void CircuitDesigner::setActiveComponent(unsigned eID) 
 {
 	if (m_activeComponent)
 	{
@@ -103,7 +104,7 @@ void Design2DEngine::setActiveComponent(unsigned eID)
 		Lumen::getApp().m_guiState->active_component = m_activeComponent.get();
 	}
 }
-void Design2DEngine::setActiveCable(unsigned eID) 
+void CircuitDesigner::setActiveCable(unsigned eID) 
 {
 	if (m_activeCable)
 	{
@@ -143,7 +144,7 @@ void Design2DEngine::setActiveCable(unsigned eID)
 	}
 }
 
-Port* Design2DEngine::getPort(unsigned eID)
+Port* CircuitDesigner::getPort(unsigned eID)
 {
 	if ((eID == 0) || (eID == -1))
 	{
@@ -168,9 +169,71 @@ Port* Design2DEngine::getPort(unsigned eID)
 	}
 }
 
-void Design2DEngine::setNameOfElements(const std::string& name) 
+void CircuitDesigner::setNameOfElements(const std::string& name) 
 {
 	m_circuit->m_label = name;
+}
+
+bool CircuitDesigner::importComponent(const std::filesystem::path& path)
+{
+	// Check if it is a component file.
+	if (path.filename().extension().string() != ".lmcp")
+	{
+		LUMEN_LOG_WARN("Tried to import component with invalid extension.", "");
+		return true;
+	}
+
+	// Add component if it does not exist.
+	std::string compName = path.filename().string();
+	if (m_circuit->m_uniqueComponents.find(compName) == m_circuit->m_uniqueComponents.end())
+	{
+		m_circuit->m_uniqueComponents.insert({ compName, YAML::LoadFile(path.string()) });
+		return true;
+	}
+	// Warn user of component overwrite.
+	else 
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Component Overwrite");
+		modal->m_entityPath = path;
+		modal->m_componentOverwrite = true;
+		modal->m_mousePosition = getMouseLocalPosition();
+		return false;
+	}
+}
+
+bool CircuitDesigner::importCable(const std::filesystem::path& path)
+{
+	// Check if it is a component file.
+	if (path.filename().extension().string() != ".lmcb")
+	{
+		LUMEN_LOG_WARN("Tried to import cable with invalid extension.", "");
+		return true;
+	}
+
+	// Add cable if it does not exist.
+	std::string cableName = path.filename().string();
+	if (m_circuit->m_uniqueCables.find(cableName) == m_circuit->m_uniqueCables.end())
+	{
+		m_circuit->m_uniqueCables.insert({ cableName, YAML::LoadFile(path.string()) });
+		return true;
+	}
+	// Warn user of cable overwrite.
+	else 
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Overwrite");
+		modal->m_entityPath = path;
+		modal->m_cableOverwrite = true;
+		modal->m_mousePosition = getMouseLocalPosition();
+		return false;
+	}
+}
+
+void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos) 
+{
+	m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
+	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
+	m_activeComponent = m_circuit->m_components.back();
+	designerState = ENTITY_SELECT;
 }
 
 //=============================================================================================================================================//
