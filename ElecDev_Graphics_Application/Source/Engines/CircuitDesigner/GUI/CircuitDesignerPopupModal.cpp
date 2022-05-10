@@ -26,19 +26,22 @@ void CircuitDesignerPopupModal::onImGuiRender()
 
 	if (ImGui::Button("Overwrite"))
 	{
-		if (m_componentOverwrite)
+		auto* engine = Lumen::getApp().getActiveEngine<CircuitDesigner>();
+		if (engine)
 		{
-			auto* engine = Lumen::getApp().getActiveEngine<CircuitDesigner>();
-			if (engine)
+			if (m_componentOverwrite)
 			{
 				engine->m_circuit->m_uniqueComponents[m_entityPath.filename().string()] = YAML::LoadFile(m_entityPath.string())["Component"];
-				if(m_mousePosition.x != -1.f)
+				if (m_mousePosition.x != -1.f)
 					engine->loadAndPlaceComponent(m_entityPath, m_mousePosition);
 			}
-		}
-		else if (m_cableOverwrite)
-		{
-
+			else if (m_cableOverwrite)
+			{
+				YAML::Node node = YAML::LoadFile(m_entityPath.string());
+				engine->m_circuit->m_uniqueCables[m_entityPath.filename().string()] = node["Cable"];;
+				if (m_mousePosition.x != -1.f)
+					engine->loadDataToCable(node, engine->m_activeCable.get());
+			}
 		}
 		closeWindow();
 	}

@@ -395,17 +395,17 @@ void ComponentEditor::onImGuiRender()
 			payloadFiles.setDragAndDropTarget();
 			if (payloadFiles.hasValidData())
 			{
-				loadDataToCable(YAML::LoadFile(payloadFiles.getDataString()), activeCable);
-				design_engine->importCable(payloadFiles.getDataString());
+				if (design_engine->importCable(payloadFiles.getDataString())) 
+					design_engine->loadDataToCable(YAML::LoadFile(payloadFiles.getDataString()), activeCable);
 			}
 
 			// Drag & Drop nodes.
 			LumenPayload payloadNode(LumenPayloadType::YamlNode);
 			payloadNode.setDragAndDropTarget();
-			if (payloadNode.hasValidData()) loadDataToCable(payloadNode.getDataYamlNode(), activeCable);
+			if (payloadNode.hasValidData()) design_engine->loadDataToCable(payloadNode.getDataYamlNode(), activeCable);
 		}
 
-		// Get the current component as the initial selection for the data selection
+		// Get the current component as the initial selection for the data selection.
 		if (equipmentSelector == -1) 
 		{
 			for (int num = 0; num < numCom; num++) 
@@ -781,27 +781,6 @@ void ComponentEditor::onImGuiRender()
 void ComponentEditor::onImGuiEnd()
 {
 	ImGui::End();
-}
-
-void ComponentEditor::loadDataToCable(const YAML::Node& node, Cable* cable) 
-{
-	YAML::Node cableNode = node;
-	if (cableNode["Cable"].IsDefined())
-		cableNode = cableNode["Cable"];
-
-	// Load type.
-	cable->m_cableType = cableNode["Label"].as<std::string>();
-	// Load color.
-	cable->setColour({
-		cableNode["Color"][0].as<float>(),
-		cableNode["Color"][1].as<float>(),
-		cableNode["Color"][2].as<float>() ,
-		cableNode["Color"][3].as<float>()
-		});
-	// Load dictionary.
-	cable->cableDict.clear();
-	for (const auto& keyValPair : cableNode["Dictionary"])
-		cable->cableDict.insert({ keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>() });
 }
 
 /*=======================================================================================================================================*/

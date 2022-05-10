@@ -304,12 +304,19 @@ void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
 {
 	Renderer::storeAndBindScene(&getScene());
 	const YAML::Node& node = event.getNode();
-	if (node["Lumen File Info"].IsDefined() && node["Lumen File Info"]["Type"].IsDefined())
+	// Check type.
+	if (node["File"].IsDefined())
 	{
-		if (node["Lumen File Info"]["Type"].as<std::string>() != "Component")
-			return;
+		std::filesystem::path file(node["File"].as<std::string>());
+		if(file.extension() == ".lmcp")
+			loadAndPlaceComponent(node, getMouseLocalPosition());
 	}
-	loadAndPlaceComponent(event.getNode(), getMouseLocalPosition());
+	// This is NOT ideal.  Should have a better way of distinguishing
+	// between nodes.
+	else if(node["Ports"].IsDefined())
+	{
+		loadAndPlaceComponent(node, getMouseLocalPosition());
+	}
 	Renderer::restoreAndUnbindScene();
 }
 

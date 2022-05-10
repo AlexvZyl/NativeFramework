@@ -26,10 +26,12 @@ Circuit::Circuit(const std::filesystem::path& path)
 Circuit::Circuit(const YAML::Node& node) 
 	: Entity(EntityType::CIRCUIT)
 {
+	m_label = node["Circuit Info"]["Label"].as<std::string>();
+
 	// Load reference components.
 	for (const auto& component : node["Reference Components"])
 	{
-		m_uniqueComponents.insert({component.first.as<std::string>(), component.second});
+		m_uniqueComponents.insert({ component.first.as<std::string>(), component.second });
 	}
 
 	// Load reference cables.

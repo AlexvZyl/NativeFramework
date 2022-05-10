@@ -135,7 +135,7 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 Port::~Port()
 {
 	// Check if port is in a circuit.
-	if (dynamic_cast<Circuit*>(m_parent->m_parent) != nullptr) 
+	if (m_parent && dynamic_cast<Circuit*>(m_parent->m_parent))
 	{
 		// If a port is removed, we need to find and destroy any linked cables.
 		auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;

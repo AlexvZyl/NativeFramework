@@ -57,9 +57,6 @@ private:
 	inline static bool m_copiedDictCable = false;
 	inline static bool m_copiedDictComponent = false;
 	inline static std::string m_copiedDictFrom = "";
-
-	// Loads the data in the cable node to the cable.
-	void loadDataToCable(const YAML::Node& node, Cable* cable);
 };
 
 //=======================================================================================================================================//

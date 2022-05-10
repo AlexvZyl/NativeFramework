@@ -232,7 +232,8 @@ bool CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOn
 
 void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos) 
 {
-	m_activeComponent->disableOutline();
+	if (m_activeComponent)
+		m_activeComponent->disableOutline();
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
@@ -241,11 +242,39 @@ void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, c
 
 void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos)
 {
-	m_activeComponent->disableOutline();
+	if(m_activeComponent)
+		m_activeComponent->disableOutline();
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(node, m_circuit.get()));
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	designerState = ENTITY_SELECT;
+}
+
+void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)
+{
+	YAML::Node cableNode = node;
+	if (cableNode["Cable"].IsDefined())
+	{
+		cableNode = cableNode["Cable"];
+	}
+	else if (cableNode["Ports"].IsDefined() || cableNode["Component"].IsDefined())
+	{
+		return;
+	}
+
+	// Load type.
+	cable->m_cableType = cableNode["Label"].as<std::string>();
+	// Load color.
+	cable->setColour({
+		cableNode["Color"][0].as<float>(),
+		cableNode["Color"][1].as<float>(),
+		cableNode["Color"][2].as<float>() ,
+		cableNode["Color"][3].as<float>()
+	});
+	// Load dictionary.
+	cable->cableDict.clear();
+	for (const auto& keyValPair : cableNode["Dictionary"])
+		cable->cableDict.insert({ keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>() });
 }
 
 //=============================================================================================================================================//

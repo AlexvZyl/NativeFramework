@@ -86,7 +86,8 @@ public:
 	virtual void setNameOfElements(const std::string& name) override;
 	void createCircuit(const std::filesystem::path& path);
 	void loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos);
-	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);
+	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);\
+	void loadDataToCable(const YAML::Node& node, Cable* cable);
 
 	// -------------- //
 	//  P RO J E C T  //
