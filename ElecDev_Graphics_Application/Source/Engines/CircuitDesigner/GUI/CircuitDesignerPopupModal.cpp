@@ -31,20 +31,17 @@ void CircuitDesignerPopupModal::onImGuiRender()
 			auto* engine = Lumen::getApp().getActiveEngine<CircuitDesigner>();
 			if (engine)
 			{
-				engine->loadAndPlaceComponent(m_entityPath, m_mousePosition);
-				engine->m_circuit->m_uniqueComponents[m_entityPath.filename().string()] = YAML::LoadFile(m_entityPath.string());
+				engine->m_circuit->m_uniqueComponents[m_entityPath.filename().string()] = YAML::LoadFile(m_entityPath.string())["Component"];
+				if(m_mousePosition.x != -1.f)
+					engine->loadAndPlaceComponent(m_entityPath, m_mousePosition);
 			}
 		}
 		else if (m_cableOverwrite)
 		{
 
 		}
-
 		closeWindow();
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Cancel"))
-	{
-		closeWindow();
-	}
+	if (ImGui::Button("Cancel")) closeWindow();
 }

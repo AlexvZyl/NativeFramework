@@ -20,5 +20,5 @@ public:
 	bool m_componentOverwrite = false;
 
 	// Store the mouse position when the modal was opened.
-	glm::vec2 m_mousePosition = {0.f,0.f};
+	glm::vec2 m_mousePosition = {-1.f,-1.f};
 };

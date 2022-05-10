@@ -116,7 +116,7 @@ void PopUpMenu::onImGuiRender()
 
         if (ImGui::MenuItem("Circuit Editor..."))
         {
-            CircuitEditor* editor = app.pushWindow<CircuitEditor>(LumenDockPanel::Left, "Circuit Editor");
+            CircuitEditor* editor = app.pushWindow<CircuitEditor>(LumenDockPanel::Right, "Circuit Editor");
         }
 
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))

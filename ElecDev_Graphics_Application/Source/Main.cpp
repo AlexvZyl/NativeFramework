@@ -21,7 +21,6 @@ int main(int, char**)
 
     // Cleanup.
     Renderer::shutdown();
-
     return 0;
 }
 

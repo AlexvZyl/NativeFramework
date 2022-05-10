@@ -4,30 +4,33 @@ LumenPayload::LumenPayload(LumenPayloadType type)
 	: m_type(type)
 {}
 
-void LumenPayload::setData(void* data, size_t size)
-{
-	m_dataPtr = data;
-	m_dataSize = size;
-}
-
-void LumenPayload::setData(const std::string& data) 
-{
-	m_dataPtr = (void*)&data;
-	m_dataSize = data.size();
-}
-
-std::string LumenPayload::getDataString() 
-{
-	return std::string((const char*)m_dataPtr);
-}
-
-void LumenPayload::setDragAndDropSource()
+void LumenPayload::setDragAndDropSource(void* data, size_t size)
 {
 	if (ImGui::BeginDragDropSource())
 	{
-		ImGui::SetDragDropPayload(getTypeCString(), m_dataPtr, m_dataSize, m_imguiCond);
+		ImGui::SetDragDropPayload(getTypeCString(), data, size, m_imguiCond);
 		ImGui::EndDragDropSource();
 	}
+}
+
+void LumenPayload::setDragAndDropSource(const char* data, size_t size)
+{
+	setDragAndDropSource((void*)data, size);
+}
+
+void LumenPayload::setDragAndDropSource(const std::string& data) 
+{
+	setDragAndDropSource(data.c_str(), data.size() + 1);
+}
+
+void LumenPayload::setDragAndDropSource(const std::filesystem::directory_entry& path)
+{
+	setDragAndDropSource(path.path().string());
+}
+
+void LumenPayload::setDragAndDropSource(const YAML::Node& node) 
+{
+	setDragAndDropSource((void*)&node, sizeof(node));
 }
 
 void LumenPayload::setDragAndDropTarget() 
@@ -48,17 +51,32 @@ void LumenPayload::setDragAndDropTarget()
 	m_imguiCond = cond;
 }
 
-std::tuple<void*, size_t> LumenPayload::getData()
+std::tuple<void*, size_t> LumenPayload::getDataRaw()
 {
 	return { m_dataPtr, m_dataSize };
+}
+
+std::string LumenPayload::getDataString()
+{
+	return std::string(getDataCString());
+}
+
+const char* LumenPayload::getDataCString()
+{
+	return static_cast<const char*>(m_dataPtr);
+}
+
+YAML::Node LumenPayload::getDataYamlNode() 
+{
+	return *static_cast<YAML::Node*>(m_dataPtr);
 }
 
 const char* LumenPayload::getTypeCString() 
 {
 	switch (m_type)
 	{
-	case LumenPayloadType::FilePath:
-		return "FILE_PATH";
+	case LumenPayloadType::String:
+		return "STRING";
 		break;
 
 	case LumenPayloadType::YamlNode:
@@ -66,7 +84,7 @@ const char* LumenPayload::getTypeCString()
 		break;
 
 	default:
-		LUMEN_LOG_WARN("Unknown payload type.", "");
+		LUMEN_LOG_WARN("Unknown payload type.", "LumenPayload");
 		return "";
 	}
 }

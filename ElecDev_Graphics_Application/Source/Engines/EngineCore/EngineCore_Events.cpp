@@ -41,6 +41,7 @@ void EngineCore::onEvent(const Event& event)
 
 	// File events.
 	else if (event.isType(EventType_FileDrop))			{ onFileDropEvent(event.cast<FileDropEvent>()); }
+	else if (event.isType(EventType_YamlNodeDrop))		{ onYamlNodeDropEvent(event.cast<YamlNodeDropEvent>()); }
 
 	// Event unhandled.
 	else LUMEN_LOG_WARN("No handler for event.", "Engine Core");

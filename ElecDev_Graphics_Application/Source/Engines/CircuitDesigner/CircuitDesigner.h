@@ -70,7 +70,8 @@ public:
 	virtual void onKeyEvent(const KeyEvent& event) override;
 	virtual void onFileDropEvent(const FileDropEvent& event) override;
 	virtual void onNotifyEvent(const NotifyEvent& event) override;
-	
+	virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) override;
+
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //
@@ -85,16 +86,16 @@ public:
 	virtual void setNameOfElements(const std::string& name) override;
 	void createCircuit(const std::filesystem::path& path);
 	void loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos);
-
+	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);
 
 	// -------------- //
 	//  P RO J E C T  //
 	// -------------- //
 
 	// Imports a component if it does not already exist.
-	bool importComponent(const std::filesystem::path& name);
+	bool importComponent(const std::filesystem::path& name, bool loadOnImport = true);
 	// Imports a cable if it does not already exist.
-	bool importCable(const std::filesystem::path& name);
+	bool importCable(const std::filesystem::path& name, bool loadOnImport = true);
 
 private:
 

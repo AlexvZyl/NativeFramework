@@ -254,24 +254,18 @@ void CircuitDesigner::onKeyEvent(const KeyEvent& event)
 
 		switch (event.key)
 		{
-			// --------------------------------------------------------------------------------------------------------------- //
-			
 			case GLFW_KEY_P:
 				// Enter component placement mode.
 				ComponentPlaceMode(screenCoords);
 				m_activeCable = nullptr;
 				break;
-			
-			// --------------------------------------------------------------------------------------------------------------- //
 
 			case GLFW_KEY_ESCAPE:
-				designerState = ENTITY_SELECT;
 				// Remove the dummy component.
+				designerState = ENTITY_SELECT;
 				m_activeComponent = nullptr;
 				m_activeCable = nullptr;
 				break;
-
-			// --------------------------------------------------------------------------------------------------------------- //
 
 			case GLFW_KEY_DELETE:
 				if (designerState == ENTITY_SELECT)
@@ -280,8 +274,6 @@ void CircuitDesigner::onKeyEvent(const KeyEvent& event)
 					deleteActiveCable();
 				}
 				break;
-
-			// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
 }
@@ -293,7 +285,6 @@ void CircuitDesigner::onKeyEvent(const KeyEvent& event)
 void CircuitDesigner::onFileDropEvent(const FileDropEvent& event) 
 {
 	Renderer::storeAndBindScene(&getScene());
-
 	for (auto& path : event.fileData)
 	{
 		if (path.filename().extension().string() == ".lmcp")
@@ -303,13 +294,22 @@ void CircuitDesigner::onFileDropEvent(const FileDropEvent& event)
 			if (m_activeCable)	   m_activeCable->disableOutline();
 
 			// Check if component can be imported.
-			if (importComponent(path)) 
-			{
-				loadAndPlaceComponent(path, getMouseLocalPosition());
-			}
+			if (importComponent(path)) loadAndPlaceComponent(path, getMouseLocalPosition());
 		}
 	}
+	Renderer::restoreAndUnbindScene();
+}
 
+void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
+{
+	Renderer::storeAndBindScene(&getScene());
+	const YAML::Node& node = event.getNode();
+	if (node["Lumen File Info"].IsDefined() && node["Lumen File Info"]["Type"].IsDefined())
+	{
+		if (node["Lumen File Info"]["Type"].as<std::string>() != "Component")
+			return;
+	}
+	loadAndPlaceComponent(event.getNode(), getMouseLocalPosition());
 	Renderer::restoreAndUnbindScene();
 }
 

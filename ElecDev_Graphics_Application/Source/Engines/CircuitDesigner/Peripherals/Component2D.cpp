@@ -87,7 +87,10 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	: Entity(EntityType::COMPONENT, parent)
 {
-	YAML::Node componentNode = node["Component"];
+	// Ensure the node is valid.
+	YAML::Node componentNode = node;
+	if (componentNode["Component"].IsDefined())
+		componentNode = componentNode["Component"];
 
 	// General data.
 	borderLayerOffset = componentNode["Border layer offset"].as<float>();
@@ -135,7 +138,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 }
 
 Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
-	: Component2D(YAML::LoadFile(path.string()), parent)
+	: Component2D(YAML::LoadFile(path.string())["Component"], parent)
 {}
 
 Component2D::~Component2D() 

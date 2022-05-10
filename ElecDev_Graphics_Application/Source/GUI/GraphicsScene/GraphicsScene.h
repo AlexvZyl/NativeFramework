@@ -74,14 +74,17 @@ public:
 		if (!m_textureID) return;
 		ImGui::Image(m_textureID, { m_contentRegionSize.x, m_contentRegionSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
-		// Drag & Drop.
-		LumenPayload payload(LumenPayloadType::FilePath);
-		payload.setDragAndDropTarget();
-		if (payload.hasValidData())
-		{
-			std::string path = payload.getDataString();
-			m_engine->onEvent(FileDropEvent(path, EventType_FileDrop));
-		}
+		// Drag & Drop files.
+		LumenPayload payloadFile(LumenPayloadType::String);
+		payloadFile.setDragAndDropTarget();
+		if (payloadFile.hasValidData())
+			m_engine->onEvent(FileDropEvent(payloadFile.getDataString(), EventType_FileDrop));
+
+		// Drag & Drop nodes.
+		LumenPayload payloadNode(LumenPayloadType::YamlNode);
+		payloadNode.setDragAndDropTarget();
+		if (payloadNode.hasValidData())
+			m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 	}
 
 	inline virtual void onImGuiEnd() override 

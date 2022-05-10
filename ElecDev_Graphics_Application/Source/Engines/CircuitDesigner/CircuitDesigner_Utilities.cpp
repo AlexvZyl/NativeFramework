@@ -174,7 +174,7 @@ void CircuitDesigner::setNameOfElements(const std::string& name)
 	m_circuit->m_label = name;
 }
 
-bool CircuitDesigner::importComponent(const std::filesystem::path& path)
+bool CircuitDesigner::importComponent(const std::filesystem::path& path, bool loadOnImport)
 {
 	// Check if it is a component file.
 	if (path.filename().extension().string() != ".lmcp")
@@ -187,7 +187,7 @@ bool CircuitDesigner::importComponent(const std::filesystem::path& path)
 	std::string compName = path.filename().string();
 	if (m_circuit->m_uniqueComponents.find(compName) == m_circuit->m_uniqueComponents.end())
 	{
-		m_circuit->m_uniqueComponents.insert({ compName, YAML::LoadFile(path.string()) });
+		m_circuit->m_uniqueComponents.insert({ compName, YAML::LoadFile(path.string())["Component"]});
 		return true;
 	}
 	// Warn user of component overwrite.
@@ -196,12 +196,13 @@ bool CircuitDesigner::importComponent(const std::filesystem::path& path)
 		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Component Overwrite");
 		modal->m_entityPath = path;
 		modal->m_componentOverwrite = true;
-		modal->m_mousePosition = getMouseLocalPosition();
+		if(loadOnImport)
+			modal->m_mousePosition = getMouseLocalPosition();
 		return false;
 	}
 }
 
-bool CircuitDesigner::importCable(const std::filesystem::path& path)
+bool CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOnImport)
 {
 	// Check if it is a component file.
 	if (path.filename().extension().string() != ".lmcb")
@@ -214,7 +215,7 @@ bool CircuitDesigner::importCable(const std::filesystem::path& path)
 	std::string cableName = path.filename().string();
 	if (m_circuit->m_uniqueCables.find(cableName) == m_circuit->m_uniqueCables.end())
 	{
-		m_circuit->m_uniqueCables.insert({ cableName, YAML::LoadFile(path.string()) });
+		m_circuit->m_uniqueCables.insert({ cableName, YAML::LoadFile(path.string())["Cable"]});
 		return true;
 	}
 	// Warn user of cable overwrite.
@@ -223,14 +224,25 @@ bool CircuitDesigner::importCable(const std::filesystem::path& path)
 		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Overwrite");
 		modal->m_entityPath = path;
 		modal->m_cableOverwrite = true;
-		modal->m_mousePosition = getMouseLocalPosition();
+		if (loadOnImport)
+			modal->m_mousePosition = getMouseLocalPosition();
 		return false;
 	}
 }
 
 void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos) 
 {
+	m_activeComponent->disableOutline();
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
+	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
+	m_activeComponent = m_circuit->m_components.back();
+	designerState = ENTITY_SELECT;
+}
+
+void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos)
+{
+	m_activeComponent->disableOutline();
+	m_circuit->m_components.push_back(std::make_shared<Component2D>(node, m_circuit.get()));
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	designerState = ENTITY_SELECT;

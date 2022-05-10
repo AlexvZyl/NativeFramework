@@ -9,6 +9,7 @@
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Engines/AssetViewer/AssetViewer.h"
 #include "Resources/ResourceHandler.h"
+#include "GUI/LumenPayload/LumenPayload.h"
 
 //=======================================================================================================================================//
 // Circuit editor.																														 //
@@ -75,13 +76,9 @@ void CircuitEditor::onImGuiRender()
 					app.viewComponent(node);
 				}
 
-				// File drag & drop.
-				if (ImGui::BeginDragDropSource())
-				{
-					//const wchar_t* itemPath = p.path().c_str();
-					//ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
-					ImGui::EndDragDropSource();
-				}
+				// Drag & drop.
+				LumenPayload payload(LumenPayloadType::YamlNode);
+				payload.setDragAndDropSource(node);
 
 				// Component name.
 				glm::vec2 stringSize = ImGui::CalcTextSize(name.c_str());
@@ -95,20 +92,10 @@ void CircuitEditor::onImGuiRender()
 		}
 		ImGui::EndChild();
 
-		// Receive dropped files.
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				// Pass FileDropEvent to engine.
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				std::wstring wPath(path);
-				std::string sPath;
-				sPath.insert(sPath.end(), wPath.begin(), wPath.end());
-				engine->importComponent(sPath);
-			}
-			ImGui::EndDragDropTarget();
-		}
+		// Drag & drop.
+		LumenPayload payloadComp(LumenPayloadType::String);
+		payloadComp.setDragAndDropTarget();
+		if (payloadComp.hasValidData()) engine->importComponent(payloadComp.getDataString(), false);
 
 		// ------------- //
 		//  C A B L E S  //
@@ -136,13 +123,9 @@ void CircuitEditor::onImGuiRender()
 
 				}
 
-				// File drag & drop.
-				if (ImGui::BeginDragDropSource())
-				{
-					/*const wchar_t* itemPath = p.path().c_str();
-					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);*/
-					ImGui::EndDragDropSource();
-				}
+				// Drag & drop.
+				LumenPayload payload(LumenPayloadType::YamlNode);
+				payload.setDragAndDropSource(node);
 
 				// Component name.
 				glm::vec2 stringSize = ImGui::CalcTextSize(name.c_str());
@@ -156,19 +139,10 @@ void CircuitEditor::onImGuiRender()
 		}
 		ImGui::EndChild();
 
-		// Receive dropped files.
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				std::wstring wPath(path);
-				std::string sPath;
-				sPath.insert(sPath.end(), wPath.begin(), wPath.end());
-				engine->importCable(sPath);
-			}
-			ImGui::EndDragDropTarget();
-		}
+		// Drag & drop.
+		LumenPayload payloadCable(LumenPayloadType::String);
+		payloadCable.setDragAndDropTarget();
+		if (payloadCable.hasValidData()) engine->importCable(payloadCable.getDataString());
 
 		// Done with style.
 		ImGui::PopStyleVar();

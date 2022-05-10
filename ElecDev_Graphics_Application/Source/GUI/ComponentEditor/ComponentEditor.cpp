@@ -16,6 +16,7 @@
 #include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Resources/ResourceHandler.h"
 #include "Lumen.h"
+#include "GUI/LumenPayload/LumenPayload.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -81,31 +82,36 @@ void ComponentEditor::onImGuiRender()
 					sprintf_s(labelType, "##T%d", i);
 					char labelRemove[20];
 					sprintf_s(labelRemove, "Remove##%d", i++);
+
 					// Port entry in table.
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
+
 					// Name.
 					ImGui::PushItemWidth(-1);
 					if (ImGui::InputText(labelName, &port->m_label))
 						port->title->updateText(port->m_label);
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
+
 					// Type.
 					ImGui::PushItemWidth(-1);
 					int* typeval = (int*)&port->m_type;
 					ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
+
 					// Remove.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::Button(labelRemove)) {
+					if (ImGui::Button(labelRemove)) 
+					{
 						activeComponent->removePort(port);
 						ImGui::PopItemWidth();
-						break;//Stop iterating through the ports if the port vector changes.
+						// Stop iterating through the ports if the port vector changes.
+						break;
 					}
 					ImGui::PopItemWidth();
 				}
-
 				ImGui::EndTable();
 		}
 		ImGui::EndChild();
@@ -383,45 +389,30 @@ void ComponentEditor::onImGuiRender()
 			}
 			ImGui::PopStyleVar();
 			ImGui::EndChild();
-			// Receive dropped files.
-			if (ImGui::BeginDragDropTarget())
+
+			// Drag & Drop files.
+			LumenPayload payloadFiles(LumenPayloadType::String);
+			payloadFiles.setDragAndDropTarget();
+			if (payloadFiles.hasValidData())
 			{
-
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-				{
-					// Pass FileDropEvent to engine.
-					std::filesystem::path fsPath((const wchar_t*)payload->Data);
-					if (fsPath.filename().extension().string() == ".lmcb")
-					{
-						activeCable->m_cableType = fsPath.filename().stem().string();
-
-						// Load the data received from the file.
-						YAML::Node node = YAML::LoadFile(fsPath.string())["Cable"];
-						// Load color.
-						activeCable->setColour({ 
-							node["Color"][0].as<float>(), 
-							node["Color"][1].as<float>(), 
-							node["Color"][2].as<float>() , 
-							node["Color"][3].as<float>() 
-						});
-						// Load dictionary.
-						activeCable->cableDict.clear();
-						for (const auto& keyValPair : node["Dictionary"])
-						{
-							activeCable->cableDict.insert({keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>()});
-						}
-
-					}
-				}
-				ImGui::EndDragDropTarget();
+				loadDataToCable(YAML::LoadFile(payloadFiles.getDataString()), activeCable);
+				design_engine->importCable(payloadFiles.getDataString());
 			}
+
+			// Drag & Drop nodes.
+			LumenPayload payloadNode(LumenPayloadType::YamlNode);
+			payloadNode.setDragAndDropTarget();
+			if (payloadNode.hasValidData()) loadDataToCable(payloadNode.getDataYamlNode(), activeCable);
 		}
 
 		// Get the current component as the initial selection for the data selection
-		if (equipmentSelector == -1) {
-			for (int num = 0; num < numCom; num++) {
+		if (equipmentSelector == -1) 
+		{
+			for (int num = 0; num < numCom; num++) 
+			{
 				equipmentSelector = num;
-				if (componentNames[num] == activeTitleString) {
+				if (componentNames[num] == activeTitleString) 
+				{
 					break;
 				}
 			}
@@ -431,10 +422,12 @@ void ComponentEditor::onImGuiRender()
 
 		int posKeys = 0;
 
-		if (equipmentSelector < numEquip) {
+		if (equipmentSelector < numEquip) 
+		{
 			for (auto& key : numComponents)
 			{
-				if (key->titleString.c_str() == componentNames[equipmentSelector]) {
+				if (key->titleString.c_str() == componentNames[equipmentSelector]) 
+				{
 					for (auto& [key2, val] : key->dataDict)
 					{
 						possibleInformation[posKeys] = key2.c_str();
@@ -448,7 +441,8 @@ void ComponentEditor::onImGuiRender()
 		{
 			for (auto& key : numCables)
 			{
-				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {
+				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) 
+				{
 					for (auto& [key2, val] : key->cableDict)
 					{
 						possibleInformation[posKeys] = key2.c_str();
@@ -737,7 +731,8 @@ void ComponentEditor::onImGuiRender()
 					{
 						activeComponent->dataDict[buffer[ifSelector]] = ifString;
 					}
-					else {
+					else 
+					{
 						activeCable->cableDict[buffer[ifSelector]] = ifString;
 					}
 				}
@@ -761,7 +756,8 @@ void ComponentEditor::onImGuiRender()
 				ImGui::InputText("##Combine String", &combineTextString);
 				if (ImGui::Button("Insert Combine function"))
 				{
-					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) {
+					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) 
+					{
 						combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
 					}
 					combineText += combineTextString + end;
@@ -769,7 +765,8 @@ void ComponentEditor::onImGuiRender()
 					{
 						activeComponent->dataDict[buffer[combineSelector]] = combineText;
 					}
-					else {
+					else 
+					{
 						activeCable->cableDict[buffer[combineSelector]] = combineText;
 					}
 				}
@@ -784,6 +781,27 @@ void ComponentEditor::onImGuiRender()
 void ComponentEditor::onImGuiEnd()
 {
 	ImGui::End();
+}
+
+void ComponentEditor::loadDataToCable(const YAML::Node& node, Cable* cable) 
+{
+	YAML::Node cableNode = node;
+	if (cableNode["Cable"].IsDefined())
+		cableNode = cableNode["Cable"];
+
+	// Load type.
+	cable->m_cableType = cableNode["Label"].as<std::string>();
+	// Load color.
+	cable->setColour({
+		cableNode["Color"][0].as<float>(),
+		cableNode["Color"][1].as<float>(),
+		cableNode["Color"][2].as<float>() ,
+		cableNode["Color"][3].as<float>()
+		});
+	// Load dictionary.
+	cable->cableDict.clear();
+	for (const auto& keyValPair : cableNode["Dictionary"])
+		cable->cableDict.insert({ keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>() });
 }
 
 /*=======================================================================================================================================*/

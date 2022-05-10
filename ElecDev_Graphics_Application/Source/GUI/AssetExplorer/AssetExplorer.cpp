@@ -271,9 +271,8 @@ void AssetExplorer::onImGuiRender()
 					}
 					
 					// Drag & drop.
-					LumenPayload payload(LumenPayloadType::FilePath);
-					payload.setData(p.path().string());
-					payload.setDragAndDropSource();
+					LumenPayload payload(LumenPayloadType::String);
+					payload.setDragAndDropSource(p);
 				}
 
 				// ------------ //
@@ -293,9 +292,8 @@ void AssetExplorer::onImGuiRender()
 					}
 
 					// Drag & drop.
-					LumenPayload payload(LumenPayloadType::FilePath);
-					payload.setData(p.path().string());
-					payload.setDragAndDropSource();
+					LumenPayload payload(LumenPayloadType::String);
+					payload.setDragAndDropSource(p);
 				}
 
 				// ----------- //

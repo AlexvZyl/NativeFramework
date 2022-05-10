@@ -61,6 +61,26 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 	// End cables.
 	emitter << YAML::EndMap;
 
+	// Reference components.
+	emitter << YAML::Key << "Reference Components" << YAML::Value;
+	emitter << YAML::BeginMap;
+	for (auto& [name, node] : circuit->m_uniqueComponents)
+	{
+		emitter << YAML::Key << name << YAML::Value << node;
+	}
+	// End reference components.
+	emitter << YAML::EndMap;
+
+	// Reference cables.
+	emitter << YAML::Key << "Reference Cables" << YAML::Value;
+	emitter << YAML::BeginMap;
+	for (auto& [name, node] : circuit->m_uniqueCables)
+	{
+		emitter << YAML::Key << name << YAML::Value << node;
+	}
+	// End reference cables.
+	emitter << YAML::EndMap;
+
 	return emitter;
 }
 

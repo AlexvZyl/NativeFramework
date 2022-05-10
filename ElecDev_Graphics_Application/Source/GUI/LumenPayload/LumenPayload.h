@@ -4,11 +4,13 @@
 #include "imgui/imgui.h"
 #include "imgui_internal.h"
 #include "Utilities/Logger/Logger.h"
+#include <filesystem>
+#include "yaml-cpp/yaml.h"
 
 // Payload types.
 enum class LumenPayloadType 
 {
-	FilePath,
+	String,
 	YamlNode,
 };
 
@@ -18,33 +20,35 @@ public:
 
 	// Constructor.
 	LumenPayload(LumenPayloadType type);
-
-	// Set data manually.
-	void setData(void* data, size_t size);
-	void setData(const std::string& data);
-
-	// Set the payload to be dragged.
-	void setDragAndDropSource();
-
-	// Set the payload to be dragged.
-	void setDragAndDropTarget();
+	// Destructor.
+	inline ~LumenPayload() = default;
 
 	// Set the imgui cond used when calling the function.
 	void setImGuiCond(int cond);
 
-	// Get the data manually.
-	std::tuple<void*, size_t> getData();
+	// Set the data.
+	void setDragAndDropSource(void* data, size_t size);
+	void setDragAndDropSource(const char* data, size_t size);
+	void setDragAndDropSource(const std::string& data);
+	void setDragAndDropSource(const std::filesystem::directory_entry& path);
+	void setDragAndDropSource(const YAML::Node& node);
 
-	// Get the type as a string.
-	const char* getTypeCString();
+	// Set the payload as a target.
+	void setDragAndDropTarget();
 
 	// Check if the payload has valid data.
 	bool hasValidData();
 
-	// Get the data based on the type.
+	// Get the data.
+	const char* getDataCString();
 	std::string getDataString();
+	YAML::Node getDataYamlNode();
+	std::tuple<void*, size_t> getDataRaw();
 
 private:
+
+	// Get the type as a string.
+	const char* getTypeCString();
 
 	LumenPayloadType m_type;
 	void* m_dataPtr = nullptr;
