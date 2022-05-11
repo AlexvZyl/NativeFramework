@@ -348,7 +348,10 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 				if (m_activeComponent.get() == component) m_activeComponent = nullptr;
 				componentsVector.erase(componentsVector.begin() + count);
 			}
-			else count++;
+			else 
+			{
+				count++;
+			}
 		}
 	}
 }

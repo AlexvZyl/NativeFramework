@@ -193,12 +193,14 @@
     <ClCompile Include="External\implot\implot_items.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
     <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
     <ClCompile Include="Source\GUI\LumenPayload\LumenPayload.cpp" />
+    <ClCompile Include="Source\Application\LumenWindow\LumenPopupWindow.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
@@ -625,6 +627,7 @@
     <ClInclude Include="External\lua\Windows\include\luaconf.h" />
     <ClInclude Include="External\lua\Windows\include\lualib.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
@@ -632,6 +635,7 @@
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
     <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />
     <ClInclude Include="Source\GUI\LumenPayload\LumenPayload.h" />
+    <ClInclude Include="Source\Application\LumenWindow\LumenPopupWindow.h" />
     <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />

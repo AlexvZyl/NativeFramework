@@ -34,8 +34,8 @@ public:
     std::string m_type;
 
     // Keep track of imported entities to be saved with the circuit.
-    std::unordered_map<std::string, YAML::Node> m_uniqueComponents;
-    std::unordered_map<std::string, YAML::Node> m_uniqueCables;
+    std::unordered_map<std::string, YAML::Node> m_referenceComponents;
+    std::unordered_map<std::string, YAML::Node> m_referenceCables;
 
 };
 

@@ -31,13 +31,13 @@ Circuit::Circuit(const YAML::Node& node)
 	// Load reference components.
 	for (const auto& component : node["Reference Components"])
 	{
-		m_uniqueComponents.insert({ component.first.as<std::string>(), component.second });
+		m_referenceComponents.insert({ component.first.as<std::string>(), component.second });
 	}
 
 	// Load reference cables.
 	for (const auto& cable : node["Reference Cables"])
 	{
-		m_uniqueCables.insert({ cable.first.as<std::string>(), cable.second });
+		m_referenceCables.insert({ cable.first.as<std::string>(), cable.second });
 	}
 
 	// Load components.
@@ -45,7 +45,7 @@ Circuit::Circuit(const YAML::Node& node)
 	{
 		// Create the component from the node.
 		std::string componentFile = component.second["File"].as<std::string>();
-		m_components.emplace_back(std::make_shared<Component2D>(m_uniqueComponents[componentFile], this));
+		m_components.emplace_back(std::make_shared<Component2D>(m_referenceComponents[componentFile], this));
 
 		// Update component.
 		auto& currentComponent = m_components.back();

@@ -10,6 +10,7 @@
 #include "Engines/AssetViewer/AssetViewer.h"
 #include "Resources/ResourceHandler.h"
 #include "GUI/LumenPayload/LumenPayload.h"
+#include "Engines/CircuitDesigner/GUI/CircuitEditorPopup.h"
 
 //=======================================================================================================================================//
 // Circuit editor.																														 //
@@ -67,13 +68,18 @@ void CircuitEditor::onImGuiRender()
 
 			// Iterate and display components.
 			int componentCount = 0;
-			for (auto& [name, node] : engine->m_circuit->m_uniqueComponents)
+			for (auto& [name, node] : engine->m_circuit->m_referenceComponents)
 			{
 				ImGui::PushID(componentCount++);
 				// Component image.
 				if (ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
 				{
 					app.viewComponent(node);
+				}
+				if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) 
+				{
+					auto* popup = app.pushWindow<CircuitEditorPopup>(LumenDockPanel::Floating, "");
+					popup->setComponent(name);
 				}
 
 				// Drag & drop.
@@ -115,12 +121,17 @@ void CircuitEditor::onImGuiRender()
 
 			// Iterate and display the cables.
 			int cableCount = 0;
-			for (auto& [name, node] : engine->m_circuit->m_uniqueCables)
+			for (auto& [name, node] : engine->m_circuit->m_referenceCables)
 			{
 				ImGui::PushID(cableCount++);
 				if (ImGui::ImageButton((void*)s_cableIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
 				{
 
+				}
+				if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+				{
+					auto* popup = app.pushWindow<CircuitEditorPopup>(LumenDockPanel::Floating, "");
+					popup->setCable(name);
 				}
 
 				// Drag & drop.
@@ -148,7 +159,6 @@ void CircuitEditor::onImGuiRender()
 		ImGui::PopStyleVar();
 		ImGui::PopStyleColor();
 	}
-
 	else 
 	{
 		ImGui::Text("No active circuit.");

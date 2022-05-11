@@ -15,12 +15,12 @@ void LumenPayload::setDragAndDropSource(void* data, size_t size)
 
 void LumenPayload::setDragAndDropSource(const char* data, size_t size)
 {
-	setDragAndDropSource((void*)data, size);
+	setDragAndDropSource((void*)data, size+1);
 }
 
 void LumenPayload::setDragAndDropSource(const std::string& data) 
 {
-	setDragAndDropSource(data.c_str(), data.size() + 1);
+	setDragAndDropSource(data.c_str(), data.size());
 }
 
 void LumenPayload::setDragAndDropSource(const std::filesystem::directory_entry& path)

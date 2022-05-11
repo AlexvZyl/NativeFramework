@@ -139,6 +139,8 @@
     <ClCompile Include="Source\Application\LumenWindow\LumenWindow.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
     <ClCompile Include="Source\GUI\LumenPayload\LumenPayload.cpp" />
+    <ClCompile Include="Source\Application\LumenWindow\LumenPopupWindow.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -830,6 +832,8 @@
     <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.h" />
     <ClInclude Include="Source\GUI\LumenPayload\LumenPayload.h" />
+    <ClInclude Include="Source\Application\LumenWindow\LumenPopupWindow.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">
