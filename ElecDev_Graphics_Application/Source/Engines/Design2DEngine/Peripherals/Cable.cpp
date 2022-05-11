@@ -141,18 +141,13 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	// Load all of the nodes belonging to the cable.
 	std::vector<glm::vec2> nodeVector;
 	nodeVector.reserve(node["Nodes"].size()+2);
-	if (startPort) {
-		nodeVector.emplace_back(startPort->centre);
-	}
 	for (const auto& nodeIt : node["Nodes"])
 	{
 		// Add to node vector.
 		glm::vec2 node = { nodeIt.second[0].as<float>(), nodeIt.second[1].as<float>() };
 		nodeVector.emplace_back(node);
 	}
-	if (endPort) {
-		nodeVector.emplace_back(endPort->centre);
-	}
+	
 	// Call constructor with data.
 	constructCable(startPort, nodeVector, endPort);
 
