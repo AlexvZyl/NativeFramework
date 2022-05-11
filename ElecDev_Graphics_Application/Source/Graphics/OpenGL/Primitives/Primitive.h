@@ -137,6 +137,9 @@ public:
 	// Getting nearest vertex.
 	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec3& position);
 	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec2& position);
+	// Getting nearest vertex index.
+	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec3& position);
+	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec2& position);
 	
 	// --------------------- //
 	//  A T T R I B U T E S  //

@@ -30,7 +30,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				setActiveVertex(screenCoords);
 
 			}
-			if (!m_activeVertex) 
+			if (m_activeVertexIdx == -1) 
 			{
 				//If we did not select a vertex, then we can check for a new primitive selection
 				setActivePrimitives(m_currentEntityID);
@@ -254,22 +254,22 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 		{
 			// User is dragging a component.
 			glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
-			if (m_activeVertex) 
+			if (m_activeVertexIdx != -1) 
 			{
 				// First check if we should move a vertex
 				// We need to move a vertex
 				if (m_activePoly) 
 				{
-					m_activePoly->translateVertex(m_activeVertex, translation);
+					m_activePoly->translateVertexAtIndex(m_activeVertexIdx, translation);
 
 					//PolyLine fix: If we move a polyLine vertex, 
 					//the vertices are rearanged in a undetermined fashion. We therefore need to fix m_activeVertex before proceeding.
 					//We could check and only do this for polylines, but for now let's just reset the active vertex every time.
-					setActiveVertex(screenCoords);
+					//setActiveVertex(screenCoords);
 				}
 				else if (m_activeLine) 
 				{
-					m_activeLine->translateVertex(m_activeVertex, translation);
+					m_activeLine->translateVertexAtIndex(m_activeVertexIdx, translation);
 				}
 			}
 			else 
@@ -318,10 +318,19 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activePoly)		   m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
 		if (m_activeLine)		   m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
 		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
-		if (m_activeVertex) 
+		if (m_activeVertexIdx != -1) 
 		{
-			if (m_activePoly)	   m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
-			else if (m_activeLine) m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			if (m_activePoly) {
+				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+				if (polyline) {
+					//Polygon is clear, so we index with m_vertices (nodes)
+					polyline->translateToVertexAtIndex(m_activeVertexIdx, polyline->m_vertices.at(m_activeVertexIdx));
+				}
+				else {
+					m_activePoly->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
+				}
+			}
+			else if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
 		}
 		if (m_activePort)		   m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
 	}

@@ -194,13 +194,14 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 {
-	m_activeVertex = nullptr;
+	//m_activeVertex = nullptr;
+	m_activeVertexIdx = -1;
 	if (m_activePoly) 
 	{
-		auto [vertexPtr, distance] = m_activePoly->getNearestVertex(coords);
+		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
 		if (distance < clickTol) 
 		{
-			m_activeVertex = vertexPtr;
+			m_activeVertexIdx = vertexIdx;
 		}
 	}
 	/*if (m_activeCircle) {
@@ -211,10 +212,10 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	}*/
 	else if (m_activeLine) 
 	{
-		auto [vertexPtr, distance] = m_activeLine->getNearestVertex(coords);
+		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIdx(coords);
 		if (distance < clickTol) 
 		{
-			m_activeVertex = vertexPtr;
+			m_activeVertexIdx = vertexIdx;
 		}
 	}
 }
@@ -244,7 +245,7 @@ void ComponentDesigner::deleteActivePrimitive()
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
 	m_activePort = nullptr;
-	m_activeVertex = nullptr;
+	m_activeVertexIdx = -1;
 	m_activeText = nullptr;
 }
 
@@ -276,7 +277,10 @@ void ComponentDesigner::renderDesignPalette()
 	ImGui::Separator();
 	ImGui::SameLine();
 
+	glm::vec4 colour = ImGui::GetStyle().Colors[ImGuiCol_FrameBg];
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, { colour.r * 2, colour.g * 2, colour.b * 2, colour.a });
 	ImGui::Checkbox("Filled", &drawFilled);
+	ImGui::PopStyleColor();
 
 	ImGui::SameLine();
 	ImGui::Separator();

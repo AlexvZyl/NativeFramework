@@ -283,7 +283,37 @@ std::tuple<VertexType*, float> Primitive<VertexType>::getNearestVertex(const glm
 template<typename VertexType>
 std::tuple<VertexType*, float> Primitive<VertexType>::getNearestVertex(const glm::vec2& position)
 {
+
+	//Needs fixing!! We should calculate the distance in the XY plane, not in 3-space.
 	return getNearestVertex({position.x, position.y, 0.f});
+}
+
+template<typename VertexType>
+std::tuple<unsigned, float> Primitive<VertexType>::getNearestVertexIdx(const glm::vec3& position)
+{
+	float minDistance = 0.f;
+	unsigned closestVertexIdx;
+	// Calculate the first vertex' distance.
+	minDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[m_vertexBufferPos].data.position));
+	closestVertexIdx = -1;
+	// Find if any of the vertices are closer.
+	for (int i = m_vertexBufferPos + 1; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		float currentDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[i].data.position));
+		if (currentDistance > minDistance)
+			continue;
+		closestVertexIdx = i-m_vertexBufferPos;
+		minDistance = currentDistance;
+	}
+	// Return the closes vertex, alongside the distance in world coordinates.
+	return { closestVertexIdx, minDistance };
+}
+
+template<typename VertexType>
+std::tuple<unsigned, float> Primitive<VertexType>::getNearestVertexIdx(const glm::vec2& position)
+{
+	//Needs fixing!! We should calculate the distance in the XY plane, not in 3-space.
+	return getNearestVertexIdx({ position.x, position.y, 0.f });
 }
 
 //=============================================================================================================================================//

@@ -143,7 +143,7 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec3 translation)
 
 void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 {
-	float tol = m_thickness;
+	float tol = m_thickness*2;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
 			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;

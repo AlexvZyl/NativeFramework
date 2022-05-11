@@ -45,7 +45,7 @@ public:
 	virtual void enableOutline() override;
 	virtual void disableOutline() override;
 
-	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec2& position);
+	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec2& position) override;
 
 protected:
 

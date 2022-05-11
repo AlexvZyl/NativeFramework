@@ -26,7 +26,8 @@ public:
     Circle* m_activeCircle;
     Text* m_activeText;
     std::shared_ptr<Port> m_activePort;
-    VertexData* m_activeVertex;
+    //VertexData* m_activeVertex;
+    unsigned m_activeVertexIdx = -1;
     PortType next_port_type = PortType::PORT_INOUT;
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
