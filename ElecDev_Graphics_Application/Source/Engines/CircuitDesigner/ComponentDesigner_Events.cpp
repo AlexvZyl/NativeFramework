@@ -55,8 +55,6 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			{
 				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
-			// Example!
-			auto [vertexPtr, distance] = m_activePoly->getNearestVertex(screenCoords);
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
@@ -116,7 +114,16 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		// Move the back vertex.
 		if (m_activePoly) 
 		{
-			m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount-1, getNearestGridVertex(screenCoords));
+			//hacky check to see if polygon is filled
+			PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+			if (polyline) {
+				//Polygon is clear, so we index with m_vertices (nodes)
+				polyline->translateToVertexAtIndex(polyline->m_vertices.size()-1, getNearestGridVertex(screenCoords));
+			}
+			else {
+				//Polygon is filled, so we index like this (using the vertex count)
+				m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount - 1, getNearestGridVertex(screenCoords));
+			}
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
@@ -254,6 +261,11 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 				if (m_activePoly) 
 				{
 					m_activePoly->translateVertex(m_activeVertex, translation);
+
+					//PolyLine fix: If we move a polyLine vertex, 
+					//the vertices are rearanged in a undetermined fashion. We therefore need to fix m_activeVertex before proceeding.
+					//We could check and only do this for polylines, but for now let's just reset the active vertex every time.
+					setActiveVertex(screenCoords);
 				}
 				else if (m_activeLine) 
 				{

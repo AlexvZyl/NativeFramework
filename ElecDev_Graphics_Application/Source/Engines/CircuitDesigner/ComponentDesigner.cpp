@@ -252,8 +252,7 @@ void ComponentDesigner::renderDesignPalette()
 {
 	if (ImGui::MenuItem("Polygon", "P", &m_polygon))
 	{
-		clearStates();
-		m_polygon = true;
+		switchState(CompDesignState::DRAW_POLY);
 	}
 
 	ImGui::SameLine();
@@ -262,8 +261,7 @@ void ComponentDesigner::renderDesignPalette()
 
 	if (ImGui::MenuItem("Lines", "L", &m_lines))
 	{
-		clearStates();
-		m_lines = true;
+		switchState(CompDesignState::DRAW_LINE);
 	}
 
 	if(ImGui::BeginMenu("Line Settings..."))
@@ -278,10 +276,15 @@ void ComponentDesigner::renderDesignPalette()
 	ImGui::Separator();
 	ImGui::SameLine();
 
+	ImGui::Checkbox("Filled", &drawFilled);
+
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+
 	if (ImGui::MenuItem("Ports", "", &m_lines))
 	{
-		clearStates();
-		m_lines = true;
+		switchState(CompDesignState::PLACE_PORT);
 	}
 
 	ImGui::SameLine();
@@ -290,8 +293,7 @@ void ComponentDesigner::renderDesignPalette()
 
 	if (ImGui::MenuItem("Delete", "Del", &m_delete))
 	{
-		clearStates();
-		m_ports = true;
+		if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
 	}
 
 	if (ImGui::MenuItem("Color Editor"))
