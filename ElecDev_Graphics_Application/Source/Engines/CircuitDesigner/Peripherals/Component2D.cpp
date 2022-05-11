@@ -93,8 +93,8 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		componentNode = componentNode["Component"];
 
 	// General data.
-	borderLayerOffset = componentNode["Border layer offset"].as<float>();
-	m_internalCircuit = componentNode["Internal circuit"].as<std::string>();
+	borderLayerOffset = componentNode["Border Layer Offset"].as<float>();
+	m_internalCircuit = componentNode["Internal Circuit"].as<std::string>();
 
 	// The data dictionary.
 	YAML::Node dictNode = componentNode["Dictionary"];
@@ -131,9 +131,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	}
 
 	titleString = title->m_string;
-
 	equipType = componentNode["Equipment Type"].as<std::string>();
-
 	enableOutline();
 }
 

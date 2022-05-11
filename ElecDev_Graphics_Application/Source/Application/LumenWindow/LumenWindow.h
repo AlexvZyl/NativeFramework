@@ -97,6 +97,7 @@ public:
 
 private:
 	friend class Application;
+	friend class EngineCore;
 	// Focus the window.
 	// This function notifies the app of a focus change.
 	void focus();

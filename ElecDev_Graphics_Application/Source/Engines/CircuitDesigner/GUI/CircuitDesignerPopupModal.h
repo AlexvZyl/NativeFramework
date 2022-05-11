@@ -24,6 +24,8 @@ public:
 
 	bool m_deleteComponents = false;
 	bool m_deleteCables = false;
+	bool m_yamlNode = false;
+	YAML::Node m_node;
 	int m_entityCount = 0;
 	std::string m_entity;
 

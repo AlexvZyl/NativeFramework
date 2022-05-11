@@ -1002,7 +1002,6 @@
     <None Include="Source\External\GLFW\Libraries\glfw3.dll" />
     <None Include="Source\DOCS.md" />
     <None Include="Source\Graphics\OpenGL\README.md" />
-    <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.json" />
     <None Include="Source\Resources\Fonts\Arial-Normal-2048\Arial-Normal-2048.json" />

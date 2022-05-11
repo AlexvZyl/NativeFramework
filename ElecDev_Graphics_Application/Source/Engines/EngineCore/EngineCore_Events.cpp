@@ -40,8 +40,8 @@ void EngineCore::onEvent(const Event& event)
 	else if (event.isType(EventType_Notify))			{ onNotifyEventForce(event.cast<NotifyEvent>()); }
 
 	// File events.
-	else if (event.isType(EventType_FileDrop))			{ onFileDropEvent(event.cast<FileDropEvent>()); }
-	else if (event.isType(EventType_YamlNodeDrop))		{ onYamlNodeDropEvent(event.cast<YamlNodeDropEvent>()); }
+	else if (event.isType(EventType_FileDrop))			{ onFileDropEventForce(event.cast<FileDropEvent>()); }
+	else if (event.isType(EventType_YamlNodeDrop))		{ onYamlNodeDropEventForce(event.cast<YamlNodeDropEvent>()); }
 
 	// Event unhandled.
 	else LUMEN_LOG_WARN("No handler for event.", "Engine Core");
@@ -78,7 +78,7 @@ void EngineCore::onDefocusEventForce(const NotifyEvent& event)
 void EngineCore::onHoverEventForce(const NotifyEvent& event) 
 {
 	m_isHovered = true;
-	if(m_scene->m_grid->m_helperCircleEnabled)
+	if (getScene().getGrid().m_helperCircleEnabled)
 		m_scene->m_grid->visibleHelperCircle();
 	onHoverEvent(event);
 }
@@ -86,7 +86,7 @@ void EngineCore::onHoverEventForce(const NotifyEvent& event)
 void EngineCore::onDehoverEventForce(const NotifyEvent& event) 
 {
 	m_isHovered = false;
-	m_scene->m_grid->hideHelperCircle();
+	getScene().getGrid().hideHelperCircle();
 	onDehoverEvent(event);
 }
 
@@ -101,8 +101,21 @@ void EngineCore::onNotifyEventForce(const NotifyEvent& event)
 
 void EngineCore::onMouseMoveEventForce(const MouseMoveEvent& event)
 {
-	getScene().getGrid().updateHelperCircle(pixelToWorldCoords(getMouseLocalPosition()));
+	if(getScene().getGrid().m_helperCircleEnabled)
+		getScene().getGrid().updateHelperCircle(pixelToWorldCoords(getMouseLocalPosition()));
 	onMouseMoveEvent(event);
+}
+
+void EngineCore::onFileDropEventForce(const FileDropEvent& event) 
+{
+	m_parentWindow->focus();
+	onFileDropEvent(event);
+}
+
+void EngineCore::onYamlNodeDropEventForce(const YamlNodeDropEvent& event) 
+{
+	m_parentWindow->focus();
+	onYamlNodeDropEvent(event);
 }
 
 //==============================================================================================================================================//

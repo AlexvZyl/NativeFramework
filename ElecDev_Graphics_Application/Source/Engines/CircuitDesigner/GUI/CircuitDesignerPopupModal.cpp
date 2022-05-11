@@ -41,18 +41,45 @@ void CircuitDesignerPopupModal::overWriteModal()
 		auto* engine = Lumen::getApp().getActiveEngine<CircuitDesigner>();
 		if (engine)
 		{
-			if (m_componentOverwrite)
+			// --------- //
+			//  F I L E  //
+			// --------- //
+
+			if (!m_yamlNode)
 			{
-				engine->m_circuit->m_referenceComponents[m_entityPath.filename().string()] = YAML::LoadFile(m_entityPath.string())["Component"];
-				if (m_mousePosition.x != -1.f)
-					engine->loadAndPlaceComponent(m_entityPath, m_mousePosition);
+				if (m_componentOverwrite)
+				{
+					engine->m_circuit->m_referenceComponents[m_entityPath.filename().string()] = YAML::LoadFile(m_entityPath.string())["Component"];
+					if (m_mousePosition.x != -1.f)
+						engine->loadAndPlaceComponent(m_entityPath, m_mousePosition);
+				}
+				else if (m_cableOverwrite)
+				{
+					YAML::Node node = YAML::LoadFile(m_entityPath.string());
+					engine->m_circuit->m_referenceCables[m_entityPath.filename().string()] = node["Cable"];;
+					if (m_mousePosition.x != -1.f)
+						engine->loadDataToCable(node, engine->m_activeCable.get());
+				}
 			}
-			else if (m_cableOverwrite)
+
+			// ------------------- //
+			//  Y A M L   N O D E  //
+			// ------------------- //
+
+			else if (m_yamlNode)
 			{
-				YAML::Node node = YAML::LoadFile(m_entityPath.string());
-				engine->m_circuit->m_referenceCables[m_entityPath.filename().string()] = node["Cable"];;
-				if (m_mousePosition.x != -1.f)
-					engine->loadDataToCable(node, engine->m_activeCable.get());
+				if (m_componentOverwrite) 
+				{
+					engine->m_circuit->m_referenceComponents[m_entity] = m_node;
+					if (m_mousePosition.x != -1.f)
+						engine->loadAndPlaceComponent(m_node, m_mousePosition);
+				}
+				else if (m_cableOverwrite)
+				{
+					engine->m_circuit->m_referenceCables[m_entity] = m_node;;
+					if (m_mousePosition.x != -1.f)
+						engine->loadDataToCable(m_node, engine->m_activeCable.get());
+				}
 			}
 		}
 		closeWindow();
@@ -63,16 +90,21 @@ void CircuitDesignerPopupModal::overWriteModal()
 
 void CircuitDesignerPopupModal::deleteModal() 
 {
-	std::string type;
-	if (m_deleteCables) type = "cables";
-	if (m_deleteComponents) type = "components";
-	std::string msg = "You are about to delete " + std::to_string(m_entityCount) + " " + type + " along with the reference.";
+	std::string msg;
+	if (m_deleteCables)
+	{
+		msg = "You are about to clear " + std::to_string(m_entityCount) + " cables and delete the reference.";
+	}
+	if (m_deleteComponents)
+	{
+		msg = "You are about to delete " + std::to_string(m_entityCount) + " components along with the reference.";
+	}
 	ImGui::Text(msg.c_str());
 	ImGui::Text("Are you sure?");
-	if (ImGui::Button("Delete"))
+	if (ImGui::Button("Continue"))
 	{
 		auto* engine = Lumen::getApp().getActiveEngine<CircuitDesigner>();
-		if (m_deleteComponents) engine->removeImportedComponent(m_entity, false);
+		if (m_deleteComponents)  engine->removeImportedComponent(m_entity, false);
 		else if (m_deleteCables) engine->removeImportedCable(m_entity, false);
 		closeWindow();
 	}

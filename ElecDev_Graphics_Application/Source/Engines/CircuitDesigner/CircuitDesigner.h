@@ -86,17 +86,16 @@ public:
 	virtual void setNameOfElements(const std::string& name) override;
 	void createCircuit(const std::filesystem::path& path);
 	void loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos);
-	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);\
+	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);
 	void loadDataToCable(const YAML::Node& node, Cable* cable);
 	int getComponentCount(const std::string& type);
 	int getCableCount(const std::string& type);
-	void deleteComponentsOfType(const std::string& type);
-	//void deleteCablesOfType(const std::string& type);
 	void deleteComponent(Component2D* component);
-	//void deleteCable(Cable* component);
-	bool importComponent(const std::filesystem::path& name, bool loadOnImport = true);
+	void importComponent(const std::filesystem::path& name, bool loadOnImport = true);
+	void importComponent(const YAML::Node& node, bool loadOnImport = true);
+	void importCable(const std::filesystem::path& name, bool loadOnImport = true);
+	void importCable(const YAML::Node& node, bool loadOnImport = true);
 	void removeImportedComponent(const std::string& component, bool checkCount = true);
-	bool importCable(const std::filesystem::path& name, bool loadOnImport = true);
 	void removeImportedCable(const std::string& cable, bool checkCount = true);
 
 private:
