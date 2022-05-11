@@ -73,18 +73,19 @@ public:
 		m_engine->onRender();
 		if (!m_textureID) return;
 		ImGui::Image(m_textureID, { m_contentRegionSize.x, m_contentRegionSize.y }, ImVec2(0, 1), ImVec2(1, 0));
+		// Check if image is hovered.
+		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
+		else						m_engine->m_isHovered = false;
 
 		// Drag & Drop files.
 		LumenPayload payloadFile(LumenPayloadType::String);
 		payloadFile.setDragAndDropTarget();
-		if (payloadFile.hasValidData())
-			m_engine->onEvent(FileDropEvent(payloadFile.getDataString(), EventType_FileDrop));
+		if (payloadFile.hasValidData()) m_engine->onEvent(FileDropEvent(payloadFile.getDataString(), EventType_FileDrop));
 
 		// Drag & Drop nodes.
 		LumenPayload payloadNode(LumenPayloadType::YamlNode);
 		payloadNode.setDragAndDropTarget();
-		if (payloadNode.hasValidData())
-			m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
+		if (payloadNode.hasValidData()) m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 	}
 
 	inline virtual void onImGuiEnd() override 
@@ -198,6 +199,14 @@ public:
 	{
 		LumenWindow::onWindowResizeEvent(event);
 		m_engine->onWindowResizeEventForce(event);
+	}
+
+	// Override to take engine hoevered into account.
+	// This might be a bit buggy, but will work for now.
+	// (The window will only register a hover on an engine space hover)
+	inline virtual bool isHovered() const override 
+	{
+		return LumenWindow::isHovered() && m_engine->m_isHovered;
 	}
 
 private:
