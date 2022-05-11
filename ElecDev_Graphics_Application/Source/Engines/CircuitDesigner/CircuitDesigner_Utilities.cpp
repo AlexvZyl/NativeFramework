@@ -32,7 +32,7 @@ void CircuitDesigner::ComponentPlaceMode(glm::vec2 screenCoords)
 void CircuitDesigner::ComponentPlaceMode()
 {
 	glm::vec2 pos = getMouseLocalPosition();
-	pos = pixelToWorldCoords(pos);
+	pos = pixelToWorldCoords(pos); 
 	ComponentPlaceMode(pos);
 }
 
@@ -218,7 +218,7 @@ bool operator==(std::shared_ptr<Cable> cableSP, Cable* cableRP)
 	return cableSP.get() == cableRP;
 }
 
-void CircuitDesigner::importComponent(const std::filesystem::path& path, bool loadOnImport)
+void CircuitDesigner::importComponent(const std::filesystem::path& path, bool loadOnImport, bool checkForOverwrite)
 {
 	// Check if it is a component file.
 	if (path.filename().extension().string() != ".lmcp")
@@ -228,7 +228,7 @@ void CircuitDesigner::importComponent(const std::filesystem::path& path, bool lo
 
 	// Add component if it does not exist.
 	std::string compName = path.filename().string();
-	if (m_circuit->m_referenceComponents.find(compName) == m_circuit->m_referenceComponents.end())
+	if (!checkForOverwrite || m_circuit->m_referenceComponents.find(compName) == m_circuit->m_referenceComponents.end())
 	{
 		m_circuit->m_referenceComponents.insert({ compName, YAML::LoadFile(path.string())["Component"] });
 		if (loadOnImport)  loadAndPlaceComponent(path, getMouseLocalPosition());
@@ -244,7 +244,7 @@ void CircuitDesigner::importComponent(const std::filesystem::path& path, bool lo
 	}
 }
 
-void CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOnImport)
+void CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOnImport, bool checkForOverwrite)
 {
 	// Check if it is a component file.
 	if (path.filename().extension().string() != ".lmcb")
@@ -254,7 +254,7 @@ void CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOn
 
 	// Add cable if it does not exist.
 	std::string cableName = path.filename().string();
-	if (m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
+	if (!checkForOverwrite || m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
 	{
 		m_circuit->m_referenceCables.insert({ cableName, YAML::LoadFile(path.string())["Cable"] });
 		if(loadOnImport) loadDataToCable(YAML::LoadFile(path.string()), m_activeCable.get());
@@ -270,7 +270,7 @@ void CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOn
 	}
 }
 
-void CircuitDesigner::importComponent(const YAML::Node& node, bool loadOnImport)
+void CircuitDesigner::importComponent(const YAML::Node& node, bool loadOnImport, bool checkForOverwrite)
 {
 	YAML::Node componentNode = node;
 	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
@@ -284,7 +284,7 @@ void CircuitDesigner::importComponent(const YAML::Node& node, bool loadOnImport)
 
 	// Add component if it does not exist.
 	std::string componentName = filename.filename().string();
-	if (m_circuit->m_referenceComponents.find(componentName) == m_circuit->m_referenceComponents.end())
+	if (!checkForOverwrite || m_circuit->m_referenceComponents.find(componentName) == m_circuit->m_referenceComponents.end())
 	{
 		m_circuit->m_referenceComponents.insert({ componentName, componentNode });
 		if (loadOnImport) loadAndPlaceComponent(componentNode, getMouseLocalPosition());
@@ -302,7 +302,7 @@ void CircuitDesigner::importComponent(const YAML::Node& node, bool loadOnImport)
 	}
 }
 
-void CircuitDesigner::importCable(const YAML::Node& node, bool loadOnImport)
+void CircuitDesigner::importCable(const YAML::Node& node, bool loadOnImport, bool checkForOverwrite)
 {
 	YAML::Node cableNode = node;
 	if (cableNode["Cable"].IsDefined()) cableNode = cableNode["Cable"];
@@ -316,7 +316,7 @@ void CircuitDesigner::importCable(const YAML::Node& node, bool loadOnImport)
 
 	// Add cable if it does not exist.
 	std::string cableName = filename.filename().string();
-	if (m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
+	if (!checkForOverwrite || m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
 	{
 		m_circuit->m_referenceCables.insert({ cableName, cableNode });
 		if (loadOnImport) loadDataToCable(cableNode, m_activeCable.get());

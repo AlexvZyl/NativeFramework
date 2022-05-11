@@ -48,6 +48,7 @@ public:
 	//  V A R I A B L E S //
 	// ------------------ //
 
+	inline static CircuitDesigner* s_engineUsedByCircuitEditor = nullptr;
 	designState designerState = ENTITY_SELECT;
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
@@ -91,10 +92,10 @@ public:
 	int getComponentCount(const std::string& type);
 	int getCableCount(const std::string& type);
 	void deleteComponent(Component2D* component);
-	void importComponent(const std::filesystem::path& name, bool loadOnImport = true);
-	void importComponent(const YAML::Node& node, bool loadOnImport = true);
-	void importCable(const std::filesystem::path& name, bool loadOnImport = true);
-	void importCable(const YAML::Node& node, bool loadOnImport = true);
+	void importComponent(const std::filesystem::path& name, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importComponent(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importCable(const std::filesystem::path& name, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importCable(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
 	void removeImportedComponent(const std::string& component, bool checkCount = true);
 	void removeImportedCable(const std::string& cable, bool checkCount = true);
 

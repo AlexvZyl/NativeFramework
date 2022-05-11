@@ -303,7 +303,9 @@ void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
 	if (node["Filename"].IsDefined())
 	{
 		std::filesystem::path file(node["Filename"].as<std::string>());
-		if (file.extension() == ".lmcp") importComponent(node);
+		bool checkForOverwrite = true;
+		if (CircuitDesigner::s_engineUsedByCircuitEditor == this) checkForOverwrite = false;
+		if (file.extension() == ".lmcp") importComponent(node, true, checkForOverwrite);
 	}
 }
 

@@ -35,6 +35,7 @@ void CircuitEditor::onImGuiRender()
 	Application& app = Lumen::getApp();
 	CircuitDesigner* engine = app.getActiveEngine<CircuitDesigner>();
 	AssetViewer* assetViewerEngine = app.getAssetViewerEngine();
+	CircuitDesigner::s_engineUsedByCircuitEditor = engine;
 
 	if(engine)
 	{

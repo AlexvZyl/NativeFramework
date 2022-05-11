@@ -58,9 +58,9 @@ void main()
     // Calculate distance and fill circle with white
     float distance = 1.0 - length(Input.LocalPosition);
     float circleAlpha = smoothstep(0.0, Input.Fade, distance);
+    circleAlpha *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
     if (circleAlpha < 0.5)  //  The 0.5 value should change based on the fade value of the circle.
         discard;            //  If not the fade does not work properly.
-    circleAlpha *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
 
     // Set output color
     o_color = Input.Color;

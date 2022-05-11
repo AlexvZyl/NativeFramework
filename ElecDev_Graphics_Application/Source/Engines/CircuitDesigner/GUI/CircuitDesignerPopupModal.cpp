@@ -23,13 +23,27 @@ void CircuitDesignerPopupModal::onImGuiRender()
 void CircuitDesignerPopupModal::overWriteModal() 
 {
 	std::string msg;
-	if (m_componentOverwrite)
+	if (!m_yamlNode)
 	{
-		msg = "You are about to overwrite the reference component '" + m_entityPath.filename().string() + "'.";
+		if (m_componentOverwrite)
+		{
+			msg = "You are about to overwrite the reference component '" + m_entityPath.filename().string() + "'.";
+		}
+		else if (m_cableOverwrite)
+		{
+			msg = "You are about to overwrite the reference cable '" + m_entityPath.filename().string() + "'.";
+		}
 	}
-	else if (m_cableOverwrite)
+	else if (m_yamlNode)
 	{
-		msg = "You are about to overwrite the reference cable '" + m_entityPath.filename().string() + "'.";
+		if (m_componentOverwrite)
+		{
+			msg = "You are about to overwrite the reference component '" + m_entity + "'.";
+		}
+		else if (m_cableOverwrite)
+		{
+			msg = "You are about to overwrite the reference cable '" + m_entity + "'.";
+		}
 	}
 
 	ImGui::Text(msg.c_str());
