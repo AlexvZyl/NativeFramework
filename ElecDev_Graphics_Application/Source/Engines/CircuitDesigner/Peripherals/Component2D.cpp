@@ -84,10 +84,13 @@ Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	moveTo(centreCoords);
 }
 
-Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
+Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	: Entity(EntityType::COMPONENT, parent)
-{	
-	YAML::Node componentNode = YAML::LoadFile(path.string())["Component"];
+{
+	// Ensure the node is valid.
+	YAML::Node componentNode = node;
+	if (componentNode["Component"].IsDefined())
+		componentNode = componentNode["Component"];
 
 	// General data.
 	borderLayerOffset = componentNode["Border layer offset"].as<float>();
@@ -95,9 +98,9 @@ Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 
 	// The data dictionary.
 	YAML::Node dictNode = componentNode["Dictionary"];
-	for (const auto& node : dictNode) 
+	for (const auto& node : dictNode)
 	{
-		dataDict.insert({node.first.as<std::string>(), node.second.as<std::string>()});
+		dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 	}
 
 	// Add the title.
@@ -116,7 +119,7 @@ Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 	}
 
 	// Add circles.
-	for (const auto& circle : componentNode["Circles"]) 
+	for (const auto& circle : componentNode["Circles"])
 	{
 		m_circles.push_back(Renderer::addCircle2D(circle.second, this));
 	}
@@ -134,20 +137,16 @@ Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 	enableOutline();
 }
 
+Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
+	: Component2D(YAML::LoadFile(path.string())["Component"], parent)
+{}
+
 Component2D::~Component2D() 
 {
-	//Renderer::remove(shape);
-	//Renderer::remove(border);
 	Renderer::remove(title);
-	for (auto circle : m_circles) {
-		Renderer::remove(circle);
-	}
-	for (auto line : m_lines) {
-		Renderer::remove(line);
-	}
-	for (auto poly : m_polygons) {
-		Renderer::remove(poly);
-	}
+	for (auto circle : m_circles) Renderer::remove(circle);
+	for (auto line : m_lines)     Renderer::remove(line);
+	for (auto poly : m_polygons)  Renderer::remove(poly);
 }
 
 //=============================================================================================================================================//
@@ -158,49 +157,15 @@ void Component2D::moveTo(const glm::vec2& pointerPos)
 {
 	glm::vec2 translation = pointerPos - centre;
 	move(translation);
-	/*
-	//shape->translateTo(pointerPos);
-	//border->translateTo(pointerPos);
-	glm::vec2 titleDest = pointerPos + titleOffset;
-	title->translateTo(titleDest);
-
-	for (auto poly : m_polygons) {
-		poly->translateTo(pointerPos);
-	}
-	for (auto line : m_lines) {
-		line->translateTo(pointerPos);
-	}
-	for (auto circ : m_circles) {
-		circ->translateTo(pointerPos);
-	}
-
-	for (std::shared_ptr port : ports) {
-		port->move(pointerPos - port->centre);
-	}
-	
-	centre = glm::vec2(pointerPos[0], pointerPos[1]);
-	*/
 }
 
 void Component2D::move(const glm::vec2& translation)
 {
-	//shape->translate(translation);
-	//border->translate(translation);
 	title->translate(translation);
-	for (auto poly : m_polygons) {
-		poly->translate(translation);
-	}
-	for (auto line : m_lines) {
-		line->translate(translation);
-	}
-	for (auto circ : m_circles) {
-		circ->translate(translation);
-	}
-
-	for (std::shared_ptr port : ports) {
-		port->move(translation);
-	}
-	
+	for (auto poly : m_polygons)	poly->translate(translation);
+	for (auto line : m_lines)		line->translate(translation);
+	for (auto circ : m_circles)	    circ->translate(translation);
+	for (auto& port : ports)		port->move(translation);
 	centre += translation;
 }
 
@@ -209,35 +174,18 @@ void Component2D::place(const glm::vec2& pos)
 	// Ensure the component is at the desired position.
 	moveTo(pos);
 	setLayer(0.0f);
-	//shape->setColor(shapeColour);
 	title->setColor(titleColour);
-	for (auto poly : m_polygons) {
-		poly->setColor(shapeColour);
-	}
-	for (auto circ : m_circles) {
-		circ->setColor(shapeColour);
-	}
-	// Move to placement layer.
+	for (auto poly : m_polygons) poly->setColor(shapeColour);
+	for (auto circ : m_circles)  circ->setColor(shapeColour);
 }
 
 void Component2D::setLayer(float layer)
 {
-	//shape->setLayer(layer);
-	//border->setLayer(layer + borderLayerOffset);
 	title->setLayer(layer + borderLayerOffset);
-	for (auto poly : m_polygons) {
-		poly->setLayer(layer);
-	}
-	for (auto line : m_lines) {
-		line->setLayer(layer);
-	}
-	for (auto circ : m_circles) {
-		circ->setLayer(layer);
-	}
-	for (std::shared_ptr port : ports) {
-		port->setLayer(layer + portLayerOffset);
-	}
-	
+	for (auto poly : m_polygons)  poly->setLayer(layer);
+	for (auto line : m_lines)	  line->setLayer(layer);
+	for (auto circ : m_circles)   circ->setLayer(layer);
+	for (auto& port : ports)	  port->setLayer(layer + portLayerOffset);
 	componentLayer = layer;
 }
 
@@ -249,69 +197,35 @@ void Component2D::setContext(GUIState* guiState)
 void Component2D::enableOutline()
 {
 	m_highlighted = true;
-
 	title->enableOutline();
-
-	for (auto poly : m_polygons) 
-	{
-		poly->enableOutline();
-	}
-
-	for (auto line : m_lines) 
-	{
-		line->enableOutline();
-	}
-
-	for (auto circ : m_circles) 
-	{
-		circ->enableOutline();
-	}
-	
-	for (std::shared_ptr port : ports) 
-	{
-		port->enableOutline();
-	}
+	for (auto poly : m_polygons)  poly->enableOutline();
+	for (auto line : m_lines)	  line->enableOutline();
+	for (auto circ : m_circles)	  circ->enableOutline();
+	for (auto& port : ports)	  port->enableOutline();
 }
 
 void Component2D::disableOutline()
 {
 	m_highlighted = false;
-
 	title->disableOutline();
-
-	for (auto poly : m_polygons)
-	{
-		poly->disableOutline();
-	}
-
-	for (auto line : m_lines)
-	{
-		line->disableOutline();
-	}
-
-	for (auto circ : m_circles)
-	{
-		circ->disableOutline();
-	}
-
-	for (std::shared_ptr port : ports)
-	{
-		port->disableOutline();
-	}
+	for (auto poly : m_polygons) poly->disableOutline();
+	for (auto line : m_lines)    line->disableOutline();
+	for (auto circ : m_circles)  circ->disableOutline();
+	for (auto& port : ports)	 port->disableOutline();
 }
 
 void Component2D::removePort(std::shared_ptr<Port> port)
 {
 	auto port_to_remove = std::find(begin(ports), end(ports), port);
-
 	if (port_to_remove != end(ports)) 
 	{
 		ports.erase(port_to_remove);
 		ports.shrink_to_fit();
 		return;
 	}
-	//Warn the user if the port was not found on this component (i.e. if we have not returned yet).
-	std::cout << yellow << "\n[Design2D] [WARNING]: " << white << "Tried to delete port "<<port->m_label<< ", but it does not belong to component "<< titleString <<".";
+	// Port was not found on this component (i.e. if we have not returned yet).
+	std::string msg = "Tried to delete port " + port->m_label + ", but it does not belong to component " + titleString + ".";
+	LUMEN_LOG_WARN(msg, "");
 }
 
 
@@ -330,12 +244,8 @@ void Component2D::updateText()
 void Component2D::setColour(const glm::vec4& colour)
 {
 	shapeColour = colour;
-	for (auto poly : m_polygons) {
-		poly->setColor(shapeColour);
-	}
-	for (auto circ : m_circles) {
-		circ->setColor(shapeColour);
-	}
+	for (auto poly : m_polygons) poly->setColor(shapeColour);
+	for (auto circ : m_circles)  circ->setColor(shapeColour);
 }
 
 void Component2D::addPoly(Polygon2D* poly)
@@ -363,11 +273,13 @@ void Component2D::addPort(std::shared_ptr<Port> port)
 void Component2D::removePoly(Polygon2D* poly)
 {
 	auto to_remove = std::find(begin(m_polygons), end(m_polygons), poly);
-	if (to_remove != m_polygons.end()) {
+	if (to_remove != m_polygons.end()) 
+	{
 		Renderer::remove(poly);
 		m_polygons.erase(to_remove);
 	}
-	else {
+	else 
+	{
 		LUMEN_LOG_WARN("Attempted to remove a polygon that is not a member of m_polygons.", "Component2D");
 	}
 }
@@ -375,11 +287,13 @@ void Component2D::removePoly(Polygon2D* poly)
 void Component2D::removeCircle(Circle* circle)
 {
 	auto to_remove = std::find(begin(m_circles), end(m_circles), circle);
-	if (to_remove != m_circles.end()) {
+	if (to_remove != m_circles.end()) 
+	{
 		Renderer::remove(circle);
 		m_circles.erase(to_remove);
 	}
-	else {
+	else 
+	{
 		LUMEN_LOG_WARN("Attempted to remove a circle that is not a member of m_circles.", "Component2D");
 	}
 }
@@ -387,11 +301,13 @@ void Component2D::removeCircle(Circle* circle)
 void Component2D::removeLine(LineSegment* line)
 {
 	auto to_remove = std::find(begin(m_lines), end(m_lines), line);
-	if (to_remove != m_lines.end()) {
+	if (to_remove != m_lines.end()) 
+	{
 		Renderer::remove(line);
 		m_lines.erase(to_remove);
 	}
-	else {
+	else 
+	{
 		LUMEN_LOG_WARN("Attempted to remove a line that is not a member of m_lines.", "Component2D");
 	}
 }
@@ -402,18 +318,10 @@ void Component2D::removeLine(LineSegment* line)
 
 PortType Component2D::getPortType(YAML::Node node)
 {
-	if (node["Type"].as<std::string>() == "PORT_IN") { return PortType::PORT_IN; }
-	else if (node["Type"].as<std::string>() == "PORT_OUT") { return PortType::PORT_OUT; }
+	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PortType::PORT_IN; }
+	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PortType::PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
 }
-
-//void Component2D::destroy()
-//{
-	/*this->~Component2D();*/
-	//shape->destroy();
-	//border->destroy();
-	//title->destroy();
-//}
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

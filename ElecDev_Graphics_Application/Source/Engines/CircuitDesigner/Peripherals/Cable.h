@@ -65,6 +65,7 @@ public:
 
 public:
 
+    // Describe the connections relative to the position in memory.
     int startComponentIndex = 0;
     int endComponentIndex = 0;
     int startPortIndex = 0;

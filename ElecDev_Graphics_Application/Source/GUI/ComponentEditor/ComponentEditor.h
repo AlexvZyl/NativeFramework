@@ -6,10 +6,13 @@
 
 #include "Application/LumenWindow/LumenWindow.h"
 #include <unordered_map>
+#include "yaml-cpp/yaml.h"
 
 //=======================================================================================================================================//
 // Component Editor.																													 //
 //=======================================================================================================================================//
+
+class Cable;
 
 class ComponentEditor : public LumenWindow
 {

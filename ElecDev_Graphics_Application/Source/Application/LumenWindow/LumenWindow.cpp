@@ -44,6 +44,7 @@ void LumenWindow::onUpdate()
 	if (!findImGuiWindow()) return;
 
 	updateRenderStateFlags();
+	m_dockID = m_imguiWindow->DockId;
 
 	if (!shouldRender()) return;
 
@@ -156,6 +157,21 @@ void LumenWindow::detectRenderStateChange()
 const glm::vec2& LumenWindow::getContentRegionSize() const 
 {
 	return m_contentRegionSize;
+}
+
+void LumenWindow::dockWindow(LumenWindow* window, ImGuiDir direction) 
+{
+	// Dock into the same node.
+	if (direction == ImGuiDir_None)
+	{
+		ImGui::DockBuilderDockWindow(window->getImGuiName(), m_dockID);
+	}
+	// Split the node and dock into new node.
+	else 
+	{
+		ImGuiID newNode = ImGui::DockBuilderSplitNode(m_dockID, direction, 0.4f, NULL, &m_dockID);
+		ImGui::DockBuilderDockWindow(window->getImGuiName(), newNode);
+	}
 }
 
 //==============================================================================================================================================//

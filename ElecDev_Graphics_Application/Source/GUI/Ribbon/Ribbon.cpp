@@ -17,10 +17,10 @@
 
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
 #include "GUI/SettingsWidget/SettingsWidget.h"
 #include "Application/Events/EventLog.h"
 #include "GUI/CableCreator/CableCreator.h"
@@ -111,7 +111,7 @@ void Ribbon::onImGuiRender()
     // Button.
     if (ImGui::ImageButton((void*)m_circuitIcon, buttonSize, { 0, 1 }, { 1, 0 }))
     {
-        Design2DEngine* engine = Lumen::getApp().pushEngine<Design2DEngine>(LumenDockPanel::Scene, "Untitled");
+        CircuitDesigner* engine = Lumen::getApp().pushEngine<CircuitDesigner>(LumenDockPanel::Scene, "Untitled");
         engine->unsavedDocument();
     }
     // Tooltip.

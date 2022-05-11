@@ -104,8 +104,6 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 	{
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
-			menu->setInitialPosition(getMouseGlobalPosition());
-			menu->setEngine(this);
 	}
 }
 

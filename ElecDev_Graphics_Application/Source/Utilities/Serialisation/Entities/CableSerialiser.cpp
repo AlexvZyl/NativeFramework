@@ -3,9 +3,9 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "OpenGL/Primitives/Circle.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 
 //=============================================================================================================================================//
 //  Cable serialiser.     																													   //
@@ -38,8 +38,18 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 
 void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
 {
-	// Begin the port Map.
+	// Begin the cable data.
 	emitter << YAML::BeginMap;
+
+	// Store the cable type, if one is supplied.
+	if (cable->m_cableType.size())
+	{
+		emitter << YAML::Key << "File" << YAML::Value << (cable->m_cableType + ".lmcb");
+	}
+	else 
+	{
+		emitter << YAML::Key << "File" << YAML::Value << "";
+	}
 
 	//  Cable general data.
 	emitter << cable;
@@ -63,16 +73,6 @@ void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
 			break;
 		startPortIndex = 0;
 		startComponentIndex++;
-	}
-
-	// Store the cable type, if one is supplied.
-	if (cable->m_cableType.size())
-	{
-		emitter << YAML::Key << "File" << YAML::Value << (cable->m_cableType + ".lmcb");
-	}
-	else 
-	{
-		emitter << YAML::Key << "File" << YAML::Value << "";
 	}
 
 	// Store the indices.

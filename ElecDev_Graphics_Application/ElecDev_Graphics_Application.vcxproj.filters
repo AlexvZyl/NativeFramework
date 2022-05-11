@@ -21,19 +21,19 @@
     <ClCompile Include="Source\Graphics\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Circle.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Vertex.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Component2D.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Utilities.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Utilities.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner.cpp" />
     <ClCompile Include="Source\GUI\ComponentEditor\ComponentEditor.cpp" />
     <ClCompile Include="Source\Graphics\Entities\Entity.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Primitive.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Port.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Port.cpp" />
     <ClCompile Include="Source\External\JSON\json.hpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\TextureGL.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Cable.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Cable.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\LineSegment.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\Circuit.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Circuit.cpp" />
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="Source\External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
@@ -75,7 +75,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGL.cpp" />
     <ClCompile Include="Source\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
@@ -83,7 +83,7 @@
     <ClCompile Include="Source\Application\ApplicationGLFWWindow.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\WindowStack.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\Design2DEngine_Events.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\toolbar.cpp" />
     <ClCompile Include="Source\GUI\Ribbon\Ribbon.cpp" />
@@ -112,8 +112,8 @@
     <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\ComponentDesigner_Events.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\ComponentDesigner.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\ComponentDesigner_Events.cpp" />
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
@@ -132,11 +132,15 @@
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\CircleSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\Polygon2DSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\TextSerialiser.cpp" />
-    <ClCompile Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
     <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenWindow.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
+    <ClCompile Include="Source\GUI\LumenPayload\LumenPayload.cpp" />
+    <ClCompile Include="Source\Application\LumenWindow\LumenPopupWindow.cpp" />
+    <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">
@@ -400,17 +404,17 @@
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Vertex.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Text.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Circle.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\Design2DEngine.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Component2D.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\CircuitDesigner.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />
     <ClInclude Include="Source\Graphics\Entities\Entity.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Port.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\Port.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Primitive.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\TextureGL.h" />
     <ClInclude Include="Source\Utilities\Serialisation\Serialiser.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Cable.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\Cable.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\LineSegment.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\Circuit.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\Circuit.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\anchordict.h" />
     <ClInclude Include="Source\External\YAML-CPP\Includes\yaml-cpp\contrib\graphbuilder.h" />
@@ -475,7 +479,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Renderer\RendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
     <ClInclude Include="Source\Graphics\Camera\Camera.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\Peripherals\IOIndicator.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.h" />
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
@@ -795,7 +799,7 @@
     <ClInclude Include="Source\Utilities\Profiler\Profiler.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\ComponentDesigner.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\ComponentDesigner.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
@@ -821,10 +825,15 @@
     <ClInclude Include="External\earcut.hpp\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="Source\Engines\AssetViewer\AssetViewer.h" />
-    <ClInclude Include="Source\Engines\Design2DEngine\GUI\ComponentDesignerColorEditor.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
     <ClInclude Include="Source\GUI\CableCreator\CableCreator.h" />
+    <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.h" />
+    <ClInclude Include="Source\GUI\LumenPayload\LumenPayload.h" />
+    <ClInclude Include="Source\Application\LumenWindow\LumenPopupWindow.h" />
+    <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

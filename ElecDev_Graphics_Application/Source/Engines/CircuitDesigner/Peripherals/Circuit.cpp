@@ -19,17 +19,33 @@ Circuit::~Circuit()
 	m_cables.clear();
 }
 
-Circuit::Circuit(const std::filesystem::path& path) 
+Circuit::Circuit(const std::filesystem::path& path)
+	: Circuit(YAML::LoadFile(path.string()))
+{}
+
+Circuit::Circuit(const YAML::Node& node) 
 	: Entity(EntityType::CIRCUIT)
 {
-	YAML::Node node = YAML::LoadFile(path.string());
+	m_label = node["Circuit Info"]["Label"].as<std::string>();
+
+	// Load reference components.
+	for (const auto& component : node["Reference Components"])
+	{
+		m_referenceComponents.insert({ component.first.as<std::string>(), component.second });
+	}
+
+	// Load reference cables.
+	for (const auto& cable : node["Reference Cables"])
+	{
+		m_referenceCables.insert({ cable.first.as<std::string>(), cable.second });
+	}
 
 	// Load components.
 	for (const auto& component : node["Components"])
 	{
 		// Create the component from the node.
-		std::string compPath = path.parent_path().string() + "\\" + component.second["File"].as<std::string>();
-		m_components.emplace_back(std::make_shared<Component2D>(compPath, this));
+		std::string componentFile = component.second["File"].as<std::string>();
+		m_components.emplace_back(std::make_shared<Component2D>(m_referenceComponents[componentFile], this));
 
 		// Update component.
 		auto& currentComponent = m_components.back();
@@ -47,7 +63,7 @@ Circuit::Circuit(const std::filesystem::path& path)
 	}
 
 	// Load cables.
-	for (const auto& cable : node["Cables"]) 
+	for (const auto& cable : node["Cables"])
 	{
 		m_cables.push_back(std::make_shared<Cable>(cable.second, this));
 	}

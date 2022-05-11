@@ -9,6 +9,7 @@
 #include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "GUI/LumenPayload/LumenPayload.h"
 
 //==============================================================================================================================================//
 //  Graphics Scene.																																//
@@ -41,11 +42,11 @@ public:
 		ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 	}
 
-	inline virtual void onImGuiRender() override 
+	inline virtual void onImGuiRender() override
 	{
 		// Set flag for design palette.
-		if (m_engine->hasDesignPalette())  { addImGuiWindowFlags(ImGuiWindowFlags_MenuBar);		}
-		else							   { removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);	}
+		if (m_engine->hasDesignPalette()) { addImGuiWindowFlags(ImGuiWindowFlags_MenuBar); }
+		else { removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar); }
 
 		// Render design palette.
 		if (m_engine->hasDesignPalette())
@@ -69,25 +70,21 @@ public:
 		}
 
 		// Render engine scene.
-		//ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 1.f);
 		m_engine->onRender();
 		if (!m_textureID) return;
 		ImGui::Image(m_textureID, { m_contentRegionSize.x, m_contentRegionSize.y }, ImVec2(0, 1), ImVec2(1, 0));
 
-		// Receive dropped files.
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				// Pass FileDropEvent to engine.
-				const wchar_t* path = (const wchar_t*)payload->Data;
-				std::wstring wPath(path);
-				std::string sPath;
-				sPath.insert(sPath.end(), wPath.begin(), wPath.end());
-				m_engine->onEvent(FileDropEvent(sPath, EventType_FileDrop));
-			}
-			ImGui::EndDragDropTarget();
-		}
+		// Drag & Drop files.
+		LumenPayload payloadFile(LumenPayloadType::String);
+		payloadFile.setDragAndDropTarget();
+		if (payloadFile.hasValidData())
+			m_engine->onEvent(FileDropEvent(payloadFile.getDataString(), EventType_FileDrop));
+
+		// Drag & Drop nodes.
+		LumenPayload payloadNode(LumenPayloadType::YamlNode);
+		payloadNode.setDragAndDropTarget();
+		if (payloadNode.hasValidData())
+			m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 	}
 
 	inline virtual void onImGuiEnd() override 
@@ -155,7 +152,7 @@ public:
 			));
 		}
 
-		// The other events do not need adjustments.
+		// The other events do not need adjustments, since they do no contain mouse positions.
 		else m_engine->onEvent(event);
 	}
 
@@ -184,13 +181,16 @@ public:
 	}
 
 	// Seperate method to construct the engine.
-	// This allows Lumen to work with engines seperately from GUI'.
+	// This allows Lumen to work with engines seperately from the GUI.
 	template<class ... Args>
 	inline void constructEngine(const Args& ... args)
 	{
 		m_engine = std::make_unique<EngineType>(args...);
 		m_textureID = (void*)m_engine->getRenderTexture();
 		Renderer::restoreAndUnbindScene();  // Scene is bound in EngineCore.
+		// If the scene has to be bound to be rendered to it will happen on the focus.
+		m_engine->m_parentWindow = this;
+		m_engine->setName(getName());
 	}
 
 	// Pass the resize to the engine.

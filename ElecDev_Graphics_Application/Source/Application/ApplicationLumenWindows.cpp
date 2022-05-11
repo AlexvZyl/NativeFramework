@@ -33,23 +33,32 @@ void Application::popWindows()
 void Application::dockWindowToPanel(LumenWindow* window, LumenDockPanel panel)
 {
 	// Dock the Window.
+	ImGuiID node = NULL;
 	switch (panel)
 	{
 	case LumenDockPanel::Scene:
-		ImGui::DockBuilderDockWindow(window->getImGuiName(), findLastActiveChildNode(m_scenePanelID));
+		node = findLastActiveChildNode(m_scenePanelID);
+		ImGui::DockBuilderDockWindow(window->getImGuiName(), node);
+		window->m_dockID = node;
 		break;
 
 	case LumenDockPanel::Left:
 		// Could have the left panel only consist of one GUI, like in VS Code.
-		ImGui::DockBuilderDockWindow(window->getImGuiName(), findLastActiveChildNode(m_leftPanelID));
+		node = findLastActiveChildNode(m_leftPanelID);
+		ImGui::DockBuilderDockWindow(window->getImGuiName(), node);
+		window->m_dockID = node;
 		break;
 
 	case LumenDockPanel::Right:
-		ImGui::DockBuilderDockWindow(window->getImGuiName(), findLastActiveChildNode(m_rightPanelID));
+		node = findLastActiveChildNode(m_rightPanelID);
+		ImGui::DockBuilderDockWindow(window->getImGuiName(), node);
+		window->m_dockID = node;
 		break;
 
 	case LumenDockPanel::Bottom:
-		ImGui::DockBuilderDockWindow(window->getImGuiName(), findLastActiveChildNode(m_bottomPanelID));
+		node = findLastActiveChildNode(m_bottomPanelID);
+		ImGui::DockBuilderDockWindow(window->getImGuiName(), node);
+		window->m_dockID = node;
 		break;
 
 	case LumenDockPanel::Floating:
@@ -70,7 +79,7 @@ void Application::dockWindowToPanel(LumenWindow* window, LumenDockPanel panel)
 
 	default:
 		LUMEN_LOG_WARN("Invalid docking configuration.", "ImGui")
-			break;
+		break;
 	}
 }
 
@@ -81,8 +90,7 @@ ImGuiID Application::findLargestChildNode(ImGuiID nodeID)
 	findChildNodes(ImGui::DockBuilderGetNode(nodeID), nodes);
 
 	// If the size is one we only have the parent.
-	if (nodes.size() == 1)
-		return nodeID;
+	if (nodes.size() == 1) return nodeID;
 
 	// Find the largest node.
 	ImGuiDockNode* largestNode = nodes[0];
@@ -106,9 +114,8 @@ ImGuiID Application::findLastActiveChildNode(ImGuiID nodeID)
 	findChildNodes(ImGui::DockBuilderGetNode(nodeID), nodes);
 
 	// If the size is one we only have the parent.
-	if (nodes.size() == 1)
-		return nodeID;
-
+	if (nodes.size() == 1) return nodeID;
+	
 	// Find the last active node.
 	ImGuiDockNode* latestNode = nodes[0];
 	for (auto* node : nodes)

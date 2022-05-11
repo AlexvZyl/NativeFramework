@@ -29,23 +29,14 @@ public:
 	virtual void onImGuiRender() override;
 	virtual void onImGuiEnd() override;
 
-	// Set the engine that the editor belongs to.
-	void setEngine(EngineCore* engine);
-
-	// Set if the editor should track the active engine.
-	void setActiveEngineTracking(bool track);
-
 private:
 
 	// Name used to create circuits.
 	std::string m_circuitNameOnCreation = "";
 
-	// The engine the editor belongs to.
-	Design2DEngine* m_engine = nullptr;
-
-	// Should the editor track the active engine?
-	bool m_trackActiveEngine = false;
-
+	// Icons.
+	inline static unsigned s_cableIcon = NULL;
+	inline static unsigned s_componentFileIcon = NULL;
 };
 
 //=======================================================================================================================================//

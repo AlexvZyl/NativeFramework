@@ -40,6 +40,15 @@ class Component2D : public Entity
 {
 public:
 
+	// Creates a generic component centred at (0, 0).
+	Component2D(Circuit* parent);
+	// Creates a generic component centred at the specified coordinates.
+	Component2D(const glm::vec2& centreCoords, Circuit* parent);
+	// Creates a component from a .lmcp file definition
+	Component2D(const std::filesystem::path& path, Circuit* parent = nullptr);
+	// Create a component from a YAML node.
+	Component2D(const YAML::Node& path, Circuit* parent = nullptr);
+
 	// Entites & Primitives describing the component.
 	std::vector<Polygon2D*> m_polygons;
 	std::vector<LineSegment*> m_lines;
@@ -84,26 +93,11 @@ public:
 	// Interaction attributes.
 	bool selected = true;
 
-	// Port lists.
-	//std::vector<std::shared_ptr<Port>> portsNorth;
-	//std::vector<std::shared_ptr<Port>> portsSouth;
-	//std::vector<std::shared_ptr<Port>> portsEast;
-	//std::vector<std::shared_ptr<Port>> portsWest;
-
-	
 	unsigned numPorts = 0;
-
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
 	glm::vec2 centre = {0.f, 0.f};
-	
-	// Creates a generic component centred at (0, 0).
-	Component2D(Circuit* parent);
-	// Creates a generic component centred at the specified coordinates.
-	Component2D(const glm::vec2& centreCoords, Circuit* parent);
-	// Creates a component from a .lmcp file definition
-	Component2D(const std::filesystem::path& path, Circuit* parent = nullptr);
 
 	// Deconstructor.s
 	~Component2D();
@@ -146,5 +140,4 @@ public:
 
 private:
 	PortType getPortType(YAML::Node node);
-	//void destroy();
 };

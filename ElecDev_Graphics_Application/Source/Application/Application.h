@@ -31,6 +31,7 @@ class FileDropEvent;
 class Event;
 class FileLoadEvent;
 class FileSaveEvent;
+class AssetViewer;
 
 template<class EngineType>
 class GraphicsScene;
@@ -111,6 +112,9 @@ public:
 	// Queue a window to be popped.
 	void queueWindowPop(unsigned ID);
 
+	// Get the asset viewer engine.
+	inline AssetViewer* getAssetViewerEngine() { return m_assetViewerEngine; };
+
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
@@ -174,6 +178,16 @@ public:
 	template<class EngineType>
 	EngineType* getActiveEngine();
 
+	// --------------------------- //
+	//  A S S E T   V I E W I N G  //
+	// --------------------------- //
+
+	void viewCircuit(const std::filesystem::path& path);
+	void viewCircuit(const YAML::Node& path);
+	void viewComponent(const std::filesystem::path& path);
+	void viewComponent(const YAML::Node& path);
+	void viewAsset(const std::filesystem::path& path);
+
 private:
 
 	// Queue of scipts to be executed.
@@ -188,12 +202,16 @@ private:
 	friend class SettingsWidget;
 	friend class RendererStats;
 	friend class LumenWindow;
+	friend class Toolbar;
 
 	// The window containing the application.
 	GLFWwindow* m_glfwWindow = nullptr;
 
 	// The active engine.
 	EngineCore* m_activeEngine = nullptr;
+
+	// The engine used to view assets.
+	AssetViewer* m_assetViewerEngine = nullptr;
 
 	// --------- //
 	//  L O O P  //
@@ -244,13 +262,9 @@ private:
 	//  E V E N T S  //
 	// ------------- //
 
-	// Handle window events.
 	void onWindowResizeEvent(const WindowEvent& event);
-	// Handle serialisation events.
 	void onFileDropEvent(const FileDropEvent& event);
-	// Load files.
 	void onFileLoadEvent(const FileLoadEvent& event);
-	// Save files.
 	void onFileSaveEvent(const FileSaveEvent& event);
 	// Update the ImGui state.
 	// Lumen controls some of the state changes (for optimisation).
@@ -313,7 +327,6 @@ EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& nam
 	GraphicsScene<EngineType>* window = m_windowStack->pushWindow<GraphicsScene<EngineType>>(name);
 	dockWindowToPanel(window, panel);
 	window->constructEngine(args...);
-	window->getEngine()->m_parentWindow = window;
 	window->focus();
 	return window->getEngine();
 }

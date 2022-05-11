@@ -21,6 +21,7 @@ class KeyEvent;
 class WindowEvent;
 class NotifyEvent;
 class FileDropEvent;
+class YamlNodeDropEvent;
 class LumenWindow;
 class Scene;
 
@@ -102,6 +103,7 @@ public:
 	inline virtual void onHoverEvent(const NotifyEvent& event) {}
 	inline virtual void onDehoverEvent(const NotifyEvent& event) {}
 	inline virtual void onFileDropEvent(const FileDropEvent& event) {}
+	inline virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) {}
 
 	// ----------------------- //
 	//  C O O R D I N A T E S  //
