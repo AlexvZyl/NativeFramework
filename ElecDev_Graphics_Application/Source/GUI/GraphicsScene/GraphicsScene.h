@@ -77,14 +77,6 @@ public:
 		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
 		else						m_engine->m_isHovered = false;
 
-		ImGui::SetCursorPos(getMouseLocalPosition());
-		ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 10.f);
-		ImGui::SetCursorPosY(m_contentRegionSize.y - ImGui::GetCursorPosY() + 35.f); 
-		if (ImGui::Button("Test"))
-		{
-			int i = 0;
-		}
-
 		// Drag & Drop files.
 		LumenPayload payloadFile(LumenPayloadType::String);
 		payloadFile.setDragAndDropTarget();
