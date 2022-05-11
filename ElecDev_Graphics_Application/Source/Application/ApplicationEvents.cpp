@@ -38,12 +38,10 @@ void Application::onUpdate()
 	if (EventLog::mouseMoveOccurred())
 	{
 		// If there is no hovered window, we need to check if a window is hovered.
-		if (!m_hoveredWindow) 
-			onHoveredWindowChange(findHoveredWindow());
+		if (!m_hoveredWindow) onHoveredWindowChange(findHoveredWindow());
 
 		// If the currently hovered window is no longer being hovered, we need to find the new window.
-		else if(!m_hoveredWindow->isHovered()) 
-			onHoveredWindowChange(findHoveredWindow());
+		else if (!m_hoveredWindow->isHovered()) onHoveredWindowChange(findHoveredWindow());
 	}
 	
 	// Dispatch GLFW events.
@@ -67,46 +65,27 @@ void Application::onUpdate()
 		else if (event->isType(EventType_MousePress))
 		{
 			// Change focus.
-			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow)
-			{
-				m_hoveredWindow->focus();
-			}
-			else if(!ImGui::GetItemID())
-			{
-				ImGui::SetWindowFocus(NULL);
-				m_focusedWindow = nullptr;
-			}
-
-			if(m_focusedWindow)	m_focusedWindow->onEvent(*event.get());
+			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow) m_hoveredWindow->focus();
+			if (!m_hoveredWindow)									   m_focusedWindow = nullptr;
+			if (m_focusedWindow)									   m_focusedWindow->onEvent(*event.get());
 		}
 
 		// Pass events to focused window.
-		else if (m_focusedWindow)
-		{
-			m_focusedWindow->onEvent(*event.get());
-		}
+		else if (m_focusedWindow) m_focusedWindow->onEvent(*event.get());
 	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredWindow)
 	{
-		if (EventLog::mouseScrollOccurred()) 
-			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
-
-		if (EventLog::mouseDragOccurred())
-			m_hoveredWindow->onEvent(EventLog::getMouseDrag());
-
-		if (EventLog::mouseMoveOccurred())
-			m_hoveredWindow->onEvent(EventLog::getMouseMove());
+		if (EventLog::mouseScrollOccurred()) m_hoveredWindow->onEvent(EventLog::getMouseScroll());
+		if (EventLog::mouseDragOccurred())	 m_hoveredWindow->onEvent(EventLog::getMouseDrag());
+		if (EventLog::mouseMoveOccurred())   m_hoveredWindow->onEvent(EventLog::getMouseMove());
 	}
 
 	// Dispatch notify events after all of the other events are done.
 	if (m_focusedWindow)
 	{
-		for (auto& event : EventLog::getNotifyEvents())
-		{
-			m_focusedWindow->onEvent(event);
-		}
+		for (auto& event : EventLog::getNotifyEvents()) m_focusedWindow->onEvent(event);
 	}
 
 	// Pop windows that are queued from GLFW events.

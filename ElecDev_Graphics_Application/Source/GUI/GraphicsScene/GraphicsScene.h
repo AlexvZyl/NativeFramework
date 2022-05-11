@@ -79,8 +79,11 @@ public:
 
 		ImGui::SetCursorPos(getMouseLocalPosition());
 		ImGui::SetCursorPosX(ImGui::GetCursorPosX() - 10.f);
-		ImGui::SetCursorPosY(m_contentRegionSize.y - ImGui::GetCursorPosY() + 20.f); 
-		ImGui::Button("Test");
+		ImGui::SetCursorPosY(m_contentRegionSize.y - ImGui::GetCursorPosY() + 35.f); 
+		if (ImGui::Button("Test"))
+		{
+			int i = 0;
+		}
 
 		// Drag & Drop files.
 		LumenPayload payloadFile(LumenPayloadType::String);
