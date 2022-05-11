@@ -242,15 +242,12 @@ void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::v
 
 void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)
 {
+	if (!cable) return;
+
 	YAML::Node cableNode = node;
-	if (cableNode["Cable"].IsDefined())
-	{
-		cableNode = cableNode["Cable"];
-	}
-	else if (cableNode["Ports"].IsDefined() || cableNode["Component"].IsDefined())
-	{
-		return;
-	}
+	if (node["Cable"].IsDefined()) cableNode = node["Cable"];
+	// Not ideal... FIX.
+	else if (cableNode["Ports"].IsDefined() || cableNode["Component"].IsDefined()) return;
 
 	// Load type.
 	cable->m_cableType = cableNode["Label"].as<std::string>();

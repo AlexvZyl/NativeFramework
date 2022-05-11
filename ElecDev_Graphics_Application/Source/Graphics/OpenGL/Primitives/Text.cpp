@@ -50,11 +50,11 @@ void Text::generateText(const std::string& text)
 	// Init.
 	glm::vec3 cursorStart = m_trackedCenter;
 
-	// Return if text is empty.
-	// Push primitive so that the VAO still keeps track of it.
+	// If the text is empty send a box so that if still exists.
 	if (!text.size()) 
 	{ 
-		m_VAO->pushPrimitive(this, {}, {});
+		VertexDataTextured zero({ 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f, 0.f }, {0.f, 0.f}, 0.f, -1.f);
+		m_VAO->pushPrimitive(this, {zero, zero, zero, zero}, {0, 1, 2, 2, 3, 0});
 		return; 
 	}
 
