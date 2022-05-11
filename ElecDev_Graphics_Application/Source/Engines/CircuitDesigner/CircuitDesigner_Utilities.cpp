@@ -264,6 +264,34 @@ void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)
 		cable->cableDict.insert({ keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>() });
 }
 
+
+
+bool operator==(std::shared_ptr<Component2D> compSP, Component2D* compRP) 
+{
+	return compSP.get() == compRP;
+}
+
+bool operator==(std::shared_ptr<Cable> cableSP, Cable* cableRP)
+{
+	return cableSP.get() == cableRP;
+}
+
+int CircuitDesigner::getCableCount(const std::string& type)
+{
+	// Make sure string has no extension.
+	std::filesystem::path file(type);
+	std::string cableType = file.filename().stem().string();
+	// Count cables of the type.
+	int count = 0;
+	for (auto& cable : m_circuit->m_cables)
+	{
+		if (cable->m_cableType == cableType)
+			count++;
+
+	}
+	return count;
+}
+
 int CircuitDesigner::getComponentCount(const std::string& type) 
 {
 	// First make sure there is no extension.
@@ -279,11 +307,6 @@ int CircuitDesigner::getComponentCount(const std::string& type)
 	return count;
 }
 
-int CircuitDesigner::getCableCount(const std::string& type)
-{
-	return 0;
-}
-
 void CircuitDesigner::deleteComponentsOfType(const std::string& type) 
 {
 	// First make sure there is no extension.
@@ -294,11 +317,6 @@ void CircuitDesigner::deleteComponentsOfType(const std::string& type)
 		if (component->equipType == componentType)
 			deleteComponent(component.get());
 	}
-}
-
-bool operator==(std::shared_ptr<Component2D> compSP, Component2D* compRP) 
-{
-	return compSP.get() == compRP;
 }
 
 void CircuitDesigner::deleteComponent(Component2D* component) 
@@ -352,7 +370,33 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 
 void CircuitDesigner::removeImportedCable(const std::string& name, bool checkCount)
 {
-
+	// Check if there are cables to remove.
+	int count = 0;
+	if (checkCount && (count = getCableCount(name)))
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Delete");
+		// Pass the data to the modal.
+		modal->m_entity = name;
+		modal->m_deleteCables = true;
+		modal->m_deleteComponents = false;
+		modal->m_entityCount = count;
+	}
+	else 
+	{
+		// Ensure filename does not have an extension.
+		std::filesystem::path file(name);
+		std::string cableType = file.filename().stem().string();
+		m_circuit->m_referenceCables.erase(name);
+		for (auto& cable : m_circuit->m_cables) 
+		{
+			if (cable->m_cableType == cableType)
+			{
+				if (m_activeCable.get() == cable) m_activeCable = nullptr;
+				cable->setColour({ 0.f, 0.f, 0.f, 1.f });
+				cable->m_cableType = "";
+			}
+		}
+	}
 }
 
 //=============================================================================================================================================//
