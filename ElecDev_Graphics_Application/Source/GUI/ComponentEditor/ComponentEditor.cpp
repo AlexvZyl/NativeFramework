@@ -393,16 +393,17 @@ void ComponentEditor::onImGuiRender()
 			// Drag & Drop files.
 			LumenPayload payloadFiles(LumenPayloadType::String);
 			payloadFiles.setDragAndDropTarget();
-			if (payloadFiles.hasValidData())
-			{
-				if (design_engine->importCable(payloadFiles.getDataString())) 
-					design_engine->loadDataToCable(YAML::LoadFile(payloadFiles.getDataString()), activeCable);
-			}
+			if (payloadFiles.hasValidData()) design_engine->importCable(payloadFiles.getDataString());
 
 			// Drag & Drop nodes.
 			LumenPayload payloadNode(LumenPayloadType::YamlNode);
 			payloadNode.setDragAndDropTarget();
-			if (payloadNode.hasValidData()) design_engine->loadDataToCable(payloadNode.getDataYamlNode(), activeCable);
+			if (payloadNode.hasValidData())
+			{
+				bool checkForOverwrite = true;
+				if (CircuitDesigner::s_engineUsedByCircuitEditor == design_engine) checkForOverwrite = false;
+				design_engine->importCable(payloadNode.getDataYamlNode(), true, checkForOverwrite);
+			}
 		}
 
 		// Get the current component as the initial selection for the data selection.

@@ -13,6 +13,11 @@
 
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable) 
 {
+	// Store the cable type, if one is supplied.
+	std::string filename = "";
+	if (cable->m_cableType.size())	filename = (cable->m_cableType + ".lmcb");
+	emitter << YAML::Key << "Filename" << YAML::Value << filename;
+
 	// General data.
 	emitter << YAML::Key << "Thickness" << YAML::Value << cable->m_thickness;
 
@@ -30,9 +35,6 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 	}
 	emitter << YAML::EndMap;
 
-	// Color.
-	emitter << YAML::Key << "Color" << YAML::Value << cable->m_colour;
-
 	return emitter;
 }
 
@@ -40,16 +42,6 @@ void serialiseCable(YAML::Emitter& emitter, Cable* cable, Circuit* circuit)
 {
 	// Begin the cable data.
 	emitter << YAML::BeginMap;
-
-	// Store the cable type, if one is supplied.
-	if (cable->m_cableType.size())
-	{
-		emitter << YAML::Key << "File" << YAML::Value << (cable->m_cableType + ".lmcb");
-	}
-	else 
-	{
-		emitter << YAML::Key << "File" << YAML::Value << "";
-	}
 
 	//  Cable general data.
 	emitter << cable;

@@ -48,6 +48,7 @@ public:
 	//  V A R I A B L E S //
 	// ------------------ //
 
+	inline static CircuitDesigner* s_engineUsedByCircuitEditor = nullptr;
 	designState designerState = ENTITY_SELECT;
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
@@ -86,18 +87,21 @@ public:
 	virtual void setNameOfElements(const std::string& name) override;
 	void createCircuit(const std::filesystem::path& path);
 	void loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos);
-	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);\
+	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);
 	void loadDataToCable(const YAML::Node& node, Cable* cable);
 	int getComponentCount(const std::string& type);
 	int getCableCount(const std::string& type);
-	void deleteComponentsOfType(const std::string& type);
-	//void deleteCablesOfType(const std::string& type);
 	void deleteComponent(Component2D* component);
-	//void deleteCable(Cable* component);
-	bool importComponent(const std::filesystem::path& name, bool loadOnImport = true);
+	void importComponent(const std::filesystem::path& name, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importComponent(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importCable(const std::filesystem::path& name, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importCable(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
 	void removeImportedComponent(const std::string& component, bool checkCount = true);
-	bool importCable(const std::filesystem::path& name, bool loadOnImport = true);
 	void removeImportedCable(const std::string& cable, bool checkCount = true);
+	void overwriteComponents(const std::string& type, const YAML::Node& node);
+	void overwriteCables(const std::string& type, const YAML::Node& node);
+	void reloadComponent(Component2D* component, const YAML::Node& node);
+
 
 private:
 

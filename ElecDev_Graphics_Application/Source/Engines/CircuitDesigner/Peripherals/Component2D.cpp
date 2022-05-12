@@ -93,8 +93,8 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		componentNode = componentNode["Component"];
 
 	// General data.
-	borderLayerOffset = componentNode["Border layer offset"].as<float>();
-	m_internalCircuit = componentNode["Internal circuit"].as<std::string>();
+	borderLayerOffset = componentNode["Border Layer Offset"].as<float>();
+	m_internalCircuit = componentNode["Internal Circuit"].as<std::string>();
 
 	// The data dictionary.
 	YAML::Node dictNode = componentNode["Dictionary"];
@@ -131,9 +131,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	}
 
 	titleString = title->m_string;
-
 	equipType = componentNode["Equipment Type"].as<std::string>();
-
 	enableOutline();
 }
 
@@ -143,6 +141,7 @@ Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 
 Component2D::~Component2D() 
 {
+	ports.clear();
 	Renderer::remove(title);
 	for (auto circle : m_circles) Renderer::remove(circle);
 	for (auto line : m_lines)     Renderer::remove(line);
@@ -223,8 +222,8 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 		ports.shrink_to_fit();
 		return;
 	}
-	// Port was not found on this component (i.e. if we have not returned yet).
-	std::string msg = "Tried to delete port " + port->m_label + ", but it does not belong to component " + titleString + ".";
+	// Port was not found on this component.
+	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + titleString + "'.";
 	LUMEN_LOG_WARN(msg, "");
 }
 

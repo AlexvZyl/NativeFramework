@@ -32,7 +32,7 @@ void CircuitDesigner::ComponentPlaceMode(glm::vec2 screenCoords)
 void CircuitDesigner::ComponentPlaceMode()
 {
 	glm::vec2 pos = getMouseLocalPosition();
-	pos = pixelToWorldCoords(pos);
+	pos = pixelToWorldCoords(pos); 
 	ComponentPlaceMode(pos);
 }
 
@@ -159,65 +159,9 @@ Port* CircuitDesigner::getPort(unsigned eID)
 	}
 }
 
-void CircuitDesigner::setNameOfElements(const std::string& name) 
+void CircuitDesigner::setNameOfElements(const std::string& name)
 {
 	m_circuit->m_label = name;
-}
-
-bool CircuitDesigner::importComponent(const std::filesystem::path& path, bool loadOnImport)
-{
-	// Check if it is a component file.
-	if (path.filename().extension().string() != ".lmcp")
-	{
-		LUMEN_LOG_WARN("Tried to import component with invalid extension.", "");
-		return true;
-	}
-
-	// Add component if it does not exist.
-	std::string compName = path.filename().string();
-	if (m_circuit->m_referenceComponents.find(compName) == m_circuit->m_referenceComponents.end())
-	{
-		m_circuit->m_referenceComponents.insert({ compName, YAML::LoadFile(path.string())["Component"]});
-		return true;
-	}
-	// Warn user of component overwrite.
-	else 
-	{
-		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Component Overwrite");
-		modal->m_entityPath = path;
-		modal->m_componentOverwrite = true;
-		if(loadOnImport)
-			modal->m_mousePosition = getMouseLocalPosition();
-		return false;
-	}
-}
-
-bool CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOnImport)
-{
-	// Check if it is a component file.
-	if (path.filename().extension().string() != ".lmcb")
-	{
-		LUMEN_LOG_WARN("Tried to import cable with invalid extension.", "");
-		return true;
-	}
-
-	// Add cable if it does not exist.
-	std::string cableName = path.filename().string();
-	if (m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
-	{
-		m_circuit->m_referenceCables.insert({ cableName, YAML::LoadFile(path.string())["Cable"]});
-		return true;
-	}
-	// Warn user of cable overwrite.
-	else 
-	{
-		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Overwrite");
-		modal->m_entityPath = path;
-		modal->m_cableOverwrite = true;
-		if (loadOnImport)
-			modal->m_mousePosition = getMouseLocalPosition();
-		return false;
-	}
 }
 
 void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos) 
@@ -242,15 +186,12 @@ void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::v
 
 void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)
 {
+	if (!cable) return;
+
 	YAML::Node cableNode = node;
-	if (cableNode["Cable"].IsDefined())
-	{
-		cableNode = cableNode["Cable"];
-	}
-	else if (cableNode["Ports"].IsDefined() || cableNode["Component"].IsDefined())
-	{
-		return;
-	}
+	if (node["Cable"].IsDefined()) cableNode = node["Cable"];
+	// Not ideal... FIX.
+	else if (cableNode["Ports"].IsDefined() || cableNode["Component"].IsDefined()) return;
 
 	// Load type.
 	cable->m_cableType = cableNode["Label"].as<std::string>();
@@ -267,11 +208,151 @@ void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)
 		cable->cableDict.insert({ keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>() });
 }
 
+bool operator==(std::shared_ptr<Component2D> compSP, Component2D* compRP) 
+{
+	return compSP.get() == compRP;
+}
+
+bool operator==(std::shared_ptr<Cable> cableSP, Cable* cableRP)
+{
+	return cableSP.get() == cableRP;
+}
+
+void CircuitDesigner::importComponent(const std::filesystem::path& path, bool loadOnImport, bool checkForOverwrite)
+{
+	// Check if it is a component file.
+	if (path.filename().extension().string() != ".lmcp")
+	{
+		LUMEN_LOG_WARN("Tried to import component with invalid extension.", "");
+	}
+
+	// Add component if it does not exist.
+	std::string compName = path.filename().string();
+	if (!checkForOverwrite || m_circuit->m_referenceComponents.find(compName) == m_circuit->m_referenceComponents.end())
+	{
+		m_circuit->m_referenceComponents.insert({ compName, YAML::LoadFile(path.string())["Component"] });
+		if (loadOnImport)  loadAndPlaceComponent(path, getMouseLocalPosition());
+	}
+	// Warn user of component overwrite.
+	else
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Component Overwrite");
+		modal->m_entityPath = path;
+		modal->m_componentOverwrite = true;
+		if (loadOnImport)
+			modal->m_mousePosition = getMouseLocalPosition();
+	}
+}
+
+void CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOnImport, bool checkForOverwrite)
+{
+	// Check if it is a component file.
+	if (path.filename().extension().string() != ".lmcb")
+	{
+		LUMEN_LOG_WARN("Tried to import cable with invalid extension.", "");
+	}
+
+	// Add cable if it does not exist.
+	std::string cableName = path.filename().string();
+	if (!checkForOverwrite || m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
+	{
+		m_circuit->m_referenceCables.insert({ cableName, YAML::LoadFile(path.string())["Cable"] });
+		if(loadOnImport) loadDataToCable(YAML::LoadFile(path.string()), m_activeCable.get());
+	}
+	// Warn user of cable overwrite.
+	else
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Overwrite");
+		modal->m_entityPath = path;
+		modal->m_cableOverwrite = true;
+		if (loadOnImport)
+			modal->m_mousePosition = getMouseLocalPosition();
+	}
+}
+
+void CircuitDesigner::importComponent(const YAML::Node& node, bool loadOnImport, bool checkForOverwrite)
+{
+	YAML::Node componentNode = node;
+	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
+
+	// Check if it is a component file.
+	std::filesystem::path filename = componentNode["Filename"].as<std::string>();
+	if (filename.extension().string() != ".lmcp")
+	{
+		LUMEN_LOG_WARN("Tried to import component with invalid extension.", "");
+	}
+
+	// Add component if it does not exist.
+	std::string componentName = filename.filename().string();
+	if (!checkForOverwrite || m_circuit->m_referenceComponents.find(componentName) == m_circuit->m_referenceComponents.end())
+	{
+		m_circuit->m_referenceComponents.insert({ componentName, componentNode });
+		if (loadOnImport) loadAndPlaceComponent(componentNode, getMouseLocalPosition());
+	}
+	// Warn user of component overwrite.
+	else
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Overwrite");
+		modal->m_yamlNode = true;
+		modal->m_node = componentNode;
+		modal->m_componentOverwrite = true;
+		modal->m_entity = componentName;
+		if (loadOnImport)
+			modal->m_mousePosition = getMouseLocalPosition();
+	}
+}
+
+void CircuitDesigner::importCable(const YAML::Node& node, bool loadOnImport, bool checkForOverwrite)
+{
+	YAML::Node cableNode = node;
+	if (cableNode["Cable"].IsDefined()) cableNode = cableNode["Cable"];
+
+	// Check if it is a cable file.
+	std::filesystem::path filename(cableNode["Filename"].as<std::string>());
+	if (filename.extension().string() != ".lmcb")
+	{
+		LUMEN_LOG_WARN("Tried to import cable with invalid extension.", "");
+	}
+
+	// Add cable if it does not exist.
+	std::string cableName = filename.filename().string();
+	if (!checkForOverwrite || m_circuit->m_referenceCables.find(cableName) == m_circuit->m_referenceCables.end())
+	{
+		m_circuit->m_referenceCables.insert({ cableName, cableNode });
+		if (loadOnImport) loadDataToCable(cableNode, m_activeCable.get());
+	}
+	// Warn user of cable overwrite.
+	else
+	{
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Cable Overwrite");
+		modal->m_yamlNode = true;
+		modal->m_node = cableNode;
+		modal->m_cableOverwrite = true;
+		modal->m_entity = cableName;
+		if (loadOnImport)
+			modal->m_mousePosition = getMouseLocalPosition();
+	}
+}
+
+int CircuitDesigner::getCableCount(const std::string& type)
+{
+	// Make sure string has no extension.
+	std::string cableType = std::filesystem::path(type).filename().stem().string();
+	// Count cables of the type.
+	int count = 0;
+	for (auto& cable : m_circuit->m_cables)
+	{
+		if (cable->m_cableType == cableType)
+			count++;
+
+	}
+	return count;
+}
+
 int CircuitDesigner::getComponentCount(const std::string& type) 
 {
 	// First make sure there is no extension.
-	std::filesystem::path file(type);
-	std::string componentType = file.filename().stem().string();
+	std::string componentType = std::filesystem::path(type).filename().stem().string();
 	// Search for components of this type.
 	int count = 0;
 	for (auto& component : m_circuit->m_components)
@@ -280,28 +361,6 @@ int CircuitDesigner::getComponentCount(const std::string& type)
 			count++;
 	}
 	return count;
-}
-
-int CircuitDesigner::getCableCount(const std::string& type)
-{
-	return 0;
-}
-
-void CircuitDesigner::deleteComponentsOfType(const std::string& type) 
-{
-	// First make sure there is no extension.
-	std::filesystem::path file(type);
-	std::string componentType = file.filename().stem().string();
-	for (auto& component : m_circuit->m_components)
-	{
-		if (component->equipType == componentType)
-			deleteComponent(component.get());
-	}
-}
-
-bool operator==(std::shared_ptr<Component2D> compSP, Component2D* compRP) 
-{
-	return compSP.get() == compRP;
 }
 
 void CircuitDesigner::deleteComponent(Component2D* component) 
@@ -324,10 +383,9 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 	int count = 0;
 	if (checkCount && (count = getComponentCount(name)))
 	{
+		// Warn user.
 		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Component Delete");
-		// Pass the data to the modal.
 		modal->m_entity = name;
-		modal->m_deleteCables = false;
 		modal->m_deleteComponents = true;
 		modal->m_entityCount = count;
 	}
@@ -335,8 +393,7 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 	else
 	{
 		// Ensure the name does not have the file extension.
-		std::filesystem::path compFS(name);
-		std::string componentType = compFS.filename().stem().string();
+		std::string componentType = std::filesystem::path(name).filename().stem().string();
 		m_circuit->m_referenceComponents.erase(name);
 		int count = 0;
 		auto& componentsVector = m_circuit->m_components;
@@ -355,7 +412,112 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 
 void CircuitDesigner::removeImportedCable(const std::string& name, bool checkCount)
 {
+	// Check if there are cables to remove.
+	int count = 0;
+	if (checkCount && (count = getCableCount(name)))
+	{
+		// Warn user.
+		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Clear Cables");
+		modal->m_entity = name;
+		modal->m_deleteCables = true;
+		modal->m_entityCount = count;
+	}
+	else 
+	{
+		// Ensure filename does not have an extension.
+		std::string cableType = std::filesystem::path(name).filename().stem().string();
+		m_circuit->m_referenceCables.erase(name);
+		for (auto& cable : m_circuit->m_cables) 
+		{
+			if (cable->m_cableType == cableType)
+			{
+				cable->setColour({ 0.f, 0.f, 0.f, 1.f });
+				cable->m_cableType = "";
+			}
+		}
+	}
+}
 
+void CircuitDesigner::overwriteComponents(const std::string& type, const YAML::Node& node)
+{
+	// Remove extension.
+	std::string componentType = std::filesystem::path(type).filename().stem().string();
+	// Overwrite components of same type.
+	for (auto& component : m_circuit->m_components)
+	{
+		if (component->equipType == componentType) reloadComponent(component.get(), node);
+		if (m_activeComponent.get() == component.get()) component->enableOutline();
+	}
+}
+
+void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& node)
+{
+	// Ensure correct node.
+	YAML::Node componentNode = node;
+	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
+	glm::vec2 position = component->centre;
+
+	// ----------------- //
+	//  P O L Y G O N S  //
+	// ----------------- //
+
+	auto& polygonsVector = component->m_polygons;
+	for (auto& poly : polygonsVector) Renderer::remove(poly);
+	polygonsVector.clear();
+	for (const auto& poly : componentNode["Polygons"])
+	{
+		polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
+		polygonsVector.back()->translate(position);
+	}
+
+	// ----------- //
+	//  L I N E S  //
+	// ----------- //
+
+	auto& linesVector = component->m_lines;
+	for (auto& line : linesVector) Renderer::remove(line);
+	linesVector.clear();
+	for (const auto& line : componentNode["Line Segments"])
+	{
+		linesVector.push_back(Renderer::addLineSegment2D(line.second, component));
+		linesVector.back()->translate(position);
+	}
+
+	// --------------- //
+	//  C I R C L E S  //
+	// --------------- //
+
+	auto& circlesVector = component->m_circles;
+	for (auto& circle : circlesVector) Renderer::remove(circle);
+	circlesVector.clear();
+	// Add circles.
+	for (const auto& circle : componentNode["Circles"])
+	{
+		circlesVector.push_back(Renderer::addCircle2D(circle.second, component));
+		circlesVector.back()->translate(position);
+	}
+
+	// ----------- //
+	//  P O R T S  //
+	// ----------- //
+
+	auto& portsVector = component->ports;
+	for (auto& port : portsVector)
+	{
+
+	}
+
+}
+
+void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node& node) 
+{
+	// Remove extension.
+	std::string cableType = std::filesystem::path(type).filename().stem().string();
+	// Overwrite cables of same type.
+	for (auto& cable : m_circuit->m_cables)
+	{
+		if (cable->m_cableType == cableType) loadDataToCable(node, cable.get());;
+	}
 }
 
 //=============================================================================================================================================//

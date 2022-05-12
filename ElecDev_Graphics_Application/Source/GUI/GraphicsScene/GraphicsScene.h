@@ -44,13 +44,12 @@ public:
 
 	inline virtual void onImGuiRender() override
 	{
-		// Set flag for design palette.
-		if (m_engine->hasDesignPalette()) { addImGuiWindowFlags(ImGuiWindowFlags_MenuBar); }
-		else { removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar); }
-
 		// Render design palette.
 		if (m_engine->hasDesignPalette())
 		{
+			// Set flag.
+			addImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
+
 			// Setup style.
 			ImGui::PopStyleVar();
 			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
@@ -68,23 +67,26 @@ public:
 			ImGui::PopStyleColor();
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 		}
+		// Set flag for no palette.
+		else removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
 
 		// Render engine scene.
 		m_engine->onRender();
 		if (!m_textureID) return;
-		ImGui::Image(m_textureID, { m_contentRegionSize.x, m_contentRegionSize.y }, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+		// Check if image is hovered to allow blocking of events.
+		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
+		else						m_engine->m_isHovered = false;
 
 		// Drag & Drop files.
 		LumenPayload payloadFile(LumenPayloadType::String);
 		payloadFile.setDragAndDropTarget();
-		if (payloadFile.hasValidData())
-			m_engine->onEvent(FileDropEvent(payloadFile.getDataString(), EventType_FileDrop));
+		if (payloadFile.hasValidData()) m_engine->onEvent(FileDropEvent(payloadFile.getDataString(), EventType_FileDrop));
 
 		// Drag & Drop nodes.
 		LumenPayload payloadNode(LumenPayloadType::YamlNode);
 		payloadNode.setDragAndDropTarget();
-		if (payloadNode.hasValidData())
-			m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
+		if (payloadNode.hasValidData()) m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 	}
 
 	inline virtual void onImGuiEnd() override 
@@ -187,9 +189,11 @@ public:
 	{
 		m_engine = std::make_unique<EngineType>(args...);
 		m_textureID = (void*)m_engine->getRenderTexture();
-		Renderer::restoreAndUnbindScene();  // Scene is bound in EngineCore.
+		// Scene is bound in EngineCore.
 		// If the scene has to be bound to be rendered to it will happen on the focus.
+		Renderer::restoreAndUnbindScene();  
 		m_engine->m_parentWindow = this;
+		// Update the engine name.
 		m_engine->setName(getName());
 	}
 
@@ -198,6 +202,13 @@ public:
 	{
 		LumenWindow::onWindowResizeEvent(event);
 		m_engine->onWindowResizeEventForce(event);
+	}
+
+	// Override to take engine hoevered into account.
+	// This allows ImGui widgets to block events to the engine.
+	inline virtual bool isHovered() const override 
+	{
+		return LumenWindow::isHovered() && m_engine->m_isHovered;
 	}
 
 private:

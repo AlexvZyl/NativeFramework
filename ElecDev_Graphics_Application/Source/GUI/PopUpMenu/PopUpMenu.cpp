@@ -41,22 +41,11 @@ void PopUpMenu::onImGuiRender()
 
     if (circuitEngine) 
     {
-        // Render menu items.
-        if (!circuitEngine->m_activeComponent && !circuitEngine->m_activeCable)
-        {
-            if (ImGui::MenuItem("Place component", "P"))
-            {
-                // Place a dummy component.
-                circuitEngine->ComponentPlaceMode();
-                closeWindow();
-            }
-        }
-
         // ------------------- //
         //  C O M P O N E N T  //
         // ------------------- //
 
-        else if (circuitEngine->m_activeComponent || circuitEngine->m_activeCable)
+        if (circuitEngine->m_activeComponent || circuitEngine->m_activeCable)
         {
             if (ImGui::MenuItem("Component Editor", "E"))
             {
@@ -71,8 +60,9 @@ void PopUpMenu::onImGuiRender()
                     circuitEngine->deleteActiveCable();
                 closeWindow();
             }
+
+            ImGui::Separator();
         }
-        ImGui::Separator();
 
         // --------------- //
         //  D E F A U L T  //
@@ -82,6 +72,8 @@ void PopUpMenu::onImGuiRender()
         {
             CircuitEditor* editor = app.pushWindow<CircuitEditor>(LumenDockPanel::Right, "Circuit Editor");
         }
+
+        ImGui::Separator();
 
         if (ImGui::MenuItem("Load Circuit...", "Ctrl+L"))
         {

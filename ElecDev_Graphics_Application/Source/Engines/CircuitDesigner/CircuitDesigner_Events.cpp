@@ -282,40 +282,31 @@ void CircuitDesigner::onKeyEvent(const KeyEvent& event)
 
 void CircuitDesigner::onFileDropEvent(const FileDropEvent& event) 
 {
-	Renderer::storeAndBindScene(&getScene());
 	for (auto& path : event.fileData)
 	{
-		if (path.filename().extension().string() == ".lmcp")
+		if (path.extension().string() == ".lmcp")
 		{
 			// Reset active entities.
 			if (m_activeComponent) m_activeComponent->disableOutline();
 			if (m_activeCable)	   m_activeCable->disableOutline();
-
-			// Check if component can be imported.
-			if (importComponent(path)) loadAndPlaceComponent(path, getMouseLocalPosition());
+			// Import and load component.
+			importComponent(path, true);
 		}
 	}
-	Renderer::restoreAndUnbindScene();
 }
 
 void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
 {
-	Renderer::storeAndBindScene(&getScene());
-	const YAML::Node& node = event.getNode();
+	YAML::Node node = event.getNode();
+	if (node["Component"].IsDefined()) node = node["Component"];
 	// Check type.
-	if (node["File"].IsDefined())
+	if (node["Filename"].IsDefined())
 	{
-		std::filesystem::path file(node["File"].as<std::string>());
-		if(file.extension() == ".lmcp")
-			loadAndPlaceComponent(node, getMouseLocalPosition());
+		std::filesystem::path file(node["Filename"].as<std::string>());
+		bool checkForOverwrite = true;
+		if (CircuitDesigner::s_engineUsedByCircuitEditor == this) checkForOverwrite = false;
+		if (file.extension() == ".lmcp") importComponent(node, true, checkForOverwrite);
 	}
-	// This is NOT ideal.  Should have a better way of distinguishing
-	// between nodes.
-	else if(node["Ports"].IsDefined())
-	{
-		loadAndPlaceComponent(node, getMouseLocalPosition());
-	}
-	Renderer::restoreAndUnbindScene();
 }
 
 //==============================================================================================================================================//

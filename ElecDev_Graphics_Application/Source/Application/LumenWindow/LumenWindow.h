@@ -88,7 +88,7 @@ public:
 	void removeImGuiWindowFlags(int flags);
 
 	// Checks if the layer is hovered.
-	bool isHovered() const;
+	virtual bool isHovered() const;
 
 	// Get the pointer to the imgui window.
 	// Curently this has to be called every frame, since the
@@ -97,6 +97,7 @@ public:
 
 private:
 	friend class Application;
+	friend class EngineCore;
 	// Focus the window.
 	// This function notifies the app of a focus change.
 	void focus();

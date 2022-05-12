@@ -864,7 +864,6 @@
       <Filter>Source</Filter>
     </None>
     <None Include="Source\Resources\PythonScripts\PythonTest.py" />
-    <None Include="Source\GUI\GUIColors.md" />
     <None Include="Source\Resources\Shaders\GLSL\backgroundShader.glsl" />
     <None Include="Source\Resources\Shaders\GLSL\circleShader.glsl" />
     <None Include="Source\Resources\Fonts\Arial-Bold\Arial-Bold.csv" />

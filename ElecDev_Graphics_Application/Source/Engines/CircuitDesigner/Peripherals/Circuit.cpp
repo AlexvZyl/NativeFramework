@@ -31,7 +31,7 @@ Circuit::Circuit(const YAML::Node& node)
 	// Load reference components.
 	for (const auto& component : node["Reference Components"])
 	{
-		m_referenceComponents.insert({ component.first.as<std::string>(), component.second });
+		m_referenceComponents.insert({ component.first.as<std::string>(), component.second });;
 	}
 
 	// Load reference cables.
@@ -44,7 +44,7 @@ Circuit::Circuit(const YAML::Node& node)
 	for (const auto& component : node["Components"])
 	{
 		// Create the component from the node.
-		std::string componentFile = component.second["File"].as<std::string>();
+		std::string componentFile = component.second["Filename"].as<std::string>();
 		m_components.emplace_back(std::make_shared<Component2D>(m_referenceComponents[componentFile], this));
 
 		// Update component.
@@ -66,6 +66,10 @@ Circuit::Circuit(const YAML::Node& node)
 	for (const auto& cable : node["Cables"])
 	{
 		m_cables.push_back(std::make_shared<Cable>(cable.second, this));
+		std::string filename = cable.second["Filename"].as<std::string>();
+		YAML::Node cableNode = node["Reference Cables"][filename];
+		glm::vec4 cableColor = { cableNode["Color"][0].as<float>(), cableNode["Color"][1].as<float>(), cableNode["Color"][2].as<float>(), cableNode["Color"][3].as<float>() };
+		m_cables.back()->setColour(cableColor);
 	}
 }
 

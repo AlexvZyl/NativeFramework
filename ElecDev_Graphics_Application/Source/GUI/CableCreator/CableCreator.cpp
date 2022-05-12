@@ -303,6 +303,8 @@ void CableCreator::serialiseCable(const std::filesystem::path & path)
 	// Cable data.
 	yamlEmitter << YAML::Key << "Cable" << YAML::Value;
 	yamlEmitter << YAML::BeginMap;
+	// Store the cable type, if one is supplied.
+	yamlEmitter << YAML::Key << "Filename" << YAML::Value << m_cableName + ".lmcb";
 	yamlEmitter << YAML::Key << "Label" << YAML::Value << m_cableName;
 	yamlEmitter << YAML::Key << "Color" << YAML::Value << m_cableColor;
 	yamlEmitter << YAML::Key << "Dictionary" << YAML::Value << m_dataDict;

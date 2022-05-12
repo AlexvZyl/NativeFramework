@@ -143,9 +143,9 @@ public:
 
 private:
 
+	// Friends.
 	template <class EngineType>
 	friend class GraphicsScene;
-
 	friend class Base2DEngine;
 	friend class Base3DEngine;
 
@@ -164,6 +164,8 @@ private:
 	virtual void onHoverEventForce(const NotifyEvent& event);
 	virtual void onDehoverEventForce(const NotifyEvent& event);
 	virtual void onWindowResizeEventForce(const WindowEvent& event);
+	virtual void onFileDropEventForce(const FileDropEvent& event);
+	virtual void onYamlNodeDropEventForce(const YamlNodeDropEvent& event);
 };
 
 //=============================================================================================================================================//
