@@ -141,7 +141,7 @@ private:
 	glm::vec4 m_xAxisColor = { 0.f, 1.f, 0.f, 1.f };
 	glm::vec4 m_yAxisColor = {1.f, 0.f, 0.f, 1.f};
 	glm::vec4 m_helperCircleColor = {0.f, 0.f, 1.f, 1.f};
-	int m_totalCoarseLines = 20;
+	int m_totalCoarseLines = 200;
 	bool m_enabled = true;
 	bool m_helperCircleEnabled = true;
 
