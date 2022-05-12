@@ -98,6 +98,10 @@ public:
 	void importCable(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
 	void removeImportedComponent(const std::string& component, bool checkCount = true);
 	void removeImportedCable(const std::string& cable, bool checkCount = true);
+	void overwriteComponents(const std::string& type, const YAML::Node& node);
+	void overwriteCables(const std::string& type, const YAML::Node& node);
+	void reloadComponent(Component2D* component, const YAML::Node& node);
+
 
 private:
 

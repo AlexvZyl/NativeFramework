@@ -20,7 +20,6 @@ CircuitEditor::CircuitEditor(std::string name, int windowFlags)
 	: LumenWindow(name, windowFlags)
 {
 	addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
-
 	s_componentFileIcon = loadBitmapToGL(loadImageFromResource(COMPONENT_FILE_ICON));
 	s_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
 }
@@ -154,16 +153,15 @@ void CircuitEditor::onImGuiRender()
 		// Drag & drop.
 		LumenPayload payloadCable(LumenPayloadType::String);
 		payloadCable.setDragAndDropTarget();
-		if (payloadCable.hasValidData()) engine->importCable(payloadCable.getDataString());
+		if (payloadCable.hasValidData()) engine->importCable(payloadCable.getDataString(), false);
 
 		// Done with style.
 		ImGui::PopStyleVar();
 		ImGui::PopStyleColor();
 	}
-	else 
-	{
-		ImGui::Text("No active circuit.");
-	}
+
+	// No engine is active.
+	else ImGui::Text("No active circuit.");
 }
 
 void CircuitEditor::onImGuiEnd() 

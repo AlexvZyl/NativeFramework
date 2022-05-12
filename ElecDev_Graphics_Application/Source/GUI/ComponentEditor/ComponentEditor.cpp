@@ -398,7 +398,12 @@ void ComponentEditor::onImGuiRender()
 			// Drag & Drop nodes.
 			LumenPayload payloadNode(LumenPayloadType::YamlNode);
 			payloadNode.setDragAndDropTarget();
-			if (payloadNode.hasValidData()) design_engine->importCable(payloadNode.getDataYamlNode());
+			if (payloadNode.hasValidData())
+			{
+				bool checkForOverwrite = true;
+				if (CircuitDesigner::s_engineUsedByCircuitEditor == design_engine) checkForOverwrite = false;
+				design_engine->importCable(payloadNode.getDataYamlNode(), true, checkForOverwrite);
+			}
 		}
 
 		// Get the current component as the initial selection for the data selection.

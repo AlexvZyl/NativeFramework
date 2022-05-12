@@ -337,8 +337,7 @@ void CircuitDesigner::importCable(const YAML::Node& node, bool loadOnImport, boo
 int CircuitDesigner::getCableCount(const std::string& type)
 {
 	// Make sure string has no extension.
-	std::filesystem::path file(type);
-	std::string cableType = file.filename().stem().string();
+	std::string cableType = std::filesystem::path(type).filename().stem().string();
 	// Count cables of the type.
 	int count = 0;
 	for (auto& cable : m_circuit->m_cables)
@@ -353,8 +352,7 @@ int CircuitDesigner::getCableCount(const std::string& type)
 int CircuitDesigner::getComponentCount(const std::string& type) 
 {
 	// First make sure there is no extension.
-	std::filesystem::path file(type);
-	std::string componentType = file.filename().stem().string();
+	std::string componentType = std::filesystem::path(type).filename().stem().string();
 	// Search for components of this type.
 	int count = 0;
 	for (auto& component : m_circuit->m_components)
@@ -385,10 +383,9 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 	int count = 0;
 	if (checkCount && (count = getComponentCount(name)))
 	{
+		// Warn user.
 		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Component Delete");
-		// Pass the data to the modal.
 		modal->m_entity = name;
-		modal->m_deleteCables = false;
 		modal->m_deleteComponents = true;
 		modal->m_entityCount = count;
 	}
@@ -396,8 +393,7 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 	else
 	{
 		// Ensure the name does not have the file extension.
-		std::filesystem::path compFS(name);
-		std::string componentType = compFS.filename().stem().string();
+		std::string componentType = std::filesystem::path(name).filename().stem().string();
 		m_circuit->m_referenceComponents.erase(name);
 		int count = 0;
 		auto& componentsVector = m_circuit->m_components;
@@ -420,18 +416,16 @@ void CircuitDesigner::removeImportedCable(const std::string& name, bool checkCou
 	int count = 0;
 	if (checkCount && (count = getCableCount(name)))
 	{
+		// Warn user.
 		auto* modal = Lumen::getApp().pushWindow<CircuitDesignerPopupModal>(LumenDockPanel::Floating, "Clear Cables");
-		// Pass the data to the modal.
 		modal->m_entity = name;
 		modal->m_deleteCables = true;
-		modal->m_deleteComponents = false;
 		modal->m_entityCount = count;
 	}
 	else 
 	{
 		// Ensure filename does not have an extension.
-		std::filesystem::path file(name);
-		std::string cableType = file.filename().stem().string();
+		std::string cableType = std::filesystem::path(name).filename().stem().string();
 		m_circuit->m_referenceCables.erase(name);
 		for (auto& cable : m_circuit->m_cables) 
 		{
@@ -441,6 +435,88 @@ void CircuitDesigner::removeImportedCable(const std::string& name, bool checkCou
 				cable->m_cableType = "";
 			}
 		}
+	}
+}
+
+void CircuitDesigner::overwriteComponents(const std::string& type, const YAML::Node& node)
+{
+	// Remove extension.
+	std::string componentType = std::filesystem::path(type).filename().stem().string();
+	// Overwrite components of same type.
+	for (auto& component : m_circuit->m_components)
+	{
+		if (component->equipType == componentType) reloadComponent(component.get(), node);
+		if (m_activeComponent.get() == component.get()) component->enableOutline();
+	}
+}
+
+void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& node)
+{
+	// Ensure correct node.
+	YAML::Node componentNode = node;
+	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
+	glm::vec2 position = component->centre;
+
+	// ----------------- //
+	//  P O L Y G O N S  //
+	// ----------------- //
+
+	auto& polygonsVector = component->m_polygons;
+	for (auto& poly : polygonsVector) Renderer::remove(poly);
+	polygonsVector.clear();
+	for (const auto& poly : componentNode["Polygons"])
+	{
+		polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
+		polygonsVector.back()->translate(position);
+	}
+
+	// ----------- //
+	//  L I N E S  //
+	// ----------- //
+
+	auto& linesVector = component->m_lines;
+	for (auto& line : linesVector) Renderer::remove(line);
+	linesVector.clear();
+	for (const auto& line : componentNode["Line Segments"])
+	{
+		linesVector.push_back(Renderer::addLineSegment2D(line.second, component));
+		linesVector.back()->translate(position);
+	}
+
+	// --------------- //
+	//  C I R C L E S  //
+	// --------------- //
+
+	auto& circlesVector = component->m_circles;
+	for (auto& circle : circlesVector) Renderer::remove(circle);
+	circlesVector.clear();
+	// Add circles.
+	for (const auto& circle : componentNode["Circles"])
+	{
+		circlesVector.push_back(Renderer::addCircle2D(circle.second, component));
+		circlesVector.back()->translate(position);
+	}
+
+	// ----------- //
+	//  P O R T S  //
+	// ----------- //
+
+	auto& portsVector = component->ports;
+	for (auto& port : portsVector)
+	{
+
+	}
+
+}
+
+void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node& node) 
+{
+	// Remove extension.
+	std::string cableType = std::filesystem::path(type).filename().stem().string();
+	// Overwrite cables of same type.
+	for (auto& cable : m_circuit->m_cables)
+	{
+		if (cable->m_cableType == cableType) loadDataToCable(node, cable.get());;
 	}
 }
 
