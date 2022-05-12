@@ -43,11 +43,11 @@ Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, const 
 	return polygon;
 }
 
-PolyLine* Renderer::addPolygon2DClear(const std::vector<glm::vec2>& vertices, Entity* parent)
+PolyLine* Renderer::addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	//s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_linesVAO.get(), parent) });
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, true) });
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, thickness, true) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 
@@ -81,7 +81,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
 
-PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent)
+PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent) });

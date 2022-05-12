@@ -69,6 +69,14 @@ void ComponentDesigner::switchState(CompDesignState state)
 		{
 			m_activeText->disableOutline();
 		}
+		if (m_activePoly)
+		{
+			m_activePoly->disableOutline();
+		}
+		if (m_activeLine)
+		{
+			m_activeLine->disableOutline();
+		}
 		if (m_activePort.get()) 
 		{
 			m_activePort->disableOutline();
@@ -195,13 +203,14 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 {
-	m_activeVertex = nullptr;
+	//m_activeVertex = nullptr;
+	m_activeVertexIdx = -1;
 	if (m_activePoly) 
 	{
-		auto [vertexPtr, distance] = m_activePoly->getNearestVertex(coords);
+		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
 		if (distance < clickTol) 
 		{
-			m_activeVertex = vertexPtr;
+			m_activeVertexIdx = vertexIdx;
 		}
 	}
 	/*if (m_activeCircle) {
@@ -212,10 +221,10 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	}*/
 	else if (m_activeLine) 
 	{
-		auto [vertexPtr, distance] = m_activeLine->getNearestVertex(coords);
+		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIdx(coords);
 		if (distance < clickTol) 
 		{
-			m_activeVertex = vertexPtr;
+			m_activeVertexIdx = vertexIdx;
 		}
 	}
 }
@@ -245,7 +254,7 @@ void ComponentDesigner::deleteActivePrimitive()
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
 	m_activePort = nullptr;
-	m_activeVertex = nullptr;
+	m_activeVertexIdx = -1;
 	m_activeText = nullptr;
 }
 
@@ -253,8 +262,7 @@ void ComponentDesigner::renderDesignPalette()
 {
 	if (ImGui::MenuItem("Polygon", "P", &m_polygon))
 	{
-		clearStates();
-		m_polygon = true;
+		switchState(CompDesignState::DRAW_POLY);
 	}
 
 	ImGui::SameLine();
@@ -263,8 +271,7 @@ void ComponentDesigner::renderDesignPalette()
 
 	if (ImGui::MenuItem("Lines", "L", &m_lines))
 	{
-		clearStates();
-		m_lines = true;
+		switchState(CompDesignState::DRAW_LINE);
 	}
 
 	if(ImGui::BeginMenu("Line Settings..."))
@@ -279,10 +286,18 @@ void ComponentDesigner::renderDesignPalette()
 	ImGui::Separator();
 	ImGui::SameLine();
 
+	glm::vec4 colour = ImGui::GetStyle().Colors[ImGuiCol_FrameBg];
+	ImGui::PushStyleColor(ImGuiCol_FrameBg, { colour.r * 2, colour.g * 2, colour.b * 2, colour.a });
+	ImGui::Checkbox("Filled", &drawFilled);
+	ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+
 	if (ImGui::MenuItem("Ports", "", &m_lines))
 	{
-		clearStates();
-		m_lines = true;
+		switchState(CompDesignState::PLACE_PORT);
 	}
 
 	ImGui::SameLine();
@@ -291,14 +306,22 @@ void ComponentDesigner::renderDesignPalette()
 
 	if (ImGui::MenuItem("Delete", "Del", &m_delete))
 	{
-		clearStates();
-		m_ports = true;
+		if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
 	}
 
 	if (ImGui::MenuItem("Color Editor"))
 	{
 		Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor")->setInitialPosition(getMouseGlobalPosition());
 	}
+
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+	
+	//Find a better way to set this width
+	ImGui::PushItemWidth(100.0f);
+	ImGui::SliderFloat("Thickness", &penThickness, 0.002f, 0.02f, "%0.3f");
+	ImGui::PopItemWidth();
 }
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)

@@ -4,7 +4,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 #include <Clipper/cpp/clipper.hpp>
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -143,7 +143,7 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec3 translation)
 
 void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 {
-	float tol = m_thickness;
+	float tol = m_thickness*2;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
 			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
