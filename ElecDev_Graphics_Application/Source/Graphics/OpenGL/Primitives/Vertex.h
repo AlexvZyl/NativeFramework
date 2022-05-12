@@ -30,13 +30,13 @@ public:
 	// --------- //
 	
 	// Size of the texture data (excluding the entity ID).
-	virtual int getDataSize()  { return 0; };					
+	inline virtual int getDataSize() = 0;					
 	// Size of offset to the entity ID.
-	virtual int getIDOffset()  { return 0; };					
+	inline virtual int getIDOffset() = 0;
 	// Size of the entity ID variable.					
-	virtual int getIDSize()    { return 0; };					
+	inline  virtual int getIDSize() = 0;
 	// Formats the data so that OpenGL can use it.
-	virtual const void* getData() { return nullptr; }	
+	inline virtual const void* getData() = 0;
 	// Returns the ID in a format that OpenGL can use.
 	const void* getID() { return (const void*)&entityID; }			
 };
@@ -163,24 +163,26 @@ public:
 		struct {
 			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
 			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
+			float radius = 0.f;
 			glm::vec2 localCoords = { 0.f,0.f };			// Position
 			float outline = 0.f;
 			float thickness = 0.f;
 			float fade = 0.f;
 		}data;
-		float rawData[12];
+		float rawData[13];
 	};
 
 	// Pointers to the data.
 	glm::vec3* position = &data.position;			// Position of the vertex in 3D space.
 	glm::vec4* color = &data.color;					// Color of the vertex.
+	float* radius = &data.radius;
 	glm::vec2* localCoords = &data.localCoords;		// Position
 	float* thickness = &data.thickness;
 	float* fade = &data.fade;
 	float* outline = &data.outline;
 
 	// Constructors.
-	VertexDataCircle(const glm::vec3& Position, const glm::vec2& local, const glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
+	VertexDataCircle(const glm::vec3& Position, const glm::vec2& local, float radius, const glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
 
 	// Return the raw data for OpenGL to use.
 	virtual const void* getData() override;	

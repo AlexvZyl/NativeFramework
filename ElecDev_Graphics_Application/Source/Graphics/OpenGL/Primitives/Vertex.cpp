@@ -27,7 +27,7 @@ int VertexDataTextured::totalSizeVDT		= VertexDataTextured::dataSizeVDT + Vertex
 // Vertex Data Circle.
 int VertexDataCircle::idSizeVDC				= sizeof(VertexDataCircle::entityID);
 int VertexDataCircle::dataSizeVDC			= sizeof(*VertexDataCircle::position) + sizeof(*VertexDataCircle::color) + sizeof(*VertexDataCircle::localCoords)
-											+ sizeof(*VertexDataCircle::fade) + sizeof(*VertexDataCircle::fade) + sizeof(*VertexDataCircle::outline);
+											+ sizeof(*VertexDataCircle::fade) + sizeof(*VertexDataCircle::fade) + sizeof(*VertexDataCircle::outline) + sizeof(*VertexDataCircle::radius);
 int VertexDataCircle::idOffsetVDC			= VertexDataCircle::dataSizeVDC;
 int VertexDataCircle::totalSizeVDC			= VertexDataCircle::dataSizeVDC + VertexDataCircle::idSizeVDC;
 
@@ -86,8 +86,8 @@ const void* VertexDataTextured::getData()
 
 void VertexDataTextured::initVertexAttributes(unsigned VAO)
 {
-	static int vertexSize = sizeof(*VertexDataTextured::position) + sizeof(*VertexDataTextured::color) + sizeof(*VertexDataTextured::textureCoords) +
-							sizeof(*VertexDataTextured::textureID) + sizeof(*VertexDataTextured::outline) + sizeof(VertexDataTextured::entityID);
+	static int vertexSize = getTotalSize();
+
 	int offset = 0;
 	// Position.
 	GLCall(glEnableVertexArrayAttrib(VAO, 0));
@@ -123,8 +123,9 @@ int VertexDataTextured::getIDSize()    { return idSizeVDT;	  };
 //  Vertex Data Circle.																														   //
 //=============================================================================================================================================//
 
-VertexDataCircle::VertexDataCircle(const glm::vec3& Position, const glm::vec2& localCoord, const glm::vec4& Colour, float Thickness, float Fade, unsigned int eID)
+VertexDataCircle::VertexDataCircle(const glm::vec3& Position, const glm::vec2& localCoord, float radiusIn, const glm::vec4& Colour, float Thickness, float Fade, unsigned int eID)
 {
+	*radius = radiusIn;
 	*position = Position; 
 	*localCoords = localCoord;
 	*color = Colour;
@@ -143,7 +144,7 @@ void VertexDataCircle::initVertexAttributes(unsigned VAO)
 {
 	static int vertexSize = sizeof(*VertexDataCircle::position) + sizeof(*VertexDataCircle::color) + sizeof(*VertexDataCircle::fade) +
 							sizeof(*VertexDataCircle::thickness) + sizeof(VertexDataCircle::entityID) + sizeof(*VertexDataCircle::localCoords) +
-							sizeof(*VertexDataCircle::outline);
+							sizeof(*VertexDataCircle::outline) + sizeof(*VertexDataCircle::radius);
 	int offset = 0;
 	// Position.
 	GLCall(glEnableVertexArrayAttrib(VAO, 0));
@@ -153,25 +154,29 @@ void VertexDataCircle::initVertexAttributes(unsigned VAO)
 	GLCall(glEnableVertexArrayAttrib(VAO, 1));
 	GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 	offset += sizeof(*VertexDataCircle::color);
-	// Local coordinates.
+	// Radius.
 	GLCall(glEnableVertexArrayAttrib(VAO, 2));
-	GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+	GLCall(glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+	offset += sizeof(*VertexDataCircle::radius);
+	// Local coordinates.
+	GLCall(glEnableVertexArrayAttrib(VAO, 3));
+	GLCall(glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 	offset += sizeof(*VertexDataCircle::localCoords);
 	// Outline value.
-	GLCall(glEnableVertexArrayAttrib(VAO, 3));
-	GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-	offset += sizeof(*VertexDataCircle::outline);
-	// Circle thickness.
 	GLCall(glEnableVertexArrayAttrib(VAO, 4));
 	GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
-	offset += sizeof(*VertexDataCircle::thickness);
-	// Circle fade.
+	offset += sizeof(*VertexDataCircle::outline);
+	// Circle thickness.
 	GLCall(glEnableVertexArrayAttrib(VAO, 5));
 	GLCall(glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+	offset += sizeof(*VertexDataCircle::thickness);
+	// Circle fade.
+	GLCall(glEnableVertexArrayAttrib(VAO, 6));
+	GLCall(glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
 	offset += sizeof(*VertexDataCircle::fade);
 	// Entity ID.
-	GLCall(glEnableVertexArrayAttrib(VAO, 6));
-	GLCall(glVertexAttribIPointer(6, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
+	GLCall(glEnableVertexArrayAttrib(VAO, 7));
+	GLCall(glVertexAttribIPointer(7, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
 }
 
 int VertexDataCircle::getTotalSize() { return totalSizeVDC; };

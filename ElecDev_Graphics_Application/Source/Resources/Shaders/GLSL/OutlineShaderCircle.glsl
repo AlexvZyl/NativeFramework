@@ -4,16 +4,18 @@
 // Input.
 layout(location = 0) in vec3 v_pos;
 layout(location = 1) in vec4 v_color;
-layout(location = 2) in vec2 v_localCoords;
-layout(location = 3) in float v_outline;
-layout(location = 4) in float v_thickness;
-layout(location = 5) in float v_fade;
-layout(location = 6) in uint v_entityID;
+layout(location = 2) in float v_radius;
+layout(location = 3) in vec2 v_localCoords;
+layout(location = 4) in float v_outline;
+layout(location = 5) in float v_thickness;
+layout(location = 6) in float v_fade;
+layout(location = 7) in uint v_entityID;
 
 uniform mat4 viewProjMatrix;
 
 struct VertexOutput
 {
+    float Radius;
     vec2 LocalPosition;
     vec4 Color;
     float Thickness;
@@ -31,6 +33,7 @@ void main()
     if(v_outline == 0.0f)
         return;
 
+    Output.Radius        = v_radius;
     Output.LocalPosition = v_localCoords;
     Output.Color         = v_color;
     Output.Thickness     = v_thickness;
@@ -44,6 +47,7 @@ void main()
 
 struct VertexOutput
 {
+    float Radius;
     vec2 LocalPosition;
     vec4 Color;
     float Thickness;

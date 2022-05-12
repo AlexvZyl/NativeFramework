@@ -29,12 +29,10 @@ CircuitDesigner::CircuitDesigner()
 
 CircuitDesigner::~CircuitDesigner()
 {
-	m_circuit.reset();
 }
 
 void CircuitDesigner::createCircuit(const std::filesystem::path& path) 
 {
-	m_circuit.reset();
 	m_circuit = std::make_shared<Circuit>(path);
 }
 

@@ -17,6 +17,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Cable* cable)
 	std::string filename = "";
 	if (cable->m_cableType.size())	filename = (cable->m_cableType + ".lmcb");
 	emitter << YAML::Key << "Filename" << YAML::Value << filename;
+	emitter << YAML::Key << "Label" << YAML::Value << cable->m_titleString;
 
 	// General data.
 	emitter << YAML::Key << "Thickness" << YAML::Value << cable->m_thickness;

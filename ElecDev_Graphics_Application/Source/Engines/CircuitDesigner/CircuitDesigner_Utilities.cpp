@@ -224,6 +224,7 @@ void CircuitDesigner::importComponent(const std::filesystem::path& path, bool lo
 	if (path.filename().extension().string() != ".lmcp")
 	{
 		LUMEN_LOG_WARN("Tried to import component with invalid extension.", "");
+		return;
 	}
 
 	// Add component if it does not exist.
@@ -250,6 +251,7 @@ void CircuitDesigner::importCable(const std::filesystem::path& path, bool loadOn
 	if (path.filename().extension().string() != ".lmcb")
 	{
 		LUMEN_LOG_WARN("Tried to import cable with invalid extension.", "");
+		return;
 	}
 
 	// Add cable if it does not exist.
@@ -280,6 +282,7 @@ void CircuitDesigner::importComponent(const YAML::Node& node, bool loadOnImport,
 	if (filename.extension().string() != ".lmcp")
 	{
 		LUMEN_LOG_WARN("Tried to import component with invalid extension.", "");
+		return;
 	}
 
 	// Add component if it does not exist.
@@ -312,6 +315,7 @@ void CircuitDesigner::importCable(const YAML::Node& node, bool loadOnImport, boo
 	if (filename.extension().string() != ".lmcb")
 	{
 		LUMEN_LOG_WARN("Tried to import cable with invalid extension.", "");
+		return;
 	}
 
 	// Add cable if it does not exist.
@@ -457,6 +461,9 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
 	glm::vec2 position = component->centre;
 
+	// Update the title.
+	component->equipType = componentNode["Equipment Type"].as<std::string>("");
+
 	// ----------------- //
 	//  P O L Y G O N S  //
 	// ----------------- //
@@ -501,12 +508,37 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	//  P O R T S  //
 	// ----------- //
 
+	// Create the new ports.
+	std::vector<std::shared_ptr<Port>> newPorts;
+	for (const auto& port : componentNode["Ports"])
+	{
+		newPorts.push_back(std::make_shared<Port>(port.second, component));
+		newPorts.back()->move(position);
+	}
+	// If any of the new ports are in the position of the old ones,
+	// move the cable over.
 	auto& portsVector = component->ports;
 	for (auto& port : portsVector)
 	{
-
+		// Find port with the same position.
+		for (auto& newPort : newPorts)
+		{
+			// Port has same position.
+			if (newPort->centre == port->centre)
+			{
+				for (auto cable : port->m_cables)
+				{
+					if (cable->m_startPort == port.get()) cable->m_startPort = newPort.get();
+					if (cable->m_endPort   == port.get()) cable->m_endPort = newPort.get();
+				}
+				newPort->m_cables = port->m_cables;
+				port->m_cables.clear();
+				break;
+			}
+		}
 	}
-
+	portsVector.clear();
+	portsVector = newPorts;
 }
 
 void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node& node) 
