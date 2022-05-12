@@ -29,6 +29,9 @@ CircuitDesigner::CircuitDesigner()
 
 CircuitDesigner::~CircuitDesigner()
 {
+	// Get rid of shared ptr.
+	m_activeComponent = nullptr;
+	m_activeCable = nullptr;
 }
 
 void CircuitDesigner::createCircuit(const std::filesystem::path& path) 

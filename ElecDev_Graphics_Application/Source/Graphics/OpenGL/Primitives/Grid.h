@@ -133,11 +133,11 @@ private:
 	int m_fineGridPixelSize = 1;
 	int m_coarseGridPixelSize = 2;
 	int m_originGridPixelSize = 3;
-	float m_coarseIncrementSize = 0.2f;
+	float m_coarseIncrementSize = 0.2f * 2;
 	float m_fineIncrementSize = 0.04f;
 	glm::vec4 m_coarseGrid = { 1.f, 1.f, 1.f, 1.f };
 	glm::vec4 m_coarseGridColor = { 1.f, 1.f, 1.f, 0.9f };
-	glm::vec4 m_fineGridColor = { 1.f, 1.f, 1.f, 0.3f };
+	glm::vec4 m_fineGridColor = { 1.f, 1.f, 1.f, 0.2f };
 	glm::vec4 m_xAxisColor = { 0.f, 1.f, 0.f, 1.f };
 	glm::vec4 m_yAxisColor = {1.f, 0.f, 0.f, 1.f};
 	glm::vec4 m_helperCircleColor = {0.f, 0.f, 1.f, 1.f};
