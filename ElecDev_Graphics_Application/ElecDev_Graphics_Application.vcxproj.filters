@@ -141,6 +141,7 @@
     <ClCompile Include="Source\GUI\LumenPayload\LumenPayload.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenPopupWindow.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\PolyLineSerialiser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\Boost\Includes\bind\apply.hpp">

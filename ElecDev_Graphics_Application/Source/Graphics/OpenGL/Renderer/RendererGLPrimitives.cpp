@@ -149,6 +149,40 @@ Circle* Renderer::addCircle2D(const YAML::Node& node, Entity* parent)
 	);
 }
 
+PolyLine* Renderer::addPolyLine(const YAML::Node& node, Entity* parent)
+{
+	// Get vertices.
+	std::vector<glm::vec2> vertices;
+	for (const auto& vertexNode : node["Vertices"])
+	{
+		YAML::Node vertex = vertexNode.second;
+		vertices.push_back({ vertex[0].as<float>(), vertex[1].as<float>() });
+	}
+
+	glm::vec4 color = { node["Color"][0].as<float>(), node["Color"][1].as<float>() , node["Color"][2].as<float>() , node["Color"][3].as<float>() };
+
+	if (node["Closed"].as<bool>())
+	{
+		PolyLine* polyline = Renderer::addPolygon2DClear(
+				vertices,
+				node["Thickness"].as<float>(),
+				parent
+			);
+		polyline->setColor(color); 
+		return polyline;
+	}
+	else
+	{
+		PolyLine* polyline = Renderer::addPolyLine(
+				vertices,
+				node["Thickness"].as<float>(),
+				parent
+			);
+		polyline->setColor(color);
+		return polyline;
+	}
+}
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

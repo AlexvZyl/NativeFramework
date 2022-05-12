@@ -55,7 +55,7 @@ public:
 	// Data.
 	glm::vec4 m_boxColor = { 0.f, 0.f, 0.f, 0.f };
 	Font* m_font = nullptr;
-	float m_textScale = 3;
+	float m_textScale = 1.f;
 	std::string m_verticalAlign = "L";
 	std::string m_horizontalAlign = "B";
 	std::string m_string = "";
