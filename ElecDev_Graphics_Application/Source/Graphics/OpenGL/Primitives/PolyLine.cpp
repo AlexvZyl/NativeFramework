@@ -4,7 +4,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 #include <Clipper/cpp/clipper.hpp>
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;

@@ -46,7 +46,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
 				}
 				else {
-					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, m_activeComponent.get());
+					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get());
 				}
 				//m_activeComponent->addPoly(m_activePoly);
 				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
@@ -61,7 +61,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (!m_activeLine) 
 			{
 				//start new line
-				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), 0.001f, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
+				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), penThickness, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
 			}
 			else {
 				//end the line
@@ -82,12 +82,12 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				}
 				else 
 				{
-					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, .02f, 0.f, m_activeComponent.get());
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, penThickness, 0.f, m_activeComponent.get());
 				}
 			}
 			else 
 			{
-				//set the circle rarius
+				//set the circle radius
 				m_activeComponent->addCircle(m_activeCircle);
 				m_activeCircle = nullptr;
 			}
@@ -230,7 +230,7 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		case GLFW_KEY_K:
 			// Test add polyLine.
 			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
-			polyline = Renderer::addPolygon2DClear(vertices, m_activeComponent.get());
+			polyline = Renderer::addPolygon2DClear(vertices, penThickness, m_activeComponent.get());
 			//polyline->pushVertex({ -0.5f, 0.f });
 			break;
 

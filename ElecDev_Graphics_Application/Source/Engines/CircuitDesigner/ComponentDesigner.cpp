@@ -69,6 +69,14 @@ void ComponentDesigner::switchState(CompDesignState state)
 		{
 			m_activeText->disableOutline();
 		}
+		if (m_activePoly)
+		{
+			m_activePoly->disableOutline();
+		}
+		if (m_activeLine)
+		{
+			m_activeLine->disableOutline();
+		}
 		if (m_activePort.get()) 
 		{
 			m_activePort->disableOutline();
@@ -305,6 +313,15 @@ void ComponentDesigner::renderDesignPalette()
 	{
 		Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor")->setInitialPosition(getMouseGlobalPosition());
 	}
+
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+	
+	//Find a better way to set this width
+	ImGui::PushItemWidth(100.0f);
+	ImGui::SliderFloat("Thickness", &penThickness, 0.002f, 0.02f, "%0.3f");
+	ImGui::PopItemWidth();
 }
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)

@@ -17,7 +17,7 @@ public:
 	bool outlined = false;
 	bool m_closed = false;
     
-    PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, bool closed = false);
+    PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness = 0.014f, bool closed = false);
     //Calculates the offset and runs the triangulation function
 	virtual void pushVertex(const glm::vec3& vertex) override;
 	virtual void pushVertex(const glm::vec2& vertex);

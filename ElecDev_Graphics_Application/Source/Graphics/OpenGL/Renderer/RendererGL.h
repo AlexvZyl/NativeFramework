@@ -119,7 +119,7 @@ public:
 	// Add a filled 2D polygon with color.
 	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
-	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, Entity* parent = nullptr);
+	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr);
 	// Add a circle.
 	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a circle.
@@ -129,7 +129,7 @@ public:
 	// Add a 2D text string.
 	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
 	//Add a polyline
-	static PolyLine* addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent = nullptr);
+	static PolyLine* addPolyLine(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr);
 
 	// Add text from a YAML file.
 	static Text* addText2D(const YAML::Node& node, Entity* parent = nullptr);

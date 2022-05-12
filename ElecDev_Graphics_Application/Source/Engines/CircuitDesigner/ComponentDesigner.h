@@ -34,6 +34,7 @@ public:
     unsigned int m_currentEntityID = 0;
     float clickTol = 0.01f;
     bool drawFilled = true;
+    float penThickness = 0.014f;
 
     CompDesignState designerState = CompDesignState::SELECT;
 
