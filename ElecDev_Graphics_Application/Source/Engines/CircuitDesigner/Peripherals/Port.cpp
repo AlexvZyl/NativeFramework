@@ -267,7 +267,6 @@ void Port::hideAttachIndicator()
 
 void Port::setContext(GUIState* guiState)
 {
-	//guiState->clickedZone.port = true;
 	m_parent->setContext();
 }
 

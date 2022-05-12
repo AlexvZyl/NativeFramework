@@ -40,9 +40,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 		emitter << YAML::Key << "Component " + std::to_string(index) << YAML::Value;
 		emitter << YAML::BeginMap;
 			emitter << YAML::Key << "Filename" << YAML::Value <<  comp->equipType + ".lmcp";
+			emitter << YAML::Key << "Label" << YAML::Value << comp->titleString;
 			emitter << YAML::Key << "Position" << YAML::Value << comp->centre;
 			emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
-			emitter << YAML::Key << "Label" << YAML::Value << comp->titleString;
 		emitter << YAML::EndMap;
 		index++;
 	}
