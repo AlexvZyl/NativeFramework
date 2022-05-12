@@ -198,18 +198,18 @@ void Renderer::geometryPass2D(Scene* scene)
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
+	// Draw Circles.
+	shader = s_shaders["CircleShader"].get();
+	shader->bind();
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
+	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
+
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
-
-	// Draw Circles.
-	shader = s_shaders["CircleShader"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 }
 
 void Renderer::objectOutliningPass2D(Scene* scene) 
@@ -239,18 +239,18 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
+	// Draw Circles.
+	shader = s_shaders["OutlineShaderCircle"].get();
+	shader->bind();
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
+	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
+
 	// Draw textured primitives.
 	shader = s_shaders["OutlineShaderTextures"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
-
-	// Draw Circles.
-	shader = s_shaders["OutlineShaderCircle"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 
 	// Render outline with post processing.
 	Renderer::setDepthFunc(GL_ALWAYS);

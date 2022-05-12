@@ -29,7 +29,7 @@ CircuitDesigner::CircuitDesigner()
 
 CircuitDesigner::~CircuitDesigner()
 {
-	// Get rid of shared ptr.
+	// Get rid of shared ptr ref.
 	m_activeComponent = nullptr;
 	m_activeCable = nullptr;
 }
