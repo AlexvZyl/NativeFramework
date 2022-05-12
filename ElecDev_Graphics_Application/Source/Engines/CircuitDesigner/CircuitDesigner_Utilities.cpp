@@ -464,6 +464,14 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	// Update the title.
 	component->equipType = componentNode["Equipment Type"].as<std::string>("");
 
+	// ----------- //
+	//  T I T L E  //
+	// ----------- //
+
+	glm::vec3 titlePosition = { node["Title"]["Position"][0].as<float>(), node["Title"]["Position"][1].as<float>() , node["Title"]["Position"][2].as<float>() };
+	component->title->translateTo(titlePosition);
+	component->title->translate(position);
+
 	// ----------------- //
 	//  P O L Y G O N S  //
 	// ----------------- //
@@ -471,10 +479,22 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	auto& polygonsVector = component->m_polygons;
 	for (auto& poly : polygonsVector) Renderer::remove(poly);
 	polygonsVector.clear();
+	int count = 0;
 	for (const auto& poly : componentNode["Polygons"])
 	{
-		polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
-		polygonsVector.back()->translate(position);
+		// Polygon.
+		if (poly.first.as<std::string>() == "Polygon " + std::to_string(count))
+		{
+			polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
+			polygonsVector.back()->translate(position);
+		}
+		// Polyline.
+		else
+		{
+			polygonsVector.push_back(Renderer::addPolyLine(poly.second, component));
+			polygonsVector.back()->translate(position);
+		}
+		count++;
 	}
 
 	// ----------- //
@@ -530,8 +550,8 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 				{
 					if (cable->m_startPort == port.get()) cable->m_startPort = newPort.get();
 					if (cable->m_endPort   == port.get()) cable->m_endPort = newPort.get();
+					newPort->attachCable(cable);
 				}
-				newPort->m_cables = port->m_cables;
 				port->m_cables.clear();
 				break;
 			}
