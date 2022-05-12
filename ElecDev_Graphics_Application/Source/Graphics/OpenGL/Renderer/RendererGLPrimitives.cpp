@@ -81,6 +81,15 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
 
+Text* Renderer::addText2D(const std::string& text, const glm::vec2& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment, const std::string& verticalAlignment, Entity* parent)
+{
+	unsigned id = EntityManager::peakNextID();
+	s_scene->m_primitives.insert({ id, std::make_unique<Text>(text, glm::vec3{position, 0.f}, color, scale,
+															  s_scene->m_texturedTrianglesVAO.get(), s_defaultFont.get(),
+															  parent, horizontalAlignment, verticalAlignment) });
+	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
+}
+
 PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();

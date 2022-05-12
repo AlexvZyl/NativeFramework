@@ -49,7 +49,30 @@ void ComponentDesigner::switchState(CompDesignState state)
 		designerState = CompDesignState::PLACE_PORT;
 		break;
 
+	case CompDesignState::ADD_TEXT:
+		//Add new text
+		switchState(CompDesignState::SELECT);
+		designerState = CompDesignState::ADD_TEXT;
+		break;
 	case CompDesignState::SELECT:
+
+		if (m_activeText)
+		{
+			m_activeText->disableOutline();
+		}
+		if (m_activePoly)
+		{
+			m_activePoly->disableOutline();
+		}
+		if (m_activeLine)
+		{
+			m_activeLine->disableOutline();
+		}
+		if (m_activePort.get())
+		{
+			m_activePort->disableOutline();
+		}
+
 		if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE) 
 		{
 			if (m_activeCircle) 
@@ -65,22 +88,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 				Renderer::remove(m_activeLine);
 			}
 		}
-		if (m_activeText) 
-		{
-			m_activeText->disableOutline();
-		}
-		if (m_activePoly)
-		{
-			m_activePoly->disableOutline();
-		}
-		if (m_activeLine)
-		{
-			m_activeLine->disableOutline();
-		}
-		if (m_activePort.get()) 
-		{
-			m_activePort->disableOutline();
-		}
+
 		m_activeLine = nullptr;
 		m_activePoly = nullptr;
 		m_activeCircle = nullptr;
@@ -232,6 +240,23 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 void ComponentDesigner::deleteActivePrimitive()
 {
 
+	if (m_activeText)
+	{
+		m_activeText->disableOutline();
+	}
+	if (m_activePoly)
+	{
+		m_activePoly->disableOutline();
+	}
+	if (m_activeLine)
+	{
+		m_activeLine->disableOutline();
+	}
+	if (m_activePort.get())
+	{
+		m_activePort->disableOutline();
+	}
+
 	if (m_activeLine)
 	{
 		m_activeComponent->removeLine(m_activeLine);
@@ -247,6 +272,10 @@ void ComponentDesigner::deleteActivePrimitive()
 	if (m_activePort) 
 	{
 		m_activeComponent->removePort(m_activePort);
+	}
+	if (m_activeText)
+	{
+		m_activeComponent->removeText(m_activeText);
 	}
 
 	//remove previous selection

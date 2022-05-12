@@ -9,7 +9,8 @@ enum class CompDesignState
     DRAW_POLY,
     DRAW_LINE,
     DRAW_CIRCLE,
-    PLACE_PORT
+    PLACE_PORT,
+    ADD_TEXT
 };
 
 class ComponentDesignerColorEditor;
@@ -32,7 +33,7 @@ public:
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
-    float clickTol = 0.01f;
+    float clickTol = 0.03f;
     bool drawFilled = true;
     float penThickness = 0.014f;
 

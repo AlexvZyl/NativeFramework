@@ -250,7 +250,6 @@ void Component2D::setColour(const glm::vec4& colour)
 void Component2D::addPoly(Polygon2D* poly)
 {
 	m_polygons.push_back(poly);
-	m_polygons.back()->setColor(shapeColour);
 	m_polygons.back()->setLayer(0.001f);//temp fix
 }
 
@@ -308,6 +307,20 @@ void Component2D::removeLine(LineSegment* line)
 	else 
 	{
 		LUMEN_LOG_WARN("Attempted to remove a line that is not a member of m_lines.", "Component2D");
+	}
+}
+
+void Component2D::removeText(Text* text)
+{
+	auto to_remove = std::find(begin(m_text), end(m_text), text);
+	if (to_remove != m_text.end())
+	{
+		Renderer::remove(text);
+		m_text.erase(to_remove);
+	}
+	else
+	{
+		LUMEN_LOG_WARN("Attempted to remove a text objet that is not a member of m_text. This can be expected when attempting to delete port or component names.", "Component2D");
 	}
 }
 

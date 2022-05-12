@@ -87,6 +87,32 @@ void LineSegment::translateVertex(VertexData* vertex, const glm::vec2 translatio
 	}
 }
 
+void LineSegment::translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+{
+	//check if we should move the end or the start of the line
+	if (glm::length(glm::vec2(m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position) - m_end) < glm::length(glm::vec2(m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position) - m_start)) {
+		//move the end
+		setEnd(m_end + translation);
+	}
+	else {
+		//move the sart
+		setStart(m_start + translation);
+	}
+}
+
+void LineSegment::translateToVertexAtIndex(unsigned index, const glm::vec2& position)
+{
+	//check if we should move the end or the start of the line
+	if (glm::length(glm::vec2(m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position) - m_end) < glm::length(glm::vec2(m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position) - m_start)) {
+		//move the end
+		setEnd(position);
+	}
+	else {
+		//move the sart
+		setStart(position);
+	}
+}
+
 //==============================================================================================================================================//
 // EOF.																																			//
 //==============================================================================================================================================//

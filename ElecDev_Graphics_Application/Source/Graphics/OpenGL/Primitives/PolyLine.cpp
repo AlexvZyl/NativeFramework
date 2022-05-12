@@ -4,7 +4,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 #include <Clipper/cpp/clipper.hpp>
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour) :Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -175,10 +175,12 @@ void PolyLine::translate(const glm::vec2& translation)
 
 void PolyLine::translateTo(const glm::vec3& position)
 {
+	translateTo(glm::vec2(position));
 }
 
 void PolyLine::translateTo(const glm::vec2& position)
 {
+	translate(position - glm::vec2(m_trackedCenter));
 }
 
 void PolyLine::enableOutline()

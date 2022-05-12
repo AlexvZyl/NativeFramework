@@ -10,6 +10,7 @@
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Utilities/Logger/Logger.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "GUI/TextEntryGUI/TextEntryGUI.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
@@ -95,6 +96,17 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		else if (designerState == CompDesignState::PLACE_PORT) {
 			m_activeComponent->addPort(m_activePort);
 			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
+		}
+		else if (designerState == CompDesignState::ADD_TEXT)
+		{
+			// Create a popup GUI for the text entry.
+			m_activeText = Renderer::addText2D(" ", screenCoords, { 0.f, 0.f, 0.f, 1.f }, 0.035f, "C", "B", m_activeComponent.get());
+			m_activeComponent->m_text.push_back(m_activeText);
+			
+			TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+			
+			
+
 		}
 	}
 
@@ -234,6 +246,11 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			//polyline->pushVertex({ -0.5f, 0.f });
 			break;
 
+		case GLFW_KEY_T:
+			//Add new text
+			switchState(CompDesignState::ADD_TEXT);
+			break;
+
 		case GLFW_KEY_DELETE:
 			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
 			break;
@@ -320,17 +337,17 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 		if (m_activeVertexIdx != -1) 
 		{
-			if (m_activePoly) {
+			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_VAO->m_vertexCPU[m_activeLine->m_vertexBufferPos + m_activeVertexIdx].data.position));
+			else if (m_activePoly) {
 				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
 				if (polyline) {
 					//Polygon is clear, so we index with m_vertices (nodes)
-					polyline->translateToVertexAtIndex(m_activeVertexIdx, polyline->m_vertices.at(m_activeVertexIdx));
+					polyline->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
 				}
 				else {
 					m_activePoly->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
 				}
 			}
-			else if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
 		}
 		if (m_activePort)		   m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
 	}

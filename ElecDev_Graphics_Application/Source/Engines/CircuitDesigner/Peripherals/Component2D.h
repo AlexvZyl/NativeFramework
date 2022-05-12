@@ -53,6 +53,7 @@ public:
 	std::vector<Polygon2D*> m_polygons;
 	std::vector<LineSegment*> m_lines;
 	std::vector<Circle*> m_circles;
+	std::vector<Text*> m_text;
 	Text* title;
 	std::vector<std::shared_ptr<Port>> ports;
 
@@ -136,6 +137,7 @@ public:
 	void removePoly(Polygon2D* poly);
 	void removeCircle(Circle* circle);
 	void removeLine(LineSegment* line);
+	void removeText(Text* text);
 	
 
 private:
