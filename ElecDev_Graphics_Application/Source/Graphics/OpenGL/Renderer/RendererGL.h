@@ -141,6 +141,8 @@ public:
 	static Polygon2D* addPolygon2D(const YAML::Node& node, Entity* parent = nullptr);
 	// Add circle from a YAML file.
 	static Circle* addCircle2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add a polyline from a YAML file.
+	static PolyLine* addPolyLine(const YAML::Node& node, Entity* parent = nullptr);
 
 	
 	// --------------------------- //

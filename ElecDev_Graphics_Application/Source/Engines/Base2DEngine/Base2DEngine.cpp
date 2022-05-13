@@ -19,7 +19,7 @@ Base2DEngine::Base2DEngine()
 	m_scene = std::make_unique<Scene>(CameraType::Standard2D, glm::vec2(500, 500));
 	Renderer::storeAndBindScene(&getScene());
 	getScene().getCamera().setScaleRate(0.5f);
-	getScene().getCamera().scale2D(3.f);
+	getScene().getCamera().scale2D(2.f);
 };
 
 //=============================================================================================================================================//

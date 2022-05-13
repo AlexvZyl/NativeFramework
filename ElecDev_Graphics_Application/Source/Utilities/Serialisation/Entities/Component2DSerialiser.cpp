@@ -5,6 +5,7 @@
 #include "../Serialiser.h"
 #include "Engines/CircuitDesigner/Peripherals/Component2D.h"
 #include "Graphics/Fonts/FontLoader.h"
+#include "OpenGL/Primitives/PolyLine.h"
 
 //=============================================================================================================================================//
 //  Component 2D serialiser.   																												   //
@@ -34,7 +35,15 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	int index = 0;
 	for (auto& poly : comp->m_polygons)
 	{
-		emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
+		PolyLine* polyline = dynamic_cast<PolyLine*>(poly);
+		if (polyline)
+		{
+			emitter << YAML::Key << "Polyline " + std::to_string(index) << YAML::Value << polyline;
+		}
+		else 
+		{
+			emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
+		}
 		index++;
 	}
 	emitter << YAML::EndMap;

@@ -29,6 +29,7 @@ class LineSegment;
 class Circle;
 class Polygon2D;
 class Text;
+class PolyLine;
 
 // Enums.
 enum class PortType;
@@ -115,6 +116,11 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Text>& text);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<Polygon2D> polygon2D);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<Polygon2D> polygon2D);
+
+// Polygon2D.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, PolyLine* polygon2D);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<PolyLine> polygon2D);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<PolyLine> polygon2D);
 
 // Circle.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, Circle* circle);

@@ -304,6 +304,7 @@
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\CircleSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\LineSegmentSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\Polygon2DSerialiser.cpp" />
+    <ClCompile Include="Source\Utilities\Serialisation\Primitives\PolyLineSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\TextSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserUtilities.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\SerialiserYAML.cpp" />

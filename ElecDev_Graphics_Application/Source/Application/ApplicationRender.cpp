@@ -222,7 +222,6 @@ void Application::buildDocks()
 	// Left Panel.
 	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.3f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_leftPanelID);
-	dockNode->LocalFlags |= ImGuiDockNodeFlags_AutoHideTabBar;
 
 	// Bottom Bar.
 	m_bottomBarID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.03f, NULL, &m_scenePanelID);

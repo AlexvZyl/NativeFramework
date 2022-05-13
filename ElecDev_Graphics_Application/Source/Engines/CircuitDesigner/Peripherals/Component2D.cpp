@@ -113,9 +113,20 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	}
 
 	// Add polygons.
+	int count = 0;
 	for (const auto& poly : componentNode["Polygons"])
 	{
-		m_polygons.push_back(Renderer::addPolygon2D(poly.second, this));
+		// Polygon.
+		if (poly.first.as<std::string>() == "Polygon " + std::to_string(count))
+		{
+			m_polygons.push_back(Renderer::addPolygon2D(poly.second, this));
+		}
+		// Polyline.
+		else 
+		{
+			m_polygons.push_back(Renderer::addPolyLine(poly.second, this));
+		}
+		count++;
 	}
 
 	// Add circles.
