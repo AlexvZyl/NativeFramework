@@ -163,6 +163,7 @@ Component2D::~Component2D()
 	for (auto circle : m_circles) Renderer::remove(circle);
 	for (auto line : m_lines)     Renderer::remove(line);
 	for (auto poly : m_polygons)  Renderer::remove(poly);
+	for (auto text : m_text)	  Renderer::remove(text);
 }
 
 //=============================================================================================================================================//
@@ -181,6 +182,7 @@ void Component2D::move(const glm::vec2& translation)
 	for (auto poly : m_polygons)	poly->translate(translation);
 	for (auto line : m_lines)		line->translate(translation);
 	for (auto circ : m_circles)	    circ->translate(translation);
+	for (auto text : m_text)        text->translate(translation);
 	for (auto& port : ports)		port->move(translation);
 	centre += translation;
 }
@@ -201,6 +203,7 @@ void Component2D::setLayer(float layer)
 	for (auto poly : m_polygons)  poly->setLayer(layer);
 	for (auto line : m_lines)	  line->setLayer(layer);
 	for (auto circ : m_circles)   circ->setLayer(layer);
+	for (auto text : m_text)      text->setLayer(layer);
 	for (auto& port : ports)	  port->setLayer(layer + portLayerOffset);
 	componentLayer = layer;
 }
@@ -217,6 +220,7 @@ void Component2D::enableOutline()
 	for (auto poly : m_polygons)  poly->enableOutline();
 	for (auto line : m_lines)	  line->enableOutline();
 	for (auto circ : m_circles)	  circ->enableOutline();
+	for (auto text : m_text)      text->enableOutline();
 	for (auto& port : ports)	  port->enableOutline();
 }
 
@@ -227,6 +231,7 @@ void Component2D::disableOutline()
 	for (auto poly : m_polygons) poly->disableOutline();
 	for (auto line : m_lines)    line->disableOutline();
 	for (auto circ : m_circles)  circ->disableOutline();
+	for (auto text : m_text)     text->disableOutline();
 	for (auto& port : ports)	 port->disableOutline();
 }
 

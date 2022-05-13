@@ -479,6 +479,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	auto& polygonsVector = component->m_polygons;
 	for (auto& poly : polygonsVector) Renderer::remove(poly);
 	polygonsVector.clear();
+	// Add new.
 	int count = 0;
 	for (const auto& poly : componentNode["Polygons"])
 	{
@@ -504,6 +505,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	auto& linesVector = component->m_lines;
 	for (auto& line : linesVector) Renderer::remove(line);
 	linesVector.clear();
+	// Add new.
 	for (const auto& line : componentNode["Line Segments"])
 	{
 		linesVector.push_back(Renderer::addLineSegment2D(line.second, component));
@@ -514,14 +516,30 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	//  C I R C L E S  //
 	// --------------- //
 
+	// Remove existing.
 	auto& circlesVector = component->m_circles;
 	for (auto& circle : circlesVector) Renderer::remove(circle);
 	circlesVector.clear();
-	// Add circles.
+	// Add new.
 	for (const auto& circle : componentNode["Circles"])
 	{
 		circlesVector.push_back(Renderer::addCircle2D(circle.second, component));
 		circlesVector.back()->translate(position);
+	}
+
+	// --------- //
+	//  T E X T  //
+	// --------- //
+
+	// Remove existing.
+	auto& textVector = component->m_text;
+	for (auto& text : textVector) Renderer::remove(text);
+	textVector.clear();
+	// Add new.
+	for (const auto& text : componentNode["Text"])
+	{
+		textVector.push_back(Renderer::addText2D(text.second, component));
+		textVector.back()->translate(position);
 	}
 
 	// ----------- //
