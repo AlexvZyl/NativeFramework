@@ -132,16 +132,16 @@ void Renderer::gridPass(Scene* scene)
 
 	// Setup shader.
 	Shader* shader = s_shaders["BasicShader"].get();
+	Grid& grid = scene->getGrid();
 	Camera& camera = scene->getCamera();
 	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
+	shader->setMat4("viewProjMatrix", grid.getViewProjectionMatrix(camera));
 
 	// Draw grid.	
-	Grid* grid = scene->m_grid.get();
 	Renderer::setDepthFunc(GL_ALWAYS);
-	Renderer::drawBufferIndexed(grid->m_fineVAO.get());
-	Renderer::drawBufferIndexed(grid->m_coarseVAO.get());
-	Renderer::drawBufferIndexed(grid->m_originVAO.get());
+	Renderer::drawBufferIndexed(grid.m_fineVAO.get());
+	Renderer::drawBufferIndexed(grid.m_coarseVAO.get());
+	Renderer::drawBufferIndexed(grid.m_originVAO.get());
 	Renderer::setDepthFunc(GL_LESS);
 }
 

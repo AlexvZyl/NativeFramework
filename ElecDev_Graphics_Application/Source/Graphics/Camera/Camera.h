@@ -70,6 +70,7 @@ public:
 
 private:
 
+	friend class Grid;
 
 	// ------------------- //
 	//  U T I L I T I E S  //

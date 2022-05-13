@@ -24,7 +24,11 @@ CircuitDesigner::CircuitDesigner()
 	: Base2DEngine()
 {
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
-	getScene().getGrid().disableHelperCircle();
+	getScene().getGrid()
+		.disableHelperCircle()
+		.setWidgetPosition(GridWidgetPosition::BOTTOM_RIGHT)
+		.setScale(1.f/1000.f);
+	getScene().getCamera().scale2D(1000.f);
 	enableOverlay();
 }
 
@@ -42,7 +46,7 @@ void CircuitDesigner::createCircuit(const std::filesystem::path& path)
 
 void CircuitDesigner::renderOverlay() 
 {
-	ImGui::Button("Test");
+	getScene().getGrid().renderOverlay();
 }
 
 //=============================================================================================================================================//

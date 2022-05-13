@@ -16,7 +16,9 @@
 
 SettingsWidget::SettingsWidget(std::string name, int imguiWindowFlags)
 	: LumenWindow(name, imguiWindowFlags)
-{}
+{
+    addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
+}
 
 void SettingsWidget::onImGuiBegin()
 {
@@ -83,8 +85,9 @@ void SettingsWidget::onImGuiRender()
     static int newGridCount = 10;
     if (engine) 
     {
+        Grid& grid = engine->getScene().getGrid();
         ImGui::Separator();
-        int gridLines = engine->getScene().getGrid().getTotalCoarseLines();
+        int gridLines = grid.getTotalCoarseLines();
         std::string gridCount = "Scene current grid lines: " + std::to_string(gridLines);
         ImGui::Text(gridCount.c_str());
         ImGui::Text("New Grid Count: ");
@@ -92,8 +95,15 @@ void SettingsWidget::onImGuiRender()
         ImGui::SliderInt("##SceneGridLines", &newGridCount, 1, 100);
         if (ImGui::Button("Update Grid"))
         {
-            engine->getScene().getGrid().destroyGrid().setTotalCoarseLines(newGridCount).createGrid();
+            grid.destroyGrid().setTotalCoarseLines(newGridCount).createGrid();
         }
+
+        ImGui::Text("Grid Scale:");
+
+        float sliderValue = grid.getScale();
+        ImGui::SliderFloat("##GridScaleSlider", &sliderValue, 1.f/10, 1.f*10);
+        grid.setScale(sliderValue);
+
         ImGui::Separator();
     }
 }

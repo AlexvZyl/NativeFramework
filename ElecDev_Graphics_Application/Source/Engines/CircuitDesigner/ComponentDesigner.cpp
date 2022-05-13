@@ -17,7 +17,10 @@ ComponentDesigner::ComponentDesigner()
 	m_activeComponent->place(glm::vec2(0.f));
 	m_activeComponent->disableOutline();
 	enableDesignPalette();
-	getScene().getGrid().disableHelperCircle();
+	enableOverlay();
+	getScene().getGrid().disableHelperCircle()
+		.setScale(1.f/1000.f);
+	getScene().getCamera().scale2D(1000.f);
 }
 
 void ComponentDesigner::switchState(CompDesignState state)
@@ -355,4 +358,9 @@ void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit*
 	m_activePort.reset();
 	m_activeComponent = std::make_shared<Component2D>(path, parent);
 	m_activeComponent->disableOutline();
+}
+
+void ComponentDesigner::renderOverlay() 
+{
+	getScene().getGrid().renderOverlay();
 }
