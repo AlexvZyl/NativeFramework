@@ -303,14 +303,6 @@ void ComponentDesigner::renderDesignPalette()
 		switchState(CompDesignState::DRAW_LINE);
 	}
 
-	if(ImGui::BeginMenu("Line Settings..."))
-	{
-		ImGui::MenuItem("Test1");
-		ImGui::MenuItem("Test2");
-		ImGui::MenuItem("Test3");
-		ImGui::EndMenu();
-	}
-
 	ImGui::SameLine();
 	ImGui::Separator();
 	ImGui::SameLine();

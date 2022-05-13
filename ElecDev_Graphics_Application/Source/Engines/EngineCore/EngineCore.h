@@ -128,18 +128,24 @@ public:
 	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
 	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
 
-	// ----------------------------- //
-	//  D E S I G N   P A L E T T E  //
-	// ----------------------------- //
+	// ----------------------- //
+	//  G U I   W I D G E T S  //
+	// ----------------------- //
 
-	// Renders the design palette. (Has to be enabled).
+	// Engine design palette.
+	// A toolbar at the top of the engine display.
 	inline virtual void renderDesignPalette() {};
-	// Checks if the engine's design palette is enabled.
 	inline bool hasDesignPalette()		{ return m_hasDesignPalette;  }
-	// Enables the design palette for this engine.
 	inline void enableDesignPalette()	{ m_hasDesignPalette = true;  }
-	// Disables the design palette for this engine.
 	inline void disableDesignPalette()	{ m_hasDesignPalette = false; }
+
+	// Engine overlay.
+	// GUI elements that are rendered on top of the engine and block events
+	// to the engine.
+	inline void enableOverlay()	 { m_hasOverlay = true;  }
+	inline void disableOverlay() { m_hasOverlay = false; }
+	inline bool hasOverlay()	 { return m_hasOverlay;  }
+	inline virtual void renderOverlay() {};
 
 private:
 
@@ -154,6 +160,7 @@ private:
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
+	bool m_hasOverlay = false;
 
 	// Handlers that are always called on the events.
 	// Prevents children from overriding certain behaviour.

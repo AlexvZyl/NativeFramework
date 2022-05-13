@@ -130,22 +130,16 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	}
 
 	// Add circles.
-	for (const auto& circle : componentNode["Circles"])
-	{
+	for (const auto& circle : componentNode["Circles"]) 
 		m_circles.push_back(Renderer::addCircle2D(circle.second, this));
-	}
 
 	// Add ports.
 	for (const auto& port : componentNode["Ports"])
-	{
 		ports.push_back(std::make_shared<Port>(port.second, this));
-	}
 
 	// Add text.
 	for (const auto& text : componentNode["Text"])
-	{
 		m_text.push_back(Renderer::addText2D(text.second, this));
-	}
 
 	titleString = title->m_string;
 	equipType = componentNode["Equipment Type"].as<std::string>();

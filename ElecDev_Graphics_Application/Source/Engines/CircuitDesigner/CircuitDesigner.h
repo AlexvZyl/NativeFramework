@@ -102,6 +102,8 @@ public:
 	void overwriteCables(const std::string& type, const YAML::Node& node);
 	void reloadComponent(Component2D* component, const YAML::Node& node);
 
+	virtual void renderOverlay() override;
+
 
 private:
 

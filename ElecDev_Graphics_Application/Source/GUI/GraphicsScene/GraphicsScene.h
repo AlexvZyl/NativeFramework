@@ -74,6 +74,7 @@ public:
 		m_engine->onRender();
 		if (!m_textureID) return;
 		ImGui::Image(m_textureID, m_contentRegionSize, ImVec2(0, 1), ImVec2(1, 0));
+		//ImGui::SetItemAllowOverlap();
 		// Check if image is hovered to allow blocking of events.
 		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
 		else						m_engine->m_isHovered = false;
@@ -87,6 +88,20 @@ public:
 		LumenPayload payloadNode(LumenPayloadType::YamlNode);
 		payloadNode.setDragAndDropTarget();
 		if (payloadNode.hasValidData()) m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
+
+		// Render the overlay.
+		if (m_engine->hasOverlay())
+		{
+			ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
+			ImGui::BeginGroup();
+			m_engine->renderOverlay();
+			ImGui::EndGroup();
+			if(ImGui::IsItemHovered()) m_engine->m_isHovered = false;
+			//ImGui::SetItemAllowOverlap();
+		}
+
+		// NOTE: For some reason overlapping is not working properly.  A workaround has been found,
+		// but I would like to rather get it fixed.
 	}
 
 	inline virtual void onImGuiEnd() override 

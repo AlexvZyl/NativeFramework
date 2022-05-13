@@ -447,10 +447,20 @@ void CircuitDesigner::overwriteComponents(const std::string& type, const YAML::N
 	// Remove extension.
 	std::string componentType = std::filesystem::path(type).filename().stem().string();
 	// Overwrite components of same type.
+	int overwriteCount = 0;
 	for (auto& component : m_circuit->m_components)
 	{
-		if (component->equipType == componentType) reloadComponent(component.get(), node);
+		if (component->equipType == componentType)
+		{
+			reloadComponent(component.get(), node);
+			overwriteCount++;
+		}
 		if (m_activeComponent.get() == component.get()) component->enableOutline();
+	}
+	if (overwriteCount)
+	{
+		std::string msg = "Overwritten " + std::to_string(overwriteCount) + " components.";
+		Lumen::getApp().pushNotification(NotificationType::Success, 4000, msg, "Circuit Designer");
 	}
 }
 
@@ -584,9 +594,19 @@ void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node&
 	// Remove extension.
 	std::string cableType = std::filesystem::path(type).filename().stem().string();
 	// Overwrite cables of same type.
+	int overwriteCount = 0;
 	for (auto& cable : m_circuit->m_cables)
 	{
-		if (cable->m_cableType == cableType) loadDataToCable(node, cable.get());;
+		if (cable->m_cableType == cableType)
+		{
+			loadDataToCable(node, cable.get());
+			overwriteCount++;
+		}
+	}
+	if (overwriteCount)
+	{
+		std::string msg = "Overwritten " + std::to_string(overwriteCount) + " cables.";
+		Lumen::getApp().pushNotification(NotificationType::Success, 4000, msg, "Circuit Designer");
 	}
 }
 

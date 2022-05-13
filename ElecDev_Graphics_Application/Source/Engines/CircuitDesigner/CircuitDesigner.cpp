@@ -25,6 +25,7 @@ CircuitDesigner::CircuitDesigner()
 {
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
 	getScene().getGrid().disableHelperCircle();
+	enableOverlay();
 }
 
 CircuitDesigner::~CircuitDesigner()
@@ -37,6 +38,11 @@ CircuitDesigner::~CircuitDesigner()
 void CircuitDesigner::createCircuit(const std::filesystem::path& path) 
 {
 	m_circuit = std::make_shared<Circuit>(path);
+}
+
+void CircuitDesigner::renderOverlay() 
+{
+	ImGui::Button("Test");
 }
 
 //=============================================================================================================================================//
