@@ -59,6 +59,17 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	}
 	emitter << YAML::EndMap;
 
+	// Text.
+	emitter << YAML::Key << "Text" << YAML::Value;
+	emitter << YAML::BeginMap;
+	index = 0;
+	for (auto& text : comp->m_text)
+	{
+		emitter << YAML::Key << "Text " + std::to_string(index) << YAML::Value << text;
+		index++;
+	}
+	emitter << YAML::EndMap;
+
 	// Circles.
 	emitter << YAML::Key << "Circles" << YAML::Value;
 	emitter << YAML::BeginMap;

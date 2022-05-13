@@ -112,9 +112,7 @@ Text* Renderer::addText2D(const YAML::Node& node, Entity* parent)
 		node["Vertical Alignment"].as<std::string>(),
 		parent
 	);
-
 	text->setBoxColour({ node["Box Color"][0].as<float>(), node["Box Color"][1].as<float>(), node["Box Color"][2].as<float>(),  node["Box Color"][3].as<float>() });
-
 	return text;
 }
 
