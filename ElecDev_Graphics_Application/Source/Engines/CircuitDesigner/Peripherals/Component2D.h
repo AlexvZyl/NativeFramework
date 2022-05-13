@@ -126,6 +126,8 @@ public:
 	void translateTitle(glm::vec2 translation);
 	//updates the Component label
 	void updateText();
+	//updates the Component type, without a label (for comp. designer)
+	void updateTextWithoutLabel();
 	//Set the colour of the polygons and circles belonging to the component
 	void setColour(const glm::vec4& colour);
 	//Adds a new polygon to the polygon list

@@ -55,7 +55,7 @@ void ComponentEditor::onImGuiRender()
 			ImGui::Text(" Type:\t  ");
 			ImGui::SameLine();
 			ImGui::InputText("##Equipment Type", &activeComponent->equipType);
-			activeComponent->updateText();
+			activeComponent->updateTextWithoutLabel();
 		}
 
 		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))

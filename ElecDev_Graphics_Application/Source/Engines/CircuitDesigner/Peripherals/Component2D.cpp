@@ -251,6 +251,11 @@ void Component2D::updateText()
 	title->updateText(textString);
 }
 
+void Component2D::updateTextWithoutLabel()
+{
+	title->updateText(equipType);
+}
+
 void Component2D::setColour(const glm::vec4& colour)
 {
 	shapeColour = colour;
