@@ -755,7 +755,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\CircuitDesigner.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.h" />
-    <ClInclude Include="Source\Application\GuiState.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />
     <ClInclude Include="Source\GUI\CircuitEditor\CircuitEditor.h" />
     <ClInclude Include="Source\GUI\ComponentEditor\ComponentEditor.h" />

@@ -45,9 +45,6 @@ Application::Application()
 	EventLog::init();
 	m_windowStack = std::make_unique<WindowStack>();
 
-	// NOTE: TO BE DEPRECATED!
-	m_guiState = std::make_unique<GUIState>();
-
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;

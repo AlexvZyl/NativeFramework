@@ -151,7 +151,7 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 	if ((eID == 0) || (eID == -1))
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = true;
+		//Lumen::getApp().m_guiState->clickedZone.background = true;
 	}
 	else 
 	{
@@ -212,7 +212,6 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 {
-	//m_activeVertex = nullptr;
 	m_activeVertexIdx = -1;
 	if (m_activePoly) 
 	{

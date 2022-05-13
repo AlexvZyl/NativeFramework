@@ -492,7 +492,6 @@
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\Lumen.h" />
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
-    <ClInclude Include="Source\Application\GuiState.h" />
     <ClInclude Include="Source\GUI\PopUpMenu\PopUpMenu.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\TexturedQuad.h" />
     <ClInclude Include="External\imgui\imconfig.h" />

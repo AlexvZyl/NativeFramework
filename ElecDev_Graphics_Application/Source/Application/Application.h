@@ -17,9 +17,6 @@
 #include "Application/LumenWindow/WindowStack.h"
 #include "GUI/GraphicsScene/GraphicsScene.h"
 
-// TO BE DEPRECATED!
-#include "GuiState.h"
-
 //==============================================================================================================================================//
 //  Forward declerations.																														//
 //==============================================================================================================================================//
@@ -140,9 +137,6 @@ public:
 	GLFWwindow* getGLFWWindow() const;
 	// Get the size of the application.
 	glm::vec2 getMainViewportSize() const;
-
-	// TO BE DEPRECATED!
-	std::unique_ptr<GUIState> m_guiState = nullptr;
 
 	// ----------------- //
 	//  P R O F I L E R  //
