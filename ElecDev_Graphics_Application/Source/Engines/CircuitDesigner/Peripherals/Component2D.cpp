@@ -141,6 +141,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		ports.push_back(std::make_shared<Port>(port.second, this));
 	}
 
+	// Add text.
+	for (const auto& text : componentNode["Text"])
+	{
+		m_text.push_back(Renderer::addText2D(text.second, this));
+	}
+
 	titleString = title->m_string;
 	equipType = componentNode["Equipment Type"].as<std::string>();
 	enableOutline();
