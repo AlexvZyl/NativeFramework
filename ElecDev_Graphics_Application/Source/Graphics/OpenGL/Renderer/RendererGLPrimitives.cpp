@@ -90,10 +90,10 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec2& position, co
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
 
-PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent)
+PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, float thickness, const glm::vec4& color, bool rounded, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, thickness, false, color, rounded) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 
@@ -183,9 +183,11 @@ PolyLine* Renderer::addPolyLine(const YAML::Node& node, Entity* parent)
 		PolyLine* polyline = Renderer::addPolyLine(
 				vertices,
 				node["Thickness"].as<float>(),
+				color,
+				true,
 				parent
 			);
-		polyline->setColor(color);
+		//polyline->setColor(color);
 		return polyline;
 	}
 }

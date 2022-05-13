@@ -3,6 +3,7 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Graphics/Entities/EntityManager.h"
@@ -158,10 +159,10 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 		if (currentEntity->m_parent == m_activeComponent.get()) 
 		{
 			//Entity is a primitive belonging to the component
-			if (dynamic_cast<LineSegment*>(currentEntity))
+			if (dynamic_cast<PolyLine*>(currentEntity))
 			{
 				//Line
-				m_activeLine = dynamic_cast<LineSegment*>(currentEntity);
+				m_activeLine = dynamic_cast<PolyLine*>(currentEntity);
 				m_activeLine->enableOutline();
 			}
 			else if (dynamic_cast<Polygon2D*>(currentEntity)) 

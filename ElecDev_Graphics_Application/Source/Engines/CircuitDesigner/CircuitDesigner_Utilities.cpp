@@ -508,7 +508,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	// Add new.
 	for (const auto& line : componentNode["Line Segments"])
 	{
-		linesVector.push_back(Renderer::addLineSegment2D(line.second, component));
+		linesVector.push_back(Renderer::addPolyLine(line.second, component));
 		linesVector.back()->translate(position);
 	}
 

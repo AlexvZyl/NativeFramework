@@ -109,7 +109,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	// Add the lines.
 	for (const auto& line : componentNode["Line Segments"])
 	{
-		m_lines.push_back(Renderer::addLineSegment2D(line.second, this));
+		m_lines.push_back(Renderer::addPolyLine(line.second, this));
 	}
 
 	// Add polygons.
@@ -285,7 +285,7 @@ void Component2D::addCircle(Circle* circle)
 	m_circles.push_back(circle);
 }
 
-void Component2D::addLine(LineSegment* line)
+void Component2D::addLine(PolyLine* line)
 {
 	m_lines.push_back(line);
 }
@@ -323,7 +323,7 @@ void Component2D::removeCircle(Circle* circle)
 	}
 }
 
-void Component2D::removeLine(LineSegment* line)
+void Component2D::removeLine(PolyLine* line)
 {
 	auto to_remove = std::find(begin(m_lines), end(m_lines), line);
 	if (to_remove != m_lines.end()) 

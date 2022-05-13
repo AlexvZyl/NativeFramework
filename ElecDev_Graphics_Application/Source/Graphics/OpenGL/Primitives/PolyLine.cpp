@@ -2,9 +2,8 @@
 #include "CavalierContours/include/cavc/polylineoffset.hpp"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
-#include <Clipper/cpp/clipper.hpp>
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour) :Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) :Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -37,6 +36,7 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 			});
 		resultVec.push_back(temp);
 	}*/
+	if (!rounded) et = ClipperLib::etOpenSquare;
 	update();
 	setColor({0.f, 0.f, 0.f, 1.f});
 }
@@ -50,7 +50,6 @@ void PolyLine::update()
 		return ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(in.x * sf), static_cast<ClipperLib::cInt>(in.y * sf));
 		});
 	ClipperLib::ClipperOffset co;
-	ClipperLib::EndType et = ClipperLib::etOpenRound;
 	if (m_closed) et = ClipperLib::etClosedLine;
 	co.AddPath(subj, ClipperLib::jtRound, et);
 	co.Execute(solution, m_thickness / 2 * sf);

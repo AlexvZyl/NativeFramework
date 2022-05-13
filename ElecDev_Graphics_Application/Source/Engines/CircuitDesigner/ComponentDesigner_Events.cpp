@@ -62,13 +62,12 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (!m_activeLine) 
 			{
 				//start new line
-				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), penThickness, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
+				bool rounded = true;
+				m_activeLine = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, { 0.f, 0.f, 0.f, 1.f }, rounded, m_activeComponent.get());
 			}
 			else {
 				//end the line
-				m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 				m_activeComponent->addLine(m_activeLine);
-				//m_activeComponent->addLine(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords));
 				m_activeLine = nullptr;
 			}
 		}
@@ -143,7 +142,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		if (m_activeLine)
 		{
 			// Update the line end position.
-			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
+			m_activeLine->translateToVertexAtIndex(m_activeLine->m_vertices.size() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
@@ -337,7 +336,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 		if (m_activeVertexIdx != -1) 
 		{
-			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_VAO->m_vertexCPU[m_activeLine->m_vertexBufferPos + m_activeVertexIdx].data.position));
+			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
 			else if (m_activePoly) {
 				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
 				if (polyline) {
