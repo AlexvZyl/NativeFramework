@@ -27,8 +27,8 @@ CircuitDesigner::CircuitDesigner()
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setWidgetPosition(GridWidgetPosition::BOTTOM_RIGHT)
-		.setScale(1.f/1000.f);
-	getScene().getCamera().scale2D(1000.f);
+		.setMajorGrid(GridUnit::MILLIMETER, 5);
+	getScene().getCamera().scale2D(100.f);
 	enableOverlay();
 }
 

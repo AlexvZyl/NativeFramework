@@ -19,9 +19,10 @@ ComponentDesigner::ComponentDesigner()
 	m_activeComponent->disableOutline();
 	enableDesignPalette();
 	enableOverlay();
-	getScene().getGrid().disableHelperCircle()
-		.setScale(1.f/1000.f);
-	getScene().getCamera().scale2D(1000.f);
+	getScene().getGrid()
+		.disableHelperCircle()
+		.setMajorGrid(GridUnit::MILLIMETER, 5);
+	getScene().getCamera().scale2D(100.f);
 }
 
 void ComponentDesigner::switchState(CompDesignState state)

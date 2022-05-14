@@ -15,6 +15,7 @@
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
 #include "glm/glm.hpp"
+#include "OpenGL/Primitives/Grid.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
@@ -187,10 +188,30 @@ void CircuitDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 void CircuitDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
+	// Everything is in mm.
+	float currentCameraScale = ( 1.f / getScene().getCamera().getTotalScale().x ) * 1000.f;
+	float currentGridSize = getScene().getGrid().getCoarseIncrementSize() * 1000.f;
+	float gridIncrementFactor = 5.f;
+	float minimumGridSize = 1.f;
+	if (currentCameraScale < currentGridSize)
+	{
+		if (currentGridSize / gridIncrementFactor < minimumGridSize)
+		{
+			getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, minimumGridSize);
+		}
+		else
+		{
+			getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, currentGridSize / gridIncrementFactor);
+		}
+	}
+	else if (currentCameraScale > currentGridSize * gridIncrementFactor)
+	{
+		getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, currentGridSize * gridIncrementFactor);
+	}
 }
 
 //==============================================================================================================================================//
-//  Mouse Drag.																																//
+//  Mouse Drag.																																    //
 //==============================================================================================================================================//
 
 void CircuitDesigner::onMouseDragEvent(const MouseDragEvent& event)
