@@ -12,5 +12,5 @@ void TextEntryGUI::onImGuiRender()
 	if (ImGui::InputText("##Text", &m_textToEdit, ImGuiInputTextFlags_AlwaysOverwrite)) {
 		m_text->updateText(m_textToEdit);
 	}
-	if (ImGui::IsKeyPressed(ImGuiKey_Enter)) closeWindow();
+	if (ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_Escape)) closeWindow();
 }
