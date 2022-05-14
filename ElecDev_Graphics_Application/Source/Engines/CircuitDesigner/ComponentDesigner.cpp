@@ -352,7 +352,7 @@ void ComponentDesigner::renderDesignPalette()
 	
 	//Find a better way to set this width
 	ImGui::PushItemWidth(100.0f);
-	ImGui::SliderFloat("Thickness", &penThickness, 0.0005f, 0.005f, "%0.4f");
+	ImGui::SliderFloat("Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
 	ImGui::PopItemWidth();
 }
 

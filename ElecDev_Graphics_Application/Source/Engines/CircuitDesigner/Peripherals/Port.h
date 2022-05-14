@@ -51,8 +51,8 @@ public:
 	glm::vec2 titleOffset;
 	static Font titleFont;
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	float titleSize = 0.004f;
-	float portSize = 0.001f;
+	float titleSize = 0.0018f;
+	float portSize = 0.0002f;
 	glm::vec2 centre;
 	static unsigned portID;
 	glm::vec4 bodyColour;
