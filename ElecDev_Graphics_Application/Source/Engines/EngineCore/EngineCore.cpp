@@ -70,8 +70,7 @@ glm::vec2 EngineCore::getNearestGridVertex(const glm::vec2& coords)
 
 glm::vec3 EngineCore::pixelToWorldDistance(const glm::vec2& distance)
 {
-	Camera& camera = getScene().getCamera();
-	return camera.pixelToWorldCoords(distance) - camera.pixelToWorldCoords({ 0.f, 0.f });
+	return pixelToWorldCoords(distance) - pixelToWorldCoords({ 0.f, 0.f });
 }
 
 glm::vec3 EngineCore::pixelToWorldCoords(const glm::vec2& coords, bool useUpdatedView)
@@ -86,13 +85,12 @@ glm::vec2 EngineCore::worldToPixelCoords(const glm::vec3& worldCoords, bool useU
 
 glm::vec2 EngineCore::worldToPixelCoords(const glm::vec2& worldCoords, bool useUpdatedView)
 {
-	return getScene().getCamera().worldToPixelCoords({worldCoords, 0.f}, useUpdatedView);
+	return getScene().getCamera().worldToPixelCoords({ worldCoords, 0.f }, useUpdatedView);
 }
 
 glm::vec2 EngineCore::worldToPixelDistance(const glm::vec3& distance)
 {
-	Camera& camera = getScene().getCamera();
-	return camera.worldToPixelCoords(distance) - camera.worldToPixelCoords({ 0.f, 0.f, 0.f });
+	return worldToPixelCoords(distance) - worldToPixelCoords({ 0.f, 0.f, 0.f });
 }
 
 //=============================================================================================================================================//

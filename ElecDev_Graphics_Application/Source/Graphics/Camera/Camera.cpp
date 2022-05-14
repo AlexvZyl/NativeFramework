@@ -38,6 +38,11 @@ void Camera::onUpdate()
 	m_prevViewMatrix = m_viewMatrix;
 }
 
+glm::vec3 Camera::getTotalScale() 
+{
+	return {m_scalingMatrix[0][0], m_scalingMatrix[1][1], m_scalingMatrix[2][2] };
+}
+
 //==============================================================================================================================================//
 //  Controls.																																	//
 //==============================================================================================================================================//
@@ -121,14 +126,20 @@ void Camera::incrementZoomAroundCursor(int increment, const glm::vec2& cursor)
 
 float Camera::getScaleFromIncrement(int increment)
 {
-	if (increment >= 0)
-	{
-		return 1 + (m_scaleRate * increment);
-	}
-	else
-	{
-		return 1 / (1 + m_scaleRate * -1 * increment);
-	}
+	if (increment >= 0)	return 1 + (m_scaleRate * increment);
+	else				return 1 / (1 + m_scaleRate * -1 * increment);
+}
+
+void Camera::setScale(const glm::vec3& scale)
+{
+	m_scalingMatrix[0][0] = scale.x;
+	m_scalingMatrix[1][1] = scale.y;
+	m_scalingMatrix[2][2] = scale.z;
+}
+
+void Camera::setScale2D(float scale) 
+{
+	Camera::setScale({ scale, scale, 1.f });
 }
 
 //==============================================================================================================================================//

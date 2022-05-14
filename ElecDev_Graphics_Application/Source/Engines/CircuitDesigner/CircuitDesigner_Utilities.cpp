@@ -477,22 +477,10 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (auto& poly : polygonsVector) Renderer::remove(poly);
 	polygonsVector.clear();
 	// Add new.
-	int count = 0;
 	for (const auto& poly : componentNode["Polygons"])
 	{
-		// Polygon.
-		if (poly.first.as<std::string>() == "Polygon " + std::to_string(count))
-		{
 			polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
 			polygonsVector.back()->translate(position);
-		}
-		// Polyline.
-		else
-		{
-			polygonsVector.push_back(Renderer::addPolyLine(poly.second, component));
-			polygonsVector.back()->translate(position);
-		}
-		count++;
 	}
 
 	// ----------- //
@@ -503,7 +491,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (auto& line : linesVector) Renderer::remove(line);
 	linesVector.clear();
 	// Add new.
-	for (const auto& line : componentNode["Line Segments"])
+	for (const auto& line : componentNode["PolyLines"])
 	{
 		linesVector.push_back(Renderer::addPolyLine(line.second, component));
 		linesVector.back()->translate(position);

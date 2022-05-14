@@ -44,6 +44,8 @@ public:
 	const glm::mat4& getProjectionMatrix() const;
 	const glm::mat4& getViewProjectionMatrix() const;
 
+	glm::vec3 getTotalScale();
+
 	// ----------------- //
 	//  C O N T R O L S  //
 	// ----------------- //
@@ -67,6 +69,9 @@ public:
 	void incrementZoomAroundCursor(int increment, const glm::vec2& cursor);
 	// Make the camera look at a point.
 	void lookAt(const glm::vec3& position) {}
+	// Set the scale of the camera.
+	void setScale2D(float scale);
+	void setScale(const glm::vec3& scale);
 
 private:
 

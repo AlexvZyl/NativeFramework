@@ -29,7 +29,7 @@ class VertexData;
 // 1 Unit in world coordinates corresponds to 1 meter.
 // Subject to change.
 
-enum class GridScaleType
+enum class GridUnit
 {
 	MILLIMETER,
 	CENTIMETER,
@@ -179,7 +179,6 @@ public:
 		{
 		case GridWidgetPosition::BOTTOM_RIGHT:
 			ImGui::SetCursorPos(contentWindowRegionSize - m_widgetPadding - m_widgetSize);
-
 			break;
 
 		default:
@@ -208,13 +207,34 @@ public:
 		ImGui::SetCursorPos(currentCursorPos);
 		return *this;
 	}
+	inline Grid& setMajorGrid(GridUnit unit, float value)
+	{
+		switch (unit)
+		{
+		case GridUnit::MILLIMETER:
+			setScale(value / 1000.f);
+			break;
+		case GridUnit::CENTIMETER:
+			setScale(value / 100.f);
+			break;
+		case GridUnit::METER:
+			setScale(value);
+			break;
+		case GridUnit::KILOMETER:
+			setScale(value * 1000.f);
+			break;
+		default:
+			LUMEN_LOG_WARN("Invalid GridUnit.", "Grid");
+		}
+		return *this;
+	}
 
 	// Getters.
 	inline int getFinePixelSize()			{ return m_coarseGridPixelSize; }
 	inline int getCoarsePixelSize()			{ return m_fineGridPixelSize; }
 	inline int getOriginPixelSize()			{ return m_originGridPixelSize; }
-	inline float getCoarseIncrementSize()	{ return m_coarseIncrementSize; }
-	inline float getFineIncrementSize()		{ return m_fineIncrementSize;}
+	inline float getCoarseIncrementSize()	{ return m_coarseIncrementSize * m_scale; }
+	inline float getFineIncrementSize()		{ return m_fineIncrementSize * m_scale;}
 	inline glm::vec4& getFineColor()		{ return m_fineGridColor; }
 	inline glm::vec4& getCoarseColor()		{ return m_coarseGridColor; }
 	inline int getTotalCoarseLines()		{ return m_totalCoarseLines; }

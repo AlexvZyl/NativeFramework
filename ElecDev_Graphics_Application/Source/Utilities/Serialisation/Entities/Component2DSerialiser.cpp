@@ -35,26 +35,18 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	int index = 0;
 	for (auto& poly : comp->m_polygons)
 	{
-		PolyLine* polyline = dynamic_cast<PolyLine*>(poly);
-		if (polyline)
-		{
-			emitter << YAML::Key << "Polyline " + std::to_string(index) << YAML::Value << polyline;
-		}
-		else 
-		{
-			emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
-		}
+		emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
 		index++;
 	}
 	emitter << YAML::EndMap;
 
 	// Line Segments.
-	emitter << YAML::Key << "Line Segments" << YAML::Value;
+	emitter << YAML::Key << "PolyLines" << YAML::Value;
 	emitter << YAML::BeginMap;
 	index = 0;
 	for (auto& line : comp->m_lines)
 	{
-		emitter << YAML::Key << "Line Segment " + std::to_string(index) << YAML::Value << line;
+		emitter << YAML::Key << "PolyLine " + std::to_string(index) << YAML::Value << line;
 		index++;
 	}
 	emitter << YAML::EndMap;

@@ -19,9 +19,10 @@ ComponentDesigner::ComponentDesigner()
 	m_activeComponent->disableOutline();
 	enableDesignPalette();
 	enableOverlay();
-	getScene().getGrid().disableHelperCircle()
-		.setScale(1.f/1000.f);
-	getScene().getCamera().scale2D(1000.f);
+	getScene().getGrid()
+		.disableHelperCircle()
+		.setMajorGrid(GridUnit::MILLIMETER, 5);
+	getScene().getCamera().scale2D(100.f);
 }
 
 void ComponentDesigner::switchState(CompDesignState state)
@@ -225,7 +226,6 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	if (m_activePoly) 
 	{
 		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
-		LUMEN_LOG_ERROR(std::to_string(worldToPixelDistance({ distance, 0.f, 0.f }).x), "Dist");
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;

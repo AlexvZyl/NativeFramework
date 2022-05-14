@@ -107,7 +107,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	title = Renderer::addText2D(componentNode["Title"], this);
 
 	// Add the lines.
-	for (const auto& line : componentNode["Line Segments"])
+	for (const auto& line : componentNode["PolyLines"])
 	{
 		m_lines.push_back(Renderer::addPolyLine(line.second, this));
 	}
@@ -116,16 +116,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	int count = 0;
 	for (const auto& poly : componentNode["Polygons"])
 	{
-		// Polygon.
-		if (poly.first.as<std::string>() == "Polygon " + std::to_string(count))
-		{
-			m_polygons.push_back(Renderer::addPolygon2D(poly.second, this));
-		}
-		// Polyline.
-		else 
-		{
-			m_polygons.push_back(Renderer::addPolyLine(poly.second, this));
-		}
+		m_polygons.push_back(Renderer::addPolygon2D(poly.second, this));
 		count++;
 	}
 

@@ -17,6 +17,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, PolyLine* polyline)
 	emitter << YAML::BeginMap;
 
 	emitter << YAML::Key << "Closed" << YAML::Value << polyline->m_closed;
+	emitter << YAML::Key << "Rounded" << YAML::Value << polyline->m_rounded;
 
 	// Data.
 	emitter << YAML::Key << "Vertices" << YAML::Value;

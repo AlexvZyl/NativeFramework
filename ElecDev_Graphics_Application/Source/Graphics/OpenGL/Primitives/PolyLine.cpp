@@ -36,7 +36,8 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 			});
 		resultVec.push_back(temp);
 	}*/
-	if (!rounded) et = ClipperLib::etOpenSquare;
+	m_rounded = rounded;
+	if (!m_rounded) et = ClipperLib::etOpenSquare;
 	update();
 	setColor({0.f, 0.f, 0.f, 1.f});
 }
