@@ -219,7 +219,8 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	if (m_activePoly) 
 	{
 		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
-		if (distance < clickTol) 
+		LUMEN_LOG_ERROR(std::to_string(worldToPixelDistance({ distance, 0.f, 0.f }).x), "Dist");
+		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
 		}
@@ -233,8 +234,9 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	else if (m_activeLine) 
 	{
 		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIdx(coords);
-		if (distance < clickTol) 
+		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
+			LUMEN_LOG_ERROR(std::to_string(worldToPixelDistance({ distance, 0.f, 0.f }).x), "Dist");
 			m_activeVertexIdx = vertexIdx;
 		}
 	}
@@ -344,7 +346,7 @@ void ComponentDesigner::renderDesignPalette()
 	
 	//Find a better way to set this width
 	ImGui::PushItemWidth(100.0f);
-	ImGui::SliderFloat("Thickness", &penThickness, 0.002f, 0.02f, "%0.3f");
+	ImGui::SliderFloat("Thickness", &penThickness, 0.0005f, 0.005f, "%0.4f");
 	ImGui::PopItemWidth();
 }
 

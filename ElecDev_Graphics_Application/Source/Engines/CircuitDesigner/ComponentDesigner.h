@@ -33,9 +33,9 @@ public:
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
-    float clickTol = 0.03f;
+    float clickTol = 10.0f;
     bool drawFilled = true;
-    float penThickness = 0.014f;
+    float penThickness = 0.001f;
 
     CompDesignState designerState = CompDesignState::SELECT;
 
