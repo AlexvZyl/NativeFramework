@@ -224,18 +224,21 @@ const glm::vec2& Camera::getViewportSize() const
 			 m_viewport[3] - m_viewport[1] };
 }
 
-const glm::mat4& Camera::getViewMatrix() const
+const glm::mat4& Camera::getViewMatrix()
 {
+	updateViewMatrix();
 	return m_viewMatrix;
 }
 
-const glm::mat4& Camera::getProjectionMatrix() const
+const glm::mat4& Camera::getProjectionMatrix()
 {
+	updateProjectionMatrix();
 	return m_projectionMatrix;
 }
 
-const glm::mat4& Camera::getViewProjectionMatrix() const
+const glm::mat4& Camera::getViewProjectionMatrix()
 {
+	updateViewProjectionMatrix();
 	return m_viewProjectionMatrix;
 }
 

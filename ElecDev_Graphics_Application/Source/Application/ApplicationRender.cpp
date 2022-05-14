@@ -13,6 +13,7 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Application/LumenWindow/WindowStack.h"
 #include "GLFW/glfw3.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 //==============================================================================================================================================//
 //  Main loop.																																	//
@@ -77,6 +78,7 @@ void Application::onRenderInit()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 
 		// Enable docking in main viewport.
 		m_mainDockspaceID = ImGui::DockSpaceOverViewport(NULL);//, ImGuiDockNodeFlags_NoDockingSplitMe);  // NULL uses the main viewport.

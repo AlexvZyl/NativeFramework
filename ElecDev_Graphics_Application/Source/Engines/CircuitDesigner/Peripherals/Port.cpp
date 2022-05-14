@@ -271,6 +271,22 @@ void Port::setContext(GUIState* guiState)
 	m_parent->setContext();
 }
 
+void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
+{
+	// Rotate.
+	m_rotation += degrees;
+	body->rotate(degrees, rotatePoint, rotateNormal);
+	border->rotate(degrees, rotatePoint, rotateNormal);
+	attachmentIndicator->rotate(degrees, rotatePoint, rotateNormal);
+	title->rotate(degrees, rotatePoint, rotateNormal);
+
+	// Update the port center.
+
+
+	// Update cables.
+	for (Cable* cable : m_cables) cable->followPort(this);
+}
+
 //==============================================================================================================================================//
 //  EOF.																																		//
 //==============================================================================================================================================//

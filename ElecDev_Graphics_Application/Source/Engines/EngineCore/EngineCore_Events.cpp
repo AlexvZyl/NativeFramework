@@ -21,11 +21,11 @@ void EngineCore::onEvent(const Event& event)
 
 	// Mouse events.
 	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(event.cast<MouseMoveEvent>()); }
-	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEvent(event.cast<MouseDragEvent>()); }
+	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEventForce(event.cast<MouseDragEvent>()); }
 	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(event.cast<MouseScrollEvent>()); }
-	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
-	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
-	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEvent(event.cast<MouseButtonEvent>()); }
+	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
+	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
+	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
 
 	// Key events.
 	else if (event.isType(EventType_KeyPress)
@@ -62,12 +62,14 @@ void EngineCore::onFocusEventForce(const NotifyEvent& event)
 	m_isFocused = true;
 	Renderer::bindScene(m_scene.get());
 	Lumen::getApp().setActiveEngine(this);
+	getGizmo().enable();
 	onFocusEvent(event);
 }
 
 void EngineCore::onDefocusEventForce(const NotifyEvent& event) 
 {
 	m_isFocused = false;
+	getGizmo().disable();
 	// We not unbind the scene here, since focus can sometimes shift to 
 	// another window, but that window is editing things in this engine.
 	// By not unbinding here we always keep the latest focused engine's
@@ -88,6 +90,18 @@ void EngineCore::onDehoverEventForce(const NotifyEvent& event)
 	m_isHovered = false;
 	getScene().getGrid().hideHelperCircle();
 	onDehoverEvent(event);
+}
+
+void EngineCore::onMouseDragEventForce(const MouseDragEvent& event) 
+{
+	if (getGizmo().isOver()) return;
+	onMouseDragEvent(event);
+}
+
+void EngineCore::onMouseButtonEventForce(const MouseButtonEvent& event) 
+{
+	if (getGizmo().isOver()) return;
+	onMouseButtonEvent(event);
 }
 
 void EngineCore::onNotifyEventForce(const NotifyEvent& event)

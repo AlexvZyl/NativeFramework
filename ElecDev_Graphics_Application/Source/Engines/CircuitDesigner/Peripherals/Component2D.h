@@ -142,6 +142,8 @@ public:
 	void removeLine(PolyLine* line);
 	void removeText(Text* text);
 	
+	void rotate(float degrees);
+	float m_rotation = 0.f;
 
 private:
 	PortType getPortType(YAML::Node node);

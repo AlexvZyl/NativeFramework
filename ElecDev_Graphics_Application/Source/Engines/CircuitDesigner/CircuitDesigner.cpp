@@ -30,6 +30,11 @@ CircuitDesigner::CircuitDesigner()
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
 	enableOverlay();
+	enableDesignPalette();
+
+	LumenGizmo& gizmo = getGizmo();
+	gizmo.setScale(0.015);
+	gizmo.enable();
 }
 
 CircuitDesigner::~CircuitDesigner()
@@ -47,6 +52,15 @@ void CircuitDesigner::createCircuit(const std::filesystem::path& path)
 void CircuitDesigner::renderOverlay() 
 {
 	getScene().getGrid().renderOverlay();
+}
+
+void CircuitDesigner::renderDesignPalette() 
+{
+	if (ImGui::Checkbox("Gizmo", &m_gizmoEnabled))
+	{
+		if (m_gizmoEnabled) getGizmo().enable();
+		else			    getGizmo().disable();
+	}
 }
 
 //=============================================================================================================================================//

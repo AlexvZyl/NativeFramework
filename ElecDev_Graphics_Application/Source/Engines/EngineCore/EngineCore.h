@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <memory>
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -147,6 +148,9 @@ public:
 	inline bool hasOverlay()	 { return m_hasOverlay;  }
 	inline virtual void renderOverlay() {};
 
+	// Get the gizmo used for manipulation.
+	inline LumenGizmo& getGizmo() { return m_lumenGizmo; };
+
 private:
 
 	// Friends.
@@ -157,6 +161,9 @@ private:
 
 	// The scene rendered to.
 	std::unique_ptr<Scene> m_scene = nullptr;
+
+	// Gizmo!
+	LumenGizmo m_lumenGizmo;
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
@@ -173,6 +180,8 @@ private:
 	virtual void onWindowResizeEventForce(const WindowEvent& event);
 	virtual void onFileDropEventForce(const FileDropEvent& event);
 	virtual void onYamlNodeDropEventForce(const YamlNodeDropEvent& event);
+	virtual void onMouseDragEventForce(const MouseDragEvent& event);
+	virtual void onMouseButtonEventForce(const MouseButtonEvent& event);
 };
 
 //=============================================================================================================================================//

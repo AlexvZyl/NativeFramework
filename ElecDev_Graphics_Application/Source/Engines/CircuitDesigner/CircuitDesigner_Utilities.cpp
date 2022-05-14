@@ -159,6 +159,7 @@ void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, c
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	designerState = ENTITY_SELECT;
+	getGizmo().setEntity(m_activeComponent.get());
 }
 
 void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos)
@@ -169,6 +170,7 @@ void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::v
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	designerState = ENTITY_SELECT;
+	getGizmo().setEntity(m_activeComponent.get());
 }
 
 void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)
@@ -457,6 +459,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	YAML::Node componentNode = node;
 	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
 	glm::vec2 position = component->centre;
+	component->centre = {0.f, 0.f};
 
 	// Update the title.
 	component->equipType = componentNode["Equipment Type"].as<std::string>("");
@@ -465,9 +468,8 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	//  T I T L E  //
 	// ----------- //
 
-	glm::vec3 titlePosition = { node["Title"]["Position"][0].as<float>(), node["Title"]["Position"][1].as<float>() , node["Title"]["Position"][2].as<float>() };
-	component->title->translateTo(titlePosition);
-	component->title->translate(position);
+	Renderer::remove(component->title);
+	component->title = Renderer::addText2D(node["Title"], component);
 
 	// ----------------- //
 	//  P O L Y G O N S  //
@@ -480,7 +482,6 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (const auto& poly : componentNode["Polygons"])
 	{
 			polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
-			polygonsVector.back()->translate(position);
 	}
 
 	// ----------- //
@@ -494,7 +495,6 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (const auto& line : componentNode["PolyLines"])
 	{
 		linesVector.push_back(Renderer::addPolyLine(line.second, component));
-		linesVector.back()->translate(position);
 	}
 
 	// --------------- //
@@ -509,7 +509,6 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (const auto& circle : componentNode["Circles"])
 	{
 		circlesVector.push_back(Renderer::addCircle2D(circle.second, component));
-		circlesVector.back()->translate(position);
 	}
 
 	// --------- //
@@ -524,7 +523,6 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (const auto& text : componentNode["Text"])
 	{
 		textVector.push_back(Renderer::addText2D(text.second, component));
-		textVector.back()->translate(position);
 	}
 
 	// ----------- //
@@ -536,7 +534,6 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	for (const auto& port : componentNode["Ports"])
 	{
 		newPorts.push_back(std::make_shared<Port>(port.second, component));
-		newPorts.back()->move(position);
 	}
 	// If any of the new ports are in the position of the old ones,
 	// move the cable over.
@@ -562,6 +559,10 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	}
 	portsVector.clear();
 	portsVector = newPorts;
+
+	// Update component.
+	component->move(position);
+	component->rotate(component->m_rotation);
 }
 
 void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node& node) 
