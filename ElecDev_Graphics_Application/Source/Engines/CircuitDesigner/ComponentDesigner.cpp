@@ -112,7 +112,7 @@ void ComponentDesigner::pushActivePrimitives()
 	{
 		PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
 		if (polyline) {
-			m_activeComponent->addLine(m_activeLine);
+			m_activeComponent->addLine(polyline);
 		}
 		else {
 			m_activeComponent->addPoly(m_activePoly);
