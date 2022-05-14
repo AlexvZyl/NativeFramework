@@ -90,7 +90,6 @@ glm::vec2 EngineCore::worldToPixelCoords(const glm::vec2& worldCoords, bool useU
 
 glm::vec2 EngineCore::worldToPixelDistance(const glm::vec3& distance)
 {
-	//return worldToPixelCoords(distance + pixelToWorldCoords({ 0.f, 0.f }));
 	return worldToPixelCoords(distance) - worldToPixelCoords({ 0.f, 0.f, 0.f });
 }
 

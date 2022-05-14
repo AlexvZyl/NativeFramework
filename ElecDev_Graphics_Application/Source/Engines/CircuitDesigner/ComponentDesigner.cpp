@@ -220,9 +220,6 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	if (m_activePoly) 
 	{
 		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
-		glm::vec2 result = worldToPixelDistance({ distance, 0.f, 0.f });
-		std::string message = "x: " + std::to_string(result.x) + " , y: " + std::to_string(result.y);
-		LUMEN_LOG_ERROR(message, "Dist");
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
