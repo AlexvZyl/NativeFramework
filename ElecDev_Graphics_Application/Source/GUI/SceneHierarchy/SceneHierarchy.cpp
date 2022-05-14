@@ -92,7 +92,6 @@ void SceneHierarchy::onImGuiRender()
 			{
 				if (ImGui::Button("Set Active"))
 				{
-					app.m_guiState->active_component = nullptr;
 					engine->m_activeComponent = nullptr;
 					engine->setActiveCable(cable->m_entityID);
 				}

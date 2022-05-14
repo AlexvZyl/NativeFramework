@@ -3,6 +3,7 @@
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Graphics/Entities/EntityManager.h"
@@ -153,7 +154,7 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 	if ((eID == 0) || (eID == -1))
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = true;
+		//Lumen::getApp().m_guiState->clickedZone.background = true;
 	}
 	else 
 	{
@@ -161,10 +162,10 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 		if (currentEntity->m_parent == m_activeComponent.get()) 
 		{
 			//Entity is a primitive belonging to the component
-			if (dynamic_cast<LineSegment*>(currentEntity))
+			if (dynamic_cast<PolyLine*>(currentEntity))
 			{
 				//Line
-				m_activeLine = dynamic_cast<LineSegment*>(currentEntity);
+				m_activeLine = dynamic_cast<PolyLine*>(currentEntity);
 				m_activeLine->enableOutline();
 			}
 			else if (dynamic_cast<Polygon2D*>(currentEntity)) 
@@ -214,7 +215,6 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 {
-	//m_activeVertex = nullptr;
 	m_activeVertexIdx = -1;
 	if (m_activePoly) 
 	{

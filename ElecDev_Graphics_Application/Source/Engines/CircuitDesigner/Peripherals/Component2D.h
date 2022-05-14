@@ -31,6 +31,7 @@ class VertexDataCircle;
 class Circuit;
 class Scene;
 class LineSegment;
+class PolyLine;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
@@ -51,7 +52,7 @@ public:
 
 	// Entites & Primitives describing the component.
 	std::vector<Polygon2D*> m_polygons;
-	std::vector<LineSegment*> m_lines;
+	std::vector<PolyLine*> m_lines;
 	std::vector<Circle*> m_circles;
 	std::vector<Text*> m_text;
 	Text* title;
@@ -126,17 +127,19 @@ public:
 	void translateTitle(glm::vec2 translation);
 	//updates the Component label
 	void updateText();
+	//updates the Component type, without a label (for comp. designer)
+	void updateTextWithoutLabel();
 	//Set the colour of the polygons and circles belonging to the component
 	void setColour(const glm::vec4& colour);
 	//Adds a new polygon to the polygon list
 	void addPoly(Polygon2D* poly);
 	void addCircle(Circle* circle);
-	void addLine(LineSegment* line);
+	void addLine(PolyLine* line);
 	void addPort(std::shared_ptr<Port> port);
 
 	void removePoly(Polygon2D* poly);
 	void removeCircle(Circle* circle);
-	void removeLine(LineSegment* line);
+	void removeLine(PolyLine* line);
 	void removeText(Text* text);
 	
 

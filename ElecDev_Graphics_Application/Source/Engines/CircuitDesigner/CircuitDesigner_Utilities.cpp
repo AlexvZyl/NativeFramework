@@ -41,7 +41,6 @@ void CircuitDesigner::deleteActiveComponent()
 	if (!m_activeComponent) return;
 	deleteComponent(m_activeComponent.get());
 	m_activeComponent = nullptr;
-	Lumen::getApp().m_guiState->active_component = nullptr;
 }
 
 void CircuitDesigner::deleteActiveCable()
@@ -65,11 +64,9 @@ void CircuitDesigner::setActiveComponent(unsigned eID)
 	}
 	if ((eID == 0) || (eID == -1))
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = true;
 	}
 	else
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		if (!currentEntity) return;
 		currentEntity->setContext();
@@ -89,9 +86,6 @@ void CircuitDesigner::setActiveComponent(unsigned eID)
 				return current.get() == cur;
 			});
 		m_activeComponent->enableOutline();
-
-		// Pass the active component to the GUI state for editing.
-		Lumen::getApp().m_guiState->active_component = m_activeComponent.get();
 	}
 }
 void CircuitDesigner::setActiveCable(unsigned eID) 
@@ -100,15 +94,12 @@ void CircuitDesigner::setActiveCable(unsigned eID)
 	{
 		m_activeCable->disableOutline();
 		m_activeCable = NULL;
-		Lumen::getApp().m_guiState->active_cable = nullptr;
 	}
 	if ((eID == 0) || (eID == -1)) 
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = true;
 	}
 	else 
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
 
 		if (!currentEntity) return;
@@ -126,8 +117,6 @@ void CircuitDesigner::setActiveCable(unsigned eID)
 						return current.get() == cur;
 					});
 				m_activeCable->enableOutline();
-
-				Lumen::getApp().m_guiState->active_cable = m_activeCable.get();
 			}
 			currentEntity = currentEntity->m_parent;
 		}
@@ -138,12 +127,10 @@ Port* CircuitDesigner::getPort(unsigned eID)
 {
 	if ((eID == 0) || (eID == -1))
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = true;
 		return nullptr;
 	}
 	else
 	{
-		Lumen::getApp().m_guiState->clickedZone.background = false;
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		if (!currentEntity) return nullptr;
 		while (currentEntity->m_type != EntityType::PORT)
@@ -518,7 +505,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	// Add new.
 	for (const auto& line : componentNode["Line Segments"])
 	{
-		linesVector.push_back(Renderer::addLineSegment2D(line.second, component));
+		linesVector.push_back(Renderer::addPolyLine(line.second, component));
 		linesVector.back()->translate(position);
 	}
 

@@ -49,8 +49,6 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				else {
 					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get());
 				}
-				//m_activeComponent->addPoly(m_activePoly);
-				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else
 			{
@@ -62,13 +60,12 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (!m_activeLine) 
 			{
 				//start new line
-				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), penThickness, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
+				bool rounded = true;
+				m_activeLine = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, { 0.f, 0.f, 0.f, 1.f }, rounded, m_activeComponent.get());
 			}
 			else {
 				//end the line
-				m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 				m_activeComponent->addLine(m_activeLine);
-				//m_activeComponent->addLine(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords));
 				m_activeLine = nullptr;
 			}
 		}
@@ -143,7 +140,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		if (m_activeLine)
 		{
 			// Update the line end position.
-			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
+			m_activeLine->translateToVertexAtIndex(m_activeLine->m_vertices.size() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
@@ -198,9 +195,6 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} };
-		PolyLine* polyline = nullptr;
-		std::string msg = "";
 		switch (event.key)
 		{
 		case GLFW_KEY_P:
@@ -239,12 +233,6 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			// Pink = expected position
 			break;
 
-		case GLFW_KEY_K:
-			// Test add polyLine.
-			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
-			polyline = Renderer::addPolygon2DClear(vertices, penThickness, m_activeComponent.get());
-			//polyline->pushVertex({ -0.5f, 0.f });
-			break;
 
 		case GLFW_KEY_T:
 			//Add new text
@@ -278,11 +266,6 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 				if (m_activePoly) 
 				{
 					m_activePoly->translateVertexAtIndex(m_activeVertexIdx, translation);
-
-					//PolyLine fix: If we move a polyLine vertex, 
-					//the vertices are rearanged in a undetermined fashion. We therefore need to fix m_activeVertex before proceeding.
-					//We could check and only do this for polylines, but for now let's just reset the active vertex every time.
-					//setActiveVertex(screenCoords);
 				}
 				else if (m_activeLine) 
 				{
@@ -321,11 +304,6 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 			}
 		}
 	}
-
-	/*if (m_activePoly)
-	{
-		Renderer::addCircle2D(glm::vec3{ glm::vec2(m_activePoly->m_trackedCenter), 0.5f }, 0.02f, { 1.f, 0.f, 0.f, 1.f });
-	}*/
 }
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
@@ -337,7 +315,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 		if (m_activeVertexIdx != -1) 
 		{
-			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_VAO->m_vertexCPU[m_activeLine->m_vertexBufferPos + m_activeVertexIdx].data.position));
+			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
 			else if (m_activePoly) {
 				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
 				if (polyline) {

@@ -84,7 +84,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	// --------------------- //
 
 	// First line.
-	m_polyLine = Renderer::addPolyLine({ m_startPort->centre,  m_startPort->centre }, m_thickness, this);
+	m_polyLine = Renderer::addPolyLine({ m_startPort->centre,  m_startPort->centre }, m_thickness, m_colour, true, this);
 
 }
 
@@ -188,7 +188,7 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 	if(m_endPort)
 		m_endPort->attachCable(this);
 
-	m_polyLine = Renderer::addPolyLine(nodeList, m_thickness, this);
+	m_polyLine = Renderer::addPolyLine(nodeList, m_thickness, m_colour, true, this);
 }
 
 //==============================================================================================================================================//

@@ -294,10 +294,10 @@ std::tuple<unsigned, float> Primitive<VertexType>::getNearestVertexIdx(const glm
 	float minDistance = 0.f;
 	unsigned closestVertexIdx;
 	// Calculate the first vertex' distance.
-	minDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[m_vertexBufferPos].data.position));
+	minDistance = std::numeric_limits<float>::infinity();
 	closestVertexIdx = -1;
 	// Find if any of the vertices are closer.
-	for (int i = m_vertexBufferPos + 1; i < m_vertexBufferPos + m_vertexCount; i++)
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 	{
 		float currentDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[i].data.position));
 		if (currentDistance > minDistance)

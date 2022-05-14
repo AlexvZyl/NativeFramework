@@ -23,7 +23,7 @@ public:
 
     std::shared_ptr<Component2D> m_activeComponent;
     Polygon2D* m_activePoly;
-    LineSegment* m_activeLine;
+    PolyLine* m_activeLine;
     Circle* m_activeCircle;
     Text* m_activeText;
     std::shared_ptr<Port> m_activePort;

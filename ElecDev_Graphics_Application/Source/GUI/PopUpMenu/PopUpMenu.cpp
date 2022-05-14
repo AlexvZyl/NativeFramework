@@ -106,7 +106,7 @@ void PopUpMenu::onImGuiRender()
             {
                 app.pushWindow<ComponentEditor>(LumenDockPanel::Left, "Component Editor");
             }
-            if (componentEngine->m_activeCircle || componentEngine->m_activePoly || componentEngine->m_activeLine || componentEngine->m_activePort) 
+            if (componentEngine->m_activeCircle || componentEngine->m_activePoly || componentEngine->m_activeLine || componentEngine->m_activePort || componentEngine->m_activeText) 
             {
                 if (ImGui::MenuItem("Delete", "DEL"))
                 {
@@ -132,6 +132,11 @@ void PopUpMenu::onImGuiRender()
             if (ImGui::MenuItem("Add Port", "O"))
             {
                 componentEngine->switchState(CompDesignState::PLACE_PORT);
+                closeWindow();
+            }
+            if (ImGui::MenuItem("Add Text", "T"))
+            {
+                componentEngine->switchState(CompDesignState::ADD_TEXT);
                 closeWindow();
             }
             if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
