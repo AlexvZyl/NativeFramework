@@ -98,12 +98,14 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		else if (designerState == CompDesignState::ADD_TEXT)
 		{
 			// Create a popup GUI for the text entry.
-			float textSize = 0.004f;
-			m_activeText = Renderer::addText2D(" ", screenCoords, { 0.f, 0.f, 0.f, 1.f }, textSize, "C", "B", m_activeComponent.get());
-			m_activeComponent->m_text.push_back(m_activeText);
+			float textSize = penThickness;
+			if (!m_activeText) {
+				m_activeText = Renderer::addText2D(" ", screenCoords, { 0.f, 0.f, 0.f, 1.f }, textSize, "C", "B", m_activeComponent.get());
+				m_activeComponent->m_text.push_back(m_activeText);
 			
-			TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
-			
+				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+				switchState(CompDesignState::SELECT);
+			}
 			
 
 		}
@@ -113,6 +115,14 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 	{
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
+	}
+
+	if (event.isType(EventType_MouseDoublePress)) {
+		if (designerState == CompDesignState::SELECT) {
+			if (m_activeText) {
+				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+			}
+		}
 	}
 }
 

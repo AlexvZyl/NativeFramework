@@ -5,8 +5,8 @@ class TextEntryGUI :
     public LumenPopupWindow
 {
 private:
-	 std::string m_textToEdit;
-	 Text* m_text;
+	Text* m_text;
+	std::string m_textToEdit;
 public:
 
 	// Constructor.

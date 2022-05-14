@@ -1,6 +1,6 @@
 #include "TextEntryGUI.h"
 
-TextEntryGUI::TextEntryGUI(const std::string& name, Text* text, int imguiWindowFlags) : LumenPopupWindow(name, imguiWindowFlags), m_text(text)
+TextEntryGUI::TextEntryGUI(const std::string& name, Text* text, int imguiWindowFlags) : LumenPopupWindow(name, imguiWindowFlags), m_text(text), m_textToEdit(text->m_string)
 {
 	removeImGuiWindowFlags(ImGuiWindowFlags_NoResize);
 	addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
