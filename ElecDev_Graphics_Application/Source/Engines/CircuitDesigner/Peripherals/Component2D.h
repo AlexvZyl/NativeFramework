@@ -80,10 +80,10 @@ public:
 
 	//title
 	static Font titleFont;
-	glm::vec2 titleOffset = glm::vec2(0.f, -0.11f);
+	glm::vec2 titleOffset = glm::vec2(0.f, -0.02f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	std::string titleString;
-	float titleSize = 0.035f;
+	float titleSize = 0.005f;
 
 	//port specifications
 	unsigned n_ports_north = 0;

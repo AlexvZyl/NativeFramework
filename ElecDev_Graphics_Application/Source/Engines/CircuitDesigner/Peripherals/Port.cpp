@@ -31,9 +31,9 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	//  P R I M I T I V E S  //
 	// --------------------- //
 
-	body = Renderer::addCircle2D(centre, 0.01f, bodyColour, 1.0f, 0.0f, this);
-	border = Renderer::addCircle2D(centre, 0.011f, borderColour, 1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
+	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
+	border = Renderer::addCircle2D(centre, 1.1f*portSize, borderColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, 0.0005f, indicatorColour, 1.0f, 0.01f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -41,7 +41,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 		m_label = "Port " + std::to_string(parent->numPorts++);
 	else m_label = label;
 
-	float textMargin = 0.015;
+	float textMargin = 0.0015;
 	//OLD DEPRECATED CODE
 	//infer the port position from the offset, and set the title
 	/*if (m_offset.y > 0.078)
@@ -128,7 +128,7 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	bodyColour = body->m_colour;
 	borderColour = border->m_colour;
 	centre = body->m_trackedCenter;
-	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, 0.0005f, indicatorColour, 1.0f, 0.01f, this);
 	setLayer(portLayer);
 }
 
@@ -171,6 +171,7 @@ void Port::moveTo(const glm::vec2& destination)
 	body->translateTo(centre);
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
+	
 	for (Cable* cable: m_cables)
 		cable->followPort(this);
 }
