@@ -17,6 +17,7 @@ public:
 	float m_layer = 0.f;
 	bool outlined = false;
 	bool m_closed = false;
+	bool m_rounded = true;
 
 	ClipperLib::EndType et = ClipperLib::etOpenRound;
     

@@ -184,7 +184,7 @@ PolyLine* Renderer::addPolyLine(const YAML::Node& node, Entity* parent)
 				vertices,
 				node["Thickness"].as<float>(),
 				color,
-				true,
+				node["Rounded"].as<bool>(),
 				parent
 			);
 		//polyline->setColor(color);
