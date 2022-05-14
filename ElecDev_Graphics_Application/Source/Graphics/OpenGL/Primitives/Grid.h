@@ -192,7 +192,7 @@ public:
 		{
 			std::string message;
 			if(m_scale * 1000.f < 1000.f) message = "Major Grid = " + std::to_string(m_coarseIncrementSize * m_scale * 1000) + " mm";
-			else					   message = "Major Grid = " + std::to_string(m_coarseIncrementSize * m_scale) + " m";
+			else					      message = "Major Grid = " + std::to_string(m_coarseIncrementSize * m_scale) + " m";
 			glm::vec2 size = ImGui::CalcTextSize(message.c_str());
 			setWidgetSize(size + m_widgetInternalPadding);
 			ImGui::SetCursorPos({
