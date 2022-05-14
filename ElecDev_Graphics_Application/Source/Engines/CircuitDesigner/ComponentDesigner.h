@@ -33,7 +33,7 @@ public:
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
-    float clickTol = 10.0f;
+    float clickTol = 15.0f;
     bool drawFilled = true;
     float penThickness = 0.001f;
 
