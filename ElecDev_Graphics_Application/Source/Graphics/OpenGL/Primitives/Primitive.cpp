@@ -131,6 +131,17 @@ void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotatePoint, 
 }
 
 template<typename VertexType>
+void Primitive<VertexType>::transform(const glm::mat4& transfrom)
+{
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		m_VAO->m_vertexCPU[i].data.position = glm::vec3(transfrom * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f));
+	}
+
+	syncWithGPU();
+}
+
+template<typename VertexType>
 void Primitive<VertexType>::scale(const glm::vec3& scaling)
 {
 	// ...

@@ -106,6 +106,8 @@ public:
 	virtual void rotate(float degrees, const glm::vec3& rotateNormal = {0.f, 0.f, 1.});
 	// Rotates the entity by the given vector and provided point.
 	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
+	// Apply a transform to the vertices.
+	virtual void transform(const glm::mat4& transform);
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
 	// Outline the primitive by the given scale.
