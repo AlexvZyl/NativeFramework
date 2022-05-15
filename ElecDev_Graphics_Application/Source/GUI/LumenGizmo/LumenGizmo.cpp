@@ -4,14 +4,17 @@
 #include "Graphics/Camera/Camera.h"
 #include "glm/gtc/matrix_transform.hpp"
 
-float* LumenGizmo::computeReferenceMatrix()
+glm::mat4 LumenGizmo::computeReferenceMatrix()
 {
-	return &glm::translate(glm::mat4(1.f), glm::vec3(m_component->centre, 0.f) / m_camera->getTotalScale())[0][0];
+	glm::mat4 referenceMatrix = glm::mat4(1.f);
+	referenceMatrix = glm::translate(referenceMatrix, glm::vec3(m_component->centre, 0.f));
+	//referenceMatrix = glm::scale(referenceMatrix,  m_camera->getTotalScale());
+	return referenceMatrix;
 }
 
-float* LumenGizmo::computeViewMatrix() 
+const float* LumenGizmo::computeViewMatrix() 
 {
-	return &glm::translate(glm::mat4(1.f), m_camera->getPosition() * m_camera->getTotalScale())[0][0];
+	return &m_camera->getViewMatrix()[0][0];
 }
 
 void LumenGizmo::render()
@@ -24,7 +27,7 @@ void LumenGizmo::render()
 	ImGuizmo::SetDrawlist();
 	ImGuizmo::SetOrthographic(isOrthographic());
 	ImGuizmo::SetRect(m_windowPosition.x, m_windowPosition.y, m_windowSize.x, m_windowSize.y);
-	ImGuizmo::SetGizmoSizeClipSpace(m_size);
+	ImGuizmo::SetGizmoSizeClipSpace(m_size / m_camera->getTotalScale().x);
 
 	// Update state.
 	m_isUsing = ImGuizmo::IsUsing();
@@ -33,7 +36,7 @@ void LumenGizmo::render()
 	// Render the gizmo.
 	Camera& camera = getCamera();
 	glm::mat4 deltaMatrix(1.f);
-	ImGuizmo::Manipulate(computeViewMatrix(), &camera.getProjectionMatrix()[0][0], getOperation(), getMode(), computeReferenceMatrix(), &deltaMatrix[0][0], &m_snapValue);
+	ImGuizmo::Manipulate(computeViewMatrix(), &camera.getProjectionMatrix()[0][0], getOperation(), getMode(), &computeReferenceMatrix()[0][0], &deltaMatrix[0][0], &m_snapValue);
 
 	// Use the delta matrix to manipulate the entity.
 	float rotation[3], scaling[3], translation[3];

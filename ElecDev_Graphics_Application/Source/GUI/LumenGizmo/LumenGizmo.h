@@ -85,8 +85,8 @@ private:
 	inline bool isVisible() { return !m_isHidden; }
 
 	// Transform to put the gizmo in the world.
-	float* computeReferenceMatrix();
-	float* computeViewMatrix();
+	glm::mat4 computeReferenceMatrix();
+	const float* computeViewMatrix();
 
 	// ID.
 	inline int getID() { return m_ID; }
