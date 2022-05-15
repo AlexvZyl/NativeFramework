@@ -96,13 +96,16 @@ void EngineCore::onDehoverEventForce(const NotifyEvent& event)
 
 void EngineCore::onMouseDragEventForce(const MouseDragEvent& event) 
 {
-	if (getGizmo()->isOver()) return;
-	onMouseDragEvent(event);
+	if (   event.isType(EventType_MouseButtonMiddle)
+		|| event.isType(EventType_MouseButtonLeft | EventType_LeftCtrl)
+		|| !getGizmo()->isOver())
+	{
+		onMouseDragEvent(event);
+	}
 }
 
 void EngineCore::onMouseButtonEventForce(const MouseButtonEvent& event) 
 {
-	if (event.isType(EventType_MouseButtonMiddle)) onMouseButtonEvent(event);
 	if (getGizmo()->isOver()) return;
 	onMouseButtonEvent(event);
 }
