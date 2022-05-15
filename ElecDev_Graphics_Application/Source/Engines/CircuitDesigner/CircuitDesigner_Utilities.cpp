@@ -42,7 +42,6 @@ void CircuitDesigner::deleteActiveComponent()
 {
 	if (!m_activeComponent) return;
 	deleteComponent(m_activeComponent.get());
-	m_activeComponent = nullptr;
 }
 
 void CircuitDesigner::deleteActiveCable()
@@ -365,6 +364,9 @@ void CircuitDesigner::deleteComponent(Component2D* component)
 	{
 		getGizmo()->clearEntities();
 		m_circuit->m_components.erase(iterator);
+		if (component == m_activeComponent) {
+			m_activeComponent = nullptr;
+		}
 		// Check if there is an hovered port.
 		if (!m_hoveredPort) return;
 		// Check to see if the hovered port was deleted.
