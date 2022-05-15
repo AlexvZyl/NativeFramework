@@ -7,6 +7,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Camera/Camera.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Costructor & Destructor.																												   //
@@ -19,8 +20,8 @@ Base2DEngine::Base2DEngine()
 	m_scene = std::make_unique<Scene>(CameraType::Standard2D, glm::vec2(500, 500));
 	Renderer::storeAndBindScene(&getScene());
 	getScene().getCamera().setScaleRate(0.5f);
-	getGizmo().setOperation(LumenGizmoOperation::Rotate2D);
-	getGizmo().setSnapValue(45.f);
+	getGizmo()->setOperation(LumenGizmoOperation::Rotate2D);
+	getGizmo()->setSnapValue(45.f);
 };
 
 //=============================================================================================================================================//

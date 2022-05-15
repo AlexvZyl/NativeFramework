@@ -15,6 +15,7 @@ This is where the interactive 2D design engine is implemented.
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -32,9 +33,9 @@ CircuitDesigner::CircuitDesigner()
 	enableOverlay();
 	enableDesignPalette();
 
-	LumenGizmo& gizmo = getGizmo();
-	gizmo.setScale(0.015);
-	gizmo.enable();
+	LumenGizmo* gizmo = getGizmo();
+	gizmo->setSize(0.010f);
+	gizmo->enable();
 }
 
 CircuitDesigner::~CircuitDesigner()
@@ -58,8 +59,8 @@ void CircuitDesigner::renderDesignPalette()
 {
 	if (ImGui::Checkbox("Gizmo", &m_gizmoEnabled))
 	{
-		if (m_gizmoEnabled) getGizmo().enable();
-		else			    getGizmo().disable();
+		if (m_gizmoEnabled) visibleGizmo();
+		else			    hideGizmo();
 	}
 }
 

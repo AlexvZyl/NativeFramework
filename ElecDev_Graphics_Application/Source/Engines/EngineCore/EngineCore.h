@@ -7,7 +7,6 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <memory>
-#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -25,6 +24,7 @@ class FileDropEvent;
 class YamlNodeDropEvent;
 class LumenWindow;
 class Scene;
+class LumenGizmo;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -41,7 +41,7 @@ class EngineCore
 public:
 
 	// Constructor
-	inline EngineCore() = default;
+	EngineCore();
 	// Destructor.
 	virtual ~EngineCore();
 	// Sets the name of the engine (and elements that have names.)
@@ -149,7 +149,13 @@ public:
 	inline virtual void renderOverlay() {};
 
 	// Get the gizmo used for manipulation.
-	inline LumenGizmo& getGizmo() { return m_lumenGizmo; };
+	LumenGizmo* getGizmo();
+
+protected:
+
+	// Protected gizmo controls.
+	void hideGizmo();
+	void visibleGizmo();
 
 private:
 
@@ -163,7 +169,7 @@ private:
 	std::unique_ptr<Scene> m_scene = nullptr;
 
 	// Gizmo!
-	LumenGizmo m_lumenGizmo;
+	std::unique_ptr<LumenGizmo> m_lumenGizmo;
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;

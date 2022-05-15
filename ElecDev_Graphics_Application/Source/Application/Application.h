@@ -11,11 +11,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "imgui/notify/imgui_notify.h"
-#include "Lumen.h"
-#include "OpenGL/Renderer/RendererGL.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
-#include "GUI/GraphicsScene/GraphicsScene.h"
+#include <filesystem>
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -29,6 +25,8 @@ class Event;
 class FileLoadEvent;
 class FileSaveEvent;
 class AssetViewer;
+class WindowStack;
+class LumenWindow;
 
 template<class EngineType>
 class GraphicsScene;
@@ -37,6 +35,8 @@ struct ImFont;
 struct GLFWwindow;
 struct RendererData;
 struct ProfileResult;
+
+namespace YAML { class Node; }
 
 //==============================================================================================================================================//
 //  Data.																																		//
@@ -145,7 +145,7 @@ public:
 	// The results from the profiler.
 	std::vector<ProfileResult> m_profilerResults;
 	bool m_profilerActive = false;
-	RendererData m_rendererData;
+	std::unique_ptr<RendererData> m_rendererData;
 
 	// --------------------------- //
 	//  N O T I F I C A T I O N S  //
@@ -301,35 +301,6 @@ private:
 	ImGuiID m_ribbonPanelID = NULL;
 	ImGuiID m_bottomBarID = NULL;
 };
-
-//==============================================================================================================================================//
-//  Templates.																																	//
-//==============================================================================================================================================//
-
-template<class WindowType, class ... Args>
-WindowType* Application::pushWindow(LumenDockPanel panel, const Args& ... args)
-{
-	WindowType* window = m_windowStack->pushWindow<WindowType>(args...);
-	dockWindowToPanel(window, panel);
-	window->focus();
-	return window;
-}
-
-template<class EngineType, class ... Args>
-EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args) 
-{
-	GraphicsScene<EngineType>* window = m_windowStack->pushWindow<GraphicsScene<EngineType>>(name);
-	dockWindowToPanel(window, panel);
-	window->constructEngine(args...);
-	window->focus();
-	return window->getEngine();
-}
-
-template<class EngineType>
-EngineType* Application::getActiveEngine() 
-{
-	return dynamic_cast<EngineType*>(m_activeEngine);
-}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

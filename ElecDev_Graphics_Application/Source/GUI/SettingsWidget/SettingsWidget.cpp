@@ -7,8 +7,11 @@
 #include "Utilities/WebSocket/LumenWebSocket.h"
 #include "SettingsWidget.h"
 #include "Application/Application.h"
-#include "GLFW/glfw3.h"
+#include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "OpenGL/Primitives/Grid.h"
+#include "OpenGL/SceneGL.h"
+#include "GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//

@@ -5,6 +5,7 @@
 #include "GUI/ScriptGui/ScriptGui.h"
 #include "BoostWebsocket.h"
 #include "LumenWebSocket.h"
+#include "Application/ApplicationTemplates.h"
 #include <iostream>
 #include <thread>
 #include "External/Misc/ConsoleColor.h"

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GUI/PopupModal/PopupModal.h"
+#include <filesystem>
+#include "yaml-cpp/yaml.h"
 
 class CircuitDesignerPopupModal : public PopupModal
 {

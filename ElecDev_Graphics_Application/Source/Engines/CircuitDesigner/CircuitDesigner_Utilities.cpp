@@ -3,6 +3,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+#include "Application/ApplicationTemplates.h"
 #include "CircuitDesigner.h"
 #include "Peripherals/Component2D.h"
 #include "Peripherals/Circuit.h"
@@ -12,6 +13,7 @@
 #include "Graphics/Entities/EntityManager.h"
 #include "Application/Application.h"
 #include "GUI/CircuitDesignerPopupModal.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Includes.																																   //
@@ -159,7 +161,7 @@ void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, c
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	designerState = ENTITY_SELECT;
-	getGizmo().setEntity(m_activeComponent.get());
+	getGizmo()->setEntity(m_activeComponent.get());
 }
 
 void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos)
@@ -170,7 +172,7 @@ void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::v
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	designerState = ENTITY_SELECT;
-	getGizmo().setEntity(m_activeComponent.get());
+	getGizmo()->setEntity(m_activeComponent.get());
 }
 
 void CircuitDesigner::loadDataToCable(const YAML::Node& node, Cable* cable)

@@ -1,6 +1,7 @@
 #include "ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
 #include "Application/Events/Events.h"
+#include "Application/ApplicationTemplates.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Lumen.h"
 #include "Application/Application.h"
@@ -12,6 +13,8 @@
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
 #include "GUI/TextEntryGUI/TextEntryGUI.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "Peripherals/Component2D.h"
+#include "OpenGL/SceneGL.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {

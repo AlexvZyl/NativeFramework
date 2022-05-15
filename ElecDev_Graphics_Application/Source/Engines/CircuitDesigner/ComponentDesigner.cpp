@@ -9,6 +9,9 @@
 #include "Graphics/Entities/EntityManager.h"
 #include "GUI/ComponentDesignerColorEditor.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "OpenGL/SceneGL.h"
+#include "Peripherals/Component2D.h"
+#include "Application/ApplicationTemplates.h"
 
 ComponentDesigner::ComponentDesigner()
 	: Base2DEngine()

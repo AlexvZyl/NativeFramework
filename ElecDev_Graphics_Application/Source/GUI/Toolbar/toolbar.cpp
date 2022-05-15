@@ -9,6 +9,8 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "Application/ApplicationTemplates.h"
+#include "Application/Events/EventLog.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -18,7 +20,6 @@
 #include "GUI/SceneHierarchy/SceneHierarchy.h"
 #include "GUI/BackgroundColorEditor/BackgroundColorEditor.h"
 #include <GLFW/glfw3.h>
-#include "Application/Events/EventLog.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */

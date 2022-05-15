@@ -9,6 +9,7 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Application/LumenWindow/WindowStack.h"
 #include "Application/Events/EventLog.h"
+#include "Application/ApplicationTemplates.h"
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
@@ -25,6 +26,7 @@
 #include "Utilities/Logger/Logger.h"
 #include "GLFW/glfw3.h"
 #include "Engines/AssetViewer/AssetViewer.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Setup																																		//
@@ -40,10 +42,11 @@ Application::Application()
 	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
-	// Events & windows.
+	// App inits.
 	Application::glfwInitCallbacks();
 	EventLog::init();
 	m_windowStack = std::make_unique<WindowStack>();
+	m_rendererData = std::make_unique<RendererData>();
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 

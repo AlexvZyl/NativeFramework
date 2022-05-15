@@ -24,6 +24,7 @@
 #include "GUI/SettingsWidget/SettingsWidget.h"
 #include "Application/Events/EventLog.h"
 #include "GUI/CableCreator/CableCreator.h"
+#include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//
 //  Includes.																																	//

@@ -9,6 +9,7 @@
 #include "OpenGL/Primitives/Primitive.h"
 #include "Graphics/Entities/Entity.h"
 #include "Engines/CircuitDesigner/Peripherals/Port.h"
+#include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//

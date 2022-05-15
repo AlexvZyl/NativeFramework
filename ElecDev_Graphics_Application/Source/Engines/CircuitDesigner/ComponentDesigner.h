@@ -1,7 +1,16 @@
 #pragma once
+
 #include "Engines/Base2DEngine/Base2DEngine.h"
-#include "Peripherals/Component2D.h"
+#include "Peripherals/Port.h"
 #include <filesystem>
+
+class Component2D;
+class Circuit;
+class Polygon2D;
+class PolyLine;
+class Circle;
+class Text;
+enum class PortType;
 
 enum class CompDesignState
 {

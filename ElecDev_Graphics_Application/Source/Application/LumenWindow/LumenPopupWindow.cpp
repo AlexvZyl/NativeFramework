@@ -1,6 +1,7 @@
 #include "LumenPopupWindow.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "Application/Events/Events.h"
 
 LumenPopupWindow::LumenPopupWindow(const std::string& name, int imguiWindowFlags) 
 	: LumenWindow(name, imguiWindowFlags)

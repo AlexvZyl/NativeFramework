@@ -2,6 +2,9 @@
 
 #include "Application/LumenWindow/LumenWindow.h"
 
+class NotifyEvent;
+class Event;
+
 class LumenPopupWindow : public LumenWindow
 {
 public: 
