@@ -47,6 +47,11 @@ glm::vec3 Camera::getTotalScale()
 //  Controls.																																	//
 //==============================================================================================================================================//
 
+const glm::vec3& Camera::getPosition() 
+{
+	return m_position;
+}
+
 void Camera::setPosition(const glm::vec3& position)
 {
 	m_position = position;

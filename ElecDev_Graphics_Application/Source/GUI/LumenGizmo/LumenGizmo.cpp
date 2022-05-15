@@ -4,9 +4,14 @@
 #include "Graphics/Camera/Camera.h"
 #include "glm/gtc/matrix_transform.hpp"
 
-glm::mat4 LumenGizmo::computeReferenceMatrix()
+float* LumenGizmo::computeReferenceMatrix()
 {
-	return glm::translate(glm::mat4(1.f), glm::vec3(m_component->centre, 0.f));
+	return &glm::translate(glm::mat4(1.f), glm::vec3(m_component->centre, 0.f) / m_camera->getTotalScale())[0][0];
+}
+
+float* LumenGizmo::computeViewMatrix() 
+{
+	return &glm::translate(glm::mat4(1.f), m_camera->getPosition() * m_camera->getTotalScale())[0][0];
 }
 
 void LumenGizmo::render()
@@ -28,10 +33,10 @@ void LumenGizmo::render()
 	// Render the gizmo.
 	Camera& camera = getCamera();
 	glm::mat4 deltaMatrix(1.f);
-	ImGuizmo::Manipulate(&camera.getViewMatrix()[0][0], &camera.getProjectionMatrix()[0][0], getOperation(), getMode(), &computeReferenceMatrix()[0][0], &deltaMatrix[0][0], &m_snapValue);
+	ImGuizmo::Manipulate(computeViewMatrix(), &camera.getProjectionMatrix()[0][0], getOperation(), getMode(), computeReferenceMatrix(), &deltaMatrix[0][0], &m_snapValue);
 
 	// Use the delta matrix to manipulate the entity.
 	float rotation[3], scaling[3], translation[3];
 	ImGuizmo::DecomposeMatrixToComponents(&deltaMatrix[0][0], translation, rotation, scaling);
-	m_component->rotate(rotation[2]);
+	if(rotation[2]) m_component->rotate(rotation[2]);
 }

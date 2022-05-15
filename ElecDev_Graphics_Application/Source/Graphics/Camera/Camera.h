@@ -52,6 +52,8 @@ public:
 
 	// Set the position of the camera.
 	void setPosition(const glm::vec3& position);
+	// Get the camera position.
+	const glm::vec3& getPosition();
 	// Set the rate by which the camera should scale.
 	void setScaleRate(float rate);
 	// Translate the camera by the given vector.

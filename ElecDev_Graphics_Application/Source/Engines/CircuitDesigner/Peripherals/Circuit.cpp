@@ -74,8 +74,6 @@ Circuit::Circuit(const YAML::Node& node)
 		m_cables.push_back(std::make_shared<Cable>(cable.second, this));
 		std::string filename = cable.second["Filename"].as<std::string>();
 		YAML::Node cableNode = node["Reference Cables"][filename];
-		glm::vec4 cableColor = { cableNode["Color"][0].as<float>(), cableNode["Color"][1].as<float>(), cableNode["Color"][2].as<float>(), cableNode["Color"][3].as<float>() };
-		m_cables.back()->setColour(cableColor);
 	}
 }
 

@@ -94,7 +94,7 @@ public:
 		// Render the gizmo.
 		LumenGizmo* gizmo = m_engine->getGizmo();
 		gizmo->setWindowPosition(ImGui::GetWindowPos());
-		gizmo->setWindowSize(ImGui::GetWindowContentRegionMax());
+		gizmo->setWindowSize(m_contentRegionSize);
 		gizmo->render();
 
 		// Render the overlay.

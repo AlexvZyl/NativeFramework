@@ -34,7 +34,7 @@ CircuitDesigner::CircuitDesigner()
 	enableDesignPalette();
 
 	LumenGizmo* gizmo = getGizmo();
-	gizmo->setSize(0.010f);
+	gizmo->setSize(0.1f);
 	gizmo->enable();
 }
 
