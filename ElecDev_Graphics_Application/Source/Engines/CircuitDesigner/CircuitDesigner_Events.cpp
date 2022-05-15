@@ -110,14 +110,17 @@ void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		{
 			m_activeComponent = nullptr;
 			m_activeCable = nullptr;
+			m_activeVertexIdx = -1;
 			designerState = ENTITY_SELECT;
 		}
 		else 
 		{
 			// Update current entity ID.
 			m_currentEntityID = getEntityID(event.mousePosition);
-			setActiveComponent(m_currentEntityID);
-			setActiveCable(m_currentEntityID);
+
+				m_activeVertexIdx = -1;
+				setActiveComponent(m_currentEntityID);
+				setActiveCable(m_currentEntityID);
 
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
