@@ -16,3 +16,6 @@
 [submodule "ElecDev_Graphics_Application/External/CavalierContours"]
 	path = ElecDev_Graphics_Application/External/CavalierContours
 	url = https://github.com/Cullen-Enerdyne/CavalierContours
+[submodule "ElecDev_Graphics_Application/External/ImGuizmo"]
+	path = ElecDev_Graphics_Application/External/ImGuizmo
+	url = https://github.com/Alex-vZyl/ImGuizmo

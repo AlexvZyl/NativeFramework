@@ -43,23 +43,29 @@ Circuit::Circuit(const YAML::Node& node)
 	// Load components.
 	for (const auto& component : node["Components"])
 	{
+		YAML::Node componentNode = component.second;
+
 		// Create the component from the node.
-		std::string componentFile = component.second["Filename"].as<std::string>();
+		std::string componentFile = componentNode["Filename"].as<std::string>();
 		m_components.emplace_back(std::make_shared<Component2D>(m_referenceComponents[componentFile], this));
 
 		// Update component.
 		auto& currentComponent = m_components.back();
 		currentComponent->disableOutline();
-		currentComponent->moveTo({ component.second["Position"][0].as<float>(), component.second["Position"][1].as<float>() });
+		currentComponent->moveTo({ componentNode["Position"][0].as<float>(), componentNode["Position"][1].as<float>() });
 		currentComponent->dataDict.clear();
 		YAML::Node dictNode = component.second["Dictionary"];
 		for (const auto& node : dictNode)
 		{
 			currentComponent->dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 		}
-		std::string label = component.second["Label"].as<std::string>();
+		std::string label = componentNode["Label"].as<std::string>();
 		currentComponent->titleString = label;
 		currentComponent->title->updateText(label);
+
+		// Rotate the component.
+		if (componentNode["Rotation"].IsDefined())
+			currentComponent->rotate(componentNode["Rotation"].as<float>());
 	}
 
 	// Load cables.

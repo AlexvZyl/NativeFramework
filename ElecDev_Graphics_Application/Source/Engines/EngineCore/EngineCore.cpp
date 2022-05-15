@@ -19,6 +19,7 @@
 void EngineCore::onRender()
 {
 	Renderer::renderScene(m_scene.get());
+	getGizmo().setCamera(getScene().getCamera());
 }
 
 EngineCore::~EngineCore() 

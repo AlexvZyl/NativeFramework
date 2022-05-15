@@ -40,9 +40,9 @@ public:
 	const glm::vec4& getViewport() const;
 	const glm::vec2& getViewportSize() const;
 	const CameraType& getType() const;
-	const glm::mat4& getViewMatrix() const;
-	const glm::mat4& getProjectionMatrix() const;
-	const glm::mat4& getViewProjectionMatrix() const;
+	const glm::mat4& getViewMatrix();
+	const glm::mat4& getProjectionMatrix();
+	const glm::mat4& getViewProjectionMatrix();
 
 	glm::vec3 getTotalScale();
 
@@ -76,6 +76,7 @@ public:
 private:
 
 	friend class Grid;
+	friend class LumenGizmo;
 
 	// ------------------- //
 	//  U T I L I T I E S  //

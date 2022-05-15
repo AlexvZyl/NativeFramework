@@ -135,6 +135,10 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	titleString = title->m_string;
 	equipType = componentNode["Equipment Type"].as<std::string>();
 	enableOutline();
+
+	// Rotate the component.
+	if(componentNode["Rotation"].IsDefined())
+		rotate(componentNode["Rotation"].as<float>());
 }
 
 Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
@@ -334,6 +338,19 @@ void Component2D::removeText(Text* text)
 	{
 		LUMEN_LOG_WARN("Attempted to remove a text objet that is not a member of m_text. This can be expected when attempting to delete port or component names.", "Component2D");
 	}
+}
+
+void Component2D::rotate(float degrees)
+{
+	m_rotation += degrees;
+	glm::vec3 rotationPoint = { centre.x, centre.y, 0.f };
+	glm::vec3 rotateNormal = {0.f, 0.f, 1.f};
+	title->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto poly : m_polygons) poly->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto line : m_lines)    line->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto circ : m_circles)  circ->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto text : m_text)     text->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto& port : ports)	 port->rotate(degrees, rotationPoint, rotateNormal);
 }
 
 //=============================================================================================================================================//

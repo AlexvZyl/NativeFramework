@@ -136,7 +136,7 @@ public:
 	{
 		return m_scale;
 	}
-	glm::mat4 getViewProjectionMatrix(const Camera& camera) 
+	glm::mat4 getViewProjectionMatrix(Camera& camera) 
 	{
 		glm::mat4 viewMatrix = glm::scale(glm::mat4(1.f), {m_scale, m_scale, 1.f});
 		glm::vec3 scaledPosition = camera.m_position;
@@ -268,7 +268,7 @@ private:
 	glm::vec4 m_xAxisColor = { 0.f, 1.f, 0.f, 1.f };
 	glm::vec4 m_yAxisColor = {1.f, 0.f, 0.f, 1.f};
 	glm::vec4 m_helperCircleColor = {0.f, 0.f, 1.f, 1.f};
-	int m_totalCoarseLines = 200;
+	int m_totalCoarseLines = 300;
 	bool m_enabled = true;
 	bool m_helperCircleEnabled = true;
 	GridWidgetPosition m_widgetPosition = GridWidgetPosition::BOTTOM_RIGHT;

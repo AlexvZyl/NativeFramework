@@ -92,6 +92,9 @@ public:
 	void detachCable(Cable* cable);
 	void showAttachIndicator();
 	void hideAttachIndicator();
+	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
+
+	float m_rotation = 0.f;
 };
 
 //==============================================================================================================================================//

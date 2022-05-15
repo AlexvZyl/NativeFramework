@@ -103,10 +103,11 @@ public:
 	void reloadComponent(Component2D* component, const YAML::Node& node);
 
 	virtual void renderOverlay() override;
-
+	virtual void renderDesignPalette() override;
 
 private:
 
+	bool m_gizmoEnabled = true;
 	friend class CircuitEditor;
 	friend class CircuitDesignerPopupModal;
 };

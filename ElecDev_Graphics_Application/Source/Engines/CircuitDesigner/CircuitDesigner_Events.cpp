@@ -123,6 +123,10 @@ void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
 		}
 	}
+
+	// Set the entity the gizmo has to edit.
+	if (m_activeComponent) getGizmo().setEntity(m_activeComponent.get());
+	else				   getGizmo().clearEntities();
 }
 
 //==============================================================================================================================================//
