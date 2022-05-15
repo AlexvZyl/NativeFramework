@@ -363,6 +363,7 @@ void CircuitDesigner::deleteComponent(Component2D* component)
 	auto iterator = std::find(m_circuit->m_components.begin(), m_circuit->m_components.end(), component);
 	if (iterator != m_circuit->m_components.end())
 	{
+		getGizmo()->clearEntities();
 		m_circuit->m_components.erase(iterator);
 		// Check if there is an hovered port.
 		if (!m_hoveredPort) return;

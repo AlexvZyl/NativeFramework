@@ -64,7 +64,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (!m_activeLine) 
 			{
 				//start new line
-				bool rounded = true;
+				bool rounded = false;
 				m_activeLine = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, { 0.f, 0.f, 0.f, 1.f }, rounded, m_activeComponent.get());
 			}
 			else {

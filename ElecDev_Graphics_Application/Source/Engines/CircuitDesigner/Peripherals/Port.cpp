@@ -34,7 +34,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f*portSize, borderColour, 1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, 0.0005f, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize*0.5f, indicatorColour, 1.0f, 0.01f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -129,7 +129,7 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	bodyColour = body->m_colour;
 	borderColour = border->m_colour;
 	centre = body->m_trackedCenter;
-	attachmentIndicator = Renderer::addCircle2D(centre, 0.0005f, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize * 0.5f, indicatorColour, 1.0f, 0.01f, this);
 	setLayer(portLayer);
 }
 
