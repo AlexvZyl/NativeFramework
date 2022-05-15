@@ -11,15 +11,21 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Engine Core.																															   //
 //=============================================================================================================================================//
 
+EngineCore::EngineCore() 
+{
+	m_lumenGizmo = std::make_unique<LumenGizmo>();
+}
+
 void EngineCore::onRender()
 {
 	Renderer::renderScene(m_scene.get());
-	getGizmo().setCamera(getScene().getCamera());
+	getGizmo()->setCamera(getScene().getCamera());
 }
 
 EngineCore::~EngineCore() 
@@ -43,6 +49,21 @@ const glm::vec2& EngineCore::getWindowContentRegionSize() const
 float EngineCore::getDeltaTime() const 
 {
 	return Lumen::getApp().getDeltaTime();
+}
+
+LumenGizmo* EngineCore::getGizmo() 
+{
+	return m_lumenGizmo.get();
+}
+
+void EngineCore::hideGizmo() 
+{
+	getGizmo()->hide();
+}
+
+void EngineCore::visibleGizmo()
+{
+	getGizmo()->visible();
 }
 
 //=============================================================================================================================================//

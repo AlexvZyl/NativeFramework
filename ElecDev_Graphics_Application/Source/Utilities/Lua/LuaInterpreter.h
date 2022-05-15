@@ -10,6 +10,7 @@
 #include "lua/Windows/include/lua.hpp"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
+#include <map>
 
 //==============================================================================================================================================//
 //  Functions.																																	//

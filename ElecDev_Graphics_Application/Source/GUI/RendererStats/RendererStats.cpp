@@ -9,6 +9,7 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "Utilities/Profiler/Profiler.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 //=======================================================================================================================================//
 // Circuit editor.																														 //
@@ -209,14 +210,14 @@ void RendererStats::onImGuiRender()
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("Draw Calls");
 		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("%d", app.m_rendererData.drawCalls);
+		ImGui::Text("%d", app.m_rendererData->drawCalls);
 
 		// Draw calls.
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("Render Passes");
 		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("%d", app.m_rendererData.renderPasses);
+		ImGui::Text("%d", app.m_rendererData->renderPasses);
 
 		// Done.
 		ImGui::EndTable();

@@ -2,10 +2,9 @@
 
 #include "imgui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
-#include "Utilities/Logger/Logger.h"
-#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
-#include "Graphics/Camera/Camera.h"
-#include "glm/gtc/matrix_transform.hpp"
+
+class Component2D;
+class Camera;
 
 enum class LumenGizmoOperation
 {
@@ -22,7 +21,7 @@ class LumenGizmo
 public:
 
 	// Constructor.
-	inline inline LumenGizmo() 
+	inline LumenGizmo() 
 	{
 		setMode(ImGuizmo::WORLD);
 		setID(s_gizmoCount++);
@@ -56,9 +55,9 @@ public:
 	// Enabled & Using.
 	inline bool isUsing() { return m_isUsing; }
 	inline bool isOver() { return m_isOver; }
-	inline bool isEnabled() { return m_localEnabled; }
-	inline void enable() { m_localEnabled = true; }
-	inline void disable() { m_localEnabled = false; }
+	inline bool isEnabled() { return m_enabled; }
+	inline void enable() { m_enabled = true; }
+	inline void disable() { m_enabled = false; }
 
 	// Window.
 	inline void setWindowSize(const glm::vec2& size) { m_windowSize = size; }
@@ -74,44 +73,19 @@ public:
 	// Rendering.
 	inline void setCamera(Camera& camera) { m_camera = &camera; }
 	inline Camera& getCamera() { return *m_camera; }
-	inline void setScale(float scale) { m_scale = scale; }
-	inline float getScale() { return m_scale; };
-	inline void render() 
-	{
-		// Do not render if not enabled.
-		if (!isEnabled() || !hasActiveEntity()) return;
-
-		// Setup the current gizmo.
-		ImGuizmo::SetID(getID());
-		ImGuizmo::SetDrawlist();
-		ImGuizmo::SetOrthographic(isOrthographic());
-		ImGuizmo::SetRect(m_windowPosition.x, m_windowPosition.y, m_windowSize.x, m_windowSize.y);
-		ImGuizmo::SetGizmoSizeClipSpace(m_scale);
-
-		// Update state.
-		m_isUsing = ImGuizmo::IsUsing();
-		m_isOver = ImGuizmo::IsOver();
-
-		// Render the gizmo.
-		Camera& camera = getCamera();
-		glm::mat4 deltaMatrix(1.f);
-		ImGuizmo::Manipulate(&camera.getViewMatrix()[0][0], &camera.getProjectionMatrix()[0][0], getOperation(), getMode(), &computeReferenceMatrix()[0][0], &deltaMatrix[0][0], &m_snapValue);
-
-		// Use the delta matrix to manipulate the entity.
-		float rotation[3], scaling[3], translation[3];
-		ImGuizmo::DecomposeMatrixToComponents(&deltaMatrix[0][0], translation, rotation, scaling);
-		m_component->rotate(rotation[2]);
-	}
+	inline void setSize(float size) { m_size = size; }
+	inline float getSize() { return m_size; };
+	void render();
 
 private:
 
-	// Calculate the reference matrix for the gizmo (so that is sits on top of the componen
-	inline glm::mat4 computeReferenceMatrix() 
-	{
-		//glm::mat4 referenceMatrix = glm::rotate(glm::mat4(1.f), m_component->m_rotation, {0.f, 0.f, 1.f});
-		glm::mat4 referenceMatrix = glm::mat4(1.f);
-		return glm::translate(referenceMatrix, glm::vec3(m_component->centre, 0.f));
-	}
+	friend class EngineCore;
+	inline void hide() { m_isHidden = true; }
+	inline void visible() { m_isHidden = false; }
+	inline bool isVisible() { return !m_isHidden; }
+
+	// Transform to put the gizmo in the world.
+	glm::mat4 computeReferenceMatrix();
 
 	// ID.
 	inline int getID() { return m_ID; }
@@ -121,17 +95,18 @@ private:
 	ImGuizmo::OPERATION m_operation;
 	ImGuizmo::MODE m_mode;
 	inline static int s_gizmoCount = 0;
-	bool m_localEnabled = false;
 	bool m_isOrthographic = true;
 	glm::vec2 m_windowSize = {200.f, 200.f};
 	glm::vec2 m_windowPosition = { 0.f, 0.f };
 	int m_ID = 0;
 	Camera* m_camera = nullptr;
-	float m_scale = 1.f;
+	float m_size = 1.f;
 	float m_snapValue = 1.f;
 	glm::mat4 m_referenceMatrix;
+	bool m_enabled = false;
 	bool m_isOver = false;
 	bool m_isUsing = false;
+	bool m_isHidden = false;
 
 	// Types of entities that can be edited.
 	// This is highly inefficient atm.  We should really use model matrices...

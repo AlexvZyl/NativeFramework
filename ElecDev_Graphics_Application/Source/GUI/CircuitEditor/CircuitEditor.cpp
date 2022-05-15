@@ -5,6 +5,7 @@
 #include "CircuitEditor.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "Application/ApplicationTemplates.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Engines/AssetViewer/AssetViewer.h"

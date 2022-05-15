@@ -13,6 +13,7 @@
 #include "Engines/AssetViewer/AssetViewer.h" 
 #include "GUI/CableCreator/CableCreator.h"
 #include "GUI/LumenPayload/LumenPayload.h"
+#include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//
 //  Statics.																																	//

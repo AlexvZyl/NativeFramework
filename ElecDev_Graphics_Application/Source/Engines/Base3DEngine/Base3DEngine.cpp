@@ -11,6 +11,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Camera/Camera.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
 //  Constructor and Destructor.																												   //

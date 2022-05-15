@@ -15,6 +15,7 @@
 #include "GUI/CircuitEditor/CircuitEditor.h"
 #include "Engines/CircuitDesigner/ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
+#include "Application/ApplicationTemplates.h"
 
 /*=======================================================================================================================================*/
 /* PopUp Menu.																															 */

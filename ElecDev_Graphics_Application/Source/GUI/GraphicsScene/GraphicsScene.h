@@ -10,6 +10,8 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "GUI/LumenPayload/LumenPayload.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
+#include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
 //  Graphics Scene.																																//
@@ -90,10 +92,10 @@ public:
 		if (payloadNode.hasValidData()) m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 
 		// Render the gizmo.
-		LumenGizmo& gizmo = m_engine->getGizmo();
-		gizmo.setWindowPosition(ImGui::GetWindowPos());
-		gizmo.setWindowSize(ImGui::GetWindowContentRegionMax());
-		gizmo.render();
+		LumenGizmo* gizmo = m_engine->getGizmo();
+		gizmo->setWindowPosition(ImGui::GetWindowPos());
+		gizmo->setWindowSize(ImGui::GetWindowContentRegionMax());
+		gizmo->render();
 
 		// Render the overlay.
 		if (m_engine->hasOverlay())

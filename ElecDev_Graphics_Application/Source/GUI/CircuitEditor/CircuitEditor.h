@@ -32,7 +32,7 @@ public:
 private:
 
 	// Name used to create circuits.
-	std::string m_circuitNameOnCreation = "";
+	std::string m_circuitNameOnCreation = "Test";
 
 	// Icons.
 	inline static unsigned s_cableIcon = NULL;

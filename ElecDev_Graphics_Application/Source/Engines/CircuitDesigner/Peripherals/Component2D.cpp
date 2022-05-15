@@ -336,7 +336,7 @@ void Component2D::removeText(Text* text)
 	}
 	else
 	{
-		LUMEN_LOG_WARN("Attempted to remove a text objet that is not a member of m_text. This can be expected when attempting to delete port or component names.", "Component2D");
+		LUMEN_LOG_WARN("Attempted to remove a text object that is not a member of m_text. This can be expected when attempting to delete port or component names.", "Component2D");
 	}
 }
 

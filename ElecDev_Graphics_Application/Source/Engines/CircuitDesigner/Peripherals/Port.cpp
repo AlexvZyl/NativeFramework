@@ -14,6 +14,7 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
+#include "glm/gtc/matrix_transform.hpp"
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -273,15 +274,20 @@ void Port::setContext(GUIState* guiState)
 
 void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
 {
+	// Calculate the rotation transform.
+	glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);
+	transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
+	transform = glm::translate(transform, -rotatePoint);
+
 	// Rotate.
 	m_rotation += degrees;
-	body->rotate(degrees, rotatePoint, rotateNormal);
-	border->rotate(degrees, rotatePoint, rotateNormal);
-	attachmentIndicator->rotate(degrees, rotatePoint, rotateNormal);
-	title->rotate(degrees, rotatePoint, rotateNormal);
+	body->transform(transform);
+	border->transform(transform);
+	attachmentIndicator->transform(transform);
+	title->transform(transform);
 
 	// Update the port center.
-
+	centre = glm::vec2(transform * glm::vec4(centre, 0.f, 1.f));
 
 	// Update cables.
 	for (Cable* cable : m_cables) cable->followPort(this);
