@@ -68,7 +68,10 @@ void CableCreator::onImGuiRender()
 	{
 		std::filesystem::path path = selectFile("Lumen Save File", "", m_cableName, "Save");
 		if (path.string().size())
+		{
 			serialiseCable(path);
+			closeWindow();
+		}
 	}
 
 
