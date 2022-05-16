@@ -481,6 +481,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 
 	Renderer::remove(component->title);
 	component->title = Renderer::addText2D(node["Title"], component);
+	component->title->updateText(component->titleString);
 
 	// ----------------- //
 	//  P O L Y G O N S  //
