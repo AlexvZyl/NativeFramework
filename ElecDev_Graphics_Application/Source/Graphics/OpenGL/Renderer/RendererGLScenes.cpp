@@ -34,10 +34,7 @@ Scene* Renderer::getScene()
 
 void Renderer::initSceneDestruction(Scene* scene)
 {
-	// Store current scene.
-	s_storedScenes.push_back(s_scene);
-	// Bind scene to be destroyed.
-	s_scene = scene;
+	storeAndBindScene(scene);
 }
 
 void Renderer::doneSceneDestruction()
@@ -53,7 +50,6 @@ void Renderer::doneSceneDestruction()
 	}
 	// Remove stored scene.
 	s_storedScenes.pop_back();
-
 }
 
 void Renderer::storeAndBindScene(Scene* scene) 
@@ -78,7 +74,8 @@ void Renderer::restoreAndUnbindScene()
 
 void Renderer::renderScene()
 {
-	Renderer::renderScene(s_scene);
+	if (s_scene) Renderer::renderScene(s_scene);
+	else LUMEN_LOG_WARN("No scene bound.", "Renderer");
 }
 
 void Renderer::renderScene(Scene* scene)

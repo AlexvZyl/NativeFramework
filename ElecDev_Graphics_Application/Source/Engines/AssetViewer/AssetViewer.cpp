@@ -21,7 +21,9 @@
 AssetViewer::AssetViewer() 
 {
 	enableDesignPalette();
-	getScene().getGrid().disableHelperCircle().disable();
+	getScene().getGrid()
+		.disableHelperCircle()
+		.disable();
 	getScene().getCamera().scale2D(100.f);
 }
 
@@ -29,8 +31,8 @@ void AssetViewer::clearAssets()
 {
 	Renderer::storeAndBindScene(&getScene());
 	m_currentAsset = "No Asset.";
-	m_circuit.reset();
-	m_component.reset();
+	m_circuit = nullptr;
+	m_component = nullptr;
 	Renderer::restoreAndUnbindScene();
 }
 
@@ -111,6 +113,7 @@ void AssetViewer::viewComponent(const YAML::Node& node)
 
 void AssetViewer::onFocusEventForce(const NotifyEvent& event) 
 {
+	// Do not bind the scene on a focus.
 	m_isFocused = true;
 	onFocusEvent(event);
 }
