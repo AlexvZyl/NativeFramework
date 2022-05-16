@@ -63,8 +63,8 @@ Component2D::Component2D(Circuit* parent)
 	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
 	titleString = "Component " + std::to_string(componentID++);
 	std::string textString = equipType + std::string(": ") + titleString;
-	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "L", "B", this);
-	//designator = Renderer::addText2D("?", titlePos, titleColour, titleSize, "L", "B", this);
+	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "L", "T", this);
+	designator = Renderer::addText2D(designatorSym, designatorOffset, titleColour, titleSize, "L", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
 	//addPort(0, PortType::PORT_IN, "LX1");
@@ -248,13 +248,15 @@ void Component2D::translateTitle(glm::vec2 translation)
 
 void Component2D::updateText()
 {
-	std::string textString = equipType + std::string(": ") + titleString;
-	title->updateText(textString);
+	std::string textString = designatorSym + std::to_string(designatorIdx);
+	title->updateText(equipType);
+	designator->updateText(textString);
 }
 
 void Component2D::updateTextWithoutLabel()
 {
 	title->updateText(equipType);
+	designator->updateText(designatorSym);
 }
 
 void Component2D::setColour(const glm::vec4& colour)

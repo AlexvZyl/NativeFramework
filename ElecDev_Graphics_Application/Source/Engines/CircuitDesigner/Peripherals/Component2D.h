@@ -63,6 +63,8 @@ public:
 
 	// Specify the type of the equipment
 	std::string equipType = "Block";
+	std::string designatorSym = "?";
+	int designatorIdx = -1;
 
 	// Data for ElecDec software.
 	std::unordered_map<std::string, std::string> dataDict;
@@ -81,7 +83,8 @@ public:
 
 	//title
 	static Font titleFont;
-	glm::vec2 titleOffset = glm::vec2(0.01f, 0.0f);
+	glm::vec2 titleOffset = glm::vec2(0.01f, -0.001f);
+	glm::vec2 designatorOffset = glm::vec2(0.01f, 0.001f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	std::string titleString;
 	float titleSize = 0.0018f;
