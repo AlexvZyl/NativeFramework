@@ -56,6 +56,7 @@ public:
 	std::vector<Circle*> m_circles;
 	std::vector<Text*> m_text;
 	Text* title;
+	Text* designator;
 	std::vector<std::shared_ptr<Port>> ports;
 
 	static unsigned componentID;
@@ -80,7 +81,7 @@ public:
 
 	//title
 	static Font titleFont;
-	glm::vec2 titleOffset = glm::vec2(0.f, -0.02f);
+	glm::vec2 titleOffset = glm::vec2(0.01f, 0.0f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	std::string titleString;
 	float titleSize = 0.0018f;
