@@ -14,6 +14,10 @@
 #include "Application/Application.h"
 #include "GUI/CircuitDesignerPopupModal.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
+#include "glm/gtc/matrix_transform.hpp"
+
+// Utility for comparing two vecs.
+bool compare(const glm::vec2& vec1, const glm::vec2& vec2, int precision = 8);
 
 //=============================================================================================================================================//
 //  Includes.																																   //
@@ -463,11 +467,13 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	// Ensure correct node.
 	YAML::Node componentNode = node;
 	if (componentNode["Component"].IsDefined()) componentNode = componentNode["Component"];
-	glm::vec2 position = component->centre;
+	glm::vec2 componentCentre = component->centre;
+	float componentRotation = component->m_rotation;
 	component->centre = {0.f, 0.f};
+	component->m_rotation = 0.f;
 
 	// Update the title.
-	component->equipType = componentNode["Equipment Type"].as<std::string>("");
+	component->equipType = componentNode["Equipment Type"].as<std::string>();
 
 	// ----------- //
 	//  T I T L E  //
@@ -485,9 +491,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	polygonsVector.clear();
 	// Add new.
 	for (const auto& poly : componentNode["Polygons"])
-	{
 			polygonsVector.push_back(Renderer::addPolygon2D(poly.second, component));
-	}
 
 	// ----------- //
 	//  L I N E S  //
@@ -498,9 +502,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	linesVector.clear();
 	// Add new.
 	for (const auto& line : componentNode["PolyLines"])
-	{
 		linesVector.push_back(Renderer::addPolyLine(line.second, component));
-	}
 
 	// --------------- //
 	//  C I R C L E S  //
@@ -512,9 +514,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	circlesVector.clear();
 	// Add new.
 	for (const auto& circle : componentNode["Circles"])
-	{
 		circlesVector.push_back(Renderer::addCircle2D(circle.second, component));
-	}
 
 	// --------- //
 	//  T E X T  //
@@ -526,9 +526,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	textVector.clear();
 	// Add new.
 	for (const auto& text : componentNode["Text"])
-	{
 		textVector.push_back(Renderer::addText2D(text.second, component));
-	}
 
 	// ----------- //
 	//  P O R T S  //
@@ -537,19 +535,25 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	// Create the new ports.
 	std::vector<std::shared_ptr<Port>> newPorts;
 	for (const auto& port : componentNode["Ports"])
-	{
 		newPorts.push_back(std::make_shared<Port>(port.second, component));
-	}
+
 	// If any of the new ports are in the position of the old ones,
 	// move the cable over.
 	auto& portsVector = component->ports;
+
+	// Rotation transform for the port centre.
+	glm::mat4 transform = glm::translate(glm::mat4(1.f), { -componentCentre, 0.f });
+	transform = glm::rotate(transform, -glm::radians(componentRotation), { 0.f, 0.f, 1.f });
+
 	for (auto& port : portsVector)
 	{
+		// Reset the port to its original position & rotation.
+		glm::vec2 portOriginalCentre = transform * glm::vec4{ port->centre, 0.f, 1.f };
 		// Find port with the same position.
 		for (auto& newPort : newPorts)
 		{
 			// Port has same position.
-			if (newPort->centre == port->centre)
+			if (compare(newPort->centre, portOriginalCentre))
 			{
 				for (auto cable : port->m_cables)
 				{
@@ -563,11 +567,11 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 		}
 	}
 	portsVector.clear();
-	portsVector = newPorts;
+	portsVector = std::move(newPorts);
 
 	// Update component.
-	component->move(position);
-	component->rotate(component->m_rotation);
+	component->move(componentCentre);
+	component->rotate(componentRotation);
 }
 
 void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node& node) 
@@ -589,6 +593,15 @@ void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node&
 		std::string msg = "Overwritten " + std::to_string(overwriteCount) + " cables.";
 		Lumen::getApp().pushNotification(NotificationType::Success, 4000, msg, "Circuit Designer");
 	}
+}
+
+bool compare(const glm::vec2& vec1, const glm::vec2& vec2, int precision)
+{
+	int x1 = std::trunc(vec1.x * std::pow(10, precision));
+	int x2 = std::trunc(vec2.x * std::pow(10, precision));
+	int y1 = std::trunc(vec1.y * std::pow(10, precision));
+	int y2 = std::trunc(vec2.y * std::pow(10, precision));
+	return x1 == x2 && y1 == y2;
 }
 
 //=============================================================================================================================================//
