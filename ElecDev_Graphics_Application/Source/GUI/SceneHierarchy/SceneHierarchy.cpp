@@ -5,10 +5,11 @@
 #include "SceneHierarchy.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -29,7 +30,7 @@ void SceneHierarchy::onImGuiRender()
 	Application& app = Lumen::getApp();
 
 	// Check for active engine.
-	Design2DEngine* engine = app.getActiveEngine<Design2DEngine>();
+	CircuitDesigner* engine = app.getActiveEngine<CircuitDesigner>();
 	if (!engine)
 	{
 		ImGui::Text("No active engine.");
@@ -47,7 +48,7 @@ void SceneHierarchy::onImGuiRender()
 		for (auto& component : engine->m_circuit->m_components)
 		{
 			ImGui::PushID(compCount++);
-			if (ImGui::CollapsingHeader(component->titleString.c_str()))
+			if (ImGui::CollapsingHeader(component->designator->m_string.c_str()))
 			{
 				// Set active button.
 				if (ImGui::Button("Set Active"))
@@ -92,7 +93,6 @@ void SceneHierarchy::onImGuiRender()
 			{
 				if (ImGui::Button("Set Active"))
 				{
-					app.m_guiState->active_component = nullptr;
 					engine->m_activeComponent = nullptr;
 					engine->setActiveCable(cable->m_entityID);
 				}

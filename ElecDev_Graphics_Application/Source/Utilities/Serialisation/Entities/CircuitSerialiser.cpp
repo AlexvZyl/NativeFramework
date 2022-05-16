@@ -3,9 +3,9 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Design2Dengine.h"
-#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Graphics/Entities/EntityManager.h"
 #include "Lumen.h"
@@ -39,10 +39,11 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 	{
 		emitter << YAML::Key << "Component " + std::to_string(index) << YAML::Value;
 		emitter << YAML::BeginMap;
-			emitter << YAML::Key << "File" << YAML::Value <<  comp->equipType + ".lmcp";
+			emitter << YAML::Key << "Filename" << YAML::Value <<  comp->equipType + ".lmcp";
+			emitter << YAML::Key << "Designator Index" << YAML::Value << comp->designatorIdx;
 			emitter << YAML::Key << "Position" << YAML::Value << comp->centre;
+			emitter << YAML::Key << "Rotation" << YAML::Value << comp->m_rotation;
 			emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
-			emitter << YAML::Key << "Label" << YAML::Value << comp->titleString;
 		emitter << YAML::EndMap;
 		index++;
 	}
@@ -59,6 +60,26 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 		cablesIndex++;
 	}
 	// End cables.
+	emitter << YAML::EndMap;
+
+	// Reference components.
+	emitter << YAML::Key << "Reference Components" << YAML::Value;
+	emitter << YAML::BeginMap;
+	for (auto& [name, node] : circuit->m_referenceComponents)
+	{
+		emitter << YAML::Key << name << YAML::Value << node;
+	}
+	// End reference components.
+	emitter << YAML::EndMap;
+
+	// Reference cables.
+	emitter << YAML::Key << "Reference Cables" << YAML::Value;
+	emitter << YAML::BeginMap;
+	for (auto& [name, node] : circuit->m_referenceCables)
+	{
+		emitter << YAML::Key << name << YAML::Value << node;
+	}
+	// End reference cables.
 	emitter << YAML::EndMap;
 
 	return emitter;

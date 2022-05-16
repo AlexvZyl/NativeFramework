@@ -3,11 +3,12 @@
 //==============================================================================================================================================//
 
 #include <iostream>
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Application/Events/Events.h"
+#include "Application/ApplicationTemplates.h"
 #include "OpenGL/SceneGL.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
@@ -15,12 +16,14 @@
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
 #include "glm/glm.hpp"
+#include "OpenGL/Primitives/Grid.h"
+#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
+void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
 	// --------------------- //
 	//  L E F T   P R E S S  //
@@ -47,7 +50,7 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (m_activeCable.get()) {
 				auto [idx, distance] = m_activeCable->getNearestVertexIdx(screenCoords);
 				m_activeVertexIdx = -1;
-				if (distance < clickTol)
+				if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 				{
 					m_activeVertexIdx = idx;
 				}
@@ -109,28 +112,33 @@ void Design2DEngine::onMouseButtonEvent(const MouseButtonEvent& event)
 		{
 			m_activeComponent = nullptr;
 			m_activeCable = nullptr;
+			m_activeVertexIdx = -1;
 			designerState = ENTITY_SELECT;
 		}
 		else 
 		{
 			// Update current entity ID.
 			m_currentEntityID = getEntityID(event.mousePosition);
-			setActiveComponent(m_currentEntityID);
-			setActiveCable(m_currentEntityID);
+
+				m_activeVertexIdx = -1;
+				setActiveComponent(m_currentEntityID);
+				setActiveCable(m_currentEntityID);
 
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
-			menu->setInitialPosition(getMouseGlobalPosition());
-			menu->setEngine(this);
 		}
 	}
+
+	// Set the entity the gizmo has to edit.
+	if (m_activeComponent) getGizmo()->setEntity(m_activeComponent.get());
+	else				   getGizmo()->clearEntities();
 }
 
 //==============================================================================================================================================//
 //  Mouse Move.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
+void CircuitDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 {
 	glm::vec2 coords = event.mousePosition;
 	glm::vec3 WorldCoords = pixelToWorldCoords(coords);
@@ -186,20 +194,40 @@ void Design2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 //  Mouse Scroll.																																//
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
+void CircuitDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
+	// Everything is in mm.
+	float currentCameraScale = ( 1.f / getScene().getCamera().getTotalScale().x ) * 1000.f;
+	float currentGridSize = getScene().getGrid().getCoarseIncrementSize() * 1000.f;
+	float gridIncrementFactor = 5.f;
+	float minimumGridSize = 1.f;
+	if (currentCameraScale < currentGridSize)
+	{
+		if (currentGridSize / gridIncrementFactor < minimumGridSize)
+		{
+			getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, minimumGridSize);
+		}
+		else
+		{
+			getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, currentGridSize / gridIncrementFactor);
+		}
+	}
+	else if (currentCameraScale > currentGridSize * gridIncrementFactor)
+	{
+		getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, currentGridSize * gridIncrementFactor);
+	}
 }
 
 //==============================================================================================================================================//
-//  Mouse Drag.																																//
+//  Mouse Drag.																																    //
 //==============================================================================================================================================//
 
-void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
+void CircuitDesigner::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 
-	if (event.isType(EventType_MouseButtonLeft))
+	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_LeftCtrl | EventType_MouseButtonLeft))
 	{
 		glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
 		if (designerState == ENTITY_SELECT)
@@ -220,7 +248,7 @@ void Design2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 //  Notify event.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
+void CircuitDesigner::onNotifyEvent(const NotifyEvent& event)
 {
 	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 	{
@@ -242,7 +270,7 @@ void Design2DEngine::onNotifyEvent(const NotifyEvent& event)
 //  Key Events.																																	//
 //==============================================================================================================================================//
 
-void Design2DEngine::onKeyEvent(const KeyEvent& event)
+void CircuitDesigner::onKeyEvent(const KeyEvent& event)
 {
 	// Events based on key type.
 	if (event.isType(EventType_KeyPress))
@@ -254,24 +282,18 @@ void Design2DEngine::onKeyEvent(const KeyEvent& event)
 
 		switch (event.key)
 		{
-			// --------------------------------------------------------------------------------------------------------------- //
-			
 			case GLFW_KEY_P:
 				// Enter component placement mode.
 				ComponentPlaceMode(screenCoords);
 				m_activeCable = nullptr;
 				break;
-			
-			// --------------------------------------------------------------------------------------------------------------- //
 
 			case GLFW_KEY_ESCAPE:
-				designerState = ENTITY_SELECT;
 				// Remove the dummy component.
+				designerState = ENTITY_SELECT;
 				m_activeComponent = nullptr;
 				m_activeCable = nullptr;
 				break;
-
-			// --------------------------------------------------------------------------------------------------------------- //
 
 			case GLFW_KEY_DELETE:
 				if (designerState == ENTITY_SELECT)
@@ -280,8 +302,6 @@ void Design2DEngine::onKeyEvent(const KeyEvent& event)
 					deleteActiveCable();
 				}
 				break;
-
-			// --------------------------------------------------------------------------------------------------------------- //
 		}
 	}
 }
@@ -290,27 +310,33 @@ void Design2DEngine::onKeyEvent(const KeyEvent& event)
 //  Files.																																		//
 //==============================================================================================================================================//
 
-void Design2DEngine::onFileDropEvent(const FileDropEvent& event) 
+void CircuitDesigner::onFileDropEvent(const FileDropEvent& event) 
 {
-	Renderer::storeAndBindScene(&getScene());
-
 	for (auto& path : event.fileData)
 	{
-		if (path.filename().extension().string() == ".lmcp")
+		if (path.extension().string() == ".lmcp")
 		{
-			// Create component from file.
-			if (m_activeComponent)
-				m_activeComponent->disableOutline();
-			if (m_activeCable)
-				m_activeCable->disableOutline();
-			m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
-			m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(getMouseLocalPosition())));
-			m_activeComponent = m_circuit->m_components.back();
-			designerState = ENTITY_SELECT;
+			// Reset active entities.
+			if (m_activeComponent) m_activeComponent->disableOutline();
+			if (m_activeCable)	   m_activeCable->disableOutline();
+			// Import and load component.
+			importComponent(path, true);
 		}
 	}
+}
 
-	Renderer::restoreAndUnbindScene();
+void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
+{
+	YAML::Node node = event.getNode();
+	if (node["Component"].IsDefined()) node = node["Component"];
+	// Check type.
+	if (node["Filename"].IsDefined())
+	{
+		std::filesystem::path file(node["Filename"].as<std::string>());
+		bool checkForOverwrite = true;
+		if (CircuitDesigner::s_engineUsedByCircuitEditor == this) checkForOverwrite = false;
+		if (file.extension() == ".lmcp") importComponent(node, true, checkForOverwrite);
+	}
 }
 
 //==============================================================================================================================================//

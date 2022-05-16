@@ -1,6 +1,7 @@
 #include "ComponentDesigner.h"
 #include "Application/Events/EventLog.h"
 #include "Application/Events/Events.h"
+#include "Application/ApplicationTemplates.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
 #include "Lumen.h"
 #include "Application/Application.h"
@@ -10,6 +11,10 @@
 #include "Graphics/OpenGL/Primitives/Circle.h"
 #include "Utilities/Logger/Logger.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "GUI/TextEntryGUI/TextEntryGUI.h"
+#include "OpenGL/Primitives/Grid.h"
+#include "Peripherals/Component2D.h"
+#include "OpenGL/SceneGL.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
@@ -30,7 +35,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				setActiveVertex(screenCoords);
 
 			}
-			if (!m_activeVertex) 
+			if (m_activeVertexIdx == -1) 
 			{
 				//If we did not select a vertex, then we can check for a new primitive selection
 				setActivePrimitives(m_currentEntityID);
@@ -46,30 +51,25 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
 				}
 				else {
-					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, m_activeComponent.get());
+					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get());
 				}
-				//m_activeComponent->addPoly(m_activePoly);
-				//m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 			else
 			{
 				m_activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
-			// Example!
-			auto [vertexPtr, distance] = m_activePoly->getNearestVertex(screenCoords);
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
 			if (!m_activeLine) 
 			{
 				//start new line
-				m_activeLine = Renderer::addLineSegment2D(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords), 0.001f, { 0.f, 0.f, 0.f, 1.f }, m_activeComponent.get());
+				bool rounded = false;
+				m_activeLine = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, { 0.f, 0.f, 0.f, 1.f }, rounded, m_activeComponent.get());
 			}
 			else {
 				//end the line
-				m_activeLine->setEnd(getNearestGridVertex(screenCoords));
 				m_activeComponent->addLine(m_activeLine);
-				//m_activeComponent->addLine(getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords));
 				m_activeLine = nullptr;
 			}
 		}
@@ -84,12 +84,12 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				}
 				else 
 				{
-					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, .02f, 0.f, m_activeComponent.get());
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, penThickness, 0.f, m_activeComponent.get());
 				}
 			}
 			else 
 			{
-				//set the circle rarius
+				//set the circle radius
 				m_activeComponent->addCircle(m_activeCircle);
 				m_activeCircle = nullptr;
 			}
@@ -98,14 +98,34 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			m_activeComponent->addPort(m_activePort);
 			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
 		}
+		else if (designerState == CompDesignState::ADD_TEXT)
+		{
+			// Create a popup GUI for the text entry.
+			float textSize = penThickness;
+			if (!m_activeText) {
+				m_activeText = Renderer::addText2D(" ", screenCoords, { 0.f, 0.f, 0.f, 1.f }, textSize, "C", "B", m_activeComponent.get());
+				m_activeComponent->m_text.push_back(m_activeText);
+			
+				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+				switchState(CompDesignState::SELECT);
+			}
+			
+
+		}
 	}
 
 	if (event.isType(EventType_MousePress | EventType_MouseButtonRight))
 	{
 			// Create a popup menu on a right click on a graphics scene.
 			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
-			menu->setInitialPosition(getMouseGlobalPosition());
-			menu->setEngine(this);
+	}
+
+	if (event.isType(EventType_MouseDoublePress)) {
+		if (designerState == CompDesignState::SELECT) {
+			if (m_activeText) {
+				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+			}
+		}
 	}
 }
 
@@ -118,7 +138,16 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		// Move the back vertex.
 		if (m_activePoly) 
 		{
-			m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount-1, getNearestGridVertex(screenCoords));
+			//hacky check to see if polygon is filled
+			PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+			if (polyline) {
+				//Polygon is clear, so we index with m_vertices (nodes)
+				polyline->translateToVertexAtIndex(polyline->m_vertices.size()-1, getNearestGridVertex(screenCoords));
+			}
+			else {
+				//Polygon is filled, so we index like this (using the vertex count)
+				m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount - 1, getNearestGridVertex(screenCoords));
+			}
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
@@ -126,7 +155,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		if (m_activeLine)
 		{
 			// Update the line end position.
-			m_activeLine->setEnd(getNearestGridVertex(screenCoords));
+			m_activeLine->translateToVertexAtIndex(m_activeLine->m_vertices.size() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
@@ -169,6 +198,26 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 void ComponentDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 {
 	Base2DEngine::onMouseScrollEvent(event);
+	// Everything is in mm.
+	float currentCameraScale = (1.f / getScene().getCamera().getTotalScale().x) * 1000.f;
+	float currentGridSize = getScene().getGrid().getCoarseIncrementSize() * 1000.f;
+	float gridIncrementFactor = 5.f;
+	float minimumGridSize = 1.f;
+	if (currentCameraScale < currentGridSize)
+	{
+		if (currentGridSize / gridIncrementFactor < minimumGridSize)
+		{
+			getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, minimumGridSize);
+		}
+		else
+		{
+			getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, currentGridSize / gridIncrementFactor);
+		}
+	}
+	else if (currentCameraScale > currentGridSize * gridIncrementFactor)
+	{
+		getScene().getGrid().setMajorGrid(GridUnit::MILLIMETER, currentGridSize * gridIncrementFactor);
+	}
 }
 
 void ComponentDesigner::onKeyEvent(const KeyEvent& event)
@@ -181,9 +230,6 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
 		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
 
-		std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} };
-		PolyLine* polyline = nullptr;
-		std::string msg = "";
 		switch (event.key)
 		{
 		case GLFW_KEY_P:
@@ -222,11 +268,10 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			// Pink = expected position
 			break;
 
-		case GLFW_KEY_K:
-			// Test add polyLine.
-			//std::vector<glm::vec2> vertices = { { 0.f, 0.f}, {0.5f, 0.5f} , { 0.5f, -0.5f} , { 0.f, 0.f} };
-			polyline = Renderer::addPolygon2DClear(vertices, m_activeComponent.get());
-			//polyline->pushVertex({ -0.5f, 0.f });
+
+		case GLFW_KEY_T:
+			//Add new text
+			switchState(CompDesignState::ADD_TEXT);
 			break;
 
 		case GLFW_KEY_DELETE:
@@ -240,7 +285,7 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 
-	if (event.isType(EventType_MouseButtonLeft))
+	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_LeftCtrl))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
@@ -249,17 +294,17 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 		{
 			// User is dragging a component.
 			glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
-			if (m_activeVertex) 
+			if (m_activeVertexIdx != -1) 
 			{
 				// First check if we should move a vertex
 				// We need to move a vertex
 				if (m_activePoly) 
 				{
-					m_activePoly->translateVertex(m_activeVertex, translation);
+					m_activePoly->translateVertexAtIndex(m_activeVertexIdx, translation);
 				}
 				else if (m_activeLine) 
 				{
-					m_activeLine->translateVertex(m_activeVertex, translation);
+					m_activeLine->translateVertexAtIndex(m_activeVertexIdx, translation);
 				}
 			}
 			else 
@@ -294,11 +339,6 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 			}
 		}
 	}
-
-	/*if (m_activePoly)
-	{
-		Renderer::addCircle2D(glm::vec3{ glm::vec2(m_activePoly->m_trackedCenter), 0.5f }, 0.02f, { 1.f, 0.f, 0.f, 1.f });
-	}*/
 }
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
@@ -308,10 +348,19 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activePoly)		   m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
 		if (m_activeLine)		   m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
 		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
-		if (m_activeVertex) 
+		if (m_activeVertexIdx != -1) 
 		{
-			if (m_activePoly)	   m_activePoly->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
-			else if (m_activeLine) m_activeLine->translateVertexTo(m_activeVertex, getNearestGridVertex(m_activeVertex->data.position));
+			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
+			else if (m_activePoly) {
+				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+				if (polyline) {
+					//Polygon is clear, so we index with m_vertices (nodes)
+					polyline->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
+				}
+				else {
+					m_activePoly->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
+				}
+			}
 		}
 		if (m_activePort)		   m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
 	}

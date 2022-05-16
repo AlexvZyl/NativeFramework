@@ -43,11 +43,11 @@ Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, const 
 	return polygon;
 }
 
-PolyLine* Renderer::addPolygon2DClear(const std::vector<glm::vec2>& vertices, Entity* parent)
+PolyLine* Renderer::addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
 	//s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_linesVAO.get(), parent) });
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, true) });
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, thickness, true) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 
@@ -81,10 +81,19 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
 
-PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent)
+Text* Renderer::addText2D(const std::string& text, const glm::vec2& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment, const std::string& verticalAlignment, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<Text>(text, glm::vec3{position, 0.f}, color, scale,
+															  s_scene->m_texturedTrianglesVAO.get(), s_defaultFont.get(),
+															  parent, horizontalAlignment, verticalAlignment) });
+	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
+}
+
+PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, float thickness, const glm::vec4& color, bool rounded, Entity* parent)
+{
+	unsigned id = EntityManager::peakNextID();
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, thickness, false, color, rounded) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 
@@ -103,9 +112,7 @@ Text* Renderer::addText2D(const YAML::Node& node, Entity* parent)
 		node["Vertical Alignment"].as<std::string>(),
 		parent
 	);
-
 	text->setBoxColour({ node["Box Color"][0].as<float>(), node["Box Color"][1].as<float>(), node["Box Color"][2].as<float>(),  node["Box Color"][3].as<float>() });
-
 	return text;
 }
 
@@ -147,6 +154,42 @@ Circle* Renderer::addCircle2D(const YAML::Node& node, Entity* parent)
 		node["Fade"].as<float>(),
 		parent
 	);
+}
+
+PolyLine* Renderer::addPolyLine(const YAML::Node& node, Entity* parent)
+{
+	// Get vertices.
+	std::vector<glm::vec2> vertices;
+	for (const auto& vertexNode : node["Vertices"])
+	{
+		YAML::Node vertex = vertexNode.second;
+		vertices.push_back({ vertex[0].as<float>(), vertex[1].as<float>() });
+	}
+
+	glm::vec4 color = { node["Color"][0].as<float>(), node["Color"][1].as<float>() , node["Color"][2].as<float>() , node["Color"][3].as<float>() };
+
+	if (node["Closed"].as<bool>())
+	{
+		PolyLine* polyline = Renderer::addPolygon2DClear(
+				vertices,
+				node["Thickness"].as<float>(),
+				parent
+			);
+		polyline->setColor(color); 
+		return polyline;
+	}
+	else
+	{
+		PolyLine* polyline = Renderer::addPolyLine(
+				vertices,
+				node["Thickness"].as<float>(),
+				color,
+				node["Rounded"].as<bool>(),
+				parent
+			);
+		//polyline->setColor(color);
+		return polyline;
+	}
 }
 
 //==============================================================================================================================================//

@@ -11,11 +11,11 @@
 //  Constructor & Destructor.																										       	   //
 //=============================================================================================================================================//
 
-Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent) 
+Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, glm::vec4 colour) 
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
-	m_colour = { 14.f / 255.f, 63.f / 255.f, 174.f / 255.f, 1.f };
+	m_colour = colour;
 	m_vertexCount = vertices.size();
 	m_VAO = VAO;
 

@@ -51,7 +51,8 @@ public:
 	glm::vec2 titleOffset;
 	static Font titleFont;
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	float titleSize = 0.02f;
+	float titleSize = 0.0018f;
+	float portSize = 0.0002f;
 	glm::vec2 centre;
 	static unsigned portID;
 	glm::vec4 bodyColour;
@@ -83,7 +84,6 @@ public:
 	void moveTo(const glm::vec2& destination);
 	void move(const glm::vec2& translation);
 	void setLayer(float layer);
-	void setContext(GUIState* guiState);
 	void enableOutline();
 	void disableOutline();
 	void setOffset(const glm::vec2& offset);
@@ -91,6 +91,9 @@ public:
 	void detachCable(Cable* cable);
 	void showAttachIndicator();
 	void hideAttachIndicator();
+	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
+
+	float m_rotation = 0.f;
 };
 
 //==============================================================================================================================================//

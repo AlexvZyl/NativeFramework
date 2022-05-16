@@ -22,7 +22,7 @@
 //==============================================================================================================================================//
 
 // Mouse double press information.
-#define MOUSE_DOUBLE_PRESS_TIMEOUT 0.4
+#define MOUSE_DOUBLE_PRESS_TIMEOUT 0.3
 std::unordered_map<LumenEventID, double> s_buttonReleaseTimes;
 std::unordered_map<LumenEventID, bool> s_buttonReleaseIgnore;
 

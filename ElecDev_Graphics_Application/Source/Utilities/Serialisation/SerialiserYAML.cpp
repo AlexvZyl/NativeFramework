@@ -9,13 +9,13 @@
 #include "Serialiser.h"
 #include <Windows.h>
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //
@@ -66,9 +66,8 @@ void saveToYAML(Component2D* component, const std::filesystem::path& path)
 	if (path.filename().string().size())
 	{
 		std::string newName = path.filename().stem().string();
-		component->titleString = newName;
+		component->equipType = newName;
 		component->title->updateText(newName);
-		component->equipType = component->titleString;
 	}
 
 	// Create yaml file.
@@ -86,7 +85,7 @@ void saveToYAML(Component2D* component, const std::filesystem::path& path)
 	std::string saveLocation = path.string();
 	if (!path.filename().string().size())
 	{
-		saveLocation += component->titleString + ".lmcp";
+		saveLocation += component->equipType + ".lmcp";
 	}
 	// Check if a file extension was supplied.
 	else if (path.extension().string() != ".lmcp")
@@ -112,7 +111,7 @@ void loadFromYAML(const std::filesystem::path& path)
 		// Circuits.
 		if (path.extension() == ".lmct")
 		{
-			Design2DEngine* engine = Lumen::getApp().pushEngine<Design2DEngine>(LumenDockPanel::Scene, path.stem().string());
+			CircuitDesigner* engine = Lumen::getApp().pushEngine<CircuitDesigner>(LumenDockPanel::Scene, path.stem().string());
 			engine->createCircuit(path);
 		}
 

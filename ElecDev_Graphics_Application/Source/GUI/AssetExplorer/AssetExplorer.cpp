@@ -12,6 +12,8 @@
 #include "imgui/imgui_internal.h"
 #include "Engines/AssetViewer/AssetViewer.h" 
 #include "GUI/CableCreator/CableCreator.h"
+#include "GUI/LumenPayload/LumenPayload.h"
+#include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//
 //  Statics.																																	//
@@ -46,8 +48,6 @@ AssetExplorer::AssetExplorer(std::string name, int imguiWindowFlags)
 AssetExplorer::~AssetExplorer() 
 {
 	s_startingDirectory = m_currentDirectory.string();
-	closeWindow();
-	m_assetViewerEngine = nullptr;
 };
 
 void AssetExplorer::onImGuiBegin()
@@ -162,23 +162,6 @@ void AssetExplorer::onImGuiRender()
 	}
 	ImGui::EndChild();
 
-
-	//// Actions bar.
-	//ImGui::SameLine();
-	//static bool addFolder = false;
-	//if (ImGui::BeginChild("Actions", {50.f, headerHeight}, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
-	//{
-	//	ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
-	//	ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 3.f);
-	//	ImGui::SetWindowFontScale(1.2f);
-	//	if (ImGui::Button(ICON_FA_FOLDER_PLUS))
-	//	{
-	//		addFolder = true;
-	//	}
-	//	ImGui::SetWindowFontScale(1.f);
-	//}
-	//ImGui::EndChild();
-
 	ImGui::SameLine();
 
 	// Filter options.
@@ -287,13 +270,10 @@ void AssetExplorer::onImGuiRender()
 						m_assetViewerEngine->clearAssets();
 						EventLog::log<FileLoadEvent>(FileLoadEvent(p, EventType_Application));
 					}
-					// File drag & drop.
-					if (ImGui::BeginDragDropSource())
-					{
-						const wchar_t* itemPath = p.path().c_str();
-						ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
-						ImGui::EndDragDropSource();
-					}
+					
+					// Drag & drop.
+					LumenPayload payload(LumenPayloadType::String);
+					payload.setDragAndDropSource(p);
 				}
 
 				// ------------ //
@@ -311,13 +291,10 @@ void AssetExplorer::onImGuiRender()
 						CableCreator* gui =  Lumen::getApp().pushWindow<CableCreator>(LumenDockPanel::Floating, "Cable Creator");
 						gui->setCable(p);
 					}
-					// File drag & drop.
-					if (ImGui::BeginDragDropSource())
-					{
-						const wchar_t* itemPath = p.path().c_str();
-						ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
-						ImGui::EndDragDropSource();
-					}
+
+					// Drag & drop.
+					LumenPayload payload(LumenPayloadType::String);
+					payload.setDragAndDropSource(p);
 				}
 
 				// ----------- //
@@ -347,22 +324,6 @@ void AssetExplorer::onImGuiRender()
 
 	// Done with icons.
 	ImGui::Columns(1);
-
-	//// Open popup.
-	//if (addFolder)
-	//{
-	//	ImGui::OpenPopup("Add Folder##AFPOPUP");
-	//	addFolder = false;
-	//}
-	//// Write to popup.
-	//if (ImGui::BeginPopup("AddFolderPopup", ImGuiPopupFlags_NoOpenOverExistingPopup))
-	//{
-	//	if (ImGui::Button("Add"))
-	//	{
-	//		ImGui::CloseCurrentPopup();
-	//	}
-	//	ImGui::EndPopup();
-	//}
 }
 
 void AssetExplorer::onImGuiEnd()
@@ -414,6 +375,12 @@ void AssetExplorer::loadDirectories()
 
 		m_directories.push_back(p);
 	}
+}
+
+void AssetExplorer::closeWindow() 
+{
+	LumenWindow::closeWindow();
+	m_assetViewerEngine->getLumenWindow()->closeWindow();
 }
 
 //==============================================================================================================================================//

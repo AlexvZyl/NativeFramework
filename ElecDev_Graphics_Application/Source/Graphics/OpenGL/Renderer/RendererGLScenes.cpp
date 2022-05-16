@@ -34,10 +34,7 @@ Scene* Renderer::getScene()
 
 void Renderer::initSceneDestruction(Scene* scene)
 {
-	// Store current scene.
-	s_storedScenes.push_back(s_scene);
-	// Bind scene to be destroyed.
-	s_scene = scene;
+	storeAndBindScene(scene);
 }
 
 void Renderer::doneSceneDestruction()
@@ -53,7 +50,6 @@ void Renderer::doneSceneDestruction()
 	}
 	// Remove stored scene.
 	s_storedScenes.pop_back();
-
 }
 
 void Renderer::storeAndBindScene(Scene* scene) 
@@ -78,7 +74,8 @@ void Renderer::restoreAndUnbindScene()
 
 void Renderer::renderScene()
 {
-	Renderer::renderScene(s_scene);
+	if (s_scene) Renderer::renderScene(s_scene);
+	else LUMEN_LOG_WARN("No scene bound.", "Renderer");
 }
 
 void Renderer::renderScene(Scene* scene)
@@ -132,16 +129,16 @@ void Renderer::gridPass(Scene* scene)
 
 	// Setup shader.
 	Shader* shader = s_shaders["BasicShader"].get();
+	Grid& grid = scene->getGrid();
 	Camera& camera = scene->getCamera();
 	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
+	shader->setMat4("viewProjMatrix", grid.getViewProjectionMatrix(camera));
 
 	// Draw grid.	
-	Grid* grid = scene->m_grid.get();
 	Renderer::setDepthFunc(GL_ALWAYS);
-	Renderer::drawBufferIndexed(grid->m_fineVAO.get());
-	Renderer::drawBufferIndexed(grid->m_coarseVAO.get());
-	Renderer::drawBufferIndexed(grid->m_originVAO.get());
+	Renderer::drawBufferIndexed(grid.m_fineVAO.get());
+	Renderer::drawBufferIndexed(grid.m_coarseVAO.get());
+	Renderer::drawBufferIndexed(grid.m_originVAO.get());
 	Renderer::setDepthFunc(GL_LESS);
 }
 
@@ -198,18 +195,18 @@ void Renderer::geometryPass2D(Scene* scene)
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
+	// Draw Circles.
+	shader = s_shaders["CircleShader"].get();
+	shader->bind();
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
+	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
+
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
-
-	// Draw Circles.
-	shader = s_shaders["CircleShader"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 }
 
 void Renderer::objectOutliningPass2D(Scene* scene) 
@@ -239,18 +236,18 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	Renderer::drawBufferIndexed(scene->m_linesVAO.get());
 	Renderer::drawBufferIndexed(scene->m_trianglesVAO.get());
 
+	// Draw Circles.
+	shader = s_shaders["OutlineShaderCircle"].get();
+	shader->bind();
+	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
+	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
+
 	// Draw textured primitives.
 	shader = s_shaders["OutlineShaderTextures"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
 	Renderer::drawBufferIndexed(scene->m_texturedTrianglesVAO.get());
-
-	// Draw Circles.
-	shader = s_shaders["OutlineShaderCircle"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesVAO.get());
 
 	// Render outline with post processing.
 	Renderer::setDepthFunc(GL_ALWAYS);

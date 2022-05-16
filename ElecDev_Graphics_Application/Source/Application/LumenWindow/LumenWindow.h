@@ -9,7 +9,6 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
-#include "Application/Events/Events.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -61,7 +60,7 @@ public:
 	inline virtual void onEvent(const Event& event) {};
 
 	// Removes the window from Lumen.
-	void closeWindow();
+	virtual void closeWindow();
 
 	// ------------------- //
 	//  I M G U I   A P I  //
@@ -88,7 +87,7 @@ public:
 	void removeImGuiWindowFlags(int flags);
 
 	// Checks if the layer is hovered.
-	bool isHovered() const;
+	virtual bool isHovered() const;
 
 	// Get the pointer to the imgui window.
 	// Curently this has to be called every frame, since the
@@ -97,6 +96,7 @@ public:
 
 private:
 	friend class Application;
+	friend class EngineCore;
 	// Focus the window.
 	// This function notifies the app of a focus change.
 	void focus();
@@ -176,6 +176,11 @@ public:
 	// Get the size of the main viewport.
 	glm::vec2 getMainViewportSize() const;
 
+	// Dock a window into this window.
+	// This information is not stored in the LumenWindow, since the docked window
+	// can be moved.  ImGui takes care of this information.
+	void dockWindow(LumenWindow* window, ImGuiDir direction = ImGuiDir_None);
+
 	// --------- //
 	//  D A T A  //
 	// --------- //
@@ -194,10 +199,11 @@ private:
 	ImGuiWindow* m_imguiWindow = nullptr;
 	LumenWindow* m_parentWindow = nullptr;
 	LumenWindow* m_childWindow = nullptr;
+	ImGuiID m_dockID = NULL;
 
 protected:
 
-	// These coodinates use the ImGui system!
+	// These coodinates use the ImGui coordinates!
 	glm::vec2 m_contentRegionSize = { 0.f, 0.f };
 	glm::vec2 m_contentRegionPosition = { 0.f, 0.f };
 

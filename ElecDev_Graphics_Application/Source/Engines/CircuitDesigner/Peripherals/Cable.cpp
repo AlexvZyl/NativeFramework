@@ -84,7 +84,7 @@ Cable::Cable(Port* startPort, Circuit* parent)
 	// --------------------- //
 
 	// First line.
-	m_polyLine = Renderer::addPolyLine({ m_startPort->centre,  m_startPort->centre }, this);
+	m_polyLine = Renderer::addPolyLine({ m_startPort->centre,  m_startPort->centre }, m_thickness, m_colour, true, this);
 
 }
 
@@ -104,7 +104,7 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	Port* startPort = nullptr;
 	Port* endPort = nullptr;
 
-	m_cableType = std::filesystem::path(node["File"].as<std::string>()).filename().stem().string();
+	m_cableType = std::filesystem::path(node["Filename"].as<std::string>()).filename().stem().string();
 
 	// Find indces.
 	int startComponentIndex = node["Start Component Index"].as<int>();
@@ -158,13 +158,6 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 		cableDict.insert({ entry.first.as<std::string>(), entry.second.as<std::string>() });
 	}
 
-	// Color.
-	setColour({
-		node["Color"][0].as<float>(), 
-		node["Color"][1].as<float>(), 
-		node["Color"][2].as<float>(), 
-		node["Color"][3].as<float>()
-	});
 }
 
 Cable::~Cable()
@@ -195,7 +188,7 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 	if(m_endPort)
 		m_endPort->attachCable(this);
 
-	m_polyLine = Renderer::addPolyLine(nodeList, this);
+	m_polyLine = Renderer::addPolyLine(nodeList, m_thickness, m_colour, true, this);
 }
 
 //==============================================================================================================================================//
@@ -211,12 +204,6 @@ void Cable::extendSegment(glm::vec2 nextPoint)
 void Cable::addSegment(glm::vec2 nextPoint)
 {
 	m_polyLine->pushVertex(nextPoint);
-}
-
-void Cable::setContext(GUIState* guiState)
-{
-	//DEPRECATED
-	//guiState->clickedZone.component = true;
 }
 
 void Cable::attach(Port* endPort)
