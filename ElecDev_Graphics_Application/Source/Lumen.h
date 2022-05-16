@@ -20,8 +20,8 @@
 
 #ifdef LUMEN_PROFILING_FUNCTIONS
 
-	#define LUMEN_DRAW_CALL()   Lumen::getApp().m_rendererData->drawCall();
-	#define LUMEN_RENDER_PASS() Lumen::getApp().m_rendererData->renderPass();
+	#define LUMEN_DRAW_CALL()   Lumen::getApp().getRendererData()->drawCall();
+	#define LUMEN_RENDER_PASS() Lumen::getApp().getRendererData()->renderPass();
 
 #else
 

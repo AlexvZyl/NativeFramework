@@ -50,7 +50,7 @@ struct RendererData
 	// Methods.
 	inline void drawCall()	 { drawCalls++;	   }
 	inline void renderPass() { renderPasses++; }
-	inline void reset() 
+	inline void clear() 
 	{
 		drawCalls = 0;
 		renderPasses = 0;

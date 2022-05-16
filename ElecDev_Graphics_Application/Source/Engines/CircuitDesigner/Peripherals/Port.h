@@ -84,7 +84,6 @@ public:
 	void moveTo(const glm::vec2& destination);
 	void move(const glm::vec2& translation);
 	void setLayer(float layer);
-	void setContext(GUIState* guiState);
 	void enableOutline();
 	void disableOutline();
 	void setOffset(const glm::vec2& offset);

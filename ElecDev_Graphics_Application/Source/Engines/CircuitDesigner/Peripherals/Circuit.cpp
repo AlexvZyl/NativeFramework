@@ -59,10 +59,18 @@ Circuit::Circuit(const YAML::Node& node)
 		{
 			currentComponent->dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 		}
-		std::string label = componentNode["Label"].as<std::string>();
-		currentComponent->titleString = label;
-		currentComponent->title->updateText(label);
 
+		if (componentNode["Designator Index"].IsDefined())
+		{
+			currentComponent->designatorIdx = componentNode["Designator Index"].as<int>();
+			currentComponent->updateText();
+		}
+		else 
+		{
+			currentComponent->designatorIdx = 0;
+			currentComponent->updateText();
+		}
+		
 		// Rotate the component.
 		if (componentNode["Rotation"].IsDefined())
 			currentComponent->rotate(componentNode["Rotation"].as<float>());

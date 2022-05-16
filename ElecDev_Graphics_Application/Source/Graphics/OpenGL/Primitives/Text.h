@@ -36,8 +36,8 @@ public:
 		 const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B");
 
 	// Updates the text of the text entity.
-	void updateText(const std::string& text);
-	void updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment = "B");
+	bool updateText(const std::string& text);
+	bool updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment = "B");
 
 	// Sets the text box colour.
 	void setBoxColour(const glm::vec4& colour);

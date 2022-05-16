@@ -360,12 +360,12 @@ void ComponentDesigner::renderDesignPalette()
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)
 {
-	m_activeComponent.reset();
+	m_activeComponent = nullptr;
 	m_activePoly = nullptr;
 	m_activeLine = nullptr;
 	m_activeCircle = nullptr;
 	m_activeText = nullptr;
-	m_activePort.reset();
+	m_activePort = nullptr;
 	m_activeComponent = std::make_shared<Component2D>(path, parent);
 	m_activeComponent->disableOutline();
 }

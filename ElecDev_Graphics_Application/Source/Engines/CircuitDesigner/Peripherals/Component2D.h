@@ -86,7 +86,7 @@ public:
 	glm::vec2 titleOffset = glm::vec2(0.01f, -0.001f);
 	glm::vec2 designatorOffset = glm::vec2(0.01f, 0.001f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	std::string titleString;
+	//std::string titleString;
 	float titleSize = 0.0018f;
 
 	//port specifications
@@ -115,8 +115,6 @@ public:
 	void place(const glm::vec2& pos);
 	//Move the component to a new layer.
 	void setLayer(float layer);
-	//set the clickedZone.component flag in the GUIState.
-	void setContext(GUIState* guiState);
 	//Highlight the component.
 	void enableOutline();
 	//Remove the component highlighting.

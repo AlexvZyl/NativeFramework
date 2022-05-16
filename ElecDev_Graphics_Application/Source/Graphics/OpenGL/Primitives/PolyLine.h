@@ -3,8 +3,8 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Utilities/Logger/Logger.h"
 #include <Clipper/cpp/clipper.hpp>
-class VertexData;
 
+class VertexData;
 
 class PolyLine : public Polygon2D
 {

@@ -91,6 +91,7 @@ public:
 	// Get the delta time for the current frame.
 	// This is updated when a new frame start.
 	inline float getDeltaTime() const { return m_deltaTime; }
+	inline RendererData* getRendererData() { return m_rendererData.get(); }
 	
 	// --------------- //
 	//  W I N D O W S  //
@@ -145,7 +146,6 @@ public:
 	// The results from the profiler.
 	std::vector<ProfileResult> m_profilerResults;
 	bool m_profilerActive = false;
-	std::unique_ptr<RendererData> m_rendererData;
 
 	// --------------------------- //
 	//  N O T I F I C A T I O N S  //
@@ -186,6 +186,8 @@ private:
 
 	// Queue of scipts to be executed.
 	std::vector<std::string> m_luaScripts;
+
+	std::unique_ptr<RendererData> m_rendererData;
 
 	// --------------- //
 	//  G E N E R A L  //

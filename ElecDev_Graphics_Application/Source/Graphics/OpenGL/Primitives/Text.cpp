@@ -4,13 +4,14 @@
 
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
-#include "Graphics/Entities/EntityManager.h"
-#include <iostream>
-#include "OpenGL/Primitives/Text.h"
-#include "Graphics/Fonts/FontLoader.h"
-#include "External/Misc/ConsoleColor.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "Utilities/Logger/Logger.h"
+#include "Graphics/Entities/EntityManager.h"
+#include "Graphics/Fonts/FontLoader.h"
+#include <iostream>
+#include "OpenGL/Primitives/Text.h"
+#include "External/Misc/ConsoleColor.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 
@@ -105,10 +106,12 @@ void Text::generateText(const std::string& text)
 		const Character& initialChar = m_font->characterDictionary.at(text[0]);
 		cursorStart.x = cursorStart.x - (initialChar.xPlaneBounds[0]) * m_textScale;
 	}
-	// Display error.
+	// Invalid alignment.
 	else	
 	{ 
-		std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_horizontalAlign << "' is not a valid horizontal alignment.\n"; return; 
+		std::string message = "'" + m_horizontalAlign + "' is not a valid horizontal alignment.\n";
+		LUMEN_LOG_ERROR(message, "Text");
+		return;
 	}
 
 	// Vertical alignment.
@@ -128,10 +131,12 @@ void Text::generateText(const std::string& text)
 	{
 		// Bottom is the default setting.
 	}
-	// Display error.
-	else	
+	// Invalid alignment.
+	else
 	{
-		std::cout << red << "\n[OPENGL] [ERROR]: " << white << "'" << m_verticalAlign << "' is not a valid vertical alignment.\n"; return; 
+		std::string message = "'" + m_verticalAlign + "' is not a valid vertical alignment.\n";
+		LUMEN_LOG_ERROR(message, "Text");
+		return;
 	}
 
 	// ----------------- //
@@ -223,8 +228,7 @@ void Text::generateText(const std::string& text)
 		const Character& c = m_font->characterDictionary.at(text[i]);
 		// Retrieve kerning value from dictionary.
 		float kerning = 0;
-		// Kerning does not apply to the first character.
-		if (i)  
+		if (i)  // Kerning does not apply to the first character.
 		{
 			// Create kerning pair.
 			std::pair kerningPair = std::pair(m_font->characterDictionary.at(text[i]).id,
@@ -304,19 +308,41 @@ void Text::setScale(float scale)
 //  Text manipulation.																													       //
 //=============================================================================================================================================//
 
-void Text::updateText(const std::string& text) 
+bool Text::updateText(const std::string& text) 
 {
+	if (m_string == text) return false;
+
 	m_string = text;
 	wipeGPU();
 	generateText(m_string);
+
+	// A bit hacky...
+	if (m_outlineEnabled)
+	{
+		m_outlineEnabled = false;
+		enableOutline();
+	}
+
+	return true;
 }
 
-void Text::updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment)
+bool Text::updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment)
 {
+	if (horizontalAlignment == m_horizontalAlign && verticalAlignment == m_verticalAlign) return false;
+
 	wipeGPU();
 	m_horizontalAlign = horizontalAlignment;
 	m_verticalAlign = verticalAlignment;
 	generateText(m_string);
+
+	// A bit hacky...
+	if (m_outlineEnabled)
+	{
+		m_outlineEnabled = false;
+		enableOutline();
+	}
+
+	return true;
 }
 
 void Text::setBoxColour(const glm::vec4& colour) 
@@ -339,14 +365,15 @@ void Text::setColor(const glm::vec4& color)
 
 void Text::setLayer(float layer)
 {
+	// Text box.
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++)
 		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
 
+	// Text.
 	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.position.z = layer;
 
 	m_trackedCenter.z = layer;
-
 	syncWithGPU();
 }
 

@@ -21,8 +21,6 @@ for a VAO to be able to render the entity to the screen.
 template<typename VertexType>
 class VertexArrayObject;
 
-struct GUIState;
-
 //=============================================================================================================================================//
 //  Primitive Pointer.																														   //
 //=============================================================================================================================================//
@@ -39,6 +37,7 @@ public:
 	bool	 m_queuedForSync = false;				// Has the primitive been synced?
 	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the entity.
 	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the entity.
+	bool m_outlineEnabled = false;
 
 	// Destructor.
 	virtual ~PrimitivePtr() = default;
@@ -53,8 +52,6 @@ public:
 	inline virtual void setEntityID(unsigned int eID) = 0;
 	// Set the entity later.
 	inline virtual void setLayer(float layer) = 0;
-	// Set context.
-	inline virtual void setContext(GUIState* guiState) = 0;
 
 protected:
 
@@ -78,8 +75,7 @@ public:
 	// ------------------- //
 
 	VertexArrayObject<VertexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
-													// Useful for rotation, scaling and moving to a point.
-	VertexType* m_vertices;							// Pointer to the first vertex in memory.
+	VertexType* m_verticesData = nullptr;		 	// Pointer to the first vertex in memory.
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
@@ -110,24 +106,24 @@ public:
 	virtual void transform(const glm::mat4& transform);
 	// Scales the entity by the given vector and center point.
 	virtual void scale(const glm::vec3& scaling);
+
 	// Outline the primitive by the given scale.
 	virtual void enableOutline();
 	// Remove the outline.
 	virtual void disableOutline();
-	// Move a vertex
-	virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position);
-	// Move a vertex
-	virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position);
-
-	// Move a vertex
-	virtual void translateVertex(VertexType* vertex, const glm::vec3 translation);
-	// Move a vertex
-	virtual void translateVertex(VertexType* vertex, const glm::vec2 translation);
 
 	// ------------- //
 	//  V E R T E X  //
 	// ------------- //
 
+	// Move a vertex
+	virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position);
+	// Move a vertex
+	virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position);
+	// Move a vertex
+	virtual void translateVertex(VertexType* vertex, const glm::vec3 translation);
+	// Move a vertex
+	virtual void translateVertex(VertexType* vertex, const glm::vec2 translation);
 	// Translation.
 	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation);
 	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation);
@@ -153,8 +149,6 @@ public:
 	virtual void setEntityID(unsigned int eID);
 	// Set the entity later.
 	virtual void setLayer(float layer);
-	// Set context.
-	virtual void setContext(GUIState* guiState);
 
 	// ------------- //
 	//  M E M O R Y  //

@@ -308,7 +308,7 @@ void ComponentEditor::onImGuiRender()
 		int numCom = 0;
 		for (auto& key : numComponents)
 		{
-			componentNames[numCom] = key->titleString.c_str();
+			componentNames[numCom] = key->designator->m_string.c_str();
 			numCom++;
 		}
 
@@ -336,9 +336,10 @@ void ComponentEditor::onImGuiRender()
 			ImGui::SameLine();
 			ImGui::Text(activeComponent->designatorSym.c_str());
 
-			activeTitleString = activeComponent->titleString;
+			activeTitleString = activeComponent->designator->m_string;
 
-			if (ImGui::InputInt("##designatorIdx", &activeComponent->designatorIdx)) {
+			if (ImGui::InputInt("##designatorIdx", &activeComponent->designatorIdx)) 
+			{
 				//std::string str = activeComponent->designatorSym + std::to_string();
 				activeComponent->updateText();
 			}
@@ -435,7 +436,7 @@ void ComponentEditor::onImGuiRender()
 		{
 			for (auto& key : numComponents)
 			{
-				if (key->titleString.c_str() == componentNames[equipmentSelector]) 
+				if (key->designator->m_string.c_str() == componentNames[equipmentSelector])
 				{
 					for (auto& [key2, val] : key->dataDict)
 					{
@@ -489,7 +490,7 @@ void ComponentEditor::onImGuiRender()
 					m_copiedDict = activeComponent->dataDict;
 					m_copiedDictComponent = true;
 					m_copiedDictCable = false;
-					m_copiedDictFrom = activeComponent->titleString;
+					m_copiedDictFrom = activeComponent->designator->m_string;
 					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
 				}
 				else if (activeCable)

@@ -105,7 +105,7 @@ void AssetViewer::viewComponent(const YAML::Node& node)
 	clearAssets();
 	m_component = std::make_unique<Component2D>(node);
 	m_component->disableOutline();
-	m_currentAsset = m_component->titleString + ".lmcp";
+	m_currentAsset = m_component->equipType + ".lmcp";
 	Renderer::restoreAndUnbindScene();
 }
 

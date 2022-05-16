@@ -149,7 +149,8 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
 		});
 
-	if (it == end(m_vertices)) {
+	if (it == end(m_vertices)) 
+	{
 		LUMEN_LOG_WARN("Tried to move an invlaid vertex.", "PolyLine");
 		return;
 	}
@@ -166,11 +167,11 @@ void PolyLine::translate(const glm::vec3& translation)
 
 void PolyLine::translate(const glm::vec2& translation)
 {
+	Primitive::translate(translation);
+
 	//update the internal vertices
-	for (auto& vert : m_vertices) {
+	for (auto& vert : m_vertices) 
 		vert += translation;
-	}
-	Polygon2D::translate(translation);
 }
 
 void PolyLine::translateTo(const glm::vec3& position)

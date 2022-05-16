@@ -48,7 +48,7 @@ void SceneHierarchy::onImGuiRender()
 		for (auto& component : engine->m_circuit->m_components)
 		{
 			ImGui::PushID(compCount++);
-			if (ImGui::CollapsingHeader(component->titleString.c_str()))
+			if (ImGui::CollapsingHeader(component->designator->m_string.c_str()))
 			{
 				// Set active button.
 				if (ImGui::Button("Set Active"))

@@ -206,12 +206,6 @@ void Cable::addSegment(glm::vec2 nextPoint)
 	m_polyLine->pushVertex(nextPoint);
 }
 
-void Cable::setContext(GUIState* guiState)
-{
-	//DEPRECATED
-	//guiState->clickedZone.component = true;
-}
-
 void Cable::attach(Port* endPort)
 {
 	// Keep pointer to end port.

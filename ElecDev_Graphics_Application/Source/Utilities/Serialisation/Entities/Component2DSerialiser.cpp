@@ -19,12 +19,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	// Component data.
 	emitter << YAML::Key << "Filename" << YAML::Value << comp->equipType + ".lmcp";
 	emitter << YAML::Key << "Internal Circuit" << YAML::Value << "Test_AE_234.lmct";
-	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->equipType;
-	emitter << YAML::Key << "Border Layer Offset" << YAML::Value << comp->borderLayerOffset;
+	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->title;
+	emitter << YAML::Key << "Designator" << YAML::Value << comp->designator;
 	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
-
-	// Title.
-	emitter << YAML::Key << "Title" << YAML::Value << comp->title;
 	
 	// Ports.
 	emitter << YAML::Key << "Ports" << YAML::Value << comp->ports;

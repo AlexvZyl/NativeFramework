@@ -61,10 +61,10 @@ Component2D::Component2D(Circuit* parent)
 	//border->setLayer(componentLayer + borderLayerOffset);
 	// Component title.
 	glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
-	titleString = "Component " + std::to_string(componentID++);
-	std::string textString = equipType + std::string(": ") + titleString;
-	title = Renderer::addText2D(textString, titlePos, titleColour, titleSize, "L", "T", this);
-	designator = Renderer::addText2D(designatorSym, designatorOffset, titleColour, titleSize, "L", "B", this);
+	//titleString = "Component " + std::to_string(componentID++);
+	//std::string textString = equipType + std::string(": ") + titleString;
+	title = Renderer::addText2D("Type", titlePos, titleColour, titleSize, "L", "T", this);
+	designator = Renderer::addText2D("?", designatorOffset, titleColour, titleSize, "L", "B", this);
 	// Add some test ports. (TO BE REMOVED). PLease keep this here while we are testing (at least until we have some generic components that can be added). 
 	// It is a bit of a pain setting up ports every time we test.
 	//addPort(0, PortType::PORT_IN, "LX1");
@@ -94,7 +94,6 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		componentNode = componentNode["Component"];
 
 	// General data.
-	borderLayerOffset = componentNode["Border Layer Offset"].as<float>();
 	m_internalCircuit = componentNode["Internal Circuit"].as<std::string>();
 
 	// The data dictionary.
@@ -104,9 +103,37 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 	}
 
-	// Add the title.
-	title = Renderer::addText2D(componentNode["Title"], this);
+	// Add the equipmemnt type.
+	if (componentNode["Title"].IsDefined())
+	{
+		title = Renderer::addText2D(componentNode["Title"], this);
+		equipType = title->m_string;
+	}
+	else if (componentNode["Equipment Type"].IsDefined())
+	{
+		title = Renderer::addText2D(componentNode["Equipment Type"], this);
+		equipType = title->m_string;
+	}
+	// Default title.
+	else
+	{
+		glm::vec3 titlePos = glm::vec3(centre + titleOffset, componentLayer + borderLayerOffset);
+		title = Renderer::addText2D("Type", titlePos, titleColour, titleSize, "L", "T", this);
+	}
 
+	// Designator.
+	if (componentNode["Designator"].IsDefined())
+	{
+		designator = Renderer::addText2D(componentNode["Designator"], this);
+		designatorSym = designator->m_string;
+	}
+	// Default designator.
+	else 
+	{
+		designator = Renderer::addText2D("?", designatorOffset, titleColour, titleSize, "L", "B", this);
+		designatorSym = designator->m_string;
+	}
+	
 	// Add the lines.
 	for (const auto& line : componentNode["PolyLines"])
 	{
@@ -133,13 +160,11 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	for (const auto& text : componentNode["Text"])
 		m_text.push_back(Renderer::addText2D(text.second, this));
 
-	titleString = title->m_string;
-	equipType = componentNode["Equipment Type"].as<std::string>();
-	enableOutline();
-
 	// Rotate the component.
 	if(componentNode["Rotation"].IsDefined())
 		rotate(componentNode["Rotation"].as<float>());
+
+	enableOutline();
 }
 
 Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
@@ -150,6 +175,7 @@ Component2D::~Component2D()
 {
 	ports.clear();
 	Renderer::remove(title);
+	Renderer::remove(designator);
 	for (auto circle : m_circles) Renderer::remove(circle);
 	for (auto line : m_lines)     Renderer::remove(line);
 	for (auto poly : m_polygons)  Renderer::remove(poly);
@@ -169,6 +195,7 @@ void Component2D::moveTo(const glm::vec2& pointerPos)
 void Component2D::move(const glm::vec2& translation)
 {
 	title->translate(translation);
+	designator->translate(translation);
 	for (auto poly : m_polygons)	poly->translate(translation);
 	for (auto line : m_lines)		line->translate(translation);
 	for (auto circ : m_circles)	    circ->translate(translation);
@@ -189,7 +216,8 @@ void Component2D::place(const glm::vec2& pos)
 
 void Component2D::setLayer(float layer)
 {
-	title->setLayer(layer + borderLayerOffset);
+	title->setLayer(layer);
+	designator->setLayer(layer);
 	for (auto poly : m_polygons)  poly->setLayer(layer);
 	for (auto line : m_lines)	  line->setLayer(layer);
 	for (auto circ : m_circles)   circ->setLayer(layer);
@@ -198,15 +226,11 @@ void Component2D::setLayer(float layer)
 	componentLayer = layer;
 }
 
-void Component2D::setContext(GUIState* guiState)
-{
-	//guiState->clickedZone.component = true;
-}
-
 void Component2D::enableOutline()
 {
 	m_highlighted = true;
 	title->enableOutline();
+	designator->enableOutline();
 	for (auto poly : m_polygons)  poly->enableOutline();
 	for (auto line : m_lines)	  line->enableOutline();
 	for (auto circ : m_circles)	  circ->enableOutline();
@@ -218,6 +242,7 @@ void Component2D::disableOutline()
 {
 	m_highlighted = false;
 	title->disableOutline();
+	designator->disableOutline();
 	for (auto poly : m_polygons) poly->disableOutline();
 	for (auto line : m_lines)    line->disableOutline();
 	for (auto circ : m_circles)  circ->disableOutline();
@@ -235,7 +260,7 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 		return;
 	}
 	// Port was not found on this component.
-	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + titleString + "'.";
+	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
 	LUMEN_LOG_WARN(msg, "");
 }
 
@@ -249,14 +274,20 @@ void Component2D::translateTitle(glm::vec2 translation)
 void Component2D::updateText()
 {
 	std::string textString = designatorSym + std::to_string(designatorIdx);
-	title->updateText(equipType);
-	designator->updateText(textString);
+	if (title->updateText(equipType)) 
+		title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
+
+	if (designator->updateText(textString))
+		designator->rotate(m_rotation, glm::vec3(centre, 0.f), {0.f, 0.f, 1.f});
 }
 
 void Component2D::updateTextWithoutLabel()
 {
-	title->updateText(equipType);
-	designator->updateText(designatorSym);
+	if (title->updateText(equipType))
+		title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
+
+	if (designator->updateText(designatorSym))
+		designator->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
 }
 
 void Component2D::setColour(const glm::vec4& colour)
@@ -349,6 +380,7 @@ void Component2D::rotate(float degrees)
 	glm::vec3 rotationPoint = { centre.x, centre.y, 0.f };
 	glm::vec3 rotateNormal = {0.f, 0.f, 1.f};
 	title->rotate(degrees, rotationPoint, rotateNormal);
+	designator->rotate(degrees, rotationPoint, rotateNormal);
 	for (auto poly : m_polygons) poly->rotate(degrees, rotationPoint, rotateNormal);
 	for (auto line : m_lines)    line->rotate(degrees, rotationPoint, rotateNormal);
 	for (auto circ : m_circles)  circ->rotate(degrees, rotationPoint, rotateNormal);

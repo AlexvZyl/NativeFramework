@@ -79,7 +79,6 @@ public:
     ~Cable();
     void extendSegment(glm::vec2 nextPoint);
     void addSegment(glm::vec2 nextPoint);
-    void setContext(GUIState* guiState);
     void attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);

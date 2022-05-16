@@ -267,11 +267,6 @@ void Port::hideAttachIndicator()
 	}
 }
 
-void Port::setContext(GUIState* guiState)
-{
-	m_parent->setContext();
-}
-
 void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
 {
 	// Calculate the rotation transform.

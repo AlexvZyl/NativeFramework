@@ -221,17 +221,15 @@ void RendererStats::onImGuiRender()
 
 		// Done.
 		ImGui::EndTable();
-		app.m_rendererData.reset();
+		app.getRendererData()->clear();
 
 		// Pipeline.
 		for (auto& [key, value] : Renderer::s_pipelineControls)
-		{
 			ImGui::Checkbox(key.c_str(), &value);
-		}
 	}
 	else
 	{
-		app.m_rendererData.reset();
+		app.getRendererData()->clear();
 	}
 	
 	ImGui::EndChild();
@@ -518,7 +516,7 @@ void RendererStats::onImGuiEnd()
 	Application& app = Lumen::getApp();
 	if (!app.m_profilerActive)
 	{
-		app.m_rendererData.reset();
+		app.getRendererData()->clear();
 		app.m_profilerResults.reserve(app.m_profilerResults.size());
 		app.m_profilerResults.shrink_to_fit();
 		app.m_profilerResults.clear();

@@ -472,18 +472,35 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	component->centre = {0.f, 0.f};
 	component->m_rotation = 0.f;
 
-	// Update equipment type.  Technically this shouldn't change.
-	component->equipType = componentNode["Equipment Type"].as<std::string>();
-
 	// ----------- //
 	//  T I T L E  //
 	// ----------- //
 
 	// Update the designator.  Technically this will only update the position.
 	// Done like this due to numrical instabilities.
-	Renderer::remove(component->title);
-	component->title = Renderer::addText2D(node["Title"], component);
-	component->title->updateText(component->titleString);
+
+	// Equipment type.
+	if (node["Title"].IsDefined())
+	{
+		Renderer::remove(component->title);
+		component->title = Renderer::addText2D(node["Title"], component);
+		component->equipType = component->title->m_string;
+	}
+	else if (node["Equipment Type"].IsDefined())
+	{
+		Renderer::remove(component->title);
+		component->title = Renderer::addText2D(node["Equipment Type"], component);
+		component->equipType = component->title->m_string;
+	}
+
+	// Designator.
+	if (node["Designator"].IsDefined())
+	{
+		Renderer::remove(component->designator);
+		component->designator = Renderer::addText2D(node["Designator"], component);
+		component->designatorSym = component->designator->m_string;
+		component->updateText();
+	}
 
 	// ----------------- //
 	//  P O L Y G O N S  //
