@@ -17,7 +17,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 // Utility for comparing two vecs.
-bool compare(const glm::vec2& vec1, const glm::vec2& vec2, int precision = 8);
+bool compare(const glm::vec2& vec1, const glm::vec2& vec2, float tolerance = 1e-6);
 
 //=============================================================================================================================================//
 //  Includes.																																   //
@@ -542,13 +542,12 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	auto& portsVector = component->ports;
 
 	// Rotation transform for the port centre.
-	glm::mat4 transform = glm::translate(glm::mat4(1.f), { -componentCentre, 0.f });
-	transform = glm::rotate(transform, -glm::radians(componentRotation), { 0.f, 0.f, 1.f });
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.f), -glm::radians(componentRotation), {0.f, 0.f, 1.f});
 
 	for (auto& port : portsVector)
 	{
 		// Reset the port to its original position & rotation.
-		glm::vec2 portOriginalCentre = transform * glm::vec4{ port->centre, 0.f, 1.f };
+		glm::vec2 portOriginalCentre = rotation * glm::vec4{ port->centre - componentCentre, 0.f, 1.f };
 		// Find port with the same position.
 		for (auto& newPort : newPorts)
 		{
@@ -595,13 +594,10 @@ void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node&
 	}
 }
 
-bool compare(const glm::vec2& vec1, const glm::vec2& vec2, int precision)
+bool compare(const glm::vec2& vec1, const glm::vec2& vec2, float tolerance)
 {
-	int x1 = std::trunc(vec1.x * std::pow(10, precision));
-	int x2 = std::trunc(vec2.x * std::pow(10, precision));
-	int y1 = std::trunc(vec1.y * std::pow(10, precision));
-	int y2 = std::trunc(vec2.y * std::pow(10, precision));
-	return x1 == x2 && y1 == y2;
+	return std::abs(vec1.x - vec2.x) < tolerance
+		&& std::abs(vec1.y - vec2.y) < tolerance;
 }
 
 //=============================================================================================================================================//

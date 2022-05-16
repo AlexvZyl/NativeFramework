@@ -44,6 +44,11 @@ public:
 	std::string getDataString();
 	YAML::Node getDataYamlNode();
 	std::tuple<void*, size_t> getDataRaw();
+	template<typename T>
+	T getData() 
+	{
+		return *static_cast<T*>(m_dataPtr);
+	}
 
 private:
 
