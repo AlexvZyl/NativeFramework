@@ -169,6 +169,7 @@ void Component2D::moveTo(const glm::vec2& pointerPos)
 void Component2D::move(const glm::vec2& translation)
 {
 	title->translate(translation);
+	designator->translate(translation);
 	for (auto poly : m_polygons)	poly->translate(translation);
 	for (auto line : m_lines)		line->translate(translation);
 	for (auto circ : m_circles)	    circ->translate(translation);
@@ -207,6 +208,7 @@ void Component2D::enableOutline()
 {
 	m_highlighted = true;
 	title->enableOutline();
+	designator->enableOutline();
 	for (auto poly : m_polygons)  poly->enableOutline();
 	for (auto line : m_lines)	  line->enableOutline();
 	for (auto circ : m_circles)	  circ->enableOutline();
@@ -218,6 +220,7 @@ void Component2D::disableOutline()
 {
 	m_highlighted = false;
 	title->disableOutline();
+	designator->disableOutline();
 	for (auto poly : m_polygons) poly->disableOutline();
 	for (auto line : m_lines)    line->disableOutline();
 	for (auto circ : m_circles)  circ->disableOutline();
@@ -349,6 +352,7 @@ void Component2D::rotate(float degrees)
 	glm::vec3 rotationPoint = { centre.x, centre.y, 0.f };
 	glm::vec3 rotateNormal = {0.f, 0.f, 1.f};
 	title->rotate(degrees, rotationPoint, rotateNormal);
+	designator->rotate(degrees, rotationPoint, rotateNormal);
 	for (auto poly : m_polygons) poly->rotate(degrees, rotationPoint, rotateNormal);
 	for (auto line : m_lines)    line->rotate(degrees, rotationPoint, rotateNormal);
 	for (auto circ : m_circles)  circ->rotate(degrees, rotationPoint, rotateNormal);
