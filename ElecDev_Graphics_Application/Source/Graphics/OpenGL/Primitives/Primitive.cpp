@@ -67,12 +67,7 @@ void Primitive<VertexType>::translate(const glm::vec3& translation)
 template<typename VertexType>
 void Primitive<VertexType>::translate(const glm::vec2& translation)
 {
-	glm::vec3 translation3{ translation, 0.f };
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.position += translation3;
-
-	m_trackedCenter += translation3;
-	syncWithGPU();
+	Primitive::translate(glm::vec3{ translation, 0.f });
 }
 
 template<typename VertexType>
@@ -89,43 +84,37 @@ void Primitive<VertexType>::translateTo(const glm::vec3& position)
 template<typename VertexType>
 void Primitive<VertexType>::translateTo(const glm::vec2& position)
 {
-	glm::vec3 translation = glm::vec3(position, m_trackedCenter.z) - m_trackedCenter;
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.position += translation;
-
-	m_trackedCenter += translation;
-	syncWithGPU();
+	Primitive::translateTo(glm::vec3{ position, m_trackedCenter.z });
 }
 
 template<typename VertexType>
 void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotateNormal)
 {
-	glm::mat4 transform = glm::translate(glm::mat4(1.f), m_trackedCenter);
-	transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
-	transform = glm::translate(transform, -m_trackedCenter);
-	
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-	{
-		glm::vec4 rotated = transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f);
-		m_VAO->m_vertexCPU[i].data.position = glm::vec3(rotated.x, rotated.y, rotated.z);
-	}
-
-	syncWithGPU();
+	Primitive::rotate(degrees, m_trackedCenter, rotateNormal);
 }
 
 template<typename VertexType>
 void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal)
 {
-	// Can this be optimised?
+	// Rather call transform if a lot of these are going to be called sequencially.
 	glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);
 	transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
 	transform = glm::translate(transform, -rotatePoint);
 
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-	{
-		glm::vec4 rotated = transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f);
-		m_VAO->m_vertexCPU[i].data.position = glm::vec3(rotated.x, rotated.y, rotated.z);
-	}
+		m_VAO->m_vertexCPU[i].data.position = glm::vec3(transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f));
+
+	syncWithGPU();
+}
+
+template<typename VertexType>
+void Primitive<VertexType>::transform(const glm::mat4& transfromMatrix)
+{
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+		m_VAO->m_vertexCPU[i].data.position = glm::vec3(transfromMatrix * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f));
+
+	// Not sure if this is correct (scaling?).
+	m_trackedCenter = glm::vec3(transfromMatrix * glm::vec4(m_trackedCenter, 1.f));
 
 	syncWithGPU();
 }
@@ -172,15 +161,11 @@ void Primitive<VertexType>::setLayer(float layer)
 }
 
 template<typename VertexType>
-void Primitive<VertexType>::setContext(GUIState* guiState)
-{
-	//guiState->clickedZone.primative = true;
-	if (m_parent) m_parent->setContext();
-}
-
-template<typename VertexType>
 void Primitive<VertexType>::enableOutline()
 {
+	if (m_outlineEnabled) return;
+	m_outlineEnabled = true;
+
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.outline = 1.0f;
 
@@ -190,6 +175,9 @@ void Primitive<VertexType>::enableOutline()
 template<typename VertexType>
 void Primitive<VertexType>::disableOutline()
 {
+	if (!m_outlineEnabled) return;
+	m_outlineEnabled = false;
+
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 		m_VAO->m_vertexCPU[i].data.outline = 0.f;
 
@@ -212,13 +200,14 @@ void Primitive<VertexType>::translateVertexTo(VertexType* vertex, const glm::vec
 template<typename VertexType>
 void Primitive<VertexType>::translateVertex(VertexType* vertex, const glm::vec3 translation)
 {
-	translateVertexTo(vertex, vertex->data.position + translation);
+	vertex->data.position += translation;
+	syncWithGPU();
 }
 
 template<typename VertexType>
 void Primitive<VertexType>::translateVertex(VertexType* vertex, const glm::vec2 translation)
 {
-	translateVertex(vertex, glm::vec3{ translation, 0.f });
+	Primitive::translateVertex(vertex, glm::vec3{ translation, 0.f });
 }
 
 //=============================================================================================================================================//
@@ -241,8 +230,7 @@ void Primitive<VertexType>::translateVertexAtIndex(unsigned index, const glm::ve
 template<typename VertexType>
 void Primitive<VertexType>::translateToVertexAtIndex(unsigned index, const glm::vec3& position)
 {
-	glm::vec3* currentPosition = &m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position;
-	*currentPosition += (position - *currentPosition);
+	m_VAO->m_vertexCPU[m_vertexBufferPos + index].data.position = position;
 	syncWithGPU();
 }
 
@@ -283,7 +271,64 @@ std::tuple<VertexType*, float> Primitive<VertexType>::getNearestVertex(const glm
 template<typename VertexType>
 std::tuple<VertexType*, float> Primitive<VertexType>::getNearestVertex(const glm::vec2& position)
 {
-	return getNearestVertex({position.x, position.y, 0.f});
+	float minDistance = 0.f;
+	VertexType* closestVertex;
+	// Calculate the first vertex' distance.
+	minDistance = glm::abs(glm::distance(position, glm::vec2(m_VAO->m_vertexCPU[m_vertexBufferPos].data.position)));
+	closestVertex = &m_VAO->m_vertexCPU[m_vertexBufferPos];
+	// Find if any of the vertices are closer.
+	for (int i = m_vertexBufferPos + 1; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		float currentDistance = glm::abs(glm::distance(position, glm::vec2(m_VAO->m_vertexCPU[i].data.position)));
+		if (currentDistance > minDistance)
+			continue;
+		closestVertex = &m_VAO->m_vertexCPU[i];
+		minDistance = currentDistance;
+	}
+	// Return the closes vertex, alongside the distance in world coordinates.
+	return { closestVertex, minDistance };
+}
+
+template<typename VertexType>
+std::tuple<unsigned, float> Primitive<VertexType>::getNearestVertexIdx(const glm::vec3& position)
+{
+	float minDistance = 0.f;
+	unsigned closestVertexIdx;
+	// Calculate the first vertex' distance.
+	minDistance = std::numeric_limits<float>::infinity();
+	closestVertexIdx = -1;
+	// Find if any of the vertices are closer.
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		float currentDistance = glm::abs(glm::distance(position, m_VAO->m_vertexCPU[i].data.position));
+		if (currentDistance > minDistance)
+			continue;
+		closestVertexIdx = i-m_vertexBufferPos;
+		minDistance = currentDistance;
+	}
+	// Return the closes vertex, alongside the distance in world coordinates.
+	return { closestVertexIdx, minDistance };
+}
+
+template<typename VertexType>
+std::tuple<unsigned, float> Primitive<VertexType>::getNearestVertexIdx(const glm::vec2& position)
+{
+	float minDistance = 0.f;
+	unsigned closestVertexIdx;
+	// Calculate the first vertex' distance.
+	minDistance = std::numeric_limits<float>::infinity();
+	closestVertexIdx = -1;
+	// Find if any of the vertices are closer.
+	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
+	{
+		float currentDistance = glm::abs(glm::distance(position, glm::vec2(m_VAO->m_vertexCPU[i].data.position)));
+		if (currentDistance > minDistance)
+			continue;
+		closestVertexIdx = i - m_vertexBufferPos;
+		minDistance = currentDistance;
+	}
+	// Return the closes vertex, alongside the distance in world coordinates.
+	return { closestVertexIdx, minDistance };
 }
 
 //=============================================================================================================================================//

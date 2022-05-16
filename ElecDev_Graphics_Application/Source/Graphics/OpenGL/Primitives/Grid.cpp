@@ -32,8 +32,9 @@ glm::vec2 Grid::getNearestGridVertex(const glm::vec2& coords)
 {
 	if (m_enabled)
 	{
-		return { std::round(coords.x / m_fineIncrementSize) * m_fineIncrementSize,
-				 std::round(coords.y / m_fineIncrementSize) * m_fineIncrementSize  };
+		float reference = m_fineIncrementSize * m_scale;
+		return { std::round(coords.x / reference) * reference,
+				 std::round(coords.y / reference) * reference };
 	}
 	return coords;
 }

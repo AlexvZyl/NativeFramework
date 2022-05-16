@@ -2,9 +2,8 @@
 #include "CavalierContours/include/cavc/polylineoffset.hpp"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
-#include <Clipper/cpp/clipper.hpp>
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, bool closed) :Polygon2D({}, VAO, parent), m_vertices(vertices), m_closed(closed)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) :Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -37,8 +36,10 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 			});
 		resultVec.push_back(temp);
 	}*/
+	m_rounded = rounded;
+	if (!m_rounded) et = ClipperLib::etOpenButt;
 	update();
-	setColor({0.f, 0.f, 0.f, 1.f});
+	setColor(m_colour);
 }
 
 void PolyLine::update()
@@ -50,7 +51,6 @@ void PolyLine::update()
 		return ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(in.x * sf), static_cast<ClipperLib::cInt>(in.y * sf));
 		});
 	ClipperLib::ClipperOffset co;
-	ClipperLib::EndType et = ClipperLib::etOpenRound;
 	if (m_closed) et = ClipperLib::etClosedLine;
 	co.AddPath(subj, ClipperLib::jtRound, et);
 	co.Execute(solution, m_thickness / 2 * sf);
@@ -143,13 +143,14 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec3 translation)
 
 void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 {
-	float tol = m_thickness;
+	float tol = m_thickness*2;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
 			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
 		});
 
-	if (it == end(m_vertices)) {
+	if (it == end(m_vertices)) 
+	{
 		LUMEN_LOG_WARN("Tried to move an invlaid vertex.", "PolyLine");
 		return;
 	}
@@ -166,19 +167,21 @@ void PolyLine::translate(const glm::vec3& translation)
 
 void PolyLine::translate(const glm::vec2& translation)
 {
+	Primitive::translate(translation);
+
 	//update the internal vertices
-	for (auto& vert : m_vertices) {
+	for (auto& vert : m_vertices) 
 		vert += translation;
-	}
-	Polygon2D::translate(translation);
 }
 
 void PolyLine::translateTo(const glm::vec3& position)
 {
+	translateTo(glm::vec2(position));
 }
 
 void PolyLine::translateTo(const glm::vec2& position)
 {
+	translate(position - glm::vec2(m_trackedCenter));
 }
 
 void PolyLine::enableOutline()

@@ -14,6 +14,7 @@
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
+#include "glm/gtc/matrix_transform.hpp"
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -31,9 +32,9 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	//  P R I M I T I V E S  //
 	// --------------------- //
 
-	body = Renderer::addCircle2D(centre, 0.01f, bodyColour, 1.0f, 0.0f, this);
-	border = Renderer::addCircle2D(centre, 0.011f, borderColour, 1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
+	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
+	border = Renderer::addCircle2D(centre, 1.1f*portSize, borderColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize*0.5f, indicatorColour, 1.0f, 0.01f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -41,7 +42,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 		m_label = "Port " + std::to_string(parent->numPorts++);
 	else m_label = label;
 
-	float textMargin = 0.015;
+	float textMargin = 0.0015;
 	//OLD DEPRECATED CODE
 	//infer the port position from the offset, and set the title
 	/*if (m_offset.y > 0.078)
@@ -128,14 +129,14 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	bodyColour = body->m_colour;
 	borderColour = border->m_colour;
 	centre = body->m_trackedCenter;
-	attachmentIndicator = Renderer::addCircle2D(centre, 0.005f, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize * 0.5f, indicatorColour, 1.0f, 0.01f, this);
 	setLayer(portLayer);
 }
 
 Port::~Port()
 {
 	// Check if port is in a circuit.
-	if (dynamic_cast<Circuit*>(m_parent->m_parent) != nullptr) 
+	if (m_parent && dynamic_cast<Circuit*>(m_parent->m_parent))
 	{
 		// If a port is removed, we need to find and destroy any linked cables.
 		auto& cableList = dynamic_cast<Circuit*>(m_parent->m_parent)->m_cables;
@@ -171,6 +172,7 @@ void Port::moveTo(const glm::vec2& destination)
 	body->translateTo(centre);
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
+	
 	for (Cable* cable: m_cables)
 		cable->followPort(this);
 }
@@ -265,10 +267,25 @@ void Port::hideAttachIndicator()
 	}
 }
 
-void Port::setContext(GUIState* guiState)
+void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
 {
-	//guiState->clickedZone.port = true;
-	m_parent->setContext();
+	// Calculate the rotation transform.
+	glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);
+	transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
+	transform = glm::translate(transform, -rotatePoint);
+
+	// Rotate.
+	m_rotation += degrees;
+	body->transform(transform);
+	border->transform(transform);
+	attachmentIndicator->transform(transform);
+	title->transform(transform);
+
+	// Update the port center.
+	centre = glm::vec2(transform * glm::vec4(centre, 0.f, 1.f));
+
+	// Update cables.
+	for (Cable* cable : m_cables) cable->followPort(this);
 }
 
 //==============================================================================================================================================//

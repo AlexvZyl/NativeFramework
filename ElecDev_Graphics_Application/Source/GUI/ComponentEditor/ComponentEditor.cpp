@@ -8,14 +8,15 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Application.h"	
 #include "Application/LumenWindow/LumenWindow.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
-#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Resources/ResourceHandler.h"
 #include "Lumen.h"
+#include "GUI/LumenPayload/LumenPayload.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -27,17 +28,13 @@ ComponentEditor::ComponentEditor(std::string name, int windowFlags)
 	if (!s_iconCreated)
 	{
 		s_cableIcon = loadBitmapToGL(loadImageFromResource(CABLE_ICON));
-		s_iconCreated = true;
 		s_textHeight = ImGui::CalcTextSize("A").y;
+		s_iconCreated = true;
 	}
 }
 
 void ComponentEditor::onImGuiBegin()
 {
-	// Place editor at correct position.
-	/*ImGui::SetNextWindowPos(m_guiState->popUpPosition);*/
-	// FIX ME!! The window size should be set dynamically
-	ImGui::SetNextWindowSize(ImVec2{ 600.f, 600.f }, ImGuiCond_Once);
 	ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 }
 
@@ -45,7 +42,7 @@ void ComponentEditor::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 
-	Design2DEngine* design_engine = app.getActiveEngine<Design2DEngine>();
+	CircuitDesigner* design_engine = app.getActiveEngine<CircuitDesigner>();
 	ComponentDesigner* component_designer = app.getActiveEngine<ComponentDesigner>();
 
 	if (component_designer) 
@@ -55,10 +52,14 @@ void ComponentEditor::onImGuiRender()
 		// Check that the active component exists. Close if not.
 		if (activeComponent)
 		{
+			ImGui::Text(" Designator:\t  ");
+			ImGui::SameLine();
+			ImGui::InputText("##Designator", &activeComponent->designatorSym);
 			ImGui::Text(" Type:\t  ");
 			ImGui::SameLine();
 			ImGui::InputText("##Equipment Type", &activeComponent->equipType);
-			activeComponent->updateText();
+
+			activeComponent->updateTextWithoutLabel();
 		}
 
 		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))
@@ -85,31 +86,36 @@ void ComponentEditor::onImGuiRender()
 					sprintf_s(labelType, "##T%d", i);
 					char labelRemove[20];
 					sprintf_s(labelRemove, "Remove##%d", i++);
+
 					// Port entry in table.
 					ImGui::TableNextRow();
 					ImGui::TableNextColumn();
+
 					// Name.
 					ImGui::PushItemWidth(-1);
 					if (ImGui::InputText(labelName, &port->m_label))
 						port->title->updateText(port->m_label);
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
+
 					// Type.
 					ImGui::PushItemWidth(-1);
 					int* typeval = (int*)&port->m_type;
 					ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
+
 					// Remove.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::Button(labelRemove)) {
+					if (ImGui::Button(labelRemove)) 
+					{
 						activeComponent->removePort(port);
 						ImGui::PopItemWidth();
-						break;//Stop iterating through the ports if the port vector changes.
+						// Stop iterating through the ports if the port vector changes.
+						break;
 					}
 					ImGui::PopItemWidth();
 				}
-
 				ImGui::EndTable();
 		}
 		ImGui::EndChild();
@@ -302,7 +308,7 @@ void ComponentEditor::onImGuiRender()
 		int numCom = 0;
 		for (auto& key : numComponents)
 		{
-			componentNames[numCom] = key->titleString.c_str();
+			componentNames[numCom] = key->designator->m_string.c_str();
 			numCom++;
 		}
 
@@ -325,13 +331,18 @@ void ComponentEditor::onImGuiRender()
 		ImGui::PushID("CompGeneral");
 		if (activeComponent)
 		{
-			ImGui::Text(" Name:\t");
-			ImGui::SameLine();\
 
-			activeTitleString = activeComponent->titleString;
+			ImGui::Text(" Designator:\t");
+			ImGui::SameLine();
+			ImGui::Text(activeComponent->designatorSym.c_str());
 
-			if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
-				activeComponent->title->updateText(activeComponent->titleString);
+			activeTitleString = activeComponent->designator->m_string;
+
+			if (ImGui::InputInt("##designatorIdx", &activeComponent->designatorIdx)) 
+			{
+				//std::string str = activeComponent->designatorSym + std::to_string();
+				activeComponent->updateText();
+			}
 
 			ImGui::Text((std::string(" Type:\t  ") + activeComponent->equipType).c_str());
 			//ImGui::SameLine();
@@ -387,45 +398,31 @@ void ComponentEditor::onImGuiRender()
 			}
 			ImGui::PopStyleVar();
 			ImGui::EndChild();
-			// Receive dropped files.
-			if (ImGui::BeginDragDropTarget())
+
+			// Drag & Drop files.
+			LumenPayload payloadFiles(LumenPayloadType::String);
+			payloadFiles.setDragAndDropTarget();
+			if (payloadFiles.hasValidData()) design_engine->importCable(payloadFiles.getDataString());
+
+			// Drag & Drop nodes.
+			LumenPayload payloadNode(LumenPayloadType::YamlNode);
+			payloadNode.setDragAndDropTarget();
+			if (payloadNode.hasValidData())
 			{
-
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-				{
-					// Pass FileDropEvent to engine.
-					std::filesystem::path fsPath((const wchar_t*)payload->Data);
-					if (fsPath.filename().extension().string() == ".lmcb")
-					{
-						activeCable->m_cableType = fsPath.filename().stem().string();
-
-						// Load the data received from the file.
-						YAML::Node node = YAML::LoadFile(fsPath.string())["Cable"];
-						// Load color.
-						activeCable->setColour({ 
-							node["Color"][0].as<float>(), 
-							node["Color"][1].as<float>(), 
-							node["Color"][2].as<float>() , 
-							node["Color"][3].as<float>() 
-						});
-						// Load dictionary.
-						activeCable->cableDict.clear();
-						for (const auto& keyValPair : node["Dictionary"])
-						{
-							activeCable->cableDict.insert({keyValPair.first.as<std::string>(), keyValPair.second.as<std::string>()});
-						}
-
-					}
-				}
-				ImGui::EndDragDropTarget();
+				bool checkForOverwrite = true;
+				if (CircuitDesigner::s_engineUsedByCircuitEditor == design_engine) checkForOverwrite = false;
+				design_engine->importCable(payloadNode.getDataYamlNode(), true, checkForOverwrite);
 			}
 		}
 
-		// Get the current component as the initial selection for the data selection
-		if (equipmentSelector == -1) {
-			for (int num = 0; num < numCom; num++) {
+		// Get the current component as the initial selection for the data selection.
+		if (equipmentSelector == -1) 
+		{
+			for (int num = 0; num < numCom; num++) 
+			{
 				equipmentSelector = num;
-				if (componentNames[num] == activeTitleString) {
+				if (componentNames[num] == activeTitleString) 
+				{
 					break;
 				}
 			}
@@ -435,10 +432,12 @@ void ComponentEditor::onImGuiRender()
 
 		int posKeys = 0;
 
-		if (equipmentSelector < numEquip) {
+		if (equipmentSelector < numEquip) 
+		{
 			for (auto& key : numComponents)
 			{
-				if (key->titleString.c_str() == componentNames[equipmentSelector]) {
+				if (key->designator->m_string.c_str() == componentNames[equipmentSelector])
+				{
 					for (auto& [key2, val] : key->dataDict)
 					{
 						possibleInformation[posKeys] = key2.c_str();
@@ -452,7 +451,8 @@ void ComponentEditor::onImGuiRender()
 		{
 			for (auto& key : numCables)
 			{
-				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) {
+				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) 
+				{
 					for (auto& [key2, val] : key->cableDict)
 					{
 						possibleInformation[posKeys] = key2.c_str();
@@ -490,7 +490,7 @@ void ComponentEditor::onImGuiRender()
 					m_copiedDict = activeComponent->dataDict;
 					m_copiedDictComponent = true;
 					m_copiedDictCable = false;
-					m_copiedDictFrom = activeComponent->titleString;
+					m_copiedDictFrom = activeComponent->designator->m_string;
 					Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
 				}
 				else if (activeCable)
@@ -741,7 +741,8 @@ void ComponentEditor::onImGuiRender()
 					{
 						activeComponent->dataDict[buffer[ifSelector]] = ifString;
 					}
-					else {
+					else 
+					{
 						activeCable->cableDict[buffer[ifSelector]] = ifString;
 					}
 				}
@@ -765,7 +766,8 @@ void ComponentEditor::onImGuiRender()
 				ImGui::InputText("##Combine String", &combineTextString);
 				if (ImGui::Button("Insert Combine function"))
 				{
-					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) {
+					if (combineTextString.substr(combineTextString.size() - 1, combineTextString.size()) == plusString) 
+					{
 						combineTextString = combineTextString.substr(0, combineTextString.size() - 1);
 					}
 					combineText += combineTextString + end;
@@ -773,7 +775,8 @@ void ComponentEditor::onImGuiRender()
 					{
 						activeComponent->dataDict[buffer[combineSelector]] = combineText;
 					}
-					else {
+					else 
+					{
 						activeCable->cableDict[buffer[combineSelector]] = combineText;
 					}
 				}

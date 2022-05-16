@@ -21,8 +21,10 @@ class KeyEvent;
 class WindowEvent;
 class NotifyEvent;
 class FileDropEvent;
+class YamlNodeDropEvent;
 class LumenWindow;
 class Scene;
+class LumenGizmo;
 
 //=============================================================================================================================================//
 //  Variables and constants.																												   //
@@ -39,7 +41,7 @@ class EngineCore
 public:
 
 	// Constructor
-	inline EngineCore() = default;
+	EngineCore();
 	// Destructor.
 	virtual ~EngineCore();
 	// Sets the name of the engine (and elements that have names.)
@@ -102,6 +104,7 @@ public:
 	inline virtual void onHoverEvent(const NotifyEvent& event) {}
 	inline virtual void onDehoverEvent(const NotifyEvent& event) {}
 	inline virtual void onFileDropEvent(const FileDropEvent& event) {}
+	inline virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) {}
 
 	// ----------------------- //
 	//  C O O R D I N A T E S  //
@@ -126,32 +129,51 @@ public:
 	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
 	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
 
-	// ----------------------------- //
-	//  D E S I G N   P A L E T T E  //
-	// ----------------------------- //
+	// ----------------------- //
+	//  G U I   W I D G E T S  //
+	// ----------------------- //
 
-	// Renders the design palette. (Has to be enabled).
+	// Engine design palette.
+	// A toolbar at the top of the engine display.
 	inline virtual void renderDesignPalette() {};
-	// Checks if the engine's design palette is enabled.
 	inline bool hasDesignPalette()		{ return m_hasDesignPalette;  }
-	// Enables the design palette for this engine.
 	inline void enableDesignPalette()	{ m_hasDesignPalette = true;  }
-	// Disables the design palette for this engine.
 	inline void disableDesignPalette()	{ m_hasDesignPalette = false; }
+
+	// Engine overlay.
+	// GUI elements that are rendered on top of the engine and block events
+	// to the engine.
+	inline void enableOverlay()	 { m_hasOverlay = true;  }
+	inline void disableOverlay() { m_hasOverlay = false; }
+	inline bool hasOverlay()	 { return m_hasOverlay;  }
+	inline virtual void renderOverlay() {};
+
+	// Get the gizmo used for manipulation.
+	LumenGizmo* getGizmo();
+
+protected:
+
+	// Protected gizmo controls.
+	void hideGizmo();
+	void visibleGizmo();
 
 private:
 
+	// Friends.
 	template <class EngineType>
 	friend class GraphicsScene;
-
 	friend class Base2DEngine;
 	friend class Base3DEngine;
 
 	// The scene rendered to.
 	std::unique_ptr<Scene> m_scene = nullptr;
 
+	// Gizmo!
+	std::unique_ptr<LumenGizmo> m_lumenGizmo;
+
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
+	bool m_hasOverlay = false;
 
 	// Handlers that are always called on the events.
 	// Prevents children from overriding certain behaviour.
@@ -162,6 +184,10 @@ private:
 	virtual void onHoverEventForce(const NotifyEvent& event);
 	virtual void onDehoverEventForce(const NotifyEvent& event);
 	virtual void onWindowResizeEventForce(const WindowEvent& event);
+	virtual void onFileDropEventForce(const FileDropEvent& event);
+	virtual void onYamlNodeDropEventForce(const YamlNodeDropEvent& event);
+	virtual void onMouseDragEventForce(const MouseDragEvent& event);
+	virtual void onMouseButtonEventForce(const MouseButtonEvent& event);
 };
 
 //=============================================================================================================================================//

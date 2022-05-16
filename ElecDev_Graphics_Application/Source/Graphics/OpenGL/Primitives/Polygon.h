@@ -28,7 +28,7 @@ class Polygon2D : public Primitive<VertexData>
 public:				
 	
 	// Constructors.
-	Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent);
+	Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f});
 
 	// Adds a new vertex and handles the required manipulation of data.
 	virtual void pushVertex(const glm::vec3& vertex);

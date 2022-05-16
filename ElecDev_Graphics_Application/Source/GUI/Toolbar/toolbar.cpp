@@ -9,6 +9,8 @@
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Lumen.h"
 #include "Application/Application.h"
+#include "Application/ApplicationTemplates.h"
+#include "Application/Events/EventLog.h"
 #include "Resources/ResourceHandler.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
@@ -18,7 +20,6 @@
 #include "GUI/SceneHierarchy/SceneHierarchy.h"
 #include "GUI/BackgroundColorEditor/BackgroundColorEditor.h"
 #include <GLFW/glfw3.h>
-#include "Application/Events/EventLog.h"
 
 /*=======================================================================================================================================*/
 /* Constructor.                                                                                                                          */
@@ -149,39 +150,41 @@ void Toolbar::onImGuiRender()
             else 
             {
                 app.m_profilerActive = false;
-                app.queueWindowPop(stats);
+                stats->closeWindow();
                 stats = nullptr;
             }
         }   
 
         // Scene hierarchy.
-        static bool sceneHierarchy = false;
-        if (ImGui::Checkbox(" Scene Hierarchy", &sceneHierarchy))
+        static bool sceneHierarchyBool = false;
+        if (ImGui::Checkbox(" Scene Hierarchy", &sceneHierarchyBool))
         {
             static SceneHierarchy* sceneHierarchy = nullptr;
-            if (sceneHierarchy)
+            if (sceneHierarchyBool)
             {
                 sceneHierarchy = app.pushWindow<SceneHierarchy>(LumenDockPanel::Right, "Scene Hierarchy");
             }
             else
             {
-                app.queueWindowPop(sceneHierarchy);
+                sceneHierarchy->closeWindow();
                 sceneHierarchy = nullptr;
             }
         }
 
-        // Scene hierarchy.
+        // Asset explorer.
         static bool assetExplorer = true;
         if (ImGui::Checkbox(" Asset Explorer", &assetExplorer))
         {
             if (assetExplorer)
             {
                 m_assetExplorerWindow = app.pushWindow<AssetExplorer>(LumenDockPanel::Bottom, "Asset Explorer");
+                app.m_assetViewerEngine = m_assetExplorerWindow->m_assetViewerEngine;
             }
             else
             {
-                app.queueWindowPop(m_assetExplorerWindow);
+                m_assetExplorerWindow->closeWindow();
                 m_assetExplorerWindow = nullptr;
+                app.m_assetViewerEngine = nullptr;
             }
         }
 

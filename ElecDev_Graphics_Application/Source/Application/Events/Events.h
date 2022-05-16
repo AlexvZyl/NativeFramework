@@ -10,6 +10,7 @@
 #include <string>
 #include "glm/glm.hpp"
 #include <filesystem>
+#include "yaml-cpp/yaml.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -25,51 +26,52 @@ typedef uint64_t LumenEventID;
 enum EventType : LumenEventID
 {
 	// Layer specific identifiers.
-	EventType_Error				=	(LumenEventID)0,
-	EventType_Application		=	(LumenEventID)1 << 0,
-									
-	// Mouse events.				
-	EventType_MousePress		=	(LumenEventID)1 << 1,
-	EventType_MouseRelease		=	(LumenEventID)1 << 2,
-	EventType_MouseDoublePress	=	(LumenEventID)1 << 3,
-	EventType_MouseScroll		=	(LumenEventID)1 << 4,
-	EventType_MouseMove			=	(LumenEventID)1 << 5,
-	EventType_MouseDrag			=	(LumenEventID)1 << 6,
-	// Mouse button states.			
-	EventType_MouseButtonLeft	=	(LumenEventID)1 << 7,
-	EventType_MouseButtonRight	=	(LumenEventID)1 << 8,
-	EventType_MouseButtonMiddle	=	(LumenEventID)1 << 9,
-									
-	// Key events.					
-	EventType_KeyPress			=	(LumenEventID)1 << 10,
-	EventType_KeyRelease		=	(LumenEventID)1 << 11,
-	EventType_KeyRepeat			=	(LumenEventID)1 << 12,
-	// Key states.				
-	EventType_LeftCtrl			=	(LumenEventID)1 << 13,
-	EventType_RightCtrl			=	(LumenEventID)1 << 14,
-	EventType_LeftShift			=	(LumenEventID)1 << 15,
-	EventType_RightShift		=	(LumenEventID)1 << 16,
-	EventType_LeftAlt			=	(LumenEventID)1 << 17,
-	EventType_RightAlt			=	(LumenEventID)1 << 18,
-									
-	// Window events.				
-	EventType_WindowResize		=	(LumenEventID)1 << 19,
-	EventType_WindowMove		=	(LumenEventID)1 << 20,
-	EventType_WindowClose		=	(LumenEventID)1 << 21,
-									
-	// File events.					
-	EventType_FileDrop			=	(LumenEventID)1 << 22,
-	EventType_FileSave			=	(LumenEventID)1 << 23,
-	EventType_FileLoad			=	(LumenEventID)1 << 24,
-									
-	// Notify events.				
-	EventType_Notify			=	(LumenEventID)1 << 25,
-	EventType_Focus				=	(LumenEventID)1 << 26,
-	EventType_Defocus			=	(LumenEventID)1 << 27,
-	EventType_Hover				=	(LumenEventID)1 << 28,
-	EventType_Dehover			=	(LumenEventID)1 << 29,
-	EventType_MouseDragStart	=	(LumenEventID)1 << 30,
-	EventType_MouseDragStop		=	(LumenEventID)1 << 31,
+	EventType_Error				=	(LumenEventID) 0,
+	EventType_Application		=	(LumenEventID) 1 << 0,
+												   
+	// Mouse events.							   
+	EventType_MousePress		=	(LumenEventID) 1 << 1,
+	EventType_MouseRelease		=	(LumenEventID) 1 << 2,
+	EventType_MouseDoublePress	=	(LumenEventID) 1 << 3,
+	EventType_MouseScroll		=	(LumenEventID) 1 << 4,
+	EventType_MouseMove			=	(LumenEventID) 1 << 5,
+	EventType_MouseDrag			=	(LumenEventID) 1 << 6,
+	// Mouse button states.						   
+	EventType_MouseButtonLeft	=	(LumenEventID) 1 << 7,
+	EventType_MouseButtonRight	=	(LumenEventID) 1 << 8,
+	EventType_MouseButtonMiddle	=	(LumenEventID) 1 << 9,
+												   
+	// Key events.								   
+	EventType_KeyPress			=	(LumenEventID) 1 << 10,
+	EventType_KeyRelease		=	(LumenEventID) 1 << 11,
+	EventType_KeyRepeat			=	(LumenEventID) 1 << 12,
+	// Key states.								   
+	EventType_LeftCtrl			=	(LumenEventID) 1 << 13,
+	EventType_RightCtrl			=	(LumenEventID) 1 << 14,
+	EventType_LeftShift			=	(LumenEventID) 1 << 15,
+	EventType_RightShift		=	(LumenEventID) 1 << 16,
+	EventType_LeftAlt			=	(LumenEventID) 1 << 17,
+	EventType_RightAlt			=	(LumenEventID) 1 << 18,
+												   
+	// Window events.							   
+	EventType_WindowResize		=	(LumenEventID) 1 << 19,
+	EventType_WindowMove		=	(LumenEventID) 1 << 20,
+	EventType_WindowClose		=	(LumenEventID) 1 << 21,
+												   
+	// File events.								   
+	EventType_FileDrop			=	(LumenEventID) 1 << 22,
+	EventType_FileSave			=	(LumenEventID) 1 << 23,
+	EventType_FileLoad			=	(LumenEventID) 1 << 24,
+	EventType_YamlNodeDrop		=	(LumenEventID) 1 << 25,
+												   
+	// Notify events.							   
+	EventType_Notify			=	(LumenEventID) 1 << 26,
+	EventType_Focus				=	(LumenEventID) 1 << 27,
+	EventType_Defocus			=	(LumenEventID) 1 << 28,
+	EventType_Hover				=	(LumenEventID) 1 << 29,
+	EventType_Dehover			=	(LumenEventID) 1 << 30,
+	EventType_MouseDragStart	=	(LumenEventID) 1 << 31,
+	EventType_MouseDragStop		=	(LumenEventID) 1 << 32,
 };
 
 //==============================================================================================================================================//
@@ -357,6 +359,28 @@ public:
 	inline FileDropEvent(const std::filesystem::path& file, LumenEventID ID = 0) 
 		: FileEvent(EventType_FileDrop | ID, file)
 	{}
+};
+
+// ----------------------------- //
+//  Y A M L   N O D E   D R O P  //
+// ----------------------------- //
+
+class YamlNodeDropEvent : public Event
+{
+
+public:
+
+	inline YamlNodeDropEvent(const YAML::Node& node, LumenEventID ID = 0) 
+		: Event(ID | EventType_YamlNodeDrop), node(node)
+	{}
+
+	const YAML::Node& getNode() const
+	{
+		return node;
+	}
+
+private:
+	YAML::Node node;
 };
 
 //==============================================================================================================================================//

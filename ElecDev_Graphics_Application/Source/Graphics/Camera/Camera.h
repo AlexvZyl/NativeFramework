@@ -12,6 +12,7 @@
 
 enum class CameraType
 {
+	None = -1,
 	Standard2D, Standard3D
 };
 
@@ -40,9 +41,10 @@ public:
 	const glm::vec4& getViewport() const;
 	const glm::vec2& getViewportSize() const;
 	const CameraType& getType() const;
-	const glm::mat4& getViewMatrix() const;
-	const glm::mat4& getProjectionMatrix() const;
-	const glm::mat4& getViewProjectionMatrix() const;
+	const glm::mat4& getViewMatrix();
+	const glm::mat4& getProjectionMatrix();
+	const glm::mat4& getViewProjectionMatrix();
+	glm::vec3 getTotalScale();
 
 	// ----------------- //
 	//  C O N T R O L S  //
@@ -50,6 +52,8 @@ public:
 
 	// Set the position of the camera.
 	void setPosition(const glm::vec3& position);
+	// Get the camera position.
+	const glm::vec3& getPosition();
 	// Set the rate by which the camera should scale.
 	void setScaleRate(float rate);
 	// Translate the camera by the given vector.
@@ -67,9 +71,14 @@ public:
 	void incrementZoomAroundCursor(int increment, const glm::vec2& cursor);
 	// Make the camera look at a point.
 	void lookAt(const glm::vec3& position) {}
+	// Set the scale of the camera.
+	void setScale2D(float scale);
+	void setScale(const glm::vec3& scale);
 
 private:
 
+	friend class Grid;
+	friend class LumenGizmo;
 
 	// ------------------- //
 	//  U T I L I T I E S  //
@@ -102,7 +111,7 @@ private:
 	bool m_projectionMatrixChanged	   = true;
 	bool m_viewProjectionMatrixChanged = true;
 	float m_aspectRatio				   = 1.f;
-	CameraType m_type;
+	CameraType m_type				   = CameraType::None;
 };
 
 //==============================================================================================================================================//

@@ -45,7 +45,7 @@ public:
 
     std::string m_cableType = "";
 
-    float m_thickness = 0.01f;
+    float m_thickness = 0.0002f;
     glm::vec4 m_colour = { 0.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
     PolyLine* m_polyLine;
     //std::vector<glm::vec2> m_vertices;
@@ -65,6 +65,7 @@ public:
 
 public:
 
+    // Describe the connections relative to the position in memory.
     int startComponentIndex = 0;
     int endComponentIndex = 0;
     int startPortIndex = 0;
@@ -78,7 +79,6 @@ public:
     ~Cable();
     void extendSegment(glm::vec2 nextPoint);
     void addSegment(glm::vec2 nextPoint);
-    void setContext(GUIState* guiState);
     void attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);

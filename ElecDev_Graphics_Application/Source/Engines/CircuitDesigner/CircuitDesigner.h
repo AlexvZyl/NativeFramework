@@ -8,6 +8,7 @@
 #include <iostream>
 #include "yaml-cpp/yaml.h"
 #include <filesystem>
+#include <unordered_map>
 
 //=============================================================================================================================================//
 //  Forward declerations																													   //
@@ -33,19 +34,21 @@ enum designState
 	CABLE_PLACE
 };
 
-class Design2DEngine : public Base2DEngine
+class CircuitDesigner : public Base2DEngine
 {
+
 public:
 
 	// Constructor
-	Design2DEngine();
+	CircuitDesigner();
 	// Destructor.
-	virtual ~Design2DEngine() override;
+	virtual ~CircuitDesigner() override;
 	
 	// ------------------ //
 	//  V A R I A B L E S //
 	// ------------------ //
 
+	inline static CircuitDesigner* s_engineUsedByCircuitEditor = nullptr;
 	designState designerState = ENTITY_SELECT;
 	std::shared_ptr<Component2D> m_activeComponent;
 	std::shared_ptr<Cable> m_activeCable;
@@ -55,27 +58,21 @@ public:
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;
-
-	float clickTol = 0.01f;
+	float clickTol = 15.0f;
 
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //
 
-	// Mouse events.
 	virtual void onMouseButtonEvent(const MouseButtonEvent& event) override;
 	virtual void onMouseMoveEvent(const MouseMoveEvent& event) override;
 	virtual void onMouseScrollEvent(const MouseScrollEvent& event) override;
 	virtual void onMouseDragEvent(const MouseDragEvent& event) override;
-	// Key events.
 	virtual void onKeyEvent(const KeyEvent& event) override;
-
-	// File events.
 	virtual void onFileDropEvent(const FileDropEvent& event) override;
-
-	//Notify event.
 	virtual void onNotifyEvent(const NotifyEvent& event) override;
-	
+	virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) override;
+
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //
@@ -89,6 +86,30 @@ public:
 	Port* getPort(unsigned eID);
 	virtual void setNameOfElements(const std::string& name) override;
 	void createCircuit(const std::filesystem::path& path);
+	void loadAndPlaceComponent(const std::filesystem::path& path, const glm::vec2& mousePos);
+	void loadAndPlaceComponent(const YAML::Node& node, const glm::vec2& mousePos);
+	void loadDataToCable(const YAML::Node& node, Cable* cable);
+	int getComponentCount(const std::string& type);
+	int getCableCount(const std::string& type);
+	void deleteComponent(Component2D* component);
+	void importComponent(const std::filesystem::path& name, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importComponent(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importCable(const std::filesystem::path& name, bool loadOnImport = true, bool checkForOverwrite = true);
+	void importCable(const YAML::Node& node, bool loadOnImport = true, bool checkForOverwrite = true);
+	void removeImportedComponent(const std::string& component, bool checkCount = true);
+	void removeImportedCable(const std::string& cable, bool checkCount = true);
+	void overwriteComponents(const std::string& type, const YAML::Node& node);
+	void overwriteCables(const std::string& type, const YAML::Node& node);
+	void reloadComponent(Component2D* component, const YAML::Node& node);
+
+	virtual void renderOverlay() override;
+	virtual void renderDesignPalette() override;
+
+private:
+
+	bool m_gizmoEnabled = true;
+	friend class CircuitEditor;
+	friend class CircuitDesignerPopupModal;
 };
 
 //=============================================================================================================================================//

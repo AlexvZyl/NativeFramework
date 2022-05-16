@@ -50,7 +50,7 @@ struct RendererData
 	// Methods.
 	inline void drawCall()	 { drawCalls++;	   }
 	inline void renderPass() { renderPasses++; }
-	inline void reset() 
+	inline void clear() 
 	{
 		drawCalls = 0;
 		renderPasses = 0;
@@ -119,7 +119,7 @@ public:
 	// Add a filled 2D polygon with color.
 	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
-	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, Entity* parent = nullptr);
+	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr);
 	// Add a circle.
 	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a circle.
@@ -128,8 +128,10 @@ public:
 	static LineSegment* addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Add a 2D text string.
 	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
+	// Add a 2D text string.
+	static Text* addText2D(const std::string& text, const glm::vec2& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
 	//Add a polyline
-	static PolyLine* addPolyLine(const std::vector<glm::vec2>& vertices, Entity* parent = nullptr);
+	static PolyLine* addPolyLine(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, const glm::vec4& color = {0.f, 0.f, 0.f, 1.f}, bool rounded = true, Entity* parent = nullptr);
 
 	// Add text from a YAML file.
 	static Text* addText2D(const YAML::Node& node, Entity* parent = nullptr);
@@ -139,6 +141,8 @@ public:
 	static Polygon2D* addPolygon2D(const YAML::Node& node, Entity* parent = nullptr);
 	// Add circle from a YAML file.
 	static Circle* addCircle2D(const YAML::Node& node, Entity* parent = nullptr);
+	// Add a polyline from a YAML file.
+	static PolyLine* addPolyLine(const YAML::Node& node, Entity* parent = nullptr);
 
 	
 	// --------------------------- //

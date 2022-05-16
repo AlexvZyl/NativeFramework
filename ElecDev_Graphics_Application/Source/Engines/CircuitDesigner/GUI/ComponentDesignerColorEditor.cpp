@@ -5,10 +5,11 @@
 #include "ComponentDesignerColorEditor.h"
 #include "Lumen.h"
 #include "Application/Application.h"
-#include "Engines/Design2DEngine/Peripherals/Cable.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "Graphics/Entities/Entity.h"
-#include "Engines/Design2DEngine/Peripherals/Port.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
+#include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//

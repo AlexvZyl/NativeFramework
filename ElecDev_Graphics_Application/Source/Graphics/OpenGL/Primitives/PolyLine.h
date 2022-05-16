@@ -2,8 +2,9 @@
 #include "OpenGL/Primitives/Polygon.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Utilities/Logger/Logger.h"
-class VertexData;
+#include <Clipper/cpp/clipper.hpp>
 
+class VertexData;
 
 class PolyLine : public Polygon2D
 {
@@ -16,8 +17,11 @@ public:
 	float m_layer = 0.f;
 	bool outlined = false;
 	bool m_closed = false;
+	bool m_rounded = true;
+
+	ClipperLib::EndType et = ClipperLib::etOpenRound;
     
-    PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, bool closed = false);
+    PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness = 0.014f, bool closed = false, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f}, bool rounded = true);
     //Calculates the offset and runs the triangulation function
 	virtual void pushVertex(const glm::vec3& vertex) override;
 	virtual void pushVertex(const glm::vec2& vertex);
@@ -45,7 +49,7 @@ public:
 	virtual void enableOutline() override;
 	virtual void disableOutline() override;
 
-	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec2& position);
+	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec2& position) override;
 
 protected:
 

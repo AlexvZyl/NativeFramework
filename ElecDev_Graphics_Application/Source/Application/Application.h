@@ -11,14 +11,7 @@
 #include "imgui/imgui_internal.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "imgui/notify/imgui_notify.h"
-#include "Lumen.h"
-#include "OpenGL/Renderer/RendererGL.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
-#include "GUI/GraphicsScene/GraphicsScene.h"
-
-// TO BE DEPRECATED!
-#include "GuiState.h"
+#include <filesystem>
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -31,6 +24,9 @@ class FileDropEvent;
 class Event;
 class FileLoadEvent;
 class FileSaveEvent;
+class AssetViewer;
+class WindowStack;
+class LumenWindow;
 
 template<class EngineType>
 class GraphicsScene;
@@ -39,6 +35,8 @@ struct ImFont;
 struct GLFWwindow;
 struct RendererData;
 struct ProfileResult;
+
+namespace YAML { class Node; }
 
 //==============================================================================================================================================//
 //  Data.																																		//
@@ -93,6 +91,7 @@ public:
 	// Get the delta time for the current frame.
 	// This is updated when a new frame start.
 	inline float getDeltaTime() const { return m_deltaTime; }
+	inline RendererData* getRendererData() { return m_rendererData.get(); }
 	
 	// --------------- //
 	//  W I N D O W S  //
@@ -110,6 +109,9 @@ public:
 	void queueWindowPop(LumenWindow* window);
 	// Queue a window to be popped.
 	void queueWindowPop(unsigned ID);
+
+	// Get the asset viewer engine.
+	inline AssetViewer* getAssetViewerEngine() { return m_assetViewerEngine; };
 
 	// ------------- //
 	//  E V E N T S  //
@@ -137,9 +139,6 @@ public:
 	// Get the size of the application.
 	glm::vec2 getMainViewportSize() const;
 
-	// TO BE DEPRECATED!
-	std::unique_ptr<GUIState> m_guiState = nullptr;
-
 	// ----------------- //
 	//  P R O F I L E R  //
 	// ----------------- //
@@ -147,7 +146,6 @@ public:
 	// The results from the profiler.
 	std::vector<ProfileResult> m_profilerResults;
 	bool m_profilerActive = false;
-	RendererData m_rendererData;
 
 	// --------------------------- //
 	//  N O T I F I C A T I O N S  //
@@ -174,10 +172,22 @@ public:
 	template<class EngineType>
 	EngineType* getActiveEngine();
 
+	// --------------------------- //
+	//  A S S E T   V I E W I N G  //
+	// --------------------------- //
+
+	void viewCircuit(const std::filesystem::path& path);
+	void viewCircuit(const YAML::Node& path);
+	void viewComponent(const std::filesystem::path& path);
+	void viewComponent(const YAML::Node& path);
+	void viewAsset(const std::filesystem::path& path);
+
 private:
 
 	// Queue of scipts to be executed.
 	std::vector<std::string> m_luaScripts;
+
+	std::unique_ptr<RendererData> m_rendererData;
 
 	// --------------- //
 	//  G E N E R A L  //
@@ -188,12 +198,16 @@ private:
 	friend class SettingsWidget;
 	friend class RendererStats;
 	friend class LumenWindow;
+	friend class Toolbar;
 
 	// The window containing the application.
 	GLFWwindow* m_glfwWindow = nullptr;
 
 	// The active engine.
 	EngineCore* m_activeEngine = nullptr;
+
+	// The engine used to view assets.
+	AssetViewer* m_assetViewerEngine = nullptr;
 
 	// --------- //
 	//  L O O P  //
@@ -244,13 +258,9 @@ private:
 	//  E V E N T S  //
 	// ------------- //
 
-	// Handle window events.
 	void onWindowResizeEvent(const WindowEvent& event);
-	// Handle serialisation events.
 	void onFileDropEvent(const FileDropEvent& event);
-	// Load files.
 	void onFileLoadEvent(const FileLoadEvent& event);
-	// Save files.
 	void onFileSaveEvent(const FileSaveEvent& event);
 	// Update the ImGui state.
 	// Lumen controls some of the state changes (for optimisation).
@@ -293,36 +303,6 @@ private:
 	ImGuiID m_ribbonPanelID = NULL;
 	ImGuiID m_bottomBarID = NULL;
 };
-
-//==============================================================================================================================================//
-//  Templates.																																	//
-//==============================================================================================================================================//
-
-template<class WindowType, class ... Args>
-WindowType* Application::pushWindow(LumenDockPanel panel, const Args& ... args)
-{
-	WindowType* window = m_windowStack->pushWindow<WindowType>(args...);
-	dockWindowToPanel(window, panel);
-	window->focus();
-	return window;
-}
-
-template<class EngineType, class ... Args>
-EngineType* Application::pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args) 
-{
-	GraphicsScene<EngineType>* window = m_windowStack->pushWindow<GraphicsScene<EngineType>>(name);
-	dockWindowToPanel(window, panel);
-	window->constructEngine(args...);
-	window->getEngine()->m_parentWindow = window;
-	window->focus();
-	return window->getEngine();
-}
-
-template<class EngineType>
-EngineType* Application::getActiveEngine() 
-{
-	return dynamic_cast<EngineType*>(m_activeEngine);
-}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

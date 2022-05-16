@@ -3,8 +3,9 @@
 //=============================================================================================================================================//
 
 #include "../Serialiser.h"
-#include "Engines/Design2DEngine/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
 #include "Graphics/Fonts/FontLoader.h"
+#include "OpenGL/Primitives/PolyLine.h"
 
 //=============================================================================================================================================//
 //  Component 2D serialiser.   																												   //
@@ -16,13 +17,11 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	emitter << YAML::BeginMap;
 
 	// Component data.
-	emitter << YAML::Key << "Border layer offset" << YAML::Value << comp->borderLayerOffset;
-	emitter << YAML::Key << "Internal circuit" << YAML::Value << "Test AE 234";
+	emitter << YAML::Key << "Filename" << YAML::Value << comp->equipType + ".lmcp";
+	emitter << YAML::Key << "Internal Circuit" << YAML::Value << "Test_AE_234.lmct";
+	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->title;
+	emitter << YAML::Key << "Designator" << YAML::Value << comp->designator;
 	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
-
-	// Title (Equipment type).
-	emitter << YAML::Key << "Title" << YAML::Value << comp->title;
-	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->equipType;
 	
 	// Ports.
 	emitter << YAML::Key << "Ports" << YAML::Value << comp->ports;
@@ -39,12 +38,23 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	emitter << YAML::EndMap;
 
 	// Line Segments.
-	emitter << YAML::Key << "Line Segments" << YAML::Value;
+	emitter << YAML::Key << "PolyLines" << YAML::Value;
 	emitter << YAML::BeginMap;
 	index = 0;
 	for (auto& line : comp->m_lines)
 	{
-		emitter << YAML::Key << "Line Segment " + std::to_string(index) << YAML::Value << line;
+		emitter << YAML::Key << "PolyLine " + std::to_string(index) << YAML::Value << line;
+		index++;
+	}
+	emitter << YAML::EndMap;
+
+	// Text.
+	emitter << YAML::Key << "Text" << YAML::Value;
+	emitter << YAML::BeginMap;
+	index = 0;
+	for (auto& text : comp->m_text)
+	{
+		emitter << YAML::Key << "Text " + std::to_string(index) << YAML::Value << text;
 		index++;
 	}
 	emitter << YAML::EndMap;

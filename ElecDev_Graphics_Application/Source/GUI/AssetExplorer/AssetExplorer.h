@@ -32,7 +32,13 @@ public:
 	virtual void onImGuiRender() override;
 	virtual void onImGuiEnd() override;
 
+	// Close the LumenWindow.
+	virtual void closeWindow() override;
+
 private:
+
+	friend class Application;
+	friend class Toolbar;
 
 	// The directory to open.
 	static std::string s_startingDirectory;

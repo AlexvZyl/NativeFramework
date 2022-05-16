@@ -7,9 +7,9 @@
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Application/LumenWindow/WindowStack.h"
 #include "Utilities/Serialisation/Serialiser.h"
-#include "Engines/Design2DEngine/Design2DEngine.h"
-#include "Engines/Design2DEngine/ComponentDesigner.h"
-#include "Engines/Design2DEngine/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/CircuitDesigner.h"
+#include "Engines/CircuitDesigner/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "Utilities/Logger/Logger.h"
@@ -25,6 +25,8 @@ void Application::onUpdate()
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
 
+	//setGuiTheme();
+
 	// Log messages.
 	Logger::flushQueue();
 
@@ -36,12 +38,10 @@ void Application::onUpdate()
 	if (EventLog::mouseMoveOccurred())
 	{
 		// If there is no hovered window, we need to check if a window is hovered.
-		if (!m_hoveredWindow) 
-			onHoveredWindowChange(findHoveredWindow());
+		if (!m_hoveredWindow) onHoveredWindowChange(findHoveredWindow());
 
 		// If the currently hovered window is no longer being hovered, we need to find the new window.
-		else if(!m_hoveredWindow->isHovered()) 
-			onHoveredWindowChange(findHoveredWindow());
+		else if (!m_hoveredWindow->isHovered()) onHoveredWindowChange(findHoveredWindow());
 	}
 	
 	// Dispatch GLFW events.
@@ -65,46 +65,27 @@ void Application::onUpdate()
 		else if (event->isType(EventType_MousePress))
 		{
 			// Change focus.
-			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow)
-			{
-				m_hoveredWindow->focus();
-			}
-			else if(!ImGui::GetItemID())
-			{
-				ImGui::SetWindowFocus(NULL);
-				m_focusedWindow = nullptr;
-			}
-
-			if(m_focusedWindow)	m_focusedWindow->onEvent(*event.get());
+			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow) m_hoveredWindow->focus();
+			if (!m_hoveredWindow)									   m_focusedWindow = nullptr;
+			if (m_focusedWindow)									   m_focusedWindow->onEvent(*event.get());
 		}
 
 		// Pass events to focused window.
-		else if (m_focusedWindow)
-		{
-			m_focusedWindow->onEvent(*event.get());
-		}
+		else if (m_focusedWindow) m_focusedWindow->onEvent(*event.get());
 	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
 	if (m_hoveredWindow)
 	{
-		if (EventLog::mouseScrollOccurred()) 
-			m_hoveredWindow->onEvent(EventLog::getMouseScroll());
-
-		if (EventLog::mouseDragOccurred())
-			m_hoveredWindow->onEvent(EventLog::getMouseDrag());
-
-		if (EventLog::mouseMoveOccurred())
-			m_hoveredWindow->onEvent(EventLog::getMouseMove());
+		if (EventLog::mouseScrollOccurred()) m_hoveredWindow->onEvent(EventLog::getMouseScroll());
+		if (EventLog::mouseDragOccurred())	 m_hoveredWindow->onEvent(EventLog::getMouseDrag());
+		if (EventLog::mouseMoveOccurred())   m_hoveredWindow->onEvent(EventLog::getMouseMove());
 	}
 
 	// Dispatch notify events after all of the other events are done.
 	if (m_focusedWindow)
 	{
-		for (auto& event : EventLog::getNotifyEvents())
-		{
-			m_focusedWindow->onEvent(event);
-		}
+		for (auto& event : EventLog::getNotifyEvents()) m_focusedWindow->onEvent(event);
 	}
 
 	// Pop windows that are queued from GLFW events.
@@ -229,7 +210,7 @@ void Application::onFileSaveEvent(const FileSaveEvent& event)
 		// Check if operation did not fail.
 		if (path.string().size())
 		{
-			Design2DEngine* designEngine = event.getEngine<Design2DEngine>();
+			CircuitDesigner* designEngine = event.getEngine<CircuitDesigner>();
 			ComponentDesigner* component_designer = event.getEngine<ComponentDesigner>();
 
 			if (designEngine) 
