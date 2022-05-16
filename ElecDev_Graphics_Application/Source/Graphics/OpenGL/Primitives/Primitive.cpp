@@ -106,8 +106,7 @@ void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotateNormal)
 	
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 	{
-		glm::vec4 rotated = transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f);
-		m_VAO->m_vertexCPU[i].data.position = glm::vec3(rotated.x, rotated.y, rotated.z);
+		m_VAO->m_vertexCPU[i].data.position = glm::vec3(transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f));
 	}
 
 	syncWithGPU();
@@ -123,8 +122,7 @@ void Primitive<VertexType>::rotate(float degrees, const glm::vec3& rotatePoint, 
 
 	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
 	{
-		glm::vec4 rotated = transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f);
-		m_VAO->m_vertexCPU[i].data.position = glm::vec3(rotated.x, rotated.y, rotated.z);
+		m_VAO->m_vertexCPU[i].data.position = glm::vec3(transform * glm::vec4(m_VAO->m_vertexCPU[i].data.position, 1.f));
 	}
 
 	syncWithGPU();

@@ -17,7 +17,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 // Utility for comparing two vecs.
-bool compare(const glm::vec2& vec1, const glm::vec2& vec2, int precision = 8);
+bool compare(const glm::vec2& vec1, const glm::vec2& vec2, float tolerance = 1e-6);
 
 //=============================================================================================================================================//
 //  Includes.																																   //
@@ -472,20 +472,24 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	component->centre = {0.f, 0.f};
 	component->m_rotation = 0.f;
 
-	// Update the title.
+	// Update equipment type.  Technically this shouldn't change.
 	component->equipType = componentNode["Equipment Type"].as<std::string>();
 
 	// ----------- //
 	//  T I T L E  //
 	// ----------- //
 
+	// Update the designator.  Technically this will only update the position.
+	// Done like this due to numrical instabilities.
 	Renderer::remove(component->title);
 	component->title = Renderer::addText2D(node["Title"], component);
+	component->title->updateText(component->titleString);
 
 	// ----------------- //
 	//  P O L Y G O N S  //
 	// ----------------- //
 
+	// Remove existing.
 	auto& polygonsVector = component->m_polygons;
 	for (auto& poly : polygonsVector) Renderer::remove(poly);
 	polygonsVector.clear();
@@ -497,6 +501,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	//  L I N E S  //
 	// ----------- //
 
+	// Remove existing.
 	auto& linesVector = component->m_lines;
 	for (auto& line : linesVector) Renderer::remove(line);
 	linesVector.clear();
@@ -542,13 +547,12 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	auto& portsVector = component->ports;
 
 	// Rotation transform for the port centre.
-	glm::mat4 transform = glm::translate(glm::mat4(1.f), { -componentCentre, 0.f });
-	transform = glm::rotate(transform, -glm::radians(componentRotation), { 0.f, 0.f, 1.f });
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.f), -glm::radians(componentRotation), {0.f, 0.f, 1.f});
 
 	for (auto& port : portsVector)
 	{
 		// Reset the port to its original position & rotation.
-		glm::vec2 portOriginalCentre = transform * glm::vec4{ port->centre, 0.f, 1.f };
+		glm::vec2 portOriginalCentre = rotation * glm::vec4{ port->centre - componentCentre, 0.f, 1.f };
 		// Find port with the same position.
 		for (auto& newPort : newPorts)
 		{
@@ -595,13 +599,10 @@ void CircuitDesigner::overwriteCables(const std::string& type, const YAML::Node&
 	}
 }
 
-bool compare(const glm::vec2& vec1, const glm::vec2& vec2, int precision)
+bool compare(const glm::vec2& vec1, const glm::vec2& vec2, float tolerance)
 {
-	int x1 = std::trunc(vec1.x * std::pow(10, precision));
-	int x2 = std::trunc(vec2.x * std::pow(10, precision));
-	int y1 = std::trunc(vec1.y * std::pow(10, precision));
-	int y2 = std::trunc(vec2.y * std::pow(10, precision));
-	return x1 == x2 && y1 == y2;
+	return std::abs(vec1.x - vec2.x) < tolerance
+		&& std::abs(vec1.y - vec2.y) < tolerance;
 }
 
 //=============================================================================================================================================//

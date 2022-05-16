@@ -12,6 +12,7 @@
 
 enum class CameraType
 {
+	None = -1,
 	Standard2D, Standard3D
 };
 
@@ -43,7 +44,6 @@ public:
 	const glm::mat4& getViewMatrix();
 	const glm::mat4& getProjectionMatrix();
 	const glm::mat4& getViewProjectionMatrix();
-
 	glm::vec3 getTotalScale();
 
 	// ----------------- //
@@ -111,7 +111,7 @@ private:
 	bool m_projectionMatrixChanged	   = true;
 	bool m_viewProjectionMatrixChanged = true;
 	float m_aspectRatio				   = 1.f;
-	CameraType m_type;
+	CameraType m_type				   = CameraType::None;
 };
 
 //==============================================================================================================================================//
