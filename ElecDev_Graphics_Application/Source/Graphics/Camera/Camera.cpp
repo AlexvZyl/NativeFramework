@@ -207,7 +207,7 @@ const glm::vec4& Camera::getViewport() const
 	return m_viewport;
 }
 
-const glm::vec2& Camera::getViewportSize() const
+glm::vec2 Camera::getViewportSize() const
 {
 	return { m_viewport[2] - m_viewport[0],
 			 m_viewport[3] - m_viewport[1] };

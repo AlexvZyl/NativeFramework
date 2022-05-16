@@ -12,6 +12,7 @@
 
 enum class CameraType
 {
+	None = -1,
 	Standard2D, Standard3D
 };
 
@@ -38,7 +39,7 @@ public:
 
 	// Getters.
 	const glm::vec4& getViewport() const;
-	const glm::vec2& getViewportSize() const;
+	glm::vec2 getViewportSize() const;
 	const CameraType& getType() const;
 	const glm::mat4& getViewMatrix() const;
 	const glm::mat4& getProjectionMatrix() const;
@@ -54,6 +55,7 @@ public:
 	void setScaleRate(float rate);
 	// Translate the camera by the given vector.
 	void translate(const glm::vec3& translation);
+	// Translate the camera by the given vector.
 	void translate(const glm::vec2& translation);
 	// Manually scale the camera in 2 dimensions.
 	void scale2D(float scale);
@@ -69,7 +71,6 @@ public:
 	void lookAt(const glm::vec3& position) {}
 
 private:
-
 
 	// ------------------- //
 	//  U T I L I T I E S  //
@@ -94,15 +95,15 @@ private:
 	glm::mat4 m_projectionMatrix	   = glm::mat4(1.0f);			
 	glm::mat4 m_viewProjectionMatrix   = glm::mat4(1.0f);
 	glm::mat4 m_scalingMatrix		   = glm::mat4(1.0f);			
-	glm::vec3 m_position			   = glm::vec3(0.f);
 	glm::mat4 m_rotationMatrix		   = glm::mat4(1.0f);			
 	glm::vec4 m_viewport			   = glm::vec4(1.0f);					
+	glm::vec3 m_position			   = glm::vec3(0.f);
 	float m_scaleRate				   = 1.f;			
 	bool m_viewMatrixChanged		   = true;
 	bool m_projectionMatrixChanged	   = true;
 	bool m_viewProjectionMatrixChanged = true;
 	float m_aspectRatio				   = 1.f;
-	CameraType m_type;
+	CameraType m_type				   = CameraType::None;
 };
 
 //==============================================================================================================================================//
