@@ -245,7 +245,6 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIdx(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
-			LUMEN_LOG_ERROR(std::to_string(worldToPixelDistance({ distance, 0.f, 0.f }).x), "Dist");
 			m_activeVertexIdx = vertexIdx;
 		}
 	}

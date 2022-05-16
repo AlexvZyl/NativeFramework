@@ -50,7 +50,7 @@ void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			if (m_activeCable.get()) {
 				auto [idx, distance] = m_activeCable->getNearestVertexIdx(screenCoords);
 				m_activeVertexIdx = -1;
-				if (distance < clickTol)
+				if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 				{
 					m_activeVertexIdx = idx;
 				}

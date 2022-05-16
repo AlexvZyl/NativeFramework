@@ -52,9 +52,13 @@ void ComponentEditor::onImGuiRender()
 		// Check that the active component exists. Close if not.
 		if (activeComponent)
 		{
+			ImGui::Text(" Designator:\t  ");
+			ImGui::SameLine();
+			ImGui::InputText("##Designator", &activeComponent->designatorSym);
 			ImGui::Text(" Type:\t  ");
 			ImGui::SameLine();
 			ImGui::InputText("##Equipment Type", &activeComponent->equipType);
+
 			activeComponent->updateTextWithoutLabel();
 		}
 
@@ -327,13 +331,17 @@ void ComponentEditor::onImGuiRender()
 		ImGui::PushID("CompGeneral");
 		if (activeComponent)
 		{
-			ImGui::Text(" Name:\t");
-			ImGui::SameLine();\
+
+			ImGui::Text(" Designator:\t");
+			ImGui::SameLine();
+			ImGui::Text(activeComponent->designatorSym.c_str());
 
 			activeTitleString = activeComponent->titleString;
 
-			if (ImGui::InputText("##ComponentName", &activeComponent->titleString))
-				activeComponent->title->updateText(activeComponent->titleString);
+			if (ImGui::InputInt("##designatorIdx", &activeComponent->designatorIdx)) {
+				//std::string str = activeComponent->designatorSym + std::to_string();
+				activeComponent->updateText();
+			}
 
 			ImGui::Text((std::string(" Type:\t  ") + activeComponent->equipType).c_str());
 			//ImGui::SameLine();
