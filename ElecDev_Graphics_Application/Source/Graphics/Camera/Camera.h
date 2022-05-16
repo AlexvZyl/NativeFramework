@@ -72,8 +72,9 @@ public:
 	void incrementZoomAroundCursor(int increment, const glm::vec2& cursor);
 	// Make the camera look at a point.
 	void lookAt(const glm::vec3& position) {}
-	// Set the scale of the camera.
+	// Set the scale of the camera (2D helper function).
 	void setScale2D(float scale);
+	// Set the scale of the camera.
 	void setScale(const glm::vec3& scale);
 
 private:
