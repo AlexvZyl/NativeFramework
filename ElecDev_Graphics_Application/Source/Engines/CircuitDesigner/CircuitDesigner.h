@@ -58,7 +58,7 @@ public:
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;
-	float clickTol = 0.01f;
+	float clickTol = 15.0f;
 
 	// ------------- //
 	//  E V E N T S  //
