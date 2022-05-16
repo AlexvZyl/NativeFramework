@@ -472,13 +472,15 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	component->centre = {0.f, 0.f};
 	component->m_rotation = 0.f;
 
-	// Update the title.
+	// Update equipment type.  Technically this shouldn't change.
 	component->equipType = componentNode["Equipment Type"].as<std::string>();
 
 	// ----------- //
 	//  T I T L E  //
 	// ----------- //
 
+	// Update the designator.  Technically this will only update the position.
+	// Done like this due to numrical instabilities.
 	Renderer::remove(component->title);
 	component->title = Renderer::addText2D(node["Title"], component);
 	component->title->updateText(component->titleString);
@@ -487,6 +489,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	//  P O L Y G O N S  //
 	// ----------------- //
 
+	// Remove existing.
 	auto& polygonsVector = component->m_polygons;
 	for (auto& poly : polygonsVector) Renderer::remove(poly);
 	polygonsVector.clear();
@@ -498,6 +501,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	//  L I N E S  //
 	// ----------- //
 
+	// Remove existing.
 	auto& linesVector = component->m_lines;
 	for (auto& line : linesVector) Renderer::remove(line);
 	linesVector.clear();
