@@ -1,12 +1,11 @@
 #pragma once
+
 #include "Application/LumenWindow/LumenPopupWindow.h"
 #include "Graphics/OpenGL/Primitives/Text.h"
-class TextEntryGUI :
-    public LumenPopupWindow
+
+class TextEntryGUI : public LumenPopupWindow
 {
-private:
-	Text* m_text;
-	std::string m_textToEdit;
+
 public:
 
 	// Constructor.
@@ -14,5 +13,10 @@ public:
 
 	// Rendering.
 	virtual void onImGuiRender() override;
+
+private:
+
+	Text* m_text;
+	std::string m_textToEdit;
 };
 

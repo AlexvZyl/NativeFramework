@@ -109,22 +109,20 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
 				switchState(CompDesignState::SELECT);
 			}
-			
-
 		}
 	}
 
 	if (event.isType(EventType_MousePress | EventType_MouseButtonRight))
 	{
 			// Create a popup menu on a right click on a graphics scene.
-			PopUpMenu* menu = Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
+			Lumen::getApp().pushWindow<PopUpMenu>(LumenDockPanel::Floating, "Popup Menu");
 	}
 
-	if (event.isType(EventType_MouseDoublePress)) {
-		if (designerState == CompDesignState::SELECT) {
-			if (m_activeText) {
-				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
-			}
+	if (event.isType(EventType_MouseDoublePress)) 
+	{
+		if (designerState == CompDesignState::SELECT) 
+		{
+			if (m_activeText) Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
 		}
 	}
 }
