@@ -264,6 +264,23 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 	LUMEN_LOG_WARN(msg, "");
 }
 
+void Component2D::removePort(Port* port)
+{
+	auto port_to_remove = std::find_if(begin(ports), end(ports), [&](std::shared_ptr<Port> current)
+		{
+			return current.get() == port;
+		});
+	if (port_to_remove != end(ports))
+	{
+		ports.erase(port_to_remove);
+		ports.shrink_to_fit();
+		return;
+	}
+	// Port was not found on this component.
+	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + titleString + "'.";
+	LUMEN_LOG_WARN(msg, "");
+}
+
 
 void Component2D::translateTitle(glm::vec2 translation)
 {

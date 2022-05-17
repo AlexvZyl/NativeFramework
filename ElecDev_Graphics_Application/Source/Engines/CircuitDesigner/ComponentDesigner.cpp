@@ -288,6 +288,10 @@ void ComponentDesigner::deleteActivePrimitive()
 	}
 	if (m_activeText)
 	{
+		//if the text belongs to a port, we can delete the whole port
+		if (m_activeText->m_parent->m_type == EntityType::PORT) {
+			m_activeComponent->removePort(dynamic_cast<Port*>(m_activeText->m_parent));
+		}
 		m_activeComponent->removeText(m_activeText);
 	}
 

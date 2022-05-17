@@ -123,6 +123,7 @@ public:
 	//unsigned addPort(int side, PortType type, const std::string& name);
 	//remove a specified port from the component.
 	void removePort(std::shared_ptr<Port> port);
+	void removePort(Port* port);
 	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.
 	//void updatePortPositions();
 	//move the title text relative to the component
