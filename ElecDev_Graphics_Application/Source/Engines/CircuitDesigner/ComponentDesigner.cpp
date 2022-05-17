@@ -98,6 +98,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 		}
 
 		m_activeLine = nullptr;
+		m_activeText = nullptr;
 		m_activePoly = nullptr;
 		m_activeCircle = nullptr;
 		m_activePort = nullptr;
