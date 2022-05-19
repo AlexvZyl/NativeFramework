@@ -17,11 +17,16 @@
 Base2DEngine::Base2DEngine() 
 	: EngineCore()
 {
+	// Scene setup.
 	m_scene = std::make_unique<Scene>(CameraType::Standard2D, glm::vec2(500, 500));
 	Renderer::storeAndBindScene(&getScene());
 	getScene().getCamera().setScaleRate(0.5f);
-	getGizmo()->setOperation(LumenGizmoOperation::Rotate2D);
-	getGizmo()->setSnapValue(45.f);
+
+	// Gizmo setup.
+	LumenGizmo& gizmo = getGizmo();
+	gizmo.setCamera(getScene().getCamera());
+	gizmo.setOperation(LumenGizmoOperation::Rotate2D);
+	gizmo.setSnapValue(45.f);
 };
 
 //=============================================================================================================================================//

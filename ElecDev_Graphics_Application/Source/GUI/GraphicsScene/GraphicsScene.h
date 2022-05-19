@@ -92,10 +92,10 @@ public:
 		if (payloadNode.hasValidData()) m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 
 		// Render the gizmo.
-		LumenGizmo* gizmo = m_engine->getGizmo();
-		gizmo->setWindowPosition(ImGui::GetWindowPos());
-		gizmo->setWindowSize(m_contentRegionSize);
-		gizmo->render();
+		LumenGizmo& gizmo = m_engine->getGizmo();
+		gizmo.setWindowPosition(ImGui::GetWindowPos());
+		gizmo.setWindowSize(m_contentRegionSize);
+		gizmo.render();
 
 		// Render the overlay.
 		if (m_engine->hasOverlay())

@@ -33,9 +33,9 @@ CircuitDesigner::CircuitDesigner()
 	enableOverlay();
 	enableDesignPalette();
 
-	LumenGizmo* gizmo = getGizmo();
-	gizmo->setSize(0.1f);
-	gizmo->enable();
+	LumenGizmo& gizmo = getGizmo();
+	gizmo.setSize(0.1f);
+	gizmo.enable();
 }
 
 CircuitDesigner::~CircuitDesigner()

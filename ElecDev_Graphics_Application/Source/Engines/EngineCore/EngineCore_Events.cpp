@@ -64,14 +64,14 @@ void EngineCore::onFocusEventForce(const NotifyEvent& event)
 	m_isFocused = true;
 	Renderer::bindScene(m_scene.get());
 	Lumen::getApp().setActiveEngine(this);
-	getGizmo()->enable();
+	getGizmo().enable();
 	onFocusEvent(event);
 }
 
 void EngineCore::onDefocusEventForce(const NotifyEvent& event) 
 {
 	m_isFocused = false;
-	getGizmo()->disable();
+	getGizmo().disable();
 	// We not unbind the scene here, since focus can sometimes shift to 
 	// another window, but that window is editing things in this engine.
 	// By not unbinding here we always keep the latest focused engine's
@@ -98,7 +98,7 @@ void EngineCore::onMouseDragEventForce(const MouseDragEvent& event)
 {
 	if (   event.isType(EventType_MouseButtonMiddle)
 		|| event.isType(EventType_MouseButtonLeft | EventType_LeftCtrl)
-		|| !getGizmo()->isOver())
+		|| !getGizmo().isOver())
 	{
 		onMouseDragEvent(event);
 	}
@@ -106,7 +106,7 @@ void EngineCore::onMouseDragEventForce(const MouseDragEvent& event)
 
 void EngineCore::onMouseButtonEventForce(const MouseButtonEvent& event) 
 {
-	if (getGizmo()->isOver()) return;
+	if (getGizmo().isOver()) return;
 	onMouseButtonEvent(event);
 }
 

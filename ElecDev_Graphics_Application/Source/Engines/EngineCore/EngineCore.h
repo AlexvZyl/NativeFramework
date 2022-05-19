@@ -143,13 +143,13 @@ public:
 	// Engine overlay.
 	// GUI elements that are rendered on top of the engine and block events
 	// to the engine.
+	inline virtual void renderOverlay() {};
 	inline void enableOverlay()	 { m_hasOverlay = true;  }
 	inline void disableOverlay() { m_hasOverlay = false; }
 	inline bool hasOverlay()	 { return m_hasOverlay;  }
-	inline virtual void renderOverlay() {};
 
 	// Get the gizmo used for manipulation.
-	LumenGizmo* getGizmo();
+	LumenGizmo& getGizmo();
 
 protected:
 
@@ -169,7 +169,7 @@ private:
 	std::unique_ptr<Scene> m_scene = nullptr;
 
 	// Gizmo!
-	std::unique_ptr<LumenGizmo> m_lumenGizmo;
+	std::unique_ptr<LumenGizmo> m_lumenGizmo = nullptr;
 
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
