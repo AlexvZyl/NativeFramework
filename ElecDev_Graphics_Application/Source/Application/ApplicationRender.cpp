@@ -25,23 +25,30 @@ void Application::run()
 	double waitRemainingTime = 0;
 	while (m_isRunning)
 	{
+		// Waiting for events prevents unneccesary polling.
 		if (m_waitForEvents)
 		{
+			// Time left to wait before the frame rendering should start.
 			waitRemainingTime = m_eventsTimeout - m_totalFrameTime;
-			// Wait for events if there is time left.
+			// If there is time left, wait the time.
 			if (waitRemainingTime > 0) glfwWaitEventsTimeout(waitRemainingTime);
-			// If there is no time left, poll so that we do not miss events.
+			// If there is no time left, quickly poll so that we do not miss events.
+			// This is especially important when we can't render fast enough and there
+			// is no time left.
 			else					   glfwPollEvents();
 		}
+		// This is very inefficient and should only be used for measurements.
 		else glfwPollEvents();
 
 		updateFrametime();
 
+		// Check if the frame should start (based on time passed).
+		// This is subject to change for when we get to multi-threading.
 		if (startFrame())
 		{
 			// Set the frametime 0 at the start of the frame so that the
 			// wait for events do not go over the fps.
-			m_totalFrameTime = 0;
+			m_totalFrameTime = 0; // Reset.
 			renderFrame();
 			updateFrametime();
 		}
@@ -50,9 +57,11 @@ void Application::run()
 
 void Application::updateFrametime() 
 {
+	// Keep track of time.
 	static double previousTime = 0;
 	static double currentTime = 0;
 	
+	// Update the total frametime.
 	currentTime = glfwGetTime();
 	m_totalFrameTime += currentTime - previousTime;
 	previousTime = currentTime;
