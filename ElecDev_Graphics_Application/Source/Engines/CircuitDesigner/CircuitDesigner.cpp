@@ -24,15 +24,19 @@ This is where the interactive 2D design engine is implemented.
 CircuitDesigner::CircuitDesigner()
 	: Base2DEngine()
 {
+	// Engine setup.
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
+	enableOverlay();
+	enableDesignPalette();
+
+	// Setup scene & grid.
+	getScene().getCamera().scale2D(100.f);
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setWidgetPosition(GridWidgetPosition::BOTTOM_RIGHT)
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
-	getScene().getCamera().scale2D(100.f);
-	enableOverlay();
-	enableDesignPalette();
 
+	// Setup gizmo.
 	LumenGizmo& gizmo = getGizmo();
 	gizmo.setSize(0.1f);
 	gizmo.enable();
