@@ -210,27 +210,26 @@ void RendererStats::onImGuiRender()
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("Draw Calls");
 		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("%d", app.m_rendererData->drawCalls);
+		ImGui::Text("%d", app.getRendererData().drawCalls);
 
 		// Draw calls.
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
 		ImGui::Text("Render Passes");
 		ImGui::TableSetColumnIndex(1);
-		ImGui::Text("%d", app.m_rendererData->renderPasses);
+		ImGui::Text("%d", app.getRendererData().renderPasses);
 
 		// Done.
 		ImGui::EndTable();
-		app.getRendererData()->clear();
+		app.getRendererData().clear();
 
 		// Pipeline.
 		for (auto& [key, value] : Renderer::s_pipelineControls)
 			ImGui::Checkbox(key.c_str(), &value);
 	}
-	else
-	{
-		app.getRendererData()->clear();
-	}
+
+	// We still need to clear the data each frame.
+	else app.getRendererData().clear();
 	
 	ImGui::EndChild();
 	ImGui::PopID();
@@ -516,7 +515,7 @@ void RendererStats::onImGuiEnd()
 	Application& app = Lumen::getApp();
 	if (!app.m_profilerActive)
 	{
-		app.getRendererData()->clear();
+		app.getRendererData().clear();
 		app.m_profilerResults.reserve(app.m_profilerResults.size());
 		app.m_profilerResults.shrink_to_fit();
 		app.m_profilerResults.clear();

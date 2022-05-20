@@ -22,10 +22,10 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
+	//setGuiTheme();
+
 	// Execute the Lua scripts.
 	executeLuaScriptQueue();
-
-	//setGuiTheme();
 
 	// Log messages.
 	Logger::flushQueue();
@@ -49,8 +49,9 @@ void Application::onUpdate()
 			Application::onEvent(*event.get()); 
 			continue;
 		}
+
 		// File drop should go to the hovered window.
-		else if (event->isType(EventType_FileDrop) && m_hoveredWindow) 
+		else if (m_hoveredWindow && event->isType(EventType_FileDrop))
 		{
 			m_hoveredWindow->onEvent(*event.get());
 			continue;
@@ -81,7 +82,8 @@ void Application::onUpdate()
 	// Dispatch notify events after all of the other events are done.
 	if (m_focusedWindow)
 	{
-		for (auto& event : EventLog::getNotifyEvents()) m_focusedWindow->onEvent(event);
+		for (auto& event : EventLog::getNotifyEvents()) 
+			m_focusedWindow->onEvent(event);
 	}
 
 	// Pop windows that are queued from GLFW events.
@@ -180,6 +182,7 @@ void Application::onEvent(const Event& event)
 void Application::onWindowResizeEvent(const WindowEvent& event)
 {
 	// This should pass a scaled window resize event to all of the windows.  I think...
+	// This could help solve the multiple resolutions problem?
 }
 
 //==============================================================================================================================================//

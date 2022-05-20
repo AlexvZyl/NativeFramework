@@ -91,7 +91,7 @@ public:
 	// Get the delta time for the current frame.
 	// This is updated when a new frame start.
 	inline float getDeltaTime() const { return m_deltaTime; }
-	inline RendererData* getRendererData() { return m_rendererData.get(); }
+	inline RendererData& getRendererData() { return *m_rendererData.get(); }
 	
 	// --------------- //
 	//  W I N D O W S  //
