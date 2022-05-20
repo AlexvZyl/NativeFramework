@@ -4,7 +4,7 @@
 
 #include "Application/Application.h"
 #include "AssetExplorer.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Events/EventLog.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"

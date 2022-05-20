@@ -19,7 +19,7 @@
 #include "GUI/Toolbar/toolbar.h"
 #include "GUI/AssetExplorer/AssetExplorer.h"
 #include "GUI/BottomBar/BottomBar.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "Utilities/Lua/LuaInterpreter.h"
 #include "External/Misc/ConsoleColor.h"

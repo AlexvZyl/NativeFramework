@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "ComponentDesignerColorEditor.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "OpenGL/Primitives/Primitive.h"

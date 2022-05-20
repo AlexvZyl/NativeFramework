@@ -297,7 +297,7 @@
     <ClCompile Include="Source\GUI\SceneHierarchy\SceneHierarchy.cpp" />
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\GUI\Toolbar\Toolbar.cpp" />
-    <ClCompile Include="Source\Lumen.cpp" />
+    <ClCompile Include="Source\Lumen\Lumen.cpp" />
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Text.cpp" />
@@ -651,7 +651,7 @@
     <ClInclude Include="Source\Application\LumenWindow\LumenPopupWindow.h" />
     <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
-    <ClInclude Include="Source\LumenPCH.h" />
+    <ClInclude Include="Source\Lumen\LumenPCH.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
     <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWindow.h" />
@@ -759,7 +759,7 @@
     <ClInclude Include="Source\GUI\Ribbon\Ribbon.h" />
     <ClInclude Include="Source\GUI\SceneHierarchy\SceneHierarchy.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
-    <ClInclude Include="Source\Lumen.h" />
+    <ClInclude Include="Source\Lumen\Lumen.h" />
     <ClInclude Include="Source\Resources\ResourceHandler.h" />
     <ClInclude Include="Source\Utilities\Platform\Thread.h" />
     <ClInclude Include="Source\Utilities\Logger\Logger.h" />

@@ -12,7 +12,7 @@ This is where the interactive 2D design engine is implemented.
 #include "Graphics/Camera/Camera.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"

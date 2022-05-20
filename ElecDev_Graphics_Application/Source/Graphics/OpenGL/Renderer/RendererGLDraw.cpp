@@ -8,7 +8,7 @@
 #include "OpenGL/ShaderGL.h" 
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "Application/Application.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 
 //==============================================================================================================================================//
 //  Buffers.																																	//

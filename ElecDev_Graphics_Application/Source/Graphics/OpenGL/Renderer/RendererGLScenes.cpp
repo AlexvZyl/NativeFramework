@@ -7,7 +7,7 @@
 #include "OpenGL/ShaderGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Primitives/Grid.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Graphics/Camera/Camera.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "Application/Application.h"

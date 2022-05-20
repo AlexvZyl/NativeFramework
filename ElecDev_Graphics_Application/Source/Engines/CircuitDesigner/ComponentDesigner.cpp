@@ -1,6 +1,6 @@
 #include "ComponentDesigner.h"
 #include "imgui/imgui.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"

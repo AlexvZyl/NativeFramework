@@ -9,7 +9,7 @@
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "GUI/ComponentEditor/ComponentEditor.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"

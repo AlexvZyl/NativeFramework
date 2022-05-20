@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "BottomBar.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "imgui/notify/imgui_notify.h"
 

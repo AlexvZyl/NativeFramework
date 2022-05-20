@@ -7,7 +7,7 @@
 #include <cfenv>
 #include "toolbar.h"
 #include "Utilities/Windows/WindowsUtilities.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Application/ApplicationTemplates.h"
 #include "Application/Events/EventLog.h"

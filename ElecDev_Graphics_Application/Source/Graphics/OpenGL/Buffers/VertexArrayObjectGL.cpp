@@ -12,7 +12,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "Graphics/Entities/Entity.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 
 //=============================================================================================================================================//

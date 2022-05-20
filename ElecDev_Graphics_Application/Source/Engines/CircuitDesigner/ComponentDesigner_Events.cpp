@@ -3,7 +3,7 @@
 #include "Application/Events/Events.h"
 #include "Application/ApplicationTemplates.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"

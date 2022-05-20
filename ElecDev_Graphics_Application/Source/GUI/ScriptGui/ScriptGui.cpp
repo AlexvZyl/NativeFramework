@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "ScriptGui.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Lua/LuaInterpreter.h"
 #include "Utilities/Logger/Logger.h"

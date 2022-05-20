@@ -7,7 +7,7 @@
 #include "Application/Application.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "Utilities/Logger/Logger.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"

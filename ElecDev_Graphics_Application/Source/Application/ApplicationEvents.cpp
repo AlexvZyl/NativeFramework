@@ -191,8 +191,7 @@ void Application::onFileDropEvent(const FileDropEvent& event)
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
 	{
-		if (path.string().size())
-			loadFromYAML(path);
+		if (path.string().size()) loadFromYAML(path);
 	}
 }
 
@@ -204,15 +203,12 @@ void Application::onFileSaveEvent(const FileSaveEvent& event)
 		// Check if operation did not fail.
 		if (path.string().size())
 		{
-			CircuitDesigner* designEngine = event.getEngine<CircuitDesigner>();
-			ComponentDesigner* component_designer = event.getEngine<ComponentDesigner>();
-
-			if (designEngine) 
+			if (auto designEngine = event.getEngine<CircuitDesigner>())
 			{
 				saveToYAML(designEngine->m_circuit.get(), path);
 				designEngine->setName(path.filename().stem().string());
 			}
-			else if (component_designer) 
+			else if (auto component_designer = event.getEngine<ComponentDesigner>())
 			{
 				saveToYAML(component_designer->m_activeComponent.get(), path);
 				component_designer->setName(path.filename().stem().string());
@@ -226,8 +222,7 @@ void Application::onFileLoadEvent(const FileLoadEvent& event)
 	// Load all of the paths in the event.
 	for (auto& path : event.fileData)
 	{
-		if (path.string().size())
-			loadFromYAML(path);
+		if (path.string().size()) loadFromYAML(path);
 	}
 }
 

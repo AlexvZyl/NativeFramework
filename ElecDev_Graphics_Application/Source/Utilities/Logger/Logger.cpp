@@ -4,7 +4,7 @@
 
 #include "Utilities/Logger/Logger.h"
 #include "External/Misc/ConsoleColor.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include <sstream>
 

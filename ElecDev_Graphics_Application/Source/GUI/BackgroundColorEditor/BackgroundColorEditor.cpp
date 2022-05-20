@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "BackgroundColorEditor.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Component2D.h"

@@ -15,7 +15,7 @@
 #include "Engines/CircuitDesigner/Peripherals/Component2D.h"
 #include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Resources/ResourceHandler.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "GUI/LumenPayload/LumenPayload.h"
 
 /*=======================================================================================================================================*/

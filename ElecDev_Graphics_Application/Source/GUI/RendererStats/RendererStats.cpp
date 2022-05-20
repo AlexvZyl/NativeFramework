@@ -3,7 +3,7 @@
 //=======================================================================================================================================//
 
 #include "RendererStats.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
