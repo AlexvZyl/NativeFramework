@@ -82,7 +82,7 @@ public:
 	// ------------------------------------------------- //
 
 	// Constructor that sets the context as well.
-	Primitive(Entity* parent);
+	Primitive(Entity* parent = nullptr);
 	// Destructor.
 	~Primitive();
 
