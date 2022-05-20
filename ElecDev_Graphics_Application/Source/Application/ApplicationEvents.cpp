@@ -30,10 +30,6 @@ void Application::onUpdate()
 	// Log messages.
 	Logger::flushQueue();
 
-	// Pop the windows queued from the previous frame's rendering.
-	// Dispatched here so that they do not get GLFW events.
-	popWindows();
-
 	// Find the hovered window on a mouse move event.
 	if (EventLog::mouseMoveOccurred())
 	{
@@ -111,10 +107,8 @@ LumenWindow* Application::findHoveredWindow()
 	// Find the window that is being hovered.
 	// We do not have to worry about order, since dear imgui handles it.
 	for (auto& [ID, window] : m_windowStack->getWindows())
-	{
-		if (window->isHovered())
-			return window.get();
-	}
+		if (window->isHovered()) return window.get();
+
 	// No window is found.
 	return nullptr;
 }

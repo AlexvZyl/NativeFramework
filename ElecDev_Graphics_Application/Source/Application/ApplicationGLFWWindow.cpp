@@ -24,7 +24,7 @@
 // Mouse double press information.
 #define MOUSE_DOUBLE_PRESS_TIMEOUT 0.3
 std::unordered_map<LumenEventID, double> s_buttonReleaseTimes;
-std::unordered_map<LumenEventID, bool> s_buttonReleaseIgnore;
+std::unordered_map<LumenEventID, bool> s_resetButtonOnRelease;
 
 // Mouse dragging information.
 glm::vec2 s_latestMouseButtonPressPosition;
@@ -45,7 +45,7 @@ inline bool isIdOfType(LumenEventID eventID, LumenEventID compareID)
 
 inline void resetDoublePressReleaseIgnore() 
 {
-    for (auto& pair : s_buttonReleaseIgnore) pair.second = false;
+    for (auto& pair : s_resetButtonOnRelease) pair.second = false;
 }
 
 inline void resetDoublePressReleaseTimes() 
@@ -125,9 +125,9 @@ void Application::glfwInitCallbacks()
     s_buttonReleaseTimes[EventType_MouseButtonLeft]     = 0;
     s_buttonReleaseTimes[EventType_MouseButtonRight]    = 0;
     s_buttonReleaseTimes[EventType_MouseButtonMiddle]   = 0;
-    s_buttonReleaseIgnore[EventType_MouseButtonLeft]    = false;
-    s_buttonReleaseIgnore[EventType_MouseButtonRight]   = false;
-    s_buttonReleaseIgnore[EventType_MouseButtonMiddle]  = false;
+    s_resetButtonOnRelease[EventType_MouseButtonLeft]    = false;
+    s_resetButtonOnRelease[EventType_MouseButtonRight]   = false;
+    s_resetButtonOnRelease[EventType_MouseButtonMiddle]  = false;
 
     // Setup dragging data.
     s_buttonDragActive[EventType_MouseButtonLeft]       = false;
@@ -162,37 +162,37 @@ void Application::glfwInitCallbacks()
             if      (action == GLFW_PRESS)      { buttonEventID |= EventType_MousePress;   }
             else if (action == GLFW_RELEASE)    { buttonEventID |= EventType_MouseRelease; }
 
-            // Check for double press.
+            // Get the current time.
             double currentTime = glfwGetTime();
+
+            // Check for double press.
             if ((currentTime - s_buttonReleaseTimes[currentButton] < MOUSE_DOUBLE_PRESS_TIMEOUT) && isIdOfType(buttonEventID, EventType_MousePress))
             {
                 // Remove mouse press ID so that double presses are seperate.
                 buttonEventID = (buttonEventID & ~EventType_MousePress) | EventType_MouseDoublePress;
                 EventLog::log<MouseButtonEvent>(cursorPos, buttonEventID);
                 // Ignore next release for double press.
-                s_buttonReleaseIgnore[currentButton] = true;
-            }
-            // Not a double press.
-            else 
-            {
-                EventLog::log<MouseButtonEvent>(cursorPos, buttonEventID);
+                s_resetButtonOnRelease[currentButton] = true;
             }
 
-            // Store the latest pressed location for the mouse drag.
+            // Not a double press.
+            else EventLog::log<MouseButtonEvent>(cursorPos, buttonEventID);
+      
+            // On Mouse Press: Dragging logic.
             if (isIdOfType(buttonEventID, EventType_MousePress))
             {
                 s_latestMouseButtonPressPosition = cursorPos;
                 addHeldButton(currentButton); 
             }
 
-            // Dragging & double press.
+            // On Mouse Release: Dragging & double press logic.
             if (isIdOfType(buttonEventID, EventType_MouseRelease))
             {    
                 // Ignore release after a double press to restart counter.
-                if (s_buttonReleaseIgnore[currentButton])
+                if (s_resetButtonOnRelease[currentButton])
                 {
                     s_buttonReleaseTimes[currentButton] = 0;
-                    s_buttonReleaseIgnore[currentButton] = false;
+                    s_resetButtonOnRelease[currentButton] = false;
                 }
                 // Store release time if not double press.
                 else
@@ -210,6 +210,7 @@ void Application::glfwInitCallbacks()
                     s_currentlyDraggingButton = NULL;
                 }
 
+                // Button is no longer held on a release.
                 removeHeldButton(currentButton);
             }
 
@@ -239,7 +240,9 @@ void Application::glfwInitCallbacks()
                 // On button draging change / start.
                 if (s_currentlyDraggingButton != currentButton)
                 {
-                    // Log the start and set data.
+                    // Log the drag start if it has not already been logged
+                    // (it is possible to for the drag to switch back to a button that 
+                    // has already been dragging).
                     if (!s_buttonDragActive[currentButton])
                     {
                         EventLog::logNotify(EventType_MouseDragStart | keyState | currentButton);
@@ -260,8 +263,7 @@ void Application::glfwInitCallbacks()
             
             // Log move event.
             LumenEventID moveEventID = EventType_MouseMove | keyState | buttonState;
-            if (s_currentlyDraggingButton)    
-                moveEventID |= EventType_MouseDrag;
+            if (s_currentlyDraggingButton) moveEventID |= EventType_MouseDrag;
             EventLog::logMouseMove(mousePos, moveEventID);
 
             // Double press should not occur after move.

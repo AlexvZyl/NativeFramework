@@ -25,11 +25,15 @@ public:
 		events.emplace_back(std::make_unique<EventType>(args...));
 	}
 
+	// Log a notify event.
+	// These events are dispatched after all of the other events. If the order is important
+	// (i.e it should be dispatched ealier) it can using the template version.
 	inline static void logNotify(LumenEventID ID, const std::string& msg = "")
 	{
 		notifyEvents.emplace_back(NotifyEvent(ID, msg));
 	}
 
+	// Log a mouse move event.
 	inline static void logMouseMove(const glm::vec2& mousePositionPixels, LumenEventID ID)
 	{
 		mouseMove.ID = ID | EventType_MouseMove;
@@ -37,11 +41,11 @@ public:
 		mouseMoveOccurredFlag = true;
 	}
 
+	// Log a mouse drag event.
 	inline static void logMouseDrag(const glm::vec2& init, const glm::vec2& current, const glm::vec2 delta, LumenEventID ID)
 	{
 		// Reset drag delta on first event.
-		if (!mouseDragOccurredFlag)
-			mouseDrag.currentFrameDelta = {0.f, 0.f};
+		if (!mouseDragOccurred()) mouseDrag.currentFrameDelta = { 0.f, 0.f };
 
 		mouseDrag.ID = ID | EventType_MouseDrag;
 		mouseDrag.initialPosition = init;
@@ -50,10 +54,11 @@ public:
 		mouseDragOccurredFlag = true;
 	}
 
+	// Log a mouse scroll event.
 	inline static void logMouseScroll(const glm::vec2& mousePositionPixels, float yOffset, float xOffset, LumenEventID ID)
 	{
 		// Reset scroll values on first event.
-		if (!mouseScrollOccurredFlag)
+		if (!mouseScrollOccurred())
 		{
 			mouseScroll.xOffset = 0;
 			mouseScroll.yOffset = 0;
@@ -61,11 +66,19 @@ public:
 
 		mouseScroll.ID = ID | EventType_MouseScroll;
 		mouseScroll.mousePosition = mousePositionPixels;
-		if(mouseScroll.xOffset < MAX_SCROLL_PER_FRAME)
-			mouseScroll.xOffset += xOffset;
-		if (mouseScroll.yOffset < MAX_SCROLL_PER_FRAME)
-			mouseScroll.yOffset += yOffset;
 		mouseScrollOccurredFlag = true;
+
+		// Determine the scroll values.
+		// The amount of scroll is capped to prevent 'free' mouse
+		// wheels and track pads from going crazy.
+		// X Offset.
+		if (mouseScroll.xOffset + xOffset < MAX_SCROLL_PER_FRAME)
+			mouseScroll.xOffset += xOffset;
+		else mouseScroll.xOffset = MAX_SCROLL_PER_FRAME;
+		// Y Offset.
+		if (mouseScroll.yOffset + yOffset < MAX_SCROLL_PER_FRAME)
+			mouseScroll.yOffset += yOffset;
+		else mouseScroll.yOffset = MAX_SCROLL_PER_FRAME;
 	}
 
 	// Setup the event log.
@@ -113,9 +126,9 @@ private:
 	inline static MouseDragEvent mouseDrag		= MouseDragEvent();
 
 	// Flags for if the seperate events occured.
-	inline static bool mouseMoveOccurredFlag = false;
+	inline static bool mouseMoveOccurredFlag   = false;
 	inline static bool mouseScrollOccurredFlag = false;
-	inline static bool mouseDragOccurredFlag = false;
+	inline static bool mouseDragOccurredFlag   = false;
 
 	// No instance.
 	EventLog();

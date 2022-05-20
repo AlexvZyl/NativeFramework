@@ -46,10 +46,8 @@ void Application::run()
 		// This is subject to change for when we get to multi-threading.
 		if (startFrame())
 		{
-			// Set the frametime 0 at the start of the frame so that the
-			// wait for events do not go over the fps.
-			m_totalFrameTime = 0; // Reset.
-			renderFrame();
+			resetFrametime();	// Start measuring the frametime on a frame start.
+			renderFrame();		// LumenWindows & engines.
 			updateFrametime();
 		}
 	}
@@ -57,7 +55,7 @@ void Application::run()
 
 void Application::updateFrametime() 
 {
-	// Keep track of time.
+	// Data.
 	static double previousTime = 0;
 	static double currentTime = 0;
 	
@@ -114,16 +112,16 @@ void Application::renderFrame()
 			imguiOnUpdate();
 
 			// Called before onUpdate so that ImGui::NewFrame() can be called
-			// before LumenWindow events are dispatched.
+			// and before LumenWindow events are dispatched.
 			onRenderInit();
 
-			// Updates Lumen state and LumenWindows.
+			// Updates states of LumenWindows & engines.
 			onUpdate();
 
-			// ImGui calls and engine rendering.
+			// Renders LumenWindows & engines.
 			onRender();
 
-			// Cleanup & imgui drawing.
+			// Cleanup & imgui rendering.
 			onRenderCleanup();
 		}
 
@@ -143,6 +141,9 @@ void Application::onRender()
 	// The order is not important, since dear imgui handles that.
 	for (auto& [ID, window] : m_windowStack->getWindows())
 		window->onRender();
+
+	// Pop the windows that are queued for removal from onRender.
+	popWindows();
 
 	// Push notificatons.
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8.f, 8.f});

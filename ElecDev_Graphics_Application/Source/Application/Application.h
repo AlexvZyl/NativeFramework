@@ -230,6 +230,8 @@ private:
 	void updateFrametime();
 	// Checks if the frame has to be started based on the frametime.
 	bool startFrame();
+	//  Reset the frametime to 0 (udually on a frame start).
+	inline void resetFrametime() { m_totalFrameTime = 0; }
 
 	// --------------- //
 	//  W I N D O W S  //

@@ -74,7 +74,6 @@ void CircuitDesigner::setActiveComponent(unsigned eID)
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		if (!currentEntity) return;
-		currentEntity->setContext();
 		while (currentEntity->m_type != EntityType::COMPONENT)
 		{
 			currentEntity = currentEntity->m_parent;
@@ -101,15 +100,13 @@ void CircuitDesigner::setActiveCable(unsigned eID)
 		m_activeCable = NULL;
 	}
 	if ((eID == 0) || (eID == -1)) 
-	{
-	}
+	{}
 	else 
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
 
 		if (!currentEntity) return;
 
-		currentEntity->setContext();
 		while (currentEntity->m_parent != nullptr) 
 		{
 			if (currentEntity->m_parent->m_type == EntityType::CABLE) 

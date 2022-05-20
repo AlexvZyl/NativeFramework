@@ -13,6 +13,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -39,6 +40,8 @@ void Renderer::shutdown()
 
 void Renderer::initialise()
 {
+	LUMEN_LOG_INFO("Initialising...", "OpenGL Renderer");
+
 	// OpenGL settings.
 	GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
 	GLCall(glEnable(GL_DEPTH_TEST));                            // Enables depth testing for the OpenGL scenes.
@@ -51,12 +54,15 @@ void Renderer::initialise()
 	// Initial setup.
 	Renderer::compileShaders();
 	Renderer::loadDefaultFont();
-	s_pipelineControls.insert({ "Background"		, true });
-	s_pipelineControls.insert({ "Geometry"			, true });
-	s_pipelineControls.insert({ "Outline"			, true });
-	s_pipelineControls.insert({ "OutlinePostProc"   , true });
-	s_pipelineControls.insert({ "Grid"				, true });
+	// Setup pipeline controls.
+	s_pipelineControls["Background"		] = true;
+	s_pipelineControls["Geometry"		] = true;
+	s_pipelineControls["Outline"		] = true;
+	s_pipelineControls["OutlinePostProc"] = true;
+	s_pipelineControls["Grid"			] = true;
 	Renderer::createUnitQuad();
+
+	LUMEN_LOG_INFO("Initialised.", "OpenGL Renderer");
 }
 
 void Renderer::loadDefaultFont()
@@ -66,17 +72,17 @@ void Renderer::loadDefaultFont()
 
 void Renderer::compileShaders()
 {
-	// Renderer shaders.
-	s_shaders.insert({ "BackgroundShader"		, std::make_unique<Shader>(BACKGROUND_SHADER) });
-	s_shaders.insert({ "BasicShader"			, std::make_unique<Shader>(BASIC_SHADER) });
-	s_shaders.insert({ "TextureShader"			, std::make_unique<Shader>(TEXTURE_SHADER) });
-	s_shaders.insert({ "CircleShader"			, std::make_unique<Shader>(CIRCLE_SHADER) });
-	s_shaders.insert({ "OutlineShader"			, std::make_unique<Shader>(OUTLINE_SHADER) });
-	s_shaders.insert({ "OutlineShaderTextures"	, std::make_unique<Shader>(OUTLINE_SHADER_TEXTURES) });
-	s_shaders.insert({ "OutlineShaderCircle"	, std::make_unique<Shader>(OUTLINE_SHADER_CIRCLE) });
-	s_shaders.insert({ "StaticTextureShader"	, std::make_unique<Shader>(STATIC_TEXTURE_SHADER) });
-	s_shaders.insert({ "OutlineBackgroundShader", std::make_unique<Shader>(OUTLINE_SHADER_BACKGROUND) });
-	s_shaders.insert({ "OutlinePostProc"		, std::make_unique<Shader>(OUTLINE_SHADER_POSTPROC) });
+	// Compile shaders.
+	s_shaders["BackgroundShader"		] = std::make_unique<Shader>(BACKGROUND_SHADER);
+	s_shaders["BasicShader"				] = std::make_unique<Shader>(BASIC_SHADER);
+	s_shaders["TextureShader"			] = std::make_unique<Shader>(TEXTURE_SHADER);
+	s_shaders["CircleShader"			] = std::make_unique<Shader>(CIRCLE_SHADER);
+	s_shaders["OutlineShader"			] = std::make_unique<Shader>(OUTLINE_SHADER);
+	s_shaders["OutlineShaderTextures"	] = std::make_unique<Shader>(OUTLINE_SHADER_TEXTURES);
+	s_shaders["OutlineShaderCircle"		] = std::make_unique<Shader>(OUTLINE_SHADER_CIRCLE);
+	s_shaders["StaticTextureShader"		] = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
+	s_shaders["OutlineBackgroundShader"	] = std::make_unique<Shader>(OUTLINE_SHADER_BACKGROUND);
+	s_shaders["OutlinePostProc"			] = std::make_unique<Shader>(OUTLINE_SHADER_POSTPROC);
 
 	Shader* shader;
 	int samplers[1] = { 0 };
@@ -148,9 +154,7 @@ void Renderer::loadTextures(Scene* scene)
 	std::vector<int> samplers = { 0 };
 	samplers.reserve(textureCount);
 	for (int i = 1; i < textureCount; i++) 
-	{ 
 		samplers.push_back(i); 
-	}
 
 	// Prepare shader.
 	GLCall(auto loc = glGetUniformLocation(s_shaders["TextureShader"]->m_rendererID, "f_textures"));
