@@ -89,7 +89,7 @@ void Camera::scaleAroundCursor(float scale, const glm::vec2& cursor)
 {
 	if (m_type == CameraType::Standard2D)
 	{
-		glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor);
+		glm::vec2 coordsBeforeScaling = pixelToWorldCoords(cursor, true);
 		Camera::scale({ scale, scale, 1.f });
 		glm::vec2 coordsAfterScaling = pixelToWorldCoords(cursor, true);
 		Camera::translate({ coordsAfterScaling.x - coordsBeforeScaling.x, coordsAfterScaling.y - coordsBeforeScaling.y, 0.f });
