@@ -140,6 +140,7 @@ void Camera::setScale(const glm::vec3& scale)
 	m_scalingMatrix[0][0] = scale.x;
 	m_scalingMatrix[1][1] = scale.y;
 	m_scalingMatrix[2][2] = scale.z;
+	viewChanged();
 }
 
 void Camera::setScale2D(float scale) 
@@ -191,6 +192,9 @@ void Camera::updateProjectionMatrix()
 void Camera::updateViewProjectionMatrix()
 {
 	if (!m_viewProjectionMatrixChanged) return;
+	
+	updateViewMatrix();
+	updateProjectionMatrix();
 
 	m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
 	m_viewProjectionMatrixChanged = false;
