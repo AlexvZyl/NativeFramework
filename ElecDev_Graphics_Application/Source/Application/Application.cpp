@@ -331,8 +331,6 @@ void Application::setGuiTheme()
 
 	if (first)
 	{
-		first = false;
-
 		// Tell imgui that it does not own the font memory data.
 		ImFontConfig imFontConfig;
 		imFontConfig.FontDataOwnedByAtlas = false;
@@ -346,6 +344,8 @@ void Application::setGuiTheme()
 		// Init notify.
 		ImGui::MergeIconsWithLatestFont(16.f, false);
 	}
+
+	first = false;
 }
 
 //==============================================================================================================================================//
