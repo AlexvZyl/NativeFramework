@@ -1,6 +1,6 @@
 # Lumen Documentation
 
-*Outdated.*
+*The docs are currently outdated due to tremendous development and the occasional refactoring.*
 
 This is the non-official documentation of the Lumen Graphics Engine.  This contains information for new team members to get up and running with rendering inside of Lumen.  No knowledge of the backend is required!
 
