@@ -120,3 +120,77 @@ void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
     }
 }
 ```
+
+## Entities
+
+Now that we know how `Events` work, we need to be able to detect if our mouse is over a specific `Entity`.  For that Lumen has an `EntityManager` that assign entity IDs.  It is not important for the developer to know how this is done.  The following example changes the color of an entity if it is pressed:
+
+```C++
+#include "Engines/My2DEngine/My2DEngine.h"
+#include "OpenGL/Entities/Circle.h"
+#include "Application/Events/Events.h"
+#include "Graphics/Entities/EntityManager.h"
+
+void My2DEngine::onMouseButtonEvent(MouseButtonEvent& event)
+{
+    // Using predefined controls.
+    Base2DEngine::onMouseButtonEvent(event);
+    
+    // The event ID is a description of the event, using the enum EventType.
+    uint64_t eventID = event.ID;
+    
+    // This checks if those two flags are contained in the ID, it does NOT check
+    // any of the other flags (we use an overloaded operator).
+    if(eventID == (EventType_MousePress | EventType_MouseButtonLeft))
+    {
+        // It is important to note that the mouse coordinates that are passed through the
+        // event are given in window pixel coordinates.  We must first convert these coordinates
+        // into our world space coordinate system.
+        glm::vec3 worldSpaceCoordinates = m_scene->pixelCoordsToWorldCoords(event.mousePosition);
+        
+        // First we need to retrieve the ID of the entity that the mouse is on.
+        // This is a function that we get from EngineCore.  Note that this function 
+        // takes the mouse coordinate in pixels.
+        unsigned entityID = getEntityID(event.mousePosition);
+        
+        // Now that we have the ID of the entity, we have to retrieve it
+        // from the EntityManager.
+        Entity* entity = EntityManager::getEntity(entityID);
+        
+        // We need to check if there is an entity.  If there is no entity
+        // under the cursor we get a nullptr.
+        if(entity)  // This is the same as 'if(entity != nullptr)'
+        {
+            // And now we can change the color.
+            entity->setColor(glm::vec4(1.f, 0.f, 1.f, 1.f));    
+        }
+    }
+}
+```
+
+TODO: Cullen to add a section on `Entity` parents.
+
+## Spawning
+
+`My2DEngine` is now fully functioning.  There is only one last thing to do, we need to be able to start using instances of `My2DEngine` inside of Lumen.  Creating a window with an instance is as easy as:
+
+```C++
+// #include "Lumen.h"
+// #include "Application.h"
+// #include "Engines/My2DEngine/My2DEngine.h"
+
+Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name", DockPanel::Scene);
+```
+
+Pushing layers into Lumen only allows constructors that provide names and flags (flags are not important for the developer).  So if you want to have extra arguments passed into the constructor you can do something like:
+
+```C++
+// #include "Lumen.h"
+// #include "Application.h"
+// #include "Engines/My2DEngine/My2DEngine.h"
+
+My2DEngine* myEnginePtr = Lumen::getApp().pushEngineLayer<My2DEngine>("My2DEngine Name", DockPanel::Scene)->getEngine();
+myEnginePtr->init(...);
+```
+
+And now it will be showing in a window inside Lumen and receive events!  Lumen uses `templates` to push layers which means we do not have to change anything inside Lumen for it to be able to work with various types of `Engines`, it can display any type of custom engine any developer decides to create.  `Lumen::getApp()` is a static function that gives us a pointer to the singleton of `Application`, so this can be called from anywhere inside Lumen.
