@@ -1,4 +1,4 @@
-## Prelude
+# Prelude
 
 We use [GLM](https://github.com/g-truc/glm) for matrices, vectors, linear algebra etc.  Some example usage:
 
@@ -46,3 +46,7 @@ glm::vec2 cursosPos = ImGui::GetCursosPos();  // Returns an ImVec2.
 ```
 
 When creating vectors and matrices, stick to `glm`.
+
+# Style & Format
+
+Still to be implemented and discussed.  The best solution is to use software that formats everything.
