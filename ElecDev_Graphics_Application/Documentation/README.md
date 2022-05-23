@@ -6,57 +6,6 @@ This is the non-official documentation of the Lumen Graphics Engine.  This conta
 
 Lumen has its own implementation of a graphics renderer.  We did this so that we are not limited by the API of someone else's work and so that we can change and implement whatever we want.  This turned out to be very beneficial.  For example, we render text based on a new method of Signed Distance Fields that someone developed in his Master's degree in graphics.  We would have no control over this if we had to use someone else's (high level) library.  Currently our renderer only supports an [OpenGL](https://www.opengl.org/) backend, however we have plans to implement a [Vulkan](https://www.vulkan.org/) renderer in the future.
 
-## Creating An Engine
-
-The next step is to create an environment where we can manipulate, add and remove `Entities` contained in the `Scene`.  This is where `Engines` come in.  There are 3 `Engines` that are internal to Lumen, namely `EngineCore`, `Base2DEngine` and `Base3DEngine`.  The following examples shows how to set up a 2D engine.  An example `My2DEngine.h`:
-
-```C++
-
-#include "Engines/Base2DEngine/Base2DEngine.h"
-
-class My2DEngine : public Base2DEngine
-{
-public:
-
-    // Constructor.
-    My2DEngine();
-    // Destructor.
-    ~My2DEngine() = default;
-    
-    // Mouse events.
-    virtual void onMouseButtonEvent(MouseButtonEvent& event) override;
-    virtual void onMouseMoveEvent(MouseMoveEvent& event) override;
-    virtual void onMouseScrollEvent(MouseScrollEvent& event) override;
-    // Key events.
-    virtual void onKeyEvent(KeyEvent& event) override;
-    
-private:
-    
-    // Example primitives.  Ideally these should be Entities created by the developer.
-    Circle* m_myCircle1 = nullptr;
-    Circle* m_myCircle2 = nullptr;
-}
-
-```
-
-We created an `Engine` that includes functionality already contained inside `EngineCore` and `Base2DEngine`.  The `Base2DEngine` comes with things such as a `Scene`, event dispatcher and basic 2D camera controls.  For more information on what these classes include, take a look at the [Engines](https://github.com/AlexEnerdyne/Lumen/tree/Main/ElecDev_Graphics_Application/Source/Engines).  An example `My2DEngine.cpp`:
-
-```C++
-
-#include "Engines/My2DEngine/My2DEngine.h"
-#include "OpenGL/RendererGL.h"
-#include "OpenGL/Entities/Circle.h"
-
-My2DEngine::My2DEngine()
-    : Base2DEngine()
-{
-    // We do not have to bind the scene here, EngineCore does that for us.
-    m_myCircle1 = Renderer::addCircle2D(...);
-    m_myCircle2 = Renderer::addCircle2D(...);
-}
-
-```
-
 ### Events
 
 We have an engine that can draw to a `Scene`, now we need to be able to handle events.  And an example `My2DEngine_Events.cpp`can be seen below.  If we want complete custom controls we should implement them here.  However, `Base2DEngine` comes with basic 2D `Camera` controls, so we can just use them.
