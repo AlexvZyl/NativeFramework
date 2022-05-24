@@ -617,6 +617,7 @@
     <ClInclude Include="Source\GUI\LumenGizmo\LumenGizmo.h" />
     <ClInclude Include="Source\Lumen\LumenPCH.h" />
     <ClInclude Include="Source\Application\ApplicationTemplates.h" />
+    <ClInclude Include="Source\Utilities\Memory\FreeList.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\GLFW\Libraries\glfw3.lib">

@@ -661,6 +661,7 @@
     <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
+    <ClInclude Include="Source\Utilities\Memory\FreeList.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.h" />
