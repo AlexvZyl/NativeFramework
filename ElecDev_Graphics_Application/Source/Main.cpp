@@ -78,23 +78,34 @@ int main(int, char**)
     emplace(freeList);
     emplace(freeList);
     emplace(freeList);
-    pop(freeList, 0);
-    pop(freeList, 1);
-    pop(freeList, 2);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    pop(freeList, 3);
+    pop(freeList, 6);
+    pop(freeList, 9);
+
+    // Iteration.
+    for (auto& entry : freeList) entry.myFunction();
+
     emplace(freeList);
     emplace(freeList);
     emplace(freeList);
 
     // Iteration.
-    for (auto& entry : freeList)
-    {
-        entry.myFunction();
-    }
+    for (auto& entry : freeList) entry.myFunction();
 
     // Initialisation.
     Application application;
     Renderer::initialise();
     
+    std::vector<TestClass> myVec;
+    myVec.emplace_back();
+
     // Main loop.
     application.run();
 

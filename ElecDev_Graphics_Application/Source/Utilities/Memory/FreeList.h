@@ -47,6 +47,16 @@ public:
 		}
 	}
 
+	// Clear the list of all its elements.
+	inline void clear()
+	{
+		callAllDestructors();
+		m_firstFreeSlot = 0;
+		m_lastFreeSlot = 0;
+		m_elementCount = 0;
+		setSlotData(0, m_capacity, -1, -1);
+	}
+
 	// Push element in the next open slot.
 	// Returns the index of the slot start.
 	inline int push(const T& element) 
@@ -59,20 +69,10 @@ public:
 		commitSlot(slotIndex);
 
 		// Copy the data.
-		moveToSlot(&element, slotIndex);
+		copyToSlot(&element, slotIndex);
 
 		// Return the index of the element.
 		return slotIndex;
-	}
-
-	// Clear the list of all its elements.
-	inline void clear() 
-	{
-		callAllDestructors();
-		m_firstFreeSlot = 0;
-		m_lastFreeSlot = 0;
-		m_elementCount = 0;
-		setSlotData(0, m_capacity, -1, -1);
 	}
 
 	// Push element in the next open slot.
@@ -87,7 +87,7 @@ public:
 		commitSlot(slotIndex);
 
 		// Copy the data.
-		moveToSlot(&element, slotIndex);
+		copyToSlot(&element, slotIndex);
 
 		// Return the index of the element.
 		return slotIndex;
@@ -118,6 +118,8 @@ public:
 		getSlotElementPtr(index)->~T();
 		freeSlot(index);
 		queryResize(-1);
+
+		assert(m_elementCount >= 0, "pop() called too many times.");
 	}
 	
 	// Utilities.
@@ -582,13 +584,20 @@ public:
 	// Iterator functions.
 	inline Iterator begin() 
 	{ 
+		// Valid and not first slot.
 		if (m_firstFreeSlot > 0)
 		{
 			return Iterator(this, 0, m_firstFreeSlot, m_iteratorMode);
 		}
+		// First slot in memory.
 		else if (!m_firstFreeSlot)
 		{
 			return Iterator(this, getSlotSize(m_firstFreeSlot), getNextSlot(m_firstFreeSlot), m_iteratorMode);
+		}
+		// There are not slots.
+		else if (!firstFreeSlotValid()) 
+		{
+			return Iterator(this, 0, -1, m_iteratorMode);
 		}
 		
 	}
