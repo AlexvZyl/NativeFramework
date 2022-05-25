@@ -39,11 +39,8 @@ int main(int, char**)
     freeList.push(myClass);
     freeList.push(myClass);
     freeList.push(myClass);
-    freeList.push(myClass);
-    freeList.push(myClass);
-    TestClass& ref = freeList[0];
-    ref.myFunction();
-    
+    freeList.pop(2);
+
     // Initialisation.
     Application application;
     Renderer::initialise();
