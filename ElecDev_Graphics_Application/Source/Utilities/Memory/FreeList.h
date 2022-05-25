@@ -31,9 +31,10 @@ public:
 		allocate(capacity);
 	}
 	FreeList(int capacity, int capacityIncrements)
-		: FreeList(capacity)
+		: FreeList()
 	{
 		setCapacityIncrements(capacityIncrements);
+		allocate(capacity);
 	}
 
 	// Destructor.
@@ -41,7 +42,7 @@ public:
 	{
 		if (m_data)
 		{
-			destructors();
+			callAllDestructors();
 			free(m_data);
 		}
 	}
@@ -62,6 +63,16 @@ public:
 
 		// Return the index of the element.
 		return slotIndex;
+	}
+
+	// Clear the list of all its elements.
+	inline void clear() 
+	{
+		callAllDestructors();
+		m_firstFreeSlot = 0;
+		m_lastFreeSlot = 0;
+		m_elementCount = 0;
+		setSlotData(0, m_capacity, -1, -1);
 	}
 
 	// Push element in the next open slot.
@@ -121,7 +132,7 @@ public:
 	inline constexpr T& operator[](int index)			  
 	{
 		#ifdef _DEBUG
-			assert(index >= 0 && index < capacity());
+			assert(index >= 0 && index < capacity(), "Trying to access data outside of the FreeList.");
 		#endif
 		return *(m_data + index); 
 	} 
@@ -129,12 +140,14 @@ public:
 	inline constexpr const T& operator[](int index) const 
 	{ 
 		#ifdef _DEBUG
-			assert(index >= 0 && index < capacity());
+			assert(index >= 0 && index < capacity(), "Trying to access data outside of the FreeList.");
 		#endif
 		return *(m_data + index); 
 	} 
 
 private:
+
+	friend class Iterator;
 
 	// Check if a resize has to occur based on the change.
 	// Return true if resize occured.
@@ -231,10 +244,10 @@ private:
 		{
 			if (m_data)
 			{
-				destructors();
+				callAllDestructors();
 				free(m_data);
+				m_data = nullptr;
 			}
-			m_data = nullptr;
 		}
 
 		// Data has not been allocated yet.
@@ -242,6 +255,7 @@ private:
 		{
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
 			setSlotData(0, newCapacity, -1, -1);
+			updateFreeSlots(0);
 		}
 
 		// Update capacity.
@@ -326,6 +340,7 @@ private:
 
 		// Set slot data.
 		setSlotData(slotIndex, 1, nextSlot, prevSlot);
+		updateFreeSlots(slotIndex);
 
 		// Update slots.
 		if (slotIsValid(prevSlot)) setNextSlot(prevSlot, slotIndex);
@@ -340,15 +355,15 @@ private:
 		{
 			mergeSlots(getPrevSlot(nextSlot), nextSlot);
 		}
-
-		// Update with new freed slot.
-		updateFreeSlots(slotIndex);
 	}
 
 	// Call the destructors of all of the elements.
-	inline void destructors() 
+	inline void callAllDestructors() 
 	{
-		// Need to implement an iterator.
+		IteratorMode tmp = m_iteratorMode;
+		setIteratorMode(IteratorMode::ELEMENTS);
+		for (auto& element : *this) element.~T();
+		setIteratorMode(tmp);
 	}
 
 	// Set the data describing the next open slot and current slot size.
@@ -467,8 +482,9 @@ private:
 	// Merge the two slots.  Called when two slots are next to each other in memory.
 	inline void mergeSlots(int firstSlot, int secondSlot) 
 	{
-		increaseSlotSize(firstSlot, 1);
+		increaseSlotSize(firstSlot, getSlotSize(secondSlot));
 		setNextSlot(firstSlot, getNextSlot(secondSlot));
+		if (hasNextSlot(secondSlot)) setPrevSlot(getNextSlot(secondSlot), firstSlot);
 		if (m_lastFreeSlot == secondSlot) m_lastFreeSlot = firstSlot;
 	}
 
@@ -513,22 +529,23 @@ public:
 	{
 	public:
 		// Contructor.
-		Iterator(FreeList<T>* fl, int index, int nextFreeSlot)
+		Iterator(FreeList<T>* fl, int index, int nextFreeSlot, IteratorMode mode)
 		{
 			m_freeList = fl;
 			m_nextFreeSlot = nextFreeSlot;
 			m_index = index;
+			m_iteratorMode = mode;
 		}
 
 		// Operators.
 		inline void operator++()
 		{
-			switch (m_freeList->getIteratorMode()) 
+			switch (m_iteratorMode)
 			{
 
 			case IteratorMode::ELEMENTS:
 				// Next slot contains data.
-				if (m_nextFreeSlot == -1 || m_index + 1 != m_nextFreeSlot)
+				if (m_nextFreeSlot == -1 || m_index + 1 < m_nextFreeSlot)
 				{
 					m_index++;
 				}
@@ -542,56 +559,41 @@ public:
 				}
 				break;
 
+			case IteratorMode::MEMORY:
+				break;
+
 			default:
 				assert(false, "Invalid iterator mode.");
 				break;
 			}
 		}
-		inline bool operator!=(const Iterator& other) 
-		{ 
-			return m_index != other.m_index; 
-		}
-		inline const T& operator*() const 
-		{ 
-			return (*m_freeList)[m_index]; 
-		}
-		inline T& operator*() 
-		{ 
-			return (*m_freeList)[m_index]; 
-		}
+		inline bool operator!=(const Iterator& other) { return m_index != other.m_index; }
+		inline const T& operator*() const { return (*m_freeList)[m_index]; }
+		inline T& operator*() { return (*m_freeList)[m_index]; }
 
 	private:
 		// Data.
 		int m_nextFreeSlot = NULL;			// Keep track of the free slots as we iterate.
 		FreeList<T>* m_freeList = nullptr;	// FreeList iterating over.
-		int m_index = NULL;					// Used to compare iterators.
+		int m_index = NULL;					// Current point in iteration.
+		IteratorMode m_iteratorMode = IteratorMode::ELEMENTS;
 	};
 
-	friend class Iterator;
-
-	// Iterator Begin.
+	// Iterator functions.
 	inline Iterator begin() 
 	{ 
-		// First free slot is not the first slot in memory and is valid.
 		if (m_firstFreeSlot > 0)
 		{
-			return Iterator(this, 0, m_firstFreeSlot);
+			return Iterator(this, 0, m_firstFreeSlot, m_iteratorMode);
 		}
-		// There is no free first slot.
-		else if (!firstFreeSlotValid())
-		{
-			return Iterator(this, 0, -1);
-		}
-		// First free slot is the first slot in memory.
 		else if (!m_firstFreeSlot)
 		{
-			return Iterator(this, getSlotSize(m_firstFreeSlot), getNextSlot(m_firstFreeSlot));
+			return Iterator(this, getSlotSize(m_firstFreeSlot), getNextSlot(m_firstFreeSlot), m_iteratorMode);
 		}
+		
 	}
-
-	// Iterator end.
-	inline Iterator end() 
+	inline Iterator end()   
 	{ 
-		return Iterator(this, capacity(), -1); 
+		return Iterator(this, capacity(), -1, m_iteratorMode); 
 	}
 };
