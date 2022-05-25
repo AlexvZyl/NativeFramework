@@ -1,10 +1,31 @@
 #include "Utilities/Platform/Preprocessor.h"
 #include "Application/Application.h"
 #include "OpenGL/Renderer/RendererGL.h"
-#include "Utilities/Memory/FreeList.h"
 
-struct TestStruct 
+// Testing.
+#include "Utilities/Memory/FreeList.h"
+#include "Utilities/Logger/Logger.h"
+
+class TestClass
 {
+public:
+
+    TestClass() 
+    {
+        std::cout << "TestClass::Constructor()\n";
+    }
+
+    ~TestClass() 
+    {
+        std::cout << "TestClass::Destructor()\n";
+    }
+
+    inline void myFunction() 
+    {
+        std::cout << "TestClass::myFunction()\n";
+    }
+
+    // Data.
     int val1 = 0;
     int val2 = 0;
     int val3 = 0;
@@ -13,11 +34,15 @@ struct TestStruct
 int main(int, char**)
 {
     // TESTING!
-    FreeList<TestStruct> freeList;
-    freeList.allocate(10);
-    auto [size, next, prev] = freeList.getSlotData(0);
-    freeList.allocate(20);
-    auto [size2, next2, prev2] = freeList.getSlotData(0);
+    FreeList<TestClass> freeList(0, 2);
+    TestClass myClass;
+    freeList.push(myClass);
+    freeList.push(myClass);
+    freeList.push(myClass);
+    freeList.push(myClass);
+    freeList.push(myClass);
+    TestClass& ref = freeList[0];
+    ref.myFunction();
     
     // Initialisation.
     Application application;
