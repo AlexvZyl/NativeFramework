@@ -5,8 +5,7 @@
 // int32 Size			(4 bytes)
 // int32 Next Slot		(4 bytes)
 // int32 Previous Slot	(4 bytes)
-// This means we cannot use glm::vec2. However, if we make them 21 bits instead
-// of 4 bytes we can fit in glm::vec2.  This will make the FreeList max value 2^21 (2 097 152).
+// This means we cannot use glm::vec2...
 #define MINIMUM_FREELIST_ELEMENT_SIZE 12 // Bytes.
 #define FREELIST_MAX_CAPACITY 2^32
 
@@ -15,6 +14,9 @@ class FreeList
 {
 
 public:
+
+	// The modes of iteration.
+	enum class IteratorMode { ELEMENTS, MEMORY };
 
 	// Constructors.
 	FreeList() 
@@ -56,11 +58,14 @@ public:
 		commitSlot(slotIndex);
 
 		// Copy the data.
-		copyToSlot(&element, slotIndex);
+		moveToSlot(&element, slotIndex);
 
 		// Return the index of the element.
 		return slotIndex;
 	}
+
+	// Push element in the next open slot.
+	// Returns the index of the slot start.
 	inline int push(T&& element)
 	{
 		// Always check if should resize.
@@ -71,9 +76,29 @@ public:
 		commitSlot(slotIndex);
 
 		// Copy the data.
-		copyToSlot(&element, slotIndex);
+		moveToSlot(&element, slotIndex);
 
-		return 1;
+		// Return the index of the element.
+		return slotIndex;
+	}
+
+	// Push element in the next open slot.
+	// Returns the index of the slot start.
+	template<class ... Args>
+	inline int emplace(const Args& ... args)
+	{
+		// Always check if should resize.
+		queryResize(1);
+
+		// Find and commit an open slot.
+		int slotIndex = findSlotFirstFit(1);
+		commitSlot(slotIndex);
+
+		// Do in place construction.
+		new (getSlotElementPtr(slotIndex)) T(args...);
+
+		// Return the index of the element.
+		return slotIndex;
 	}
 
 	// Pop the element at the given index.
@@ -85,12 +110,29 @@ public:
 	}
 	
 	// Utilities.
-	inline constexpr int capacity()						  { return m_capacity; }			     // Get the capacity in amount of elements.
-	inline constexpr int size()							  { return m_elementCount; }		     // Get the amount of elements comitted.
-	inline constexpr T& operator[](int index)             { return *(m_data + index); }		     // Index operator.
-	inline constexpr const T& operator[](int index) const { return *(m_data + index); }		     // Const index operator.
-	inline void setCapacityIncrements(int increments)     { m_capacityIncrements = increments; } // Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline void setResizeThreshold(float threshold)       { m_resizeThreshold = threshold; }     // Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline constexpr int capacity()							 { return m_capacity; }					// Get the capacity in amount of elements.
+	inline constexpr int size()								 { return m_elementCount; }				// Get the amount of elements comitted.
+	inline void setCapacityIncrements(int increments)		 { m_capacityIncrements = increments; }	// Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline void setResizeThreshold(float threshold)			 { m_resizeThreshold = threshold; }		// Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline void setIteratorMode(IteratorMode mode)			 { m_iteratorMode = mode; }				// Set the mode of iteration.
+	inline IteratorMode getIteratorMode()					 { return m_iteratorMode; }				// Get the mode of iteration.
+
+	// Index operator.
+	inline constexpr T& operator[](int index)			  
+	{
+		#ifdef _DEBUG
+			assert(index >= 0 && index < capacity());
+		#endif
+		return *(m_data + index); 
+	} 
+	// Const index operator.
+	inline constexpr const T& operator[](int index) const 
+	{ 
+		#ifdef _DEBUG
+			assert(index >= 0 && index < capacity());
+		#endif
+		return *(m_data + index); 
+	} 
 
 private:
 
@@ -282,23 +324,22 @@ private:
 		// Find the slots next to the inserted one.
 		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex); 
 
-		// Update prev slot.
-		if (slotIsValid(prevSlot))
+		// Set slot data.
+		setSlotData(slotIndex, 1, nextSlot, prevSlot);
+
+		// Update slots.
+		if (slotIsValid(prevSlot)) setNextSlot(prevSlot, slotIndex);
+		if (slotIsValid(nextSlot)) setPrevSlot(nextSlot, slotIndex);
+
+		// Now check for merges.
+		if (slotIsValid(prevSlot) && prevSlot == getNextSlot(prevSlot) - getSlotSize(prevSlot))
 		{
-			// If this slot sits right next to the prev slot, simply increase size.
-			if (prevSlot == slotIndex - 1) increaseSlotSize(slotIndex, 1);
+			mergeSlots(prevSlot, getNextSlot(prevSlot));
 		}
-		// There is no prev slot.
-		else setPrevSlot(slotIndex, -1);
-
-		// Update next slot.
-		if (slotIsValid(nextSlot))
+		if (slotIsValid(nextSlot) && getPrevSlot(nextSlot) == nextSlot - getSlotSize(getPrevSlot(nextSlot)))
 		{
-
+			mergeSlots(getPrevSlot(nextSlot), nextSlot);
 		}
-		// There is no next slot.
-		else setNextSlot(slotIndex, -1);
-
 
 		// Update with new freed slot.
 		updateFreeSlots(slotIndex);
@@ -308,6 +349,127 @@ private:
 	inline void destructors() 
 	{
 		// Need to implement an iterator.
+	}
+
+	// Set the data describing the next open slot and current slot size.
+	inline void setSlotData(int slotIndex, int slotSize, int nextSlot, int prevSlot)							  
+	{
+		int* data = getSlotDataPtr(slotIndex);
+		*(data++) = slotSize;
+		*(data++) = nextSlot;
+		*(data  ) = prevSlot;
+	}
+
+	// Get the data describing the slot.
+	// { size, nextSlot, prevSlot }
+	inline std::tuple<int, int, int> getSlotData(int slotIndex)													
+	{																											
+		int* data = getSlotDataPtr(slotIndex);
+		return { *(data), *(data + 1), *(data + 2) };
+	}
+
+	// Updated the tracked free slots.
+	inline void updateFreeSlots(int slotIndex)																	
+	{
+		if (slotIndex < m_firstFreeSlot || !firstFreeSlotValid()) m_firstFreeSlot = slotIndex;
+		if (slotIndex > m_lastFreeSlot  || !lastFreeSlotValid())  m_lastFreeSlot  = slotIndex;
+	}
+
+	// Find the slots adjacent to the passed slot.  This is used when inserting a slot and having tp update the data.			
+	inline std::tuple<int, int> findAdjacentSlots(int slotIndex)												
+	{
+		// Check for available slots.
+		bool hasValidFirst = firstFreeSlotValid();
+		bool hasValidLast = lastFreeSlotValid();
+
+		// Default to no slot.
+		int leftSlot = -1;
+		int rightSlot = -1;
+
+		// No valid slots, return defaults.
+		if (!hasValidFirst && !hasValidLast) { }
+
+		// If both slots are valid, use the one closest to the index.
+		else if (hasValidFirst && hasValidLast)
+		{
+			// Calculate distances.
+			int distanceFromFirst = slotIndex - m_firstFreeSlot;
+			int distanceFromEnd = m_lastFreeSlot - slotIndex;
+
+			// Left of first slot.
+			if (distanceFromFirst < 0) rightSlot = m_firstFreeSlot;
+
+			// Right of last slot.
+			else if (distanceFromEnd < 0) leftSlot = m_lastFreeSlot;
+
+			// First slot is closest.
+			else if(distanceFromFirst <= distanceFromEnd)
+			{
+				int referenceSlot = searchForward(m_firstFreeSlot, slotIndex);
+				leftSlot = referenceSlot;
+				rightSlot = getNextSlot(referenceSlot);
+			}
+			// Last slot is closest.
+			else 
+			{
+				int referenceSlot = searchReverse(m_lastFreeSlot, slotIndex);
+				rightSlot = referenceSlot;
+				leftSlot = getPrevSlot(referenceSlot);
+			}
+		}
+
+		// Only left slot is valid.
+		else if (hasValidFirst)
+		{
+			int referenceSlot = searchForward(m_firstFreeSlot, slotIndex);
+			leftSlot = referenceSlot;
+			rightSlot = getNextSlot(referenceSlot);
+		}
+
+		// Only right slot is valid.
+		else
+		{
+			int referenceSlot = searchReverse(m_lastFreeSlot, slotIndex);
+			rightSlot = referenceSlot;
+			leftSlot = getPrevSlot(referenceSlot);
+		}
+
+		// Return the slots.
+		return { leftSlot, rightSlot };
+	}
+
+	// Search for the slot that sits right before the reference slot, starting at the startSlot.
+	inline int searchForward(int startSlot, int referenceSlot) 
+	{
+		int currentSlot = startSlot;
+		int currentNextSlot = getNextSlot(currentSlot);
+		while (currentNextSlot < referenceSlot && slotIsValid(currentNextSlot))
+		{
+			currentSlot = currentNextSlot;
+			currentNextSlot = getNextSlot(currentSlot);
+		}
+		return currentSlot;
+	}
+
+	// Search for the slot that sits right after the reference slot, starting at the startSlot.
+	inline int searchReverse(int startSlot, int referenceSlot)
+	{
+		int currentSlot = startSlot;
+		int currentPrevSlot = getPrevSlot(currentSlot);
+		while (currentPrevSlot > referenceSlot && slotIsValid(currentPrevSlot))
+		{
+			currentSlot = currentPrevSlot;
+			currentPrevSlot = getNextSlot(currentSlot);
+		}
+		return currentSlot;
+	}
+
+	// Merge the two slots.  Called when two slots are next to each other in memory.
+	inline void mergeSlots(int firstSlot, int secondSlot) 
+	{
+		increaseSlotSize(firstSlot, 1);
+		setNextSlot(firstSlot, getNextSlot(secondSlot));
+		if (m_lastFreeSlot == secondSlot) m_lastFreeSlot = firstSlot;
 	}
 
 	// Slot utilities.
@@ -320,7 +482,7 @@ private:
 	inline bool hasNextSlot(int slotIndex)				   { return getNextSlot(slotIndex) != -1; }				  // Check if the given slot has a next slot.
 	inline bool hasPrevSlot(int slotIndex)				   { return getPrevSlot(slotIndex) != -1; }				  // Check if the given slot has a previous slot.
 	inline int* getSlotDataPtr(int slotIndex)			   { return reinterpret_cast<int*>(m_data + slotIndex); } // Get an int pointer to the slot data.
-	inline T* getSlotElementPtr(int slotIndex)			   { return &(*this)[slotIndex]; }						  // Get a pointer to the slot as an element.
+	inline T* getSlotElementPtr(int slotIndex)			   { return m_data+slotIndex; }							  // Get a pointer to the slot as an element.
 	inline bool firstFreeSlotValid()					   { return m_firstFreeSlot != -1; }					  // Checks if the first free slot is valid (exists).
 	inline bool lastFreeSlotValid()						   { return m_lastFreeSlot != -1; }						  // Checks if the last free slot is valid (exists).
 	inline bool slotIsValid(int slot)					   { return slot != -1; }								  // Checks if the slot is valid.
@@ -330,40 +492,6 @@ private:
 	inline void moveToSlot(const T* source, int slotIndex) { memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); } // Move the element data into the slot.
 	inline void clearSlot(int slotIndex, int val = 0)	   { memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement); }     // Clear the slot data.
 	inline void increaseSlotSize(int slotIndex, int size)  { setSlotSize(slotIndex, getSlotSize(slotIndex) + size); }		   // Increase the slot size.
-	inline void setSlotData(int slotIndex, int slotSize, int nextSlot, int prevSlot)							  // Set the data describing the next open slot and current slot size.
-	{
-		int* data = getSlotDataPtr(slotIndex);
-		*(data++) = slotSize;
-		*(data++) = nextSlot;
-		*(data  ) = prevSlot;
-		updateFreeSlots(slotIndex);
-	}
-	inline std::tuple<int, int, int> getSlotData(int slotIndex)													// Get the data describing the slot.
-	{																											// { size, nextSlot, prevSlot }
-		int* data = getSlotDataPtr(slotIndex);
-		return { *(data), *(data + 1), *(data + 2) };
-	}
-	inline void updateFreeSlots(int slotIndex)																	// Updated the tracked free slots.
-	{
-		if (slotIndex < m_firstFreeSlot || !firstFreeSlotValid()) m_firstFreeSlot = slotIndex;
-		if (slotIndex > m_lastFreeSlot  || !lastFreeSlotValid())  m_lastFreeSlot  = slotIndex;
-	}
-	inline std::tuple<int, int> findAdjacentSlots(int slotIndex)												// Find the slots adjacent to the passed slot.  This is used when inserting a slot and having tp update the data.			
-	{
-		bool hasValidFirst = firstFreeSlotValid();
-		bool hasValidLast = lastFreeSlotValid();
-
-		// No valid slots.
-		if (!hasValidFirst && !hasValidLast)
-		{
-			return {-1, -1};
-		}
-		// If both slots are valid, use the one closest to the index.
-		else if (hasValidFirst && hasValidLast)
-		{
-
-		}
-	}
 
 	// Data.
 	T* m_data = nullptr;			// Pointer to the data on the heap.
@@ -375,4 +503,95 @@ private:
 	int m_capacityIncrements = 10;	// The amount of slots added/removed on resize.
 	float m_resizeThreshold = 1.1f; // The ratio that the freelist has to be reduced beyond the resize in increments to be reduced in size.
 									// This prevents the situation where resizes happens unneccesarily.
+	IteratorMode m_iteratorMode = IteratorMode::ELEMENTS; // The mode of iteration.
+
+public:
+
+	// FreeLists need a custom iterator, since we want to be able to avoid unused 
+	// slots and set the mode of iteration.
+	class Iterator
+	{
+	public:
+		// Contructor.
+		Iterator(FreeList<T>* fl, int index, int nextFreeSlot)
+		{
+			m_freeList = fl;
+			m_nextFreeSlot = nextFreeSlot;
+			m_index = index;
+		}
+
+		// Operators.
+		inline void operator++()
+		{
+			switch (m_freeList->getIteratorMode()) 
+			{
+
+			case IteratorMode::ELEMENTS:
+				// Next slot contains data.
+				if (m_nextFreeSlot == -1 || m_index + 1 != m_nextFreeSlot)
+				{
+					m_index++;
+				}
+				// Next slot does not contain data.
+				else
+				{
+					// 'Jump' over slot.
+					m_index += m_freeList->getSlotSize(m_nextFreeSlot) + 1;
+					// Set the next slot to miss.
+					m_nextFreeSlot = m_freeList->getNextSlot(m_nextFreeSlot);
+				}
+				break;
+
+			default:
+				assert(false, "Invalid iterator mode.");
+				break;
+			}
+		}
+		inline bool operator!=(const Iterator& other) 
+		{ 
+			return m_index != other.m_index; 
+		}
+		inline const T& operator*() const 
+		{ 
+			return (*m_freeList)[m_index]; 
+		}
+		inline T& operator*() 
+		{ 
+			return (*m_freeList)[m_index]; 
+		}
+
+	private:
+		// Data.
+		int m_nextFreeSlot = NULL;			// Keep track of the free slots as we iterate.
+		FreeList<T>* m_freeList = nullptr;	// FreeList iterating over.
+		int m_index = NULL;					// Used to compare iterators.
+	};
+
+	friend class Iterator;
+
+	// Iterator Begin.
+	inline Iterator begin() 
+	{ 
+		// First free slot is not the first slot in memory and is valid.
+		if (m_firstFreeSlot > 0)
+		{
+			return Iterator(this, 0, m_firstFreeSlot);
+		}
+		// There is no free first slot.
+		else if (!firstFreeSlotValid())
+		{
+			return Iterator(this, 0, -1);
+		}
+		// First free slot is the first slot in memory.
+		else if (!m_firstFreeSlot)
+		{
+			return Iterator(this, getSlotSize(m_firstFreeSlot), getNextSlot(m_firstFreeSlot));
+		}
+	}
+
+	// Iterator end.
+	inline Iterator end() 
+	{ 
+		return Iterator(this, capacity(), -1); 
+	}
 };
