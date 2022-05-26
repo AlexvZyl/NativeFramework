@@ -1,5 +1,7 @@
 #pragma once
 
+#include <tuple>
+
 // When data has been freed the first 12 bytes of the slot is used to store
 // information regarding the open slots.
 // int32 Size			(4 bytes)
