@@ -5,6 +5,8 @@
 //=============================================================================================================================================//
 
 #include "OpenGL/ErrorHandlerGL.h"
+#include "OpenGL/Buffers/IndexBufferObject.h"
+#include "OpenGL/Buffers/VertexBufferObject.h"
 #include <glad/glad.h>
 #include <vector>
 #include "glm/glm.hpp"
@@ -16,25 +18,23 @@
 //=============================================================================================================================================//
 
 // Putting indices in a struct allows them to be used with FreeLists.
+// Currently IndexData2 cannot be put in a freelist, it is too small.
 
 struct IndexData2
 {
-	// Constructors.
 	inline IndexData2(int index0, int index1)
 	{
 		indices[0] = index0;
 		indices[1] = index1;
 	}
 	inline IndexData2() = default;
-
-	// Data.
 	int indices[2] = { 0, 0 };
-	inline int size() { return 2; }
+	inline int* data() { return &indices[0]; }
+	static inline int size() { return 2; }
 };
 
 struct IndexData3
 {
-	// Constructors.
 	inline IndexData3(int index0, int index1, int index2) 
 	{
 		indices[0] = index0;
@@ -42,15 +42,13 @@ struct IndexData3
 		indices[2] = index2;
 	}
 	inline IndexData3() = default;
-
-	// Data.
 	int indices[3] = { 0, 0, 0 };
-	inline int size() { return 3; }
+	inline int* data() { return &indices[0]; }
+	static inline int size() { return 3; }
 };
 
 struct IndexData4
 {
-	// Constructors.
 	inline IndexData4(int index0, int index1, int index2, int index3)
 	{
 		indices[0] = index0;
@@ -59,36 +57,60 @@ struct IndexData4
 		indices[3] = index3;
 	}
 	inline IndexData4() = default;
-
-	// Data.
 	int indices[4] = { 0, 0, 0, 0 };
-	inline int size() { return 4; }
+	inline int* data() { return &indices[0]; }
+	static inline int size() { return 4; }
 };
-
 
 //=============================================================================================================================================//
 //  VAO Interface.																															   //
 //=============================================================================================================================================//
 
-// In some aspects the VAO acts as a GPU version of a FreeList.
 class IVertexArrayObject 
 { 
 public:
+
+	// Create the VAO.
+	inline void createArray() 
+	{
+		assert(!existsOnGPU(), "VAO already exists on the GPU.");
+		GLCall(glGenVertexArrays(1, &m_VAOID));
+		m_existsOnGPU = true;
+	}
+
+	// Delete the VAO.
+	inline void deleteArray() 
+	{
+		assert(existsOnGPU(), "VAO does not exist on the GPU.");
+		GLCall(glDeleteVertexArrays(1, &m_VAOID));
+		m_VBO.deleteBuffer();
+		m_IBO.deleteBuffer();
+		m_existsOnGPU = false;
+	}
 
 	// Bind the VAO.
 	inline void bind() const			
 	{ 
 		GLCall(glBindVertexArray(m_VAOID)); 
 	}
+
 	// Unbind the VAO.
 	inline void unbind() const			
 	{ 
 		GLCall(glBindVertexArray(0)); 
 	}
+
 	// Get the type of the VAO.
 	inline GLenum getBufferType() const 
 	{ 
 		return m_bufferType; 
+	}
+
+	// Does the VAO exists on the GPU?
+	// (Has it been created?)
+	inline bool existsOnGPU() 
+	{
+		return m_existsOnGPU;
 	}
 	
 protected:
@@ -100,16 +122,13 @@ protected:
 	inline virtual bool onDrawCall() = 0;
 
 	// Data.
-	GLenum m_bufferType = 0;				// Data type used in this VAO.	
-	unsigned m_VAOID = 0;					// Vertex Array Object ID.
-	unsigned m_VBOID = 0;					// Vertex Buffer Objext ID.	
-	unsigned m_IBOID = 0;					// Index Buffer Object ID.
-	unsigned m_vertexCount = 0;				// The amount of vertices in this VAO.
-	unsigned m_indexCount = 0;				// The amount of indices in this VAO.
-	unsigned m_vertexBufferCapacity = 0;	// Capacity of the vertices buffer.
-	unsigned m_indexBufferCapacity = 0;		// Capacity of the indices buffer.
-	bool m_vertexBufferSynced = true;		// Keep track of if the CPU and GPU data is synced for the vertices.
-	bool m_indexBufferSynced = true;		// Keep track of if the CPU and GPU data is synced for the iondices.
+	VertexBufferObject m_VBO;			// The buffer containing the vertices.
+	IndexBufferObject m_IBO;			// The buffer containing the indices.
+	GLenum m_bufferType = 0;			// Data type used in this VAO.	
+	unsigned m_VAOID = 0;				// Vertex Array Object ID.
+	bool m_vertexBufferSynced = true;	// Keep track of if the CPU and GPU data is synced for the vertices.
+	bool m_indexBufferSynced = true;	// Keep track of if the CPU and GPU data is synced for the iondices.
+	bool m_existsOnGPU = false;			// Has the VAO been created?
 };
 
 //=============================================================================================================================================//
@@ -125,32 +144,29 @@ public:
 	inline VertexArrayObject(GLenum type) 
 		: IVertexArrayObject(type)
 	{
-		// Generate the VAO.
-		GLCall(glGenVertexArrays(1, &m_VAOID));
-		GLCall(glBindVertexArray(m_VAOID));
+		// VAO setup.
+		createArray();
+		bind();
 
-		// Generate the IBO.
-		GLCall(glGenBuffers(1, &m_IBOID));
-		GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBOID));
+		// VBO setup.
+		m_VBO.createBuffer();
+		m_VBO.bind();
 
-		// Generate the VBO.
-		GLCall(glGenBuffers(1, &m_VBOID));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_VBOID));
+		// IBO setup.
+		m_IBO.createBuffer();
+		m_IBO.bind();
 
 		// Enable vertex attributes.
 		VertexType::initVertexAttributes(m_VAOID);
 
 		// Default value.
-		setBufferIncrementSize(VERTEX_BUFFER_INCREMENTS);
+		setCapacityIncrements(BUFFER_INCREMENTS);
 	}
 
 	// Destructor.
-	inline ~VertexArrayObject()
+	inline ~VertexArrayObject() 
 	{
-		// Clear GPU memory.
-		GLCall(glDeleteBuffers(1, &m_VBOID));
-		GLCall(glDeleteBuffers(1, &m_IBOID));
-		GLCall(glDeleteVertexArrays(1, &m_VAOID));
+		deleteArray();
 	}
 
 	// Push vertices and return their index in memory.
@@ -162,12 +178,14 @@ public:
 	// Push vertices and return their index in memory.
 	inline int push(VertexType* vertexPtr, int size)
 	{
+		verticesChanged();
 		return m_vertexData.push(vertexPtr, size);
 	}
 
 	// Erase vertices.
-	inline void erase(int index, int size) 
+	inline void eraseVertices(int index, int size) 
 	{
+		verticesChanged();
 		m_vertexData.erase(index, size);
 	}
 
@@ -180,7 +198,15 @@ public:
 	// Push indices and return their index in memory.
 	inline int push(IndexType* indices, int size)
 	{
+		indicesChanged();
 		return m_indexData.push(indices, size);
+	}
+
+	// Erase indices.
+	inline void eraseIndices(int index, int size)
+	{
+		indicesChanged();
+		m_indexData.erase(index, size);
 	}
 
 	// Utilities.
@@ -188,6 +214,14 @@ public:
 	inline int getCapacityIncrements()				{ return m_vertexData.getCapacityIncrements(); };	
 	inline void setResizeThreshold(float threshold) { m_vertexData.setResizeThreshold(threshold); m_indexData.setResizeThreshold(threshold); }
 	inline float getResizeThreshold()				{ return m_vertexData.getResizeThreshold(); }
+	inline int getVertexCount()					    { return m_vertexData.size(); }
+	inline int getIndexCount()						{ return m_indexData.size() * IndexType::size(); }
+	inline int getVertexCapacityCPU()				{ return m_vertexData.capacity(); }
+	inline int getVertexCapacityGPU()				{ return m_VBO.capacity(); }
+	inline int getIndexCapacityCPU()				{ return m_indexData.capacity() * IndexType::size(); }  // Given in indices, not IndexData count.
+	inline int getIndexCapacityGPU()				{ return m_IBO.capacity(); }						    // Given in indices, not IndexData count.
+	inline void indicesChanged()					{ m_indexBufferSynced = false; }
+	inline void verticesChanged()					{ m_vertexBufferSynced = false; }
 
 	// Data.
 	FreeList<VertexType> m_vertexData;
@@ -206,10 +240,6 @@ private:
 	//  M E M O R Y   M A N A G E M E N T  //
 	// ----------------------------------- //
 
-	// Resizes the buffers on the GPU.
-	bool queryBufferResize();
-	// Updates the data on the GPU.
-	void syncPrimitives();
 	// Update the index buffer data.
 	void syncIndexBuffer();
 	// Update the index buffer data.

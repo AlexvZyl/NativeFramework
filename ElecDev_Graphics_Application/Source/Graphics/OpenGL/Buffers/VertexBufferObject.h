@@ -1,94 +1,46 @@
-#include "Utilities/Memory/FreeList.h"
-#include "OpenGL/ErrorHandlerGL.h"
-#include "glad/glad.h"
-#include <assert.h>
 
 class VertexBufferObject 
 {
+public:
+
 	// Constructor should do nothing.
 	inline VertexBufferObject() = default;
 
 	// Destructor.
-	~VertexBufferObject()
-	{
-		if(existsOnGPU())
-			deleteBuffer();
-	}
+	~VertexBufferObject();
 
 	// Create the buffer.
-	inline void createBuffer()
-	{ 
-		assert(!existsOnGPU(), "VBO already exists on the GPU.");
-		GLCall(glGenBuffers(1, &m_rendererID)); 
-		m_existsOnGPU = true;
-	}
+	void createBuffer();
 
 	// Delete the buffer.
-	inline void deleteBuffer() 
-	{
-		assert(existsOnGPU(), "VBO does not exist on the GPU.");
-		GLCall(glDeleteBuffers(1, &m_rendererID));
-		m_existsOnGPU = false;
-	}
+	void deleteBuffer();
 
 	// Check if the buffer exists on the GPU.
-	inline bool existsOnGPU() 
-	{
-		return m_existsOnGPU;
-	}
+	bool existsOnGPU();
 
 	// Get the VBO ID.
-	inline int ID()
-	{ 
-		return m_rendererID; 
-	}
-
+	int ID();
+		
 	// Bind the VBO.
-	inline void bind()
-	{ 
-		assert(existsOnGPU(), "VBO does not exist on the GPU.");
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_rendererID));
-	}
+	void bind();
 
 	// Unbind the VBO.
-	inline void unbind()
-	{ 
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-	}
+	void unbind();
 
 	// Set the data.
-	inline void bufferData(int size, const void* data, int usage) 
-	{
-		GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, usage));
-		m_capacity = size;
-	}
+	void bufferData(int size, const void* data, int usage);
 
 	// Set the data by name.
-	inline void namedBufferData(int size, const void* data, int usage)
-	{
-		GLCall(glNamedBufferData(m_rendererID, size, data, usage));
-		m_capacity = size;
-	}
+	void namedBufferData(int size, const void* data, int usage);
 
 	// Set the buffer sub data.
-	inline void bufferSubData(int offset, int size, const void* data) 
-	{
-		assert(offset + size < m_capacity, "Setting data out of range.");
-		GLCall(glBufferSubData(GL_ARRAY_BUFFER, offset, size, data));
-	}
+	void bufferSubData(int offset, int size, const void* data);
 
 	// Set the buffer sub data by name.
-	inline void namedBufferSubData(int offset, int size, const void* data)
-	{
-		assert(offset + size < m_capacity, "Setting data out of range.");
-		GLCall(glNamedBufferSubData(m_rendererID, offset, size, data));
-	}
+	void namedBufferSubData(int offset, int size, const void* data);
 
 	// Get the capacity.
-	inline int capacity() 
-	{
-		return m_capacity;
-	}
+	int capacity();
 
 private:
 
