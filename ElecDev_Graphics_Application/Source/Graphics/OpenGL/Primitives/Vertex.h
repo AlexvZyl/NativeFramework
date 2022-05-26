@@ -23,18 +23,12 @@ public:
 	// ID associated with the vertex.
 	unsigned int entityID = 0;									
 	// Constructor.
-	Vertex() = default;
+	inline Vertex() = default;
 
 	// --------- //
 	//  D A T A  //
 	// --------- //
 	
-	// Size of the texture data (excluding the entity ID).
-	inline virtual int getDataSize() = 0;					
-	// Size of offset to the entity ID.
-	inline virtual int getIDOffset() = 0;
-	// Size of the entity ID variable.					
-	inline  virtual int getIDSize() = 0;
 	// Formats the data so that OpenGL can use it.
 	inline virtual const void* getData() = 0;
 	// Returns the ID in a format that OpenGL can use.
@@ -80,11 +74,11 @@ public:
 	// The entire data size.
 	static int getTotalSize();	
 	// Size of the texture data (excluding the entity ID).
-	virtual int getDataSize() override;		
+	static int getDataSize();		
 	// Size of offset to the entity ID.
-	virtual int getIDOffset() override;		
+	static int getIDOffset();		
 	// Size of the entity ID variable.			
-	virtual int getIDSize() override;		
+	static int getIDSize();		
 	// Sets the attributes according to the vertex data.
 	static void initVertexAttributes(unsigned vao);
 };
@@ -132,11 +126,11 @@ public:
 	// The entire data size.
 	static int getTotalSize();	
 	// Size of the texture data (excluding the entity ID).
-	virtual int getDataSize() override;		
+	static int getDataSize();
 	// Size of offset to the entity ID.
-	virtual int getIDOffset() override;		
+	static int getIDOffset();
 	// Size of the entity ID variable.			
-	virtual int getIDSize() override;	
+	static int getIDSize();
 	// Sets the attributes according to the vertex data.
 	static void initVertexAttributes(unsigned vao);
 };
@@ -189,11 +183,11 @@ public:
 	// The entire data size.
 	static int getTotalSize();	
 	// Size of the texture data (excluding the entity ID).
-	virtual int getDataSize() override;		
+	static int getDataSize();
 	// Size of offset to the entity ID.
-	virtual int getIDOffset() override;		
+	static int getIDOffset();
 	// Size of the entity ID variable.			
-	virtual int getIDSize() override;	
+	static int getIDSize();
 	// Sets the attributes according to the vertex data.
 	static void initVertexAttributes(unsigned vao);
 };

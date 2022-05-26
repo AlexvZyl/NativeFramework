@@ -199,6 +199,7 @@
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjects.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
@@ -220,7 +221,6 @@
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\ComponentDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
@@ -280,7 +280,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ShaderGL.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Utilities.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.cpp" />
@@ -641,6 +640,7 @@
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjects.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
@@ -663,7 +663,6 @@
     <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
     <ClInclude Include="Source\Utilities\Memory\FreeList.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Buffers\PrimitiveArrayObject.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.h" />
     <ClInclude Include="External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
     <ClInclude Include="External\YAML-CPP\Includes\yaml-cpp\binary.h" />

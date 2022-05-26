@@ -14,26 +14,26 @@
 //  Buffers.																																	//
 //==============================================================================================================================================//
 
-void Renderer::drawBufferIndexed(VertexArrayObjectPtr* vao)
+void Renderer::drawBufferIndexed(IVertexArrayObject* vao)
 {
 	if (!vao->onDrawCall()) return;
 
 	LUMEN_DRAW_CALL();
 
-	GLCall(glBindVertexArray(vao->m_VAOID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vao->m_IBOID));
-	GLCall(glDrawElements(vao->m_bufferType, vao->m_indexCount, GL_UNSIGNED_INT, 0));
+	vao->bind();
+	vao->m_IBO.bind();
+	GLCall(glDrawElements(vao->m_bufferType, vao->getIndexCount(), GL_UNSIGNED_INT, 0));
 }
 
-void Renderer::drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive)
+void Renderer::drawBufferIndexedForcePrimitive(IVertexArrayObject* vao, unsigned primitive)
 {
 	if (!vao->onDrawCall()) return;
 
 	LUMEN_DRAW_CALL();
 
-	GLCall(glBindVertexArray(vao->m_VAOID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vao->m_IBOID));
-	GLCall(glDrawElements(primitive, vao->m_indexCount, GL_UNSIGNED_INT, 0));
+	vao->bind();
+	vao->m_IBO.bind();
+	GLCall(glDrawElements(primitive, vao->getIndexCount(), GL_UNSIGNED_INT, 0));
 }
 
 //==============================================================================================================================================//

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tuple>
+#include <assert.h>
 
 // When data has been freed the first 12 bytes of the slot is used to store
 // information regarding the open slots.

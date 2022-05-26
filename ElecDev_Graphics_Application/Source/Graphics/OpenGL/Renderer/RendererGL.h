@@ -29,7 +29,7 @@ class Entity;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
-class VertexArrayObjectPtr;
+class IVertexArrayObject;
 class PolyLine;
 
 template<typename VertexType, typename IndexType>
@@ -187,8 +187,8 @@ private:
 	// --------------- //
 
 	// Buffers.
-	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
-	static void drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive);
+	static void drawBufferIndexed(IVertexArrayObject* vao);
+	static void drawBufferIndexedForcePrimitive(IVertexArrayObject* vao, unsigned primitive);
 
 	// Textures.
 	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);

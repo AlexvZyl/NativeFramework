@@ -5,8 +5,8 @@
 //=============================================================================================================================================//
 
 #include "OpenGL/ErrorHandlerGL.h"
-#include "OpenGL/Buffers/IndexBufferObject.h"
-#include "OpenGL/Buffers/VertexBufferObject.h"
+#include "OpenGL/Buffers/BufferObjects.h"
+#include "Lumen/Lumen.h"
 #include <glad/glad.h>
 #include <vector>
 #include "glm/glm.hpp"
@@ -62,6 +62,18 @@ struct IndexData4
 	static inline int size() { return 4; }
 };
 
+// Data used to issue a reload command.
+struct ReloadCommand 
+{
+	ReloadCommand(int index, int size) 
+		: index(index), size(size) 
+	{ }
+
+	int index = 0;
+	int size = 0;
+	int null = NULL; // So that it can be used in the freelist.
+};
+
 //=============================================================================================================================================//
 //  VAO Interface.																															   //
 //=============================================================================================================================================//
@@ -112,11 +124,27 @@ public:
 	{
 		return m_existsOnGPU;
 	}
+
+	// Utilities.
+	virtual inline void setCapacityIncrements(int size) = 0;
+	virtual inline int getCapacityIncrements() = 0;
+	virtual inline void setResizeThreshold(float threshold) = 0;
+	virtual inline float getResizeThreshold() = 0;
+	virtual inline int getVertexCount() = 0;
+	virtual inline int getIndexCount() = 0;
+	virtual inline int getVertexCapacityCPU() = 0;
+	virtual inline int getVertexCapacityGPU() = 0;
+	virtual inline int getIndexCapacityCPU() = 0;
+	virtual inline int getIndexCapacityGPU() = 0;
 	
 protected:
 
+	friend class Renderer;
+
 	// Constructor.
-	IVertexArrayObject(GLenum type) : m_bufferType(type) {}
+	IVertexArrayObject(GLenum type) 
+		: m_bufferType(type) 
+	{ }
 
 	// Methods.
 	inline virtual bool onDrawCall() = 0;
@@ -135,7 +163,7 @@ protected:
 //  VAO Templated Class.																													   //
 //=============================================================================================================================================//
 
-template <typename VertexType, typename IndexType>
+template <typename VertexType, typename IndexType = IndexData3>
 class VertexArrayObject : public IVertexArrayObject
 {	
 public:
@@ -210,25 +238,24 @@ public:
 	}
 
 	// Utilities.
-	inline void setCapacityIncrements(int size)		{ m_vertexData.setCapacityIncrements(size); m_indexData.setCapacityIncrements(size); };
-	inline int getCapacityIncrements()				{ return m_vertexData.getCapacityIncrements(); };	
-	inline void setResizeThreshold(float threshold) { m_vertexData.setResizeThreshold(threshold); m_indexData.setResizeThreshold(threshold); }
-	inline float getResizeThreshold()				{ return m_vertexData.getResizeThreshold(); }
-	inline int getVertexCount()					    { return m_vertexData.size(); }
-	inline int getIndexCount()						{ return m_indexData.size() * IndexType::size(); }
-	inline int getVertexCapacityCPU()				{ return m_vertexData.capacity(); }
-	inline int getVertexCapacityGPU()				{ return m_VBO.capacity(); }
-	inline int getIndexCapacityCPU()				{ return m_indexData.capacity() * IndexType::size(); }  // Given in indices, not IndexData count.
-	inline int getIndexCapacityGPU()				{ return m_IBO.capacity(); }						    // Given in indices, not IndexData count.
-	inline void indicesChanged()					{ m_indexBufferSynced = false; }
-	inline void verticesChanged()					{ m_vertexBufferSynced = false; }
-
+	virtual inline void setCapacityIncrements(int size)	override	 { m_vertexData.setCapacityIncrements(size); m_indexData.setCapacityIncrements(size); };
+	virtual inline int getCapacityIncrements() override				 { return m_vertexData.getCapacityIncrements(); };
+	virtual inline void setResizeThreshold(float threshold) override { m_vertexData.setResizeThreshold(threshold); m_indexData.setResizeThreshold(threshold); }
+	virtual inline float getResizeThreshold() override				 { return m_vertexData.getResizeThreshold(); }
+	virtual inline int getVertexCount() override					 { return m_vertexData.size(); }
+	virtual inline int getIndexCount() override						 { return m_indexData.size() * IndexType::size(); }
+	virtual inline int getVertexCapacityCPU() override				 { return m_vertexData.capacity(); }
+	virtual inline int getVertexCapacityGPU() override				 { return m_VBO.capacity(); }
+	virtual inline int getIndexCapacityCPU() override				 { return m_indexData.capacity() * IndexType::size(); }  // Given in indices, not IndexData count.
+	virtual inline int getIndexCapacityGPU() override				 { return m_IBO.capacity(); }						     // Given in indices, not IndexData count.
+	
 	// Data.
 	FreeList<VertexType> m_vertexData;
 	FreeList<IndexType> m_indexData;
 
 private:
 
+	// Friends.
 	friend class Scene;
 	friend class FrameBufferObject;
 	friend class RendererStats;
@@ -236,23 +263,89 @@ private:
 	friend class BackgroundColorEditor;
 	friend class Grid;
 
+	// Utilities.
+	inline void indicesChanged()  { m_indexBufferSynced = false;  }
+	inline void indicesSynced()   { m_indexBufferSynced = true;   }
+	inline void verticesChanged() { m_vertexBufferSynced = false; }
+	inline void verticesSynced()  { m_vertexBufferSynced = true;  }
+
 	// ----------------------------------- //
 	//  M E M O R Y   M A N A G E M E N T  //
 	// ----------------------------------- //
 
-	// Update the index buffer data.
-	void syncIndexBuffer();
-	// Update the index buffer data.
-	void syncVertexBuffer();
-	// This function deletes the data on the CPU side and keeps the GPU side data.
-	// This is useful when no more changes are going to be made and RAM should be reduced.
-	void wipeCPU();
-	// Wipes all of the data GPU side but keeps the CPU data.
-	void wipeGPU();
-	// Wipes all of the data (CPU and GPU).
-	void wipeAll();
-	// Checks if buffer should resize, sync and render.
-	virtual bool onDrawCall() override;
+	// Sync the entire VBO the the GPU.
+	inline void syncEntireVBOtoGPU() 
+	{
+		// Get vertex info.
+		int totalSize = VertexType::getTotalSize();
+		int dataSize = VertexType::getDataSize();
+		int idOffset = VertexType::getIDOffset();
+		int idSize = VertexType::getIDSize();
+
+		// Resize.
+		m_VBO.bind();
+		int newCapacity = m_vertexData.size();
+		if(m_VBO.capacity() != newCapacity) m_VBO.resize(newCapacity * totalSize);
+
+		// Load the data.
+		int index = 0;
+		for (auto& vertex : m_vertexData)
+		{
+			m_VBO.bufferSubData(index * totalSize, dataSize, vertex.getData());
+			m_VBO.bufferSubData(index * totalSize + idOffset, idSize, vertex.getID());
+			index++;
+		}
+
+		// Done.
+		verticesSynced();
+	}
+
+	// Sync the entire IBO the the GPU.
+	inline void syncEntireIBOtoGPU()
+	{
+		const static sizeOfUnsigned = sizeof(unsigned);
+
+		// Resize.
+		m_IBO.bind();
+		int newCapacity = m_indexData.size();
+		if (m_IBO.capacity() != newCapacity) m_IBO.resize(newCapacity * sizeOfUnsigned);
+
+		// Load the data.
+		int index = 0;
+		for (auto& indexdata : m_indexData)
+		{
+			m_IBO.bufferSubData(index * sizeOfUnsigned * IndexType::size(), sizeOfUnsigned * IndexType::size(), indexdata.data());
+			index++:
+		}
+
+		indicesSynced();
+	}
+
+	// Sync the GPU vertex data with the CPU data.
+	inline void syncVerticesToGPU(int index, int size)
+	{
+
+	}
+
+	// Sync the GPU index data with the CPU data.
+	inline void syncIndicesToGPU(int index, int size)
+	{
+
+	}
+
+	// ------------------- //
+	//  R E N D E R I N G  //
+	// ------------------- //
+
+	// Updates and checks if has to render.
+	inline virtual bool onDrawCall() override 
+	{
+		if (!m_vertexBufferSynced) syncEntireVBOtoGPU();
+		if (!m_indexBufferSynced)  syncEntireIBOtoGPU();
+		if (!getVertexCount())	   return false;
+		if (!getIndexCount())	   return false;
+		return true;
+	}
 };
 
 //=============================================================================================================================================//
