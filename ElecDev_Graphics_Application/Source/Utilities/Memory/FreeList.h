@@ -61,11 +61,8 @@ public:
 	// Returns the index of the slot start.
 	inline int push(const T& element) 
 	{
-		// Always check if should resize.
-		queryResize(1);
-
 		// Find and commit an open slot.
-		int slotIndex = findSlotFirstFit(1);
+		int slotIndex = findSlotFirstFit();
 		commitSlot(slotIndex);
 
 		// Do in place copy construction.
@@ -75,15 +72,29 @@ public:
 		return slotIndex;
 	}
 
+	// Push an array of elements into the list.
+	// Returns the index of the start.
+	// The memory is guaranteed to be contiguous.
+	inline int push(T* elementPtr, int size) 
+	{
+		// Find and commit slot range.
+		int slotIndex = findSlotFirstFit(size);
+		commitSlot(slotIndex, size);
+
+		// Do in place copy construction.
+		for (int i = 0; i < size; i++)
+			new (getSlotElementPtr(slotIndex+i)) T(*(elementPtr+i));
+
+		// Return the index of the first element.
+		return slotIndex;
+	}
+
 	// Push element in the next open slot.
 	// Returns the index of the slot start.
 	inline int push(T&& element)
 	{
-		// Always check if should resize.
-		queryResize(1);
-
 		// Find and commit an open slot.
-		int slotIndex = findSlotFirstFit(1);
+		int slotIndex = findSlotFirstFit();
 		commitSlot(slotIndex);
 
 		// Do in place copy construction.
@@ -98,11 +109,8 @@ public:
 	template<class ... Args>
 	inline int emplace(const Args& ... args)
 	{
-		// Always check if should resize.
-		queryResize(1);
-
 		// Find and commit an open slot.
-		int slotIndex = findSlotFirstFit(1);
+		int slotIndex = findSlotFirstFit();
 		commitSlot(slotIndex);
 
 		// Do in place construction.
@@ -115,16 +123,18 @@ public:
 	// Pop the element at the given index.
 	inline void pop(int index) 
 	{
-		getSlotElementPtr(index)->~T();
+		assert(index < m_capacity, "Trying to pop outside of capacity.");
+		slotDestructor(index);
 		freeSlot(index);
-		queryResize(-1);
 	}
 
 	// Pop the range of elements.
 	inline void pop(int startIndex, int size)
 	{
+		assert(startIndex + size < m_capacity, "Trying to pop outside of capacity.");
 		for (int i = startIndex; i < startIndex + size; i++)
-			pop(i);
+			slotDestructor(i);
+		freeSlot(startIndex, size);
 	}
 	
 	// Utilities.
@@ -207,7 +217,7 @@ private:
 			{
 				// Set new slot data.
 				if (!firstFreeSlotValid()) setSlotData(m_capacity, newCapacity - m_capacity, -1, -1);
-				else					  setSlotData(m_capacity, newCapacity - m_capacity, -1, m_firstFreeSlot);
+				else					   setSlotData(m_capacity, newCapacity - m_capacity, -1, m_firstFreeSlot);
 
 				// Update.
 				updateFreeSlots(m_capacity);
@@ -276,46 +286,61 @@ private:
 	}
 
 	// Find the first slot that fits the data.
-	inline int findSlotFirstFit(int slotSize) 
+	inline int findSlotFirstFit(int slotSize = 1) 
 	{
 		// Find an open slot that is large enough, starting from the first free one.
+		// If there is no valid first slot, skip the initial search and resize.
 		int slotIndex = m_firstFreeSlot;
-		int currentSlotSize = getSlotSize(slotIndex);
-		while (currentSlotSize < slotSize)
+		if (slotIsValid(slotIndex))
 		{
-			slotIndex = getNextSlot(slotIndex);
-			slotSize = getSlotSize(slotIndex);
+			int currentSlotSize = getSlotSize(slotIndex);
+			while (currentSlotSize < slotSize)
+			{
+				slotIndex = getNextSlot(slotIndex);
+				slotSize = getSlotSize(slotIndex);
+			}
 		}
-		return slotIndex;
+
+		// Found a valid slot.
+		if (slotIsValid(slotIndex)) return slotIndex;
+
+		// Did not find a valid slot.  Resize and search again.
+		if(queryResize(slotSize)) return findSlotFirstFit(slotSize);
+
+		// Failed.
+		assert(false, "Slot find and resize both failed.");
 	}
 
 	// Commit a slot to be used.
-	inline void commitSlot(int slotIndex) 
+	inline void commitSlot(int slotIndex, int size = 1) 
 	{
-		// Comitting a slot means an element has been added.
-		m_elementCount++;
+		// Comitting a slot means the elements are added.
+		m_elementCount+=size;
 
 		// Get the slot data.
-		auto [size, nextSlot, prevSlot] = getSlotData(slotIndex);
+		auto [slotSize, nextSlot, prevSlot] = getSlotData(slotIndex);
 		bool curHasPrevSlot = hasPrevSlot(slotIndex);
 		bool curHasNextSlot = hasNextSlot(slotIndex);
 
-		// It is a slot with multiple slots.
-		if (size > 1)
+		// Ensure slot is large enough.
+		assert(slotSize >= size, "Slot cannot hold the requested data.");
+
+		// Slot is larger than the requested size.
+		if (slotSize > size)
 		{
-			// The next slot is now a slot.
-			setSlotData(slotIndex + 1, size - 1, nextSlot, prevSlot);
+			// The next open slot is now the new slot.
+			setSlotData(slotIndex + size, slotSize - size, nextSlot, prevSlot);
 
 			// Update prev slot data.
-			if (curHasPrevSlot) setNextSlot(prevSlot, slotIndex + 1);
-			else				m_firstFreeSlot = slotIndex + 1;
+			if (curHasPrevSlot) setNextSlot(prevSlot, slotIndex + size);
+			else				m_firstFreeSlot = slotIndex + size;
 
 			// Update next slot data.
-			if (curHasNextSlot) setPrevSlot(nextSlot, slotIndex + 1);
-			else				m_lastFreeSlot = slotIndex + 1;
+			if (curHasNextSlot) setPrevSlot(nextSlot, slotIndex + size);
+			else				m_lastFreeSlot = slotIndex + size;
 		}
 
-		// Slot of size 1.
+		// Size consumes entire slot.
 		else
 		{
 			// Update prev slot data.
@@ -329,40 +354,44 @@ private:
 	}
 
 	// Free a used slot.
-	inline void freeSlot(int slotIndex) 
+	inline void freeSlot(int slotIndex, int size = 1) 
 	{
 		// Freeing a slot means an element has been removed.
-		m_elementCount--;
+		m_elementCount-=size;
 		assert(m_elementCount >= 0, "Tried to free too many elements.");
 
 	#ifdef _DEBUG
-		// Set data to 0.
-		setSlotMemory(slotIndex, 0);
+		// Clear the memorty.
+		setSlotsMemory(slotIndex, size);
 	#endif 
 
 		// Find the slots next to the inserted one.
 		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex); 
 
 		// Set slot data.
-		setSlotData(slotIndex, 1, nextSlot, prevSlot);
+		setSlotData(slotIndex, size, nextSlot, prevSlot);
 		updateFreeSlots(slotIndex);
 
-		// Update adjacent slots.
-		if (slotIsValid(prevSlot)) setNextSlot(prevSlot, slotIndex);
-		if (slotIsValid(nextSlot)) setPrevSlot(nextSlot, slotIndex);
-
-		// Prev slot merge.
+		// Prev slot.
 		if (slotIsValid(prevSlot))
 		{
-			int size = getSlotSize(prevSlot);
-			if (prevSlot + size == slotIndex) mergeSlots(prevSlot, slotIndex);
+			// Update.
+			setNextSlot(prevSlot, slotIndex);
+			// Merge.
+			if (prevSlot + getSlotSize(prevSlot) == slotIndex) mergeSlots(prevSlot, slotIndex);
 		}
-		// Next slot merge.
+		// Next slot.
 		if (slotIsValid(nextSlot))
 		{
-			int prev = getPrevSlot(nextSlot);
-			if (prev + getSlotSize(prev) == nextSlot) mergeSlots(prev, nextSlot);
+			// Update.
+			setPrevSlot(nextSlot, slotIndex);
+			// Merge.  Here we take nextSlots' prev slot (instead of slotIndex) because it 
+			// is possible that merge was already run on slotIndex.
+			if (slotIndex + size == nextSlot) mergeSlots(getPrevSlot(nextSlot), nextSlot);
 		}
+
+		// Check if it should shrink.
+		queryResize(-1);
 	}
 
 	// Call the destructors of all of the elements.
@@ -510,20 +539,22 @@ private:
 	inline bool firstFreeSlotValid()					   { return m_firstFreeSlot != -1; }					  // Checks if the first free slot is valid (exists).
 	inline bool lastFreeSlotValid()						   { return m_lastFreeSlot != -1; }						  // Checks if the last free slot is valid (exists).
 	inline bool slotIsValid(int slot)					   { return slot != -1; }								  // Checks if the slot is valid.
+	inline void slotDestructor(int slotIndex)			   { getSlotElementPtr(slotIndex)->~T(); }				  // Call the destructor of the element in the slot.
 	inline void copyToSlot(T* source, int slotIndex)	   { memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }  // Copy the element data into the slot.
 	inline void copyToSlot(const T* source, int slotIndex) { memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }  // Copy the element data into the slot.
 	inline void moveToSlot(T* source, int slotIndex)	   { memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); } // Move the element data into the slot.
 	inline void moveToSlot(const T* source, int slotIndex) { memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); } // Move the element data into the slot.
-	inline void setSlotMemory(int slotIndex, int val = 0)  { memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement); }     // Clear the slot data.
 	inline void increaseSlotSize(int slotIndex, int size)  { setSlotSize(slotIndex, getSlotSize(slotIndex) + size); }		   // Increase the slot size.
+	inline void setSlotMemory(int slotIndex, int val = 0xCC) { setSlotsMemory(slotIndex, 1, val); }							   // Set the value of the slot memory.
+	inline void setSlotsMemory(int slotIndex, int size, int val = 0xCC) { memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement * size); } // Set the value of the slots memory.
 
 	// Data.
 	T* m_data = nullptr;			// Pointer to the data on the heap.
 	int m_capacity = 0;				// The total elements that can be held.
 	int m_elementCount = 0;			// Keep track of the amount of elements allocated.
 	int m_sizeOfElement = NULL;		// The size (in bytes) of each open slot (each slot can hold one element).
-	int m_firstFreeSlot = 0;		// The indices of the slots,
-	int m_lastFreeSlot  = 0;		// -1 = no free slot.
+	int m_firstFreeSlot = -1;		// The indices of the slots,
+	int m_lastFreeSlot  = -1;		// -1 = no free slot.
 	int m_capacityIncrements = 10;	// The amount of slots added/removed on resize.
 	float m_resizeThreshold = 1.1f; // The ratio that the freelist has to be reduced beyond the resize in increments to be reduced in size.
 									// This prevents the situation where resizes happens unneccesarily.
