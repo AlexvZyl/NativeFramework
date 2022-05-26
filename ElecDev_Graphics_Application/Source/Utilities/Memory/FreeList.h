@@ -528,27 +528,27 @@ private:
 	}
 
 	// Slot utilities.
-	inline int getSlotSize(int slotIndex)				   { return *(getSlotDataPtr(slotIndex)); }				  // Get the size of the slot.
-	inline int getNextSlot(int slotIndex)				   { return *(getSlotDataPtr(slotIndex) + 1); }			  // Get the next open slot.
-	inline int getPrevSlot(int slotIndex)				   { return *(getSlotDataPtr(slotIndex) + 2); }			  // Get the prev open slot.
-	inline void setSlotSize(int slotIndex, int size)	   { *(getSlotDataPtr(slotIndex)) = size; }				  // Set the size of the slot.
-	inline void setNextSlot(int slotIndex, int nextSlot)   { *(getSlotDataPtr(slotIndex) + 1) = nextSlot; }		  // Set the next open slot.
-	inline void setPrevSlot(int slotIndex, int prevSlot)   { *(getSlotDataPtr(slotIndex) + 2) = prevSlot; }		  // Set the prev open slot.
-	inline bool hasNextSlot(int slotIndex)				   { return getNextSlot(slotIndex) != -1; }				  // Check if the given slot has a next slot.
-	inline bool hasPrevSlot(int slotIndex)				   { return getPrevSlot(slotIndex) != -1; }				  // Check if the given slot has a previous slot.
-	inline int* getSlotDataPtr(int slotIndex)			   { return reinterpret_cast<int*>(m_data + slotIndex); } // Get an int pointer to the slot data.
-	inline T* getSlotElementPtr(int slotIndex)			   { return m_data+slotIndex; }							  // Get a pointer to the slot as an element.
-	inline bool firstFreeSlotValid()					   { return m_firstFreeSlot != -1; }					  // Checks if the first free slot is valid (exists).
-	inline bool lastFreeSlotValid()						   { return m_lastFreeSlot != -1; }						  // Checks if the last free slot is valid (exists).
-	inline bool slotIsValid(int slot)					   { return slot != -1; }								  // Checks if the slot is valid.
-	inline void slotDestructor(int slotIndex)			   { getSlotElementPtr(slotIndex)->~T(); }				  // Call the destructor of the element in the slot.
-	inline void copyToSlot(T* source, int slotIndex)	   { memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }  // Copy the element data into the slot.
-	inline void copyToSlot(const T* source, int slotIndex) { memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }  // Copy the element data into the slot.
-	inline void moveToSlot(T* source, int slotIndex)	   { memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); } // Move the element data into the slot.
-	inline void moveToSlot(const T* source, int slotIndex) { memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); } // Move the element data into the slot.
-	inline void increaseSlotSize(int slotIndex, int size)  { setSlotSize(slotIndex, getSlotSize(slotIndex) + size); }		   // Increase the slot size.
-	inline void setSlotMemory(int slotIndex, int val = 0xCC) { setSlotsMemory(slotIndex, 1, val); }							   // Set the value of the slot memory.
-	inline void setSlotsMemory(int slotIndex, int size, int val = 0xCC) { memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement * size); } // Set the value of the slots memory.
+	inline int getSlotSize(int slotIndex)								{ return *(getSlotDataPtr(slotIndex)); }								// Get the size of the slot.
+	inline int getNextSlot(int slotIndex)								{ return *(getSlotDataPtr(slotIndex) + 1); }							// Get the next open slot.
+	inline int getPrevSlot(int slotIndex)								{ return *(getSlotDataPtr(slotIndex) + 2); }							// Get the prev open slot.
+	inline void setSlotSize(int slotIndex, int size)					{ *(getSlotDataPtr(slotIndex)) = size; }								// Set the size of the slot.
+	inline void setNextSlot(int slotIndex, int nextSlot)				{ *(getSlotDataPtr(slotIndex) + 1) = nextSlot; }						// Set the next open slot.
+	inline void setPrevSlot(int slotIndex, int prevSlot)				{ *(getSlotDataPtr(slotIndex) + 2) = prevSlot; }						// Set the prev open slot.
+	inline bool hasNextSlot(int slotIndex)								{ return getNextSlot(slotIndex) != -1; }								// Check if the given slot has a next slot.
+	inline bool hasPrevSlot(int slotIndex)								{ return getPrevSlot(slotIndex) != -1; }								// Check if the given slot has a previous slot.
+	inline int* getSlotDataPtr(int slotIndex)							{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an int pointer to the slot data.
+	inline T* getSlotElementPtr(int slotIndex)							{ return m_data+slotIndex; }											// Get a pointer to the slot as an element.
+	inline bool firstFreeSlotValid()									{ return m_firstFreeSlot != -1; }										// Checks if the first free slot is valid (exists).
+	inline bool lastFreeSlotValid()										{ return m_lastFreeSlot != -1; }										// Checks if the last free slot is valid (exists).
+	inline bool slotIsValid(int slot)									{ return slot != -1; }													// Checks if the slot is valid.
+	inline void slotDestructor(int slotIndex)							{ getSlotElementPtr(slotIndex)->~T(); }									// Call the destructor of the element in the slot.
+	inline void copyToSlot(T* source, int slotIndex)					{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
+	inline void copyToSlot(const T* source, int slotIndex)				{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
+	inline void moveToSlot(T* source, int slotIndex)					{ memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Move the element data into the slot.
+	inline void moveToSlot(const T* source, int slotIndex)				{ memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Move the element data into the slot.
+	inline void increaseSlotSize(int slotIndex, int size)				{ setSlotSize(slotIndex, getSlotSize(slotIndex) + size); }				// Increase the slot size.
+	inline void setSlotMemory(int slotIndex, int val = 0xCC)			{ setSlotsMemory(slotIndex, 1, val); }									// Set the value of the slot memory.
+	inline void setSlotsMemory(int slotIndex, int size, int val = 0xCC)	{ memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement * size); }	// Set the value of the slots memory.
 
 	// Data.
 	T* m_data = nullptr;			// Pointer to the data on the heap.
