@@ -123,7 +123,7 @@ public:
 	}
 
 	// Pop the element at the given index.
-	inline void pop(int index) 
+	inline void erase(int index) 
 	{
 		assert(index < m_capacity, "Trying to pop outside of capacity.");
 		slotDestructor(index);
@@ -131,7 +131,7 @@ public:
 	}
 
 	// Pop the range of elements.
-	inline void pop(int startIndex, int size)
+	inline void erase(int startIndex, int size)
 	{
 		assert(startIndex + size < m_capacity, "Trying to pop outside of capacity.");
 		for (int i = startIndex; i < startIndex + size; i++)
@@ -140,12 +140,14 @@ public:
 	}
 	
 	// Utilities.
-	inline constexpr int capacity()							 { return m_capacity; }					// Get the capacity in amount of elements.
-	inline constexpr int size()								 { return m_elementCount; }				// Get the amount of elements comitted.
-	inline void setCapacityIncrements(int increments)		 { m_capacityIncrements = increments; }	// Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline void setResizeThreshold(float threshold)			 { m_resizeThreshold = threshold; }		// Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline void setIteratorMode(IteratorMode mode)			 { m_iteratorMode = mode; }				// Set the mode of iteration.
-	inline IteratorMode getIteratorMode()					 { return m_iteratorMode; }				// Get the mode of iteration.
+	inline constexpr int capacity()						{ return m_capacity; }					// Get the capacity in amount of elements.
+	inline constexpr int size()							{ return m_elementCount; }				// Get the amount of elements comitted.
+	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }	// Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline int getCapacityIncrements()					{ return m_capacityIncrements; }		// Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline void setResizeThreshold(float threshold)		{ m_resizeThreshold = threshold; }		// Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline float getResizeThreshold()					{ return m_resizeThreshold; }			// Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline void setIteratorMode(IteratorMode mode)		{ m_iteratorMode = mode; }				// Set the mode of iteration.
+	inline IteratorMode getIteratorMode()				{ return m_iteratorMode; }				// Get the mode of iteration.
 
 	// Index operator.
 	inline constexpr T& operator[](int index)			  

@@ -32,7 +32,7 @@ class VertexDataCircle;
 class VertexArrayObjectPtr;
 class PolyLine;
 
-template<typename VertexType>
+template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 struct Font;

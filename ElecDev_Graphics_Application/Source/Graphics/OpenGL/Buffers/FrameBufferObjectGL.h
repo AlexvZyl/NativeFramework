@@ -17,7 +17,7 @@ It is going to be used to render to an ImGUI widget.
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
+template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class VertexDataTextured;
