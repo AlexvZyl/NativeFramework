@@ -10,7 +10,7 @@ struct TestStruct
 {
     ~TestStruct() 
     {
-        std::cout << "TestStruct::Destructor()\n";
+        //std::cout << "TestStruct::Destructor()\n";
     }
 };
 
@@ -20,14 +20,21 @@ public:
 
     TestClass() 
     {
-        std::cout << "TestClass::Constructor()\n";
+        //std::cout << "TestClass::Constructor()\n";
         myUPtrString = std::make_unique<std::string>("This is my UPtr String yay!");
         myStruct = std::make_unique<TestStruct>();
     }
 
     ~TestClass() 
     {
-        std::cout << "TestClass::Destructor()\n";
+        //std::cout << "TestClass::Destructor()\n";
+    }
+
+    TestClass(const TestClass& other) 
+    {
+        //std::cout << "TestClass::CopyConstructor()\n";
+        myUPtrString = std::make_unique<std::string>("This is my UPtr String yay!");
+        myStruct = std::make_unique<TestStruct>();
     }
 
     inline void myFunction() 
@@ -45,30 +52,31 @@ public:
     std::unique_ptr<TestStruct> myStruct;
 };
 
-void push(FreeList<TestClass>& fl) 
-{
-    int index = fl.push({});
-    fl[index].indexInList = index;
-    std::cout << "Pushed Index: " << std::to_string(index) << ", ";
-    std::cout << "Capacity: " << std::to_string(fl.capacity()) << ", ";
-    std::cout << "Size: " << std::to_string(fl.size()) << ".\n";
-}
-
-void emplace(FreeList<TestClass>& fl)
+void emplace(FreeList<TestClass>& fl, bool display = false)
 {
     int index = fl.emplace();
     fl[index].indexInList = index;
+    if (!display) return;
     std::cout << "Emplaced Index: " << std::to_string(index) << ", ";
     std::cout << "Capacity: " << std::to_string(fl.capacity()) << ", ";
     std::cout << "Size: " << std::to_string(fl.size()) << ".\n";
 }
 
-void pop(FreeList<TestClass>& fl, int index)
+void pop(FreeList<TestClass>& fl, int index, bool display = false)
 {
     fl.pop(index);
+    if (!display) return;
     std::cout << "Popped Index: " << std::to_string(index) << ", ";
     std::cout << "Capacity: " << std::to_string(fl.capacity()) << ", ";
     std::cout << "Size: " << std::to_string(fl.size()) << ".\n";
+}
+
+void loop(FreeList<TestClass>& fl) 
+{
+    std::cout << "Capacity: " << std::to_string(fl.capacity()) << ", Size: " << std::to_string(fl.size()) << ".\n";
+    for (auto& entry : fl)
+        std::cout << "Index: " << std::to_string(entry.indexInList) << ".\n";
+    std::cout << "\n";
 }
 
 int main(int, char**)
@@ -80,32 +88,25 @@ int main(int, char**)
     emplace(freeList);
     emplace(freeList);
     emplace(freeList);
-    emplace(freeList);
-    emplace(freeList);
-    emplace(freeList);
-    emplace(freeList);
-    emplace(freeList);
+    pop(freeList, 1);
     pop(freeList, 3);
-    pop(freeList, 6);
-    pop(freeList, 9);
-
-    // Iteration.
-    for (auto& entry : freeList) entry.myFunction();
-
+    pop(freeList, 4);
+    pop(freeList, 0);
+    loop(freeList);
     emplace(freeList);
     emplace(freeList);
     emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    loop(freeList);
 
-    // Iteration.
-    for (auto& entry : freeList) entry.myFunction();
+    freeList.pop(0, 5);
+    loop(freeList);
 
     // Initialisation.
     Application application;
     Renderer::initialise();
     
-    std::vector<TestClass> myVec;
-    myVec.emplace_back();
-
     // Main loop.
     application.run();
 
