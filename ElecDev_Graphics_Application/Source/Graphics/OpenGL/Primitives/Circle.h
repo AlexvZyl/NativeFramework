@@ -10,7 +10,6 @@
 //  Forward decleration.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class VertexDataCircle;

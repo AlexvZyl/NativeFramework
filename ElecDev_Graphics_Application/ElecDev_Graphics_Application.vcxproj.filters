@@ -147,7 +147,8 @@
     <ClCompile Include="External\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="External\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="Source\GUI\LumenGizmo\LumenGizmo.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjects.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\GLAD\Includes\glad\glad.h">
@@ -174,7 +175,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ShaderGL.h" />
     <ClInclude Include="Source\Graphics\Fonts\FontLoader.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Polygon.h" />
     <ClInclude Include="Source\Graphics\Entities\EntityManager.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Vertex.h" />
@@ -616,7 +616,8 @@
     <ClInclude Include="Source\Lumen\LumenPCH.h" />
     <ClInclude Include="Source\Application\ApplicationTemplates.h" />
     <ClInclude Include="Source\Utilities\Memory\FreeList.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjects.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\GLFW\Libraries\glfw3.lib">

@@ -18,7 +18,6 @@ for a VAO to be able to render the entity to the screen.
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 struct IndexData2;

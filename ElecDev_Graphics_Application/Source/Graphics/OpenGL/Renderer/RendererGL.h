@@ -34,7 +34,6 @@ class PolyLine;
 class FrameBufferObject;
 struct IndexData3;
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 struct Font;

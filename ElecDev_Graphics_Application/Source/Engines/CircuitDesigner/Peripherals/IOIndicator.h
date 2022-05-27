@@ -16,7 +16,6 @@ enum class PortPosition;
 class Port;
 class VertexData;
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 //==============================================================================================================================================//

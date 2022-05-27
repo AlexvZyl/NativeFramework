@@ -14,7 +14,6 @@
 //  Forward declarations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class VertexDataTextured;

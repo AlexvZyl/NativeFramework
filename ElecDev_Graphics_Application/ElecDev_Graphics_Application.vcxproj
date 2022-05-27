@@ -199,7 +199,8 @@
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjects.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.cpp" />
+    <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
@@ -640,7 +641,8 @@
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjects.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
@@ -746,7 +748,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ShaderGL.h" />
     <ClInclude Include="Source\Graphics\Fonts\FontLoader.h" />
-    <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\CircuitDesigner.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.h" />
     <ClInclude Include="Source\GUI\AssetExplorer\AssetExplorer.h" />

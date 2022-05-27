@@ -41,12 +41,6 @@ public:
 	// Get the capacity.
 	int capacity();
 
-	// Resize the buffer with the provided size.
-	void resize(int size, const void* data = NULL);
-
-	// Resize the buffer with the provided size, using namedBufferData().
-	void namedResize(int size, const void* data = NULL);
-
 private:
 
 	int m_target = NULL;

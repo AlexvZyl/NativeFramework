@@ -405,6 +405,8 @@ private:
 		// Find the slots next to the inserted one.
 		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex); 
 
+		// TODO: Check if the slot has already been freed based on the adjacent slots.
+
 		// Freeing a slot means an element has been removed.
 		m_elementCount-=size;
         // Assert if tried to free too many elements.
@@ -626,6 +628,20 @@ public:
 			m_index = index;
 			m_nextFreeSlot = nextFreeSlot;
 			m_iteratorMode = mode;
+			updateElementsInMemory()
+		}
+
+		inline void updateElementsInMemory()
+		{
+			// Set the memory region size.
+			if (fl->slotIsValid(nextFreeSlot))
+			{
+				m_elementsInMemoryRegion = m_nextFreeSlot - m_index;
+			}
+			else
+			{
+				m_elementsInMemoryRegion = m_freeList->capacity() - m_index;
+			}
 		}
 
 		// Operators.
@@ -633,24 +649,25 @@ public:
 		{
 			switch (m_iteratorMode)
 			{
+			case IteratorMode::MEMORY:
+
+
+				break;
 
 			case IteratorMode::ELEMENTS:
 				// Next slot contains data.
 				if (m_nextFreeSlot == -1 || m_index + 1 < m_nextFreeSlot)
 				{
 					m_index++;
+					m_elementsInMemoryRegion--;
 				}
-				// Next slot does not contain data.
+				// 'Jump' over linked list slot.
 				else
 				{
-					// 'Jump' over slot.
 					m_index += m_freeList->getSlotSize(m_nextFreeSlot) + 1;
-					// Set the next slot to miss.
 					m_nextFreeSlot = m_freeList->getNextSlot(m_nextFreeSlot);
+					updateElementsInMemory()
 				}
-				break;
-
-			case IteratorMode::MEMORY:
 				break;
 
 			default:
@@ -665,16 +682,17 @@ public:
 	private:
 
 		// Data.
-		int m_nextFreeSlot = NULL;			// Keep track of the free slots as we iterate.
-		FreeList<T>* m_freeList = nullptr;	// FreeList iterating over.
-		int m_index = NULL;					// Current point in iteration.
-		IteratorMode m_iteratorMode = IteratorMode::ELEMENTS;
+		int m_index = NULL;										// The index in memory of the current element.
+		int m_nextFreeSlot = NULL;								// The index of the next slot that does not contain data.
+		int m_elementsInMemoryRegion = NULL;					// The amount of elements in the current memory region.
+		FreeList<T>* m_freeList = nullptr;						// FreeList iterating over.
+		IteratorMode m_iteratorMode = IteratorMode::ELEMENTS;	// The set iteration mode.
 	};
 
 	// Iterator functions.
 	inline Iterator begin() 
 	{ 
-		// First slot in memory.
+		// First slot in memory has a linked list entry.
 		if (m_firstFreeSlot == 0) return Iterator(this, getSlotSize(m_firstFreeSlot), getNextSlot(m_firstFreeSlot), m_iteratorMode);
 		// Construct iterator normally.
 		else					  return Iterator(this, 0, m_firstFreeSlot, m_iteratorMode);

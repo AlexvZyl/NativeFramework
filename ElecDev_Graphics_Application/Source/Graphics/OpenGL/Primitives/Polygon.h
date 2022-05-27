@@ -14,7 +14,6 @@
 //  Forward dclerations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class VertexData;

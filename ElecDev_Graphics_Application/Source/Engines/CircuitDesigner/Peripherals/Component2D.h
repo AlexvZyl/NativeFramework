@@ -18,7 +18,6 @@
 //  Forward declerations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class Circle;

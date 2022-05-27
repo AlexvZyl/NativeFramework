@@ -1,5 +1,5 @@
-#include "Utilities/Memory/FreeList.h"
-#include "OpenGL/Buffers/BufferObjects.h"
+
+#include "OpenGL/Buffers/BufferObjectsGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include <assert.h>
 
@@ -65,16 +65,6 @@ void BufferObject::namedBufferSubData(int offset, int size, const void* data)
 {
 	assert(offset + size < m_capacity); // Setting data out of range.
 	GLCall(glNamedBufferSubData(m_rendererID, offset, size, data));
-}
-
-void BufferObject::resize(int size, const void* data)
-{
-	bufferData(size, data);
-}
-
-void BufferObject::namedResize(int size, const void* data)
-{
-	namedBufferData(size, data);
 }
 
 int BufferObject::capacity()
