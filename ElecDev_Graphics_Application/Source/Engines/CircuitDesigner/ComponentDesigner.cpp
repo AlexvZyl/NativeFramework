@@ -22,6 +22,7 @@ ComponentDesigner::ComponentDesigner()
 	m_activeComponent->disableOutline();
 	enableDesignPalette();
 	enableOverlay();
+	enableTooltip();
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
@@ -378,4 +379,9 @@ void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit*
 void ComponentDesigner::renderOverlay() 
 {
 	getScene().getGrid().renderOverlay();
+}
+
+void ComponentDesigner::renderTooltip() 
+{
+	
 }

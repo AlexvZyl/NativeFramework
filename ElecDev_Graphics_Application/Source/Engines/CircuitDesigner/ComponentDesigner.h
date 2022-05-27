@@ -65,6 +65,7 @@ public:
     // Design palette.
     virtual void renderDesignPalette() override;
     virtual void renderOverlay() override;
+    virtual void renderTooltip() override;
 
     void switchState(CompDesignState state);
     void pushActivePrimitives();

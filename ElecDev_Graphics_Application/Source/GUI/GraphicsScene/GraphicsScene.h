@@ -103,6 +103,12 @@ public:
 			ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
 			m_engine->renderOverlay();
 		}
+
+		// Render the tooltip.
+		if (m_engine->hasTooltip() && ImGui::IsWindowHovered())
+		{
+			m_engine->renderTooltip();
+		}
 	}
 
 	inline virtual void onImGuiEnd() override 
