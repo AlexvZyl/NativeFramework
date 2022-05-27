@@ -24,7 +24,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D)
 	VertexArrayObject<VertexData>* vao = polygon2D->m_VAO;
 	for (int i = polygon2D->m_vertexBufferPos; i < polygon2D->m_vertexCount + polygon2D->m_vertexBufferPos; i++)
 	{
-		emitter << YAML::Key << "Vertex " + std::to_string(index) << YAML::Value << vao->m_vertexCPU[i].data.position;
+		emitter << YAML::Key << "Vertex " + std::to_string(index) << YAML::Value << vao->m_vertexData[i].data.position;
 		index++;
 	}
 	emitter << YAML::EndMap;

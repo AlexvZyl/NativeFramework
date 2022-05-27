@@ -15,14 +15,14 @@ BufferObject::~BufferObject()
 
 void BufferObject::createBuffer()
 {
-	assert(!m_existsOnGPU, "Buffer already exists on the GPU.");
+	assert(!m_existsOnGPU); // Buffer already exists on the GPU.
 	GLCall(glGenBuffers(1, &m_rendererID));
 	m_existsOnGPU = true;
 }
 
 void BufferObject::deleteBuffer()
 {
-	assert(m_existsOnGPU, "Buffer does not exist on the GPU.");
+	assert(m_existsOnGPU); // Buffer does not exist on the GPU.
 	GLCall(glDeleteBuffers(1, &m_rendererID));
 	m_existsOnGPU = false;
 }
@@ -34,7 +34,7 @@ int BufferObject::ID()
 
 void BufferObject::bind()
 {
-	assert(m_existsOnGPU, "Buffer does not exist on the GPU.");
+	assert(m_existsOnGPU); // Buffer does not exist on the GPU.
 	GLCall(glBindBuffer(m_target, m_rendererID));
 }
 
@@ -57,13 +57,13 @@ void BufferObject::namedBufferData(int size, const void* data, int usage)
 
 void BufferObject::bufferSubData(int offset, int size, const void* data)
 {
-	assert(offset + size < m_capacity, "Setting data out of range.");
+	assert(offset + size < m_capacity); // Setting data out of range.
 	GLCall(glBufferSubData(m_target, offset, size, data));
 }
 
 void BufferObject::namedBufferSubData(int offset, int size, const void* data)
 {
-	assert(offset + size < m_capacity, "Setting data out of range.");
+	assert(offset + size < m_capacity); // Setting data out of range.
 	GLCall(glNamedBufferSubData(m_rendererID, offset, size, data));
 }
 

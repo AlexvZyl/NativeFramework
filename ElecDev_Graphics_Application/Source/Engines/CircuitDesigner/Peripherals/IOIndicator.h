@@ -16,7 +16,7 @@ enum class PortPosition;
 class Port;
 class VertexData;
 
-template<typename VertexType>
+template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 //==============================================================================================================================================//
@@ -35,7 +35,7 @@ private:
 public:
 
     // Comstructor.
-    IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData>* VAO, Port* parent);
+    IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData, IndexData3>* VAO, Port* parent);
     // Set the IO type.
     void setType(PortType type, PortPosition position);
 

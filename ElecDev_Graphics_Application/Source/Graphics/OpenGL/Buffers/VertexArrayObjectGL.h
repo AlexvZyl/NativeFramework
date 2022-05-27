@@ -12,13 +12,16 @@
 #include "glm/glm.hpp"
 #include <memory>
 #include "Utilities/Memory/FreeList.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Primitive.h"
 
 //=============================================================================================================================================//
 //  Index Data.																																   //
 //=============================================================================================================================================//
 
 // Putting indices in a struct allows them to be used with FreeLists.
-// Currently IndexData2 cannot be put in a freelist, it is too small.
+// Currently IndexData2 has an extra int so that it can be placed in
+// the freelist.
 
 struct IndexData2
 {
@@ -28,9 +31,11 @@ struct IndexData2
 		indices[1] = index1;
 	}
 	inline IndexData2() = default;
-	int indices[2] = { 0, 0 };
 	inline int* data() { return &indices[0]; }
 	static inline int size() { return 2; }
+	// Data.
+	int indices[2] = { 0, 0 };
+	int null = NULL;
 };
 
 struct IndexData3
@@ -42,9 +47,10 @@ struct IndexData3
 		indices[2] = index2;
 	}
 	inline IndexData3() = default;
-	int indices[3] = { 0, 0, 0 };
 	inline int* data() { return &indices[0]; }
 	static inline int size() { return 3; }
+	// Data.
+	int indices[3] = { 0, 0, 0 };
 };
 
 struct IndexData4
@@ -57,9 +63,10 @@ struct IndexData4
 		indices[3] = index3;
 	}
 	inline IndexData4() = default;
-	int indices[4] = { 0, 0, 0, 0 };
 	inline int* data() { return &indices[0]; }
 	static inline int size() { return 4; }
+	// Data.
+	int indices[4] = { 0, 0, 0, 0 };
 };
 
 // Data used to issue a reload command.
@@ -68,7 +75,7 @@ struct ReloadCommand
 	ReloadCommand(int index, int size) 
 		: index(index), size(size) 
 	{ }
-
+	
 	int index = 0;
 	int size = 0;
 	int null = NULL; // So that it can be used in the freelist.
@@ -210,6 +217,13 @@ public:
 		return m_vertexData.push(vertexPtr, size);
 	}
 
+	// Push vertices and return their index in memory.
+	inline int push(const VertexType* vertexPtr, int size)
+	{
+		verticesChanged();
+		return m_vertexData.push(vertexPtr, size);
+	}
+
 	// Erase vertices.
 	inline void eraseVertices(int index, int size) 
 	{
@@ -225,6 +239,13 @@ public:
 
 	// Push indices and return their index in memory.
 	inline int push(IndexType* indices, int size)
+	{
+		indicesChanged();
+		return m_indexData.push(indices, size);
+	}
+
+	// Push indices and return their index in memory.
+	inline int push(const IndexType* indices, int size)
 	{
 		indicesChanged();
 		return m_indexData.push(indices, size);
@@ -253,6 +274,14 @@ public:
 	FreeList<VertexType> m_vertexData;
 	FreeList<IndexType> m_indexData;
 
+	// DEBUGGING.
+	void pushPrimitive(PrimitivePtr* primitive, const std::vector<VertexType>& vertices, const std::vector<unsigned>& indices) {}
+	void popPrimitive(PrimitivePtr* primitive) {}
+	void updateIndices(PrimitivePtr* primitive, const std::vector<unsigned>& indices) {}
+	void syncPrimitiveVertexData(PrimitivePtr* primitive) {}
+	void syncPrimitiveIndexData(PrimitivePtr* primitive) {}
+	void syncPrimitiveData(PrimitivePtr* primitive) {}
+
 private:
 
 	// Friends.
@@ -277,10 +306,10 @@ private:
 	inline void syncEntireVBOtoGPU() 
 	{
 		// Get vertex info.
-		int totalSize = VertexType::getTotalSize();
-		int dataSize = VertexType::getDataSize();
-		int idOffset = VertexType::getIDOffset();
-		int idSize = VertexType::getIDSize();
+		const static int totalSize = VertexType::getTotalSize();
+		const static int dataSize = VertexType::getDataSize();
+		const static int idOffset = VertexType::getIDOffset();
+		const static int idSize = VertexType::getIDSize();
 
 		// Resize.
 		m_VBO.bind();
@@ -303,7 +332,7 @@ private:
 	// Sync the entire IBO the the GPU.
 	inline void syncEntireIBOtoGPU()
 	{
-		const static sizeOfUnsigned = sizeof(unsigned);
+		const static int sizeOfUnsigned = sizeof(unsigned);
 
 		// Resize.
 		m_IBO.bind();
@@ -315,7 +344,7 @@ private:
 		for (auto& indexdata : m_indexData)
 		{
 			m_IBO.bufferSubData(index * sizeOfUnsigned * IndexType::size(), sizeOfUnsigned * IndexType::size(), indexdata.data());
-			index++:
+			index++;
 		}
 
 		indicesSynced();

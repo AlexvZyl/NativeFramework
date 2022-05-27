@@ -1,4 +1,5 @@
 #include "glad/glad.h"
+#include <stddef.h>
 
 class BufferObject
 {

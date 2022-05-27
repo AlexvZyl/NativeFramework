@@ -31,6 +31,8 @@ class VertexDataTextured;
 class VertexDataCircle;
 class IVertexArrayObject;
 class PolyLine;
+class FrameBufferObject;
+struct IndexData3;
 
 template<typename VertexType, typename IndexType>
 class VertexArrayObject;
@@ -192,7 +194,7 @@ private:
 
 	// Textures.
 	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
-	static std::unique_ptr<VertexArrayObject<VertexDataTextured>> s_unitQuad;
+	static std::unique_ptr<VertexArrayObject<VertexDataTextured, IndexData3>> s_unitQuad;
 	static void createUnitQuad();
 
 	// ------------------- //

@@ -14,7 +14,7 @@
 //  Forward declarations.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
+template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class VertexDataTextured;
@@ -26,13 +26,13 @@ struct Font;
 //  Class.																																	    //
 //==============================================================================================================================================//
 
-class Text : public Primitive<VertexDataTextured>
+class Text : public Primitive<VertexDataTextured, IndexData3>
 {
 public:
 
 	// Constructor.
 	Text(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale,
-		 VertexArrayObject<VertexDataTextured>* VAO, Font* font, Entity* parent,
+		 VertexArrayObject<VertexDataTextured, IndexData3>* VAO, Font* font, Entity* parent,
 		 const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B");
 
 	// Updates the text of the text entity.

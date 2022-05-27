@@ -10,16 +10,17 @@
 //  Forward decleration.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
+template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
 class VertexDataCircle;
+struct IndexData3;
 
 //=============================================================================================================================================//
 //  Circle class.		 																													   //
 //=============================================================================================================================================//
 
-class Circle : public Primitive<VertexDataCircle>
+class Circle : public Primitive<VertexDataCircle, IndexData3>
 {
 public:
 
@@ -35,8 +36,8 @@ public:
 	float m_radius = 0;
 
 	// Constructors. 
-	Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
-	Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
+	Circle(VertexArrayObject<VertexDataCircle, IndexData3>* vao, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
+	Circle(VertexArrayObject<VertexDataCircle, IndexData3>* vao, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
 	
 	void setRadius(float radius);
 };

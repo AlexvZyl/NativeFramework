@@ -21,6 +21,10 @@ for a VAO to be able to render the entity to the screen.
 template<typename VertexType, typename IndexType>
 class VertexArrayObject;
 
+struct IndexData2;
+struct IndexData3;
+struct IndexData4;
+
 //=============================================================================================================================================//
 //  Primitive Pointer.																														   //
 //=============================================================================================================================================//
@@ -65,7 +69,7 @@ protected:
 //  Primitive Class.																														   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
+template<typename VertexType, typename IndexType = IndexData3>
 class Primitive: public PrimitivePtr
 {
 public:
@@ -74,8 +78,8 @@ public:
 	//  V A R I A B L E S  //
 	// ------------------- //
 
-	VertexArrayObject<VertexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
-	VertexType* m_verticesData = nullptr;		 	// Pointer to the first vertex in memory.
+	VertexArrayObject<VertexType, IndexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
+	//VertexType* m_verticesData = nullptr;		 				// Pointer to the first vertex in memory.
 
 	// ------------------------------------------------- //
 	//  C O N S T R U C T O R   &   D E S T R U C T O R  //

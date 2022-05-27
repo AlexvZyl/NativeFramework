@@ -356,7 +356,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 					polyline->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
 				}
 				else {
-					m_activePoly->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
+					m_activePoly->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexData[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
 				}
 			}
 		}

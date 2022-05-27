@@ -3,7 +3,8 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) :Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData, IndexData3>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) 
+	: Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;

@@ -90,7 +90,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
 	// VAO's.
 	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;
-	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;
+	std::unique_ptr<VertexArrayObject<VertexData, IndexData2>> m_linesVAO;
 	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;
 	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;
 	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;

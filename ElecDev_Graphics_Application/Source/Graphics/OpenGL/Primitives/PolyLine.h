@@ -21,7 +21,7 @@ public:
 
 	ClipperLib::EndType et = ClipperLib::etOpenRound;
     
-    PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness = 0.014f, bool closed = false, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f}, bool rounded = true);
+    PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData, IndexData3>* VAO, Entity* parent, float thickness = 0.014f, bool closed = false, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f}, bool rounded = true);
     //Calculates the offset and runs the triangulation function
 	virtual void pushVertex(const glm::vec3& vertex) override;
 	virtual void pushVertex(const glm::vec2& vertex);

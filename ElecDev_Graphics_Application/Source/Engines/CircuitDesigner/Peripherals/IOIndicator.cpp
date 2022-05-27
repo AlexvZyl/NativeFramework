@@ -9,7 +9,7 @@
 //  Methods.																															        //
 //==============================================================================================================================================//
 
-IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData>* VAO, Port* parent)
+IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData, IndexData3>* VAO, Port* parent)
 	: Primitive(parent),
 	  m_portType(type),
 	  m_portPosition(position)

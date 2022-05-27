@@ -104,21 +104,25 @@ void Renderer::createUnitQuad()
 {
 	// Create VAO.
 	s_unitQuad = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	s_unitQuad->setBufferIncrementSize(4);
+	s_unitQuad->setCapacityIncrements(2);
 
 	// Vertex data.
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(-1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 0.f), 0.f, 0));
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(-1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 1.f), 0.f, 0));
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 1.f), 0.f, 0));
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 0.f), 0.f, 0));
-	s_unitQuad->m_vertexCount += 4;
+	VertexDataTextured vertices[4] = {
+		VertexDataTextured(glm::vec3(-1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 0.f), 0.f, 0),
+		VertexDataTextured(glm::vec3(-1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 1.f), 0.f, 0),
+		VertexDataTextured(glm::vec3(1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 1.f), 0.f, 0),
+		VertexDataTextured(glm::vec3(1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 0.f), 0.f, 0)
+	};
 
 	// Index data.
-	s_unitQuad->m_indexCPU.insert(s_unitQuad->m_indexCPU.end(), { 0,1,2, 2,3,0 });
-	s_unitQuad->m_indexCount += 6;
+	IndexData3 indices[2] = {
+		IndexData3(0, 1, 2),
+		IndexData3(2, 3, 0)
+	};
 
-	// Data will be loaded upon first resize.
-	s_unitQuad->queryBufferResize();
+	// Push data.
+	s_unitQuad->push(vertices, 4);
+	s_unitQuad->push(indices, 4);
 }
 
 //==============================================================================================================================================//

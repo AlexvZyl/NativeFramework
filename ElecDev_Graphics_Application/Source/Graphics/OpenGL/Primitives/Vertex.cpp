@@ -65,10 +65,10 @@ void VertexData::initVertexAttributes(unsigned VAO)
 	GLCall(glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, totalSizeVD, (const void*)idOffset));
 }
 
-int VertexData::getTotalSize() { return totalSizeVD; };
-int VertexData::getDataSize()  { return dataSizeVD;  };
-int VertexData::getIDOffset()  { return idOffsetVD;  };
-int VertexData::getIDSize()	   { return idSizeVD;	 };
+int VertexData::getTotalSize() { return totalSizeVD; }
+int VertexData::getDataSize()  { return dataSizeVD;  }
+int VertexData::getIDOffset()  { return idOffsetVD;  }
+int VertexData::getIDSize()	   { return idSizeVD;	 }
 
 //=============================================================================================================================================//
 //  Vertex Data Textured.																													   //
@@ -114,10 +114,10 @@ void VertexDataTextured::initVertexAttributes(unsigned VAO)
 	GLCall(glVertexAttribIPointer(5, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
 }
 
-int VertexDataTextured::getTotalSize() { return totalSizeVDT; };
-int VertexDataTextured::getDataSize()  { return dataSizeVDT;  };
-int VertexDataTextured::getIDOffset()  { return idOffsetVDT;  };
-int VertexDataTextured::getIDSize()    { return idSizeVDT;	  };
+int VertexDataTextured::getTotalSize() { return totalSizeVDT; }
+int VertexDataTextured::getDataSize()  { return dataSizeVDT;  }
+int VertexDataTextured::getIDOffset()  { return idOffsetVDT;  }
+int VertexDataTextured::getIDSize()    { return idSizeVDT;	  }
 
 //=============================================================================================================================================//
 //  Vertex Data Circle.																														   //
@@ -179,10 +179,10 @@ void VertexDataCircle::initVertexAttributes(unsigned VAO)
 	GLCall(glVertexAttribIPointer(7, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
 }
 
-int VertexDataCircle::getTotalSize() { return totalSizeVDC; };
-int VertexDataCircle::getDataSize()  { return dataSizeVDC;  };
-int VertexDataCircle::getIDOffset()  { return idOffsetVDC;  };
-int VertexDataCircle::getIDSize()    { return idSizeVDC;    };
+int VertexDataCircle::getTotalSize() { return totalSizeVDC; }
+int VertexDataCircle::getDataSize()  { return dataSizeVDC;  }
+int VertexDataCircle::getIDOffset()  { return idOffsetVDC;  }
+int VertexDataCircle::getIDSize()    { return idSizeVDC;    }
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

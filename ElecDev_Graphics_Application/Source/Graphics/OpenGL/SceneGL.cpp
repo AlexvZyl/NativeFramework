@@ -30,10 +30,10 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	m_camera				= std::make_unique<Camera>(cameraType, size);
 
 	// VAO's.
-	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData>>(GL_LINES);
-	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_texturedTrianglesVAO  = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle>>(GL_TRIANGLES);
+	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData, IndexData2>>(GL_LINES);
+	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData, IndexData3>>(GL_TRIANGLES);
+	m_texturedTrianglesVAO  = std::make_unique<VertexArrayObject<VertexDataTextured, IndexData3>>(GL_TRIANGLES);
+	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle, IndexData3>>(GL_TRIANGLES);
 
 	// Grid.
 	Renderer::storeAndBindScene(this);
@@ -128,30 +128,25 @@ void Scene::create2DBackground()
 	
 	// Create the VAO.
 	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_backgroundVAO->setBufferIncrementSize(5);
-
-	// Assign background data.
-	glm::vec4 bgColor2((float)217 / 255, (float)250 / 255, (float)255 / 255, 1.f);
-	glm::vec4 bgColor1((float)182 / 255, (float)200 / 255, (float)255 / 255, 1.f);
-	//glm::vec4 defaultCol((float)92 / 255, (float)95 / 255, (float)103 / 255, 1.f);
-	glm::vec3 pos1(1.0f, 1.0f, 0.f);
-	glm::vec3 pos2(-1.0f, 1.0f, 0.f);
-	glm::vec3 pos3(-1.0f, -1.0f, 0.f);
-	glm::vec3 pos4(1.0f, -1.0f, 0.f);
+	m_backgroundVAO->setCapacityIncrements(4);
 
 	// Vertices.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos1, Renderer::backgroundColor, -1)); //  Top right.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos2, Renderer::backgroundColor, -1)); //  Top left.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos3, Renderer::backgroundColor, -1)); //  Bottom left.
-	m_backgroundVAO->m_vertexCPU.emplace_back(VertexData(pos4, Renderer::backgroundColor, -1)); //  Bottom right.
-	m_backgroundVAO->m_vertexCount += 4;
+	VertexData vertices[4] = {
+		VertexData({ 1.0f, 1.0f, 0.f },   Renderer::backgroundColor, -1), //  Top right.
+		VertexData({ -1.0f, 1.0f, 0.f },  Renderer::backgroundColor, -1), //  Top left.
+		VertexData({ -1.0f, -1.0f, 0.f }, Renderer::backgroundColor, -1), //  Bottom left.
+		VertexData({ 1.0f, -1.0f, 0.f },  Renderer::backgroundColor, -1)  //  Bottom right.
+	};
 
 	// Indices.
-	m_backgroundVAO->m_indexCPU.insert(m_backgroundVAO->m_indexCPU.end(), { 0,1,2, 2,3,0 });
-	m_backgroundVAO->m_indexCount += 6;
+	IndexData3 indices[2] = {
+		IndexData3(0, 1, 2),
+		IndexData3(2, 3, 0)
+	};
 
-	// Data will be set on the first resize.
-	m_backgroundVAO->queryBufferResize();
+	// Push data.
+	m_backgroundVAO->push(vertices, 4);
+	m_backgroundVAO->push(indices, 2);
 }
 
 void Scene::create3DBackground() 
