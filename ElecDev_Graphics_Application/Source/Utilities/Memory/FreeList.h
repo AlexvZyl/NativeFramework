@@ -559,7 +559,7 @@ private:
 		while (currentPrevSlot > referenceSlot && slotIsValid(currentPrevSlot))
 		{
 			currentSlot = currentPrevSlot;
-			currentPrevSlot = getNextSlot(currentSlot);
+			currentPrevSlot = getPrevSlot(currentSlot);
 		}
 		return currentSlot;
 	}
