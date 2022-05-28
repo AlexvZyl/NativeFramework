@@ -67,6 +67,14 @@ public:
 		{
 			new (getSlotElementPtr(it.m_index)) T(*it);
 		}
+
+		// Now copy all the slots' data.
+		int currentSlot = other.m_firstFreeSlot;
+		while(slotIsValid(currentSlot))
+		{
+			copySlotData(other.getSlotDataPtr(currentSlot), currentSlot);			
+			currentSlot = other.getNextSlot(currentSlot);
+		}
 	}
 
 	// Destructor.
@@ -611,11 +619,17 @@ private:
 		if (m_lastFreeSlot == secondSlot) m_lastFreeSlot = firstSlot;
 	}
 
-	// Slot utilities.
+    // Memoory.
 	inline int* getSlotDataPtr(int slotIndex) 							{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an int pointer to the slot data.
 	inline const int* getSlotDataPtr(int slotIndex) const 				{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an const int pointer to the slot data.
 	inline T* getSlotElementPtr(int slotIndex) 							{ return m_data + slotIndex; }											// Get a pointer to the slot as an element.
 	inline const T* getSlotElementPtr(int slotIndex) const				{ return m_data + slotIndex; }											// Get a const pointer to the slot as an element.
+	inline void setSlotMemory(int slotIndex, int val = 0xCC)			{ setSlotsMemory(slotIndex, 1, val); }									// Set the value of the slot memory.
+	inline void setSlotsMemory(int slotIndex, int size, int val = 0xCC)	{ memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement * size); }	// Set the value of the slots memory.
+	inline void copySlotData(int* source, int slotDest)   				{ memcpy(getSlotDataPtr(slotDest), source, 12); }						// Copy the data from another slot to this slot.
+	inline void copySlotData(const int* source, int slotDest) 			{ memcpy(getSlotDataPtr(slotDest), source, 12); }						// Copy the data from another slot to this slot.
+
+	// Slot utilities.
 	inline void slotDestructor(int slotIndex)							{ getSlotElementPtr(slotIndex)->~T(); }									// Call the destructor of the element in the slot.
 	inline int getSlotSize(int slotIndex) const							{ return *(getSlotDataPtr(slotIndex)); }								// Get the size of the slot.
 	inline int getPrevSlot(int slotIndex) const							{ return *(getSlotDataPtr(slotIndex) + 1); }							// Get the prev open slot.
@@ -635,14 +649,6 @@ private:
 	inline bool isSlotContained(int parent, int parentSize, int child) const { return child >= parent && child < parent + parentSize; }			// Checks if the child slot is contained in the parent, based on the parent size.
 	inline void connectSlots(int firstSlot, int secondSlot)				{ setNextSlot(firstSlot, secondSlot); setPrevSlot(secondSlot, firstSlot); }	// Connect the two slots via their next and prev slots.
 
-    // Memopry.
-	inline void copyToSlot(T* source, int slotIndex)					{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
-	inline void copyToSlot(const T* source, int slotIndex)				{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
-	inline void moveToSlot(T* source, int slotIndex)					{ memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Move the element data into the slot.
-	inline void moveToSlot(const T* source, int slotIndex)				{ memmove(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Move the element data into the slot.
-	inline void setSlotMemory(int slotIndex, int val = 0xCC)			{ setSlotsMemory(slotIndex, 1, val); }									// Set the value of the slot memory.
-	inline void setSlotsMemory(int slotIndex, int size, int val = 0xCC)	{ memset(getSlotElementPtr(slotIndex), val, m_sizeOfElement * size); }	// Set the value of the slots memory.
-
 	// Data.
 	T* m_data = nullptr;			                      // Pointer to the data on the heap.
 	IteratorMode m_iteratorMode = IteratorMode::ELEMENTS; // The mode of iteration.
@@ -657,9 +663,9 @@ private:
 
 public:
 
-	// ---------------- //
-	// I T E R A T O R  //
-	// ---------------- //
+	// ----------------- //
+	//  I T E R A T O R  //
+	// ----------------- //
 
 	// FreeLists need a custom iterator, since we want to be able to avoid unused 
 	// slots and set the mode of iteration.
