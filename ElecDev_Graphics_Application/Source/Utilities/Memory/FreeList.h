@@ -199,16 +199,18 @@ public:
 	}
 	
 	// Utilities.
-	inline constexpr int capacity() const               { return m_capacity; }						// Get the capacity in amount of elements.
-	inline constexpr int allocated() const              { return capacity() * m_sizeOfElement; }	// Get the amount of memory used in bytes.
-	inline constexpr int count() const                  { return m_elementCount; }					// Get the amount of elements comitted.
-	inline constexpr int size() const                   { return count() * m_sizeOfElement; }		// Get the amount of data used (in bytes).
-	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }		// Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline int getCapacityIncrements() const            { return m_capacityIncrements; }			// Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline void setResizeThreshold(float threshold)     { m_resizeThreshold = threshold; }			// Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline float getResizeThreshold() const             { return m_resizeThreshold; }				// Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline void setIteratorMode(IteratorMode mode)      { m_iteratorMode = mode; }					// Set the mode of iteration.
-	inline IteratorMode getIteratorMode() const         { return m_iteratorMode; }					// Get the mode of iteration.
+	inline constexpr int capacity() const               { return m_capacity; }						 // Get the capacity in amount of elements.
+	inline constexpr int allocated() const              { return capacity() * m_sizeOfElement; }	 // Get the amount of memory used in bytes.
+	inline constexpr int count() const                  { return m_elementCount; }					 // Get the amount of elements comitted.
+	inline constexpr int size() const                   { return count() * m_sizeOfElement; }		 // Get the amount of data used (in bytes).
+	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }		 // Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline int getCapacityIncrements() const            { return m_capacityIncrements; }			 // Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline void setResizeThreshold(float threshold)     { m_resizeThreshold = threshold; }			 // Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline float getResizeThreshold() const             { return m_resizeThreshold; }				 // Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline void setIteratorMode(IteratorMode mode)      { m_iteratorMode = mode; }					 // Set the mode of iteration.
+	inline IteratorMode getIteratorMode() const         { return m_iteratorMode; }					 // Get the mode of iteration.
+	inline void iterateMemory() 						{ m_iteratorMode = IteratorMode::MEMORY; }	 // Set the FreeList to iterate over memory regions.
+	inline void iterateElements() 						{ m_iteratorMode = IteratorMode::ELEMENTS; } // Set the FreeList to iterate over elements in memory.
 
 	// Index operator.
 	inline constexpr T& operator[](int index)			  
@@ -433,9 +435,11 @@ private:
 		// Find the slots next to the inserted one.
 		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex); 
 
+	#ifdef _DEBUG
 		// Check if the slot has already been freed.
 		if (slotIsValid(prevSlot)) assert(!isSlotContained(prevSlot, slotIndex));		// Slot has already been freed.
 		if (slotIsValid(nextSlot)) assert(!isSlotContained(slotIndex, size, nextSlot)); // Slot has already been freed.
+	#endif
 
 		// Destroy slot elements.
 		for(int i=slotIndex; i<slotIndex+size; i++) slotDestructor(i);
@@ -638,6 +642,7 @@ private:
 	inline int* getSlotDataPtr(int slotIndex) 							{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an int pointer to the slot data.
 	inline const int* getSlotDataPtr(int slotIndex) const 				{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an const int pointer to the slot data.
 	inline T* getSlotElementPtr(int slotIndex) 							{ return m_data + slotIndex; }											// Get a pointer to the slot as an element.
+	inline const T* getSlotElementPtr(int slotIndex) const				{ return m_data + slotIndex; }											// Get a const pointer to the slot as an element.
 	inline void slotDestructor(int slotIndex)							{ getSlotElementPtr(slotIndex)->~T(); }									// Call the destructor of the element in the slot.
 	inline int getSlotSize(int slotIndex) const							{ return *(getSlotDataPtr(slotIndex)); }								// Get the size of the slot.
 	inline int getPrevSlot(int slotIndex) const							{ return *(getSlotDataPtr(slotIndex) + 1); }							// Get the prev open slot.
@@ -718,8 +723,20 @@ public:
 			switch (m_iteratorMode)
 			{
 			case IteratorMode::MEMORY:
-
-
+				// Move to next memory region.
+				if(m_freeList->slotIsValid(m_nextFreeSlot))
+				{
+				 	m_index = m_freeList->getSlotSize(m_nextFreeSlot);
+				}
+				// No memory regions left.
+				else 
+				{
+					m_index = m_freeList->capacity();
+					return;
+				}
+				// Upadte next slot.
+				m_nextFreeSlot = m_freeList->getNextSlot(m_nextFreeSlot);
+				updateElementsInMemory();
 				break;
 
 			case IteratorMode::ELEMENTS:
