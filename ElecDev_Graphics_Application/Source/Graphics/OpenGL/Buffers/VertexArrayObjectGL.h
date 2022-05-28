@@ -13,7 +13,7 @@ public:
 
 	// Create the array.
 	// (For now this creates the default buffers with it).
-	void createArray();
+	void create();
 
 	// Create the array based on the vertex type.
 	// (For now this creates the default buffers with it).
@@ -29,7 +29,7 @@ public:
 	}
 
 	// Delete the array along with its buffers.
-	void deleteArray();
+	void destroy();
 
 	// Bind the array.
 	void bind();

@@ -5,25 +5,25 @@
 
 VertexArrayObject::~VertexArrayObject()
 {
-	if(m_existsOnGPU) deleteArray();
+	if(m_existsOnGPU) destroy();
 }
 
-void VertexArrayObject::createArray()
+void VertexArrayObject::create()
 {
 	assert(!m_existsOnGPU); // VAO already exists on the GPU.
 	GLCall(glGenVertexArrays(1, &m_rendererID));
 	m_existsOnGPU = true;
 
 	// Create the default buffers.
-	m_VBO.createBuffer();
-	m_IBO.createBuffer();
+	m_VBO.create();
+	m_IBO.create();
 }
 
-void VertexArrayObject::deleteArray() 
+void VertexArrayObject::destroy()
 {
 	assert(m_existsOnGPU); //  VAO does not exist on the GPU.
-	m_VBO.deleteBuffer();
-	m_IBO.deleteBuffer();
+	m_VBO.destroy();
+	m_IBO.destroy();
 	GLCall(glDeleteVertexArrays(1, &m_rendererID));
 	m_existsOnGPU = false;
 }

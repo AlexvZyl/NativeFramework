@@ -10,17 +10,17 @@ BufferObject::BufferObject(int target)
 
 BufferObject::~BufferObject()
 {
-	if (m_existsOnGPU) deleteBuffer();
+	if (m_existsOnGPU) destroy();
 }
 
-void BufferObject::createBuffer()
+void BufferObject::create()
 {
 	assert(!m_existsOnGPU); // Buffer already exists on the GPU.
 	GLCall(glGenBuffers(1, &m_rendererID));
 	m_existsOnGPU = true;
 }
 
-void BufferObject::deleteBuffer()
+void BufferObject::destroy()
 {
 	assert(m_existsOnGPU); // Buffer does not exist on the GPU.
 	GLCall(glDeleteBuffers(1, &m_rendererID));

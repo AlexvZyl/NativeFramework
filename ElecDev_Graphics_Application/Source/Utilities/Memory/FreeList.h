@@ -105,38 +105,6 @@ public:
 		return slotIndex;
 	}
 
-    // Push element in the next open slot.
-	// Returns the index of the slot start.
-	inline int push(T& element) 
-	{
-		// Find and commit an open slot.
-		int slotIndex = findSlotFirstFit();
-		commitSlot(slotIndex);
-
-		// Do in place copy construction.
-		new (getSlotElementPtr(slotIndex)) T(element);
-
-		// Return the index of the element.
-		return slotIndex;
-	}
-
-	// Push an array of elements into the list.
-	// Returns the index of the start.
-	// The memory is guaranteed to be contiguous.
-	inline int push(T* elementPtr, int size) 
-	{
-		// Find and commit slot range.
-		int slotIndex = findSlotFirstFit(size);
-		commitSlot(slotIndex, size);
-
-		// Do in place copy construction.
-		for (int i = 0; i < size; i++)
-			new (getSlotElementPtr(slotIndex+i)) T(*(elementPtr+i));
-
-		// Return the index of the first element.
-		return slotIndex;
-	}
-
     // Push an array of elements into the list.
 	// Returns the index of the start.
 	// The memory is guaranteed to be contiguous.
@@ -456,6 +424,11 @@ private:
 		// Set slot data.
 		setSlotData(slotIndex, size, prevSlot, nextSlot);
 		updateFreeSlots(slotIndex);
+
+		// NOTE: The following 4 lines can be optimised by adding if statements.
+		// It is kept like this for readability and since freelists already excel 
+		// at erasing.  
+		// (A connection is uneccesary if it is going to be merged).
 
 		// Try to connect slots.
 		attemptConnection(prevSlot, slotIndex);

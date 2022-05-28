@@ -12,10 +12,10 @@ public:
 	~BufferObject();
 
 	// Create the buffer.
-	void createBuffer();
+	void create();
 
 	// Delete the buffer.
-	void deleteBuffer();
+	void destroy();
 
 	// Get the VBO ID.
 	int ID();
