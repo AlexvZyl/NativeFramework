@@ -161,14 +161,8 @@ public:
 		return slotIndex;
 	}
 
-	// Pop the element at the given index.
-	inline void erase(int index) 
-	{
-		erase(index, 1);
-	}
-
 	// Pop the range of elements.
-	inline void erase(int startIndex, int size)
+	inline void erase(int startIndex, int size = 1)
 	{
 		assert(startIndex + size <= m_capacity); // Trying to pop outside of capacity.
 		freeSlot(startIndex, size);
