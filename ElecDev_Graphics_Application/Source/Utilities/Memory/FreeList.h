@@ -248,12 +248,13 @@ private:
 	// This function assumes that findSlotFirstFit() was run and a slot large enough was
 	// not found.  It will therefore try to use the last slot (if it sits at the end) first
 	// before resizing the entire capacity.
-	inline void resizeToFitElement(int size = 1) 
+	inline bool resizeToFitElement(int size = 1) 
 	{
 		// Try to add to the last slot.
-		if (isLastSlotAtEnd())	queryResize(size - getSlotSize(m_lastFreeSlot));
+		if (lastFreeSlotValid() && isLastSlotAtEnd())	
+			return queryResize(size - getSlotSize(m_lastFreeSlot));
 		// Allocate new memory.
-		else					queryResize(size);
+		else return queryResize(size);
 	}
 
 	// Allocate the memory.
@@ -375,7 +376,7 @@ private:
 		m_elementCount+=size;
 
 		// Get the slot data.
-		auto [slotSize, nextSlot, prevSlot] = getSlotData(slotIndex);
+		auto [slotSize, prevSlot, nextSlot] = getSlotData(slotIndex);
 		bool curHasPrevSlot = hasPrevSlot(slotIndex);
 		bool curHasNextSlot = hasNextSlot(slotIndex);
 
@@ -387,7 +388,7 @@ private:
 		if (slotSize > size)
 		{
 			// The next open slot is now the new slot.
-			setSlotData(slotIndex + size, slotSize - size, nextSlot, prevSlot);
+			setSlotData(slotIndex + size, slotSize - size, prevSlot, nextSlot);
 
 			// Update prev slot data.
 			if (curHasPrevSlot) setNextSlot(prevSlot, slotIndex + size);
@@ -432,7 +433,7 @@ private:
 	#endif 
 
 		// Set slot data.
-		setSlotData(slotIndex, size, nextSlot, prevSlot);
+		setSlotData(slotIndex, size, prevSlot, nextSlot);
 		updateFreeSlots(slotIndex);
 
 		// Try to merge the slots.
@@ -611,8 +612,8 @@ private:
 	inline bool slotIsValid(int slot)									{ return slot != -1; }													// Checks if the slot is valid.
     inline bool slotsAreAdjacent(int firstSlot, int secondSlot)			{ return firstSlot + getSlotSize(firstSlot) == secondSlot; }			// Checks if the slots are adjacent to each other.
 	inline bool isLastSlotAtEnd()										{ return slotsAreAdjacent(m_lastFreeSlot, m_capacity); }				// Checks if the last slot in the list sits at the end of memory.
-	inline bool isSlotContained(int parent, int parentSize, int child)	{ return child >= parent && child <= parent + parentSize; }				// Checks if the child slot is contained in the parent, based on the parent size.
-	inline bool isSlotContained(int parent, int child)					{ isSlotContained(parent, getSlotSize(parent), child); }				// Checks if the child slot is contained in the parent.
+	inline bool isSlotContained(int parent, int parentSize, int child)	{ return child >= parent && child < parent + parentSize; }				// Checks if the child slot is contained in the parent, based on the parent size.
+	inline bool isSlotContained(int parent, int child)					{ return isSlotContained(parent, getSlotSize(parent), child); }			// Checks if the child slot is contained in the parent.
 
     // Memopry.
 	inline void copyToSlot(T* source, int slotIndex)					{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
@@ -649,14 +650,14 @@ public:
 			m_index = index;
 			m_nextFreeSlot = nextFreeSlot;
 			m_iteratorMode = mode;
-			updateElementsInMemory()
+			updateElementsInMemory();
 		}
 
 		inline void updateElementsInMemory()
 		{
 			// Set the memory region size.
-			if (fl->slotIsValid(nextFreeSlot))	m_elementsInMemoryRegion = m_nextFreeSlot - m_index;
-			else								m_elementsInMemoryRegion = m_freeList->capacity() - m_index;
+			if (m_freeList->slotIsValid(m_nextFreeSlot)) m_elementsInMemoryRegion = m_nextFreeSlot - m_index;
+			else								 	     m_elementsInMemoryRegion = m_freeList->capacity() - m_index;
 		}
 
 		// Operators.
@@ -681,7 +682,7 @@ public:
 				{
 					m_index += m_freeList->getSlotSize(m_nextFreeSlot) + 1;
 					m_nextFreeSlot = m_freeList->getNextSlot(m_nextFreeSlot);
-					updateElementsInMemory()
+					updateElementsInMemory();
 				}
 				break;
 
