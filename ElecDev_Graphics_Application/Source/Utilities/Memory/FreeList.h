@@ -162,10 +162,10 @@ public:
 	}
 
 	// Pop the range of elements.
-	inline void erase(int startIndex, int size = 1)
+	inline void erase(int startIndex, int count = 1)
 	{
-		assert(startIndex + size <= m_capacity); // Trying to pop outside of capacity.
-		freeSlot(startIndex, size);
+		assert(startIndex + count <= m_capacity); // Trying to pop outside of capacity.
+		freeSlot(startIndex, count);
 	}
 	
 	// Utilities.
