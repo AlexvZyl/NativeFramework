@@ -642,6 +642,7 @@
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\GraphicsPrimitiveBuffersGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />

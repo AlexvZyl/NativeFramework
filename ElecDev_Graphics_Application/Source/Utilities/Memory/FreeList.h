@@ -133,7 +133,6 @@ public:
 		return slotIndex;
 	}
 
-
 	// Push element in the next open slot.
 	// Returns the index of the slot start.
 	inline int push(T&& element)
@@ -215,34 +214,46 @@ private:
 
 	friend class Iterator;
 
-	// Check if a resize has to occur based on the change.
-	// Return true if resize occured.
-	inline bool queryResize(int elementChange)
+	// Tries to resize based on the requested capacity change.
+	// Takes into account the capacity increments value.
+	inline bool queryResize(int capacityChange)
 	{
 		// Ensure actual resize query.
-		if (!elementChange) return false;
+		if (!capacityChange) return false;
 
 		// Calculate the expected element count with query.
-		int newElementCount = elementChange + m_elementCount;
+		int newCapacity = capacityChange + m_capacity;
 
 		// Increase.
-		if ( (elementChange > 0) && newElementCount > m_capacity )
+		if ( (capacityChange > 0) && newCapacity > m_capacity )
 		{
-			int toIncrease = ( ((newElementCount - m_capacity) / m_capacityIncrements) + 1) * m_capacityIncrements;
+			int toIncrease = ( ((newCapacity - m_capacity) / m_capacityIncrements) + 1) * m_capacityIncrements;
 			allocate(m_capacity + toIncrease);
 			return true;
 		}
 
 		// Decrease.
-		else if ( (newElementCount >= 0) && newElementCount < m_capacity - (m_capacityIncrements * m_resizeThreshold) )
+		else if ( (newCapacity >= 0) && newCapacity < m_capacity - (m_capacityIncrements * m_resizeThreshold) )
 		{
-			int toDecrease = (((m_capacity - newElementCount) / m_capacityIncrements) + 1) * m_capacityIncrements;
+			int toDecrease = (((m_capacity - newCapacity) / m_capacityIncrements) + 1) * m_capacityIncrements;
 			allocate(m_capacity - toDecrease);
 			return true;
 		}
 
 		// No resize occured.
 		return false;
+	}
+
+	// Resizes the freelist so that it can fit an element of the specified size.
+	// This function assumes that findSlotFirstFit() was run and a slot large enough was
+	// not found.  It will therefore try to use the last slot (if it sits at the end) first
+	// before resizing the entire capacity.
+	inline void resizeToFitElement(int size = 1) 
+	{
+		// Try to add to the last slot.
+		if (isLastSlotAtEnd())	queryResize(size - getSlotSize(m_lastFreeSlot));
+		// Allocate new memory.
+		else					queryResize(size);
 	}
 
 	// Allocate the memory.
@@ -257,32 +268,28 @@ private:
 			// Increase capacity.
 			T* oldData = m_data;
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
+			assert(m_data); // Could not allocate memory.
 			memmove(m_data, oldData, m_capacity * m_sizeOfElement);
 			free(oldData);
 
             // Did not have a last slot.  
+			// This also means the new slot will be the only slot.
             if(!lastFreeSlotValid())
             {
                 setSlotData(m_capacity, newCapacity - m_capacity, -1, -1);
                 updateFreeSlots(m_capacity);
             }
 
-            // Had a last free slot and was not at the end of memory.
-            else if(m_lastFreeSlot != m_capacity - 1)
-            {
-                setSlotData(m_capacity, newCapacity - m_capacity, m_lastFreeSlot, -1);
-                setNextSlot(m_lastFreeSlot, m_capacity);
-                updateFreeSlots(m_capacity);
-            }
-
-			// Has a last free slot at the end of memory, so simply increase size.
-			else if (m_lastFreeSlot == m_capacity - 1)
-            {
-                increaseSlotSize(m_lastFreeSlot, newCapacity - m_capacity);
-            }
-
-            // Error occureed with resize.
-            else assert(false);
+			// Has a last free slot.
+			else
+			{
+				int prevLastSlot = m_lastFreeSlot;
+				// Create new slot.
+				setSlotData(m_capacity, newCapacity - m_capacity, m_lastFreeSlot, -1);
+				updateFreeSlots(m_capacity);
+				// Try to merge with the last slot.
+				attemptMerge(prevLastSlot, m_capacity);
+			}
 		}
 
 		// Decrease allocated data.
@@ -291,11 +298,13 @@ private:
 			// TODO: Decreasing capacity is more complex than increasing.
 			// Need to take care of data inside the removed capacity.
 			// Remove this functionality for now.
+			newCapacity = m_capacity; // Ignore resize for now.
 			return;
 
 			// Decrease capacity.
 			T* oldData = m_data;
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
+			assert(m_data); // Could not allocate memory.
 			memmove(m_data, oldData, newCapacity * m_sizeOfElement);
 			free(oldData);
 		}
@@ -315,6 +324,7 @@ private:
 		else if (!m_data && newCapacity)
 		{
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
+			assert(m_data); // Could not allocate memory.
 			setSlotData(0, newCapacity, -1, -1);
 			updateFreeSlots(0);
 		}
@@ -348,8 +358,8 @@ private:
 		    if (slotIsValid(slotIndex)) return slotIndex;
 		}
 
-		// Did not find a valid slot.  Resize and search again.
-		if(queryResize(slotSize)) return findSlotFirstFit(slotSize);
+		// Did not find a valid slot.  Resize and return the last slot.
+		if(resizeToFitElement(slotSize)) return m_lastFreeSlot;
 
 		// Slot find and resize both failed.
 		assert(false); 
@@ -422,10 +432,13 @@ private:
 		updateFreeSlots(slotIndex);
 
 		// Try to merge the slots.
-        attemptMerge(prevSlot, slotIndex);
-        attemptMerge(slotIndex, nextSlot);
+		if (attemptMerge(prevSlot, slotIndex))
+			attemptMerge(prevSlot, nextSlot);
+		else
+			attemptMerge(slotIndex, nextSlot);
 
 		// Check if it should shrink.
+		// For now this will do nothing.
 		queryResize(-size);
 	}
 
@@ -553,16 +566,17 @@ private:
 
     // Checks if a merge is possible based on their adjacency and validity.
     // Merges if it is valid.
-	inline void attemptMerge(int firstSlot, int secondSlot) 
+	inline bool attemptMerge(int firstSlot, int secondSlot) 
 	{
 		// Ensure slots are valid.
-		if(!slotIsValid(firstSlot) || !slotIsValid(secondSlot)) return;
+		if(!slotIsValid(firstSlot) || !slotIsValid(secondSlot)) return false;
 
 		// Ensure slots are adjacent.
-		if(!slotsAreAdjacent(firstSlot, secondSlot)) return;
+		if(!slotsAreAdjacent(firstSlot, secondSlot)) return false;
 
 		// Merge is possible.
 		mergeSlots(firstSlot, secondSlot);
+		return true;
 	}
 
 	// Merge the two slots.  Called when two slots are next to each other in memory.
@@ -592,6 +606,7 @@ private:
 	inline bool lastFreeSlotValid()										{ return slotIsValid(m_lastFreeSlot); }									// Checks if the last free slot is valid (exists).
 	inline bool slotIsValid(int slot)									{ return slot != -1; }													// Checks if the slot is valid.
     inline bool slotsAreAdjacent(int firstSlot, int secondSlot)			{ return firstSlot + getSlotSize(firstSlot) == secondSlot; }			// Checks if the slots are adjacent to each other.
+	inline bool isLastSlotAtEnd()										{ return slotsAreAdjacent(m_lastFreeSlot, m_capacity); }				// Checks if the last slot in the list sits at the end of memory.
 
     // Memopry.
 	inline void copyToSlot(T* source, int slotIndex)					{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
@@ -634,14 +649,8 @@ public:
 		inline void updateElementsInMemory()
 		{
 			// Set the memory region size.
-			if (fl->slotIsValid(nextFreeSlot))
-			{
-				m_elementsInMemoryRegion = m_nextFreeSlot - m_index;
-			}
-			else
-			{
-				m_elementsInMemoryRegion = m_freeList->capacity() - m_index;
-			}
+			if (fl->slotIsValid(nextFreeSlot))	m_elementsInMemoryRegion = m_nextFreeSlot - m_index;
+			else								m_elementsInMemoryRegion = m_freeList->capacity() - m_index;
 		}
 
 		// Operators.

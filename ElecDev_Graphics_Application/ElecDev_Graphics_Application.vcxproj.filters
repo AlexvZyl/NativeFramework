@@ -618,6 +618,7 @@
     <ClInclude Include="Source\Utilities\Memory\FreeList.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Buffers\GraphicsPrimitiveBuffersGL.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\GLFW\Libraries\glfw3.lib">

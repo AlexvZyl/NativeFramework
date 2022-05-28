@@ -43,6 +43,7 @@ public:
 
 private:
 
+	// Data.
 	int m_target = NULL;
 	unsigned m_rendererID = NULL;
 	int m_capacity = NULL;
@@ -52,13 +53,11 @@ private:
 class VertexBufferObject : public BufferObject
 {
 public:
-	VertexBufferObject() : BufferObject(GL_ARRAY_BUFFER) 
-	{ }
+	VertexBufferObject() : BufferObject(GL_ARRAY_BUFFER) { }
 };
 
 class IndexBufferObject : public BufferObject
 {
 public:
-	IndexBufferObject() : BufferObject(GL_ELEMENT_ARRAY_BUFFER) 
-	{ }
+	IndexBufferObject() : BufferObject(GL_ELEMENT_ARRAY_BUFFER) { }
 };
