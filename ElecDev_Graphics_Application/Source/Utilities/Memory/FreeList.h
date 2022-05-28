@@ -182,16 +182,16 @@ public:
 	}
 	
 	// Utilities.
-	inline constexpr int capacity()                     { return m_capacity; }					 // Get the capacity in amount of elements.
-	inline constexpr int allocated()                    { return capacity() * m_sizeOfElement; } // Get the amount of memory used in bytes.
-	inline constexpr int count()                        { return m_elementCount; }				 // Get the amount of elements comitted.
-	inline constexpr int size()                         { return count() * m_sizeOfElement; }	 // Get the amount of data used (in bytes).
-	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }	 // Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline int getCapacityIncrements()                  { return m_capacityIncrements; }		 // Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline void setResizeThreshold(float threshold)     { m_resizeThreshold = threshold; }		 // Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline float getResizeThreshold()                   { return m_resizeThreshold; }			 // Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline void setIteratorMode(IteratorMode mode)      { m_iteratorMode = mode; }				 // Set the mode of iteration.
-	inline IteratorMode getIteratorMode()               { return m_iteratorMode; }				 // Get the mode of iteration.
+	inline constexpr int capacity()                     { return m_capacity; }						// Get the capacity in amount of elements.
+	inline constexpr int allocated()                    { return capacity() * m_sizeOfElement; }	// Get the amount of memory used in bytes.
+	inline constexpr int count()                        { return m_elementCount; }					// Get the amount of elements comitted.
+	inline constexpr int size()                         { return count() * m_sizeOfElement; }		// Get the amount of data used (in bytes).
+	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }		// Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline int getCapacityIncrements()                  { return m_capacityIncrements; }			// Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline void setResizeThreshold(float threshold)     { m_resizeThreshold = threshold; }			// Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline float getResizeThreshold()                   { return m_resizeThreshold; }				// Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline void setIteratorMode(IteratorMode mode)      { m_iteratorMode = mode; }					// Set the mode of iteration.
+	inline IteratorMode getIteratorMode()               { return m_iteratorMode; }					// Get the mode of iteration.
 
 	// Index operator.
 	inline constexpr T& operator[](int index)			  
@@ -221,7 +221,7 @@ private:
 		// Ensure actual resize query.
 		if (!capacityChange) return false;
 
-		// Calculate the expected element count with query.
+		// Calculate the requested new capacity.
 		int newCapacity = capacityChange + m_capacity;
 
 		// Increase.
@@ -351,7 +351,9 @@ private:
             // Look for a large enough slot.
 			while (currentSlotSize < slotSize)
 			{
+				// Get next slot and check if is valid.
 				slotIndex = getNextSlot(slotIndex);
+				if (!slotIsValid(slotIndex)) break;
 				currentSlotSize = getSlotSize(slotIndex);
 			}
             // Found a valid slot.
@@ -415,12 +417,14 @@ private:
 		// Find the slots next to the inserted one.
 		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex); 
 
-		// TODO: Check if the slot has already been freed based on the adjacent slots.
+		// Check if the slot has already been freed.
+		if (slotIsValid(prevSlot)) assert(!isSlotContained(prevSlot, slotIndex));		// Slot has already been freed.
+		if (slotIsValid(nextSlot)) assert(!isSlotContained(slotIndex, size, nextSlot)); // Slot has already been freed.
 
 		// Freeing a slot means an element has been removed.
 		m_elementCount-=size;
         // Assert if tried to free too many elements.
-		assert(m_elementCount >= 0); 
+		assert(m_elementCount >= 0); // Freed too many elements.
 
 	#ifdef _DEBUG
 		// Clear the memory.
@@ -607,6 +611,8 @@ private:
 	inline bool slotIsValid(int slot)									{ return slot != -1; }													// Checks if the slot is valid.
     inline bool slotsAreAdjacent(int firstSlot, int secondSlot)			{ return firstSlot + getSlotSize(firstSlot) == secondSlot; }			// Checks if the slots are adjacent to each other.
 	inline bool isLastSlotAtEnd()										{ return slotsAreAdjacent(m_lastFreeSlot, m_capacity); }				// Checks if the last slot in the list sits at the end of memory.
+	inline bool isSlotContained(int parent, int parentSize, int child)	{ return child >= parent && child <= parent + parentSize; }				// Checks if the child slot is contained in the parent, based on the parent size.
+	inline bool isSlotContained(int parent, int child)					{ isSlotContained(parent, getSlotSize(parent), child); }				// Checks if the child slot is contained in the parent.
 
     // Memopry.
 	inline void copyToSlot(T* source, int slotIndex)					{ memcpy(getSlotElementPtr(slotIndex), source, m_sizeOfElement); }		// Copy the element data into the slot.
