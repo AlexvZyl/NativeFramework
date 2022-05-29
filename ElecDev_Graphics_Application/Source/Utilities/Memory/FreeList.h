@@ -100,6 +100,7 @@ public:
 
 	// Push element in the next open slot.
 	// Returns the index of the slot start.
+	// Runs the copy constructor.
 	inline int push(const T& element) 
 	{
 		// Find and commit an open slot.
@@ -116,7 +117,8 @@ public:
     // Push an array of elements into the list.
 	// Returns the index of the start.
 	// The memory is guaranteed to be contiguous.
-	inline int push(const T* elementPtr, int size) 
+	// Runs the copy constructor.
+	inline int push(const T* elementPtr, int size = 1) 
 	{
 		// Find and commit slot range.
 		int slotIndex = findSlotFirstFit(size);
@@ -132,6 +134,7 @@ public:
 
 	// Push element in the next open slot.
 	// Returns the index of the slot start.
+	// Runs the copy constructor.
 	inline int push(T&& element)
 	{
 		// Find and commit an open slot.
@@ -147,6 +150,7 @@ public:
 
 	// Push element in the next open slot.
 	// Returns the index of the slot start.
+	// Does an in place contruction.
 	template<class ... Args>
 	inline int emplace(const Args& ... args)
 	{
@@ -242,7 +246,7 @@ private:
 		// Try to add to the last slot.
 		if (lastFreeSlotValid() && isLastSlotAtEnd())	
 			return queryResize(size - getSlotSize(m_lastFreeSlot));
-		// Allocate new memory.
+		// Allocate new memory large enough for entire element.
 		else return queryResize(size);
 	}
 
@@ -259,7 +263,7 @@ private:
 			T* oldData = m_data;
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
 			assert(m_data); // Could not allocate memory.
-			memmove(m_data, oldData, m_capacity * m_sizeOfElement);
+			memcpy(m_data, oldData, m_capacity * m_sizeOfElement);
 			free(oldData);
 
             // Did not have a last slot.  
@@ -295,7 +299,7 @@ private:
 			T* oldData = m_data;
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
 			assert(m_data); // Could not allocate memory.
-			memmove(m_data, oldData, newCapacity * m_sizeOfElement);
+			memcpy(m_data, oldData, newCapacity * m_sizeOfElement);
 			free(oldData);
 		}
 
