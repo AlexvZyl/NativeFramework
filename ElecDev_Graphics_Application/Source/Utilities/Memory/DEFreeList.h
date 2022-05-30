@@ -31,73 +31,31 @@ public:
 	FreeList(int capacity)
 		: FreeList()
 	{
-		queryResize(capacity);
+		this->queryResize(capacity);
 	}
 	FreeList(int capacity, int capacityIncrements)
 		: FreeList()
 	{
-		setCapacityIncrements(capacityIncrements);
-		queryResize(capacity);
+		this->setCapacityIncrements(capacityIncrements);
+		this->queryResize(capacity);
 	}
 
 private:
 
 	inline virtual void mergeSlots(int firstSlot, int secondSlot) override
 	{
-		increaseSlotSize(firstSlot, getSlotSize(secondSlot));
-		setNextSlot(firstSlot, getNextSlot(secondSlot));
-		if (hasNextSlot(secondSlot)) setPrevSlot(getNextSlot(secondSlot), firstSlot);
-		if (m_lastFreeSlot == secondSlot) m_lastFreeSlot = firstSlot;
+		this->increaseSlotSize(firstSlot, this->getSlotSize(secondSlot));
+		this->setNextSlot(firstSlot, this->getNextSlot(secondSlot));
+		if (this->hasNextSlot(secondSlot)) this->setPrevSlot(this->getNextSlot(secondSlot), firstSlot);
+		if (this->m_lastFreeSlot == secondSlot) this->m_lastFreeSlot = firstSlot;
 	}
 
 	inline virtual void connectSlots(int firstSlot, int secondSlot) override			
 	{
-		setNextSlot(firstSlot, secondSlot); 
-		setPrevSlot(secondSlot, firstSlot); 
+		this->setNextSlot(firstSlot, secondSlot); 
+		this->setPrevSlot(secondSlot, firstSlot); 
 	}	
 
-	inline virtual int commitSlotFirstFit(int slotSize = 1) override
-	{
-		// Find an open slot that is large enough, starting from the first free one.
-		// If there is no valid first slot, skip the initial search and resize.
-		int slotIndex = m_firstFreeSlot;
-		if (slotIsValid(slotIndex))
-		{
-			int currentSlotSize = getSlotSize(slotIndex);
-            // Look for a large enough slot.
-			while (currentSlotSize < slotSize)
-			{
-				// Get next slot and check if is valid.
-				slotIndex = getNextSlot(slotIndex);
-				if (!slotIsValid(slotIndex)) 
-				{
-					// Did not find a valid slot.  
-					// Try to resize and return the last slot.
-					if(resizeToFitElement(slotSize)) 
-					{
-						commitSlot(getPrevSlot(m_lastFreeSlot), m_lastFreeSlot, -1);
-						return m_lastFreeSlot;
-					}
-						// Slot find and resize both failed.
-					else assert(false);
-				}
-				currentSlotSize = getSlotSize(slotIndex);
-			}
-		}
-		// Found a valid slot.
-		commitSlot(getPrevSlot(slotIndex), slotIndex, getNextSlot(slotIndex));
-		return slotIndex;
-	}
-
-	// Get the data describing the slot.
-	// { Size, Next Slot, Prev Slot }
-	inline std::tuple<int, int, int> getSlotData(int slotIndex)													
-	{																											
-		int* data = getSlotDataPtr(slotIndex);
-		return { data[0], data[1], data[2] };
-	}
-
-	// Find the slots adjacent to the passed slot.  This is used when inserting a slot and having to update the data.			
 	inline std::tuple<int, int> findAdjacentSlots(int slotIndex) override											
 	{
 		// If not slots are valid these defaults will be returned.
@@ -107,31 +65,29 @@ private:
 		// If one of the slots are valid, both are valid, since
 		// both indexes can point to the same slot.
 		// Else there are no valid slots and we do not  need to change the values.
-		if (firstFreeSlotValid())
+		if (this->firstFreeSlotValid())
 		{
 			// Calculate distances.
-			int distanceFromFirst = slotIndex - m_firstFreeSlot;
-			int distanceFromEnd = m_lastFreeSlot - slotIndex;
+			int distanceFromFirst = slotIndex - this->m_firstFreeSlot;
+			int distanceFromEnd = this->m_lastFreeSlot - slotIndex;
 
 			// Left of first slot.
-			if (distanceFromFirst < 0) rightSlot = m_firstFreeSlot;
+			if (distanceFromFirst < 0) rightSlot = this->m_firstFreeSlot;
 
 			// Right of last slot.
-			else if (distanceFromEnd < 0) leftSlot = m_lastFreeSlot;
+			else if (distanceFromEnd < 0) leftSlot = this->m_lastFreeSlot;
 
 			// First slot is closest.
 			else if(distanceFromFirst <= distanceFromEnd)
 			{
-				int referenceSlot = searchForward(m_firstFreeSlot, slotIndex);
-				leftSlot = referenceSlot;
-				rightSlot = getNextSlot(referenceSlot);
+				leftSlot = this->searchForward(this->m_firstFreeSlot, slotIndex);
+				rightSlot = this->getNextSlot(leftSlot);
 			}
 			// Last slot is closest.
 			else 
 			{
-				int referenceSlot = searchReverse(m_lastFreeSlot, slotIndex);
-				rightSlot = referenceSlot;
-				leftSlot = getPrevSlot(referenceSlot);
+				rightSlot = this->searchReverse(this->m_lastFreeSlot, slotIndex);
+				leftSlot = this->getPrevSlot(rightSlot);
 			}
 		}
 

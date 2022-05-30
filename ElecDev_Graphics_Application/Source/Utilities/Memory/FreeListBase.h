@@ -21,7 +21,7 @@ public:
 	inline FreeListBase(int slotSize) : m_slotSize(slotSize) { }
 
 	// Copy constructor.
-	FreeListBase(const FreeListBase& other)
+	FreeListBase(const FreeListBase<T>& other)
 	{
 		// Copy metadata.
 		setCapacityIncrements(other.getCapacityIncrements());
@@ -301,7 +301,7 @@ protected:
 		m_capacity = newCapacity;
 	}
 
-		inline void freeSlot(int slotIndex, int size = 1) 
+	inline void freeSlot(int slotIndex, int size = 1) 
 	{
 		// Find the slots next to the inserted one.
 		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex); 
@@ -353,6 +353,56 @@ protected:
 		setIteratorMode(IteratorMode::ELEMENTS);
 		for (auto& element : *this) element.~T();
 		setIteratorMode(tmp);
+	}
+
+	inline int commitSlotFirstFit(int slotSize = 1)
+	{
+		// Find an open slot that is large enough, starting from the first free one.
+		// If there is no valid first slot, skip the initial search and resize.
+
+		int tmp = -1;  // Used for transitioning and saving previous state.
+		int prevSlot = -1;
+		int slotIndex = m_firstFreeSlot;
+		if (slotIsValid(slotIndex))
+		{
+			int currentSlotSize = getSlotSize(slotIndex);
+            // Look for a large enough slot.
+			while (currentSlotSize < slotSize)
+			{
+				// Get next slot and check if is valid.
+				tmp = getNextSlot(slotIndex);
+				if (!slotIsValid(tmp)) 
+				{
+					// Did not find a valid slot.
+					slotIndex = -1;	
+					break;
+				}
+				prevSlot = slotIndex;
+				slotIndex = tmp;
+				currentSlotSize = getSlotSize(slotIndex);
+			}
+            // Found a valid slot.
+		    if (slotIsValid(slotIndex)) 
+			{
+				commitSlot(prevSlot, slotIndex, getNextSlot(slotIndex), slotSize);
+				return slotIndex;
+			}
+		}
+
+		// Need to check if the last slot is at the end of memory so that the prev slot
+		// can be determined.  
+		if(!isLastSlotAtEnd()) prevSlot = slotIndex;
+
+		// Did not find a valid slot.  Resize and return the last slot.
+		if(resizeToFitElement(slotSize)) 
+		{
+			commitSlot(prevSlot, m_lastFreeSlot, -1, slotSize);
+			return m_lastFreeSlot;
+		}
+
+		// Slot find and resize both failed.
+		assert(false); 
+        return 0;
 	}
 
 		// Commits a slot by taking it out of the FreeList.
@@ -513,10 +563,9 @@ protected:
 	inline bool isSlotContained(int parent, int parentSize, int child) const { return child >= parent && child < parent + parentSize; }			// Checks if the child slot is contained in the parent, based on the parent size.
 
 	// Implementation dependant functions.
-	inline void connectSlots(int firstSlot, int secondSlot)				= 0;		// Connect the two slots.
-	inline std::tuple<int, int> findAdjacentSlots(int slotIndex) 		= 0;		// Find the slots adjacent to the passed slot.  This is used when inserting a slot and having to update the data.			
-	inline int commitSlotFirstFit(int slotSize = 1)  					= 0;		// Find and commit the first slot that is found.
-	inline void mergeSlots(int firstSlot, int secondSlot) 				= 0;		// Merge the two slots.  Called when two slots are next to each other in memory.  Does not check if the merge is valid.
+	inline virtual void connectSlots(int firstSlot, int secondSlot)				= 0;		// Connect the two slots.
+	inline virtual std::tuple<int, int> findAdjacentSlots(int slotIndex) 		= 0;		// Find the slots adjacent to the passed slot.  This is used when inserting a slot and having to update the data.			
+	inline virtual void mergeSlots(int firstSlot, int secondSlot) 				= 0;		// Merge the two slots.  Called when two slots are next to each other in memory.  Does not check if the merge is valid.
 
 	// Data.
 	T* m_data = nullptr;			                      // Pointer to the data on the heap.
@@ -622,13 +671,13 @@ public:
 	//  N O N   C O N S T   I T E R A T O R  //
 	// ------------------------------------- //
 
-	class Iterator : public IteratorBase<FreeList<T>>
+	class Iterator : public IteratorBase<FreeListBase<T>>
 	{
 	public:
 
 		// Constructor.
-		inline Iterator(FreeList<T>* fl, int index, int nextFreeSlot, IteratorMode mode) 
-			: IteratorBase<FreeList<T>>(fl, index, nextFreeSlot, mode)
+		inline Iterator(FreeListBase<T>* fl, int index, int nextFreeSlot, IteratorMode mode) 
+			: IteratorBase<FreeListBase<T>>(fl, index, nextFreeSlot, mode)
 		{ }	
 
 		// Operators.
@@ -654,13 +703,13 @@ public:
 	//  C O N S T   I T E R A T O R  //
 	// ----------------------------- //
 
-	class ConstIterator : public IteratorBase<const FreeList<T>>
+	class ConstIterator : public IteratorBase<const FreeListBase<T>>
 	{
 	public:
 
 		// Constructor.
-		inline ConstIterator(const FreeList<T>* fl, int index, int nextFreeSlot, IteratorMode mode) 
-			: IteratorBase<const FreeList<T>>(fl, index, nextFreeSlot, mode)
+		inline ConstIterator(const FreeListBase<T>* fl, int index, int nextFreeSlot, IteratorMode mode) 
+			: IteratorBase<const FreeListBase<T>>(fl, index, nextFreeSlot, mode)
 		{ }
 
 		// Operators.
