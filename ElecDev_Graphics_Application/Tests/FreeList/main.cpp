@@ -40,6 +40,14 @@ int main(int, char**)
     const int TOTAL_LOOPS = 10000;
     const int RESERVE = TOTAL_LOOPS / 5;
 
+    FreeList<Test> myTestList(0, 2);
+    myTestList.emplace();
+    myTestList.emplace();
+    myTestList.emplace();
+    myTestList.push(Test());
+    myTestList.erase(1);
+    myTestList.erase(2,2);
+
     {
         PROFILE_SCOPE("Lumen::Freelist Total");
         FreeList<Test> myList(0, RESERVE);

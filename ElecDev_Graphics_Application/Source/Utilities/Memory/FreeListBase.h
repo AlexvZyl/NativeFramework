@@ -360,11 +360,11 @@ protected:
 		// Find an open slot that is large enough, starting from the first free one.
 		// If there is no valid first slot, skip the initial search and resize.
 
-		int tmp = -1;  // Used for transitioning and saving previous state.
 		int prevSlot = -1;
 		int slotIndex = m_firstFreeSlot;
 		if (slotIsValid(slotIndex))
 		{
+			int tmp = -1;  // Used for transitioning and saving previous state.
 			int currentSlotSize = getSlotSize(slotIndex);
             // Look for a large enough slot.
 			while (currentSlotSize < slotSize)
@@ -391,18 +391,19 @@ protected:
 
 		// Need to check if the last slot is at the end of memory so that the prev slot
 		// can be determined.  
-		if(!isLastSlotAtEnd()) prevSlot = slotIndex;
+		if(lastFreeSlotValid() && !isLastSlotAtEnd()) prevSlot = slotIndex;
 
 		// Did not find a valid slot.  Resize and return the last slot.
 		if(resizeToFitElement(slotSize)) 
 		{
-			commitSlot(prevSlot, m_lastFreeSlot, -1, slotSize);
-			return m_lastFreeSlot;
+			int slotIndex = m_lastFreeSlot;
+			commitSlot(prevSlot, slotIndex, -1, slotSize);
+			return slotIndex;
 		}
 
-		// Slot find and resize both failed.
-		assert(false); 
-        return 0;
+		// An error occurred with finding a slot or resizing the list.
+		assert(false);
+		return 0;
 	}
 
 		// Commits a slot by taking it out of the FreeList.

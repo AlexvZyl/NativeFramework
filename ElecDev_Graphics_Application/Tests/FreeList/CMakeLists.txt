@@ -24,5 +24,5 @@ include_directories(
 add_executable(Test ${SourceFiles})
 
 # Build settings.
-set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS_RELEASE "-O1")
