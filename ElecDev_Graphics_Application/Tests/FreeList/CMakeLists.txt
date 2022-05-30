@@ -16,11 +16,12 @@ set(
 # Add includes.
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../Source/Utilities/Memory/"
 )
 
 # add the executable
 add_executable(Test ${SourceFiles})
 
 # Build settings.
-set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_CXX_FLAGS_RELEASE "-O1")
