@@ -9,15 +9,9 @@
 class Test 
 {
 public:
-    Test() 
-    {
-    }
-    ~Test() 
-    {
-    }
-
+    Test() { }
+    ~Test() { }
     inline void myFunction() { totalCalls++; }
-
     unsigned index = 0;
     unsigned data2 = 0;
     unsigned data3 = 0;
