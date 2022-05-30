@@ -6,6 +6,7 @@
 
 #include "Profiler.h"
 #include <iostream>
+#include <string>
 
 //==============================================================================================================================================//
 //  Timer.																																		//
@@ -20,19 +21,13 @@ Timer::Timer(const char* name)
 
 Timer::~Timer()
 {
-	stop();
-}
-
-// Stop the timer.
-void Timer::stop()
-{
-    // Get end time.
+	// Get end time.
     auto endTimePoint = std::chrono::high_resolution_clock::now();
     // Get microseconds.
     auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_startPoint).time_since_epoch().count();
     auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch().count();
     float duration = (end - start) * 0.001f;
-    std::cout << "[" << m_name << "] : [" << std::to_string(duration) << " ms] \n";
+    std::cout << "[" << m_name << "] \t: [" << std::to_string(duration) << " ms] \n";
 }
 
 //==============================================================================================================================================//

@@ -10,13 +10,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(
     SourceFiles
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Profiler.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Profiler/Profiler.cpp"
 )
 
 # Add includes.
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     "${CMAKE_CURRENT_SOURCE_DIR}/../../Source/Utilities/Memory/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Profiler/"
 )
 
 # add the executable

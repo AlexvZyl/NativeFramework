@@ -5,7 +5,6 @@
 //==============================================================================================================================================//
 
 #include <chrono>
-#include <iostream>
 
 //==============================================================================================================================================//
 //  Timer.																																		//
@@ -31,17 +30,15 @@ class Timer
 {
 public:
 
-	// Constructor.
+	// Constructor (starts the timer).
 	Timer(const char* name);
 
-	// Destructor.
+	// Destructor (stop the timer).
 	~Timer();
-
-	// Stop the timer.
-	void stop();
 
 private:
 
+	// Data.
 	const char* m_name = nullptr;
 	std::chrono::time_point<std::chrono::high_resolution_clock> m_startPoint;
 };
