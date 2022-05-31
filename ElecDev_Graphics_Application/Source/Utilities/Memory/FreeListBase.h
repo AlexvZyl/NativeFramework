@@ -391,7 +391,7 @@ protected:
 
 		// Need to check if the last slot is at the end of memory so that the prev slot
 		// can be determined.  
-		if(lastFreeSlotValid() && !isLastSlotAtEnd()) prevSlot = slotIndex;
+		if(lastFreeSlotValid() && !isLastSlotAtEnd()) prevSlot = m_lastFreeSlot;
 
 		// Did not find a valid slot.  Resize and return the last slot.
 		if(resizeToFitElement(slotSize)) 
