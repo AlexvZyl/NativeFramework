@@ -233,25 +233,13 @@ protected:
 			assert(m_data); // Could not allocate memory.
 			memcpy(m_data, oldData, m_capacity * m_sizeOfElement);
 			free(oldData);
-
-            // Did not have a last slot.  
-			// This also means the new slot will be the only slot.
-            if(!lastFreeSlotValid())
-            {
-                setSlotData(m_capacity, newCapacity - m_capacity, -1, -1);
-                updateFreeSlots(m_capacity);
-            }
-
-			// Has a last free slot.
-			else
-			{
-				int prevLastSlot = m_lastFreeSlot;
-				// Create new slot.
-				setSlotData(m_capacity, newCapacity - m_capacity, m_lastFreeSlot, -1);
-				updateFreeSlots(m_capacity);
-				// Try to merge with the last slot.
-				attemptMerge(prevLastSlot, m_capacity);
-			}
+			
+			// Setup the slots.
+			int prevLastSlot = m_lastFreeSlot;
+			setSlotData(m_capacity, newCapacity - m_capacity, -1, -1);
+			updateFreeSlots(m_capacity);
+			attemptConnection(prevLastSlot, m_capacity);
+			attemptMerge(prevLastSlot, m_capacity);
 		}
 
 		// Decrease allocated data.
