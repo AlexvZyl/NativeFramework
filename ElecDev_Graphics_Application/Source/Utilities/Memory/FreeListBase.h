@@ -238,8 +238,8 @@ protected:
 			int prevLastSlot = m_lastFreeSlot;
 			setSlotData(m_capacity, newCapacity - m_capacity, -1, -1);
 			updateFreeSlots(m_capacity);
-			attemptConnection(prevLastSlot, m_capacity);
-			attemptMerge(prevLastSlot, m_capacity);
+			if(!attemptMerge(prevLastSlot, m_capacity))
+				attemptConnection(prevLastSlot, m_capacity);
 		}
 
 		// Decrease allocated data.
