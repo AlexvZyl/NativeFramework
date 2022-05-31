@@ -17,8 +17,12 @@ public:
 	// The modes of iteration.
 	enum class IteratorMode { ELEMENTS, MEMORY };
 
+protected:
+
 	// Contructor.
 	inline FreeListBase(int slotSize) : m_slotSize(slotSize) { }
+
+public:
 
 	// Copy constructor.
 	FreeListBase(const FreeListBase<T>& other)
@@ -141,18 +145,20 @@ public:
 	}
 	
 	// Utilities.
-	inline constexpr int capacity() const               { return m_capacity; }						 // Get the capacity in amount of elements.
-	inline constexpr int allocated() const              { return capacity() * m_sizeOfElement; }	 // Get the amount of memory used in bytes.
-	inline constexpr int count() const                  { return m_elementCount; }					 // Get the amount of elements comitted.
-	inline constexpr int size() const                   { return count() * m_sizeOfElement; }		 // Get the amount of data used (in bytes).
-	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }		 // Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline int getCapacityIncrements() const            { return m_capacityIncrements; }			 // Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
-	inline void setResizeThreshold(float threshold)     { m_resizeThreshold = threshold; }			 // Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline float getResizeThreshold() const             { return m_resizeThreshold; }				 // Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
-	inline void setIteratorMode(IteratorMode mode)      { m_iteratorMode = mode; }					 // Set the mode of iteration.
-	inline IteratorMode getIteratorMode() const         { return m_iteratorMode; }					 // Get the mode of iteration.
-	inline void iterateMemory() 						{ m_iteratorMode = IteratorMode::MEMORY; }	 // Set the FreeList to iterate over memory regions.
-	inline void iterateElements() 						{ m_iteratorMode = IteratorMode::ELEMENTS; } // Set the FreeList to iterate over elements in memory.
+	inline constexpr int capacity() const               { return m_capacity; }						  // Get the capacity in amount of elements.
+	inline constexpr int allocated() const              { return capacity() * m_sizeOfElement; }	  // Get the amount of memory used in bytes.
+	inline constexpr int count() const                  { return m_elementCount; }					  // Get the amount of elements comitted.
+	inline constexpr int size() const                   { return count() * m_sizeOfElement; }		  // Get the amount of data used (in bytes).
+	inline void setCapacityIncrements(int increments)   { m_capacityIncrements = increments; }		  // Set the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline int getCapacityIncrements() const            { return m_capacityIncrements; }			  // Get the amount of elements that the FreeLists resizes on a resize.  This prevents resizing every time an element is added.
+	inline void setResizeThreshold(float threshold)     { m_resizeThreshold = threshold; }			  // Set the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline float getResizeThreshold() const             { return m_resizeThreshold; }				  // Get the threshold for resizing (more specifically, decreasing).  Prevents unnceccesary allocation and copying of data.
+	inline void setIteratorMode(IteratorMode mode)      { m_iteratorMode = mode; }					  // Set the mode of iteration.
+	inline IteratorMode getIteratorMode() const         { return m_iteratorMode; }					  // Get the mode of iteration.
+	inline void iterateMemory() 						{ m_iteratorMode = IteratorMode::MEMORY; }	  // Set the FreeList to iterate over memory regions.
+	inline void iterateElements() 						{ m_iteratorMode = IteratorMode::ELEMENTS; }  // Set the FreeList to iterate over elements in memory.
+	inline int getLastFreeSlot() const 					{ return m_lastFreeSlot; }					  // Get the last free slot.
+	inline int getFirstFreeSlot() const 				{ return m_firstFreeSlot; }					  // Get the first free slot.
 
 	// Index operator.
 	inline constexpr T& operator[](int index)			  
@@ -316,11 +322,18 @@ protected:
 		setSlotData(slotIndex, size, nextSlot, prevSlot);
 		updateFreeSlots(slotIndex);
 
-		// Setup slots.
-		if(!attemptMerge(slotIndex, nextSlot))
-			attemptConnection(slotIndex, nextSlot);
-		if(!attemptMergeWithNextSlot(prevSlot))
-			attemptConnection(prevSlot, getNextSlot(prevSlot));	
+		// NOTE: The following 4 lines can be optimised by adding if statements.
+		// It is kept like this for readability and since freelists already excel 
+		// at erasing.  
+		// (A connection is uneccesary if it is going to be merged).
+
+		// Try to connect slots.
+		attemptConnection(prevSlot, slotIndex);
+		attemptConnection(slotIndex, nextSlot);
+
+		// Try to merge slots.
+		attemptMerge(slotIndex, nextSlot);
+		attemptMergeWithNextSlot(prevSlot);
 			
 		// Check if it should shrink.
 		// For now this will do nothing.

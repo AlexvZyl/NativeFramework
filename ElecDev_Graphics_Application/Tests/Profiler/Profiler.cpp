@@ -26,7 +26,7 @@ Timer::~Timer()
     // Get microseconds.
     auto start = std::chrono::time_point_cast<std::chrono::nanoseconds>(m_startPoint).time_since_epoch().count();
     auto end = std::chrono::time_point_cast<std::chrono::nanoseconds>(endTimePoint).time_since_epoch().count();
-    float duration = (end - start) * 0.000001f;
+    float duration = (end - start) / 1e6f;  // ns -> ms
     std::cout << "[" << m_name << "] : [" << std::to_string(duration) << " ms] \n";
 }
 

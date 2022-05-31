@@ -19,6 +19,8 @@
 template <typename T>
 class SEFreeList : public FreeListBase<T>
 {
+public:
+
 	// Constructors.
 	SEFreeList() : FreeListBase<T>(SE_FREELIST_MINIMUM_ELEMENT_SIZE)
 	{
@@ -43,7 +45,7 @@ private:
 	// These functions are overridden so that larger functions can be implemented in the the parent, 
 	// otherwise two relatively large functions (with only one line difference) has to be maintained in
 	// two different plaves.
-	inline virtual void setSlotData(int slotIndex, int slotSize, int nextSlot, int prevSlot) override {  this->setSlotData(slotIndex, slotSize, nextSlot); }
+	inline virtual void setSlotData(int slotIndex, int slotSize, int nextSlot, int prevSlot) override {  FreeListBase<T>::setSlotData(slotIndex, slotSize, nextSlot); }
 	inline virtual void setPrevSlot(int slotIndex, int prevSlot) override { }
 	inline virtual int getPrevSlot(int slotIndex) const override { return 0; }
 

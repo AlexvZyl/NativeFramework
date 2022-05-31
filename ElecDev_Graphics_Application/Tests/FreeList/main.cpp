@@ -6,51 +6,117 @@
 #include <vector>
 #include <Windows.h>
 
-class Test 
+class TestClass
 {
 public:
-    Test() { }
-    ~Test() { }
+    inline TestClass() { constructorCalls++; }
+    inline ~TestClass() { destructorCalls++; }
+    TestClass(const TestClass& other)
+    { 
+        copyConstCalls++; 
+        index = other.index;
+        data2 = other.data2;
+        data3 = other.data3;
+        myString = other.myString;
+    }
+    inline static void reset()
+    {
+        constructorCalls = 0;
+        destructorCalls = 0;
+        copyConstCalls = 0;
+    }
     inline void myFunction() { totalCalls++; }
     unsigned index = 0;
     unsigned data2 = 0;
     unsigned data3 = 0;
     inline static int totalCalls = 0;
-    std::string myString = "Testing for data corruption yay.";
+    inline static int constructorCalls = 0;
+    inline static int destructorCalls = 0;
+    inline static int copyConstCalls = 0;
+    std::string myString = "Testing for data corruption.";
 };
-inline void loop(FreeList<Test>& fl) 
+
+inline void loop(FreeListBase<TestClass>& fl) 
 {
-    std::cout << "\nCapacity: " << fl.capacity() << ".\n";
-    std::cout << "Allocated: " << fl.allocated() << ".\n";
-    std::cout << "Count: " << fl.count() << ".\n";
-    std::cout << "Size: " << fl.size() << ".\n\n";
-    for (auto& entry : fl)
-        std::cout << "Index: " << entry.index << ", String: " << entry.myString << "\n";
-    std::cout.flush();
+    for (auto& entry : fl) std::cout << "Index: " << entry.index << ", String: " << entry.myString << "\n";
+    std::cout << "\n";
 }
-inline void emplace(FreeList<Test>& fl)
+
+inline void emplace(FreeListBase<TestClass>& fl)
 {
     int index = fl.emplace();
     fl[index].index = index;
 }
 
-int main(int, char**)
+inline void printCallData()
+{
+    std::cout << "[Constructor Calls] : [" << TestClass::constructorCalls << "]\n";
+    std::cout << "[Destructor Calls] : [" << TestClass::destructorCalls << "]\n";
+    std::cout << "[Copy Constructor Calls] : [" << TestClass::copyConstCalls << "]\n\n";
+    TestClass::reset();
+}
+
+inline void printMetaData(FreeListBase<TestClass>& freeList)
+{
+    std::cout << "[Capacity] : [" << freeList.capacity() << "]\n";
+    std::cout << "[Allocated] : [" << freeList.allocated() << "]\n";
+    std::cout << "[Count] : [" << freeList.count() << "]\n";
+    std::cout << "[Size] : [" << freeList.size() << "]\n";
+    std::cout << "[First Free Slot] : [" << freeList.getFirstFreeSlot() << "]\n";
+    std::cout << "[Last Free Slot] : [" << freeList.getLastFreeSlot() << "]\n\n";
+}
+
+inline void simpleEmplaceErase(FreeListBase<TestClass>& freeList)
+{
+    std::cout << "Simple Emplace Erase\n\n";
+
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    printMetaData(freeList);
+    loop(freeList);
+    freeList.erase(0);
+    freeList.erase(1);
+    freeList.erase(2);
+    freeList.erase(3);
+    freeList.erase(4);
+    printMetaData(freeList);
+    loop(freeList);
+    printCallData();
+}
+
+inline void simplePushErase(FreeListBase<TestClass>& freeList)
+{
+    std::cout << "Simple Push Erase\n\n";
+
+    freeList.push(TestClass());
+    freeList.push(TestClass());
+    freeList.push(TestClass());
+    freeList.push(TestClass());
+    freeList.push(TestClass());
+    printMetaData(freeList);
+    loop(freeList);
+    freeList.erase(0);
+    freeList.erase(1);
+    freeList.erase(2);
+    freeList.erase(3);
+    freeList.erase(4);
+    printMetaData(freeList);
+    loop(freeList);
+    printCallData();
+}
+
+inline void performanceTests()
 {
     std::cout << "\n";
     const int TOTAL_LOOPS = 10000;
     const int RESERVE = TOTAL_LOOPS / 5;
 
-    FreeList<Test> myTestList(0, 2);
-    myTestList.emplace();
-    myTestList.emplace();
-    myTestList.emplace();
-    myTestList.push(Test());
-    myTestList.erase(1);
-    myTestList.erase(2,2);
-
-    {
+  {
         PROFILE_SCOPE("Lumen::Freelist Total");
-        FreeList<Test> myList(0, RESERVE);
+        FreeList<TestClass> myList(0, RESERVE);
 
         {
             PROFILE_SCOPE("Lumen::Freelist Emplacing");
@@ -62,7 +128,7 @@ int main(int, char**)
 
         {
             PROFILE_SCOPE("Lumen::Freelist Copying & Destroying");
-            FreeList<Test> copiedList = myList;
+            FreeList<TestClass> copiedList = myList;
         }
 
         {
@@ -74,8 +140,8 @@ int main(int, char**)
             }
         }
 
-        std::cout << "[Lumen::Freelist Total Calls] : [" << Test::totalCalls << "]\n";
-        Test::totalCalls = 0;
+        std::cout << "[Lumen::Freelist Total Calls] : [" << TestClass::totalCalls << "]\n";
+        TestClass::totalCalls = 0;
 
         {
             PROFILE_SCOPE("Lumen::Freelist Memory Indexing");
@@ -83,7 +149,7 @@ int main(int, char**)
             int fragments = 0;
             for(auto& entry : myList)
             {
-                Test* memory = &entry;
+                TestClass* memory = &entry;
                 fragments++;
             }
         }
@@ -101,7 +167,7 @@ int main(int, char**)
 
     {
         PROFILE_SCOPE("std::vector Total");
-        std::vector<Test> myVec;
+        std::vector<TestClass> myVec;
 
         {
             PROFILE_SCOPE("std::vector Emplacing");
@@ -113,7 +179,7 @@ int main(int, char**)
 
         {
             PROFILE_SCOPE("std::vector Copying & Destroying");
-            std::vector<Test> copiedVec = myVec;
+            std::vector<TestClass> copiedVec = myVec;
         }
 
         {
@@ -124,12 +190,12 @@ int main(int, char**)
             }
         }
 
-        std::cout << "[std::vector Total Calls] : [" << Test::totalCalls << "]\n";
-        Test::totalCalls = 0;
+        std::cout << "[std::vector Total Calls] : [" << TestClass::totalCalls << "]\n";
+        TestClass::totalCalls = 0;
 
         {
             PROFILE_SCOPE("std::vector Memory Indexing");
-            Test* memory = myVec.data();
+            TestClass* memory = myVec.data();
         }
 
         {
@@ -140,6 +206,20 @@ int main(int, char**)
             }
         }
     }
+
+    TestClass::reset();
+}
+
+int main(int, char**)
+{
+    FreeList<TestClass> testList(0, 5);
+    simpleEmplaceErase(testList);
+    simplePushErase(testList);
+    performanceTests();
+
+    SEFreeList<TestClass> testList2(0, 5);
+    simpleEmplaceErase(testList2);
+    simplePushErase(testList2);
 
     return 0;
 }
