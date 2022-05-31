@@ -316,18 +316,11 @@ protected:
 		setSlotData(slotIndex, size, nextSlot, prevSlot);
 		updateFreeSlots(slotIndex);
 
-		// NOTE: The following 4 lines can be optimised by adding if statements.
-		// It is kept like this for readability and since freelists already excel 
-		// at erasing.  
-		// (A connection is uneccesary if it is going to be merged).
-
-		// Try to connect slots.
-		attemptConnection(prevSlot, slotIndex);
-		attemptConnection(slotIndex, nextSlot);
-
-		// Try to merge slots.
-		attemptMerge(slotIndex, nextSlot);
-		attemptMergeWithNextSlot(prevSlot);
+		// Setup slots.
+		if(!attemptMerge(slotIndex, nextSlot))
+			attemptConnection(slotIndex, nextSlot);
+		if(!attemptMergeWithNextSlot(prevSlot))
+			attemptConnection(prevSlot, getNextSlot(prevSlot));	
 			
 		// Check if it should shrink.
 		// For now this will do nothing.
