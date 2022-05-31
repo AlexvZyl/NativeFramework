@@ -105,7 +105,7 @@ public:
 		}
 
 		// Render the tooltip.
-		if (m_engine->hasTooltip() && ImGui::IsWindowHovered())
+		if (m_engine->hasTooltip() && m_engine->m_isHovered)
 		{
 			m_engine->renderTooltip();
 		}
