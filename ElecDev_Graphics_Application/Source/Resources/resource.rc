@@ -96,6 +96,16 @@ SETTINGS_ICON					RCDATA						"Icons\\SettingsIcon.png"
 USER_ICON						RCDATA						"Icons\\UserIcon.png"
 CABLE_ICON						RCDATA						"Icons\\Cable.png"
 //-------------------------------------------------------------------------------------------------
+// Tooltip.
+DRAW_POLY_CLEAR_ICON			RCDATA						"Icons\\DrawPolyClear.png"
+DRAW_POLY_FILLED_ICON			RCDATA						"Icons\\DrawPolyFilled.png"
+DRAW_CIRCLE_CLEAR_ICON			RCDATA						"Icons\\DrawCircleClear.png"
+DRAW_CIRCLE_FILLED_ICON			RCDATA						"Icons\\DrawCircleFilled.png"
+DRAW_TEXT_ICON					RCDATA						"Icons\\AddText.png"
+DRAW_LINE_ICON					RCDATA						"Icons\\DrawLine.png"
+//-------------------------------------------------------------------------------------------------
+
+
 
 #endif    // English (United States) resources
 

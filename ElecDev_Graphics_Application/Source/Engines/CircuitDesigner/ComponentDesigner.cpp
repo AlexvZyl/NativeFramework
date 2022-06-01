@@ -12,6 +12,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Peripherals/Component2D.h"
 #include "Application/ApplicationTemplates.h"
+#include "Resources/ResourceHandler.h"
 
 ComponentDesigner::ComponentDesigner()
 	: Base2DEngine()
@@ -27,6 +28,14 @@ ComponentDesigner::ComponentDesigner()
 		.disableHelperCircle()
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
+
+	//load tooltip icons
+	draw_clear_poly_icon = loadBitmapToGL(loadImageFromResource(DRAW_POLY_CLEAR_ICON));
+	draw_filled_poly_icon = loadBitmapToGL(loadImageFromResource(DRAW_POLY_FILLED_ICON));
+	draw_clear_circle_icon = loadBitmapToGL(loadImageFromResource(DRAW_CIRCLE_CLEAR_ICON));
+	draw_filled_circle_icon = loadBitmapToGL(loadImageFromResource(DRAW_CIRCLE_FILLED_ICON));
+	draw_text_icon = loadBitmapToGL(loadImageFromResource(DRAW_TEXT_ICON));
+	draw_line_icon = loadBitmapToGL(loadImageFromResource(DRAW_LINE_ICON));
 }
 
 void ComponentDesigner::switchState(CompDesignState state)
@@ -340,6 +349,8 @@ void ComponentDesigner::renderDesignPalette()
 		switchState(CompDesignState::PLACE_PORT);
 	}
 
+	ImGui::ImageButtonEx()
+
 	ImGui::SameLine();
 	ImGui::Separator();
 	ImGui::SameLine();
@@ -383,5 +394,60 @@ void ComponentDesigner::renderOverlay()
 
 void ComponentDesigner::renderTooltip() 
 {
-	
+	bool disp_string = false;
+
+	ImGui::PushStyleColor(ImGuiCol_Border, glm::vec4(1.0, 0.0, 0.0, 1.0));
+	ImGui::PushStyleVar(ImGuiStyleVar_PopupBorderSize, 0.f);
+	ImGui::PushStyleColor(ImGuiCol_PopupBg, glm::vec4(0.0, 0.0, 0.0, 0.0));
+	ImGui::BeginTooltipEx(ImGuiTooltipFlags_None, ImGuiWindowFlags_AlwaysAutoResize);
+	glm::vec2 icon_size = {30, 30};
+	std::string toolString;
+	switch (designerState) {
+	case CompDesignState::SELECT:
+		toolString = "Select";
+		disp_string = false;
+		break;
+	case CompDesignState::ADD_TEXT:
+		toolString = ICON_FA_PEN;
+		disp_string = false;
+		ImGui::Image((void*)draw_text_icon, icon_size, { 0, 1 }, { 1, 0 });
+		break;
+	case CompDesignState::DRAW_CIRCLE:
+		disp_string = false;
+		if (drawFilled) {
+			ImGui::Image((void*)draw_filled_circle_icon, icon_size, { 0, 1 }, { 1, 0 });
+		}
+		else {
+			ImGui::Image((void*)draw_clear_circle_icon, icon_size, { 0, 1 }, { 1, 0 });
+		}
+		break;
+	case CompDesignState::DRAW_POLY:
+		//toolString = "Place vertex";
+		//toolString = ICON_FA_DRAW_POLYGON;
+		if (drawFilled) {
+			ImGui::Image((void*)draw_filled_poly_icon, icon_size, {0, 1}, {1, 0});
+		}
+		else {
+			ImGui::Image((void*)draw_clear_poly_icon, icon_size, { 0, 1 }, { 1, 0 });
+		}
+		disp_string = false;
+		break;
+	case CompDesignState::DRAW_LINE:
+		toolString = ICON_FA_PENCIL_ALT;
+		disp_string = false;
+		ImGui::Image((void*)draw_line_icon, icon_size, { 0, 1 }, { 1, 0 });
+		break;
+	case CompDesignState::PLACE_PORT:
+		//ImGui::Text("Select");
+		break;
+
+	}
+
+	if (disp_string) {
+		ImGui::Text(toolString.c_str());
+	}
+	ImGui::EndTooltip();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
 }

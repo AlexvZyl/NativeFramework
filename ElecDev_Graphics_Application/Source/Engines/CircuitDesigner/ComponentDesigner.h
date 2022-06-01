@@ -48,6 +48,15 @@ public:
 
     CompDesignState designerState = CompDesignState::SELECT;
 
+
+    //tooltip images
+    unsigned draw_clear_poly_icon;
+    unsigned draw_filled_poly_icon;
+    unsigned draw_clear_circle_icon;
+    unsigned draw_filled_circle_icon;
+    unsigned draw_text_icon;
+    unsigned draw_line_icon;
+
     // Constructor.
     ComponentDesigner();
 
