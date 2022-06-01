@@ -213,7 +213,7 @@ private:
 		ibo.bind();
 		for (auto it = m_indexData.begin(); it != m_indexData.end(); ++it)
 		{
-			ibo.bufferSubData(it.m_index * sizeof(unsigned), it.m_elementsInMemoryRegion * sizeof(unsigned), (*it).data());
+			ibo.bufferSubData(it.m_index * sizeof(IndexType), it.m_elementsInMemoryRegion * sizeof(IndexType), (*it).data());
 		}
 	}
 
