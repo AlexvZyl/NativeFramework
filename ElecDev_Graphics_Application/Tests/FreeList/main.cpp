@@ -26,19 +26,22 @@ public:
         copyConstCalls = 0;
     }
     inline void myFunction() { totalCalls++; }
+    // Local data.
+    std::string myString = "Short string.";
     unsigned index = 0;
     unsigned data2 = 0;
     unsigned data3 = 0;
+    // Static data.
     inline static int totalCalls = 0;
     inline static int constructorCalls = 0;
     inline static int destructorCalls = 0;
     inline static int copyConstCalls = 0;
-    std::string myString = "Testing for data corruption.";
 };
 
 inline void loop(FreeListBase<TestClass>& fl) 
 {
-    for (auto& entry : fl) std::cout << "Index: " << entry.index << ", String: " << entry.myString << "\n";
+    for (auto& entry : fl) 
+        std::cout << "Index: " << entry.index << ", String: " << entry.myString << "\n";
     std::cout << "\n";
 }
 
@@ -64,6 +67,12 @@ inline void printMetaData(FreeListBase<TestClass>& freeList)
     std::cout << "[Size] : [" << freeList.size() << "]\n";
     std::cout << "[First Free Slot] : [" << freeList.getFirstFreeSlot() << "]\n";
     std::cout << "[Last Free Slot] : [" << freeList.getLastFreeSlot() << "]\n\n";
+}
+
+inline void tooLargeArrayLastFreeSlot()
+{
+
+
 }
 
 inline void simpleEmplaceErase(FreeListBase<TestClass>& freeList)
@@ -103,6 +112,50 @@ inline void simplePushErase(FreeListBase<TestClass>& freeList)
     freeList.erase(2);
     freeList.erase(3);
     freeList.erase(4);
+    printMetaData(freeList);
+    loop(freeList);
+    printCallData();
+}
+
+inline void centerRemovePushArray(FreeListBase<TestClass>& freeList)
+{
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    printMetaData(freeList);
+    loop(freeList);
+    freeList.erase(4,3);
+    TestClass myvec[3] = { TestClass(), TestClass(), TestClass() };
+    freeList.push(myvec, 3);
+    printMetaData(freeList);
+    loop(freeList);
+    printCallData();
+}
+
+inline void centerRemovePushTooLargeArray(FreeListBase<TestClass>& freeList)
+{
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    printMetaData(freeList);
+    loop(freeList);
+    freeList.erase(4,3);
+    TestClass myvec[4] = { TestClass(), TestClass(), TestClass(), TestClass() };
+    freeList.push(myvec, 4);
     printMetaData(freeList);
     loop(freeList);
     printCallData();
@@ -212,14 +265,22 @@ inline void performanceTests()
 
 int main(int, char**)
 {
+    // DE FreeList.
     FreeList<TestClass> testList(0, 5);
-    simpleEmplaceErase(testList);
-    simplePushErase(testList);
-    performanceTests();
+    // simpleEmplaceErase(testList);
+    // simplePushErase(testList);
+    // centerRemovePushArray(testList);
+    centerRemovePushTooLargeArray(testList);
 
+    // SE FreeList.
     SEFreeList<TestClass> testList2(0, 5);
-    simpleEmplaceErase(testList2);
-    simplePushErase(testList2);
+    // simpleEmplaceErase(testList2);
+    // simplePushErase(testList2);
+    // centerRemovePushArray(testList2);
+    centerRemovePushTooLargeArray(testList2);
+    
+    // Performance.
+    performanceTests();
 
     return 0;
 }
