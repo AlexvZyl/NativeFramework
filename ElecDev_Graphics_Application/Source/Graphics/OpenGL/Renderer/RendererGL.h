@@ -16,7 +16,7 @@
 //  Forward Declerations.																														//
 //==============================================================================================================================================//
 
-class PrimitivePtr;
+class IPrimitive;
 class Scene;
 class Polygon2DTextured;
 class Circle;
@@ -32,10 +32,14 @@ class VertexDataCircle;
 class IVertexArrayObject;
 class PolyLine;
 class FrameBufferObject;
-struct IndexData3;
-
 class VertexArrayObject;
 
+template<typename VertexType>
+class GraphicsTrianglesBuffer;
+template<typename VertexType>
+class GraphicsLinesBuffer;
+
+struct Ind3;
 struct Font;
 
 //==============================================================================================================================================//
@@ -78,7 +82,7 @@ public:
 	// Use the font provided.
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
-	static void remove(PrimitivePtr* primitive);
+	static void remove(IPrimitive* primitive);
 	// Clear the rendering context.
 	static void clearColor();
 	// Force the GPU commands.
@@ -188,12 +192,12 @@ private:
 	// --------------- //
 
 	// Buffers.
-	static void drawBufferIndexed(IVertexArrayObject* vao);
-	static void drawBufferIndexedForcePrimitive(IVertexArrayObject* vao, unsigned primitive);
+	static void drawBufferIndexed(IGraphicsPrimitivesBuffer& vao);
+	static void drawBufferIndexedForcePrimitive(IGraphicsPrimitivesBuffer& vao, unsigned primitive);
 
 	// Textures.
 	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
-	static std::unique_ptr<VertexArrayObject<VertexDataTextured, IndexData3>> s_unitQuad;
+	static std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> s_unitQuad;
 	static void createUnitQuad();
 
 	// ------------------- //

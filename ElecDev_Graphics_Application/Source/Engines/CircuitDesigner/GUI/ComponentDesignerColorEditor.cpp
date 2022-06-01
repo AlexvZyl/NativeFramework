@@ -36,7 +36,7 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 
 	// Get the active element.
-	PrimitivePtr* activePrimitive = nullptr;
+	IPrimitive* activePrimitive = nullptr;
 	Port* activePort = nullptr;
 	Cable* activeCable = nullptr;
 	if (engine->m_activeCircle)

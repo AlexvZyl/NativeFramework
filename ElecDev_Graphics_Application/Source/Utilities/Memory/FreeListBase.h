@@ -400,7 +400,7 @@ protected:
 		return 0;
 	}
 
-		// Commits a slot by taking it out of the FreeList.
+	// Commits a slot by taking it out of the FreeList.
 	inline void commitSlot(int prevSlot, int slotIndex, int nextSlot, int size = 1) 
 	{
 		// Comitting a slot means the elements are added.

@@ -30,14 +30,14 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	m_camera				= std::make_unique<Camera>(cameraType, size);
 
 	// VAO's.
-	m_linesVAO				= std::make_unique<VertexArrayObject<VertexData, IndexData2>>(GL_LINES);
-	m_trianglesVAO			= std::make_unique<VertexArrayObject<VertexData, IndexData3>>(GL_TRIANGLES);
-	m_texturedTrianglesVAO  = std::make_unique<VertexArrayObject<VertexDataTextured, IndexData3>>(GL_TRIANGLES);
-	m_circlesVAO			= std::make_unique<VertexArrayObject<VertexDataCircle, IndexData3>>(GL_TRIANGLES);
+	m_linesBuffer				= std::make_unique<GraphicsLinesBuffer<VertexData>>();
+	m_trianglesBuffer			= std::make_unique<GraphicsTrianglesBuffer<VertexData>>();
+	m_texturedTrianglesBuffer	= std::make_unique<GraphicsTrianglesBuffer<VertexDataTextured>>();
+	m_circlesBuffer				= std::make_unique<GraphicsTrianglesBuffer<VertexDataCircle>>();
 
 	// Grid.
 	Renderer::storeAndBindScene(this);
-	m_grid					= std::make_unique<Grid>();
+	m_grid = std::make_unique<Grid>();
 	Renderer::restoreAndUnbindScene();
 
 	// Background.
@@ -127,26 +127,25 @@ void Scene::create2DBackground()
 	//			13 ---- 14 ---- 15 ---- 16
 	
 	// Create the VAO.
-	m_backgroundVAO = std::make_unique<VertexArrayObject<VertexData>>(GL_TRIANGLES);
-	m_backgroundVAO->setCapacityIncrements(4);
+	m_backgroundBuffer = std::make_unique<GraphicsTrianglesBuffer<VertexData>>();
+	m_backgroundBuffer->setCapacityIncrements(4);
 
 	// Vertices.
 	VertexData vertices[4] = {
-		VertexData({ 1.0f, 1.0f, 0.f },   Renderer::backgroundColor, -1), //  Top right.
-		VertexData({ -1.0f, 1.0f, 0.f },  Renderer::backgroundColor, -1), //  Top left.
+		VertexData({ 1.0f, 1.0f, 0.f   }, Renderer::backgroundColor, -1), //  Top right.
+		VertexData({ -1.0f, 1.0f, 0.f  }, Renderer::backgroundColor, -1), //  Top left.
 		VertexData({ -1.0f, -1.0f, 0.f }, Renderer::backgroundColor, -1), //  Bottom left.
-		VertexData({ 1.0f, -1.0f, 0.f },  Renderer::backgroundColor, -1)  //  Bottom right.
+		VertexData({ 1.0f, -1.0f, 0.f  }, Renderer::backgroundColor, -1)  //  Bottom right.
 	};
 
 	// Indices.
-	IndexData3 indices[2] = {
-		IndexData3(0, 1, 2),
-		IndexData3(2, 3, 0)
+	UInd3 indices[2] = {
+		{ 0, 1, 2 },
+		{ 2, 3, 0 }
 	};
 
 	// Push data.
-	m_backgroundVAO->push(vertices, 4);
-	m_backgroundVAO->push(indices, 2);
+	m_backgroundBuffer->push(vertices, 4, indices, 2);
 }
 
 void Scene::create3DBackground() 

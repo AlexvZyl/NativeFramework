@@ -40,14 +40,14 @@ void BackgroundColorEditor::onImGuiRender()
 	if (scene)
 	{
 		glm::vec4 color;
-		color[0] = scene->m_backgroundVAO->m_vertexData[0].data.color[0];
-		color[1] = scene->m_backgroundVAO->m_vertexData[0].data.color[1];
-		color[2] = scene->m_backgroundVAO->m_vertexData[0].data.color[2];
-		color[3] = scene->m_backgroundVAO->m_vertexData[0].data.color[3];
+		color[0] = scene->m_backgroundBuffer->m_vertexData[0].data.color[0];
+		color[1] = scene->m_backgroundBuffer->m_vertexData[0].data.color[1];
+		color[2] = scene->m_backgroundBuffer->m_vertexData[0].data.color[2];
+		color[3] = scene->m_backgroundBuffer->m_vertexData[0].data.color[3];
 		ImGui::SameLine();
 		if (ImGui::ColorPicker4("##ColorEditor", &color[0], ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
 		{
-			for (auto& vertex : scene->m_backgroundVAO->m_vertexData)
+			for (auto& vertex : scene->m_backgroundBuffer->m_vertexData)
 			{
 				vertex.data.color[0] = color[0];
 				vertex.data.color[1] = color[1]; 
@@ -55,7 +55,7 @@ void BackgroundColorEditor::onImGuiRender()
 				vertex.data.color[3] = color[3];
 
 			}
-			scene->m_backgroundVAO->m_vertexBufferSynced = false;
+			scene->m_backgroundBuffer->m_vertexBufferSynced = false;
 		}
 	}
 	else 

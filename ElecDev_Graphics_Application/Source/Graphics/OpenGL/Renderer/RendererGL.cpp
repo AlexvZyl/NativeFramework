@@ -14,6 +14,7 @@
 #include "Graphics/Fonts/FontLoader.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -24,7 +25,7 @@ Scene* Renderer::s_scene = nullptr;
 std::vector<Scene*> Renderer::s_storedScenes;
 std::unique_ptr<Font> Renderer::s_defaultFont = nullptr;
 std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
-std::unique_ptr<VertexArrayObject<VertexDataTextured>> Renderer::s_unitQuad = nullptr;
+std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> Renderer::s_unitQuad = nullptr;
 
 //==============================================================================================================================================//
 //  Setup.																																		//
@@ -103,7 +104,7 @@ void Renderer::compileShaders()
 void Renderer::createUnitQuad() 
 {
 	// Create VAO.
-	s_unitQuad = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
+	s_unitQuad = std::make_unique<GraphicsTrianglesBuffer<VertexDataTextured>>();
 	s_unitQuad->setCapacityIncrements(2);
 
 	// Vertex data.
@@ -115,14 +116,13 @@ void Renderer::createUnitQuad()
 	};
 
 	// Index data.
-	IndexData3 indices[2] = {
-		IndexData3(0, 1, 2),
-		IndexData3(2, 3, 0)
+	UInd3 indices[2] = {
+		UInd3(0, 1, 2),
+		UInd3(2, 3, 0)
 	};
 
 	// Push data.
-	s_unitQuad->push(vertices, 4);
-	s_unitQuad->push(indices, 4);
+	s_unitQuad->push(vertices, 4, indices, 2);
 }
 
 //==============================================================================================================================================//
@@ -179,60 +179,17 @@ void Renderer::loadTextures(Scene* scene)
 //  Utilities.																																	//
 //==============================================================================================================================================//
 
-void Renderer::clearColor() 
-{
-	GLCall(glClear(GL_COLOR_BUFFER_BIT));
-}
-
-void Renderer::finish() 
-{
-	GLCall(glFinish());
-}
-
-void Renderer::flush() 
-{
-	GLCall(glFlush());
-}
-
-void Renderer::enable(unsigned attribute)
-{
-	GLCall(glEnable(attribute));
-}
-
-void Renderer::disable(unsigned attribute)
-{
-	GLCall(glDisable(attribute));
-}
-
-void Renderer::setDepthFunc(unsigned function) 
-{
-	GLCall(glDepthFunc(function));
-}
-
-void Renderer::setViewport(const glm::vec2& viewport)
-{
-	GLCall(glViewport(0, 0, (int)viewport.x, (int)viewport.y));
-}
-
-void Renderer::setViewport(const glm::vec4& viewport)
-{
-	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
-}
-
-void Renderer::setClearColor(const glm::vec4& color) 
-{
-	GLCall(glClearColor(color.r, color.g, color.b, color.a));
-}
-
-void Renderer::setLineSize(int size) 
-{
-	GLCall(glLineWidth((float)size));
-}
-
-void Renderer::clear(int bitplane)
-{
-	GLCall(glClear(bitplane));
-}
+void Renderer::clearColor()								{ GLCall(glClear(GL_COLOR_BUFFER_BIT)); }
+void Renderer::finish()									{ GLCall(glFinish()); }
+void Renderer::flush()									{ GLCall(glFlush()); }
+void Renderer::enable(unsigned attribute)				{ GLCall(glEnable(attribute)); }
+void Renderer::disable(unsigned attribute)				{ GLCall(glDisable(attribute)); }
+void Renderer::setDepthFunc(unsigned function)			{ GLCall(glDepthFunc(function)); }
+void Renderer::setViewport(const glm::vec2& viewport)	{ GLCall(glViewport(0, 0, (int)viewport.x, (int)viewport.y)); }
+void Renderer::setViewport(const glm::vec4& viewport)	{ GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3])); }
+void Renderer::setClearColor(const glm::vec4& color)	{ GLCall(glClearColor(color.r, color.g, color.b, color.a)); }
+void Renderer::setLineSize(int size)					{ GLCall(glLineWidth((float)size)); }
+void Renderer::clear(int bitplane)						{ GLCall(glClear(bitplane)); }
 
 //==============================================================================================================================================//
 //  EOF.																																		//

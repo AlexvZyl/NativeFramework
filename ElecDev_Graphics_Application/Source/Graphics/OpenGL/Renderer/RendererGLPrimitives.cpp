@@ -20,7 +20,7 @@
 //  Removing 2D Primitives.																														//
 //==============================================================================================================================================//
 
-void Renderer::remove(PrimitivePtr* primitive)
+void Renderer::remove(IPrimitive* primitive)
 {
 	s_scene->m_primitives.erase(primitive->m_entityID);
 }
@@ -32,7 +32,7 @@ void Renderer::remove(PrimitivePtr* primitive)
 Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_trianglesVAO.get(), parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_trianglesBuffer.get(), parent) });
 	return dynamic_cast<Polygon2D*>(s_scene->m_primitives.at(id).get());
 }
 
@@ -46,29 +46,29 @@ Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, const 
 PolyLine* Renderer::addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	//s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_linesVAO.get(), parent) });
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, thickness, true) });
+	//s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_linesBuffer.get(), parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesBuffer.get(), parent, thickness, true) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 
 Circle* Renderer::addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<Circle>(s_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<Circle>(s_scene->m_circlesBuffer.get(), center, radius, color, thickness, fade, parent) });
 	return dynamic_cast<Circle*>(s_scene->m_primitives.at(id).get());
 }
 
 Circle* Renderer::addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<Circle>(s_scene->m_circlesVAO.get(), center, radius, color, thickness, fade, parent) });
+	s_scene->m_primitives.insert({ id, std::make_unique<Circle>(s_scene->m_circlesBuffer.get(), center, radius, color, thickness, fade, parent) });
 	return dynamic_cast<Circle*>(s_scene->m_primitives.at(id).get());
 }
 
 LineSegment* Renderer::addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness, const glm::vec4& colour, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<LineSegment>(start, end, s_scene->m_trianglesVAO.get(), parent, thickness, colour) });
+	s_scene->m_primitives.insert({ id, std::make_unique<LineSegment>(start, end, s_scene->m_trianglesBuffer.get(), parent, thickness, colour) });
 	return dynamic_cast<LineSegment*>(s_scene->m_primitives.at(id).get());
 }
 
@@ -76,7 +76,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec3& position, co
 {
 	unsigned id = EntityManager::peakNextID();
 	s_scene->m_primitives.insert({ id, std::make_unique<Text>(text, position, color, scale,
-															  s_scene->m_texturedTrianglesVAO.get(), s_defaultFont.get(),
+															  s_scene->m_texturedTrianglesBuffer.get(), s_defaultFont.get(),
 															  parent, horizontalAlignment, verticalAlignment) });
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
@@ -85,7 +85,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec2& position, co
 {
 	unsigned id = EntityManager::peakNextID();
 	s_scene->m_primitives.insert({ id, std::make_unique<Text>(text, glm::vec3{position, 0.f}, color, scale,
-															  s_scene->m_texturedTrianglesVAO.get(), s_defaultFont.get(),
+															  s_scene->m_texturedTrianglesBuffer.get(), s_defaultFont.get(),
 															  parent, horizontalAlignment, verticalAlignment) });
 	return dynamic_cast<Text*>(s_scene->m_primitives.at(id).get());
 }
@@ -93,7 +93,7 @@ Text* Renderer::addText2D(const std::string& text, const glm::vec2& position, co
 PolyLine* Renderer::addPolyLine(const std::vector<glm::vec2>& vertices, float thickness, const glm::vec4& color, bool rounded, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesVAO.get(), parent, thickness, false, color, rounded) });
+	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesBuffer.get(), parent, thickness, false, color, rounded) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }
 

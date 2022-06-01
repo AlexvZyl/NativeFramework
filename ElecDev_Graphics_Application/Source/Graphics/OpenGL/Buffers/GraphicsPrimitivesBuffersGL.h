@@ -60,36 +60,37 @@ struct UInd3
 	};
 };
 
-class GraphicsPrimitivesBuffer
+class IGraphicsPrimitivesBuffer 
 {
 public:
 
-	// Get the VAO that is used to render this primitive.
-	inline virtual VertexArrayObject& getVAO() { return m_VAO; };
-
-	// Notify the buffer of a draw call so that updates can be made.
+	// Functions that the renderer has to be able to access universally.
 	inline virtual bool onDrawCall() = 0;
+	inline virtual VertexArrayObject& getVAO() = 0;
+	inline virtual int getIndexCount() = 0;
+	inline virtual int getVertexCount() = 0;
+
+protected:
+
+	// Constructor.
+	inline IGraphicsPrimitivesBuffer() = default;
+	// Destructor.
+	inline virtual ~IGraphicsPrimitivesBuffer() = default;
+};
+
+template <typename VertexContainer, typename VertexType, typename IndexContainer, typename IndexType>
+class GraphicsPrimitivesBuffer : public IGraphicsPrimitivesBuffer
+{
 
 protected:
 
 	// Constructor.
 	inline GraphicsPrimitivesBuffer() 
 	{
+		// Setup GPU data.
 		m_VAO.create();
-	};
+		m_VAO.setLayout<VertexType>();
 
-	// GPU data.
-	VertexArrayObject m_VAO;
-};
-
-template <typename VertexType>
-class GraphicsTrianglesBuffer : public GraphicsPrimitivesBuffer
-{
-public:
-
-	// Constructor.
-	inline GraphicsTrianglesBuffer() 
-	{
 		// Setup CPU data.
 		m_vertexData.iterateElements();
 		m_indexData.iterateMemory();
@@ -97,22 +98,22 @@ public:
 		m_indexData.setCapacityIncrements(BUFFER_INCREMENTS);
 		m_vertexData.setResizeThreshold(VERTEX_BUFFER_REDUCTION_SCALE);
 		m_indexData.setResizeThreshold(VERTEX_BUFFER_REDUCTION_SCALE);
+	};
 
-		// Setup GPU data.
-		getVAO().setLayout<VertexType>();
-	}
+	// Destructor.
+	inline ~GraphicsPrimitivesBuffer() = default;
 
-	// Push vertices and return the index in memory.
-	// Vertices are copied.
-	inline int push(const VertexType* ptr, int size = 1) 
+public:
+
+	// Push vertices and return the index in memory.  Vertices are copied.
+	inline int push(const VertexType* ptr, int size = 1)
 	{
 		return m_vertexData.push(ptr, size);
 	}
 
-	// Push indices and return the index in memory.
-	// indices are copied.
+	// Push indices and return the index in memory.  Indices are copied.
 	// The offset should be the starting vertex's position in memory.
-	inline int push(UInd3* ptr, int size = 1, int offset = 0)
+	inline int push(IndexType* ptr, int offset, int size = 1)
 	{
 		int index = m_indexData.push(ptr, size);
 		if (!offset) return index;
@@ -121,8 +122,18 @@ public:
 		return index;
 	}
 
+	// Push vertices and the corresponding indices.
+	// This function handles the offsetting of indices.
+	// returns { VerticesIndex, IndicesIndex }
+	inline std::tuple<int, int> push(VertexType* vertexPtr, int vertexCount, IndexType* indexPtr, int indexCount) 
+	{
+		int verticesIndex = push(vertexPtr, vertexCount);
+		int indicesIndex = push(indexPtr, indexCount, verticesIndex);
+		return { verticesIndex, indicesIndex};
+	}
+
 	// Erase the vertices given the position and size.
-	inline void eraseVertices(int index, int size) 
+	inline void eraseVertices(int index, int size)
 	{
 		m_vertexData.erase(index, size);
 	}
@@ -134,23 +145,57 @@ public:
 	}
 
 	// Notify of draw call.
-	inline virtual bool onDrawCall() 
+	inline virtual bool onDrawCall() override
 	{
-		
+		if (!m_indexData.count()) return false; 
+		if (!m_vertexData.count()) return false;
+		checkResize();
+		return true;
 	}
 
 	// Utilities.
-	inline float getResizeThreshold()				{ return m_vertexData.getResizeThreshold();	   }
-	inline int getCapacityIncrements()				{ return m_vertexData.getCapacityIncrements(); }	
-	inline void setResizeThreshold(float value)		{ m_vertexData.setResizeThreshold(value);
-													  m_indexData.setResizeThreshold(value);	   }
-	inline void setCapacityIncrements(int value)	{ m_indexData.setCapacityIncrements(value);			
-													  m_vertexData.setCapacityIncrements(value);   }	
+	inline VertexType& getVertex(int index)				{ return m_vertexData[index]; }
+	inline float getResizeThreshold()					{ return m_vertexData.getResizeThreshold(); }
+	inline int getCapacityIncrements()					{ return m_vertexData.getCapacityIncrements(); }
+	inline virtual VertexArrayObject& getVAO() override	{ return m_VAO; };
+	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
+	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
+	inline virtual int getIndexCount() override			{ return m_indexData.count(); }
+	inline virtual int getVertexCount() override		{ return m_vertexData.count(); }
+	inline VertexContainer<VertexType>& getVertexData() { return m_vertexData; }
+	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
+
+	// Template types.
+	constexpr typedef VertexType t_vertexType;
+	constexpr typedef IndexType t_indexType;
+	constexpr typedef VertexContainer t_vertexContainer;
+	constexpr typedef IndexContainer t_indexContainer;
 
 private:
 
+	// Check if the buffers have to resize.
+	inline void checkResize()
+	{
+		if (m_VAO.getIBO().capacity() != m_indexData.capacity())  resizeIBO();
+		if (m_VAO.getVBO().capacity() != m_vertexData.capacity()) resizeVBO();
+	}
+
+	// Resize the GPU vertex buffer.
+	inline void resizeVBO() 
+	{
+		getVAO().getVBO().bufferData(m_vertexData.capacity() * VertexType::getTotalSize(), NULL);
+		reloadAllVertices();
+	}
+
+	// Resize the GPU index buffer.
+	inline void resizeIBO()
+	{
+		getVAO().getIBO().bufferData(m_indexData.capacity() * sizeof(unsigned), NULL);
+		reloadAllIndices();
+	}
+
 	// Load all of the vertex CPU data to the GPU.
-	inline void reloadAllVertices() 
+	inline void reloadAllVertices()
 	{
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
@@ -172,7 +217,31 @@ private:
 		}
 	}
 
+	// GPU data.
+	VertexArrayObject m_VAO;
 	// CPU data.
-	FreeList<VertexType> m_vertexData;
-	FreeList<UInd3> m_indexData;
+	VertexContainer<VertexType> m_vertexData;
+	IndexContainer<IndexType> m_indexData;
+};
+
+template <typename VertexType>
+class GraphicsTrianglesBuffer : public GraphicsPrimitivesBuffer<FreeList, VertexType, FreeList, UInd3>
+{ 
+	// Constructor.
+	inline GraphicsTrianglesBuffer() 
+		: GraphicsPrimitivesBuffer()
+	{
+		getVAO().setType(GL_TRIANGLES);
+	}
+};
+
+template <typename VertexType>
+class GraphicsLinesBuffer : public GraphicsPrimitivesBuffer<FreeList, VertexType, SEFreeList, UInd2>
+{ 
+	// Constructor.
+	inline GraphicsLinesBuffer() 
+		: GraphicsPrimitivesBuffer()
+	{
+		getVAO().setType(GL_LINES);
+	}
 };

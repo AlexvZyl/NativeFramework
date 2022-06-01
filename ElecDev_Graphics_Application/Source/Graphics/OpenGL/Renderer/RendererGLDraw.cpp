@@ -9,31 +9,34 @@
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "Application/Application.h"
 #include "Lumen/Lumen.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 
 //==============================================================================================================================================//
 //  Buffers.																																	//
 //==============================================================================================================================================//
 
-void Renderer::drawBufferIndexed(IVertexArrayObject* vao)
+void Renderer::drawBufferIndexed(IGraphicsPrimitivesBuffer& gpb)
 {
-	if (!vao->onDrawCall()) return;
+	if (!gpb.onDrawCall()) return;
 
 	LUMEN_DRAW_CALL();
 
-	vao->bind();
-	vao->m_IBO.bind();
-	GLCall(glDrawElements(vao->m_bufferType, vao->getIndexCount(), GL_UNSIGNED_INT, 0));
+	VertexArrayObject& vao = gpb.getVAO();
+	vao.bind();
+	vao.getIBO().bind();
+	GLCall(glDrawElements(vao.getType(), gpb.getIndexCount(), GL_UNSIGNED_INT, 0));
 }
 
-void Renderer::drawBufferIndexedForcePrimitive(IVertexArrayObject* vao, unsigned primitive)
+void Renderer::drawBufferIndexedForcePrimitive(IGraphicsPrimitivesBuffer& gpb, unsigned primitive)
 {
-	if (!vao->onDrawCall()) return;
+	if (!gpb.onDrawCall()) return;
 
 	LUMEN_DRAW_CALL();
 
-	vao->bind();
-	vao->m_IBO.bind();
-	GLCall(glDrawElements(primitive, vao->getIndexCount(), GL_UNSIGNED_INT, 0));
+	VertexArrayObject& vao = gpb.getVAO();
+	vao.bind();
+	vao.getIBO().bind();
+	GLCall(glDrawElements(primitive, gpb.getIndexCount(), GL_UNSIGNED_INT, 0));
 }
 
 //==============================================================================================================================================//
@@ -47,7 +50,7 @@ void Renderer::drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned tex
 	GLCall(glBindTexture(GL_TEXTURE_2D, texture));
 	GLenum drawBuffers[1] = { attachment };
 	GLCall(glNamedFramebufferDrawBuffers(FBO->m_frameBufferID, 1, drawBuffers));
-	Renderer::drawBufferIndexed(s_unitQuad.get());
+	Renderer::drawBufferIndexed(*s_unitQuad.get());
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	FBO->setDrawBuffers();
 }

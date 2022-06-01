@@ -244,10 +244,10 @@ void RendererStats::onImGuiRender()
 		if (scene)
 		{
 			// Calculate memory usage.
-			float linesMem = (sizeof(VertexData) * (float)scene->m_linesVAO->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_linesVAO->getIndexCapacityGPU()) / 1000000;
-			float trianglesMem = (sizeof(VertexData) * (float)scene->m_trianglesVAO->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_trianglesVAO->getIndexCapacityGPU()) / 1000000;
-			float texturesMem = (sizeof(VertexDataTextured) * (float)scene->m_texturedTrianglesVAO->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_texturedTrianglesVAO->getIndexCapacityGPU()) / 1000000;
-			float circlesMem = (sizeof(VertexDataCircle) * (float)scene->m_circlesVAO->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_circlesVAO->getIndexCapacityGPU()) / 1000000;
+			float linesMem = (sizeof(VertexData) * (float)scene->m_linesBuffer->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_linesBuffer->getIndexCapacityGPU()) / 1000000;
+			float trianglesMem = (sizeof(VertexData) * (float)scene->m_trianglesBuffer->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_trianglesBuffer->getIndexCapacityGPU()) / 1000000;
+			float texturesMem = (sizeof(VertexDataTextured) * (float)scene->m_texturedTrianglesBuffer->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_texturedTrianglesBuffer->getIndexCapacityGPU()) / 1000000;
+			float circlesMem = (sizeof(VertexDataCircle) * (float)scene->m_circlesBuffer->getVertexCapacityGPU() + sizeof(unsigned) * (float)scene->m_circlesBuffer->getIndexCapacityGPU()) / 1000000;
 			float totalMem = linesMem + trianglesMem + texturesMem + circlesMem;
 			ImGui::Text("Total VAO VRAM Usage : %.3f MB", totalMem);
 
@@ -269,28 +269,28 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_linesVAO->getVertexCount());
+				ImGui::Text("%d", scene->m_linesBuffer->getVertexCount());
 
 				// Index Count.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_linesVAO->getIndexCount());
+				ImGui::Text("%d", scene->m_linesBuffer->getIndexCount());
 
 				// Vertex Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_linesVAO->getVertexCapacityGPU());
+				ImGui::Text("%d", scene->m_linesBuffer->getVertexCapacityGPU());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_linesVAO->getIndexCapacityGPU());
+				ImGui::Text("%d", scene->m_linesBuffer->getIndexCapacityGPU());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -305,8 +305,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_linesVAO->syncEntireVBOtoGPU();
-					scene->m_linesVAO->syncEntireIBOtoGPU();
+					scene->m_linesBuffer->syncEntireVBOtoGPU();
+					scene->m_linesBuffer->syncEntireIBOtoGPU();
 				}
 
 			}
@@ -331,28 +331,28 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_trianglesVAO->getVertexCount());
+				ImGui::Text("%d", scene->m_trianglesBuffer->getVertexCount());
 
 				// Index Count.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_trianglesVAO->getIndexCount());
+				ImGui::Text("%d", scene->m_trianglesBuffer->getIndexCount());
 
 				// Vertex Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_trianglesVAO->getVertexCapacityGPU());
+				ImGui::Text("%d", scene->m_trianglesBuffer->getVertexCapacityGPU());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_trianglesVAO->getIndexCapacityGPU());
+				ImGui::Text("%d", scene->m_trianglesBuffer->getIndexCapacityGPU());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -367,8 +367,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_trianglesVAO->syncEntireIBOtoGPU();
-					scene->m_trianglesVAO->syncEntireVBOtoGPU();
+					scene->m_trianglesBuffer->syncEntireIBOtoGPU();
+					scene->m_trianglesBuffer->syncEntireVBOtoGPU();
 				}
 			}
 			ImGui::PopID();
@@ -392,28 +392,28 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_texturedTrianglesVAO->getVertexCount());
+				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getVertexCount());
 
 				// Index Count.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_texturedTrianglesVAO->getIndexCount());
+				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getIndexCount());
 
 				// Vertex Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_texturedTrianglesVAO->getVertexCapacityGPU());
+				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getVertexCapacityGPU());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_texturedTrianglesVAO->getIndexCapacityGPU());
+				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getIndexCapacityGPU());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -428,8 +428,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_texturedTrianglesVAO->syncEntireIBOtoGPU();
-					scene->m_texturedTrianglesVAO->syncEntireVBOtoGPU();
+					scene->m_texturedTrianglesBuffer->syncEntireIBOtoGPU();
+					scene->m_texturedTrianglesBuffer->syncEntireVBOtoGPU();
 				}
 			}
 			ImGui::PopID();
@@ -453,28 +453,28 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_circlesVAO->getVertexCount());
+				ImGui::Text("%d", scene->m_circlesBuffer->getVertexCount());
 
 				// Index Count.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Count");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_circlesVAO->getIndexCount());
+				ImGui::Text("%d", scene->m_circlesBuffer->getIndexCount());
 
 				// Vertex Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_circlesVAO->getVertexCapacityGPU());
+				ImGui::Text("%d", scene->m_circlesBuffer->getVertexCapacityGPU());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_circlesVAO->getIndexCapacityGPU());
+				ImGui::Text("%d", scene->m_circlesBuffer->getIndexCapacityGPU());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -489,8 +489,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_circlesVAO->syncEntireIBOtoGPU();
-					scene->m_circlesVAO->syncEntireVBOtoGPU();
+					scene->m_circlesBuffer->syncEntireIBOtoGPU();
+					scene->m_circlesBuffer->syncEntireVBOtoGPU();
 				}
 			}
 			ImGui::PopID();

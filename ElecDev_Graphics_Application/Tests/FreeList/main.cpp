@@ -69,10 +69,26 @@ inline void printMetaData(FreeListBase<TestClass>& freeList)
     std::cout << "[Last Free Slot] : [" << freeList.getLastFreeSlot() << "]\n\n";
 }
 
-inline void tooLargeArrayLastFreeSlot()
+inline void tooLargeArrayLastFreeSlot(FreeListBase<TestClass>& freeList)
 {
-
-
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    emplace(freeList);
+    printMetaData(freeList);
+    loop(freeList);
+    freeList.erase(8,2);
+    TestClass myvec[3] = { TestClass(), TestClass(), TestClass() };
+    freeList.push(myvec, 3);
+    printMetaData(freeList);
+    loop(freeList);
+    printCallData();
 }
 
 inline void simpleEmplaceErase(FreeListBase<TestClass>& freeList)
@@ -270,17 +286,20 @@ int main(int, char**)
     // simpleEmplaceErase(testList);
     // simplePushErase(testList);
     // centerRemovePushArray(testList);
-    centerRemovePushTooLargeArray(testList);
+    // centerRemovePushTooLargeArray(testList);
+    tooLargeArrayLastFreeSlot(testList);
 
     // SE FreeList.
     SEFreeList<TestClass> testList2(0, 5);
     // simpleEmplaceErase(testList2);
     // simplePushErase(testList2);
     // centerRemovePushArray(testList2);
-    centerRemovePushTooLargeArray(testList2);
+    // centerRemovePushTooLargeArray(testList2);
+    tooLargeArrayLastFreeSlot(testList2);
+
     
     // Performance.
-    performanceTests();
+    // performanceTests();
 
     return 0;
 }
