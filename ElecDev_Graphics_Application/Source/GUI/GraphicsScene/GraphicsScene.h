@@ -40,7 +40,7 @@ public:
 		// Adjust window padding.
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f, 0.f });
 		ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 	}
 
@@ -100,11 +100,9 @@ public:
 		// Render the overlay.
 		if (m_engine->hasOverlay())
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.f);
 			ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
-			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
-			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
 			m_engine->renderOverlay();
-			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
 		}
 

@@ -325,8 +325,11 @@ void ComponentDesigner::renderOverlay()
 	constexpr glm::vec2 button_size = { 40, 40 };
 	constexpr glm::vec2 dropdown_size = { 10, 10 };
 	
-	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_NoNavFocus)) 
+	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_NoNav)) 
 	{
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
+
 		//ImGui::SetWindowSize({ -1.f, button_size.y });
 		//ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, { -1.f, -1.f });
 
@@ -605,6 +608,9 @@ void ComponentDesigner::renderOverlay()
 		ImGui::SliderFloat("Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
 		ImGui::PopItemWidth();
 		//ImGui::PopStyleVar();
+
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
 	}
 	ImGui::EndChild();
 
