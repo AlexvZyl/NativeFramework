@@ -17,7 +17,10 @@
 
 ComponentDesignerColorEditor::ComponentDesignerColorEditor(std::string name, int imguiWindowFlags)
 	: LumenWindow(name, imguiWindowFlags)
-{}
+{
+	addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
+}
+
 
 void ComponentDesignerColorEditor::onImGuiBegin()
 {

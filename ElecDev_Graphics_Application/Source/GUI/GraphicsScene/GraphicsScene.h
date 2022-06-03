@@ -39,7 +39,6 @@ public:
 	{	
 		// Adjust window padding.
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f, 0.f });
 		ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 	}
@@ -116,7 +115,6 @@ public:
 	inline virtual void onImGuiEnd() override 
 	{
 		ImGui::End();
-		ImGui::PopStyleVar();
 		ImGui::PopStyleVar();
 		ImGui::PopStyleVar();
 	}
@@ -226,13 +224,6 @@ public:
 	{
 		LumenWindow::onWindowResizeEvent(event);
 		m_engine->onWindowResizeEventForce(event);
-	}
-
-	// Override to take engine hoevered into account.
-	// This allows ImGui widgets to block events to the engine.
-	inline virtual bool isHovered() const override 
-	{
-		return LumenWindow::isHovered();//&& m_engine->m_isHovered;
 	}
 
 private:
