@@ -829,6 +829,10 @@
     <Image Include="Source\Resources\Icons\DrawCircleFilled.png" />
     <Image Include="Source\Resources\Icons\DrawLine.png" />
     <Image Include="Source\Resources\Icons\AddText.png" />
+    <Image Include="Source\Resources\Icons\Delete.png" />
+    <Image Include="Source\Resources\Icons\ColourPalette.png" />
+    <Image Include="Source\Resources\Icons\Port.png" />
+    <Image Include="Source\Resources\Icons\Dropdown.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

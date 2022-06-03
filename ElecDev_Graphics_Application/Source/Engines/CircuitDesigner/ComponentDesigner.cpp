@@ -36,6 +36,10 @@ ComponentDesigner::ComponentDesigner()
 	draw_filled_circle_icon = loadBitmapToGL(loadImageFromResource(DRAW_CIRCLE_FILLED_ICON));
 	draw_text_icon = loadBitmapToGL(loadImageFromResource(DRAW_TEXT_ICON));
 	draw_line_icon = loadBitmapToGL(loadImageFromResource(DRAW_LINE_ICON));
+	delete_icon = loadBitmapToGL(loadImageFromResource(DELETE_ICON));
+	port_icon = loadBitmapToGL(loadImageFromResource(PORT_ICON));
+	colour_palette_icon = loadBitmapToGL(loadImageFromResource(COLOUR_PALETTE_ICON));
+	dropdown_icon = loadBitmapToGL(loadImageFromResource(DROPDOWN_ICON));
 }
 
 void ComponentDesigner::switchState(CompDesignState state)
@@ -317,62 +321,283 @@ void ComponentDesigner::deleteActivePrimitive()
 
 void ComponentDesigner::renderDesignPalette() 
 {
-	if (ImGui::MenuItem("Polygon", "P", &m_polygon))
-	{
-		switchState(CompDesignState::DRAW_POLY);
-	}
 
-	ImGui::SameLine();
-	ImGui::Separator();
-	ImGui::SameLine();
-
-	if (ImGui::MenuItem("Lines", "L", &m_lines))
-	{
-		switchState(CompDesignState::DRAW_LINE);
-	}
-
-	ImGui::SameLine();
-	ImGui::Separator();
-	ImGui::SameLine();
-
-	glm::vec4 colour = ImGui::GetStyle().Colors[ImGuiCol_FrameBg];
-	ImGui::PushStyleColor(ImGuiCol_FrameBg, { colour.r * 2, colour.g * 2, colour.b * 2, colour.a });
-	ImGui::Checkbox("Filled", &drawFilled);
-	ImGui::PopStyleColor();
-
-	ImGui::SameLine();
-	ImGui::Separator();
-	ImGui::SameLine();
-
-	if (ImGui::MenuItem("Ports", "", &m_lines))
-	{
-		switchState(CompDesignState::PLACE_PORT);
-	}
-
-	ImGui::ImageButtonEx()
-
-	ImGui::SameLine();
-	ImGui::Separator();
-	ImGui::SameLine();
-
-	if (ImGui::MenuItem("Delete", "Del", &m_delete))
-	{
-		if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
-	}
-
-	if (ImGui::MenuItem("Color Editor"))
-	{
-		Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor")->setInitialPosition(getMouseGlobalPosition());
-	}
-
-	ImGui::SameLine();
-	ImGui::Separator();
-	ImGui::SameLine();
+	glm::vec2 button_size = { 50, 50 };
+	glm::vec2 dropdown_size = { 10, 10 };
 	
-	//Find a better way to set this width
-	ImGui::PushItemWidth(100.0f);
-	ImGui::SliderFloat("Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
-	ImGui::PopItemWidth();
+	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true)) {
+		//ImGui::SetWindowSize({ -1.f, button_size.y });
+		//ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, { -1.f, -1.f });
+
+		static float b = 0.8f; //  Temp colours. We should use standardised theme colours here.
+		static float c = 0.5f; 
+		static float i = 4.4f;
+
+		if (designerState == CompDesignState::DRAW_POLY && !drawFilled) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)draw_clear_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)draw_clear_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::DRAW_POLY);
+				drawFilled = false;
+			}
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Clear Polygon");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+
+
+		if (designerState == CompDesignState::DRAW_POLY && drawFilled) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)draw_filled_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)draw_filled_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::DRAW_POLY);
+				drawFilled = true;
+			}
+		}
+		
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Filled Polygon");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+
+
+		if (designerState == CompDesignState::DRAW_CIRCLE && !drawFilled) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)draw_clear_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)draw_clear_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::DRAW_CIRCLE);
+				drawFilled = false;
+			}
+		}
+
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Clear Circle");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		if (designerState == CompDesignState::DRAW_CIRCLE && drawFilled) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)draw_filled_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)draw_filled_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::DRAW_CIRCLE);
+				drawFilled = true;
+			}
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Filled Circle");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		if (designerState == CompDesignState::DRAW_LINE) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)draw_line_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)draw_line_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::DRAW_LINE);
+			}
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Line");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		if (designerState == CompDesignState::PLACE_PORT) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)port_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)port_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::PLACE_PORT);
+			}
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Port");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		if (designerState == CompDesignState::ADD_TEXT) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::SELECT);
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }))
+			{
+				switchState(CompDesignState::ADD_TEXT);
+			}
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Text");
+			ImGui::EndTooltip();
+		}
+
+		if (designerState == CompDesignState::ADD_TEXT) {
+
+			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
+				if (ImGui::Button("Settings...", button_size)) {
+					//do stuff
+				}
+				ImGui::EndButtonDropDown();
+			}
+			ImGui::PopStyleColor(3);
+		}
+		else {
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
+				if (ImGui::Button("Settings...", button_size)) {
+					//do stuff
+				}
+				ImGui::EndButtonDropDown();
+			}
+		}
+		
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Text Settings");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		ImGui::Separator();
+		ImGui::SameLine();
+
+		if (ImGui::ImageButton((void*)delete_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, { 0.8f, 0.f, 0.f, 1.f }))
+		{
+			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Delete");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		ImGui::Separator();
+		ImGui::SameLine();
+
+		if (ImGui::ImageButton((void*)colour_palette_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, penColour))
+		{
+			Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor")->setInitialPosition(getMouseGlobalPosition());
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Colour Editor");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		ImGui::Separator();
+		ImGui::SameLine();
+		
+
+		//Find a better way to set this width
+		ImGui::PushItemWidth(100.0f);
+		ImGui::SliderFloat("Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
+		ImGui::PopItemWidth();
+		//ImGui::PopStyleVar();
+	}
+	ImGui::EndChild();
 }
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)

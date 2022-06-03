@@ -45,6 +45,7 @@ public:
     float clickTol = 15.0f;
     bool drawFilled = true;
     float penThickness = 0.001f;
+    glm::vec4 penColour = { 0.f, 0.f, 0.f, 1.f };
 
     CompDesignState designerState = CompDesignState::SELECT;
 
@@ -56,6 +57,10 @@ public:
     unsigned draw_filled_circle_icon;
     unsigned draw_text_icon;
     unsigned draw_line_icon;
+    unsigned delete_icon;
+    unsigned port_icon;
+    unsigned colour_palette_icon;
+    unsigned dropdown_icon;
 
     // Constructor.
     ComponentDesigner();

@@ -69,6 +69,10 @@
 #define DRAW_CIRCLE_FILLED_ICON 296
 #define DRAW_TEXT_ICON 297
 #define DRAW_LINE_ICON 298
+#define DELETE_ICON 299
+#define COLOUR_PALETTE_ICON 300
+#define PORT_ICON 301
+#define DROPDOWN_ICON 302
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */

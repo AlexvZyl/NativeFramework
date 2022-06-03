@@ -103,6 +103,10 @@ DRAW_CIRCLE_CLEAR_ICON			RCDATA						"Icons\\DrawCircleClear.png"
 DRAW_CIRCLE_FILLED_ICON			RCDATA						"Icons\\DrawCircleFilled.png"
 DRAW_TEXT_ICON					RCDATA						"Icons\\AddText.png"
 DRAW_LINE_ICON					RCDATA						"Icons\\DrawLine.png"
+DELETE_ICON						RCDATA						"Icons\\Delete.png"
+COLOUR_PALETTE_ICON				RCDATA						"Icons\\ColourPalette.png"
+PORT_ICON						RCDATA						"Icons\\Port.png"
+DROPDOWN_ICON					RCDATA						"Icons\\Dropdown.png"
 //-------------------------------------------------------------------------------------------------
 
 

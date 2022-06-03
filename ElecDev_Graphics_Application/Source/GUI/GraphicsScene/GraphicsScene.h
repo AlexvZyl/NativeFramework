@@ -49,32 +49,16 @@ public:
 		// Render design palette.
 		if (m_engine->hasDesignPalette())
 		{
-			// Set flag.
-			addImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
-
-			// Setup style.
-			ImGui::PopStyleVar();
 			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
-			ImGui::PushID(getName().c_str());
-			// Render palette.
-			if (ImGui::BeginMenuBar())
-			{
-				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
-				m_engine->renderDesignPalette();
-				ImGui::EndMenuBar();
-				ImGui::PopStyleVar();
-			}
-			// Clear style.
-			ImGui::PopID();
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
+			m_engine->renderDesignPalette();
 			ImGui::PopStyleColor();
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+			ImGui::PopStyleVar();
 		}
-		// Set flag for no palette.
-		else removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
-
 		// Render engine scene.
 		m_engine->onRender();
 		if (!m_textureID) return;
+		ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
 		ImGui::Image(m_textureID, m_contentRegionSize, { 0, 1 }, { 1, 0 });
 		ImGui::SetItemAllowOverlap();
 		// Check if image is hovered to allow blocking of events.

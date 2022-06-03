@@ -69,7 +69,7 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 
 	// Set the color to be edited.
-	glm::vec4* color = nullptr;
+	glm::vec4* color = &(engine->penColour);
 	if (activePrimitive)
 	{
 		color = &activePrimitive->m_colour;
