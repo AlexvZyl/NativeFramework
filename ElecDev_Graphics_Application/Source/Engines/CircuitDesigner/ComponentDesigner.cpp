@@ -322,9 +322,8 @@ void ComponentDesigner::deleteActivePrimitive()
 
 void ComponentDesigner::renderOverlay() 
 {
-
-	glm::vec2 button_size = { 50, 50 };
-	glm::vec2 dropdown_size = { 10, 10 };
+	constexpr glm::vec2 button_size = { 40, 40 };
+	constexpr glm::vec2 dropdown_size = { 10, 10 };
 	
 	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_NoNavFocus)) 
 	{
@@ -335,8 +334,8 @@ void ComponentDesigner::renderOverlay()
 		static float c = 0.5f; 
 		static float i = 4.4f;
 
-		if (designerState == CompDesignState::DRAW_POLY && !drawFilled) {
-
+		if (designerState == CompDesignState::DRAW_POLY && !drawFilled) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -568,7 +567,7 @@ void ComponentDesigner::renderOverlay()
 		ImGui::Separator();
 		ImGui::SameLine();
 
-		if (ImGui::ImageButton((void*)colour_palette_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }))// , penColour))
+		if (ImGui::ImageButton((void*)colour_palette_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, penColour))
 		{
 			Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor")->setInitialPosition(getMouseGlobalPosition());
 		}
@@ -576,7 +575,7 @@ void ComponentDesigner::renderOverlay()
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Delete");
+			ImGui::Text("Colour Editor");
 			ImGui::EndTooltip();
 		}
 
@@ -592,7 +591,7 @@ void ComponentDesigner::renderOverlay()
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Colour Editor");
+			ImGui::Text("Delete");
 			ImGui::EndTooltip();
 		}
 
