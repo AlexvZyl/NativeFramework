@@ -135,10 +135,10 @@ public:
 
 	// Engine design palette.
 	// A toolbar at the top of the engine display.
-	inline virtual void renderDesignPalette() {};
-	inline bool hasDesignPalette()		{ return m_hasDesignPalette;  }
-	inline void enableDesignPalette()	{ m_hasDesignPalette = true;  }
-	inline void disableDesignPalette()	{ m_hasDesignPalette = false; }
+	inline virtual void renderMenuBar() {};
+	inline void enableMenuBar()		{ m_hasMenuBar = true;  }
+	inline void disableMenuBar()	{ m_hasMenuBar = false; }
+	inline bool hasMenuBar()		{ return m_hasMenuBar;  }
 
 	// Engine overlay.
 	// GUI elements that are rendered on top of the engine and block events
@@ -150,9 +150,9 @@ public:
 
 	// Tooltip.
 	// Useful for dispalying information to the user.
-	inline void enableTooltip() { m_hasTooltip = true; }
+	inline void enableTooltip()	 { m_hasTooltip = true;  }
 	inline void disableTooltip() { m_hasTooltip = false; }
-	inline bool hasTooltip() { return m_hasTooltip; }
+	inline bool hasTooltip()	 { return m_hasTooltip;  }
 	inline virtual void renderTooltip() {}
 
 	// Get the gizmo used for manipulation.
@@ -179,7 +179,7 @@ private:
 	std::unique_ptr<LumenGizmo> m_lumenGizmo;
 
 	// Does the engine have a design palette?
-	bool m_hasDesignPalette = false;
+	bool m_hasMenuBar = false;
 	bool m_hasOverlay = false;
 	bool m_hasTooltip = false;
 

@@ -77,7 +77,7 @@ public:
     virtual void onNotifyEvent(const NotifyEvent& event) override;
 
     // Design palette.
-    virtual void renderDesignPalette() override;
+    virtual void renderMenuBar() override;
     virtual void renderOverlay() override;
     virtual void renderTooltip() override;
 

@@ -106,7 +106,7 @@ void EngineCore::onMouseDragEventForce(const MouseDragEvent& event)
 
 void EngineCore::onMouseButtonEventForce(const MouseButtonEvent& event) 
 {
-	if (getGizmo()->isOver()) return;
+	if (!m_isHovered ||getGizmo()->isOver()) return;
 	onMouseButtonEvent(event);
 }
 
