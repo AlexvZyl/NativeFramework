@@ -107,6 +107,7 @@ DELETE_ICON						RCDATA						"Icons\\Delete.png"
 COLOUR_PALETTE_ICON				RCDATA						"Icons\\ColourPalette.png"
 PORT_ICON						RCDATA						"Icons\\Port.png"
 DROPDOWN_ICON					RCDATA						"Icons\\Dropdown.png"
+PENCIL_ICON						RCDATA						"Icons\\Pencil.png"
 //-------------------------------------------------------------------------------------------------
 
 

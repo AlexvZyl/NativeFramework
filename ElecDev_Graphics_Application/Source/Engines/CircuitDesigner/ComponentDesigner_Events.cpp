@@ -101,9 +101,8 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		else if (designerState == CompDesignState::ADD_TEXT)
 		{
 			// Create a popup GUI for the text entry.
-			float textSize = penThickness;
 			if (!m_activeText) {
-				m_activeText = Renderer::addText2D(" ", screenCoords, penColour, textSize, "C", "B", m_activeComponent.get());
+				m_activeText = Renderer::addText2D(" ", screenCoords, textColour, textSize, "C", "B", m_activeComponent.get());
 				m_activeComponent->m_text.push_back(m_activeText);
 			
 				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
@@ -251,7 +250,10 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			break;
 
 		case GLFW_KEY_ESCAPE:
-			switchState(CompDesignState::SELECT);
+			if ((designerState == CompDesignState::DRAW_POLY && m_activePoly)|| (designerState == CompDesignState::DRAW_CIRCLE && m_activeCircle)|| (designerState == CompDesignState::DRAW_LINE && m_activeLine)) {
+				switchState(designerState);
+			}
+			else { switchState(CompDesignState::SELECT); }
 			break;
 
 		case GLFW_KEY_S:

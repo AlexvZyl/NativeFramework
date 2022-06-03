@@ -40,6 +40,7 @@ ComponentDesigner::ComponentDesigner()
 	port_icon = loadBitmapToGL(loadImageFromResource(PORT_ICON));
 	colour_palette_icon = loadBitmapToGL(loadImageFromResource(COLOUR_PALETTE_ICON));
 	dropdown_icon = loadBitmapToGL(loadImageFromResource(DROPDOWN_ICON));
+	pencil_icon = loadBitmapToGL(loadImageFromResource(PENCIL_ICON));
 }
 
 void ComponentDesigner::switchState(CompDesignState state)
@@ -504,14 +505,14 @@ void ComponentDesigner::renderDesignPalette()
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
-			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }))
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, {0.f, 0.f, 0.f, 0.f}, textColour))
 			{
 				switchState(CompDesignState::SELECT);
 			}
 			ImGui::PopStyleColor(3);
 		}
 		else {
-			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }))
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, textColour))
 			{
 				switchState(CompDesignState::ADD_TEXT);
 			}
@@ -530,18 +531,37 @@ void ComponentDesigner::renderDesignPalette()
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
 			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
-				if (ImGui::Button("Settings...", button_size)) {
-					//do stuff
+				ImGui::PopStyleColor(3);
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) {
+					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
+				ImGui::Text("Size");
+				ImGui::SameLine();
+				//Find a better way to set this width
+				ImGui::PushItemWidth(80.0f);
+				if (ImGui::InputInt("pt ", &sizePt)) {
+					textSize = sizePt / 2835.f;
+				}
+				ImGui::PopItemWidth();
 				ImGui::EndButtonDropDown();
 			}
-			ImGui::PopStyleColor(3);
+			else{
+				ImGui::PopStyleColor(3);
+			}
 		}
 		else {
 			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
-				if (ImGui::Button("Settings...", button_size)) {
-					//do stuff
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) {
+					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
+				ImGui::Text("Size");
+				ImGui::SameLine();
+				//Find a better way to set this width
+				ImGui::PushItemWidth(80.0f);
+				if (ImGui::InputInt("pt ", &sizePt)) {
+					textSize = sizePt/2835.f;
+				}
+				ImGui::PopItemWidth();
 				ImGui::EndButtonDropDown();
 			}
 		}
@@ -558,25 +578,10 @@ void ComponentDesigner::renderDesignPalette()
 		ImGui::Separator();
 		ImGui::SameLine();
 
-		if (ImGui::ImageButton((void*)delete_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, { 0.8f, 0.f, 0.f, 1.f }))
-		{
-			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
-		}
 
-		if (ImGui::IsItemHovered())
+		if (ImGui::ImageButton((void*)pencil_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, penColour))
 		{
-			ImGui::BeginTooltip();
-			ImGui::Text("Delete");
-			ImGui::EndTooltip();
-		}
-
-		ImGui::SameLine();
-		ImGui::Separator();
-		ImGui::SameLine();
-
-		if (ImGui::ImageButton((void*)colour_palette_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, penColour))
-		{
-			Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor")->setInitialPosition(getMouseGlobalPosition());
+			Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &penColour)->setInitialPosition(getMouseGlobalPosition());
 		}
 
 		if (ImGui::IsItemHovered())
@@ -587,14 +592,43 @@ void ComponentDesigner::renderDesignPalette()
 		}
 
 		ImGui::SameLine();
-		ImGui::Separator();
-		ImGui::SameLine();
-		
 
 		//Find a better way to set this width
 		ImGui::PushItemWidth(100.0f);
-		ImGui::SliderFloat("Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
+		//FIXME
+		ImGui::SetCursorPosY(16.f);
+		ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
 		ImGui::PopItemWidth();
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Thickness");
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine();
+		if (ImGui::GetCursorPosX() < ImGui::GetWindowContentRegionMax().x - 60)
+			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 60);
+
+
+		glm::vec4 delete_tint = { 0.2f, 0.2f, 0.2f, 1.0f };
+		if (designerState == CompDesignState::SELECT && (m_activeCircle || m_activeLine || m_activePoly || m_activeText)) {
+			delete_tint = { 0.8f, 0.f, 0.f, 1.f };
+		}
+
+		if (ImGui::ImageButton((void*)delete_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, delete_tint))
+		{
+			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
+		}
+
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::BeginTooltip();
+			ImGui::Text("Delete");
+			ImGui::EndTooltip();
+		}
+		
 		//ImGui::PopStyleVar();
 	}
 	ImGui::EndChild();
@@ -635,32 +669,32 @@ void ComponentDesigner::renderTooltip()
 	case CompDesignState::ADD_TEXT:
 		toolString = ICON_FA_PEN;
 		disp_string = false;
-		ImGui::Image((void*)draw_text_icon, icon_size, { 0, 1 }, { 1, 0 });
+		ImGui::Image((void*)draw_text_icon, icon_size, { 0, 1 }, { 1, 0 }, textColour);
 		break;
 	case CompDesignState::DRAW_CIRCLE:
 		disp_string = false;
 		if (drawFilled) {
-			ImGui::Image((void*)draw_filled_circle_icon, icon_size, { 0, 1 }, { 1, 0 });
+			ImGui::Image((void*)draw_filled_circle_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
 		else {
-			ImGui::Image((void*)draw_clear_circle_icon, icon_size, { 0, 1 }, { 1, 0 });
+			ImGui::Image((void*)draw_clear_circle_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
 		break;
 	case CompDesignState::DRAW_POLY:
 		//toolString = "Place vertex";
 		//toolString = ICON_FA_DRAW_POLYGON;
 		if (drawFilled) {
-			ImGui::Image((void*)draw_filled_poly_icon, icon_size, {0, 1}, {1, 0});
+			ImGui::Image((void*)draw_filled_poly_icon, icon_size, {0, 1}, {1, 0}, penColour);
 		}
 		else {
-			ImGui::Image((void*)draw_clear_poly_icon, icon_size, { 0, 1 }, { 1, 0 });
+			ImGui::Image((void*)draw_clear_poly_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
 		disp_string = false;
 		break;
 	case CompDesignState::DRAW_LINE:
 		toolString = ICON_FA_PENCIL_ALT;
 		disp_string = false;
-		ImGui::Image((void*)draw_line_icon, icon_size, { 0, 1 }, { 1, 0 });
+		ImGui::Image((void*)draw_line_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		break;
 	case CompDesignState::PLACE_PORT:
 		//ImGui::Text("Select");

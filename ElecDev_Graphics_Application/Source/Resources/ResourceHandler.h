@@ -73,6 +73,7 @@
 #define COLOUR_PALETTE_ICON 300
 #define PORT_ICON 301
 #define DROPDOWN_ICON 302
+#define PENCIL_ICON 303
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */
