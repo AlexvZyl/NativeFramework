@@ -603,7 +603,7 @@ void ComponentDesigner::renderDesignPalette()
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Thickness");
+			ImGui::Text("Line Thickness");
 			ImGui::EndTooltip();
 		}
 
