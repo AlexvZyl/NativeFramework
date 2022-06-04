@@ -44,8 +44,11 @@ public:
     unsigned int m_currentEntityID = 0;
     float clickTol = 15.0f;
     bool drawFilled = true;
-    float penThickness = 0.001f;
+    float penThickness = 0.0001f;
+    int sizePt = 10;
+    float textSize = sizePt / 2835.f;
     glm::vec4 penColour = { 0.f, 0.f, 0.f, 1.f };
+    glm::vec4 textColour = { 0.f, 0.f, 0.f, 1.f };
 
     CompDesignState designerState = CompDesignState::SELECT;
 
@@ -61,6 +64,7 @@ public:
     unsigned port_icon;
     unsigned colour_palette_icon;
     unsigned dropdown_icon;
+    unsigned pencil_icon;
 
     // Constructor.
     ComponentDesigner();
