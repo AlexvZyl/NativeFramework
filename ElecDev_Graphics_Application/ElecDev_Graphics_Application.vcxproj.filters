@@ -823,6 +823,17 @@
     <Image Include="Source\Resources\Icons\UserIcon.png" />
     <Image Include="Source\Resources\Icons\LeftArrowIcon.png" />
     <Image Include="Source\Resources\Icons\Cable.png" />
+    <Image Include="Source\Resources\Icons\DrawPolyClear.png" />
+    <Image Include="Source\Resources\Icons\DrawPolyFilled.png" />
+    <Image Include="Source\Resources\Icons\DrawCircleClear.png" />
+    <Image Include="Source\Resources\Icons\DrawCircleFilled.png" />
+    <Image Include="Source\Resources\Icons\DrawLine.png" />
+    <Image Include="Source\Resources\Icons\AddText.png" />
+    <Image Include="Source\Resources\Icons\Delete.png" />
+    <Image Include="Source\Resources\Icons\ColourPalette.png" />
+    <Image Include="Source\Resources\Icons\Port.png" />
+    <Image Include="Source\Resources\Icons\Dropdown.png" />
+    <Image Include="Source\Resources\Icons\Pencil.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

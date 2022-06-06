@@ -15,9 +15,10 @@
 //  Popup menu.																																	//
 //==============================================================================================================================================//
 
-ComponentDesignerColorEditor::ComponentDesignerColorEditor(std::string name, int imguiWindowFlags)
-	: LumenWindow(name, imguiWindowFlags)
-{}
+ComponentDesignerColorEditor::ComponentDesignerColorEditor(std::string name, int imguiWindowFlags, glm::vec4* const target)
+	: LumenWindow(name, imguiWindowFlags), m_target(target)
+{
+}
 
 void ComponentDesignerColorEditor::onImGuiBegin()
 {
@@ -69,7 +70,7 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 
 	// Set the color to be edited.
-	glm::vec4* color = nullptr;
+	glm::vec4* color = m_target;
 	if (activePrimitive)
 	{
 		color = &activePrimitive->m_colour;

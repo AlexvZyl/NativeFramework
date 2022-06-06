@@ -76,6 +76,7 @@ void PolyLine::update()
 
 	m_vertexCount = vertexVector.size();
 	m_VAO->pushPrimitive(this, vertexVector, indices);
+	m_outlineEnabled = false;
 	if (outlined) 
 	{
 		enableOutline();

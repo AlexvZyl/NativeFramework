@@ -63,6 +63,17 @@
 #define SETTINGS_ICON 290
 #define USER_ICON 291
 #define CABLE_ICON 292
+#define DRAW_POLY_CLEAR_ICON 293
+#define DRAW_POLY_FILLED_ICON 294
+#define DRAW_CIRCLE_CLEAR_ICON 295
+#define DRAW_CIRCLE_FILLED_ICON 296
+#define DRAW_TEXT_ICON 297
+#define DRAW_LINE_ICON 298
+#define DELETE_ICON 299
+#define COLOUR_PALETTE_ICON 300
+#define PORT_ICON 301
+#define DROPDOWN_ICON 302
+#define PENCIL_ICON 303
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */

@@ -25,7 +25,8 @@ class ComponentDesignerColorEditor : public LumenWindow
 public:
 
 	// Constructor.
-	ComponentDesignerColorEditor(std::string name, int imguiWindowFlags = 0);
+	ComponentDesignerColorEditor(std::string name, int imguiWindowFlags = 0, glm::vec4* const target = nullptr);
+	//ComponentDesignerColorEditor(std::string name, glm::vec4* const target, int imguiWindowFlags = 0);
 	// Destructor.
 	inline virtual ~ComponentDesignerColorEditor() = default;
 
@@ -46,6 +47,7 @@ private:
 
 	// The position that the window starts up at.
 	glm::vec2 m_initialPosition;
+	glm::vec4* const m_target;
 };
 
 //==============================================================================================================================================//

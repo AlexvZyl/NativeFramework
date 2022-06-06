@@ -148,6 +148,13 @@ public:
 	inline bool hasOverlay()	 { return m_hasOverlay;  }
 	inline virtual void renderOverlay() {};
 
+	// Tooltip.
+	// Useful for dispalying information to the user.
+	inline void enableTooltip() { m_hasTooltip = true; }
+	inline void disableTooltip() { m_hasTooltip = false; }
+	inline bool hasTooltip() { return m_hasTooltip; }
+	inline virtual void renderTooltip() {}
+
 	// Get the gizmo used for manipulation.
 	LumenGizmo* getGizmo();
 
@@ -174,6 +181,7 @@ private:
 	// Does the engine have a design palette?
 	bool m_hasDesignPalette = false;
 	bool m_hasOverlay = false;
+	bool m_hasTooltip = false;
 
 	// Handlers that are always called on the events.
 	// Prevents children from overriding certain behaviour.
