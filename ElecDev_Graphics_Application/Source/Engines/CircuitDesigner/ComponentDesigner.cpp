@@ -622,7 +622,7 @@ void ComponentDesigner::renderOverlay()
 			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 46);
 
 		glm::vec4 delete_tint = { 0.2f, 0.2f, 0.2f, 1.0f };
-		if (designerState == CompDesignState::SELECT && (m_activeCircle || m_activeLine || m_activePoly || m_activeText)) {
+		if (designerState == CompDesignState::SELECT && (m_activeCircle || m_activeLine || m_activePoly || m_activeText || m_activePort)) {
 			delete_tint = { 0.8f, 0.f, 0.f, 1.f };
 		}
 
