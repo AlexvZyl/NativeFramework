@@ -66,7 +66,8 @@ void Application::onUpdate()
 		{
 			// Change focus.
 			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow) m_hoveredWindow->focus();
-			if (!m_hoveredWindow)									   m_focusedWindow = nullptr;
+			if (!m_hoveredWindow)									   onFocusedWindowChange(nullptr); 
+			// If there is a window after the change, pass the event.
 			if (m_focusedWindow)									   m_focusedWindow->onEvent(*event.get());
 		}
 

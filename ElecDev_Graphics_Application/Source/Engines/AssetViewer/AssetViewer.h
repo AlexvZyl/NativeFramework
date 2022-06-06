@@ -29,7 +29,7 @@ public:
     ~AssetViewer() = default;
 
     // So that the file name can be displayed.
-    virtual void renderDesignPalette() override;
+    virtual void renderMenuBar() override;
 
     // Asset viewing functions.
     void clearAssets();
