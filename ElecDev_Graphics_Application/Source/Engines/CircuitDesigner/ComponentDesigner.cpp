@@ -21,7 +21,7 @@ ComponentDesigner::ComponentDesigner()
 	m_activeComponent->title->updateText(m_activeComponent->equipType);
 	m_activeComponent->place(glm::vec2(0.f));
 	m_activeComponent->disableOutline();
-	enableDesignPalette();
+	//enableMenuBar();
 	enableOverlay();
 	enableTooltip();
 	getScene().getGrid()
@@ -29,7 +29,7 @@ ComponentDesigner::ComponentDesigner()
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
 
-	//load tooltip icons
+	// Load tooltip icons.
 	draw_clear_poly_icon = loadBitmapToGL(loadImageFromResource(DRAW_POLY_CLEAR_ICON));
 	draw_filled_poly_icon = loadBitmapToGL(loadImageFromResource(DRAW_POLY_FILLED_ICON));
 	draw_clear_circle_icon = loadBitmapToGL(loadImageFromResource(DRAW_CIRCLE_CLEAR_ICON));
@@ -305,7 +305,8 @@ void ComponentDesigner::deleteActivePrimitive()
 	if (m_activeText)
 	{
 		//if the text belongs to a port, we can delete the whole port
-		if (m_activeText->m_parent->m_type == EntityType::PORT) {
+		if (m_activeText->m_parent->m_type == EntityType::PORT) 
+		{
 			m_activeComponent->removePort(dynamic_cast<Port*>(m_activeText->m_parent));
 		}
 		m_activeComponent->removeText(m_activeText);
@@ -320,13 +321,16 @@ void ComponentDesigner::deleteActivePrimitive()
 	m_activeText = nullptr;
 }
 
-void ComponentDesigner::renderDesignPalette() 
+void ComponentDesigner::renderOverlay() 
 {
-
-	glm::vec2 button_size = { 50, 50 };
-	glm::vec2 dropdown_size = { 10, 10 };
+	constexpr glm::vec2 button_size = { 35, 35 };
+	constexpr glm::vec2 dropdown_size = { 10, 10 };
 	
-	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true)) {
+	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_AlwaysUseWindowPadding)) 
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
+
 		//ImGui::SetWindowSize({ -1.f, button_size.y });
 		//ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, { -1.f, -1.f });
 
@@ -334,8 +338,8 @@ void ComponentDesigner::renderDesignPalette()
 		static float c = 0.5f; 
 		static float i = 4.4f;
 
-		if (designerState == CompDesignState::DRAW_POLY && !drawFilled) {
-
+		if (designerState == CompDesignState::DRAW_POLY && !drawFilled) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -345,7 +349,8 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)draw_clear_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
 				switchState(CompDesignState::DRAW_POLY);
@@ -363,8 +368,8 @@ void ComponentDesigner::renderDesignPalette()
 		ImGui::SameLine();
 
 
-		if (designerState == CompDesignState::DRAW_POLY && drawFilled) {
-
+		if (designerState == CompDesignState::DRAW_POLY && drawFilled) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -374,7 +379,8 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)draw_filled_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
 				switchState(CompDesignState::DRAW_POLY);
@@ -393,8 +399,8 @@ void ComponentDesigner::renderDesignPalette()
 		ImGui::SameLine();
 
 
-		if (designerState == CompDesignState::DRAW_CIRCLE && !drawFilled) {
-
+		if (designerState == CompDesignState::DRAW_CIRCLE && !drawFilled) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -404,14 +410,14 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)draw_clear_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
 				switchState(CompDesignState::DRAW_CIRCLE);
 				drawFilled = false;
 			}
 		}
-
 
 		if (ImGui::IsItemHovered())
 		{
@@ -421,8 +427,8 @@ void ComponentDesigner::renderDesignPalette()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::DRAW_CIRCLE && drawFilled) {
-
+		if (designerState == CompDesignState::DRAW_CIRCLE && drawFilled) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -432,7 +438,8 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)draw_filled_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
 				switchState(CompDesignState::DRAW_CIRCLE);
@@ -448,7 +455,8 @@ void ComponentDesigner::renderDesignPalette()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::DRAW_LINE) {
+		if (designerState == CompDesignState::DRAW_LINE) 
+		{
 
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -459,7 +467,8 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)draw_line_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
 				switchState(CompDesignState::DRAW_LINE);
@@ -474,8 +483,8 @@ void ComponentDesigner::renderDesignPalette()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::PLACE_PORT) {
-
+		if (designerState == CompDesignState::PLACE_PORT) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -485,7 +494,8 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)port_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
 				switchState(CompDesignState::PLACE_PORT);
@@ -500,8 +510,8 @@ void ComponentDesigner::renderDesignPalette()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::ADD_TEXT) {
-
+		if (designerState == CompDesignState::ADD_TEXT) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -511,7 +521,8 @@ void ComponentDesigner::renderDesignPalette()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else {
+		else 
+		{
 			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, textColour))
 			{
 				switchState(CompDesignState::ADD_TEXT);
@@ -525,8 +536,8 @@ void ComponentDesigner::renderDesignPalette()
 			ImGui::EndTooltip();
 		}
 
-		if (designerState == CompDesignState::ADD_TEXT) {
-
+		if (designerState == CompDesignState::ADD_TEXT) 
+		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -578,7 +589,6 @@ void ComponentDesigner::renderDesignPalette()
 		ImGui::Separator();
 		ImGui::SameLine();
 
-
 		if (ImGui::ImageButton((void*)pencil_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, penColour))
 		{
 			Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &penColour)->setInitialPosition(getMouseGlobalPosition());
@@ -587,7 +597,7 @@ void ComponentDesigner::renderDesignPalette()
 		if (ImGui::IsItemHovered())
 		{
 			ImGui::BeginTooltip();
-			ImGui::Text("Colour Editor");
+			ImGui::Text("Pen Colour");
 			ImGui::EndTooltip();
 		}
 
@@ -608,9 +618,8 @@ void ComponentDesigner::renderDesignPalette()
 		}
 
 		ImGui::SameLine();
-		if (ImGui::GetCursorPosX() < ImGui::GetWindowContentRegionMax().x - 60)
-			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 60);
-
+		if (ImGui::GetCursorPosX() < ImGui::GetWindowContentRegionMax().x - 46)
+			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 46);
 
 		glm::vec4 delete_tint = { 0.2f, 0.2f, 0.2f, 1.0f };
 		if (designerState == CompDesignState::SELECT && (m_activeCircle || m_activeLine || m_activePoly || m_activeText || m_activePort)) {
@@ -630,8 +639,14 @@ void ComponentDesigner::renderDesignPalette()
 		}
 		
 		//ImGui::PopStyleVar();
+
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
 	}
 	ImGui::EndChild();
+
+	// Grid size overlay.
+	getScene().getGrid().renderOverlay();
 }
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)
@@ -646,11 +661,6 @@ void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit*
 	m_activeComponent->disableOutline();
 }
 
-void ComponentDesigner::renderOverlay() 
-{
-	getScene().getGrid().renderOverlay();
-}
-
 void ComponentDesigner::renderTooltip() 
 {
 	bool disp_string = false;
@@ -661,7 +671,8 @@ void ComponentDesigner::renderTooltip()
 	ImGui::BeginTooltipEx(ImGuiTooltipFlags_None, ImGuiWindowFlags_AlwaysAutoResize);
 	glm::vec2 icon_size = {30, 30};
 	std::string toolString;
-	switch (designerState) {
+	switch (designerState) 
+	{
 	case CompDesignState::SELECT:
 		toolString = "Select";
 		disp_string = false;
@@ -673,20 +684,24 @@ void ComponentDesigner::renderTooltip()
 		break;
 	case CompDesignState::DRAW_CIRCLE:
 		disp_string = false;
-		if (drawFilled) {
+		if (drawFilled) 
+		{
 			ImGui::Image((void*)draw_filled_circle_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
-		else {
+		else 
+		{
 			ImGui::Image((void*)draw_clear_circle_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
 		break;
 	case CompDesignState::DRAW_POLY:
 		//toolString = "Place vertex";
 		//toolString = ICON_FA_DRAW_POLYGON;
-		if (drawFilled) {
+		if (drawFilled) 
+		{
 			ImGui::Image((void*)draw_filled_poly_icon, icon_size, {0, 1}, {1, 0}, penColour);
 		}
-		else {
+		else 
+		{
 			ImGui::Image((void*)draw_clear_poly_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
 		disp_string = false;
@@ -702,11 +717,14 @@ void ComponentDesigner::renderTooltip()
 
 	}
 
-	if (disp_string) {
-		ImGui::Text(toolString.c_str());
-	}
+	if (disp_string) ImGui::Text(toolString.c_str());
 	ImGui::EndTooltip();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleVar();
+}
+
+void ComponentDesigner::renderMenuBar() 
+{
+
 }

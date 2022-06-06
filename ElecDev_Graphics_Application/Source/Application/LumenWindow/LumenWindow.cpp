@@ -122,6 +122,7 @@ void LumenWindow::updateImGuiName()
 	}
 
 	// Need to add white space so that it is at least the minimum width.
+	// TODO: This leaves an inconsistent min width.
 	int spacesToAdd = std::ceil((MIN_TAB_WIDTH - currentWidth)/WIDTH_OF_SPACE);
 	std::string spaces = "";
 	for (int i = 0; i < spacesToAdd; i++) spaces.push_back(' ');

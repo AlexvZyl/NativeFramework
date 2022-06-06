@@ -103,7 +103,7 @@ public:
 	void reloadComponent(Component2D* component, const YAML::Node& node);
 
 	virtual void renderOverlay() override;
-	virtual void renderDesignPalette() override;
+	virtual void renderMenuBar() override;
 
 private:
 

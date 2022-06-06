@@ -86,16 +86,17 @@ void Toolbar::onImGuiRender()
         ImGui::Separator();
 
         // Close.
-        if (ImGui::MenuItem("Close", "Ctrl+W"))
-            Lumen::getApp().stopRunning();
+        if (ImGui::MenuItem("Close", "Ctrl+W")) Lumen::getApp().stopRunning();
 
-        ImGui::EndMenu();
         ImGui::PopStyleVar();
+        ImGui::EndMenu();
     }
 
     // --------- //
     //  E D I T  //
     // --------- //
+
+    ImGui::SetCursorPosY(m_contentRegionPosition.y);
 
     if (ImGui::BeginMenu("Edit"))
     {
@@ -124,14 +125,16 @@ void Toolbar::onImGuiRender()
         {
 
         }
-        ImGui::EndMenu();
 
         ImGui::PopStyleVar();
+        ImGui::EndMenu();
     }
 
     // ----------- //
     //  T O O L S  //
     // ----------- //
+
+    ImGui::SetCursorPosY(m_contentRegionPosition.y);
 
     if(ImGui::BeginMenu("Tools"))
     {
@@ -232,9 +235,8 @@ void Toolbar::onImGuiRender()
         }
 
         // End.
-        ImGui::EndMenu();
-
         ImGui::PopStyleVar();
+        ImGui::EndMenu();
     }
 };
 
@@ -243,10 +245,7 @@ void Toolbar::onImGuiEnd()
     // End.
     ImGui::EndMainMenuBar();
     // Style.
-    ImGui::PopStyleVar();
-    ImGui::PopStyleVar();
-    ImGui::PopStyleVar();
-    ImGui::PopStyleVar();
+    ImGui::PopStyleVar(4);
     ImGui::PopStyleColor();
 }
 

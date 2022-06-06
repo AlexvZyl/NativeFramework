@@ -27,10 +27,11 @@ void Application::run()
 	{
 		if (m_waitForEvents)
 		{
-			// Ensure remaining time is positive.
 			waitRemainingTime = m_eventsTimeout - m_totalFrameTime;
-			if(waitRemainingTime > 0)
-				glfwWaitEventsTimeout(waitRemainingTime);
+			// Wait for events if there is time left.
+			if (waitRemainingTime > 0) glfwWaitEventsTimeout(waitRemainingTime);
+			// If there is no time left, poll so that we do not miss events.
+			else					   glfwPollEvents();
 		}
 		else glfwPollEvents();
 
@@ -116,9 +117,10 @@ void Application::renderFrame()
 			// Cleanup & imgui drawing.
 			onRenderCleanup();
 		}
+
 		{
 			// Keep this seperate, since it blocks.
-			// This must be added to the Frametime (GPU) when added.
+			// TODO: Add to Frametime (GPU).
 			LUMEN_PROFILE_SCOPE("Swap Buffers");
 			glfwSwapBuffers(getGLFWWindow());
 		}
@@ -144,7 +146,7 @@ void Application::onRenderCleanup()
 	// Set viewport.
 	int display_w, display_h;
 	glfwGetFramebufferSize(getGLFWWindow(), &display_w, &display_h);
-	Renderer::setViewport(glm::vec2(display_w, display_h));
+	Renderer::setViewport({ display_w, display_h });
 
 	{
 		LUMEN_PROFILE_SCOPE("ImGui Draw");
