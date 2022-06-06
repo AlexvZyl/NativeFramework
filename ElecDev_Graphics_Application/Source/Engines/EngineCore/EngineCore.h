@@ -196,6 +196,7 @@ private:
 	virtual void onYamlNodeDropEventForce(const YamlNodeDropEvent& event);
 	virtual void onMouseDragEventForce(const MouseDragEvent& event);
 	virtual void onMouseButtonEventForce(const MouseButtonEvent& event);
+	virtual void onMouseScrollEventForce(const MouseScrollEvent& event);
 };
 
 //=============================================================================================================================================//

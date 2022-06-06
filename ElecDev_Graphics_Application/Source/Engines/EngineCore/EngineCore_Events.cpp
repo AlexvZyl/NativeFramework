@@ -24,7 +24,7 @@ void EngineCore::onEvent(const Event& event)
 	// Mouse events.
 	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(event.cast<MouseMoveEvent>()); }
 	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEventForce(event.cast<MouseDragEvent>()); }
-	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(event.cast<MouseScrollEvent>()); }
+	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEventForce(event.cast<MouseScrollEvent>()); }
 	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
 	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
 	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
@@ -136,6 +136,12 @@ void EngineCore::onYamlNodeDropEventForce(const YamlNodeDropEvent& event)
 {
 	m_parentWindow->focus();
 	onYamlNodeDropEvent(event);
+}
+
+void EngineCore::onMouseScrollEventForce(const MouseScrollEvent& event) 
+{
+	if (!m_isHovered) return;
+	onMouseScrollEvent(event);
 }
 
 //==============================================================================================================================================//

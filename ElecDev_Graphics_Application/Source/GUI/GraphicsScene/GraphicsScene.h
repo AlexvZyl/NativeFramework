@@ -45,17 +45,16 @@ public:
 
 	inline virtual void onImGuiRender() override
 	{
-		// Render design palette.
+		// Render the engine menubar.
 		if (m_engine->hasMenuBar())
 		{
 			// Set flag.
 			addImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
 
 			// Setup style.
-			ImGui::PopStyleVar();
 			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
 			ImGui::PushID(getName().c_str());
-			// Render palette.
+			// Render the bar.
 			if (ImGui::BeginMenuBar())
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
@@ -66,17 +65,16 @@ public:
 			// Clear style.
 			ImGui::PopID();
 			ImGui::PopStyleColor();
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 		}
-		// Set flag for no palette.
+		// Set flag for no menubar.
 		else removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
 
 		// Render engine scene.
 		m_engine->onRender();
 		if (!m_textureID) return;
 		ImGui::Image(m_textureID, m_contentRegionSize, { 0, 1 }, { 1, 0 });
-		ImGui::SetItemAllowOverlap();
 		// Check if image is hovered to allow blocking of events.
+		ImGui::SetItemAllowOverlap();
 		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
 		else						m_engine->m_isHovered = false;
 
@@ -100,9 +98,10 @@ public:
 		if (m_engine->hasOverlay())
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
 			ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
 			m_engine->renderOverlay();
-			ImGui::PopStyleVar();
+			ImGui::PopStyleVar(2);
 		}
 
 		// Render the tooltip.
@@ -115,8 +114,7 @@ public:
 	inline virtual void onImGuiEnd() override 
 	{
 		ImGui::End();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
+		ImGui::PopStyleVar(2);
 	}
 
 	// Pass events to the engine.
