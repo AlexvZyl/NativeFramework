@@ -51,6 +51,7 @@ Application::Application()
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigInputTrickleEventQueue = false;
 	setGuiTheme();
 
 	// Initialisation frame.
