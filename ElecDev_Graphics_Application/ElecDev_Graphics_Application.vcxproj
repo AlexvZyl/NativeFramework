@@ -208,6 +208,7 @@
     <ClCompile Include="Source\GUI\LumenPayload\LumenPayload.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenPopupWindow.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
+    <ClCompile Include="Source\Application\LumenWindow\LumenWebsocketWindow.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
     <ClCompile Include="Source\Application\ApplicationLumenWindows.cpp" />
@@ -651,6 +652,7 @@
     <ClInclude Include="Source\Application\LumenWindow\LumenPopupWindow.h" />
     <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
+    <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
     <ClInclude Include="Source\LumenPCH.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
     <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
