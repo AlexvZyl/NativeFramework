@@ -69,53 +69,41 @@ void LumenWebSocket::listener()
 		std::string input = boost::beast::buffers_to_string(buffer.cdata());
 		LUMEN_LOG_INFO("Received input.", "Websocket");
 
-		// Dispatch script.
-		if (input.find(LUA_EXECUTABLE_SCRIPT) != std::string::npos)
-		{
-			app.pushLuaScript(input);
-		}
-		else if (input.find(LUA_SCRIPT_GUI) != std::string::npos)
+		// Create script GUI.
+		if (input.find(LUA_SCRIPT_GUI) != std::string::npos)
 		{
 			LumenWebSocket::createGuiFromScript(input);
 		}
+		// Add script to be executed once.
+		else app.pushLuaScript(input);
 	}
 }
 
 void LumenWebSocket::createGuiFromScript(std::string& script) 
 {
-	static const std::string guiNameID = "-- Gui Name: '";
-	static const std::string websocketID = "-- Websocket: '";
+	static const char* guiNameID = "-- Gui Name: '";
+	static const char* websocketID = "-- Websocket: '";
 
 	Application& app = Lumen::getApp();
 
-	// Find the gui name.
+	// Find the gui name and push onto stack.
 	std::string guiName;
-	int pos = script.find(guiNameID.c_str());
-	pos += guiNameID.size();
-	while (script[pos] != '\'') 
-	{
-		guiName.push_back(script[pos++]);
-	}
-
+	int pos = script.find(guiNameID);
+	pos += strlen(guiNameID);
+	while (script[pos] != '\'') guiName.push_back(script[pos++]);
 	ScriptGui* scriptGui = app.pushWindow<ScriptGui>(LumenDockPanel::Left, guiName);
 	scriptGui->setSctipt(script);
 
 	// Find the websocket url and connect GUI.
-	pos = script.find(websocketID.c_str());
-	pos += websocketID.size();
+	pos = script.find(websocketID);
+	pos += strlen(websocketID);
 	// Get host.
 	std::string host;
-	while (script[pos] != ':')
-	{
-		host.push_back(script[pos++]);
-	}
+	while (script[pos] != ':') host.push_back(script[pos++]);
 	// Get port.
 	std::string port;
 	pos++;
-	while (script[pos] != '\'')
-	{
-		port.push_back(script[pos++]);
-	}
+	while (script[pos] != '\'') port.push_back(script[pos++]);
 	// Create connection.
 	scriptGui->connectWebSocket(host, port);
 }

@@ -30,13 +30,13 @@ class LumenWindow
 public:
 
 	// Constructor.
-	// IMPORTANT: onAttach() has to be called when the layer is pushed onto the stack.
+	// IMPORTANT: onAttach() has to be called when the window is pushed onto the stack.
 	inline LumenWindow(const char* name, int imguiWindowFlags = 0)
 		: m_windowName(name), m_imguiWindowFlags(imguiWindowFlags)
-	{}
+	{ }
 	inline LumenWindow(const std::string& name , int imguiWindowFlags = 0)
 		: m_windowName(name), m_imguiWindowFlags(imguiWindowFlags)
-	{}
+	{ }
 
 	// Destructor.
 	inline virtual ~LumenWindow() = default;
@@ -181,12 +181,9 @@ public:
 	// can be moved.  ImGui takes care of this information.
 	void dockWindow(LumenWindow* window, ImGuiDir direction = ImGuiDir_None);
 
-	// --------- //
-	//  D A T A  //
-	// --------- //
-
 private:
 
+	// Data.
 	int m_imguiWindowFlags = 0;
 	bool m_isCollapsed = false;
 	bool m_isHidden = false;
