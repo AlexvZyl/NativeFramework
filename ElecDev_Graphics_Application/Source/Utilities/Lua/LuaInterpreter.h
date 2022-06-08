@@ -86,7 +86,7 @@ inline void lua_ExecuteScript(lua_State* L, const std::string& script, bool noti
 
 inline bool lua_GetBooleanAndPop(lua_State* L)
 {
-	LUMEN_DEBUG_ASSERT(lua_isboolean(L, -1), "Incorrect type.");
+	LUMEN_DEBUG_ASSERT(lua_isboolean(L, -1), "Tried to get incorrect type from the stack.");
 	bool result = lua_toboolean(L, -1);
 	lua_pop(L, 1);
 	return result;
@@ -95,7 +95,7 @@ inline bool lua_GetBooleanAndPop(lua_State* L)
 template <typename T>
 inline T lua_GetNumberAndPop(lua_State* L) 
 {
-	LUMEN_DEBUG_ASSERT(lua_isnumber(L, -1), "Incorrect type.");
+	LUMEN_DEBUG_ASSERT(lua_isnumber(L, -1), "Tried to get incorrect type from the stack.");
 	T result = (T)lua_tonumber(L, -1);
 	lua_pop(L, 1);
 	return result;
@@ -103,7 +103,7 @@ inline T lua_GetNumberAndPop(lua_State* L)
 
 inline std::string&& lua_GetStringAndPop(lua_State* L)
 {
-	LUMEN_DEBUG_ASSERT(lua_isstring(L, -1), "Incorrect type.");
+	LUMEN_DEBUG_ASSERT(lua_isstring(L, -1), "Tried to get incorrect type from the stack.");
 	std::string result = lua_tostring(L, -1);
 	lua_pop(L, 1);
 	return std::move(result);
