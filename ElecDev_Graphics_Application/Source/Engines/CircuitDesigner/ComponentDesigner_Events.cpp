@@ -296,7 +296,7 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 
-	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_LeftCtrl))
+	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_SpaceBar))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);

@@ -227,7 +227,7 @@ void CircuitDesigner::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 
-	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_LeftCtrl | EventType_MouseButtonLeft))
+	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_SpaceBar | EventType_MouseButtonLeft))
 	{
 		glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
 		if (designerState == ENTITY_SELECT)
