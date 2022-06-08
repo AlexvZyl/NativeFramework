@@ -620,6 +620,7 @@
     <ClInclude Include="Source\LumenPCH.h" />
     <ClInclude Include="Source\Application\ApplicationTemplates.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
+    <ClInclude Include="Source\Utilities\Assert\Assert.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

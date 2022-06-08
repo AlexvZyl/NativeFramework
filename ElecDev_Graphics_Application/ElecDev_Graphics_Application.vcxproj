@@ -655,6 +655,7 @@
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
     <ClInclude Include="Source\LumenPCH.h" />
+    <ClInclude Include="Source\Utilities\Assert\Assert.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI.h" />
     <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWindow.h" />
