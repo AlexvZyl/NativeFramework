@@ -33,9 +33,6 @@
 //  2D Rendering.																																//
 //==============================================================================================================================================//
 
-// FOR INTERNAL USE ONLY!  
-// If you are using the Lua API you do not need to worry about this section.
-
 int lua_BeginScene2D(lua_State* L);
 int lua_DrawLine2D(lua_State* L);
 int lua_DrawQuad2D(lua_State* L);
@@ -59,6 +56,13 @@ int lua_imgui_Combo(lua_State* L);
 int lua_imgui_Checkbox(lua_State* L);
 int lua_imgui_InputText(lua_State* L);
 int lua_imgui_Table(lua_State* L);
+
+//==============================================================================================================================================//
+//  Custom GUI's.																																//
+//==============================================================================================================================================//
+
+int lua_gui_Transformer(lua_State* L);
+int lua_gui_Bucket(lua_State* L);
 
 //==============================================================================================================================================//
 //  EOF.																																		//

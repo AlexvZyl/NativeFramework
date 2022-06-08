@@ -4,7 +4,7 @@
 
 #include "GUI/ScriptGui/ScriptGui.h"
 #include "Utilities/Lua/LuaInterpreter.h"
-#include "Utilities/Lua/LuaAPI/LuaAPI.h"
+#include "Utilities/Lua/LuaAPI.h"
 #include "imgui/imgui.h"
 
 //==============================================================================================================================================//
@@ -51,7 +51,7 @@ int lua_imgui_Button(lua_State* L)
 {
 	// Get data.
 	glm::vec2 size(0.f);
-	lua_GetTableAndPop<float>(L, &size[0], 2);
+	lua_GetTableAndPop<float>(L, &size[0]);
 	std::string text = lua_GetStringAndPop(L);
 
 	// Render.
@@ -71,7 +71,7 @@ int lua_imgui_CloseButton(lua_State* L)
 {
 	// Get data.
 	glm::vec2 size(0.f);
-	lua_GetTableAndPop<float>(L, &size[0], 2);
+	lua_GetTableAndPop<float>(L, &size[0]);
 	std::string text = lua_GetStringAndPop(L);
 
 	// Render.
@@ -94,7 +94,7 @@ int lua_imgui_ClearAwaitScriptButton(lua_State* L)
 {
 	// Get data.
 	glm::vec2 size(0.f);
-	lua_GetTableAndPop<float>(L, &size[0], 2);
+	lua_GetTableAndPop<float>(L, &size[0]);
 	std::string text = lua_GetStringAndPop(L);
 
 	// Render.
@@ -140,8 +140,7 @@ int lua_imgui_Combo(lua_State* L)
 
 	// Get data.
 	int maxHeightInItems = lua_GetNumberAndPop<int>(L);
-	std::vector<std::string> items;
-	lua_GetStringTableAndPop(L, items);
+	auto items = lua_GetStringTableAndPop(L);
 	int initialItem = lua_GetNumberAndPop<int>(L);
 	std::string label = lua_GetStringAndPop(L);
 
@@ -236,8 +235,7 @@ int lua_imgui_Table(lua_State* L)
 	> tableData;
 
 	// Get data.
-	std::map<std::string, std::vector<std::string>> dict;
-	lua_GetDictAndPop(L, dict);
+	auto dict = lua_GetDictAndPop(L);
 	float height = lua_GetNumberAndPop<float>(L);
 	std::string label = lua_GetStringAndPop(L);
 
