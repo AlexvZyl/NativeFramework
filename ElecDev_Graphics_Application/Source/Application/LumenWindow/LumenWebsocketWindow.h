@@ -28,7 +28,7 @@ public:
 	// Constructor.
 	LumenWebsocketWindow(const std::string& name, int windowFlags = 0);
 	// Destructor.
-	~LumenWebsocketWindow();
+	virtual ~LumenWebsocketWindow();
 
 	// Set the websocket the GUI callbacks to.
 	void connectWebSocket(const std::string& host, const std::string& port);
