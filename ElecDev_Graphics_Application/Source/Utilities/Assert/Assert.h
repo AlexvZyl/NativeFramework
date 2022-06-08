@@ -15,7 +15,7 @@
 
 #else
 	
-	#define LUMEN_ASSERT(x)
+	#define LUMEN_ASSERT(condition, message)
 	#define LUMEN_DEBUG_ASSERT(condition, message)
 
 #endif
