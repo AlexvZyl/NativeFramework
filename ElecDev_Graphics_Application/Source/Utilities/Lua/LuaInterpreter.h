@@ -86,6 +86,7 @@ inline void lua_ExecuteScript(lua_State* L, const std::string& script, bool noti
 template <typename T>
 inline T lua_GetNumberAndPop(lua_State* L) 
 {
+	assert(lua_isnumber(L, -1)); // Check if getting correct type.
 	T result = (T)lua_tonumber(L, -1);
 	lua_pop(L, 1);
 	return result;
@@ -93,6 +94,7 @@ inline T lua_GetNumberAndPop(lua_State* L)
 
 inline std::string&& lua_GetStringAndPop(lua_State* L)
 {
+	assert(lua_isstring(L, -1)); // Check if getting correct type.
 	std::string result = lua_tostring(L, -1);
 	lua_pop(L, 1);
 	return std::move(result);
@@ -139,6 +141,7 @@ inline std::vector<std::string>&& lua_GetStringTableAndPop(lua_State* L)
 
 inline bool lua_GetBooleanAndPop(lua_State* L) 
 {
+	assert(lua_isboolean(L, -1)); // Check if getting correct type.
 	bool result = lua_toboolean(L, -1);
 	lua_pop(L, 1);
 	return result;
