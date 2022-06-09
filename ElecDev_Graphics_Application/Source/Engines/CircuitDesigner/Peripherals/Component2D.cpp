@@ -102,6 +102,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 	}
 
+	// Add tags.
+	if (componentNode["ToTag"].IsDefined())
+		m_toTagNumber = componentNode["ToTag"].as<std::string>();
+	if (componentNode["FromTag"].IsDefined())
+		m_fromTagNumber = componentNode["FromTag"].as<std::string>();
+
 	// Add the equipmemnt type.
 	if (componentNode["Title"].IsDefined())
 	{
