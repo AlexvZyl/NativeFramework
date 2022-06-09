@@ -72,7 +72,6 @@ Component2D::Component2D(Circuit* parent)
 	enableOutline();
 
 	// General dictionary data.
-	dataDict.insert({ "ToTagNumber", "From(Circuit Database)" });
 	dataDict.insert({ "Metric", "1" });
 	dataDict.insert({ "Description", "From(Circuit Database)" });
 	dataDict.insert({ "Unit", "ea" });
