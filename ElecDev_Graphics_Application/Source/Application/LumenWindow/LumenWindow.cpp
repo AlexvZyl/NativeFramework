@@ -244,13 +244,13 @@ glm::vec2 LumenWindow::getMouseGlobalPosition() const
 glm::vec2 LumenWindow::globalToLocalCoords(const glm::vec2& coords) const 
 {
 	return { coords.x - m_contentRegionPosition.x,
-			 coords.y - (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)), };
+			 coords.y - (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)) };
 }
 
 glm::vec2 LumenWindow::localToGlobalCoords(const glm::vec2& coords) const
 {
 	return { coords.x + m_contentRegionPosition.x,
-			 coords.y + (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)), };
+			 coords.y + (getMainViewportSize().y - (m_contentRegionPosition.y + m_contentRegionSize.y)) };
 }
 
 glm::vec2 LumenWindow::getMainViewportSize() const 
