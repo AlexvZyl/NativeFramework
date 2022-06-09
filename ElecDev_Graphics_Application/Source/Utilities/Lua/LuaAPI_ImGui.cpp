@@ -6,6 +6,7 @@
 #include "Utilities/Lua/LuaInterpreter.h"
 #include "Utilities/Lua/LuaAPI.h"
 #include "imgui/imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 //==============================================================================================================================================//
 //  Functions.																																	//
@@ -144,23 +145,6 @@ int lua_imgui_Combo(lua_State* L)
 	int initialItem = lua_GetNumberAndPop<int>(L);
 	std::string label = lua_GetStringAndPop(L);
 
-	int itemsCharLength = 0;
-	for (auto& item : items) itemsCharLength += item.size();
-
-	// Create zero seperated string.
-	char* memory = (char*)calloc(itemsCharLength + items.size() + 1, sizeof(char));
-	const char* zeroSeperatedString = (const char*)memory;
-	char nullTerminator = '\0';
-
-	int index = 0;
-	for (auto& item : items)
-	{
-		for (auto& c : item) 
-			memory[index++] = c;
-		memory[index++] = nullTerminator;
-	}
-	memory[index++] = nullTerminator;
-
 	// Store item. This does not store the item if it already exists.
 	comboItems.insert({label, initialItem });
 	// Get item.
@@ -168,13 +152,12 @@ int lua_imgui_Combo(lua_State* L)
 
 	// Render.
 	bool selected = false;
-	if (ImGui::Combo(label.c_str(), currentItem, zeroSeperatedString, maxHeightInItems))
+	if (ImGui::Combo(label.c_str(), currentItem, items, maxHeightInItems))
 	{
 		std::string msg = "[Combo] " + label + " : Item " + items[*currentItem] + ".";
 		Lumen::getActiveScriptGui()->callbackMessage(msg);
 		selected = true;
 	}
-	free((void*)memory);
 	return selected;
 }
 
