@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "Utilities/Lua/LuaInterpreter.h"
-#include "Utilities/Lua/LuaAPI/LuaAPI.h"
+#include "Utilities/Lua/LuaAPI.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Primitives/Polygon.h"
@@ -38,10 +38,10 @@ int lua_DrawLine2D(lua_State* L)
 	glm::vec4 color(0.f);
 	glm::vec3 vertex2(0.f);
 	glm::vec3 vertex1(0.f);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
+	lua_GetTableAndPop<float>(L, &color[0]);
 	float thickness = lua_GetNumberAndPop<float>(L);
-	lua_GetTableAndPop<float>(L, &vertex2[0], 3);
-	lua_GetTableAndPop<float>(L, &vertex1[0], 3);
+	lua_GetTableAndPop<float>(L, &vertex2[0]);
+	lua_GetTableAndPop<float>(L, &vertex1[0]);
 
 	// Draw.
 	Renderer::addLineSegment2D(vertex1, vertex2, thickness, color);
@@ -59,9 +59,9 @@ int lua_DrawQuad2D(lua_State* L)
 	glm::vec4 color(0.f);
 	glm::vec3 vertex2(0.f);
 	glm::vec3 vertex1(0.f);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
-	lua_GetTableAndPop<float>(L, &vertex2[0], 3);
-	lua_GetTableAndPop<float>(L, &vertex1[0], 3);
+	lua_GetTableAndPop<float>(L, &color[0]);
+	lua_GetTableAndPop<float>(L, &vertex2[0]);
+	lua_GetTableAndPop<float>(L, &vertex1[0]);
 
 	// Construct the vertices.
 	std::vector<glm::vec3> vertices;
@@ -92,9 +92,9 @@ int lua_DrawRotatedQuad2D(lua_State* L)
 	glm::vec3 vertex2(0.f);
 	glm::vec3 vertex1(0.f);
 	float degrees = lua_GetNumberAndPop<float>(L);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
-	lua_GetTableAndPop<float>(L, &vertex2[0], 3);
-	lua_GetTableAndPop<float>(L, &vertex1[0], 3);
+	lua_GetTableAndPop<float>(L, &color[0]);
+	lua_GetTableAndPop<float>(L, &vertex2[0]);
+	lua_GetTableAndPop<float>(L, &vertex1[0]);
 
 	// Construct the vertices.
 	std::vector<glm::vec3> vertices;
@@ -131,8 +131,8 @@ int lua_DrawText2D(lua_State* L)
 	std::string verticalAlignment = lua_GetStringAndPop(L);
 	std::string horizontalAlignment = lua_GetStringAndPop(L);
 	float scale = lua_GetNumberAndPop<float>(L);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
-	lua_GetTableAndPop<float>(L, &position[0], 3);
+	lua_GetTableAndPop<float>(L, &color[0]);
+	lua_GetTableAndPop<float>(L, &position[0]);
 	std::string text = lua_GetStringAndPop(L);
 
 	// Draw.
@@ -150,8 +150,8 @@ int lua_DrawRotatedText2D(lua_State* L)
 	std::string verticalAlignment = lua_GetStringAndPop(L);
 	std::string horizontalAlignment = lua_GetStringAndPop(L);
 	float scale = lua_GetNumberAndPop<float>(L);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
-	lua_GetTableAndPop<float>(L, &position[0], 3);
+	lua_GetTableAndPop<float>(L, &color[0]);
+	lua_GetTableAndPop<float>(L, &position[0]);
 	std::string text = lua_GetStringAndPop(L);
 
 	// Draw.
@@ -172,9 +172,9 @@ int lua_DrawCircle2D(lua_State* L)
 	glm::vec3 center(0.f);
 	float fade = lua_GetNumberAndPop<float>(L);
 	float thickness = lua_GetNumberAndPop<float>(L);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
+	lua_GetTableAndPop<float>(L, &color[0]);
 	float radius = lua_GetNumberAndPop<float>(L);
-	lua_GetTableAndPop<float>(L, &center[0], 3);
+	lua_GetTableAndPop<float>(L, &center[0]);
 
 	// Draw.
 	Renderer::addCircle2D(center, radius, color, thickness, fade);
@@ -193,10 +193,10 @@ int lua_DrawTriangle2D(lua_State* L)
 	glm::vec3 vertex3(0.f); 
 	glm::vec3 vertex2(0.f);
 	glm::vec3 vertex1(0.f);
-	lua_GetTableAndPop<float>(L, &color[0], 4);
-	lua_GetTableAndPop<float>(L, &vertex3[0], 3);
-	lua_GetTableAndPop<float>(L, &vertex2[0], 3);
-	lua_GetTableAndPop<float>(L, &vertex1[0], 3);
+	lua_GetTableAndPop<float>(L, &color[0]);
+	lua_GetTableAndPop<float>(L, &vertex3[0]);
+	lua_GetTableAndPop<float>(L, &vertex2[0]);
+	lua_GetTableAndPop<float>(L, &vertex1[0]);
 
 	// Construct vertices.
 	std::vector<glm::vec3> vertices;

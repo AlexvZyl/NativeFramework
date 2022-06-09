@@ -101,6 +101,7 @@ inline LumenEventID getKeyState(GLFWwindow* window)
     if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))   { eventState |= EventType_RightShift; }
     if (glfwGetKey(window, GLFW_KEY_LEFT_ALT))      { eventState |= EventType_LeftAlt;    }
     if (glfwGetKey(window, GLFW_KEY_RIGHT_ALT))     { eventState |= EventType_RightAlt;   }
+    if (glfwGetKey(window, GLFW_KEY_SPACE))         { eventState |= EventType_SpaceBar;   }
     return eventState;
 }
 

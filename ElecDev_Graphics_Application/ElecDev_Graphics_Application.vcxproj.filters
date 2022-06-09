@@ -117,13 +117,13 @@
     <ClCompile Include="Source\GUI\SettingsWidget\SettingsWidget.cpp" />
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
-    <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI_2DRendering.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLDraw.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLScenes.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPrimitives.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
     <ClCompile Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.cpp" />
-    <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_ImGui.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI_ImGui.cpp" />
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGLPostProcessing.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />
@@ -151,6 +151,7 @@
     <ClCompile Include="Source\GUI\LumenGizmo\LumenGizmo.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenWebsocketWindow.cpp" />
     <ClCompile Include="Source\GUI\TransformerSetup\TransformerSetupGui.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI_Gui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h">
@@ -586,7 +587,7 @@
     <ClInclude Include="External\imgui\notify\notify_icons_raw.h" />
     <ClInclude Include="External\imgui\notify\notify_icons_define.h" />
     <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
-    <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaAPI.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
     <ClInclude Include="External\lua\Windows\include\lauxlib.h" />
     <ClInclude Include="External\lua\Windows\include\lua.h" />
@@ -621,6 +622,7 @@
     <ClInclude Include="Source\Application\ApplicationTemplates.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
     <ClInclude Include="Source\GUI\TransformerSetup\TransformerSetupGui.h" />
+    <ClInclude Include="Source\Utilities\Assert\Assert.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

@@ -72,7 +72,6 @@ Component2D::Component2D(Circuit* parent)
 	enableOutline();
 
 	// General dictionary data.
-	dataDict.insert({ "ToTagNumber", "From(Circuit Database)" });
 	dataDict.insert({ "Metric", "1" });
 	dataDict.insert({ "Description", "From(Circuit Database)" });
 	dataDict.insert({ "Unit", "ea" });
@@ -102,6 +101,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	{
 		dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 	}
+
+	// Add tags.
+	if (componentNode["ToTag"].IsDefined())
+		m_toTagNumber = componentNode["ToTag"].as<std::string>();
+	if (componentNode["FromTag"].IsDefined())
+		m_fromTagNumber = componentNode["FromTag"].as<std::string>();
 
 	// Add the equipmemnt type.
 	if (componentNode["Title"].IsDefined())

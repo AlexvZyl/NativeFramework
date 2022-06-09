@@ -52,26 +52,27 @@ enum EventType : LumenEventID
 	EventType_RightShift		=	(LumenEventID) 1 << 16,
 	EventType_LeftAlt			=	(LumenEventID) 1 << 17,
 	EventType_RightAlt			=	(LumenEventID) 1 << 18,
+	EventType_SpaceBar			=	(LumenEventID) 1 << 19,
 												   
 	// Window events.							   
-	EventType_WindowResize		=	(LumenEventID) 1 << 19,
-	EventType_WindowMove		=	(LumenEventID) 1 << 20,
-	EventType_WindowClose		=	(LumenEventID) 1 << 21,
+	EventType_WindowResize		=	(LumenEventID) 1 << 20,
+	EventType_WindowMove		=	(LumenEventID) 1 << 21,
+	EventType_WindowClose		=	(LumenEventID) 1 << 22,
 												   
 	// File events.								   
-	EventType_FileDrop			=	(LumenEventID) 1 << 22,
-	EventType_FileSave			=	(LumenEventID) 1 << 23,
-	EventType_FileLoad			=	(LumenEventID) 1 << 24,
-	EventType_YamlNodeDrop		=	(LumenEventID) 1 << 25,
+	EventType_FileDrop			=	(LumenEventID) 1 << 23,
+	EventType_FileSave			=	(LumenEventID) 1 << 24,
+	EventType_FileLoad			=	(LumenEventID) 1 << 25,
+	EventType_YamlNodeDrop		=	(LumenEventID) 1 << 26,
 												   
 	// Notify events.							   
-	EventType_Notify			=	(LumenEventID) 1 << 26,
-	EventType_Focus				=	(LumenEventID) 1 << 27,
-	EventType_Defocus			=	(LumenEventID) 1 << 28,
-	EventType_Hover				=	(LumenEventID) 1 << 29,
-	EventType_Dehover			=	(LumenEventID) 1 << 30,
-	EventType_MouseDragStart	=	(LumenEventID) 1 << 31,
-	EventType_MouseDragStop		=	(LumenEventID) 1 << 32,
+	EventType_Notify			=	(LumenEventID) 1 << 27,
+	EventType_Focus				=	(LumenEventID) 1 << 28,
+	EventType_Defocus			=	(LumenEventID) 1 << 29,
+	EventType_Hover				=	(LumenEventID) 1 << 30,
+	EventType_Dehover			=	(LumenEventID) 1 << 31,
+	EventType_MouseDragStart	=	(LumenEventID) 1 << 32,
+	EventType_MouseDragStop		=	(LumenEventID) 1 << 33,
 };
 
 //==============================================================================================================================================//
