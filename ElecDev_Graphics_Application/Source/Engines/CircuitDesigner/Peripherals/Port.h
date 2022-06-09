@@ -64,7 +64,7 @@ public:
 	Circle* border;
 	Circle* attachmentIndicator;
 	Text* title;
-	float indicatorFraction = 0.75f;
+	float indicatorFraction = 1.0f;
 
 	glm::vec2 m_offset = { 0, 0 };
 	PortPosition m_position;

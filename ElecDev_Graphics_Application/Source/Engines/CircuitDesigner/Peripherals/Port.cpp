@@ -23,7 +23,7 @@
 
 Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const std::string& label)
 	: Entity(EntityType::PORT, parent),
-	bodyColour(0.7f, 0.7f, 0.7f, 1.f),
+	bodyColour(1.f, 1.f, 1.f, 1.f),
 	borderColour(0.f, 0.f, 0.f, 1.f),
 	// m_offset(offset),
 	centre(centre),
@@ -34,20 +34,20 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	// --------------------- //
 	switch (m_type) {
 	case PortType::PORT_IN:
-		indicatorColour = { 0.4f, 0.6f, 0.4f, 0.f };
+		indicatorColour = { 0.4f, 0.8f, 0.4f, 0.5f };
 		break;
 	case PortType::PORT_OUT:
-		indicatorColour = { 0.6f, 0.4f, 0.4f, 0.f };
+		indicatorColour = { 0.8f, 0.4f, 0.4f, 0.5f };
 		break;
 	case PortType::PORT_INOUT:
-		indicatorColour = { 0.4f, 0.4f, 0.6f, 0.f };
+		indicatorColour = { 0.4f, 0.4f, 0.8f, 0.5f };
 		break;
 	}
 
 
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f*portSize, borderColour, 1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, 1.0f, 0.f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -115,7 +115,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 }
 
 Port::Port(const YAML::Node& node, Component2D* parent)
-	: Entity(EntityType::PORT, parent)
+	: Entity(EntityType::PORT, parent), bodyColour(1.f, 1.f, 1.f, 1.f)
 {
 	// General data.
 	//m_label = node["Label"].as<std::string>();
@@ -126,27 +126,27 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	if (type == "PORT_INOUT")
 	{
 		m_type = PortType::PORT_INOUT;
-		indicatorColour = { 0.4f, 0.4f, 0.6f, 0.f };
+		indicatorColour = { 0.4f, 0.4f, 0.8f, 0.5f };
 	}
 	else if (type == "PORT_IN")
 	{
 		m_type = PortType::PORT_IN;
-		indicatorColour = { 0.4f, 0.6f, 0.4f, 0.f };
+		indicatorColour = { 0.4f, 0.8f, 0.4f, 0.5f };
 	}
 	else if (type == "PORT_OUT")
 	{
 		m_type = PortType::PORT_OUT;
-		indicatorColour = { 0.6f, 0.4f, 0.4f, 0.f };
+		indicatorColour = { 0.8f, 0.4f, 0.4f, 0.5f };
 	}
 
 	// Add shapes.
 	centre = { node["Centre"][0].as<float>(),  node["Centre"][1].as<float>() };
-	bodyColour = node["Body"]["Color"].as<glm::vec4>();
+	//bodyColour = node["Body"]["Color"].as<glm::vec4>();
 	borderColour = node["Border"]["Color"].as<glm::vec4>();
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, 1.0f, 0.01f, this);
 	title = Renderer::addText2D(node["Title"], this);
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize * indicatorFraction, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize * indicatorFraction, indicatorColour, 1.0f, 0.f, this);
 	setLayer(portLayer);
 }
 
@@ -247,13 +247,13 @@ void Port::attachCable(Cable* cable)
 {
 	m_cables.push_back(cable);	switch (m_type) {
 	case PortType::PORT_IN:
-		indicatorColour = { 0.f, 0.6f, 0.f, 1.f };
+		indicatorColour = { 0.f, 0.8f, 0.f, 1.f };
 		break;
 	case PortType::PORT_OUT:
-		indicatorColour = { 0.6f, 0.f, 0.f, 1.f };
+		indicatorColour = { 0.8f, 0.f, 0.f, 1.f };
 		break;
 	case PortType::PORT_INOUT:
-		indicatorColour = { 0.f, 0.f, 0.6f, 1.f };
+		indicatorColour = { 0.f, 0.f, 0.8f, 1.f };
 		break;
 	}
 	attachmentIndicator->setColor(indicatorColour);
@@ -272,13 +272,13 @@ void Port::detachCable(Cable* cable)
 	{
 		switch (m_type) {
 		case PortType::PORT_IN:
-			indicatorColour = { 0.4f, 0.6f, 0.4f, 0.f };
+			indicatorColour = { 0.4f, 0.6f, 0.4f, 0.5f };
 			break;
 		case PortType::PORT_OUT:
-			indicatorColour = { 0.6f, 0.4f, 0.4f, 0.f };
+			indicatorColour = { 0.6f, 0.4f, 0.4f, 0.5f };
 			break;
 		case PortType::PORT_INOUT:
-			indicatorColour = { 0.4f, 0.4f, 0.6f, 0.f };
+			indicatorColour = { 0.4f, 0.4f, 0.6f, 0.5f };
 			break;
 		}
 		attachmentIndicator->setColor(indicatorColour);
@@ -298,7 +298,7 @@ void Port::hideAttachIndicator()
 {
 	if (m_cables.empty()) 
 	{
-		indicatorColour.a = 0.f;
+		indicatorColour.a = 0.5f;
 		attachmentIndicator->setColor(indicatorColour);
 	}
 }
