@@ -210,7 +210,7 @@
     <ClCompile Include="Source\GUI\ScriptGui\ScriptGui.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenWebsocketWindow.cpp" />
     <ClCompile Include="Source\Utilities\Logger\Logger.cpp" />
-    <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_2DRendering.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI_2DRendering.cpp" />
     <ClCompile Include="Source\Application\ApplicationLumenWindows.cpp" />
     <ClCompile Include="Source\Application\ApplicationRender.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\WindowStack.cpp" />
@@ -302,7 +302,8 @@
     <ClCompile Include="Source\Resources\resourceHandler.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Text.cpp" />
-    <ClCompile Include="Source\Utilities\Lua\LuaAPI\LuaAPI_ImGui.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI_ImGui.cpp" />
+    <ClCompile Include="Source\Utilities\Lua\LuaAPI_Gui.cpp" />
     <ClCompile Include="Source\Utilities\Profiler\Profiler.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CableSerialiser.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Entities\CircuitSerialiser.cpp" />
@@ -654,7 +655,8 @@
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
     <ClInclude Include="Source\LumenPCH.h" />
-    <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
+    <ClInclude Include="Source\Utilities\Assert\Assert.h" />
+    <ClInclude Include="Source\Utilities\Lua\LuaAPI.h" />
     <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWindow.h" />
     <ClInclude Include="Source\Application\Events\EventLog.h" />
