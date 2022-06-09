@@ -66,7 +66,7 @@ void SceneHierarchy::onImGuiRender()
 					ImGui::PushID(portCount++);
 					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
-					ImGui::Text(port->m_label.c_str());
+					ImGui::Text(port->title->m_string.c_str());
 					ImGui::TableSetColumnIndex(1);
 					if(port->m_cables.size())
 						ImGui::Text(port->m_cables[0]->m_titleString.c_str());

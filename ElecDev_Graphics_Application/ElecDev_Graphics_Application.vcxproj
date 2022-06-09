@@ -318,6 +318,7 @@
     <ClCompile Include="Source\Utilities\WebSocket\LumenWebSocket.cpp" />
     <ClCompile Include="Source\Utilities\Windows\WindowsUtilities.cpp" />
     <ClCompile Include="Source\GUI\TextEntryGUI\TextEntryGUI.cpp" />
+    <ClCompile Include="Source\GUI\TransformerSetup\TransformerSetupGui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
@@ -777,6 +778,7 @@
     <ClInclude Include="Source\Utilities\WebSocket\LumenWebSocket.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
     <ClInclude Include="Source\GUI\TextEntryGUI\TextEntryGUI.h" />
+    <ClInclude Include="Source\GUI\TransformerSetup\TransformerSetupGui.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\lua\Windows\lua54.lib" />

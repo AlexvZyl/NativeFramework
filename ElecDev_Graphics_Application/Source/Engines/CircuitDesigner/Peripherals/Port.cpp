@@ -15,6 +15,7 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
 #include "glm/gtc/matrix_transform.hpp"
+#include "Utilities/Serialisation/Serialiser.h"
 
 //==============================================================================================================================================//
 //  Methods.																																	//
@@ -31,16 +32,29 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	// --------------------- //
 	//  P R I M I T I V E S  //
 	// --------------------- //
+	switch (m_type) {
+	case PortType::PORT_IN:
+		indicatorColour = { 0.4f, 0.6f, 0.4f, 0.f };
+		break;
+	case PortType::PORT_OUT:
+		indicatorColour = { 0.6f, 0.4f, 0.4f, 0.f };
+		break;
+	case PortType::PORT_INOUT:
+		indicatorColour = { 0.4f, 0.4f, 0.6f, 0.f };
+		break;
+	}
+
 
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f*portSize, borderColour, 1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize*0.5f, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, 1.0f, 0.01f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
+	std::string labelLocal = label;
 	if (label == "default")
-		m_label = "Port " + std::to_string(parent->numPorts++);
-	else m_label = label;
+		labelLocal = "Port " + std::to_string(parent->numPorts++);
+	//else m_label = label;
 
 	float textMargin = 0.0015;
 	//OLD DEPRECATED CODE
@@ -83,12 +97,12 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	if (centre.x < 0){
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "B", this);
+		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "R", "B", this);
 	}
 	else {
 		titleOffset = glm::vec2{ textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "B", this);
+		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "L", "B", this);
 	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
@@ -104,7 +118,7 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	: Entity(EntityType::PORT, parent)
 {
 	// General data.
-	m_label = node["Label"].as<std::string>();
+	//m_label = node["Label"].as<std::string>();
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Set the port type.
@@ -112,24 +126,27 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	if (type == "PORT_INOUT")
 	{
 		m_type = PortType::PORT_INOUT;
+		indicatorColour = { 0.4f, 0.4f, 0.6f, 0.f };
 	}
 	else if (type == "PORT_IN")
 	{
 		m_type = PortType::PORT_IN;
+		indicatorColour = { 0.4f, 0.6f, 0.4f, 0.f };
 	}
 	else if (type == "PORT_OUT")
 	{
 		m_type = PortType::PORT_OUT;
+		indicatorColour = { 0.6f, 0.4f, 0.4f, 0.f };
 	}
 
 	// Add shapes.
-	body = Renderer::addCircle2D(node["Body"], this);
-	border = Renderer::addCircle2D(node["Border"], this);
+	centre = { node["Centre"][0].as<float>(),  node["Centre"][1].as<float>() };
+	bodyColour = node["Body"]["Color"].as<glm::vec4>();
+	borderColour = node["Border"]["Color"].as<glm::vec4>();
+	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
+	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, 1.0f, 0.01f, this);
 	title = Renderer::addText2D(node["Title"], this);
-	bodyColour = body->m_colour;
-	borderColour = border->m_colour;
-	centre = body->m_trackedCenter;
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize * 0.5f, indicatorColour, 1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize * indicatorFraction, indicatorColour, 1.0f, 0.01f, this);
 	setLayer(portLayer);
 }
 
@@ -228,8 +245,17 @@ void Port::setOffset(const glm::vec2& offset)
 
 void Port::attachCable(Cable* cable)
 {
-	m_cables.push_back(cable);
-	indicatorColour = { 0.f, 0.f, 0.f, 1.0f };
+	m_cables.push_back(cable);	switch (m_type) {
+	case PortType::PORT_IN:
+		indicatorColour = { 0.f, 0.6f, 0.f, 1.f };
+		break;
+	case PortType::PORT_OUT:
+		indicatorColour = { 0.6f, 0.f, 0.f, 1.f };
+		break;
+	case PortType::PORT_INOUT:
+		indicatorColour = { 0.f, 0.f, 0.6f, 1.f };
+		break;
+	}
 	attachmentIndicator->setColor(indicatorColour);
 }
 
@@ -244,7 +270,17 @@ void Port::detachCable(Cable* cable)
 
 	if (m_cables.empty()) 
 	{
-		indicatorColour = { 0.5f, 0.5f, 0.5f, 0.f };
+		switch (m_type) {
+		case PortType::PORT_IN:
+			indicatorColour = { 0.4f, 0.6f, 0.4f, 0.f };
+			break;
+		case PortType::PORT_OUT:
+			indicatorColour = { 0.6f, 0.4f, 0.4f, 0.f };
+			break;
+		case PortType::PORT_INOUT:
+			indicatorColour = { 0.4f, 0.4f, 0.6f, 0.f };
+			break;
+		}
 		attachmentIndicator->setColor(indicatorColour);
 	}
 }

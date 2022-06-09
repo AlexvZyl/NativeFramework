@@ -93,8 +93,8 @@ void ComponentEditor::onImGuiRender()
 
 					// Name.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::InputText(labelName, &port->m_label))
-						port->title->updateText(port->m_label);
+					if (ImGui::InputText(labelName, &port->title->m_string))
+						port->title->updateText(port->title->m_string);
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 

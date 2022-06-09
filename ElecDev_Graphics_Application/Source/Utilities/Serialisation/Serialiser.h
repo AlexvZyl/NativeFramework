@@ -132,6 +132,24 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, LineSegment* lineSegment);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unique_ptr<LineSegment> lineSegment);
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::shared_ptr<LineSegment> lineSegment);
 
+namespace YAML {
+    template <>
+    inline glm::vec2 Node::as<glm::vec2>() const {
+      //return  glm::vec3(*Node::as<std::array<float, 2>>().data());
+        return glm::vec2{ (*this)[0].as<float>(), (*this)[1].as<float>() };
+    }
+    template <>
+    inline glm::vec3 Node::as<glm::vec3>() const {
+       // return  glm::vec3(*Node::as<std::array<float, 3>>().data());
+        return glm::vec3{ (*this)[0].as<float>(), (*this)[1].as<float>(), (*this)[2].as<float>() };
+    }
+    template <>
+    inline glm::vec4 Node::as<glm::vec4>() const {
+        //return  glm::vec4(*Node::as<std::array<float, 4>>().data());
+        return glm::vec4{ (*this)[0].as<float>(), (*this)[1].as<float>(), (*this)[2].as<float>(), (*this)[3].as<float>() };
+    }
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

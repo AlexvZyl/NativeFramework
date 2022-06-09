@@ -260,7 +260,7 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 		return;
 	}
 	// Port was not found on this component.
-	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
+	std::string msg = "Tried to delete port '" + port->title->m_string + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
 	LUMEN_LOG_WARN(msg, "");
 }
 
@@ -277,7 +277,7 @@ void Component2D::removePort(Port* port)
 		return;
 	}
 	// Port was not found on this component.
-	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
+	std::string msg = "Tried to delete port '" + port->title->m_string + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
 	LUMEN_LOG_WARN(msg, "");
 }
 

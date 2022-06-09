@@ -197,6 +197,12 @@ void PolyLine::disableOutline()
 	Polygon2D::disableOutline();
 }
 
+void PolyLine::setThickness(float thickness)
+{
+	m_thickness = thickness;
+	update();
+}
+
 std::tuple<unsigned, float> PolyLine::getNearestVertexIdx(const glm::vec2& position)
 {
 	unsigned i = 0;

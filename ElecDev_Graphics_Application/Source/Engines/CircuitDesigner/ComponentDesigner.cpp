@@ -607,7 +607,19 @@ void ComponentDesigner::renderOverlay()
 		ImGui::PushItemWidth(100.0f);
 		//FIXME
 		ImGui::SetCursorPosY(16.f);
-		ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
+		if (m_activeLine) {
+			float thickness = m_activeLine->m_thickness;
+			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
+				m_activeLine->setThickness(thickness);
+			}
+		}
+		else if(m_activeCircle) {
+			float thickness = m_activeCircle->m_thickness;
+			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
+				m_activeCircle->setThickness(thickness);
+			}
+		}
+		else ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
 		ImGui::PopItemWidth();
 
 		if (ImGui::IsItemHovered())

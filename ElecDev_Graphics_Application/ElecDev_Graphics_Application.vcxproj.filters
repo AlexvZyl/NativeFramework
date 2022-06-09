@@ -150,6 +150,7 @@
     <ClCompile Include="External\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="Source\GUI\LumenGizmo\LumenGizmo.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenWebsocketWindow.cpp" />
+    <ClCompile Include="Source\GUI\TransformerSetup\TransformerSetupGui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\External\GLAD\Includes\glad\glad.h">
@@ -619,6 +620,7 @@
     <ClInclude Include="Source\LumenPCH.h" />
     <ClInclude Include="Source\Application\ApplicationTemplates.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
+    <ClInclude Include="Source\GUI\TransformerSetup\TransformerSetupGui.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Source\External\GLFW\Libraries\glfw3.lib">

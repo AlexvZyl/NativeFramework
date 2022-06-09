@@ -52,7 +52,7 @@ public:
 	static Font titleFont;
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	float titleSize = 0.0018f;
-	float portSize = 0.0002f;
+	float portSize = 0.0003f;
 	glm::vec2 centre;
 	static unsigned portID;
 	glm::vec4 bodyColour;
@@ -64,8 +64,8 @@ public:
 	Circle* border;
 	Circle* attachmentIndicator;
 	Text* title;
+	float indicatorFraction = 0.75f;
 
-	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
 	PortPosition m_position;
 	PortType m_type;
