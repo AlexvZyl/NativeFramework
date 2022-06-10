@@ -95,14 +95,16 @@ void ComponentEditor::onImGuiRender()
 					// Name.
 					ImGui::PushItemWidth(-1);
 					if (ImGui::InputText(labelName, &port->title->m_string))
-						port->title->updateText(port->title->m_string);
+						port->title->update();
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
 					// Type.
 					ImGui::PushItemWidth(-1);
 					int* typeval = (int*)&port->m_type;
-					ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
+					if (ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT")) {
+						port->updateType();
+					}
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 

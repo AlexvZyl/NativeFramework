@@ -89,6 +89,7 @@ public:
 	void setOffset(const glm::vec2& offset);
 	void attachCable(Cable* cable);
 	void detachCable(Cable* cable);
+	void updateType();
 	void showAttachIndicator();
 	void hideAttachIndicator();
 	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });

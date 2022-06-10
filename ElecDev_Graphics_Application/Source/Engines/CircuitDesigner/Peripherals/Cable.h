@@ -45,7 +45,7 @@ public:
 
     std::string m_cableType = "";
 
-    float m_thickness = 0.0002f;
+    float m_thickness = 0.0004f;
     glm::vec4 m_colour = { 0.f / 255.f, 0.f / 255.f, 0.f / 255.f, 1.f };
     PolyLine* m_polyLine;
     //std::vector<glm::vec2> m_vertices;

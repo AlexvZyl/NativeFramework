@@ -285,6 +285,24 @@ void Port::detachCable(Cable* cable)
 	}
 }
 
+void Port::updateType()
+{
+	//assumes no hovered/attached ports (port types should only change in component designer)
+	switch (m_type) {
+	case PortType::PORT_IN:
+		indicatorColour = { 0.4f, 0.6f, 0.4f, 0.5f };
+		break;
+	case PortType::PORT_OUT:
+		indicatorColour = { 0.6f, 0.4f, 0.4f, 0.5f };
+		break;
+	case PortType::PORT_INOUT:
+		indicatorColour = { 0.4f, 0.4f, 0.6f, 0.5f };
+		break;
+	}
+
+	attachmentIndicator->setColor(indicatorColour);
+}
+
 void Port::showAttachIndicator()
 {
 	if (m_cables.empty()) 
