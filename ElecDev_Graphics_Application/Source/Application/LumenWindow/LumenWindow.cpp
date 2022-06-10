@@ -82,6 +82,12 @@ bool LumenWindow::isHovered() const
 	return ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows | ImGuiHoveredFlags_DockHierarchy, m_imguiWindow);
 }
 
+bool LumenWindow::isFocused() const 
+{
+	if (!m_imguiWindow) return false;
+	return ImGui::IsWindowFocused();
+}
+
 ImGuiWindow* LumenWindow::findImGuiWindow()
 {
 	if (m_imguiWindow) return m_imguiWindow;
