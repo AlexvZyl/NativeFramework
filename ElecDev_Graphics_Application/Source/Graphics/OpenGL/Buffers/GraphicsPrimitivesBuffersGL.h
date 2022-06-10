@@ -121,6 +121,7 @@ public:
 		int index = m_vertexData.push(ptr, size);
 
 		// GPU.
+		// TODO: This can be reduced to one call.
 		VertexBufferObject& vbo = getVAO().getVBO();
 		for (int i = index; i < index + size; i++)
 		{
@@ -202,10 +203,10 @@ public:
 	inline VertexContainer<VertexType>& getVertexData() { return m_vertexData; }
 	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
 	inline VertexType& getVertex(int index)				{ return m_vertexData[index]; }
-	inline float getResizeThreshold()					{ return m_vertexData.getResizeThreshold(); }
-	inline int getCapacityIncrements()					{ return m_vertexData.getCapacityIncrements(); }
 	inline virtual int getIndexCount() override			{ return m_indexData.count(); }
 	inline virtual int getVertexCount() override		{ return m_vertexData.count(); }
+	inline float getResizeThreshold()					{ return m_vertexData.getResizeThreshold(); }
+	inline int getCapacityIncrements()					{ return m_vertexData.getCapacityIncrements(); }
 	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
 	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
 
@@ -227,7 +228,7 @@ public:
 			resizeVBO();
 			// If the VBO was resized, the vertices were reloaded and
 			// there is no need to sync the remaining primitives.
-			m_primitivesToSync.clear();
+			m_primitivesToSync.resize(0);
 		}
 	}
 
@@ -252,6 +253,7 @@ public:
 		vbo.bind();
 		for (auto it = m_vertexData.begin(); it != m_vertexData.end(); ++it)
 		{
+			// TODO: This can be reduced to one call.
 			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getDataSize(), (*it).getData());
 			vbo.bufferSubData(it.m_index * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), (*it).getID());
 		}
@@ -277,6 +279,7 @@ public:
 		for (auto primitive : m_primitivesToSync)
 		{
 			// Iterate vertices contained by the primtive.
+			// TODO: This can be reduced to one call.
 			for (int i = primitive->m_vertexBufferPos; i < primitive->m_vertexBufferPos + primitive->m_vertexCount; i++)
 			{
 				vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
@@ -286,7 +289,7 @@ public:
 			primitive->m_queuedForSync = false;
 		}
 		// All primitives have been synced.
-		m_primitivesToSync.clear();
+		m_primitivesToSync.resize(0);
 	}
 
 private:
@@ -297,7 +300,9 @@ private:
 	VertexContainer<VertexType> m_vertexData;
 	IndexContainer<IndexType> m_indexData;
 	// The primitives that have been queued for sync.
-	std::vector<IPrimitive*> m_primitivesToSync;
+	// TODO: Need a vector that does not resize and shrink every time.
+	// For now ImVector will work fine.
+	ImVector<IPrimitive*> m_primitivesToSync;
 };
 
 template <typename VertexType>
