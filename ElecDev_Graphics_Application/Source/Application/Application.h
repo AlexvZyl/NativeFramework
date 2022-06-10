@@ -244,6 +244,8 @@ private:
 	void onFocusedWindowChange(LumenWindow* newWindow);
 	// Find the Window that is being hovered.
 	LumenWindow* findHoveredWindow();
+	// Find the Window that is focused.
+	LumenWindow* findFocusedWindow();
 	// Dock a Window to the panel.
 	void dockWindowToPanel(LumenWindow* window, LumenDockPanel panel);
 	// Pop the Windows queued for removal.
