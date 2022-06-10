@@ -278,9 +278,9 @@ private:
 	float m_scale = 1.f;
 
 	// VAO containing grid vertices.
-	std::unique_ptr<VertexArrayObject<VertexData, IndexData2>> m_fineVAO = nullptr;
-	std::unique_ptr<VertexArrayObject<VertexData, IndexData2>> m_coarseVAO = nullptr;
-	std::unique_ptr<VertexArrayObject<VertexData, IndexData2>> m_originVAO = nullptr;
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_fineVAO = nullptr;
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_coarseVAO = nullptr;
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_originVAO = nullptr;
 
 	// Circle used to identify active vertex.
 	Circle* m_helperCircle = nullptr;

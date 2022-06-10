@@ -13,6 +13,8 @@ for a VAO to be able to render the entity to the screen.
 #include <memory>
 #include "glm/glm.hpp"
 #include "Graphics/Entities/Entity.h"
+#include "Utilities/Assert/Assert.h"
+#include "glm/gtx/transform.hpp"
 
 //=============================================================================================================================================//
 //  Primitive Pointer.																														   //
@@ -30,6 +32,7 @@ public:
 	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the primitive.
 	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the primitive.
 	bool m_outlineEnabled = false;
+	float m_outlineValue = 0.f;
 
 	// API.	
 	inline virtual void setColor(const glm::vec4& color) = 0;
@@ -52,26 +55,22 @@ protected:
 template<typename BufferType>
 class Primitive: public IPrimitive
 {
-	constexpr typedef Primitive<BufferType> This;
-	constexpr typedef BufferType::t_vertexType VertexType;
-	constexpr typedef BufferType::t_indexType IndexType;
+	typedef Primitive<BufferType> This;
+	typedef BufferType::t_vertexType VertexType;
+	typedef BufferType::t_indexType IndexType;
 
 public:
 
-	// Constructors.
+	// Constructor.
 	inline Primitive(Entity* parent = nullptr) : IPrimitive(parent) { }
 
 	// Destructor.
 	inline virtual ~Primitive() { if (m_onGPU) removeFromGraphicsBuffer(); }
 
-	// ------------------- //
-	//  P R I M I T I V E  //
-	// ------------------- //
-
 	virtual void translate(const glm::vec3& translation) 
 	{
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.position += translation;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.position += translation;
 
 		m_trackedCenter += translation;
 		syncWithGPU();
@@ -85,10 +84,10 @@ public:
 	virtual void translateTo(const glm::vec3& position) 
 	{
 		glm::vec3 translation = position - m_trackedCenter;
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.position += translation;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.position += translation;
 
-		m_trackedCenter += translation;
+		m_trackedCenter = position;
 		syncWithGPU();
 	}
 
@@ -104,8 +103,8 @@ public:
 		transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
 		transform = glm::translate(transform, -rotatePoint);
 
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.position = glm::vec3(transform * glm::vec4(getGraphicsBuffer().getVertex(i).data.position, 1.f));
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.position = glm::vec3(transform * glm::vec4(getVertex(i).data.position, 1.f));
 
 		syncWithGPU();
 	}
@@ -117,11 +116,11 @@ public:
 
 	virtual void transform(const glm::mat4& transform) 
 	{
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.position = glm::vec3(transfromMatrix * glm::vec4(getGraphicsBuffer().getVertex(i).data.position, 1.f));
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.position = glm::vec3(transform * glm::vec4(getVertex(i).data.position, 1.f));
 
 		// Not sure if this is correct (scaling?).
-		m_trackedCenter = glm::vec3(transfromMatrix * glm::vec4(m_trackedCenter, 1.f));
+		m_trackedCenter = glm::vec3(transform * glm::vec4(m_trackedCenter, 1.f));
 
 		syncWithGPU();
 	}
@@ -138,8 +137,8 @@ public:
 		if (m_outlineEnabled) return;
 		m_outlineEnabled = true;
 
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.outline = 1.0f;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.outline = 1.0f;
 
 		syncWithGPU();
 	}
@@ -149,8 +148,8 @@ public:
 		if (!m_outlineEnabled) return;
 		m_outlineEnabled = false;
 
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.outline = 0.f;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.outline = 0.f;
 
 		syncWithGPU();
 	}
@@ -159,15 +158,22 @@ public:
 	//  V E R T E X  //
 	// ------------- //
 
+	// Get the vertex belonging to this primitive (based on local index).
+	inline virtual VertexType& getVertex(int index) 
+	{
+		LUMEN_DEBUG_ASSERT(index > 0 && index < m_vertexCount, "Indexing out of range.");
+		return getGraphicsBuffer().getVertex(m_vertexBufferPos + index);
+	}
+
 	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position) 
 	{
 		vertex->data.position = position;
 		syncWithGPU();
 	}
 
-	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position) 
+	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position)
 	{
-		This::translateVertexTo(vertex, glm::vec3(position, vertex->data.position.z));
+		This::translateVertexTo(vertex, { position.x, position.y, vertex->data.position.z });
 	}
 
 	inline virtual void translateVertex(VertexType* vertex, const glm::vec3 translation) 
@@ -178,12 +184,12 @@ public:
 
 	inline virtual void translateVertex(VertexType* vertex, const glm::vec2 translation) 
 	{
-		This::translateVertex(vertex, glm::vec3(translation, 0.f));
+		This::translateVertex(vertex, { translation.x, translation.y, 0.f });
 	}
 
 	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation)
 	{
-		This::translateVertex(&getGraphicsBuffer().getVertex(m_vertexBufferPos + index), translation);
+		This::translateVertex(&getVertex(index), translation);
 	}
 
 	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation)
@@ -193,7 +199,7 @@ public:
 
 	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
 	{
-		This::translateVertexTo(&getGraphicsBuffer().getVertex(m_vertexBufferPos + index), position);
+		This::translateVertexTo(&getVertex(index), position);
 	}
 
 	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
@@ -203,29 +209,29 @@ public:
 
 	inline virtual void setVertexAtIndexColor(unsigned index, const glm::vec4& color)
 	{
-		getGraphicsBuffer().getVertex(m_vertexBufferPos + index).data.color = color;
+		getVertex(index).data.color = color;
 		syncWithGPU();
 	}
 
 	inline virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec3& position)
 	{
 		auto [index, distance] = getNearestVertexIndex(position);
-		return { getGraphicsBuffer().getVertex(index + m_vertexBufferPos), distance };
+		return { getVertex(index), distance };
 	}
 
 	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position)
 	{
-		float minDistance = 0.f;
-		VertexType* closestVertex = &getGraphicsBuffer().getVertex(m_vertexBufferPos);;
 		// Calculate the first vertex' distance.
-		minDistance = glm::abs(glm::distance(position, closestVertex->data.position));
-		// Find if any of the vertices are closer.
 		int nearestVertexIndex = 0;
-		for (int i = m_vertexBufferPos + 1; i < m_vertexBufferPos + m_vertexCount; i++)
+		VertexType& closestVertex = getVertex(0);;
+		float minDistance = glm::abs(glm::distance(position, closestVertex.data.position));
+		// Find if any of the vertices are closer.
+		for (int i = 0; i < m_vertexCount; i++)
 		{
-			float currentDistance = glm::abs(glm::distance(position, getGraphicsBuffer().getVertex(i).data.position));
+			VertexType& currentVertex = getVertex(i);
+			float currentDistance = glm::abs(glm::distance(position, currentVertex.data.position));
 			if (currentDistance > minDistance) continue;
-			closestVertex = &getGraphicsBuffer().getVertex(i)];
+			closestVertex = &currentVertex;
 			nearestVertexIndex = i - m_vertexBufferPos;
 			minDistance = currentDistance;
 		}
@@ -236,37 +242,37 @@ public:
 	inline virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec2& position)
 	{
 		auto [index, distance] = getNearestVertexIndex(position);
-		return { getGraphicsBuffer().getVertex(index + m_vertexBufferPos), distance };
+		return { getVertex(index), distance };
 	}
 
 	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position)
 	{
-		float minDistance = 0.f;
-		VertexType* closestVertex = &getGraphicsBuffer().getVertex(m_vertexBufferPos);;
 		// Calculate the first vertex' distance.
-		minDistance = glm::abs(glm::distance(position, closestVertex->data.position));
-		// Find if any of the vertices are closer.
 		int nearestVertexIndex = 0;
-		for (int i = m_vertexBufferPos + 1; i < m_vertexBufferPos + m_vertexCount; i++)
+		VertexType& closestVertex = getVertex(0);
+		float minDistance = glm::abs(glm::distance(position, closestVertex.data.position));
+		// Find if any of the vertices are closer.
+		for (int i = 0; i < m_vertexCount; i++)
 		{
-			float currentDistance = glm::abs(glm::distance(position, glm::vec2(getGraphicsBuffer().getVertex(i).data.position)));
+			VertexType& currentVertex = getVertex(i);
+			float currentDistance = glm::abs(glm::distance(position, glm::vec2(currentVertex.data.position)));
 			if (currentDistance > minDistance) continue;
-			closestVertex = &getGraphicsBuffer().getVertex(i)];
+			closestVertex = &currentVertex;
 			nearestVertexIndex = i - m_vertexBufferPos;
 			minDistance = currentDistance;
 		}
 		// Return the closest vertex, alongside the distance in world coordinates.
 		return { nearestVertexIndex, minDistance };
 	}
-	
+
 	// --------------------- //
 	//  A T T R I B U T E S  //
 	// --------------------- //
 
 	virtual void setColor(const glm::vec4& color) 
 	{
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.color = color;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.color = color;
 
 		m_colour = color;
 		syncWithGPU();
@@ -274,8 +280,8 @@ public:
 
 	virtual void setEntityID(unsigned int eID) 
 	{
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).entityID = eID;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).entityID = eID;
 
 		m_entityID = eID;
 		syncWithGPU();
@@ -283,8 +289,8 @@ public:
 
 	virtual void setLayer(float layer) 
 	{
-		for (int i = m_vertexBufferPos; i < m_vertexBufferPos + m_vertexCount; i++)
-			getGraphicsBuffer().getVertex(i).data.position.z = layer;
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).data.position.z = layer;
 
 		m_trackedCenter.z = layer;
 		syncWithGPU();
@@ -302,13 +308,12 @@ public:
 	inline virtual void constructVerticesLocally() = 0;
 
 	// Set the GPU context that the primitive renders to.
-	inline virtual void setGraphicsBuffer(BufferType<VertexType>* buffer) { m_graphicsBuffer = buffer; }
+	inline virtual void setGraphicsBuffer(BufferType* buffer) { m_graphicsBuffer = buffer; }
 
 	// Remove the vertex & index data.
 	inline void removeFromGraphicsBuffer() 
 	{
-		// Data not on GPU.
-		assert(m_onGPU);  
+		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
 		m_onGPU = false;
 
 		// Remove from GPU.
@@ -323,24 +328,21 @@ public:
 	// Move the vertex & index data from the Graphics Buffer.
 	inline void moveFromGrapicsBuffer() 
 	{
-		// Data not on GPU.
-		assert(m_onGPU);
+		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
 		m_onGPU = false;
 	}
 
 	// Move the vertex & index data to the Graphics buffer.
 	inline void moveToGraphicsBuffer() 
 	{
-		// Data already on GPU.
-		assert(!m_onGPU);
+		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
 		m_onGPU = true;
 	}
 
 	// Notify the GPU that the data has to be updated.
 	virtual void syncWithGPU() 
 	{
-		// There is not data on the GPU to sync to.
-		assert(m_onGPU);
+		LUMEN_DEBUG_ASSERT(m_onGPU, "There is no data on the GPU to sync to.");
 	}
 
 	// Clear the data on the CPU.
@@ -348,7 +350,7 @@ public:
 	{
 		// The data is not on the CPU, but on the GPU.
 		// This will not break anything, but there is a fault in the logic.
-		assert(!m_onGPU);  
+		LUMEN_DEBUG_ASSERT(!m_onGPU);
 
 		// Clear the CPU data.
 		m_localVertexData.clear();
@@ -360,8 +362,8 @@ public:
 protected:
 
 	// The GPB that the Primitive is contained in (if any).
-	BufferType<VertexType>* m_graphicsBuffer = nullptr;
-	inline BufferType<VertexType>& getGraphicsBuffer() { return m_graphicsBuffer; }
+	BufferType* m_graphicsBuffer = nullptr;
+	inline BufferType& getGraphicsBuffer() { return *m_graphicsBuffer; }
 
 	// Local data.
 	// This is used when the primitive is constructed outside the context of a Graphics Buffer,

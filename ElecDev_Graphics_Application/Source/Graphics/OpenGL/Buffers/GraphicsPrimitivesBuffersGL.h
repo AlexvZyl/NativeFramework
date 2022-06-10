@@ -4,9 +4,9 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "Lumen/Lumen.h"
 
-struct Ind2 
+struct Int2 
 {
-	Ind2(int ind0, int ind1) { _data[0] = ind0; _data[1] = ind1; }
+	Int2(int ind0, int ind1) { _data[0] = ind0; _data[1] = ind1; }
 	inline int* data() { return _data; }
 	// Operators.
 	inline void operator+=(int val) { _data[0] += val; _data[1] += val; };
@@ -16,11 +16,12 @@ struct Ind2
 		int _data[2] = { 0,1 };
 		int ind0, ind1;
 	};
+	typedef int VarType;
 };
 
-struct UInd2 
+struct UInt2 
 {
-	UInd2(unsigned ind0, unsigned ind1) { _data[0] = ind0; _data[1] = ind1; }
+	UInt2(unsigned ind0, unsigned ind1) { _data[0] = ind0; _data[1] = ind1; }
 	inline unsigned* data() { return _data; }
 	// Operators.
 	inline void operator+=(unsigned val) { _data[0] += val; _data[1] += val; };
@@ -30,11 +31,12 @@ struct UInd2
 		unsigned _data[2] = { 0,1 };
 		unsigned ind0, ind1;
 	};
+	typedef unsigned VarType;
 };
 
-struct Ind3 
+struct Int3 
 {
-	Ind3(int ind0, int ind1, int ind2) { _data[0] = ind0; _data[1] = ind1; _data[2] = ind2; }
+	Int3(int ind0, int ind1, int ind2) { _data[0] = ind0; _data[1] = ind1; _data[2] = ind2; }
 	inline int* data() { return _data; }
 	// Operators.
 	inline void operator+=(int val) { _data[0] += val; _data[1] += val; _data[2] += val; };
@@ -44,11 +46,12 @@ struct Ind3
 		int _data[3] = { 0,1,2 };
 		int ind0, ind1, ind2;
 	};
+	typedef int VarType;
 };
 
-struct UInd3 
+struct UInt3 
 {
-	UInd3(unsigned ind0, unsigned ind1, unsigned ind2) { _data[0] = ind0; _data[1] = ind1; _data[2] = ind2; }
+	UInt3(unsigned ind0, unsigned ind1, unsigned ind2) { _data[0] = ind0; _data[1] = ind1; _data[2] = ind2; }
 	inline unsigned* data() { return _data; }
 	// Operators.
 	inline void operator+=(unsigned val) { _data[0] += val; _data[1] += val; _data[2] += val; };
@@ -58,6 +61,7 @@ struct UInd3
 		unsigned ind0, ind1, ind2;
 		unsigned _data[3] = { 0,1,2 };
 	};
+	typedef unsigned VarType;
 };
 
 class IGraphicsPrimitivesBuffer 
@@ -78,7 +82,10 @@ protected:
 	inline virtual ~IGraphicsPrimitivesBuffer() = default;
 };
 
-template <typename VertexContainer, typename VertexType, typename IndexContainer, typename IndexType>
+template <typename VertexType, 
+		  typename IndexType, 
+	      template <typename> class VertexContainer, 
+	      template <typename> class IndexContainer>
 class GraphicsPrimitivesBuffer : public IGraphicsPrimitivesBuffer
 {
 
@@ -125,7 +132,7 @@ public:
 	// Push vertices and the corresponding indices.
 	// This function handles the offsetting of indices.
 	// returns { VerticesIndex, IndicesIndex }
-	inline std::tuple<int, int> push(VertexType* vertexPtr, int vertexCount, IndexType* indexPtr, int indexCount) 
+	inline std::tuple<unsigned, unsigned> push(VertexType* vertexPtr, int vertexCount, IndexType* indexPtr, int indexCount)
 	{
 		int verticesIndex = push(vertexPtr, vertexCount);
 		int indicesIndex = push(indexPtr, indexCount, verticesIndex);
@@ -166,12 +173,10 @@ public:
 	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
 
 	// Template types.
-	constexpr typedef VertexType t_vertexType;
-	constexpr typedef IndexType t_indexType;
-	constexpr typedef VertexContainer t_vertexContainer;
-	constexpr typedef IndexContainer t_indexContainer;
-
-private:
+	typedef VertexType t_vertexType;
+	typedef IndexType t_indexType;
+	typedef VertexContainer<VertexType> t_vertexContainer;
+	typedef IndexContainer<IndexType> t_indexContainer;
 
 	// Check if the buffers have to resize.
 	inline void checkResize()
@@ -217,6 +222,8 @@ private:
 		}
 	}
 
+private:
+
 	// GPU data.
 	VertexArrayObject m_VAO;
 	// CPU data.
@@ -225,23 +232,25 @@ private:
 };
 
 template <typename VertexType>
-class GraphicsTrianglesBuffer : public GraphicsPrimitivesBuffer<FreeList, VertexType, FreeList, UInd3>
+class GraphicsTrianglesBuffer : public GraphicsPrimitivesBuffer<VertexType, UInt3, FreeList, FreeList>
 { 
+public:
+
 	// Constructor.
-	inline GraphicsTrianglesBuffer() 
-		: GraphicsPrimitivesBuffer()
+	inline GraphicsTrianglesBuffer() : GraphicsPrimitivesBuffer<VertexType, UInt3, FreeList, FreeList>()
 	{
-		getVAO().setType(GL_TRIANGLES);
+		this->getVAO().setType(GL_TRIANGLES);
 	}
 };
 
 template <typename VertexType>
-class GraphicsLinesBuffer : public GraphicsPrimitivesBuffer<FreeList, VertexType, SEFreeList, UInd2>
+class GraphicsLinesBuffer : public GraphicsPrimitivesBuffer<VertexType, UInt2, FreeList, SEFreeList>
 { 
+public:
+
 	// Constructor.
-	inline GraphicsLinesBuffer() 
-		: GraphicsPrimitivesBuffer()
+	inline GraphicsLinesBuffer() : GraphicsPrimitivesBuffer<VertexType, UInt2, FreeList, SEFreeList>()
 	{
-		getVAO().setType(GL_LINES);
+		this->getVAO().setType(GL_LINES);
 	}
 };

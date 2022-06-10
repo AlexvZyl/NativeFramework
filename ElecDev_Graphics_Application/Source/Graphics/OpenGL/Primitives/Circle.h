@@ -10,16 +10,15 @@
 //  Forward decleration.																													   //
 //=============================================================================================================================================//
 
-class VertexDataCircle;
-
 template<typename VertexType>
 class GraphicsTrianglesBuffer;
+class VertexDataCircle;
 
 //=============================================================================================================================================//
 //  Circle class.		 																													   //
 //=============================================================================================================================================//
 
-class Circle : public Primitive<VertexDataCircle>
+class Circle : public Primitive<GraphicsTrianglesBuffer<VertexDataCircle>>
 {
 public:
 
@@ -35,9 +34,8 @@ public:
 	float m_radius = 0;
 
 	// Constructors. 
-	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* vao, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
-	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* vao, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
-	
+	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gtb, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
+	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gtb, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
 	void setRadius(float radius);
 };
 

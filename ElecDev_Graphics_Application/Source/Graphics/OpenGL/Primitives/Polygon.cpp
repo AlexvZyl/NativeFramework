@@ -11,13 +11,13 @@
 //  Constructor & Destructor.																										       	   //
 //=============================================================================================================================================//
 
-Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, glm::vec4 colour) 
+Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBuffer<VertexData>* gtb, Entity* parent, glm::vec4 colour)
 	: Primitive<VertexData>(parent)
 {
 	// Inits.
 	m_colour = colour;
 	m_vertexCount = vertices.size();
-	m_VAO = VAO;
+	setGraphicsBuffer(gtb);
 
 	//Auto-centering code can be found below. This may be useful at some stage, but should not be default.
 	/*/
@@ -50,26 +50,15 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	//  I N D I C E S  //
 	// --------------- //
 
-	if (m_VAO->getBufferType() == GL_TRIANGLES)
+	if (getGraphicsBuffer().getVAO().getType() == GL_TRIANGLES)
 	{
-		//tesselate with earcut.
+		// Tesselate with earcut.
 		//NOTE: This is only valid for polygons in the XY plane. We need to project the points onto a 2D plane to support polygons in arbitrary planes.
 		std::vector < std::vector<glm::vec3>> vertices_with_holes;
 		vertices_with_holes.push_back(vertices);
 		indices = mapbox::earcut<unsigned>(vertices_with_holes);
-
-		/*//Old index code
-		indices.reserve(3 * (m_vertexCount - 2));
-		for (int i = 2; i < m_vertexCount; i++) 
-		{
-			indices.push_back(0);
-			indices.push_back(i-1);
-			indices.push_back(i);
-		}
-
-		*/
 	}
-	else if (m_VAO->getBufferType() == GL_LINES)
+	else if (getGraphicsBuffer().getVAO().getType() == GL_LINES)
 	{
 		indices.reserve(2 * m_vertexCount);
 		for (int i = 1; i < m_vertexCount; i++) 
@@ -83,7 +72,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, VertexArrayObject<V
 	m_indexCount = indices.size();
     
 	// Pass to VAO.
-	m_VAO->pushPrimitive(this, vertexVector, indices);
+	auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertexVector.data(), vertexVector.size(), indices.data(), indices.size());
 }
 
 void Polygon2D::pushVertex(const glm::vec3& vertex) 
@@ -126,7 +115,7 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 
 void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
 {
-	m_VAO->m_vertexData[m_vertexBufferPos + index].data.position += translation;
+	getVertex(index).data.position += translation;
 	updateIndices();
 	syncWithGPU();
 }
@@ -136,17 +125,17 @@ void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec2& translat
 	translateVertexAtIndex(index, { translation.x, translation.y, 0.f });
 }
 
-void Polygon2D::translateToVertexAtIndex(unsigned index, const glm::vec3& position)
+void Polygon2D::translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
 {
-	glm::vec3* currentPosition = &m_VAO->m_vertexData[m_vertexBufferPos + index].data.position;
+	glm::vec3* currentPosition = &getVertex(index).data.position;
 	*currentPosition += (position - *currentPosition);
 	updateIndices();
 	syncWithGPU();
 }
 
-void Polygon2D::translateToVertexAtIndex(unsigned index, const glm::vec2& position)
+void Polygon2D::translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
 {
-	translateToVertexAtIndex(index, { position.x, position.y, 0.f });
+	translateVertexAtIndexTo(index, { position.x, position.y, 0.f });
 }
 
 void Polygon2D::updateIndices()

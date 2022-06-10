@@ -229,7 +229,7 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	m_activeVertexIdx = -1;
 	if (m_activePoly) 
 	{
-		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
+		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;

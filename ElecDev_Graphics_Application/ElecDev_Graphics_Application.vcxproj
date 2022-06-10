@@ -271,7 +271,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Circle.cpp" />
     <ClCompile Include="Source\Graphics\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Polygon.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Primitives\Primitive.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Vertex.cpp" />
     <ClCompile Include="Source\Graphics\Fonts\FontLoader.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine.cpp" />
@@ -655,6 +654,7 @@
     <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
     <ClInclude Include="Source\GUI\ScriptGui\ScriptGui.h" />
     <ClInclude Include="Source\Lumen\LumenPCH.h" />
+    <ClInclude Include="Source\Utilities\Assert\Assert.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaAPI\LuaAPI.h" />
     <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWindow.h" />
@@ -664,7 +664,10 @@
     <ClInclude Include="Source\GUI\BottomBar\BottomBar.h" />
     <ClInclude Include="Source\GUI\SettingsWidget\SettingsWidget.h" />
     <ClInclude Include="Source\Utilities\Lua\LuaInterpreter.h" />
+    <ClInclude Include="Source\Utilities\Memory\DEFreeList.h" />
     <ClInclude Include="Source\Utilities\Memory\FreeList.h" />
+    <ClInclude Include="Source\Utilities\Memory\FreeListBase.h" />
+    <ClInclude Include="Source\Utilities\Memory\SEFreeList.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.h" />
     <ClInclude Include="External\YAML-CPP\Includes\yaml-cpp\anchor.h" />

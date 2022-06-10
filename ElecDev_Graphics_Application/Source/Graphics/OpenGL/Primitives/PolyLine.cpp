@@ -3,8 +3,8 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData, IndexData3>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) 
-	: Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, GraphicsTrianglesBuffer<VertexData>* gtb, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) 
+	: Polygon2D({}, gtb, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -106,12 +106,12 @@ void PolyLine::translateVertexAtIndex(unsigned index, const glm::vec2& translati
 	update();
 }
 
-void PolyLine::translateToVertexAtIndex(unsigned index, const glm::vec3& position)
+void PolyLine::translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
 {
-	translateToVertexAtIndex(index, glm::vec2{ position });
+	translateVertexAtIndexTo(index, glm::vec2{ position });
 }
 
-void PolyLine::translateToVertexAtIndex(unsigned index, const glm::vec2& position)
+void PolyLine::translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
 {
 	glm::vec2 translation = position - m_vertices.at(index);
 	translateVertexAtIndex(index, translation);
@@ -169,8 +169,7 @@ void PolyLine::translate(const glm::vec3& translation)
 void PolyLine::translate(const glm::vec2& translation)
 {
 	Primitive::translate(translation);
-
-	//update the internal vertices
+	// Update the internal vertices.
 	for (auto& vert : m_vertices) 
 		vert += translation;
 }
