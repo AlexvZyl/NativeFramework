@@ -64,11 +64,12 @@ void Application::onUpdate()
 		// This also allows us to modify how dear imgui sets focused windows.
 		else if (event->isType(EventType_MousePress))
 		{
-			// Change focus.
+			// Change focus if clicked on a new window.
 			if (m_hoveredWindow && m_hoveredWindow != m_focusedWindow) m_hoveredWindow->focus();
-			if (!m_hoveredWindow)									   onFocusedWindowChange(nullptr); 
+			// Double check if a focus should occur.  For now this is a workaround where tabs are not setting focus.
+			else onFocusedWindowChange(findFocusedWindow());
 			// If there is a window after the change, pass the event.
-			if (m_focusedWindow)									   m_focusedWindow->onEvent(*event.get());
+			if (m_focusedWindow) m_focusedWindow->onEvent(*event.get());
 		}
 
 		// Pass events to focused window.
@@ -109,14 +110,22 @@ void Application::onUpdate()
 
 LumenWindow* Application::findHoveredWindow()
 {
-	// Find the window that is being hovered.
 	// We do not have to worry about order, since dear imgui handles it.
 	for (auto& [ID, window] : m_windowStack->getWindows())
 	{
-		if (window->isHovered())
-			return window.get();
+		if (window->isHovered()) return window.get();
 	}
-	// No window is found.
+	// No window is hovered.
+	return nullptr;
+}
+
+LumenWindow* Application::findFocusedWindow()
+{
+	for (auto& [ID, window] : m_windowStack->getWindows())
+	{
+		if (window->isFocused()) return window.get();
+	}
+	// No window is focused.
 	return nullptr;
 }
 
