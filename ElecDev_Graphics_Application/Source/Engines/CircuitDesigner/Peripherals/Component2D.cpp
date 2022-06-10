@@ -103,9 +103,9 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	}
 
 	// Add tags.
-	if (componentNode["ToTag"].IsDefined())
+	if (componentNode["Tag"].IsDefined())
 		m_toTagNumber = componentNode["ToTag"].as<std::string>();
-	if (componentNode["FromTag"].IsDefined())
+	if (componentNode["From Tag"].IsDefined())
 		m_fromTagNumber = componentNode["FromTag"].as<std::string>();
 
 	// Add the equipmemnt type.

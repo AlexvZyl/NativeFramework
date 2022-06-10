@@ -32,7 +32,7 @@ void EngineCore::onEvent(const Event& event)
 	// Key events.
 	else if (event.isType(EventType_KeyPress)
 		  || event.isType(EventType_KeyRelease)
-		  || event.isType(EventType_KeyRepeat))			{ onKeyEvent(event.cast<KeyEvent>()); }
+		  || event.isType(EventType_KeyRepeat))			{ onKeyEventForce(event.cast<KeyEvent>()); }
 
 	// Window events.
 	else if (event.isType(EventType_WindowResize))		{ onWindowResizeEventForce(event.cast<WindowEvent>()); }
@@ -142,6 +142,12 @@ void EngineCore::onMouseScrollEventForce(const MouseScrollEvent& event)
 {
 	if (!m_isHovered) return;
 	onMouseScrollEvent(event);
+}
+
+void EngineCore::onKeyEventForce(const KeyEvent& event) 
+{
+	// Do not pass event if ImGui is using the keyboard.
+	onKeyEvent(event);
 }
 
 //==============================================================================================================================================//

@@ -44,6 +44,8 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 			emitter << YAML::Key << "Position" << YAML::Value << comp->centre;
 			emitter << YAML::Key << "Rotation" << YAML::Value << comp->m_rotation;
 			emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
+			emitter << YAML::Key << "Tag" << YAML::Value << comp->m_toTagNumber;
+			emitter << YAML::Key << "From Tag" << YAML::Value << comp->m_fromTagNumber;
 		emitter << YAML::EndMap;
 		index++;
 	}
