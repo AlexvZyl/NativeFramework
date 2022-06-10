@@ -510,12 +510,16 @@ void ComponentDesigner::renderOverlay()
 		}
 
 		ImGui::SameLine();
+		glm::vec4 buttonCol = textColour;
+		if (m_activeText) {
+			buttonCol = m_activeText->m_colour;
+		}
 		if (designerState == CompDesignState::ADD_TEXT) 
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
-			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, {0.f, 0.f, 0.f, 0.f}, textColour))
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, {0.f, 0.f, 0.f, 0.f}, buttonCol))
 			{
 				switchState(CompDesignState::SELECT);
 			}
@@ -523,7 +527,7 @@ void ComponentDesigner::renderOverlay()
 		}
 		else 
 		{
-			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, textColour))
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, buttonCol))
 			{
 				switchState(CompDesignState::ADD_TEXT);
 			}
@@ -550,7 +554,13 @@ void ComponentDesigner::renderOverlay()
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (ImGui::InputInt("pt ", &sizePt)) {
+				if (m_activeText) {
+					int tempSizePt = std::round(m_activeText->m_textScale * 2835);
+					if (ImGui::InputInt("pt ", &tempSizePt)) {
+						m_activeText->setScale(tempSizePt / 2835.f);
+					}
+				}
+				else if (ImGui::InputInt("pt ", &sizePt)) {
 					textSize = sizePt / 2835.f;
 				}
 				ImGui::PopItemWidth();
@@ -569,8 +579,14 @@ void ComponentDesigner::renderOverlay()
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (ImGui::InputInt("pt ", &sizePt)) {
-					textSize = sizePt/2835.f;
+				if (m_activeText) {
+					int tempSizePt = std::round(m_activeText->m_textScale * 2835);
+					if (ImGui::InputInt("pt ", &tempSizePt)) {
+						m_activeText->setScale(tempSizePt / 2835.f);
+					}
+				}
+				else if (ImGui::InputInt("pt ", &sizePt)) {
+					textSize = sizePt / 2835.f;
 				}
 				ImGui::PopItemWidth();
 				ImGui::EndButtonDropDown();
@@ -607,7 +623,19 @@ void ComponentDesigner::renderOverlay()
 		ImGui::PushItemWidth(100.0f);
 		//FIXME
 		ImGui::SetCursorPosY(16.f);
-		ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
+		if (m_activeLine) {
+			float thickness = m_activeLine->m_thickness;
+			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
+				m_activeLine->setThickness(thickness);
+			}
+		}
+		else if(m_activeCircle) {
+			float thickness = m_activeCircle->m_thickness;
+			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
+				m_activeCircle->setThickness(thickness);
+			}
+		}
+		else ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
 		ImGui::PopItemWidth();
 
 		if (ImGui::IsItemHovered())

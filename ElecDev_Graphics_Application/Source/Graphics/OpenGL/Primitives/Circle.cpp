@@ -61,6 +61,38 @@ void Circle::setRadius(float radius)
 	// Add to VAO.
 	m_VAO->popPrimitive(this);
 	m_VAO->pushPrimitive(this, vertices, indices);
+	if (m_outlineEnabled)
+	{
+		m_outlineEnabled = false;
+		enableOutline();
+	}
+}
+
+void Circle::setThickness(float thickness)
+{
+	m_thickness = thickness;
+
+	// Create the vertices.
+	std::vector<VertexDataCircle> vertices;
+	vertices.reserve(4);
+	vertices.emplace_back(VertexDataCircle({ m_trackedCenter.x - m_radius, m_trackedCenter.y + m_radius, m_trackedCenter.z }, local1, m_radius, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(VertexDataCircle({ m_trackedCenter.x + m_radius, m_trackedCenter.y + m_radius, m_trackedCenter.z }, local2, m_radius, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(VertexDataCircle({ m_trackedCenter.x + m_radius, m_trackedCenter.y - m_radius, m_trackedCenter.z }, local3, m_radius, m_colour, m_thickness, m_fade, m_entityID));
+	vertices.emplace_back(VertexDataCircle({ m_trackedCenter.x - m_radius, m_trackedCenter.y - m_radius, m_trackedCenter.z }, local4, m_radius, m_colour, m_thickness, m_fade, m_entityID));
+
+	// Create the indices.
+	std::vector<unsigned> indices = { 0,1,2,2,3,0 };
+
+	// Add to VAO.
+	m_VAO->popPrimitive(this);
+	m_VAO->pushPrimitive(this, vertices, indices);
+
+	
+	if (m_outlineEnabled)
+	{
+		m_outlineEnabled = false;
+		enableOutline();
+	}
 }
 
 

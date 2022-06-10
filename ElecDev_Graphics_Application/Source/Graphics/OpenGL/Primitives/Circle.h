@@ -39,6 +39,7 @@ public:
 	Circle(VertexArrayObject<VertexDataCircle>* vao, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
 	
 	void setRadius(float radius);
+	void setThickness(float thickness);
 };
 
 //=============================================================================================================================================//

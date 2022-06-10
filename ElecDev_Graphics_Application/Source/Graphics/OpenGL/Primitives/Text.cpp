@@ -301,7 +301,15 @@ void Text::generateText(const std::string& text)
 void Text::setScale(float scale)
 {
 	m_textScale = scale;
-	updateText(m_string);
+	wipeGPU();
+	generateText(m_string);
+
+	// A bit hacky...
+	if (m_outlineEnabled)
+	{
+		m_outlineEnabled = false;
+		enableOutline();
+	}
 }
 
 //=============================================================================================================================================//
@@ -324,6 +332,19 @@ bool Text::updateText(const std::string& text)
 	}
 
 	return true;
+}
+
+void Text::update()
+{
+	wipeGPU();
+	generateText(m_string);
+
+	// A bit hacky...
+	if (m_outlineEnabled)
+	{
+		m_outlineEnabled = false;
+		enableOutline();
+	}
 }
 
 bool Text::updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment)

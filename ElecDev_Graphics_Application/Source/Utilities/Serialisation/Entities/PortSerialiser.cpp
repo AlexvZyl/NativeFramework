@@ -16,7 +16,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Port* port)
 	emitter << YAML::BeginMap;
 
 	// Port data.
-	emitter << YAML::Key << "Label" << YAML::Value << port->m_label;
+	emitter << YAML::Key << "Label" << YAML::Value << port->title->m_string;
 	emitter << YAML::Key << "Entity ID" << YAML::Value << port->m_entityID;
 	emitter << YAML::Key << "Centre" << YAML::Value << port->centre;
 	emitter << YAML::Key << "Layer" << YAML::Value << port->portLayer;

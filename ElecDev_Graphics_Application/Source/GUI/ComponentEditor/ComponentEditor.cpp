@@ -94,15 +94,17 @@ void ComponentEditor::onImGuiRender()
 
 					// Name.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::InputText(labelName, &port->m_label))
-						port->title->updateText(port->m_label);
+					if (ImGui::InputText(labelName, &port->title->m_string))
+						port->title->update();
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
 					// Type.
 					ImGui::PushItemWidth(-1);
 					int* typeval = (int*)&port->m_type;
-					ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT");
+					if (ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT")) {
+						port->updateType();
+					}
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
@@ -529,49 +531,57 @@ void ComponentEditor::onImGuiRender()
 		{
 			if (activeComponent || activeCable)
 			{
-				// Display to tag number.
-				ImGui::Text("To Tag Number: ");
-				ImGui::SameLine();
-				ImGui::PushItemWidth(-1);
-				ImGui::InputText("##totagnumber", &activeComponent->m_toTagNumber);
-				ImGui::PopItemWidth();
 
-				// From tag number.
-				std::vector<std::string> fromTags;
-				fromTags.push_back(activeComponent->m_fromTagNumber);
-				int currentItem = 0;
-				// Get all of the possible from tag numbers.
-				for (auto& port : activeComponent->ports)
-				{
-					// Find input ports.
-					if (port->m_type == PortType::PORT_IN || port->m_type == PortType::PORT_INOUT)
+				if (activeComponent) {
+					// Display to tag number.
+					ImGui::Text("To Tag Number: ");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(-1);
+					ImGui::InputText("##totagnumber", &activeComponent->m_toTagNumber);
+					ImGui::PopItemWidth();
+
+					// From tag number.
+					std::vector<std::string> fromTags;
+					//fromTags.push_back(activeComponent->m_fromTagNumber);
+					int currentItem = 0;
+					// Get all of the possible from tag numbers.
+					for (auto& port : activeComponent->ports)
 					{
-						// Get the component on the other side.
-						for (auto& cable : port->m_cables)
+						// Find input ports.
+						if (port->m_type == PortType::PORT_IN || port->m_type == PortType::PORT_INOUT)
 						{
-							// Find a valid port.
+							// Get the component on the other side.
+							for (auto& cable : port->m_cables)
+							{
+								// Find a valid port.
 
-							if (cable->m_endPort && cable->m_endPort != port.get())
-							{
-								fromTags.push_back((dynamic_cast<Component2D*>(cable->m_endPort->m_parent))->m_toTagNumber);
-							}
-							else if (cable->m_startPort && cable->m_startPort != port.get())
-							{
-								fromTags.push_back((dynamic_cast<Component2D*>(cable->m_startPort->m_parent))->m_toTagNumber);
+								if (cable->m_endPort && cable->m_endPort != port.get())
+								{
+									fromTags.push_back((dynamic_cast<Component2D*>(cable->m_endPort->m_parent))->m_toTagNumber);
+									if (fromTags.back() == activeComponent->m_fromTagNumber) {
+										currentItem = fromTags.size() - 1;
+									}
+								}
+								else if (cable->m_startPort && cable->m_startPort != port.get())
+								{
+									fromTags.push_back((dynamic_cast<Component2D*>(cable->m_startPort->m_parent))->m_toTagNumber);
+									if (fromTags.back() == activeComponent->m_fromTagNumber) {
+										currentItem = fromTags.size() - 1;
+									}
+								}
 							}
 						}
 					}
+					// Display combo box.
+					ImGui::Text("From Tag Number: ");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(-1);
+					if (ImGui::Combo("##FromTagNumberCombo", &currentItem, fromTags))
+					{
+						activeComponent->m_fromTagNumber = fromTags[currentItem];
+					}
+					ImGui::PopItemWidth();
 				}
-				// Display combo box.
-				ImGui::Text("From Tag Number: ");
-				ImGui::SameLine();
-				ImGui::PushItemWidth(-1);
-				if (ImGui::Combo("##FromTagNumberCombo", &currentItem, fromTags))
-				{
-					activeComponent->m_fromTagNumber = fromTags[currentItem];
-				}
-				ImGui::PopItemWidth();
-
 				// Data.
 				std::unordered_map<std::string, std::string>* dataDict = nullptr;
 				if (activeComponent) dataDict = &activeComponent->dataDict;
