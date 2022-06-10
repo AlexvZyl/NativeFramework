@@ -533,8 +533,8 @@ void ComponentEditor::onImGuiRender()
 			{
 
 				if (activeComponent) {
-					// Display to tag number.
-					ImGui::Text("To Tag Number: ");
+					// Display tag number.
+					ImGui::Text("Tag Number: ");
 					ImGui::SameLine();
 					ImGui::PushItemWidth(-1);
 					ImGui::InputText("##totagnumber", &activeComponent->m_toTagNumber);

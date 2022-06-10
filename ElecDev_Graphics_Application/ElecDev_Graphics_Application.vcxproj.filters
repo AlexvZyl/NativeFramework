@@ -150,7 +150,6 @@
     <ClCompile Include="External\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="Source\GUI\LumenGizmo\LumenGizmo.cpp" />
     <ClCompile Include="Source\Application\LumenWindow\LumenWebsocketWindow.cpp" />
-    <ClCompile Include="Source\GUI\TransformerSetup\TransformerSetupGui.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI_Gui.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -621,7 +620,6 @@
     <ClInclude Include="Source\LumenPCH.h" />
     <ClInclude Include="Source\Application\ApplicationTemplates.h" />
     <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
-    <ClInclude Include="Source\GUI\TransformerSetup\TransformerSetupGui.h" />
     <ClInclude Include="Source\Utilities\Assert\Assert.h" />
   </ItemGroup>
   <ItemGroup>

@@ -21,8 +21,8 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	emitter << YAML::Key << "Internal Circuit" << YAML::Value << "Test_AE_234.lmct";
 	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->title;
 	emitter << YAML::Key << "Designator" << YAML::Value << comp->designator;
-	emitter << YAML::Key << "ToTag" << YAML::Value << comp->m_toTagNumber;
-	emitter << YAML::Key << "FromTag" << YAML::Value << comp->m_fromTagNumber;
+	emitter << YAML::Key << "Tag" << YAML::Value << comp->m_toTagNumber;
+	emitter << YAML::Key << "From Tag" << YAML::Value << comp->m_fromTagNumber;
 	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
 	
 	// Ports.
