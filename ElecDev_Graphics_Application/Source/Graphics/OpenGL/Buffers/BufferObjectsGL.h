@@ -20,7 +20,7 @@ public:
 	void destroy();
 
 	// Get the VBO ID.
-	int ID();
+	int getID();
 
 	// Bind the VBO.
 	void bind();
@@ -40,7 +40,7 @@ public:
 	// Set the buffer sub data by name.
 	void namedBufferSubData(int offset, int size, const void* data);
 
-	// Get the capacity.
+	// Get the capacity in bytes.
 	int capacity();
 
 private:

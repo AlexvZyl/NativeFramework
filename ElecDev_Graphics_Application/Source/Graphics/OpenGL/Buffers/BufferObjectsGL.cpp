@@ -1,7 +1,6 @@
-
 #include "OpenGL/Buffers/BufferObjectsGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
-#include <assert.h>
+#include "Utilities/Assert/Assert.h"
 
 BufferObject::BufferObject(int target)
 {
@@ -15,26 +14,29 @@ BufferObject::~BufferObject()
 
 void BufferObject::create()
 {
-	assert(!m_existsOnGPU); // Buffer already exists on the GPU.
+	LUMEN_DEBUG_ASSERT(!m_existsOnGPU, "Buffer already exists on the GPU.");
+
 	GLCall(glGenBuffers(1, &m_rendererID));
 	m_existsOnGPU = true;
 }
 
 void BufferObject::destroy()
 {
-	assert(m_existsOnGPU); // Buffer does not exist on the GPU.
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
 	GLCall(glDeleteBuffers(1, &m_rendererID));
 	m_existsOnGPU = false;
 }
 
-int BufferObject::ID()
+int BufferObject::getID()
 {
 	return m_rendererID;
 }
 
 void BufferObject::bind()
 {
-	assert(m_existsOnGPU); // Buffer does not exist on the GPU.
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
 	GLCall(glBindBuffer(m_target, m_rendererID));
 }
 
@@ -45,24 +47,32 @@ void BufferObject::unbind()
 
 void BufferObject::bufferData(int size, const void* data, int usage)
 {
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
 	GLCall(glBufferData(m_target, size, data, usage));
 	m_capacity = size;
 }
 
 void BufferObject::namedBufferData(int size, const void* data, int usage)
 {
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
 	GLCall(glNamedBufferData(m_rendererID, size, data, usage));
 	m_capacity = size;
 }
 
 void BufferObject::bufferSubData(int offset, int size, const void* data)
 {
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
 	assert(offset + size < m_capacity); // Setting data out of range.
 	GLCall(glBufferSubData(m_target, offset, size, data));
 }
 
 void BufferObject::namedBufferSubData(int offset, int size, const void* data)
 {
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
 	assert(offset + size < m_capacity); // Setting data out of range.
 	GLCall(glNamedBufferSubData(m_rendererID, offset, size, data));
 }

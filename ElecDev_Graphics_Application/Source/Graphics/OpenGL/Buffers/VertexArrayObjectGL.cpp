@@ -1,7 +1,7 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
+#include "Utilities/Assert/Assert.h"
 #include "glad/glad.h"
-#include <assert.h>
 
 VertexArrayObject::~VertexArrayObject()
 {
@@ -10,18 +10,21 @@ VertexArrayObject::~VertexArrayObject()
 
 void VertexArrayObject::create()
 {
-	assert(!m_existsOnGPU); // VAO already exists on the GPU.
+	LUMEN_DEBUG_ASSERT(!m_existsOnGPU, "VAO already exists on the GPU.");
+
 	GLCall(glGenVertexArrays(1, &m_rendererID));
 	m_existsOnGPU = true;
 
-	// Create the default buffers.
+	// Create the default buffers for now.
 	m_VBO.create();
 	m_IBO.create();
 }
 
 void VertexArrayObject::destroy()
 {
-	assert(m_existsOnGPU); //  VAO does not exist on the GPU.
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "VAO does not exist on the GPU.");
+
+	// Destroy default buffers for now.
 	m_VBO.destroy();
 	m_IBO.destroy();
 	GLCall(glDeleteVertexArrays(1, &m_rendererID));
@@ -30,7 +33,8 @@ void VertexArrayObject::destroy()
 
 void VertexArrayObject::bind() 
 {
-	assert(m_existsOnGPU);  // VAO does not exist on the GPU.
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "VAO does not exist on the GPU.");
+
 	GLCall(glBindVertexArray(m_rendererID));
 }
 

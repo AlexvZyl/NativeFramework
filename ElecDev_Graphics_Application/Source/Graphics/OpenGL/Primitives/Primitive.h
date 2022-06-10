@@ -33,6 +33,7 @@ public:
 	unsigned m_indexBufferPos = 0;					// The start position of the primitive indices in the GPB.
 	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the primitive.
 	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the primitive.
+	bool m_queuedForSync = false;
 	bool m_outlineEnabled = false;
 	float m_outlineValue = 0.f;
 
@@ -346,7 +347,8 @@ public:
 	{
 		LUMEN_DEBUG_ASSERT(m_onGPU, "There is no data on the GPU to sync to.");
 
-
+		if (m_queuedForSync) return;
+		getGraphicsBuffer().sync(this);
 	}
 
 	// Clear the data on the CPU.

@@ -117,17 +117,30 @@ public:
 	// Push vertices and return the index in memory.  Vertices are copied.
 	inline int push(const VertexType* ptr, int size = 1)
 	{
-		return m_vertexData.push(ptr, size);
+		// CPU.
+		int index = m_vertexData.push(ptr, size);
+
+		// GPU.
+		VertexBufferObject& vbo = getVAO().getVBO();
+		for (int i = index; i < index + size; i++)
+		{
+			vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
+			vbo.bufferSubData(i * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
+		}
 	}
 
 	// Push indices and return the index in memory.  Indices are copied.
 	// The offset should be the starting vertex's position in memory.
-	inline int push(IndexType* ptr, int size, int offset = 1)
+	inline int push(IndexType* ptr, int size, int offset)
 	{
+		// CPU.
 		int index = m_indexData.push(ptr, size);
-		if (!offset) return index;
 		// Offset the incides.
-		for (int i = index; i < index + size; i++) m_indexData[i] += offset;
+		if (offset) for (int i = index; i < index + size; i++) m_indexData[i] += offset;
+		
+		// GPU.
+		getVAO().getIBO().namedBufferSubData(index * sizeof(IndexType), size * sizeof(IndexType), &m_indexData[index]);
+
 		return index;
 	}
 
@@ -144,13 +157,21 @@ public:
 	// Erase the vertices given the position and size.
 	inline void eraseVertices(int index, int size)
 	{
+		// CPU.
 		m_vertexData.erase(index, size);
+
+		// GPU.
+		getVAO().getVBO().namedBufferSubData(index * sizeof(VertexType), size * sizeof(VertexType), NULL);
 	}
 
 	// Erase the indices given the position and size.
 	inline void eraseIndices(int index, int size)
 	{
+		// CPU.
 		m_indexData.erase(index, size);
+
+		// GPU.
+		getVAO().getIBO().namedBufferSubData(index * sizeof(IndexType), size * sizeof(IndexType), NULL);
 	}
 
 	// Erase vertices and indices.
@@ -160,26 +181,33 @@ public:
 		eraseVertices(verticesIndex, verticesCount);
 	}
 
-	// Notify of draw call.
+	// Do necessary updates and return if should be drawn.
 	inline virtual bool onDrawCall() override
 	{
-		if (!m_indexData.count()) return false; 
+		if (!m_indexData.count())  return false; 
 		if (!m_vertexData.count()) return false;
 		checkResize();
+		if (m_primitivesToSync.size()) syncPrimitives();
 		return true;
 	}
 
+	// Queue the primitive to be synced.
+	inline void sync(IPrimitive* primitive) 
+	{
+		m_primitivesToSync.push_back(primitive);
+	}
+
 	// Utilities.
+	inline virtual VertexArrayObject& getVAO() override	{ return m_VAO; };
+	inline VertexContainer<VertexType>& getVertexData() { return m_vertexData; }
+	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
 	inline VertexType& getVertex(int index)				{ return m_vertexData[index]; }
 	inline float getResizeThreshold()					{ return m_vertexData.getResizeThreshold(); }
 	inline int getCapacityIncrements()					{ return m_vertexData.getCapacityIncrements(); }
-	inline virtual VertexArrayObject& getVAO() override	{ return m_VAO; };
-	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
-	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
 	inline virtual int getIndexCount() override			{ return m_indexData.count(); }
 	inline virtual int getVertexCount() override		{ return m_vertexData.count(); }
-	inline VertexContainer<VertexType>& getVertexData() { return m_vertexData; }
-	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
+	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
+	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
 
 	// Template types.
 	typedef VertexType t_vertexType;
@@ -190,8 +218,17 @@ public:
 	// Check if the buffers have to resize.
 	inline void checkResize()
 	{
-		if (m_VAO.getIBO().capacity() != m_indexData.capacity())  resizeIBO();
-		if (m_VAO.getVBO().capacity() != m_vertexData.capacity()) resizeVBO();
+		if (m_VAO.getIBO().capacity() != m_indexData.capacity())
+		{
+			resizeIBO(); 
+		}
+		if (m_VAO.getVBO().capacity() != m_vertexData.capacity())
+		{
+			resizeVBO();
+			// If the VBO was resized, the vertices were reloaded and
+			// there is no need to sync the remaining primitives.
+			m_primitivesToSync.clear();
+		}
 	}
 
 	// Resize the GPU vertex buffer.
@@ -216,7 +253,7 @@ public:
 		for (auto it = m_vertexData.begin(); it != m_vertexData.end(); ++it)
 		{
 			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getDataSize(), (*it).getData());
-			vbo.bufferSubData(it.m_index * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), (*it).getData());
+			vbo.bufferSubData(it.m_index * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), (*it).getID());
 		}
 	}
 
@@ -229,6 +266,27 @@ public:
 		{
 			ibo.bufferSubData(it.m_index * sizeof(IndexType), it.m_elementsInMemoryRegion * sizeof(IndexType), (*it).data());
 		}
+	}
+
+	// Sync all of the primitives in the queue.
+	inline void syncPrimitives() 
+	{	
+		VertexBufferObject& vbo = getVAO().getVBO();
+		vbo.bind();
+		// Iterate primitives.
+		for (auto primitive : m_primitivesToSync)
+		{
+			// Iterate vertices contained by the primtive.
+			for (int i = primitive->m_vertexBufferPos; i < primitive->m_vertexBufferPos + primitive->m_vertexCount; i++)
+			{
+				vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
+				vbo.bufferSubData(i * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
+			}
+			// The primitive is no longer in the queue.
+			primitive->m_queuedForSync = false;
+		}
+		// All primitives have been synced.
+		m_primitivesToSync.clear();
 	}
 
 private:

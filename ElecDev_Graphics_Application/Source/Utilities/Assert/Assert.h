@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "Lumen/Lumen.h"
 #include <assert.h>
 
