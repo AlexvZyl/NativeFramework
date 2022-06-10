@@ -4,6 +4,8 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "Lumen/Lumen.h"
 
+class IPrimitive;
+
 struct Int2 
 {
 	Int2(int ind0, int ind1) { _data[0] = ind0; _data[1] = ind1; }
@@ -120,7 +122,7 @@ public:
 
 	// Push indices and return the index in memory.  Indices are copied.
 	// The offset should be the starting vertex's position in memory.
-	inline int push(IndexType* ptr, int offset, int size = 1)
+	inline int push(IndexType* ptr, int size, int offset = 1)
 	{
 		int index = m_indexData.push(ptr, size);
 		if (!offset) return index;
@@ -149,6 +151,13 @@ public:
 	inline void eraseIndices(int index, int size)
 	{
 		m_indexData.erase(index, size);
+	}
+
+	// Erase vertices and indices.
+	inline void erase(int verticesIndex, int verticesCount, int indicesIndex, int indicesCount) 
+	{
+		eraseIndices(indicesIndex, indicesCount);
+		eraseVertices(verticesIndex, verticesCount);
 	}
 
 	// Notify of draw call.
@@ -229,6 +238,8 @@ private:
 	// CPU data.
 	VertexContainer<VertexType> m_vertexData;
 	IndexContainer<IndexType> m_indexData;
+	// The primitives that have been queued for sync.
+	std::vector<IPrimitive*> m_primitivesToSync;
 };
 
 template <typename VertexType>

@@ -15,6 +15,8 @@ for a VAO to be able to render the entity to the screen.
 #include "Graphics/Entities/Entity.h"
 #include "Utilities/Assert/Assert.h"
 #include "glm/gtx/transform.hpp"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 
 //=============================================================================================================================================//
 //  Primitive Pointer.																														   //
@@ -213,7 +215,7 @@ public:
 		syncWithGPU();
 	}
 
-	inline virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec3& position)
+	inline virtual std::tuple<VertexType&, float> getNearestVertex(const glm::vec3& position)
 	{
 		auto [index, distance] = getNearestVertexIndex(position);
 		return { getVertex(index), distance };
@@ -231,7 +233,7 @@ public:
 			VertexType& currentVertex = getVertex(i);
 			float currentDistance = glm::abs(glm::distance(position, currentVertex.data.position));
 			if (currentDistance > minDistance) continue;
-			closestVertex = &currentVertex;
+			closestVertex = currentVertex;
 			nearestVertexIndex = i - m_vertexBufferPos;
 			minDistance = currentDistance;
 		}
@@ -239,7 +241,7 @@ public:
 		return { nearestVertexIndex, minDistance };
 	}
 
-	inline virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec2& position)
+	inline virtual std::tuple<VertexType&, float> getNearestVertex(const glm::vec2& position)
 	{
 		auto [index, distance] = getNearestVertexIndex(position);
 		return { getVertex(index), distance };
@@ -250,14 +252,14 @@ public:
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
 		VertexType& closestVertex = getVertex(0);
-		float minDistance = glm::abs(glm::distance(position, closestVertex.data.position));
+		float minDistance = glm::abs(glm::distance(position, glm::vec2(closestVertex.data.position)));
 		// Find if any of the vertices are closer.
 		for (int i = 0; i < m_vertexCount; i++)
 		{
 			VertexType& currentVertex = getVertex(i);
 			float currentDistance = glm::abs(glm::distance(position, glm::vec2(currentVertex.data.position)));
 			if (currentDistance > minDistance) continue;
-			closestVertex = &currentVertex;
+			closestVertex = currentVertex;
 			nearestVertexIndex = i - m_vertexBufferPos;
 			minDistance = currentDistance;
 		}
@@ -343,14 +345,15 @@ public:
 	virtual void syncWithGPU() 
 	{
 		LUMEN_DEBUG_ASSERT(m_onGPU, "There is no data on the GPU to sync to.");
+
+
 	}
 
 	// Clear the data on the CPU.
 	inline void clearLocalData() 
 	{
-		// The data is not on the CPU, but on the GPU.
 		// This will not break anything, but there is a fault in the logic.
-		LUMEN_DEBUG_ASSERT(!m_onGPU);
+		LUMEN_DEBUG_ASSERT(!m_onGPU, "The data is not on the CPU, but on the GPU.");
 
 		// Clear the CPU data.
 		m_localVertexData.clear();

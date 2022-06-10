@@ -33,6 +33,7 @@ class IVertexArrayObject;
 class PolyLine;
 class FrameBufferObject;
 class VertexArrayObject;
+class IGraphicsPrimitivesBuffer;
 
 template<typename VertexType>
 class GraphicsTrianglesBuffer;

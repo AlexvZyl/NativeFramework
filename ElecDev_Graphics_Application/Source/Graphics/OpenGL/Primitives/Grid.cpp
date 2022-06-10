@@ -3,7 +3,7 @@
 //=============================================================================================================================================//
 
 #include "Grid.h"
-#include "OpenGL/Buffers/VertexArrayObjectGL.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Renderer/RendererGL.h"
@@ -15,9 +15,9 @@
 Grid::Grid() 
 {
 	// Setup buffers.
-	m_fineVAO	= std::make_unique<VertexArrayObject<VertexData, IndexData2>>(GL_LINES);
-	m_coarseVAO = std::make_unique<VertexArrayObject<VertexData, IndexData2>>(GL_LINES);
-	m_originVAO = std::make_unique<VertexArrayObject<VertexData, IndexData2>>(GL_LINES);
+	m_fineBuffer   = std::make_unique<GraphicsLinesBuffer<VertexData>>();
+	m_coarseBuffer = std::make_unique<GraphicsLinesBuffer<VertexData>>();
+	m_originBuffer = std::make_unique<GraphicsLinesBuffer<VertexData>>();
 	// Add the circle used to display the nearest vertex.
 	m_helperCircle = Renderer::addCircle2D({ 0.f, 0.f, -0.99999f }, m_fineIncrementSize / 5.f, m_helperCircleColor);
 	createGrid();
@@ -50,15 +50,15 @@ Grid& Grid::createGrid()
 	float maxVertexCoord = (float)m_totalCoarseLines * (float)m_coarseIncrementSize;
 	int totalCoarseVerts = m_totalCoarseLines * 2 * 4;
 	int totalFineVerts = (int)std::floor(maxVertexCoord / m_fineIncrementSize) * 2 * 8;
-	// Setup the VAO's.
-	m_fineVAO->setCapacityIncrements(totalFineVerts);
-	m_fineVAO->setCapacityIncrements(totalFineVerts);
-	m_coarseVAO->setCapacityIncrements(totalCoarseVerts);
-	m_coarseVAO->setCapacityIncrements(totalCoarseVerts);
-	m_originVAO->setCapacityIncrements(4);
+	// Setup the Buffer's.
+	m_fineBuffer->setCapacityIncrements(totalFineVerts);
+	m_fineBuffer->setCapacityIncrements(totalFineVerts);
+	m_coarseBuffer->setCapacityIncrements(totalCoarseVerts);
+	m_coarseBuffer->setCapacityIncrements(totalCoarseVerts);
+	m_originBuffer->setCapacityIncrements(4);
 	std::vector<VertexData> vertices;
 	vertices.reserve(totalFineVerts);
-	std::vector<IndexData2> indices;
+	std::vector<UInt2> indices;
 
 	// ------------- //
 	//  O R I G I N  //
@@ -68,10 +68,9 @@ Grid& Grid::createGrid()
 	vertices.emplace_back(VertexData({ 0.f, -maxVertexCoord, -1.f }, m_xAxisColor, 0));
 	vertices.emplace_back(VertexData({ maxVertexCoord, 0.f, -1.f }, m_yAxisColor, 0));
 	vertices.emplace_back(VertexData({ -maxVertexCoord, 0.f, -1.f }, m_yAxisColor, 0));
-	m_originVAO->push(vertices);
-	indices.emplace_back(IndexData2(0, 1));
-	indices.emplace_back(IndexData2(2, 3));
-	m_originVAO->push(indices);
+	indices.emplace_back(UInt2{ 0, 1 });
+	indices.emplace_back(UInt2{ 2, 3 });
+	m_originBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	vertices.clear();
 	indices.clear();
 
@@ -86,27 +85,26 @@ Grid& Grid::createGrid()
 		// X Positive Lines.
 		vertices.emplace_back(VertexData({ currentPosition, maxVertexCoord, -1.f }, m_coarseGridColor, 0));
 		vertices.emplace_back(VertexData({ currentPosition, -maxVertexCoord, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		// X Negative Lines.
 		vertices.emplace_back(VertexData({ -currentPosition, maxVertexCoord, -1.f }, m_coarseGridColor, 0));
 		vertices.emplace_back(VertexData({ -currentPosition, -maxVertexCoord, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		// Y Positive Lines.
 		vertices.emplace_back(VertexData({ maxVertexCoord, currentPosition, -1.f }, m_coarseGridColor, 0));
 		vertices.emplace_back(VertexData({ -maxVertexCoord, currentPosition, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		// Y Negative Lines.
 		vertices.emplace_back(VertexData({ maxVertexCoord, -currentPosition, -1.f }, m_coarseGridColor, 0));
 		vertices.emplace_back(VertexData({ -maxVertexCoord, -currentPosition, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		currentPosition += m_coarseIncrementSize;
 	}
-	m_coarseVAO->push(vertices);
-	m_coarseVAO->push(indices);
+	m_coarseBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	vertices.clear();
 	indices.clear();
 
@@ -121,37 +119,36 @@ Grid& Grid::createGrid()
 		// X Positive Lines.
 		vertices.emplace_back(VertexData({ currentPosition, maxVertexCoord, -1.f }, m_fineGridColor, 0));
 		vertices.emplace_back(VertexData({ currentPosition, -maxVertexCoord, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		// X Negative Lines.
 		vertices.emplace_back(VertexData({ -currentPosition, maxVertexCoord, -1.f }, m_fineGridColor, 0));
 		vertices.emplace_back(VertexData({ -currentPosition, -maxVertexCoord, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		// Y Positive Lines.
 		vertices.emplace_back(VertexData({ maxVertexCoord, currentPosition, -1.f }, m_fineGridColor, 0));
 		vertices.emplace_back(VertexData({ -maxVertexCoord, currentPosition, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		// Y Negative Lines.
 		vertices.emplace_back(VertexData({ maxVertexCoord, -currentPosition, -1.f }, m_fineGridColor, 0));
 		vertices.emplace_back(VertexData({ -maxVertexCoord, -currentPosition, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(IndexData2(0 + vertexCount, 1 + vertexCount));
+		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
 		vertexCount += 2;
 		currentPosition += m_fineIncrementSize;
 	}
-	m_fineVAO->push(vertices);
-	m_fineVAO->push(indices);
 
+	m_fineBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	return *this;
 }
 
 Grid& Grid::destroyGrid() 
 {
 	disableHelperCircle();
-	/*m_coarseVAO->wipeAll();
-	m_fineVAO->wipeAll();
-	m_originVAO->wipeAll();*/
+	/*m_coarseBuffer->wipeAll();
+	m_fineBuffer->wipeAll();
+	m_originBuffer->wipeAll();*/
 	return *this;
 }
 

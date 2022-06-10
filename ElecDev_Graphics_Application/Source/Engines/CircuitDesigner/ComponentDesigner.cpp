@@ -243,7 +243,7 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	}*/
 	else if (m_activeLine) 
 	{
-		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIdx(coords);
+		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
