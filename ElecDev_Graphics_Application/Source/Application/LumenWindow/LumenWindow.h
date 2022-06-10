@@ -86,8 +86,11 @@ public:
 	// Removes from the existing flags.
 	void removeImGuiWindowFlags(int flags);
 
-	// Checks if the layer is hovered.
+	// Checks if the window is hovered.
 	virtual bool isHovered() const;
+
+	// Checks if the window is focused by imgui.
+	virtual bool isFocused() const;
 
 	// Get the pointer to the imgui window.
 	// Curently this has to be called every frame, since the
