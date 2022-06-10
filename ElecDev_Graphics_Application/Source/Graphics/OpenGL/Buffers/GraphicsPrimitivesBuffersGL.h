@@ -127,7 +127,7 @@ public:
 		int index = m_indexData.push(ptr, size);
 		if (!offset) return index;
 		// Offset the incides.
-		for (int i = index; i < size; i++) m_indexData[i] += offset;
+		for (int i = index; i < index + size; i++) m_indexData[i] += offset;
 		return index;
 	}
 
