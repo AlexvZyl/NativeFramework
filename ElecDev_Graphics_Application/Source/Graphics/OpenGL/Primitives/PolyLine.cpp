@@ -37,6 +37,7 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, GraphicsTrianglesBuffer<Vert
 			});
 		resultVec.push_back(temp);
 	}*/
+
 	m_rounded = rounded;
 	if (!m_rounded) et = ClipperLib::etOpenButt;
 	update();
@@ -65,22 +66,23 @@ void PolyLine::update()
 		resultVec.push_back(temp);
 	}
 
-	m_VAO->popPrimitive(this);
-	std::vector<unsigned> indices = mapbox::earcut<unsigned>(resultVec);
+	// Clear current data.
+	removeFromGraphicsBuffer();
+
+	auto indices = mapbox::earcut<unsigned>(resultVec);
 	m_indexCount = indices.size();
 
 	std::vector<VertexData> vertexVector;
-	for (auto& path : resultVec) {
-		for (auto& vertex : path)
-			vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
+	for (auto& path : resultVec) 
+	{
+		for (auto& vertex : path) vertexVector.emplace_back(vertex, m_colour, m_entityID);
 	}
 
 	m_vertexCount = vertexVector.size();
-	m_VAO->pushPrimitive(this, vertexVector, indices);
-	if (outlined) 
-	{
-		enableOutline();
-	}
+
+	// Push new data.
+	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size());
+	if (outlined) enableOutline();
 }
 
 void PolyLine::pushVertex(const glm::vec3& vertex)
@@ -184,10 +186,10 @@ void PolyLine::translateTo(const glm::vec2& position)
 	translate(position - glm::vec2(m_trackedCenter));
 }
 
-void PolyLine::enableOutline()
+void PolyLine::enableOutline(float value)
 {
 	outlined = true;
-	Polygon2D::enableOutline();
+	Polygon2D::enableOutline(value);
 }
 
 void PolyLine::disableOutline()
@@ -196,13 +198,15 @@ void PolyLine::disableOutline()
 	Polygon2D::disableOutline();
 }
 
-std::tuple<unsigned, float> PolyLine::getNearestVertexIdx(const glm::vec2& position)
+std::tuple<unsigned, float> PolyLine::getNearestVertexIndex(const glm::vec2& position)
 {
 	unsigned i = 0;
 	unsigned idx = 0;
 	float min = INFINITY;
-	for (glm::vec2 vert : m_vertices) {
-		if (glm::length(vert - position) < min) {
+	for (glm::vec2 vert : m_vertices) 
+	{
+		if (glm::length(vert - position) < min) 
+		{
 			idx = i;
 			min = glm::length(vert - position);
 		}

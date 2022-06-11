@@ -128,7 +128,7 @@ void Scene::create2DBackground()
 	
 	// Create the VAO.
 	m_backgroundBuffer = std::make_unique<GraphicsTrianglesBuffer<VertexData>>();
-	m_backgroundBuffer->setCapacityIncrements(4);
+	m_backgroundBuffer->setCapacityIncrements(2);
 
 	// Vertices.
 	VertexData vertices[4] = {
@@ -139,7 +139,7 @@ void Scene::create2DBackground()
 	};
 
 	// Indices.
-	UInd3 indices[2] = {
+	const UInt3 indices[2] = {
 		{ 0, 1, 2 },
 		{ 2, 3, 0 }
 	};

@@ -528,7 +528,7 @@ protected:
 		return true;
 	}
 
-    // Memoory.
+    // Memory.
 	inline int* getSlotDataPtr(int slotIndex) 							{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an int pointer to the slot data.
 	inline const int* getSlotDataPtr(int slotIndex) const 				{ return reinterpret_cast<int*>(m_data + slotIndex); }					// Get an const int pointer to the slot data.
 	inline T* getSlotElementPtr(int slotIndex) 							{ return m_data + slotIndex; }											// Get a pointer to the slot as an element.

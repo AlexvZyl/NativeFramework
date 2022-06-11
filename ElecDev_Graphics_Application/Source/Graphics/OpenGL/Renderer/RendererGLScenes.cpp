@@ -115,7 +115,7 @@ void Renderer::backgroundPass(Scene* scene)
 	// Draw background.
 	s_shaders["BackgroundShader"]->bind();
 	Renderer::setDepthFunc(GL_ALWAYS);
-	Renderer::drawBufferIndexed(scene->m_backgroundBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_backgroundBuffer.get());
 	Renderer::setDepthFunc(GL_LESS);
 }
 
@@ -136,9 +136,9 @@ void Renderer::gridPass(Scene* scene)
 
 	// Draw grid.	
 	Renderer::setDepthFunc(GL_ALWAYS);
-	Renderer::drawBufferIndexed(grid.m_fineVAO.get());
-	Renderer::drawBufferIndexed(grid.m_coarseVAO.get());
-	Renderer::drawBufferIndexed(grid.m_originVAO.get());
+	Renderer::drawBufferIndexed(*grid.m_fineBuffer.get());
+	Renderer::drawBufferIndexed(*grid.m_coarseBuffer.get());
+	Renderer::drawBufferIndexed(*grid.m_originBuffer.get());
 	Renderer::setDepthFunc(GL_LESS);
 }
 
@@ -192,21 +192,21 @@ void Renderer::geometryPass2D(Scene* scene)
 	shader = s_shaders["BasicShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_linesBuffer.get());
-	Renderer::drawBufferIndexed(scene->m_trianglesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_linesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_trianglesBuffer.get());
 
 	// Draw Circles.
 	shader = s_shaders["CircleShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_circlesBuffer.get());
 
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
-	Renderer::drawBufferIndexed(scene->m_texturedTrianglesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_texturedTrianglesBuffer.get());
 }
 
 void Renderer::objectOutliningPass2D(Scene* scene) 
@@ -233,21 +233,21 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	shader = s_shaders["OutlineShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_linesBuffer.get());
-	Renderer::drawBufferIndexed(scene->m_trianglesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_linesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_trianglesBuffer.get());
 
 	// Draw Circles.
 	shader = s_shaders["OutlineShaderCircle"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_circlesBuffer.get());
 
 	// Draw textured primitives.
 	shader = s_shaders["OutlineShaderTextures"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
-	Renderer::drawBufferIndexed(scene->m_texturedTrianglesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_texturedTrianglesBuffer.get());
 
 	// Render outline with post processing.
 	Renderer::setDepthFunc(GL_ALWAYS);
@@ -299,21 +299,21 @@ void Renderer::geometryPass3D(Scene* scene)
 	shader = s_shaders["BasicShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_linesBuffer.get());
-	Renderer::drawBufferIndexed(scene->m_trianglesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_linesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_trianglesBuffer.get());
 
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
-	Renderer::drawBufferIndexed(scene->m_texturedTrianglesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_texturedTrianglesBuffer.get());
 
 	// Draw Circles.
 	shader = s_shaders["CircleShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(scene->m_circlesBuffer.get());
+	Renderer::drawBufferIndexed(*scene->m_circlesBuffer.get());
 }
 
 //==============================================================================================================================================//

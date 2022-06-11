@@ -23,7 +23,7 @@
 Text::Text(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, 
 		   GraphicsTrianglesBuffer<VertexDataTextured>* gtb, Font* font, Entity* parent,
 		   const std::string& horizontalAlignment, const std::string& verticalAlignment)
-	: Primitive<VertexDataTextured>(parent)
+	: Primitive<GraphicsTrianglesBuffer<VertexDataTextured>>(parent)
 {
 	// ---------- //
 	// S E T U P  //

@@ -2,10 +2,9 @@
 
 #include "Utilities/Memory/FreeList.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
+#include "OpenGL/Primitives/IPrimitive.h"
 #include "Lumen/Lumen.h"
 #include "imgui/imgui.h"
-
-class IPrimitive;
 
 struct Int2 
 {
@@ -293,6 +292,16 @@ public:
 		}
 		// All primitives have been synced.
 		m_primitivesToSync.resize(0);
+	}
+
+	// Update the indices with the new vector.
+	// Returns the new position in the freelist.
+	inline int updateIndices(int indexPosition, int indexCount, int offset, IndexType* newIndices, int newIndexCount)
+	{
+		// Remove original data.
+		eraseIndices(indexPosition, indexCount);
+		// Push new data.
+		return push(newIndices, newIndexCount, offset);
 	}
 
 private:

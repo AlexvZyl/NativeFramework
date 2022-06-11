@@ -622,6 +622,7 @@
     <ClInclude Include="Source\Utilities\Memory\FreeListBase.h" />
     <ClInclude Include="Source\Utilities\Memory\SEFreeList.h" />
     <ClInclude Include="Source\Utilities\Assert\Assert.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Primitives\IPrimitive.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\GLFW\Libraries\glfw3.lib">

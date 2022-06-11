@@ -46,7 +46,7 @@ public:
 	virtual void translateTo(const glm::vec3& position) override;
 	//Translates the entity in the XY plane, keeping the same Z value.
 	virtual void translateTo(const glm::vec2& position) override;
-	virtual void enableOutline() override;
+	virtual void enableOutline(float value = 1.f) override;
 	virtual void disableOutline() override;
 
 	virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) override;

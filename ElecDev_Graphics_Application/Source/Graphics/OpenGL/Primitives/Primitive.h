@@ -9,48 +9,15 @@ for a VAO to be able to render the entity to the screen.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include <vector>
-#include <memory>
-#include "glm/glm.hpp"
-#include "Graphics/Entities/Entity.h"
-#include "Utilities/Assert/Assert.h"
-#include "glm/gtx/transform.hpp"
+#include "OpenGL/Primitives/IPrimitive.h"
 #include "OpenGL/Primitives/Vertex.h"
 #include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
+#include "Utilities/Assert/Assert.h"
 
-//=============================================================================================================================================//
-//  Primitive Pointer.																														   //
-//=============================================================================================================================================//
+#include "glm/gtx/transform.hpp"
 
-class IPrimitive : public Entity
-{
-public:
-
-	// Data.
-	unsigned m_vertexCount = 0;						// Counts the amount of vertices.
-	unsigned m_indexCount = 0;						// Counts the amount of indices.
-	unsigned m_vertexBufferPos = 0;					// The start position of the primitive vertices in the GPB.
-	unsigned m_indexBufferPos = 0;					// The start position of the primitive indices in the GPB.
-	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the primitive.
-	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the primitive.
-	bool m_queuedForSync = false;					// Is the primitive going to be synced on the next draw call.
-	bool m_outlineEnabled = false;					// Does the primitive has its outline enabled.
-	float m_outlineValue = 0.f;						// The alpha value (or bloom intensity?) of the outline.
-
-	// API.	
-	// Not quite sure if we need this.
-	inline virtual void setColor(const glm::vec4& color) = 0;
-	inline virtual void setEntityID(unsigned int eID) = 0;
-	inline virtual void setLayer(float layer) = 0;
-
-	// Destructor.
-	virtual ~IPrimitive() = default;
-
-protected:
-
-	// Constructor.
-	IPrimitive(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) { }
-};
+#include <vector>
+#include <memory>
 
 //=============================================================================================================================================//
 //  Primitive Class.																														   //
@@ -59,6 +26,7 @@ protected:
 template<typename BufferType>
 class Primitive: public IPrimitive
 {
+protected:
 
 	// Template types.
 	typedef Primitive<BufferType> This;
@@ -308,10 +276,10 @@ public:
 
 	// Construct the vertices and pass them to the GraphicsBuffer.
 	// Do not keep a local copy.
-	inline virtual void constructVerticesOnGPU() = 0;
+	inline virtual void constructVerticesOnGPU() { };
 
 	// Construct the vertices on the CPU without passing them to the GPU.
-	inline virtual void constructVerticesOnCPU() = 0;
+	inline virtual void constructVerticesOnCPU() { };
 
 	// Set the GPU context that the primitive renders to.
 	inline virtual void setGraphicsBuffer(BufferType* buffer) { m_graphicsBuffer = buffer; }
@@ -326,18 +294,20 @@ public:
 		m_onGPU = false;
 		m_indexBufferPos = NULL;
 		m_vertexBufferPos = NULL;
+		m_queuedForSync = false;
 	}
 
 	// Push the vertex and index data to the graphics buffer.
 	// Also updates the required metadata.
-	inline void pushToGraphicsBuffer(VertexType* vertices, int vertexCount, IndexType* indices, int indexCount) 
+	inline void pushToGraphicsBuffer(const VertexType* vertices, int vertexCount, const IndexType* indices, int indexCount) 
 	{
 		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
 
 		auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertices, vertexCount, indices, indexCount);
 		m_onGPU = true;
 		m_vertexCount = vertexCount;
-		m_indexCount  indexCount;
+		m_indexCount = indexCount;
+		m_queuedForSync = false;
 	}
 
 	// Move the vertex & index data from the Graphics Buffer.
@@ -353,18 +323,18 @@ public:
 		m_vertexDataCPU.insert(
 			m_vertexDataCPU.end(), 
 			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos,
-			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos + m_vertexCount,
+			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos + m_vertexCount
 		);
 
 		// Copy the indices.
 		m_indexDataCPU.insert(
 			m_indexDataCPU().end(),
 			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos,
-			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos + m_indexCount,
-		)
+			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos + m_indexCount
+		);
 
 		// Offset the indices to original values.
-		if(m_vertexBufferPos) for (auto& ind : m_indexDataCPU) ind -= m_vertexBufferPos;
+		if (m_vertexBufferPos) for (auto& ind : m_indexDataCPU) ind -= m_vertexBufferPos;
 
 		removeFromGraphicsBuffer();
 	}
@@ -394,6 +364,13 @@ public:
 		m_vertexDataCPU.shrink_to_fit();
 		m_indexDataCPU.clear();
 		m_indexDataCPU.shrink_to_fit();
+	}
+
+	// Update the indices with a new array.
+	inline void updateIndices(IndexType* indices, int indexCount) 
+	{
+		m_indexBufferPos = getGraphicsBuffer().updateIndices(m_indexBufferPos, m_indexCount, m_vertexBufferPos, indices, indexCount);
+		m_indexCount = indexCount;
 	}
 
 protected:

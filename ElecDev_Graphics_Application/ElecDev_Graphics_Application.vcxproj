@@ -644,6 +644,7 @@
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\GraphicsPrimitivesBuffersGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Grid.h" />
+    <ClInclude Include="Source\Graphics\OpenGL\Primitives\IPrimitive.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\PolyLine.h" />
     <ClInclude Include="Source\Graphics\Renderer.h" />
     <ClInclude Include="Source\GUI\BackgroundColorEditor\BackgroundColorEditor.h" />
