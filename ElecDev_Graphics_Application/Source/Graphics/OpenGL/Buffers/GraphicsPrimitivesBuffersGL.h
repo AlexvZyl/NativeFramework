@@ -119,8 +119,9 @@ public:
 	{
 		// CPU.
 		int index = m_vertexData.push(ptr, size);
+		if (queryVerticesResize()) return index;
 
-		// GPU.
+		// If no resize, manually load data.
 		// TODO: This can be reduced to one call.
 		VertexBufferObject& vbo = getVAO().getVBO();
 		for (int i = index; i < index + size; i++)
@@ -128,7 +129,6 @@ public:
 			vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
 			vbo.bufferSubData(i * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
 		}
-
 		return index;
 	}
 
@@ -140,10 +140,10 @@ public:
 		int index = m_indexData.push(ptr, size);
 		// Offset the incides.
 		if (offset) for (int i = index; i < index + size; i++) m_indexData[i] += offset;
+		if (queryIndicesResize()) return index;
 		
-		// GPU.
+		// If no resize, manually load data.
 		getVAO().getIBO().namedBufferSubData(index * sizeof(IndexType), size * sizeof(IndexType), &m_indexData[index]);
-
 		return index;
 	}
 
@@ -187,7 +187,6 @@ public:
 	// Do necessary updates and return if should be drawn.
 	inline virtual bool onDrawCall() override
 	{
-		checkResize();
 		if (!m_indexData.count())      return false; 
 		if (!m_vertexData.count())     return false;
 		if (m_primitivesToSync.size()) syncPrimitives();
@@ -219,19 +218,34 @@ public:
 	typedef IndexContainer<IndexType> t_indexContainer;
 
 	// Check if the buffers have to resize.
-	inline void checkResize()
+	inline bool queryResize()
+	{
+		return queryVerticesResize() || queryIndicesResize();
+	}
+
+	// Check if the indices memory has to resize.
+	inline bool queryIndicesResize() 
 	{
 		if (m_VAO.getIBO().capacity() != m_indexData.capacity())
 		{
-			resizeIBO(); 
+			resizeIBO();
+			return true;
 		}
+		return false;
+	}
+
+	// Check if the vertices memory has to resize.
+	inline bool queryVerticesResize() 
+	{
 		if (m_VAO.getVBO().capacity() != m_vertexData.capacity())
 		{
 			resizeVBO();
 			// If the VBO was resized, the vertices were reloaded and
 			// there is no need to sync the remaining primitives.
 			m_primitivesToSync.resize(0);
+			return true;
 		}
+		return false;
 	}
 
 	// Resize the GPU vertex buffer.

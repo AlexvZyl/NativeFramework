@@ -12,15 +12,8 @@
 
 int main(int, char**)
 {
-    // Initialisation.
     Application application;
-    Renderer::initialise();
-
-    // Main loop.
     application.run();
-
-    // Cleanup.
-    Renderer::shutdown();
     return 0;
 }
 

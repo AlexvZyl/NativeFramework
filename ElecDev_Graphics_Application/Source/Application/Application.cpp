@@ -39,6 +39,9 @@ Application::Application()
 	// Create GLFW window.
 	m_glfwWindow = Application::glfwInitWindow();
 
+	// Init renderer.
+	Renderer::initialise();
+
 	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
@@ -79,6 +82,9 @@ Application::~Application()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+
+	// Shutdown renderer.
+	Renderer::shutdown();
 
 	// GLFW cleanup.
 	glfwDestroyWindow(getGLFWWindow());
