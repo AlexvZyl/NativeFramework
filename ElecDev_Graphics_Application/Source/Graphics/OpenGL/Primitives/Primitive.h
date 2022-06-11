@@ -33,11 +33,12 @@ public:
 	unsigned m_indexBufferPos = 0;					// The start position of the primitive indices in the GPB.
 	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the primitive.
 	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the primitive.
-	bool m_queuedForSync = false;
-	bool m_outlineEnabled = false;
-	float m_outlineValue = 0.f;
+	bool m_queuedForSync = false;					// Is the primitive going to be synced on the next draw call.
+	bool m_outlineEnabled = false;					// Does the primitive has its outline enabled.
+	float m_outlineValue = 0.f;						// The alpha value (or bloom intensity?) of the outline.
 
 	// API.	
+	// Not quite sure if we need this.
 	inline virtual void setColor(const glm::vec4& color) = 0;
 	inline virtual void setEntityID(unsigned int eID) = 0;
 	inline virtual void setLayer(float layer) = 0;
@@ -58,6 +59,8 @@ protected:
 template<typename BufferType>
 class Primitive: public IPrimitive
 {
+
+	// Template types.
 	typedef Primitive<BufferType> This;
 	typedef BufferType::t_vertexType VertexType;
 	typedef BufferType::t_indexType IndexType;
@@ -68,7 +71,10 @@ public:
 	inline Primitive(Entity* parent = nullptr) : IPrimitive(parent) { }
 
 	// Destructor.
-	inline virtual ~Primitive() { if (m_onGPU) removeFromGraphicsBuffer(); }
+	inline virtual ~Primitive() 
+	{ 
+		if (m_onGPU) removeFromGraphicsBuffer(); 
+	}
 
 	virtual void translate(const glm::vec3& translation) 
 	{
@@ -86,12 +92,7 @@ public:
 
 	virtual void translateTo(const glm::vec3& position) 
 	{
-		glm::vec3 translation = position - m_trackedCenter;
-		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.position += translation;
-
-		m_trackedCenter = position;
-		syncWithGPU();
+		This::translate(position - m_trackedCenter);
 	}
 
 	virtual void translateTo(const glm::vec2& position) 
@@ -135,13 +136,14 @@ public:
 		syncWithGPU();
 	}
 
-	virtual void enableOutline() 
+	virtual void enableOutline(float value = 1.f) 
 	{
 		if (m_outlineEnabled) return;
 		m_outlineEnabled = true;
+		m_outlineValue = value;
 
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.outline = 1.0f;
+			getVertex(i).data.outline = value;
 
 		syncWithGPU();
 	}
@@ -150,6 +152,7 @@ public:
 	{
 		if (!m_outlineEnabled) return;
 		m_outlineEnabled = false;
+		m_outlineValue = 0.f;
 
 		for (int i = 0; i < m_vertexCount; i++)
 			getVertex(i).data.outline = 0.f;
@@ -162,7 +165,7 @@ public:
 	// ------------- //
 
 	// Get the vertex belonging to this primitive (based on local index).
-	inline virtual VertexType& getVertex(int index) 
+	inline VertexType& getVertex(int index) 
 	{
 		LUMEN_DEBUG_ASSERT(index > 0 && index < m_vertexCount, "Indexing out of range.");
 		return getGraphicsBuffer().getVertex(m_vertexBufferPos + index);
@@ -176,7 +179,7 @@ public:
 
 	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position)
 	{
-		This::translateVertexTo(vertex, { position.x, position.y, vertex->data.position.z });
+		This::translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
 	}
 
 	inline virtual void translateVertex(VertexType* vertex, const glm::vec3 translation) 
@@ -187,7 +190,7 @@ public:
 
 	inline virtual void translateVertex(VertexType* vertex, const glm::vec2 translation) 
 	{
-		This::translateVertex(vertex, { translation.x, translation.y, 0.f });
+		This::translateVertex(vertex, glm::vec3{ translation, 0.f });
 	}
 
 	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation)
@@ -197,7 +200,7 @@ public:
 
 	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation)
 	{
-		This::translateVertexAtIndex(index, { translation.x, translation.y, 0.f });
+		This::translateVertexAtIndex(index, glm::vec3{ translation, 0.f });
 	}
 
 	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
@@ -207,7 +210,7 @@ public:
 
 	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
 	{
-		This::translateVertexAtIndexTo(index, { position.x, position.y, 0.f });
+		This::translateVertexAtIndexTo(index, glm::vec3{ position, 0.f });
 	}
 
 	inline virtual void setVertexAtIndexColor(unsigned index, const glm::vec4& color)
@@ -281,7 +284,7 @@ public:
 		syncWithGPU();
 	}
 
-	virtual void setEntityID(unsigned int eID) 
+	virtual void setEntityID(unsigned eID) 
 	{
 		for (int i = 0; i < m_vertexCount; i++)
 			getVertex(i).entityID = eID;
@@ -307,8 +310,8 @@ public:
 	// Do not keep a local copy.
 	inline virtual void constructVerticesOnGPU() = 0;
 
-	// Construct the vertices locally.
-	inline virtual void constructVerticesLocally() = 0;
+	// Construct the vertices on the CPU without passing them to the GPU.
+	inline virtual void constructVerticesOnCPU() = 0;
 
 	// Set the GPU context that the primitive renders to.
 	inline virtual void setGraphicsBuffer(BufferType* buffer) { m_graphicsBuffer = buffer; }
@@ -317,29 +320,62 @@ public:
 	inline void removeFromGraphicsBuffer() 
 	{
 		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
-		m_onGPU = false;
 
 		// Remove from GPU.
 		getGraphicsBuffer().erase(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
-		// Reset metadata.
-		m_vertexBufferPos = NULL;
+		m_onGPU = false;
 		m_indexBufferPos = NULL;
-		m_vertexCount = 0;
-		m_indexCount = 0;
+		m_vertexBufferPos = NULL;
+	}
+
+	// Push the vertex and index data to the graphics buffer.
+	// Also updates the required metadata.
+	inline void pushToGraphicsBuffer(VertexType* vertices, int vertexCount, IndexType* indices, int indexCount) 
+	{
+		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+
+		auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertices, vertexCount, indices, indexCount);
+		m_onGPU = true;
+		m_vertexCount = vertexCount;
+		m_indexCount  indexCount;
 	}
 
 	// Move the vertex & index data from the Graphics Buffer.
-	inline void moveFromGrapicsBuffer() 
+	inline void moveFromGraphicsBuffer() 
 	{
 		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
-		m_onGPU = false;
+
+		// Prepare memory.
+		m_vertexDataCPU.reserve(m_vertexCount);
+		m_indexDataCPU.reserve(m_indexCount);
+
+		// Copy vertices.
+		m_vertexDataCPU.insert(
+			m_vertexDataCPU.end(), 
+			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos,
+			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos + m_vertexCount,
+		);
+
+		// Copy the indices.
+		m_indexDataCPU.insert(
+			m_indexDataCPU().end(),
+			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos,
+			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos + m_indexCount,
+		)
+
+		// Offset the indices to original values.
+		if(m_vertexBufferPos) for (auto& ind : m_indexDataCPU) ind -= m_vertexBufferPos;
+
+		removeFromGraphicsBuffer();
 	}
 
 	// Move the vertex & index data to the Graphics buffer.
 	inline void moveToGraphicsBuffer() 
 	{
 		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
-		m_onGPU = true;
+
+		pushToGraphicsBuffer(m_vertexDataCPU.data(), m_vertexDataCPU.size(), m_indexDataCPU.data(), m_indexDataCPU.size());
+		clearCPUData();
 	}
 
 	// Notify the GPU that the data has to be updated.
@@ -352,16 +388,12 @@ public:
 	}
 
 	// Clear the data on the CPU.
-	inline void clearLocalData() 
+	inline void clearCPUData() 
 	{
-		// This will not break anything, but there is a fault in the logic.
-		LUMEN_DEBUG_ASSERT(!m_onGPU, "The data is not on the CPU, but on the GPU.");
-
-		// Clear the CPU data.
-		m_localVertexData.clear();
-		m_localVertexData.shrink_to_fit();
-		m_localIndexData.clear();
-		m_localIndexData.shrink_to_fit();
+		m_vertexDataCPU.clear();
+		m_vertexDataCPU.shrink_to_fit();
+		m_indexDataCPU.clear();
+		m_indexDataCPU.shrink_to_fit();
 	}
 
 protected:
@@ -373,8 +405,8 @@ protected:
 	// Local data.
 	// This is used when the primitive is constructed outside the context of a Graphics Buffer,
 	// of when the data has to be removed from the Graphics buffer but still has to be kept.
-	std::vector<VertexType> m_localVertexData;
-	std::vector<IndexType> m_localIndexData;
+	std::vector<VertexType> m_vertexDataCPU;
+	std::vector<IndexType> m_indexDataCPU;
 	// Is the data on the GPU?
 	bool m_onGPU = false;	
 };

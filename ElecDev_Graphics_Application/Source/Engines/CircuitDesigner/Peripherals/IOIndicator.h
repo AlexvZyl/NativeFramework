@@ -16,13 +16,11 @@ enum class PortPosition;
 class Port;
 class VertexData;
 
-class VertexArrayObject;
-
 //==============================================================================================================================================//
 //  IOIndicator Class.																															//
 //==============================================================================================================================================//
 
-class IOIndicator : public Primitive<VertexData>
+class IOIndicator : public Primitive<GraphicsTrianglesBuffer<VertexData>>
 {
 
 private:
@@ -34,7 +32,7 @@ private:
 public:
 
     // Comstructor.
-    IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData, IndexData3>* VAO, Port* parent);
+    IOIndicator(PortType type, PortPosition position, GraphicsTrianglesBuffer<VertexData>* gtb, Port* parent);
     // Set the IO type.
     void setType(PortType type, PortPosition position);
 

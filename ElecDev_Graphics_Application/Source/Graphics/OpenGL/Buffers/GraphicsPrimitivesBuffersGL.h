@@ -3,6 +3,7 @@
 #include "Utilities/Memory/FreeList.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "Lumen/Lumen.h"
+#include "imgui/imgui.h"
 
 class IPrimitive;
 
@@ -128,11 +129,13 @@ public:
 			vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
 			vbo.bufferSubData(i * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
 		}
+
+		return index;
 	}
 
 	// Push indices and return the index in memory.  Indices are copied.
 	// The offset should be the starting vertex's position in memory.
-	inline int push(IndexType* ptr, int size, int offset)
+	inline int push(const IndexType* ptr, int size, int offset)
 	{
 		// CPU.
 		int index = m_indexData.push(ptr, size);
@@ -148,7 +151,7 @@ public:
 	// Push vertices and the corresponding indices.
 	// This function handles the offsetting of indices.
 	// returns { VerticesIndex, IndicesIndex }
-	inline std::tuple<unsigned, unsigned> push(VertexType* vertexPtr, int vertexCount, IndexType* indexPtr, int indexCount)
+	inline std::tuple<unsigned, unsigned> push(const VertexType* vertexPtr, int vertexCount, const IndexType* indexPtr, int indexCount)
 	{
 		int verticesIndex = push(vertexPtr, vertexCount);
 		int indicesIndex = push(indexPtr, indexCount, verticesIndex);
@@ -185,9 +188,9 @@ public:
 	// Do necessary updates and return if should be drawn.
 	inline virtual bool onDrawCall() override
 	{
-		if (!m_indexData.count())  return false; 
-		if (!m_vertexData.count()) return false;
 		checkResize();
+		if (!m_indexData.count())      return false; 
+		if (!m_vertexData.count())     return false;
 		if (m_primitivesToSync.size()) syncPrimitives();
 		return true;
 	}

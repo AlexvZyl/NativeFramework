@@ -108,17 +108,17 @@ void Renderer::createUnitQuad()
 	s_unitQuad->setCapacityIncrements(2);
 
 	// Vertex data.
-	VertexDataTextured vertices[4] = {
-		VertexDataTextured(glm::vec3(-1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 0.f), 0.f, 0),
-		VertexDataTextured(glm::vec3(-1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 1.f), 0.f, 0),
-		VertexDataTextured(glm::vec3(1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 1.f), 0.f, 0),
-		VertexDataTextured(glm::vec3(1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 0.f), 0.f, 0)
+	const VertexDataTextured vertices[4] = {
+		{ { -1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 0.f }, 0.f, 0 },
+		{ { -1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 1.f }, 0.f, 0 },
+		{ {  1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 1.f }, 0.f, 0 },
+		{ {  1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 0.f }, 0.f, 0 }
 	};
 
 	// Index data.
-	UInd3 indices[2] = {
-		UInd3(0, 1, 2),
-		UInd3(2, 3, 0)
+	const UInt3 indices[2] = { 
+		{ 0, 1, 2 }, 
+		{ 2, 3, 0 } 
 	};
 
 	// Push data.

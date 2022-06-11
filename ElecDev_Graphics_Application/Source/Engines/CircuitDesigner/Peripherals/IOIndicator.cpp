@@ -9,7 +9,7 @@
 //  Methods.																															        //
 //==============================================================================================================================================//
 
-IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData, IndexData3>* VAO, Port* parent)
+IOIndicator::IOIndicator(PortType type, PortPosition position, GraphicsTrianglesBuffer<VertexData>* gtb, Port* parent)
 	: Primitive(parent),
 	  m_portType(type),
 	  m_portPosition(position)
@@ -17,7 +17,7 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject
 	// General setup.
 	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
 	m_colour = parent->indicatorColour;//glm::vec4(0.5f, 0.5f, 0.5f, 0.5f);
-	m_VAO = VAO;
+	setGraphicsBuffer(gtb);
 
 	// ----------------- //
 	//  V E R T I C E S  //
@@ -77,12 +77,12 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject
 	m_indexCount = indices.size();
 	translateTo(parent->centre);
 
-	m_VAO->pushPrimitive(this, vertexVector, indices);
+	auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertexVector.data(), vertexVector.size(), indices.data(), indices.size());
 }
 
 void IOIndicator::setType(PortType type, PortPosition position)
 {
-	wipeGPU();
+	removeFromGraphicsBuffer();
 
 	m_portType = type;
 	m_portPosition = position;
@@ -142,7 +142,7 @@ void IOIndicator::setType(PortType type, PortPosition position)
 		// Handle PORT_INOUT.
 	}
 	m_indexCount = indices.size();
-	m_VAO->pushPrimitive(this, vertexVector, indices);
+	auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertexVector.data(), vertexVector.size(), indices.data(), indices.size());
 }
 
 //==============================================================================================================================================//
