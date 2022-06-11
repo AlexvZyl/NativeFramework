@@ -226,7 +226,7 @@ public:
 	// Check if the indices memory has to resize.
 	inline bool queryIndicesResize() 
 	{
-		if (m_VAO.getIBO().capacity() != m_indexData.capacity())
+		if (m_VAO.getIBO().capacity() != m_indexData.allocated())
 		{
 			resizeIBO();
 			return true;
@@ -237,7 +237,7 @@ public:
 	// Check if the vertices memory has to resize.
 	inline bool queryVerticesResize() 
 	{
-		if (m_VAO.getVBO().capacity() != m_vertexData.capacity())
+		if (m_VAO.getVBO().capacity() != m_vertexData.allocated())
 		{
 			resizeVBO();
 			// If the VBO was resized, the vertices were reloaded and
@@ -251,14 +251,14 @@ public:
 	// Resize the GPU vertex buffer.
 	inline void resizeVBO() 
 	{
-		getVAO().getVBO().bufferData(m_vertexData.capacity() * VertexType::getTotalSize(), NULL);
+		getVAO().getVBO().namedBufferData(m_vertexData.allocated(), NULL);
 		reloadAllVertices();
 	}
 
 	// Resize the GPU index buffer.
 	inline void resizeIBO()
 	{
-		getVAO().getIBO().bufferData(m_indexData.capacity() * sizeof(unsigned), NULL);
+		getVAO().getIBO().namedBufferData(m_indexData.allocated(), NULL);
 		reloadAllIndices();
 	}
 
@@ -271,7 +271,7 @@ public:
 		{
 			// TODO: This can be reduced to one call.
 			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getDataSize(), (*it).getData());
-			vbo.bufferSubData(it.m_index * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), (*it).getID());
+			vbo.bufferSubData(it.m_index * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getIDSize(), (*it).getID());
 		}
 	}
 

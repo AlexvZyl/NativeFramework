@@ -146,7 +146,7 @@ Grid& Grid::createGrid()
 Grid& Grid::destroyGrid() 
 {
 	disableHelperCircle();
-	/*m_coarseBuffer->wipeAll();
+	/*m_coarseBuffer->;
 	m_fineBuffer->wipeAll();
 	m_originBuffer->wipeAll();*/
 	return *this;

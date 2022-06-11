@@ -619,7 +619,7 @@ public:
 				// Move to next memory region.
 				if(m_freeList->slotIsValid(m_nextFreeSlot))
 				{
-				 	m_index = m_freeList->getSlotSize(m_nextFreeSlot);
+				 	m_index = m_nextFreeSlot + m_freeList->getSlotSize(m_nextFreeSlot);
 				}
 				// No memory regions left.
 				else 

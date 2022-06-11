@@ -132,10 +132,10 @@ void Scene::create2DBackground()
 
 	// Vertices.
 	VertexData vertices[4] = {
-		VertexData({ 1.0f, 1.0f, 0.f   }, Renderer::backgroundColor, -1), //  Top right.
-		VertexData({ -1.0f, 1.0f, 0.f  }, Renderer::backgroundColor, -1), //  Top left.
-		VertexData({ -1.0f, -1.0f, 0.f }, Renderer::backgroundColor, -1), //  Bottom left.
-		VertexData({ 1.0f, -1.0f, 0.f  }, Renderer::backgroundColor, -1)  //  Bottom right.
+		{ { 1.0f, 1.0f, 0.f   }, Renderer::backgroundColor, (unsigned) -1 }, //  Top right.
+		{ { -1.0f, 1.0f, 0.f  }, Renderer::backgroundColor, (unsigned) -1 }, //  Top left.
+		{ { -1.0f, -1.0f, 0.f }, Renderer::backgroundColor, (unsigned) -1 }, //  Bottom left.
+		{ { 1.0f, -1.0f, 0.f  }, Renderer::backgroundColor, (unsigned) -1 }  //  Bottom right.
 	};
 
 	// Indices.

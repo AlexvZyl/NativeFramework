@@ -135,7 +135,7 @@ public:
 	// Get the vertex belonging to this primitive (based on local index).
 	inline VertexType& getVertex(int index) 
 	{
-		LUMEN_DEBUG_ASSERT(index > 0 && index < m_vertexCount, "Indexing out of range.");
+		LUMEN_DEBUG_ASSERT(index >= 0 && index < m_vertexCount, "Indexing out of range.");
 		return getGraphicsBuffer().getVertex(m_vertexBufferPos + index);
 	}
 
@@ -385,7 +385,7 @@ protected:
 	std::vector<VertexType> m_vertexDataCPU;
 	std::vector<IndexType> m_indexDataCPU;
 	// Is the data on the GPU?
-	bool m_onGPU = false;	
+	bool m_onGPU = true;	
 };
 
 //=============================================================================================================================================//
