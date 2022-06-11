@@ -206,13 +206,33 @@ void Cable::addSegment(glm::vec2 nextPoint)
 	m_polyLine->pushVertex(nextPoint);
 }
 
-void Cable::attach(Port* endPort)
+bool Cable::attach(Port* endPort)
 {
-	// Keep pointer to end port.
-	m_endPort = endPort;
-	extendSegment(m_endPort->centre);
-	setColour(m_colour);
-	endPort->attachCable(this);
+	//check input/output relationship is respected
+	if (endPort == m_startPort) return false;
+	if (endPort->m_type != m_startPort->m_type || endPort->m_type == PortType::PORT_INOUT) {
+		// Keep pointer to end port.
+		m_endPort = endPort;
+		extendSegment(m_endPort->centre);
+		setColour(m_colour);
+		endPort->attachCable(this);
+
+		// Set fromTag(s)
+		if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
+			if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
+				m_startPort->fromTag = dynamic_cast<Component2D*>(m_endPort->m_parent)->m_toTagNumber;
+				m_startPort->voltage = m_endPort->voltage;
+			}
+		}
+		if (m_startPort->m_type == PortType::PORT_OUT || m_startPort->m_type == PortType::PORT_INOUT) {
+			if (m_endPort->m_type == PortType::PORT_IN || m_endPort->m_type == PortType::PORT_INOUT) {
+				m_endPort->fromTag = dynamic_cast<Component2D*>(m_startPort->m_parent)->m_toTagNumber;
+				m_endPort->voltage = m_startPort->voltage;
+			}
+		}
+		return true;
+	}
+	return false;
 }
 
 void Cable::followPort(Port* movedPort)

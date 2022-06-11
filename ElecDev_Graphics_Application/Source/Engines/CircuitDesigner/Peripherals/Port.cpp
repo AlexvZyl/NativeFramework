@@ -245,7 +245,22 @@ void Port::setOffset(const glm::vec2& offset)
 
 void Port::attachCable(Cable* cable)
 {
-	m_cables.push_back(cable);	switch (m_type) {
+	m_cables.push_back(cable);	
+	if (cable->m_endPort) {
+		switch (cable->m_endPort->m_type) {
+		case PortType::PORT_IN:
+
+			break;
+		case PortType::PORT_OUT:
+
+			break;
+		case PortType::PORT_INOUT:
+
+			break;
+		}
+	}
+	
+	switch (m_type) {
 	case PortType::PORT_IN:
 		indicatorColour = { 0.f, 0.8f, 0.f, 1.f };
 		break;
@@ -282,6 +297,8 @@ void Port::detachCable(Cable* cable)
 			break;
 		}
 		attachmentIndicator->setColor(indicatorColour);
+		voltage = 0.f;
+		fromTag = "none";
 	}
 }
 
