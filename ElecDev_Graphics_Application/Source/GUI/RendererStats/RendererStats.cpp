@@ -305,8 +305,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_linesBuffer->reloadAllIndices();
-					scene->m_linesBuffer->reloadAllVertices();
+					scene->m_linesBuffer->reloadIndices();
+					scene->m_linesBuffer->reloadVertices();
 				}
 
 			}
@@ -367,8 +367,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_trianglesBuffer->reloadAllIndices();
-					scene->m_trianglesBuffer->reloadAllVertices();
+					scene->m_trianglesBuffer->reloadIndices();
+					scene->m_trianglesBuffer->reloadVertices();
 				}
 			}
 			ImGui::PopID();
@@ -428,8 +428,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_texturedTrianglesBuffer->reloadAllIndices();
-					scene->m_texturedTrianglesBuffer->reloadAllVertices();
+					scene->m_texturedTrianglesBuffer->reloadIndices();
+					scene->m_texturedTrianglesBuffer->reloadVertices();
 				}
 			}
 			ImGui::PopID();
@@ -489,8 +489,8 @@ void RendererStats::onImGuiRender()
 				// Sync button.
 				if (ImGui::Button("Sync With GPU"))
 				{
-					scene->m_circlesBuffer->reloadAllIndices();
-					scene->m_circlesBuffer->reloadAllVertices();
+					scene->m_circlesBuffer->reloadIndices();
+					scene->m_circlesBuffer->reloadVertices();
 				}
 			}
 			ImGui::PopID();

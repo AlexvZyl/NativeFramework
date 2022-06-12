@@ -51,7 +51,7 @@ void BackgroundColorEditor::onImGuiRender()
 				vertex.data.color[3] = color[3];
 
 			}
-			scene->m_backgroundBuffer->reloadAllVertices();
+			scene->m_backgroundBuffer->reloadVertices();
 		}
 	}
 

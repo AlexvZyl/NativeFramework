@@ -126,8 +126,8 @@ public:
 		VertexBufferObject& vbo = getVAO().getVBO();
 		for (int i = index; i < index + size; i++)
 		{
-			vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
-			vbo.bufferSubData(i * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
+			vbo.bufferSubData(i * sizeof(VertexType), VertexType::getDataSize(), getVertex(i).getData());
+			vbo.bufferSubData(i * sizeof(VertexType) + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
 		}
 		return index;
 	}
@@ -136,14 +136,10 @@ public:
 	// The offset should be the starting vertex's position in memory.
 	inline int push(const IndexType* ptr, int size, int offset)
 	{
-		// CPU.
+		// Load data to CPU and offset indices.
 		int index = m_indexData.push(ptr, size);
-		// Offset the incides.
 		if (offset) for (int i = index; i < index + size; i++) m_indexData[i] += offset;
-		if (queryIndicesResize()) return index;
-		
-		// If no resize, manually load data.
-		getVAO().getIBO().namedBufferSubData(index * sizeof(IndexType), size * sizeof(IndexType), &m_indexData[index]);
+		indicesChanged();
 		return index;
 	}
 
@@ -162,19 +158,15 @@ public:
 	{
 		// CPU.
 		m_vertexData.erase(index, size);
-
-		// GPU.
+		// Orphan the data.
 		getVAO().getVBO().namedBufferSubData(index * sizeof(VertexType), size * sizeof(VertexType), NULL);
 	}
 
 	// Erase the indices given the position and size.
 	inline void eraseIndices(int index, int size)
 	{
-		// CPU.
 		m_indexData.erase(index, size);
-
-		// GPU.
-		getVAO().getIBO().namedBufferSubData(index * sizeof(IndexType), size * sizeof(IndexType), NULL);
+		indicesChanged();
 	}
 
 	// Erase vertices and indices.
@@ -189,6 +181,7 @@ public:
 	{
 		if (!m_indexData.count())      return false; 
 		if (!m_vertexData.count())     return false;
+		if (m_indicesChanged)		   reloadIndices();
 		if (m_primitivesToSync.size()) syncPrimitives();
 		return true;
 	}
@@ -210,6 +203,7 @@ public:
 	inline int getCapacityIncrements()					{ return m_vertexData.getCapacityIncrements(); }
 	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
 	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
+	inline void indicesChanged()						{ m_indicesChanged = true; }
 
 	// Template types.
 	typedef VertexType t_vertexType;
@@ -217,53 +211,26 @@ public:
 	typedef VertexContainer<VertexType> t_vertexContainer;
 	typedef IndexContainer<IndexType> t_indexContainer;
 
-	// Check if the buffers have to resize.
-	inline bool queryResize()
-	{
-		return queryVerticesResize() || queryIndicesResize();
-	}
-
-	// Check if the indices memory has to resize.
-	inline bool queryIndicesResize() 
-	{
-		if (m_VAO.getIBO().capacity() != m_indexData.allocated())
-		{
-			resizeIBO();
-			return true;
-		}
-		return false;
-	}
-
 	// Check if the vertices memory has to resize.
 	inline bool queryVerticesResize() 
 	{
+		// Check if resize required.
 		if (m_VAO.getVBO().capacity() != m_vertexData.allocated())
 		{
-			resizeVBO();
+			// Resize the VBO and reload the data.
+			getVAO().getVBO().namedBufferData(m_vertexData.allocated(), NULL);
+			reloadVertices();
 			// If the VBO was resized, the vertices were reloaded and
 			// there is no need to sync the remaining primitives.
 			m_primitivesToSync.resize(0);
 			return true;
 		}
+		// No resize ocurred.
 		return false;
 	}
 
-	// Resize the GPU vertex buffer.
-	inline void resizeVBO() 
-	{
-		getVAO().getVBO().namedBufferData(m_vertexData.allocated(), NULL);
-		reloadAllVertices();
-	}
-
-	// Resize the GPU index buffer.
-	inline void resizeIBO()
-	{
-		getVAO().getIBO().namedBufferData(m_indexData.allocated(), NULL);
-		reloadAllIndices();
-	}
-
 	// Load all of the vertex CPU data to the GPU.
-	inline void reloadAllVertices()
+	inline void reloadVertices()
 	{
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
@@ -276,14 +243,26 @@ public:
 	}
 
 	// Load all of the index CPU data to the GPU.
-	inline void reloadAllIndices()
+	inline void reloadIndices()
 	{
 		IndexBufferObject& ibo = getVAO().getIBO();
 		ibo.bind();
+
+		// Orphan if no resize.
+		if (m_indexData.size() == ibo.capacity())  ibo.orphan();
+		// Resize.
+		else ibo.bufferData(m_indexData.size(), NULL);
+
+		// Reload index data.
+		int offset = 0;
 		for (auto it = m_indexData.begin(); it != m_indexData.end(); ++it)
 		{
-			ibo.bufferSubData(it.m_index * sizeof(IndexType), it.m_elementsInMemoryRegion * sizeof(IndexType), (*it).data());
+			ibo.bufferSubData(offset * sizeof(IndexType), it.m_elementsInMemoryRegion * sizeof(IndexType), (*it).data());
+			offset += it.m_elementsInMemoryRegion;
 		}
+
+		// Index data is now updated.
+		m_indicesChanged = false;
 	}
 
 	// Sync all of the primitives in the queue.
@@ -298,8 +277,8 @@ public:
 			// TODO: This can be reduced to one call.
 			for (int i = primitive->m_vertexBufferPos; i < primitive->m_vertexBufferPos + primitive->m_vertexCount; i++)
 			{
-				vbo.bufferSubData(i * VertexType::getTotalSize(), VertexType::getDataSize(), getVertex(i).getData());
-				vbo.bufferSubData(i * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
+				vbo.bufferSubData(i * sizeof(VertexType), VertexType::getDataSize(), getVertex(i).getData());
+				vbo.bufferSubData(i * sizeof(VertexType) + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
 			}
 			// The primitive is no longer in the queue.
 			primitive->m_queuedForSync = false;
@@ -308,13 +287,14 @@ public:
 		m_primitivesToSync.resize(0);
 	}
 
-	// Update the indices with the new vector.
+	// Update indices for existing primitive with new indices.  
+	// This is very useful for highly dynamic polygons where the vertex count is static.
 	// Returns the new position in the freelist.
 	inline int updateIndices(int indexPosition, int indexCount, int offset, IndexType* newIndices, int newIndexCount)
 	{
 		// Remove original data.
 		eraseIndices(indexPosition, indexCount);
-		// Push new data.
+		// Push new data with the original offset.
 		return push(newIndices, newIndexCount, offset);
 	}
 
@@ -329,6 +309,10 @@ private:
 	// TODO: Need a vector that does not resize and shrink every time.
 	// For now ImVector will work fine.
 	ImVector<IPrimitive*> m_primitivesToSync;
+
+	// All of the indices that are in the buffer will by drawn by the GPU, so there should be no
+	// 'invalid' data.  The requires the indices to be able to be updated regardless of resizes.
+	bool m_indicesChanged = false;
 };
 
 template <typename VertexType>

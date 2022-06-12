@@ -9,39 +9,30 @@ public:
 
 	// Constructor should do nothing.
 	BufferObject(int target);
-
 	// Destructor.
 	~BufferObject();
 
-	// Create the buffer.
-	void create();
-
-	// Delete the buffer.
-	void destroy();
-
-	// Get the VBO ID.
-	int getID();
-
-	// Bind the VBO.
+	// OpenGL API.
+	// All of the function descpritions can be found on 'docs.GL'.
 	void bind();
-
-	// Unbind the VBO.
 	void unbind();
-
-	// Set the data. 
 	void bufferData(int size, const void* data, int usage = GL_DYNAMIC_DRAW);
-
-	// Set the data by name.
 	void namedBufferData(int size, const void* data, int usage = GL_DYNAMIC_DRAW);
-
-	// Set the buffer sub data.
 	void bufferSubData(int offset, int size, const void* data);
-
-	// Set the buffer sub data by name.
 	void namedBufferSubData(int offset, int size, const void* data);
+	void clearBufferData(int internalFormat, int format, int type, const void* data);
+	void clearNamedBufferData(int internalFormat, int format, int type, const void* data);
+	void clearBufferSubData(int internalFormat, int offset, int size, int format, int type, const void* data);
+	void clearNamedBufferSubData(int internalFormat, int offset, int size, int format, int type, const void* data);
 
-	// Get the capacity in bytes.
-	int capacity();
+	// Extended OpenGL API.
+	// These are custom functions that does not exist in the official api.
+	void create();
+	void destroy();
+	void orphan();
+	inline int getID()	   { return m_rendererID; }	
+	inline int getTarget() { return m_target;     }	
+	inline int capacity()  { return m_capacity;   }	
 
 private:
 
@@ -51,6 +42,8 @@ private:
 	int m_capacity = NULL;
 	bool m_existsOnGPU = false;
 };
+
+// Instantiations.
 
 class VertexBufferObject : public BufferObject
 {

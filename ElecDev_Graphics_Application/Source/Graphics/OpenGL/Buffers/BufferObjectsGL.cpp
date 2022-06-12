@@ -21,6 +21,13 @@ void BufferObject::create()
 	bind();
 }
 
+void BufferObject::orphan() 
+{
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
+	GLCall(glInvalidateBufferData(getID()));
+}
+
 void BufferObject::destroy()
 {
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
@@ -29,28 +36,25 @@ void BufferObject::destroy()
 	m_existsOnGPU = false;
 }
 
-int BufferObject::getID()
-{
-	return m_rendererID;
-}
-
 void BufferObject::bind()
 {
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
 
-	GLCall(glBindBuffer(m_target, m_rendererID));
+	GLCall(glBindBuffer(getTarget(), m_rendererID));
 }
 
 void BufferObject::unbind()
 {
-	GLCall(glBindBuffer(m_target, 0));
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
+	GLCall(glBindBuffer(getTarget(), 0));
 }
 
 void BufferObject::bufferData(int size, const void* data, int usage)
 {
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
 
-	GLCall(glBufferData(m_target, size, data, usage));
+	GLCall(glBufferData(getTarget(), size, data, usage));
 	m_capacity = size;
 }
 
@@ -58,7 +62,7 @@ void BufferObject::namedBufferData(int size, const void* data, int usage)
 {
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
 
-	GLCall(glNamedBufferData(m_rendererID, size, data, usage));
+	GLCall(glNamedBufferData(getID(), size, data, usage));
 	m_capacity = size;
 }
 
@@ -67,7 +71,7 @@ void BufferObject::bufferSubData(int offset, int size, const void* data)
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
 	LUMEN_DEBUG_ASSERT(offset >= 0 && offset + size <= m_capacity, "Setting data out of range.");
 
-	GLCall(glBufferSubData(m_target, offset, size, data));
+	GLCall(glBufferSubData(getTarget(), offset, size, data));
 }
 
 void BufferObject::namedBufferSubData(int offset, int size, const void* data)
@@ -75,10 +79,35 @@ void BufferObject::namedBufferSubData(int offset, int size, const void* data)
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
 	LUMEN_DEBUG_ASSERT(offset >= 0 && offset + size <= m_capacity, "Setting data out of range.");
 
-	GLCall(glNamedBufferSubData(m_rendererID, offset, size, data));
+	GLCall(glNamedBufferSubData(getID(), offset, size, data));
 }
 
-int BufferObject::capacity()
+void BufferObject::clearBufferData(int internalFormat, int format, int type, const void* data)
 {
-	return m_capacity;
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
+	GLCall(glClearBufferData(getTarget(), internalFormat, format, type, data));
+}
+
+void BufferObject::clearNamedBufferData(int internalFormat, int format, int type, const void* data)
+{
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+
+	GLCall(glClearBufferData(getID(), internalFormat, format, type, data));
+}
+
+void BufferObject::clearBufferSubData(int internalFormat, int offset, int size, int format, int type, const void* data)
+{
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+	LUMEN_DEBUG_ASSERT(offset >= 0 && offset + size <= m_capacity, "Setting data out of range.");
+
+	GLCall(glClearBufferSubData(getTarget(), internalFormat, offset, size, format, type, data));
+}
+
+void BufferObject::clearNamedBufferSubData(int internalFormat, int offset, int size, int format, int type, const void* data)
+{
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
+	LUMEN_DEBUG_ASSERT(offset >= 0 && offset + size <= m_capacity, "Setting data out of range.");
+
+	GLCall(glClearNamedBufferSubData(getID(), internalFormat, offset, size, format, type, data));
 }
