@@ -104,7 +104,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 
 	// Add tags.
 	if (componentNode["Tag"].IsDefined())
-		m_toTagNumber = componentNode["ToTag"].as<std::string>();
+		m_toTagNumber = componentNode["Tag"].as<std::string>();
 	if (componentNode["From Tag"].IsDefined())
 		m_fromTagNumber = componentNode["FromTag"].as<std::string>();
 

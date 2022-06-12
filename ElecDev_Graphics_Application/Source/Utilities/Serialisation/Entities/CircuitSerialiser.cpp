@@ -46,6 +46,17 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 			emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
 			emitter << YAML::Key << "Tag" << YAML::Value << comp->m_toTagNumber;
 			emitter << YAML::Key << "From Tag" << YAML::Value << comp->m_fromTagNumber;
+			emitter << YAML::Key << "Ports" << YAML::Value;
+			emitter << YAML::BeginMap;
+				for (auto& port : comp->ports)
+				{
+					emitter << YAML::Key << port->title->m_string << YAML::Value;
+					emitter << YAML::BeginMap;
+						emitter << YAML::Key << "From Tag" << YAML::Value << port->fromTag;
+						emitter << YAML::Key << "Voltage" << YAML::Value << port->voltage;
+					emitter << YAML::EndMap;
+				}
+			emitter << YAML::EndMap;
 		emitter << YAML::EndMap;
 		index++;
 	}
