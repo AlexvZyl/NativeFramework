@@ -18,7 +18,9 @@ struct Int2
 		int _data[2] = { 0,1 };
 		int ind0, ind1;
 	};
+	// Template.
 	typedef int VarType;
+	constexpr static inline int count() { return 2; }
 };
 
 struct UInt2 
@@ -33,7 +35,9 @@ struct UInt2
 		unsigned _data[2] = { 0,1 };
 		unsigned ind0, ind1;
 	};
+	// Template.
 	typedef unsigned VarType;
+	constexpr static inline int count() { return 2; }
 };
 
 struct Int3 
@@ -48,7 +52,9 @@ struct Int3
 		int _data[3] = { 0,1,2 };
 		int ind0, ind1, ind2;
 	};
+	// Template.
 	typedef int VarType;
+	constexpr static inline int count() { return 3; }
 };
 
 struct UInt3 
@@ -63,7 +69,9 @@ struct UInt3
 		unsigned ind0, ind1, ind2;
 		unsigned _data[3] = { 0,1,2 };
 	};
+	// Template.
 	typedef unsigned VarType;
+	constexpr static inline int count() { return 3; }
 };
 
 class IGraphicsPrimitivesBuffer 
@@ -73,8 +81,8 @@ public:
 	// Functions that the renderer has to be able to access universally.
 	inline virtual bool onDrawCall() = 0;
 	inline virtual VertexArrayObject& getVAO() = 0;
-	inline virtual int getIndexCount() = 0;
-	inline virtual int getVertexCount() = 0;
+	inline virtual int getIndexCount() const = 0;
+	inline virtual int getVertexCount() const = 0;
 
 protected:
 
@@ -119,16 +127,11 @@ public:
 	{
 		// CPU.
 		int index = m_vertexData.push(ptr, size);
-		if (queryVerticesResize()) return index;
 
-		// If no resize, manually load data.
-		// TODO: This can be reduced to one call.
-		VertexBufferObject& vbo = getVAO().getVBO();
-		for (int i = index; i < index + size; i++)
-		{
-			vbo.bufferSubData(i * sizeof(VertexType), VertexType::getDataSize(), getVertex(i).getData());
-			vbo.bufferSubData(i * sizeof(VertexType) + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
-		}
+		// GPU. If there is not resize the data should be loaded manually.
+		if (!queryVerticesResize());
+			getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), getVertex(index).getData());
+
 		return index;
 	}
 
@@ -158,8 +161,8 @@ public:
 	{
 		// CPU.
 		m_vertexData.erase(index, size);
-		// Orphan the data.
-		getVAO().getVBO().namedBufferSubData(index * sizeof(VertexType), size * sizeof(VertexType), NULL);
+		// Orphan the data.  Is this necessary?
+		getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), NULL);
 	}
 
 	// Erase the indices given the position and size.
@@ -179,10 +182,10 @@ public:
 	// Do necessary updates and return if should be drawn.
 	inline virtual bool onDrawCall() override
 	{
-		if (!m_indexData.count())      return false; 
-		if (!m_vertexData.count())     return false;
 		if (m_indicesChanged)		   reloadIndices();
 		if (m_primitivesToSync.size()) syncPrimitives();
+		if (!m_indexData.count())      return false; 
+		if (!m_vertexData.count())     return false;
 		return true;
 	}
 
@@ -197,10 +200,10 @@ public:
 	inline VertexContainer<VertexType>& getVertexData() { return m_vertexData; }
 	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
 	inline VertexType& getVertex(int index)				{ return m_vertexData[index]; }
-	inline virtual int getIndexCount() override			{ return m_indexData.count(); }
-	inline virtual int getVertexCount() override		{ return m_vertexData.count(); }
-	inline float getResizeThreshold()					{ return m_vertexData.getResizeThreshold(); }
-	inline int getCapacityIncrements()					{ return m_vertexData.getCapacityIncrements(); }
+	inline virtual int getIndexCount() const override	{ return m_indexData.count() * IndexType::count(); }
+	inline virtual int getVertexCount() const override	{ return m_vertexData.count(); }
+	inline float getResizeThreshold() const				{ return m_vertexData.getResizeThreshold(); }
+	inline int getCapacityIncrements() const			{ return m_vertexData.getCapacityIncrements(); }
 	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
 	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
 	inline void indicesChanged()						{ m_indicesChanged = true; }
@@ -235,11 +238,7 @@ public:
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
 		for (auto it = m_vertexData.begin(); it != m_vertexData.end(); ++it)
-		{
-			// TODO: This can be reduced to one call.
-			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getDataSize(), (*it).getData());
-			vbo.bufferSubData(it.m_index * VertexType::getTotalSize() + VertexType::getIDOffset(), VertexType::getIDSize(), (*it).getID());
-		}
+			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getTotalSize(), (*it).getData());
 	}
 
 	// Load all of the index CPU data to the GPU.
@@ -249,7 +248,7 @@ public:
 		ibo.bind();
 
 		// Orphan if no resize.
-		if (m_indexData.size() == ibo.capacity())  ibo.orphan();
+		if (m_indexData.size() == ibo.capacity()) ibo.orphan();
 		// Resize.
 		else ibo.bufferData(m_indexData.size(), NULL);
 
@@ -270,17 +269,10 @@ public:
 	{	
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
-		// Iterate primitives.
+		// Update primitives data.
 		for (auto primitive : m_primitivesToSync)
 		{
-			// Iterate vertices contained by the primtive.
-			// TODO: This can be reduced to one call.
-			for (int i = primitive->m_vertexBufferPos; i < primitive->m_vertexBufferPos + primitive->m_vertexCount; i++)
-			{
-				vbo.bufferSubData(i * sizeof(VertexType), VertexType::getDataSize(), getVertex(i).getData());
-				vbo.bufferSubData(i * sizeof(VertexType) + VertexType::getIDOffset(), VertexType::getDataSize(), getVertex(i).getID());
-			}
-			// The primitive is no longer in the queue.
+			vbo.bufferSubData(primitive->m_vertexBufferPos * VertexType::getTotalSize(), VertexType::getTotalSize() * primitive->m_vertexCount, getVertex(primitive->m_vertexBufferPos).getData());
 			primitive->m_queuedForSync = false;
 		}
 		// All primitives have been synced.
