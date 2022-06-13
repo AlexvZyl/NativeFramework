@@ -77,9 +77,9 @@ Circuit::Circuit(const YAML::Node& node)
 
 		// Add tags.
 		if (componentNode["Tag"].IsDefined())
-			currentComponent->m_toTagNumber = componentNode["ToTag"].as<std::string>();
+			currentComponent->m_toTagNumber = componentNode["Tag"].as<std::string>();
 		if (componentNode["From Tag"].IsDefined())
-			currentComponent->m_fromTagNumber = componentNode["FromTag"].as<std::string>();
+			currentComponent->m_fromTagNumber = componentNode["From Tag"].as<std::string>();
 	}
 
 	// Load cables.

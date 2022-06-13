@@ -72,6 +72,9 @@ public:
 
 	std::vector<Cable*> m_cables;
 
+	std::string* fromTag = nullptr;
+	float voltage = 0.f;
+
 	// Constructor.
 	Port(const glm::vec2& pos, PortType type, Component2D* parent, const std::string& label = "default");
 	Port(const YAML::Node& node, Component2D* parent = nullptr);

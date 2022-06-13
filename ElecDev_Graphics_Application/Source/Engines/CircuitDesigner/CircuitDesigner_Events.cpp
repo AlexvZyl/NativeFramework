@@ -77,18 +77,19 @@ void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 
 			if (clickedPort)
 			{
-				// Only add the cable if the end port is different to the start port.
-				if (clickedPort != m_activeCable->m_startPort)
-				{
-					m_activeCable->attach(clickedPort);
+				//attach if port is valid
+				if (m_activeCable->attach(clickedPort)) {
 					m_circuit->m_cables.push_back(m_activeCable);
-				}
-				m_activeCable->disableOutline();
-				m_activeCable = nullptr;
-				m_activeComponent->disableOutline();
-				m_activeComponent = nullptr;
+					m_activeCable->disableOutline();
+					m_activeCable = nullptr;
+					m_activeComponent->disableOutline();
+					m_activeComponent = nullptr;
 
-				designerState = ENTITY_SELECT;
+					designerState = ENTITY_SELECT;
+				}
+				else {
+					Lumen::getApp().pushNotification(NotificationType::Info, 1000, "Check input/output relationships.", "Invalid Port Combination");
+				}
 			}
 			else
 			{
