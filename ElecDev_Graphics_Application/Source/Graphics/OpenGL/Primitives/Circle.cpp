@@ -40,7 +40,7 @@ Circle::Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gpb, const glm::vec3& 
 	m_indexCount = 2;
 
 	// Add to VAO.
-	auto [ m_vertexBufferPos, m_indexBufferPos ] = getGraphicsBuffer().push(vertices, 4, indices, 2);
+	pushToGraphicsBuffer(vertices, 4, indices, 2);
 } 
 
 Circle::Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gpb, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)

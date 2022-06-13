@@ -6,12 +6,11 @@ class VertexArrayObject
 {
 public:
 
-	// Constructor.
+	// Constructors.
 	inline VertexArrayObject(int type) : m_type(type) { }
 	inline VertexArrayObject() = default;
-
 	// Destructor.
-	~VertexArrayObject();
+	inline ~VertexArrayObject() { if (m_existsOnGPU) destroy(); };
 
 	// Create the array.
 	// (For now this creates the default buffers with it).
@@ -40,7 +39,7 @@ public:
 	void unbind();
 
 	// Checks if the VAO exists on the GPU.
-	inline bool existsOnGPU() { return m_existsOnGPU; }
+	inline bool existsOnGPU() const { return m_existsOnGPU; }
 
 	// Get the VBO.
 	inline VertexBufferObject& getVBO() { return m_VBO; };
@@ -48,8 +47,10 @@ public:
 	// Get the IBO.
 	inline IndexBufferObject& getIBO() { return m_IBO; }
 
+	inline int getID() const { return m_rendererID; }
+
 	// Get the VAO type.
-	inline int getType() { return m_type; }
+	inline int getType() const { return m_type; }
 
 	// Set the type of the VAO.
 	inline void setType(int type) { m_type = type; }
@@ -58,11 +59,11 @@ private:
 
 	// Data.
 	unsigned m_rendererID = NULL;
-	bool m_existsOnGPU = false;
 	int m_type = NULL;
+	bool m_existsOnGPU = false;
 
 	// For now each VAO can only have one of each.
-	// Layer support adding various buffers given layouts.
+	// Later support adding various buffers given layouts.
 	VertexBufferObject m_VBO;
 	IndexBufferObject m_IBO;
 };

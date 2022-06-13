@@ -3,17 +3,13 @@
 #include "Utilities/Assert/Assert.h"
 #include "glad/glad.h"
 
-VertexArrayObject::~VertexArrayObject()
-{
-	if(m_existsOnGPU) destroy();
-}
-
 void VertexArrayObject::create()
 {
 	LUMEN_DEBUG_ASSERT(!m_existsOnGPU, "VAO already exists on the GPU.");
 
 	GLCall(glGenVertexArrays(1, &m_rendererID));
 	m_existsOnGPU = true;
+	bind();
 
 	// Create the default buffers for now.
 	m_VBO.create();
@@ -40,5 +36,7 @@ void VertexArrayObject::bind()
 
 void VertexArrayObject::unbind() 
 {
+	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "VAO does not exist on the GPU.");
+
 	GLCall(glBindVertexArray(0));
 }

@@ -292,9 +292,10 @@ public:
 		// Remove from GPU.
 		getGraphicsBuffer().erase(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
 		m_onGPU = false;
+		getGraphicsBuffer().removeFromSync(this);
+		m_queuedForSync = false;
 		m_indexBufferPos = NULL;
 		m_vertexBufferPos = NULL;
-		m_queuedForSync = false;
 	}
 
 	// Push the vertex and index data to the graphics buffer.
@@ -303,11 +304,12 @@ public:
 	{
 		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
 
-		auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertices, vertexCount, indices, indexCount);
+		auto [vertexPos, indexPos] = getGraphicsBuffer().push(vertices, vertexCount, indices, indexCount);
+		m_vertexBufferPos = vertexPos;
+		m_indexBufferPos = indexPos;
 		m_onGPU = true;
 		m_vertexCount = vertexCount;
 		m_indexCount = indexCount;
-		m_queuedForSync = false;
 	}
 
 	// Move the vertex & index data from the Graphics Buffer.
@@ -355,6 +357,7 @@ public:
 
 		if (m_queuedForSync) return;
 		getGraphicsBuffer().sync(this);
+		m_queuedForSync = true;
 	}
 
 	// Clear the data on the CPU.
@@ -385,7 +388,7 @@ protected:
 	std::vector<VertexType> m_vertexDataCPU;
 	std::vector<IndexType> m_indexDataCPU;
 	// Is the data on the GPU?
-	bool m_onGPU = true;	
+	bool m_onGPU = false;	
 };
 
 //=============================================================================================================================================//

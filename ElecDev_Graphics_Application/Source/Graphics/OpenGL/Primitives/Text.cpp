@@ -66,7 +66,7 @@ void Text::generateText(const std::string& text)
 	std::vector<VertexDataTextured> vertices;
 	std::vector<UInt3> indices;
 	int charCount = text.length();
-	indices.reserve((charCount + 1) * 6);	// Add one to the char count for
+	indices.reserve((charCount + 1) * 2);	// Add one to the char count for
 	vertices.reserve((charCount + 1) * 4);	// the text box.
 
 	// Calculate the string length with kerning. 
@@ -196,7 +196,6 @@ void Text::generateText(const std::string& text)
 			});
 	// Increment counts.
 	m_vertexCount += 4;
-	m_indexCount += 6;
 	// -----------------------
 
 	// ----------------------------- //
@@ -283,12 +282,11 @@ void Text::generateText(const std::string& text)
 		totalAdvance += c.xAdvance + kerning;
 		// Increment counts.
 		m_vertexCount += 4;
-		m_indexCount += 6;
 		// -----------------------
 	}
 
 	// Push data to the buffer.
-	auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertices.data(), vertices.size(), indices.data(), indices.size());
+	pushToGraphicsBuffer(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
 void Text::setScale(float scale)

@@ -19,7 +19,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 	m_vertexCount = vertices.size();
 	setGraphicsBuffer(gtb);
 
-	//Auto-centering code can be found below. This may be useful at some stage, but should not be default.
+	// Auto-centering code can be found below. This may be useful at some stage, but should not be default.
 	/*/
 	// Find centre.
 	float xTot = 0, yTot = 0, zTot = 0;
@@ -53,7 +53,8 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 	if (getGraphicsBuffer().getVAO().getType() == GL_TRIANGLES)
 	{
 		// Tesselate with earcut.
-		//NOTE: This is only valid for polygons in the XY plane. We need to project the points onto a 2D plane to support polygons in arbitrary planes.
+		// NOTE: This is only valid for polygons in the XY plane. We need to project the 
+		// points onto a 2D plane to support polygons in arbitrary planes.
 		std::vector < std::vector<glm::vec3>> vertices_with_holes;
 		vertices_with_holes.push_back(vertices);
 		indices = mapbox::earcut<unsigned>(vertices_with_holes);
@@ -72,7 +73,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 	m_indexCount = indices.size();
     
 	// Pass to VAO.
-	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size());
+	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size() / UInt3::count());
 }
 
 void Polygon2D::pushVertex(const glm::vec3& vertex) 
@@ -90,7 +91,7 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 	// Add new vertex.
 	currentVertices.emplace_back(vertex, m_colour, m_entityID);
 
-	// Pop and push the primitive.
+	// Update the 
 	removeFromGraphicsBuffer();
 	m_vertexCount++;
 	std::vector<unsigned> indices;

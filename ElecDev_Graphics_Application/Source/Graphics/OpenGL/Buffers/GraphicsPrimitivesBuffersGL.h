@@ -8,70 +8,62 @@
 
 struct Int2 
 {
-	Int2(int ind0, int ind1) { _data[0] = ind0; _data[1] = ind1; }
-	inline int* data() { return _data; }
+	Int2(int int0, int int1) : int0(int0), int1(int1) { }
+	inline int* data() { return &int0; }
 	// Operators.
-	inline void operator+=(int val) { _data[0] += val; _data[1] += val; };
-	inline void operator-=(int val) { _data[0] -= val; _data[1] -= val; };
+	inline void operator+=(int val) { int0 += val; int1 += val; }
+	inline void operator-=(int val) { int0 -= val; int1 -= val; }
 	// Data.
-	union {
-		int _data[2] = { 0,1 };
-		int ind0, ind1;
-	};
+	int int0, int1;
 	// Template.
 	typedef int VarType;
 	constexpr static inline int count() { return 2; }
+	constexpr static inline int size()  { return Int2::count() * sizeof(VarType); }
 };
 
 struct UInt2 
 {
-	UInt2(unsigned ind0, unsigned ind1) { _data[0] = ind0; _data[1] = ind1; }
-	inline unsigned* data() { return _data; }
+	UInt2(unsigned int0, unsigned int1) : int0(int0), int1(int1) { }
+	inline unsigned* data() { return &int0; }
 	// Operators.
-	inline void operator+=(unsigned val) { _data[0] += val; _data[1] += val; };
-	inline void operator-=(unsigned val) { _data[0] -= val; _data[1] -= val; };
+	inline void operator+=(unsigned val) { int0 += val; int1 += val; }
+	inline void operator-=(unsigned val) { int0 -= val; int1 -= val; }
 	// Data.
-	union {
-		unsigned _data[2] = { 0,1 };
-		unsigned ind0, ind1;
-	};
+	unsigned int0, int1;
 	// Template.
 	typedef unsigned VarType;
 	constexpr static inline int count() { return 2; }
+	constexpr static inline int size()  { return UInt2::count() * sizeof(VarType); }
 };
 
 struct Int3 
 {
-	Int3(int ind0, int ind1, int ind2) { _data[0] = ind0; _data[1] = ind1; _data[2] = ind2; }
-	inline int* data() { return _data; }
+	Int3(int int0, int int1, int int2) : int0(int0), int1(int1), int2(int2) { }
+	inline int* data() { return &int0; }
 	// Operators.
-	inline void operator+=(int val) { _data[0] += val; _data[1] += val; _data[2] += val; };
-	inline void operator-=(int val) { _data[0] -= val; _data[1] -= val; _data[2] -= val; };
+	inline void operator+=(int val) { int0 += val; int1 += val; int2 += val; }
+	inline void operator-=(int val) { int0 -= val; int1 -= val; int2 -= val; }
 	// Data.
-	union {
-		int _data[3] = { 0,1,2 };
-		int ind0, ind1, ind2;
-	};
+	int int0, int1, int2;
 	// Template.
 	typedef int VarType;
 	constexpr static inline int count() { return 3; }
+	constexpr static inline int size()  { return Int3::count() * sizeof(VarType); }
 };
 
 struct UInt3 
 {
-	UInt3(unsigned ind0, unsigned ind1, unsigned ind2) { _data[0] = ind0; _data[1] = ind1; _data[2] = ind2; }
-	inline unsigned* data() { return _data; }
+	UInt3(unsigned int0, unsigned int1, unsigned int2) : int0(int0), int1(int1), int2(int2) { }
+	inline unsigned* data() { return &int0; }
 	// Operators.
-	inline void operator+=(unsigned val) { _data[0] += val; _data[1] += val; _data[2] += val; };
-	inline void operator-=(unsigned val) { _data[0] -= val; _data[1] -= val; _data[2] -= val; };
+	inline void operator+=(unsigned val) { int0 += val; int1 += val; int2 += val; };
+	inline void operator-=(unsigned val) { int0 -= val; int1 -= val; int2 -= val; };
 	// Data.
-	union {
-		unsigned ind0, ind1, ind2;
-		unsigned _data[3] = { 0,1,2 };
-	};
+	unsigned int0, int1, int2;
 	// Template.
 	typedef unsigned VarType;
 	constexpr static inline int count() { return 3; }
+	constexpr static inline int size()  { return UInt3::count() * sizeof(VarType); }
 };
 
 class IGraphicsPrimitivesBuffer 
@@ -125,20 +117,25 @@ public:
 	// Push vertices and return the index in memory.  Vertices are copied.
 	inline int push(const VertexType* ptr, int size = 1)
 	{
+		if (!size) return -1;
+
 		// CPU.
 		int index = m_vertexData.push(ptr, size);
 
 		// GPU. If there is not resize the data should be loaded manually.
-		if (!queryVerticesResize());
+		if (!queryVerticesResize())
 			getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), getVertex(index).getData());
 
 		return index;
 	}
 
 	// Push indices and return the index in memory.  Indices are copied.
-	// The offset should be the starting vertex's position in memory.
+	// The offset should be the starting vertex's position in memory that
+	// was returned when pushing the vertices.
 	inline int push(const IndexType* ptr, int size, int offset)
 	{
+		if (!size) return -1;
+
 		// Load data to CPU and offset indices.
 		int index = m_indexData.push(ptr, size);
 		if (offset) for (int i = index; i < index + size; i++) m_indexData[i] += offset;
@@ -147,8 +144,8 @@ public:
 	}
 
 	// Push vertices and the corresponding indices.
-	// This function handles the offsetting of indices.
-	// returns { VerticesIndex, IndicesIndex }
+	// The indices are offset automatically.
+	// @returns { VerticesIndex, IndicesIndex }
 	inline std::tuple<unsigned, unsigned> push(const VertexType* vertexPtr, int vertexCount, const IndexType* indexPtr, int indexCount)
 	{
 		int verticesIndex = push(vertexPtr, vertexCount);
@@ -159,6 +156,9 @@ public:
 	// Erase the vertices given the position and size.
 	inline void eraseVertices(int index, int size)
 	{
+		// Ensure data is valid.
+		if (!size || index == -1) return;
+
 		// CPU.
 		m_vertexData.erase(index, size);
 		// Orphan the data.  Is this necessary?
@@ -168,6 +168,9 @@ public:
 	// Erase the indices given the position and size.
 	inline void eraseIndices(int index, int size)
 	{
+		// Ensure data is valid.
+		if (!size || index == -1) return;
+
 		m_indexData.erase(index, size);
 		indicesChanged();
 	}
@@ -188,11 +191,28 @@ public:
 		if (!m_vertexData.count())     return false;
 		return true;
 	}
-
+	
 	// Queue the primitive to be synced.
 	inline void sync(IPrimitive* primitive) 
 	{
 		m_primitivesToSync.push_back(primitive);
+		primitive->m_queuedForSync = true;
+	}
+
+	// Remove the primitive from the sync queue.
+	inline void removeFromSync(IPrimitive* primitive)
+	{
+		if (!primitive->m_queuedForSync) return;
+
+		int index = 0;
+		for (auto p : m_primitivesToSync)
+		{
+			if (primitive == p) break;
+			index++;
+		}
+
+		m_primitivesToSync.erase(m_primitivesToSync.begin() + index);
+		primitive->m_queuedForSync = false;
 	}
 
 	// Utilities.
@@ -238,7 +258,9 @@ public:
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
 		for (auto it = m_vertexData.begin(); it != m_vertexData.end(); ++it)
+		{
 			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getTotalSize(), (*it).getData());
+		}
 	}
 
 	// Load all of the index CPU data to the GPU.
@@ -256,7 +278,7 @@ public:
 		int offset = 0;
 		for (auto it = m_indexData.begin(); it != m_indexData.end(); ++it)
 		{
-			ibo.bufferSubData(offset * sizeof(IndexType), it.m_elementsInMemoryRegion * sizeof(IndexType), (*it).data());
+			ibo.bufferSubData(offset * IndexType::size(), it.m_elementsInMemoryRegion * IndexType::size(), (*it).data());
 			offset += it.m_elementsInMemoryRegion;
 		}
 

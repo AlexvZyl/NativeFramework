@@ -7,10 +7,10 @@ class BufferObject
 {
 public:
 
-	// Constructor should do nothing.
-	BufferObject(int target);
+	// Constructor.
+	inline BufferObject(int target) : m_target(target) { }
 	// Destructor.
-	~BufferObject();
+	inline ~BufferObject() { if (m_existsOnGPU) destroy(); }
 
 	// OpenGL API.
 	// All of the function descpritions can be found on 'docs.GL'.
@@ -26,7 +26,7 @@ public:
 	void clearNamedBufferSubData(int internalFormat, int offset, int size, int format, int type, const void* data);
 
 	// Extended OpenGL API.
-	// These are custom functions that does not exist in the official api.
+	// These are custom functions that does not exist in the official API.
 	void create();
 	void destroy();
 	void orphan();

@@ -2,16 +2,6 @@
 #include "OpenGL/ErrorHandlerGL.h"
 #include "Utilities/Assert/Assert.h"
 
-BufferObject::BufferObject(int target)
-{
-	m_target = target;
-}
-
-BufferObject::~BufferObject()
-{
-	if (m_existsOnGPU) destroy();
-}
-
 void BufferObject::create()
 {
 	LUMEN_DEBUG_ASSERT(!m_existsOnGPU, "Buffer already exists on the GPU.");
@@ -93,7 +83,7 @@ void BufferObject::clearNamedBufferData(int internalFormat, int format, int type
 {
 	LUMEN_DEBUG_ASSERT(m_existsOnGPU, "Buffer does not exist on the GPU.");
 
-	GLCall(glClearBufferData(getID(), internalFormat, format, type, data));
+	GLCall(glClearNamedBufferData(getID(), internalFormat, format, type, data));
 }
 
 void BufferObject::clearBufferSubData(int internalFormat, int offset, int size, int format, int type, const void* data)
