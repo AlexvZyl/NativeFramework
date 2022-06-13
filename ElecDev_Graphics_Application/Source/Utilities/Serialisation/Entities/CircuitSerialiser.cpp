@@ -52,7 +52,9 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circuit* circuit)
 				{
 					emitter << YAML::Key << port->title->m_string << YAML::Value;
 					emitter << YAML::BeginMap;
-						emitter << YAML::Key << "From Tag" << YAML::Value << port->fromTag;
+						if (port->fromTag) {
+							emitter << YAML::Key << "From Tag" << YAML::Value << *(port->fromTag);
+						}
 						emitter << YAML::Key << "Voltage" << YAML::Value << port->voltage;
 					emitter << YAML::EndMap;
 				}

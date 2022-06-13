@@ -72,7 +72,7 @@ public:
 
 	std::vector<Cable*> m_cables;
 
-	std::string fromTag = "none";
+	std::string* fromTag = nullptr;
 	float voltage = 0.f;
 
 	// Constructor.

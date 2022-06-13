@@ -298,7 +298,7 @@ void Port::detachCable(Cable* cable)
 		}
 		attachmentIndicator->setColor(indicatorColour);
 		voltage = 0.f;
-		fromTag = "none";
+		fromTag = nullptr;
 	}
 }
 
