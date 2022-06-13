@@ -26,7 +26,7 @@ public:
 		m_VBO.bind();
 
 		// Setup the vertex layout for the buffers.
-		VertexType::initVertexAttributes(m_rendererID);
+		VertexType::setVertexLayout(m_rendererID);
 	}
 
 	// Delete the array along with its buffers.

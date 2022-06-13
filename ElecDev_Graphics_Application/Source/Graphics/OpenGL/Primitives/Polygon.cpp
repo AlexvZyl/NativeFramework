@@ -86,7 +86,7 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 	for (int i = 0; i < m_vertexCount; i++) 
 	{
 		currentVertices.emplace_back(getVertex(i));
-		vertices.emplace_back((currentVertices.back().data.position));
+		vertices.emplace_back((currentVertices.back().position));
 	}
 	// Add new vertex.
 	currentVertices.emplace_back(vertex, m_colour, m_entityID);
@@ -119,7 +119,7 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 
 void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
 {
-	getVertex(index).data.position += translation;
+	getVertex(index).position += translation;
 	updateIndices();
 	syncWithGPU();
 }
@@ -131,7 +131,7 @@ void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec2& translat
 
 void Polygon2D::translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
 {
-	glm::vec3* currentPosition = &getVertex(index).data.position;
+	glm::vec3* currentPosition = &getVertex(index).position;
 	*currentPosition += (position - *currentPosition);
 	updateIndices();
 	syncWithGPU();
@@ -150,7 +150,7 @@ void Polygon2D::updateIndices()
 		std::vector<glm::vec3> vertices;
 		for (int i = 0; i < m_vertexCount; i++) 
 		{
-			vertices.emplace_back((getVertex(i).data.position));
+			vertices.emplace_back((getVertex(i).position));
 		}
 		std::vector < std::vector<glm::vec3>> vertices_with_holes;
 		vertices_with_holes.push_back(vertices);
@@ -173,19 +173,19 @@ void Polygon2D::updateIndices()
 
 void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec3 position)
 {
-	vertex->data.position = position;
+	vertex->position = position;
 	updateIndices();
 	syncWithGPU();
 }
 
 void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec2 position)
 {
-	translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
+	translateVertexTo(vertex, glm::vec3{ position, vertex->position.z });
 }
 
 void Polygon2D::translateVertex(VertexData* vertex, const glm::vec3 translation)
 {
-	translateVertexTo(vertex, vertex->data.position + translation);
+	translateVertexTo(vertex, vertex->position + translation);
 }
 
 void Polygon2D::translateVertex(VertexData* vertex, const glm::vec2 translation)

@@ -97,7 +97,7 @@ protected:
 		m_VAO.setLayout<VertexType>();
 
 		// Setup CPU data.
-		m_vertexData.iterateElements();
+		m_vertexData.iterateMemory();
 		m_indexData.iterateMemory();
 		m_vertexData.setCapacityIncrements(BUFFER_INCREMENTS);
 		m_indexData.setCapacityIncrements(BUFFER_INCREMENTS);
@@ -121,7 +121,7 @@ public:
 
 		// GPU. If there is not resize the data should be loaded manually.
 		if (!queryVerticesResize())
-			getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), getVertex(index).getData());
+			getVAO().getVBO().namedBufferSubData(index * sizeof(VertexType), size * sizeof(VertexType), getVertex(index).data());
 
 		return index;
 	}
@@ -160,7 +160,7 @@ public:
 		// CPU.
 		m_vertexData.erase(index, size);
 		// Orphan the data.  Is this necessary?
-		//getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), NULL);
+		//getVAO().getVBO().namedBufferSubData(index * sizeof(VertexType), size * sizeof(VertexType), NULL);
 	}
 
 	// Erase the indices given the position and size.
@@ -261,7 +261,7 @@ public:
 		vbo.bind();
 		for (auto it = m_vertexData.begin(); it != m_vertexData.end(); ++it)
 		{
-			vbo.bufferSubData(it.m_index * VertexType::getTotalSize(), VertexType::getTotalSize(), (*it).getData());
+			vbo.bufferSubData(it.m_index * sizeof(VertexType), it.m_elementsInMemoryRegion * sizeof(VertexType), (*it).data());
 		}
 	}
 
@@ -296,7 +296,7 @@ public:
 		// Update primitives data.
 		for (auto primitive : m_primitivesToSync)
 		{
-			vbo.bufferSubData(primitive->m_vertexBufferPos * VertexType::getTotalSize(), VertexType::getTotalSize() * primitive->m_vertexCount, getVertex(primitive->m_vertexBufferPos).getData());
+			vbo.bufferSubData(primitive->m_vertexBufferPos * sizeof(VertexType), sizeof(VertexType) * primitive->m_vertexCount, getVertex(primitive->m_vertexBufferPos).data());
 			primitive->m_queuedForSync = false;
 		}
 		// All primitives have been synced.

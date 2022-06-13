@@ -22,7 +22,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D)
 	emitter << YAML::BeginMap;
 	for (int i = 0; i < polygon2D->m_vertexCount; i++)
 	{
-		emitter << YAML::Key << "Vertex " + std::to_string(i) << YAML::Value << polygon2D->getVertex(i).data.position;
+		emitter << YAML::Key << "Vertex " + std::to_string(i) << YAML::Value << polygon2D->getVertex(i).position;
 	}
 	emitter << YAML::EndMap;
 	// Color.

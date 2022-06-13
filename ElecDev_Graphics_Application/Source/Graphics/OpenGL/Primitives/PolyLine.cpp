@@ -129,7 +129,7 @@ void PolyLine::translateVertexTo(VertexData* vertex, const glm::vec2 position)
 	float tol = m_thickness;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
-			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
+			return glm::length(vert - glm::vec2{ vertex->position }) < tol;
 		});
 	if (it == end(m_vertices)) {
 		LUMEN_LOG_WARN("Tried to move an invlaid vertex.", "PolyLine");
@@ -149,7 +149,7 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 	float tol = m_thickness*2;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
-			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
+			return glm::length(vert - glm::vec2{ vertex->position }) < tol;
 		});
 
 	if (it == end(m_vertices)) 

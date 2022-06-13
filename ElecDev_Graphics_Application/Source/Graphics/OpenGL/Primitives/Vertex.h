@@ -133,7 +133,7 @@ class VertexDataCircle : public IVertexData
 public:
 
 	// Constructor.
-	inline VertexDataCircle(const glm::vec3& position, const glm::vec2& localCoords, float radius, const glm::vec4& color, float thickness, float fade, unsigned int eID = 0, float outline = 0.f) 
+	inline VertexDataCircle(const glm::vec3& position, const glm::vec2& localCoords, float radius, const glm::vec4& color, float thickness, float fade, unsigned int entityID = 0, float outline = 0.f)
 		: position(position), color(color), radius(radius), localCoords(localCoords), outline(outline), thickness(thickness), fade(fade), entityID(entityID)
 	{ }
 

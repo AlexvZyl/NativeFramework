@@ -47,7 +47,7 @@ public:
 	virtual void translate(const glm::vec3& translation) 
 	{
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.position += translation;
+			getVertex(i).position += translation;
 
 		m_trackedCenter += translation;
 		syncWithGPU();
@@ -76,7 +76,7 @@ public:
 		transform = glm::translate(transform, -rotatePoint);
 
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.position = glm::vec3(transform * glm::vec4(getVertex(i).data.position, 1.f));
+			getVertex(i).position = glm::vec3(transform * glm::vec4(getVertex(i).position, 1.f));
 
 		syncWithGPU();
 	}
@@ -89,7 +89,7 @@ public:
 	virtual void transform(const glm::mat4& transform) 
 	{
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.position = glm::vec3(transform * glm::vec4(getVertex(i).data.position, 1.f));
+			getVertex(i).position = glm::vec3(transform * glm::vec4(getVertex(i).position, 1.f));
 
 		// Not sure if this is correct (scaling?).
 		m_trackedCenter = glm::vec3(transform * glm::vec4(m_trackedCenter, 1.f));
@@ -111,7 +111,7 @@ public:
 		m_outlineValue = value;
 
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.outline = value;
+			getVertex(i).outline = value;
 
 		syncWithGPU();
 	}
@@ -123,7 +123,7 @@ public:
 		m_outlineValue = 0.f;
 
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.outline = 0.f;
+			getVertex(i).outline = 0.f;
 
 		syncWithGPU();
 	}
@@ -141,18 +141,18 @@ public:
 
 	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position) 
 	{
-		vertex->data.position = position;
+		vertex->position = position;
 		syncWithGPU();
 	}
 
 	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position)
 	{
-		This::translateVertexTo(vertex, glm::vec3{ position, vertex->data.position.z });
+		This::translateVertexTo(vertex, glm::vec3{ position, vertex->position.z });
 	}
 
 	inline virtual void translateVertex(VertexType* vertex, const glm::vec3 translation) 
 	{
-		vertex->data.position += translation;
+		vertex->position += translation;
 		syncWithGPU();
 	}
 
@@ -183,7 +183,7 @@ public:
 
 	inline virtual void setVertexAtIndexColor(unsigned index, const glm::vec4& color)
 	{
-		getVertex(index).data.color = color;
+		getVertex(index).color = color;
 		syncWithGPU();
 	}
 
@@ -198,12 +198,12 @@ public:
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
 		VertexType& closestVertex = getVertex(0);;
-		float minDistance = glm::abs(glm::distance(position, closestVertex.data.position));
+		float minDistance = glm::abs(glm::distance(position, closestVertex.position));
 		// Find if any of the vertices are closer.
 		for (int i = 0; i < m_vertexCount; i++)
 		{
 			VertexType& currentVertex = getVertex(i);
-			float currentDistance = glm::abs(glm::distance(position, currentVertex.data.position));
+			float currentDistance = glm::abs(glm::distance(position, currentVertex.position));
 			if (currentDistance > minDistance) continue;
 			closestVertex = currentVertex;
 			nearestVertexIndex = i - m_vertexBufferPos;
@@ -224,12 +224,12 @@ public:
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
 		VertexType& closestVertex = getVertex(0);
-		float minDistance = glm::abs(glm::distance(position, glm::vec2(closestVertex.data.position)));
+		float minDistance = glm::abs(glm::distance(position, glm::vec2(closestVertex.position)));
 		// Find if any of the vertices are closer.
 		for (int i = 0; i < m_vertexCount; i++)
 		{
 			VertexType& currentVertex = getVertex(i);
-			float currentDistance = glm::abs(glm::distance(position, glm::vec2(currentVertex.data.position)));
+			float currentDistance = glm::abs(glm::distance(position, glm::vec2(currentVertex.position)));
 			if (currentDistance > minDistance) continue;
 			closestVertex = currentVertex;
 			nearestVertexIndex = i - m_vertexBufferPos;
@@ -246,7 +246,7 @@ public:
 	virtual void setColor(const glm::vec4& color) 
 	{
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.color = color;
+			getVertex(i).color = color;
 
 		m_colour = color;
 		syncWithGPU();
@@ -264,7 +264,7 @@ public:
 	virtual void setLayer(float layer) 
 	{
 		for (int i = 0; i < m_vertexCount; i++)
-			getVertex(i).data.position.z = layer;
+			getVertex(i).position.z = layer;
 
 		m_trackedCenter.z = layer;
 		syncWithGPU();

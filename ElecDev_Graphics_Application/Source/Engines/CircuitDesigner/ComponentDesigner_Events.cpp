@@ -359,7 +359,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 				}
 				else 
 				{
-					m_activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).data.position));
+					m_activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position));
 				}
 			}
 		}

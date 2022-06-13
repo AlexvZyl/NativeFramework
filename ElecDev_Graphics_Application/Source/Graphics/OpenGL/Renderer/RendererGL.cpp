@@ -109,16 +109,16 @@ void Renderer::createUnitQuad()
 
 	// Vertex data.
 	const VertexDataTextured vertices[4] = {
-		{ { -1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 0.f }, 0.f, 0 },
-		{ { -1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 1.f }, 0.f, 0 },
-		{ {  1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 1.f }, 0.f, 0 },
-		{ {  1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 0.f }, 0.f, 0 }
+		VertexDataTextured({ -1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 0.f }, 0.f, 0),
+		VertexDataTextured({ -1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 1.f }, 0.f, 0),
+		VertexDataTextured({  1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 1.f }, 0.f, 0),
+		VertexDataTextured({  1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 0.f }, 0.f, 0)
 	};
 
 	// Index data.
-	const UInt3 indices[2] = { 
-		{ 0, 1, 2 }, 
-		{ 2, 3, 0 } 
+	const UInt3 indices[2] = {
+		UInt3{ 0, 1, 2 },
+		UInt3{ 2, 3, 0 }
 	};
 
 	// Push data.

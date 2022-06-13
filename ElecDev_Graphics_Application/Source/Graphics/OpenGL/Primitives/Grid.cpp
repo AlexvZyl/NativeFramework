@@ -64,12 +64,12 @@ Grid& Grid::createGrid()
 	//  O R I G I N  //
 	// ------------- //
 
-	vertices.emplace_back(VertexData({ 0.f, maxVertexCoord, -1.f }, m_xAxisColor, 0));
-	vertices.emplace_back(VertexData({ 0.f, -maxVertexCoord, -1.f }, m_xAxisColor, 0));
-	vertices.emplace_back(VertexData({ maxVertexCoord, 0.f, -1.f }, m_yAxisColor, 0));
-	vertices.emplace_back(VertexData({ -maxVertexCoord, 0.f, -1.f }, m_yAxisColor, 0));
-	indices.emplace_back(UInt2{ 0, 1 });
-	indices.emplace_back(UInt2{ 2, 3 });
+	vertices.emplace_back(glm::vec3{ 0.f, maxVertexCoord, -1.f }, m_xAxisColor, 0);
+	vertices.emplace_back(glm::vec3{ 0.f, -maxVertexCoord, -1.f }, m_xAxisColor, 0);
+	vertices.emplace_back(glm::vec3{ maxVertexCoord, 0.f, -1.f }, m_yAxisColor, 0);
+	vertices.emplace_back(glm::vec3{ -maxVertexCoord, 0.f, -1.f }, m_yAxisColor, 0);
+	indices.emplace_back(0, 1);
+	indices.emplace_back(2, 3);
 	m_originBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	vertices.clear();
 	indices.clear();
@@ -83,24 +83,24 @@ Grid& Grid::createGrid()
 	while (currentPosition <= maxVertexCoord + m_coarseIncrementSize)
 	{
 		// X Positive Lines.
-		vertices.emplace_back(VertexData({ currentPosition, maxVertexCoord, -1.f }, m_coarseGridColor, 0));
-		vertices.emplace_back(VertexData({ currentPosition, -maxVertexCoord, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ currentPosition, maxVertexCoord, -1.f }, m_coarseGridColor, 0);
+		vertices.emplace_back(glm::vec3{ currentPosition, -maxVertexCoord, -1.f }, m_coarseGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		// X Negative Lines.
-		vertices.emplace_back(VertexData({ -currentPosition, maxVertexCoord, -1.f }, m_coarseGridColor, 0));
-		vertices.emplace_back(VertexData({ -currentPosition, -maxVertexCoord, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ -currentPosition, maxVertexCoord, -1.f }, m_coarseGridColor, 0);
+		vertices.emplace_back(glm::vec3{ -currentPosition, -maxVertexCoord, -1.f }, m_coarseGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		// Y Positive Lines.
-		vertices.emplace_back(VertexData({ maxVertexCoord, currentPosition, -1.f }, m_coarseGridColor, 0));
-		vertices.emplace_back(VertexData({ -maxVertexCoord, currentPosition, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ maxVertexCoord, currentPosition, -1.f }, m_coarseGridColor, 0);
+		vertices.emplace_back(glm::vec3{ -maxVertexCoord, currentPosition, -1.f }, m_coarseGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		// Y Negative Lines.
-		vertices.emplace_back(VertexData({ maxVertexCoord, -currentPosition, -1.f }, m_coarseGridColor, 0));
-		vertices.emplace_back(VertexData({ -maxVertexCoord, -currentPosition, -1.f }, m_coarseGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ maxVertexCoord, -currentPosition, -1.f }, m_coarseGridColor, 0);
+		vertices.emplace_back(glm::vec3{ -maxVertexCoord, -currentPosition, -1.f }, m_coarseGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		currentPosition += m_coarseIncrementSize;
 	}
@@ -117,24 +117,24 @@ Grid& Grid::createGrid()
 	while (currentPosition <= maxVertexCoord)
 	{
 		// X Positive Lines.
-		vertices.emplace_back(VertexData({ currentPosition, maxVertexCoord, -1.f }, m_fineGridColor, 0));
-		vertices.emplace_back(VertexData({ currentPosition, -maxVertexCoord, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ currentPosition, maxVertexCoord, -1.f }, m_fineGridColor, 0);
+		vertices.emplace_back(glm::vec3{ currentPosition, -maxVertexCoord, -1.f }, m_fineGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		// X Negative Lines.
-		vertices.emplace_back(VertexData({ -currentPosition, maxVertexCoord, -1.f }, m_fineGridColor, 0));
-		vertices.emplace_back(VertexData({ -currentPosition, -maxVertexCoord, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ -currentPosition, maxVertexCoord, -1.f }, m_fineGridColor, 0);
+		vertices.emplace_back(glm::vec3{ -currentPosition, -maxVertexCoord, -1.f }, m_fineGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		// Y Positive Lines.
-		vertices.emplace_back(VertexData({ maxVertexCoord, currentPosition, -1.f }, m_fineGridColor, 0));
-		vertices.emplace_back(VertexData({ -maxVertexCoord, currentPosition, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ maxVertexCoord, currentPosition, -1.f }, m_fineGridColor, 0);
+		vertices.emplace_back(glm::vec3{ -maxVertexCoord, currentPosition, -1.f }, m_fineGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		// Y Negative Lines.
-		vertices.emplace_back(VertexData({ maxVertexCoord, -currentPosition, -1.f }, m_fineGridColor, 0));
-		vertices.emplace_back(VertexData({ -maxVertexCoord, -currentPosition, -1.f }, m_fineGridColor, 0));
-		indices.emplace_back(UInt2(0 + vertexCount, 1 + vertexCount));
+		vertices.emplace_back(glm::vec3{ maxVertexCoord, -currentPosition, -1.f }, m_fineGridColor, 0);
+		vertices.emplace_back(glm::vec3{ -maxVertexCoord, -currentPosition, -1.f }, m_fineGridColor, 0);
+		indices.emplace_back(0 + vertexCount, 1 + vertexCount);
 		vertexCount += 2;
 		currentPosition += m_fineIncrementSize;
 	}

@@ -340,7 +340,7 @@ void Text::setBoxColour(const glm::vec4& colour)
 { 
 	m_boxColor = colour;
 	for (int i = 0; i < 4; i++)
-		getVertex(i).data.color = colour;
+		getVertex(i).color = colour;
 
 	syncWithGPU();
 }
@@ -349,7 +349,7 @@ void Text::setColor(const glm::vec4& color)
 {
 	m_colour = color;
 	for (int i = 4; i < m_vertexCount; i++)
-		getVertex(i).data.color = color;
+		getVertex(i).color = color;
 
 	syncWithGPU();
 }
@@ -358,11 +358,11 @@ void Text::setLayer(float layer)
 {
 	// Text box.
 	for (int i = 0; i < 4; i++)
-		getVertex(i).data.position.z = layer - 0.001;
+		getVertex(i).position.z = layer - 0.001;
 
 	// Text.
 	for (int i = 4; i < m_vertexCount; i++)
-		getVertex(i).data.position.z = layer;
+		getVertex(i).position.z = layer;
 
 	m_trackedCenter.z = layer;
 	syncWithGPU();

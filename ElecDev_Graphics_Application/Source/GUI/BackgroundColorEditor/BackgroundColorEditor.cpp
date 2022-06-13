@@ -39,16 +39,16 @@ void BackgroundColorEditor::onImGuiRender()
 	// Open color editor.
 	if (scene)
 	{
-		glm::vec4 color = scene->m_backgroundBuffer->getVertex(0).data.color;
+		glm::vec4 color = scene->m_backgroundBuffer->getVertex(0).color;
 		ImGui::SameLine();
 		if (ImGui::ColorPicker4("##ColorEditor", &color[0], ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
 		{
 			for (auto& vertex : scene->m_backgroundBuffer->getVertexData())
 			{
-				vertex.data.color[0] = color[0];
-				vertex.data.color[1] = color[1]; 
-				vertex.data.color[2] = color[2];
-				vertex.data.color[3] = color[3];
+				vertex.color[0] = color[0];
+				vertex.color[1] = color[1]; 
+				vertex.color[2] = color[2];
+				vertex.color[3] = color[3];
 
 			}
 			scene->m_backgroundBuffer->reloadVertices();
