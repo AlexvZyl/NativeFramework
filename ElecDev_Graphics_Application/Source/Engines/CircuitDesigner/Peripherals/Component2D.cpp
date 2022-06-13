@@ -138,6 +138,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		designator = Renderer::addText2D("?", designatorOffset, titleColour, titleSize, "L", "B", this);
 		designatorSym = designator->m_string;
 	}
+
+	//Add type
+	if (componentNode["Type"].IsDefined())
+	{
+		type = componentNode["Type"].as<std::string>();
+	}
 	
 	// Add the lines.
 	for (const auto& line : componentNode["PolyLines"])

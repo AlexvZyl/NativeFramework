@@ -22,6 +22,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->title;
 	emitter << YAML::Key << "Designator" << YAML::Value << comp->designator;
 	emitter << YAML::Key << "Tag" << YAML::Value << comp->m_toTagNumber;
+	emitter << YAML::Key << "Type" << YAML::Value << comp->type;
 	emitter << YAML::Key << "Dictionary" << YAML::Value << comp->dataDict;
 	
 	// Ports.

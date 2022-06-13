@@ -56,9 +56,39 @@ void ComponentEditor::onImGuiRender()
 			ImGui::Text(" Designator:\t  ");
 			ImGui::SameLine();
 			ImGui::InputText("##Designator", &activeComponent->designatorSym);
-			ImGui::Text(" Type:\t  ");
+			ImGui::Text(" Name:\t  ");
 			ImGui::SameLine();
 			ImGui::InputText("##Equipment Type", &activeComponent->equipType);
+			ImGui::Text("Type: \t");
+			ImGui::SameLine();
+			static std::string types[] = { "Unspecified",
+									"Substation",
+									"Distribution Transformer",
+									"Mini Substation",
+									"MCC",
+									"Distribution Board",
+									"Motor",
+									"Local Isolator",
+									"VSD",
+									"Splice Box",
+									"Remote Input / Output",
+									"Voltage Transformer",
+									"Current Transformer",
+									"MV Breaker Panel",
+									"Surge Arrestor",
+									"Gulley Box",
+									"Overhead Line",
+									"Lighting Transformer", 
+									"Generator"};
+			if (ImGui::BeginCombo("##type", activeComponent->type.c_str())) {
+				for (size_t i = 0; i < IM_ARRAYSIZE(types); i++)
+				{
+					if (ImGui::Selectable(types[i].c_str())) {
+						activeComponent->type = types[i];
+					}
+				}
+				ImGui::EndCombo();
+			}
 
 			activeComponent->updateTextWithoutLabel();
 		}
