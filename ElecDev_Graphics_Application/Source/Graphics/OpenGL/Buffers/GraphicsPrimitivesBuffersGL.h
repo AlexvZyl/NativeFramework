@@ -159,8 +159,6 @@ public:
 
 		// CPU.
 		m_vertexData.erase(index, size);
-		// Orphan the data.  Is this necessary?
-		//getVAO().getVBO().namedBufferSubData(index * sizeof(VertexType), size * sizeof(VertexType), NULL);
 	}
 
 	// Erase the indices given the position and size.
@@ -296,7 +294,7 @@ public:
 		// Update primitives data.
 		for (auto primitive : m_primitivesToSync)
 		{
-			vbo.bufferSubData(primitive->m_vertexBufferPos * sizeof(VertexType), sizeof(VertexType) * primitive->m_vertexCount, getVertex(primitive->m_vertexBufferPos).data());
+			vbo.bufferSubData(primitive->m_vertexBufferPos * sizeof(VertexType), primitive->m_vertexCount * sizeof(VertexType), getVertex(primitive->m_vertexBufferPos).data());
 			primitive->m_queuedForSync = false;
 		}
 		// All primitives have been synced.
@@ -306,10 +304,10 @@ public:
 	// Update indices for existing primitive with new indices.  
 	// This is very useful for highly dynamic polygons where the vertex count is static.
 	// Returns the new position in the freelist.
-	inline int updateIndices(int indexPosition, int indexCount, int offset, IndexType* newIndices, int newIndexCount)
+	inline int updateIndices(int oldIndexPosition, int oldIndexCount, int offset, IndexType* newIndices, int newIndexCount)
 	{
 		// Remove original data.
-		eraseIndices(indexPosition, indexCount);
+		eraseIndices(oldIndexPosition, oldIndexCount);
 		// Push new data with the original offset.
 		return push(newIndices, newIndexCount, offset);
 	}

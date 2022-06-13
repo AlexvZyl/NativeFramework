@@ -8,10 +8,10 @@ class IPrimitive : public Entity
 public:
 
 	// Data.
-	unsigned m_vertexCount = 0;						// Counts the amount of vertices.
-	unsigned m_indexCount = 0;						// Counts the amount of indices.
-	unsigned m_vertexBufferPos = -1;				// The start position of the primitive vertices in the GPB.
-	unsigned m_indexBufferPos = -1;					// The start position of the primitive indices in the GPB.
+	int m_vertexCount = 0;							// Counts the amount of vertices.
+	int m_indexCount = 0;							// Counts the amount of indices.
+	int m_vertexBufferPos = -1;						// The start position of the primitive vertices in the GPB.
+	int m_indexBufferPos = -1;						// The start position of the primitive indices in the GPB.
 	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the primitive.
 	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the primitive.
 	bool m_queuedForSync = false;					// Is the primitive going to be synced on the next draw call.

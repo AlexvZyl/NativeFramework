@@ -32,30 +32,24 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 	m_trackedCenter = {xTot/m_vertexCount, yTot/m_vertexCount, zTot/m_vertexCount}; 
 	*/
 	
-	//Centre on the origin
+	// Centre on the origin.
 	m_trackedCenter = { 0.f, 0.f, 0.f };
 
 	std::vector<VertexData> vertexVector;
 	vertexVector.reserve(m_vertexCount);
 	std::vector<unsigned> indices;
 	
-	// ----------------- //
-	//  V E R T I C E S  //
-	// ----------------- //
-
+	// Vertices.
 	for (auto& vertex : vertices)
-		vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
+		vertexVector.emplace_back(vertex, m_colour, m_entityID);
 
-	// --------------- //
-	//  I N D I C E S  //
-	// --------------- //
-
+	// Indices.
 	if (getGraphicsBuffer().getVAO().getType() == GL_TRIANGLES)
 	{
 		// Tesselate with earcut.
 		// NOTE: This is only valid for polygons in the XY plane. We need to project the 
 		// points onto a 2D plane to support polygons in arbitrary planes.
-		std::vector < std::vector<glm::vec3>> vertices_with_holes;
+		std::vector<std::vector<glm::vec3>> vertices_with_holes;
 		vertices_with_holes.push_back(vertices);
 		indices = mapbox::earcut<unsigned>(vertices_with_holes);
 	}
@@ -70,9 +64,8 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 		indices.push_back(0);
 		indices.push_back(m_vertexCount-1);
 	}
-	m_indexCount = indices.size();
     
-	// Pass to VAO.
+	// Pass to buffer.
 	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size() / UInt3::count());
 }
 
@@ -114,7 +107,7 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 		indices.push_back(m_vertexCount - 1);
 	}
 	m_indexCount = indices.size();
-	pushToGraphicsBuffer(currentVertices.data(), currentVertices.size(), (UInt3*)indices.data(), indices.size());
+	pushToGraphicsBuffer(currentVertices.data(), currentVertices.size(), (UInt3*)indices.data(), indices.size() / UInt3::count());
 }
 
 void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
@@ -168,7 +161,7 @@ void Polygon2D::updateIndices()
 		indices.push_back(m_vertexCount - 1);
 	}
 
-	This::updateIndices((UInt3*)indices.data(), indices.size());
+	This::updateIndices((UInt3*)indices.data(), indices.size() / UInt3::count());
 }
 
 void Polygon2D::translateVertexTo(VertexData* vertex, const glm::vec3 position)

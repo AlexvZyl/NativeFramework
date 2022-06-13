@@ -58,7 +58,7 @@ void Text::generateText(const std::string& text)
 		UInt3 indices[2] = { {0, 1, 2}, {2, 3, 0} };
 		VertexDataTextured zero({ 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f, 0.f }, {0.f, 0.f}, 0.f, -1.f);
 		VertexDataTextured vertices[4] = { zero, zero, zero, zero };
-		auto [m_vertexBufferPos, m_indexBufferPos] = getGraphicsBuffer().push(vertices, 4, indices, 2);
+		pushToGraphicsBuffer(vertices, 4, indices, 2);
 		return; 
 	}
 
@@ -191,8 +191,8 @@ void Text::generateText(const std::string& text)
 	// -----------------------
 	// Indices.
 	indices.insert(indices.end(), {
-				{ 0 + m_vertexCount, 1 + m_vertexCount, 2 + m_vertexCount },
-				{ 2 + m_vertexCount, 3 + m_vertexCount, 0 + m_vertexCount }
+				{ 0 + (unsigned)m_vertexCount, 1 + (unsigned)m_vertexCount, 2 + (unsigned)m_vertexCount },
+				{ 2 + (unsigned)m_vertexCount, 3 + (unsigned)m_vertexCount, 0 + (unsigned)m_vertexCount }
 			});
 	// Increment counts.
 	m_vertexCount += 4;
@@ -275,8 +275,8 @@ void Text::generateText(const std::string& text)
 		// -----------------------
 		// Indices.
 		indices.insert(indices.end(), {
-				{ 0 + m_vertexCount, 1 + m_vertexCount, 2 + m_vertexCount },
-				{ 2 + m_vertexCount, 3 + m_vertexCount, 0 + m_vertexCount }
+				{ 0 + (unsigned)m_vertexCount, 1 + (unsigned)m_vertexCount, 2 + (unsigned)m_vertexCount },
+				{ 2 + (unsigned)m_vertexCount, 3 + (unsigned)m_vertexCount, 0 + (unsigned)m_vertexCount }
 			});
 		// Move cursor for next character.
 		totalAdvance += c.xAdvance + kerning;

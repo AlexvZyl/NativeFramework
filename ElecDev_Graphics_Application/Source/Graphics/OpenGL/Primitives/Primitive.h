@@ -197,16 +197,16 @@ public:
 	{
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
-		VertexType& closestVertex = getVertex(0);;
+		VertexType& closestVertex = getVertex(0);
 		float minDistance = glm::abs(glm::distance(position, closestVertex.position));
 		// Find if any of the vertices are closer.
-		for (int i = 0; i < m_vertexCount; i++)
+		for (int i = 1; i < m_vertexCount; i++)
 		{
 			VertexType& currentVertex = getVertex(i);
 			float currentDistance = glm::abs(glm::distance(position, currentVertex.position));
 			if (currentDistance > minDistance) continue;
 			closestVertex = currentVertex;
-			nearestVertexIndex = i - m_vertexBufferPos;
+			nearestVertexIndex = i;
 			minDistance = currentDistance;
 		}
 		// Return the closest vertex, alongside the distance in world coordinates.
@@ -226,13 +226,13 @@ public:
 		VertexType& closestVertex = getVertex(0);
 		float minDistance = glm::abs(glm::distance(position, glm::vec2(closestVertex.position)));
 		// Find if any of the vertices are closer.
-		for (int i = 0; i < m_vertexCount; i++)
+		for (int i = 1; i < m_vertexCount; i++)
 		{
 			VertexType& currentVertex = getVertex(i);
 			float currentDistance = glm::abs(glm::distance(position, glm::vec2(currentVertex.position)));
 			if (currentDistance > minDistance) continue;
 			closestVertex = currentVertex;
-			nearestVertexIndex = i - m_vertexBufferPos;
+			nearestVertexIndex = i;
 			minDistance = currentDistance;
 		}
 		// Return the closest vertex, alongside the distance in world coordinates.
@@ -370,10 +370,10 @@ public:
 	}
 
 	// Update the indices with a new array.
-	inline void updateIndices(IndexType* indices, int indexCount) 
+	inline void updateIndices(IndexType* newIndices, int newIndexCount) 
 	{
-		m_indexBufferPos = getGraphicsBuffer().updateIndices(m_indexBufferPos, m_indexCount, m_vertexBufferPos, indices, indexCount);
-		m_indexCount = indexCount;
+		m_indexBufferPos = getGraphicsBuffer().updateIndices(m_indexBufferPos, m_indexCount, m_vertexBufferPos, newIndices, newIndexCount);
+		m_indexCount = newIndexCount;
 	}
 
 protected:
