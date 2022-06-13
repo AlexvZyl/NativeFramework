@@ -34,7 +34,7 @@ public:
 	inline void enableSnap(float snapValue = 1.f) { m_snapValue = snapValue; }
 	inline void setSnapValue(float snapValue) { m_snapValue = snapValue; }
 	inline void disableSnap() { m_snapValue = 0.f; }
-	inline bool isSnapEnabled() { return m_snapValue; };
+	inline bool isSnapEnabled() { return m_snapValue; }
 
 	// Operation overloads.
 	inline void setOperation(LumenGizmoOperation operation)

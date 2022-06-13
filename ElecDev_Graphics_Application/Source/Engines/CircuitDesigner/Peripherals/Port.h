@@ -52,7 +52,7 @@ public:
 	static Font titleFont;
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
 	float titleSize = 0.0018f;
-	float portSize = 0.0002f;
+	float portSize = 0.0003f;
 	glm::vec2 centre;
 	static unsigned portID;
 	glm::vec4 bodyColour;
@@ -64,13 +64,16 @@ public:
 	Circle* border;
 	Circle* attachmentIndicator;
 	Text* title;
+	float indicatorFraction = 1.0f;
 
-	std::string m_label;
 	glm::vec2 m_offset = { 0, 0 };
 	PortPosition m_position;
 	PortType m_type;
 
 	std::vector<Cable*> m_cables;
+
+	std::string* fromTag = nullptr;
+	float voltage = 0.f;
 
 	// Constructor.
 	Port(const glm::vec2& pos, PortType type, Component2D* parent, const std::string& label = "default");
@@ -89,6 +92,7 @@ public:
 	void setOffset(const glm::vec2& offset);
 	void attachCable(Cable* cable);
 	void detachCable(Cable* cable);
+	void updateType();
 	void showAttachIndicator();
 	void hideAttachIndicator();
 	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });

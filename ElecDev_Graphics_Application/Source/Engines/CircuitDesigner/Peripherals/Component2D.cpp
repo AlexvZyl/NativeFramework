@@ -72,7 +72,6 @@ Component2D::Component2D(Circuit* parent)
 	enableOutline();
 
 	// General dictionary data.
-	dataDict.insert({ "ToTagNumber", "From(Circuit Database)" });
 	dataDict.insert({ "Metric", "1" });
 	dataDict.insert({ "Description", "From(Circuit Database)" });
 	dataDict.insert({ "Unit", "ea" });
@@ -103,6 +102,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 	}
 
+	// Add tags.
+	if (componentNode["Tag"].IsDefined())
+		m_toTagNumber = componentNode["Tag"].as<std::string>();
+	if (componentNode["From Tag"].IsDefined())
+		m_fromTagNumber = componentNode["FromTag"].as<std::string>();
+
 	// Add the equipmemnt type.
 	if (componentNode["Title"].IsDefined())
 	{
@@ -132,6 +137,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	{
 		designator = Renderer::addText2D("?", designatorOffset, titleColour, titleSize, "L", "B", this);
 		designatorSym = designator->m_string;
+	}
+
+	//Add type
+	if (componentNode["Type"].IsDefined())
+	{
+		type = componentNode["Type"].as<std::string>();
 	}
 	
 	// Add the lines.
@@ -260,7 +271,7 @@ void Component2D::removePort(std::shared_ptr<Port> port)
 		return;
 	}
 	// Port was not found on this component.
-	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
+	std::string msg = "Tried to delete port '" + port->title->m_string + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
 	LUMEN_LOG_WARN(msg, "");
 }
 
@@ -277,7 +288,7 @@ void Component2D::removePort(Port* port)
 		return;
 	}
 	// Port was not found on this component.
-	std::string msg = "Tried to delete port '" + port->m_label + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
+	std::string msg = "Tried to delete port '" + port->title->m_string + "', but it does not belong to component '" + designator->m_string + std::to_string(designatorIdx) + "'.";
 	LUMEN_LOG_WARN(msg, "");
 }
 

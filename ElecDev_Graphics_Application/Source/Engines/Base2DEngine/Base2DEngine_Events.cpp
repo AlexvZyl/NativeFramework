@@ -17,7 +17,7 @@
 
 void Base2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 {
-	if (event.isType(EventType_MouseButtonMiddle) || event.isType(EventType_MouseButtonLeft | EventType_LeftCtrl))
+	if (event.isType(EventType_MouseButtonMiddle) || event.isType(EventType_MouseButtonLeft | EventType_SpaceBar))
 	{
 		getScene().getCamera().translate(pixelToWorldDistance(event.currentFrameDelta)); 
 	}

@@ -35,7 +35,7 @@ void saveToYAML(Circuit* circuit, const std::filesystem::path& path)
 	yamlEmitter << YAML::BeginMap;
 		yamlEmitter << YAML::Key << "Lumen File Info" << YAML::Value;
 		yamlEmitter << YAML::BeginMap;
-			yamlEmitter << YAML::Key << "Version" << YAML::Value << "0.0.1";
+			yamlEmitter << YAML::Key << "Version" << YAML::Value << LUMEN_VERSION_STRING;
 			yamlEmitter << YAML::Key << "Type" << YAML::Value << "Circuit";
 		yamlEmitter << YAML::EndMap;
 		yamlEmitter << circuit;

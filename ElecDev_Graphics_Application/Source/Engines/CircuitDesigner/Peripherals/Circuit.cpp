@@ -74,6 +74,12 @@ Circuit::Circuit(const YAML::Node& node)
 		// Rotate the component.
 		if (componentNode["Rotation"].IsDefined())
 			currentComponent->rotate(componentNode["Rotation"].as<float>());
+
+		// Add tags.
+		if (componentNode["Tag"].IsDefined())
+			currentComponent->m_toTagNumber = componentNode["Tag"].as<std::string>();
+		if (componentNode["From Tag"].IsDefined())
+			currentComponent->m_fromTagNumber = componentNode["From Tag"].as<std::string>();
 	}
 
 	// Load cables.

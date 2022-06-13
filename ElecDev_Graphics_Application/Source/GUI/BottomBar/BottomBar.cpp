@@ -32,7 +32,7 @@ void BottomBar::onImGuiBegin()
 void BottomBar::onImGuiRender()
 {
     ImGui::SetCursorPos({8.f, 0.f});
-    ImGui::Text("v0.1");
+    ImGui::Text(LUMEN_VERSION_STRING);
 }
 
 void BottomBar::onImGuiEnd()

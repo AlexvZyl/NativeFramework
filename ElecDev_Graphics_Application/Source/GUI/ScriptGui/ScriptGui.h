@@ -4,18 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Utilities/WebSocket/BoostWebsocket.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include <memory>
-#include <boost/asio.hpp>
-#include <boost/asio/ts/buffer.hpp>
-#include <boost/asio/ts/internet.hpp>
-
-namespace asio = boost::asio;
-using asio_websocket = boost::asio::ip::tcp::socket;
-using asio_ioc = asio::io_context;
-using boost_error_code = boost::system::error_code;
-using asio_endpoint = asio::ip::tcp::endpoint;
+#include "Application/LumenWindow/LumenWebsocketWindow.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -27,12 +16,12 @@ struct lua_State;
 //  Script GUI.																																	//
 //==============================================================================================================================================//
 
-class ScriptGui : public LumenWindow
+class ScriptGui : public LumenWebsocketWindow
 {
 public:
 
 	// Constructor.
-	ScriptGui(std::string name, int windowFlags = 0);
+	ScriptGui(const std::string& name, int windowFlags = 0);
 	// Destructor.
 	~ScriptGui();
 
@@ -41,14 +30,8 @@ public:
 	virtual void onImGuiRender() override;
 	virtual void onImGuiEnd() override;
 
-	// Set the websocket the GUI callbacks to.
-	void connectWebSocket(std::string& host, std::string& port);
-
 	// Set the script that defines the gui.
-	void setSctipt(std::string& script);
-
-	// Send a callback message over the web socket.
-	void callbackMessage(std::string& message);
+	void setSctipt(std::string script);
 
 	// Tells the GUI to get a new script.
 	void awaitNewScript();
@@ -57,10 +40,6 @@ public:
 	std::string m_script;
 
 private:
-
-	// The websocket that the GUI callbacks to.
-	std::unique_ptr<basic_boost_websocket> m_webSocket;
-	std::unique_ptr<asio_ioc> m_ioContext;
 
 	// Lua VM that the script is executed in.
 	lua_State* m_luaState = nullptr;

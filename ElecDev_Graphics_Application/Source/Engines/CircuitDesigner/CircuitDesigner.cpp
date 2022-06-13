@@ -35,6 +35,9 @@ CircuitDesigner::CircuitDesigner()
 		.disableHelperCircle()
 		.setWidgetPosition(GridWidgetPosition::BOTTOM_RIGHT)
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
+	getScene().getCamera().scale2D(100.f);
+	enableOverlay();
+	enableMenuBar();
 
 	// Setup gizmo.
 	LumenGizmo& gizmo = getGizmo();
@@ -59,7 +62,7 @@ void CircuitDesigner::renderOverlay()
 	getScene().getGrid().renderOverlay();
 }
 
-void CircuitDesigner::renderDesignPalette() 
+void CircuitDesigner::renderMenuBar() 
 {
 	if (ImGui::Checkbox("Gizmo", &m_gizmoEnabled))
 	{

@@ -20,7 +20,7 @@
 
 AssetViewer::AssetViewer() 
 {
-	enableDesignPalette();
+	enableMenuBar();
 	getScene().getGrid()
 		.disableHelperCircle()
 		.disable();
@@ -36,7 +36,7 @@ void AssetViewer::clearAssets()
 	Renderer::restoreAndUnbindScene();
 }
 
-void AssetViewer::renderDesignPalette() 
+void AssetViewer::renderMenuBar() 
 {
 	ImGui::SetCursorPosX(getWindowContentRegionSize().x / 2 - ImGui::CalcTextSize(m_currentAsset.c_str()).x / 2);
 	ImGui::Text(m_currentAsset.c_str());

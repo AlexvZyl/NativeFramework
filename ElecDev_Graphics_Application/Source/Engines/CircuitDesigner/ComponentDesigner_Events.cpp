@@ -48,10 +48,10 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			{
 				if (drawFilled) 
 				{
-					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, m_activeComponent.get());
+					m_activePoly = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, penColour, m_activeComponent.get());
 				}
 				else {
-					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get());
+					m_activePoly = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get(), penColour);
 				}
 			}
 			else
@@ -65,7 +65,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			{
 				//start new line
 				bool rounded = false;
-				m_activeLine = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, { 0.f, 0.f, 0.f, 1.f }, rounded, m_activeComponent.get());
+				m_activeLine = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, penColour, rounded, m_activeComponent.get());
 			}
 			else {
 				//end the line
@@ -80,11 +80,11 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				//start new circle
 				if (drawFilled) 
 				{
-					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, m_activeComponent->shapeColour, 1.0f, 0.f, m_activeComponent.get());
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, 1.0f, 0.f, m_activeComponent.get());
 				}
 				else 
 				{
-					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, { 0.f, 0.f, 0.f, 1.f }, penThickness, 0.f, m_activeComponent.get());
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, penThickness, 0.f, m_activeComponent.get());
 				}
 			}
 			else 
@@ -101,9 +101,8 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		else if (designerState == CompDesignState::ADD_TEXT)
 		{
 			// Create a popup GUI for the text entry.
-			float textSize = penThickness;
 			if (!m_activeText) {
-				m_activeText = Renderer::addText2D(" ", screenCoords, { 0.f, 0.f, 0.f, 1.f }, textSize, "C", "B", m_activeComponent.get());
+				m_activeText = Renderer::addText2D(" ", screenCoords, textColour, textSize, "C", "B", m_activeComponent.get());
 				m_activeComponent->m_text.push_back(m_activeText);
 			
 				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
@@ -251,7 +250,10 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			break;
 
 		case GLFW_KEY_ESCAPE:
-			switchState(CompDesignState::SELECT);
+			if ((designerState == CompDesignState::DRAW_POLY && m_activePoly)|| (designerState == CompDesignState::DRAW_CIRCLE && m_activeCircle)|| (designerState == CompDesignState::DRAW_LINE && m_activeLine)) {
+				switchState(designerState);
+			}
+			else { switchState(CompDesignState::SELECT); }
 			break;
 
 		case GLFW_KEY_S:
@@ -275,6 +277,17 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		case GLFW_KEY_DELETE:
 			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
 			break;
+
+		case GLFW_KEY_BACKSPACE:
+			if (designerState == CompDesignState::SELECT) deleteActivePrimitive();
+			break;
+
+		case GLFW_KEY_ENTER:
+			if (designerState != CompDesignState::SELECT) {
+				pushActivePrimitives();
+				switchState(CompDesignState::SELECT);
+			}
+			break;
 		}
 	}
 }
@@ -283,7 +296,7 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 {
 	Base2DEngine::onMouseDragEvent(event);
 
-	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_LeftCtrl))
+	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_SpaceBar))
 	{
 		glm::vec2 pixelCoords = event.mousePosition;
 		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);

@@ -39,45 +39,42 @@ public:
 	{	
 		// Adjust window padding.
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f, 0.f });
 		ImGui::Begin(getImGuiName(), &m_isOpen, getImGuiWindowFlags());
 	}
 
 	inline virtual void onImGuiRender() override
 	{
-		// Render design palette.
-		if (m_engine->hasDesignPalette())
+		// Render the engine menubar.
+		if (m_engine->hasMenuBar())
 		{
 			// Set flag.
 			addImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
 
 			// Setup style.
-			ImGui::PopStyleVar();
 			ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
 			ImGui::PushID(getName().c_str());
-			// Render palette.
+			// Render the bar.
 			if (ImGui::BeginMenuBar())
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
-				m_engine->renderDesignPalette();
+				m_engine->renderMenuBar();
 				ImGui::EndMenuBar();
 				ImGui::PopStyleVar();
 			}
 			// Clear style.
 			ImGui::PopID();
 			ImGui::PopStyleColor();
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
 		}
-		// Set flag for no palette.
+		// Set flag for no menubar.
 		else removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
 
 		// Render engine scene.
 		m_engine->onRender();
 		if (!m_textureID) return;
 		ImGui::Image(m_textureID, m_contentRegionSize, { 0, 1 }, { 1, 0 });
-		ImGui::SetItemAllowOverlap();
 		// Check if image is hovered to allow blocking of events.
+		ImGui::SetItemAllowOverlap();
 		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
 		else						m_engine->m_isHovered = false;
 
@@ -100,17 +97,24 @@ public:
 		// Render the overlay.
 		if (m_engine->hasOverlay())
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.f);
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
 			ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
 			m_engine->renderOverlay();
+			ImGui::PopStyleVar(2);
+		}
+
+		// Render the tooltip.
+		if (m_engine->hasTooltip() && m_engine->m_isHovered)
+		{
+			m_engine->renderTooltip();
 		}
 	}
 
 	inline virtual void onImGuiEnd() override 
 	{
 		ImGui::End();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar();
+		ImGui::PopStyleVar(2);
 	}
 
 	// Pass events to the engine.
@@ -218,13 +222,6 @@ public:
 	{
 		LumenWindow::onWindowResizeEvent(event);
 		m_engine->onWindowResizeEventForce(event);
-	}
-
-	// Override to take engine hoevered into account.
-	// This allows ImGui widgets to block events to the engine.
-	inline virtual bool isHovered() const override 
-	{
-		return LumenWindow::isHovered() && m_engine->m_isHovered;
 	}
 
 private:

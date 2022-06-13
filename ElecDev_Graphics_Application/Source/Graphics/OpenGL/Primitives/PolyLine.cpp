@@ -82,7 +82,11 @@ void PolyLine::update()
 
 	// Push new data.
 	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size());
-	if (outlined) enableOutline();
+	m_outlineEnabled = false;
+	if (outlined) 
+	{
+		enableOutline();
+	}
 }
 
 void PolyLine::pushVertex(const glm::vec3& vertex)
@@ -196,6 +200,12 @@ void PolyLine::disableOutline()
 {
 	outlined = false;
 	Polygon2D::disableOutline();
+}
+
+void PolyLine::setThickness(float thickness)
+{
+	m_thickness = thickness;
+	update();
 }
 
 std::tuple<unsigned, float> PolyLine::getNearestVertexIndex(const glm::vec2& position)

@@ -62,6 +62,20 @@ void Circle::setRadius(float radius)
 	syncWithGPU();
 }
 
+void Circle::setThickness(float thickness)
+{
+	m_thickness = thickness;
+
+	// Update the vertexdata.
+	getVertex(0).thickness = thickness;
+	getVertex(1).thickness = thickness;
+	getVertex(2).thickness = thickness;
+	getVertex(3).thickness = thickness;
+
+	// Sync.
+	syncWithGPU();
+}
+
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

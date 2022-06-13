@@ -48,6 +48,7 @@ public:
 	virtual void translateTo(const glm::vec2& position) override;
 	virtual void enableOutline(float value = 1.f) override;
 	virtual void disableOutline() override;
+	virtual void setThickness(float thickness);
 
 	virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) override;
 

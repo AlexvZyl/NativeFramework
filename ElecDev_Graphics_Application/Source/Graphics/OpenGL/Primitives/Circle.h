@@ -37,6 +37,7 @@ public:
 	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gtb, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
 	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gtb, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
 	void setRadius(float radius);
+	void setThickness(float thickness);
 };
 
 //=============================================================================================================================================//

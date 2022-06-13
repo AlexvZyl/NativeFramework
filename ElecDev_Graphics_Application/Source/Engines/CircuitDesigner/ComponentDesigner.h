@@ -44,9 +44,27 @@ public:
     unsigned int m_currentEntityID = 0;
     float clickTol = 15.0f;
     bool drawFilled = true;
-    float penThickness = 0.001f;
+    float penThickness = 0.0001f;
+    int sizePt = 10;
+    float textSize = sizePt / 2835.f;
+    glm::vec4 penColour = { 0.f, 0.f, 0.f, 1.f };
+    glm::vec4 textColour = { 0.f, 0.f, 0.f, 1.f };
 
     CompDesignState designerState = CompDesignState::SELECT;
+
+
+    //tooltip images
+    unsigned draw_clear_poly_icon;
+    unsigned draw_filled_poly_icon;
+    unsigned draw_clear_circle_icon;
+    unsigned draw_filled_circle_icon;
+    unsigned draw_text_icon;
+    unsigned draw_line_icon;
+    unsigned delete_icon;
+    unsigned port_icon;
+    unsigned colour_palette_icon;
+    unsigned dropdown_icon;
+    unsigned pencil_icon;
 
     // Constructor.
     ComponentDesigner();
@@ -63,8 +81,9 @@ public:
     virtual void onNotifyEvent(const NotifyEvent& event) override;
 
     // Design palette.
-    virtual void renderDesignPalette() override;
+    virtual void renderMenuBar() override;
     virtual void renderOverlay() override;
+    virtual void renderTooltip() override;
 
     void switchState(CompDesignState state);
     void pushActivePrimitives();

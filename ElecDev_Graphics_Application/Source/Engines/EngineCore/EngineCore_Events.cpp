@@ -24,7 +24,7 @@ void EngineCore::onEvent(const Event& event)
 	// Mouse events.
 	if		(event.isType(EventType_MouseMove))			{ onMouseMoveEventForce(event.cast<MouseMoveEvent>()); }
 	else if (event.isType(EventType_MouseDrag))			{ onMouseDragEventForce(event.cast<MouseDragEvent>()); }
-	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEvent(event.cast<MouseScrollEvent>()); }
+	else if (event.isType(EventType_MouseScroll))		{ onMouseScrollEventForce(event.cast<MouseScrollEvent>()); }
 	else if	(event.isType(EventType_MousePress))		{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
 	else if (event.isType(EventType_MouseRelease))		{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
 	else if (event.isType(EventType_MouseDoublePress))	{ onMouseButtonEventForce(event.cast<MouseButtonEvent>()); }
@@ -32,7 +32,7 @@ void EngineCore::onEvent(const Event& event)
 	// Key events.
 	else if (event.isType(EventType_KeyPress)
 		  || event.isType(EventType_KeyRelease)
-		  || event.isType(EventType_KeyRepeat))			{ onKeyEvent(event.cast<KeyEvent>()); }
+		  || event.isType(EventType_KeyRepeat))			{ onKeyEventForce(event.cast<KeyEvent>()); }
 
 	// Window events.
 	else if (event.isType(EventType_WindowResize))		{ onWindowResizeEventForce(event.cast<WindowEvent>()); }
@@ -97,8 +97,8 @@ void EngineCore::onDehoverEventForce(const NotifyEvent& event)
 void EngineCore::onMouseDragEventForce(const MouseDragEvent& event) 
 {
 	if (   event.isType(EventType_MouseButtonMiddle)
-		|| event.isType(EventType_MouseButtonLeft | EventType_LeftCtrl)
-		|| !getGizmo().isOver())
+		|| event.isType(EventType_MouseButtonLeft | EventType_SpaceBar)
+		|| !getGizmo()->isOver())
 	{
 		onMouseDragEvent(event);
 	}
@@ -136,6 +136,18 @@ void EngineCore::onYamlNodeDropEventForce(const YamlNodeDropEvent& event)
 {
 	m_parentWindow->focus();
 	onYamlNodeDropEvent(event);
+}
+
+void EngineCore::onMouseScrollEventForce(const MouseScrollEvent& event) 
+{
+	if (!m_isHovered) return;
+	onMouseScrollEvent(event);
+}
+
+void EngineCore::onKeyEventForce(const KeyEvent& event) 
+{
+	// Do not pass event if ImGui is using the keyboard.
+	onKeyEvent(event);
 }
 
 //==============================================================================================================================================//

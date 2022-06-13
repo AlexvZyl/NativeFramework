@@ -13,14 +13,10 @@
 //==============================================================================================================================================//
 
 namespace boost {
-	namespace asio {
-		namespace ip {
-
-			class address;
-
-		};
-	};
-};
+namespace asio {
+namespace ip {
+	class address;
+};};};
 
 using boost_ip_address = boost::asio::ip::address;
 
@@ -48,7 +44,6 @@ public:
 private:
 
 	// Websocket message types.
-	inline static const char* LUA_EXECUTABLE_SCRIPT = "LUA_EXECUTABLE_SCRIPT";
 	inline static const char* LUA_SCRIPT_GUI = "LUA_SCRIPT_GUI";
 
 	// Create a Lumen GUI.

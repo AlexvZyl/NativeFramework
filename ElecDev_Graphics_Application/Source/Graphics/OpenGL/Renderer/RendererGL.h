@@ -125,7 +125,7 @@ public:
 	// Add a filled 2D polygon with color.
 	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
 	// Add a clear 2D polygon.
-	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr);
+	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f});
 	// Add a circle.
 	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
 	// Add a circle.

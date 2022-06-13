@@ -34,6 +34,7 @@ public:
 
 	// Updates the text of the text entity.
 	bool updateText(const std::string& text);
+	void update();
 	bool updateAlignment(const std::string& horizontalAlignment, const std::string& verticalAlignment = "B");
 
 	// Sets the text box colour.

@@ -85,8 +85,7 @@ void AssetExplorer::onImGuiRender()
 		// Move back button.
 		ImGui::PushID("BACK_AB");
 		bool pathHistory = m_pathHistory.size();
-		if(!pathHistory)
-			ImGui::BeginDisabled();
+		if(!pathHistory) ImGui::BeginDisabled();
 		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 0, 0 }, { 1, 1 }))
 		{
 			if (pathHistory)
@@ -97,16 +96,14 @@ void AssetExplorer::onImGuiRender()
 				loadDirectories();
 			}
 		}
-		if (!pathHistory)
-			ImGui::EndDisabled();
+		if (!pathHistory) ImGui::EndDisabled();
 		ImGui::PopID();
 
 		// Move forward button.
 		ImGui::SameLine();
 		bool pathUndoHistory = m_pathUndoHistory.size();
 		ImGui::PushID("FORWARD_AB");
-		if (!pathUndoHistory)
-			ImGui::BeginDisabled();
+		if (!pathUndoHistory) ImGui::BeginDisabled();
 		if (ImGui::ImageButton((void*)s_leftArrowIcon, headerSize, { 1, 0 }, { 0, 1 }))
 		{
 			if (pathUndoHistory)
@@ -117,8 +114,7 @@ void AssetExplorer::onImGuiRender()
 				loadDirectories();
 			}
 		}
-		if (!pathUndoHistory)
-			ImGui::EndDisabled();
+		if (!pathUndoHistory) ImGui::EndDisabled();
 		ImGui::PopID();
 
 		// Move up.

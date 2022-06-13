@@ -62,12 +62,15 @@ public:
 
 	// Specify the type of the equipment
 	std::string equipType = "Block";
+	std::string type = "Unspecified";
 	std::string designatorSym = "?";
 	int designatorIdx = -1;
 
 	// Data for ElecDec software.
 	std::unordered_map<std::string, std::string> dataDict;
 	std::string m_internalCircuit;
+	std::string m_fromTagNumber = "None";
+	std::string m_toTagNumber = "None";
 
 	// Component shape attributes.
 	float height = 0.08f;
