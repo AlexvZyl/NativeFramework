@@ -78,7 +78,8 @@ void ComponentEditor::onImGuiRender()
 									"Surge Arrestor",
 									"Gulley Box",
 									"Overhead Line",
-									"Lighting Transformer" };
+									"Lighting Transformer", 
+									"Generator"};
 			if (ImGui::BeginCombo("##type", activeComponent->type.c_str())) {
 				for (size_t i = 0; i < IM_ARRAYSIZE(types); i++)
 				{

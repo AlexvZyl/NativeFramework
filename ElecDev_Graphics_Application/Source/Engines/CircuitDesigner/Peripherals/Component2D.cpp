@@ -139,6 +139,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		designatorSym = designator->m_string;
 	}
 
+	//Add type
 	if (componentNode["Type"].IsDefined())
 	{
 		type = componentNode["Type"].as<std::string>();
