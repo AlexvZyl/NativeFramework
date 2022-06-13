@@ -98,7 +98,7 @@ void EngineCore::onMouseDragEventForce(const MouseDragEvent& event)
 {
 	if (   event.isType(EventType_MouseButtonMiddle)
 		|| event.isType(EventType_MouseButtonLeft | EventType_SpaceBar)
-		|| !getGizmo()->isOver())
+		|| !getGizmo().isOver())
 	{
 		onMouseDragEvent(event);
 	}

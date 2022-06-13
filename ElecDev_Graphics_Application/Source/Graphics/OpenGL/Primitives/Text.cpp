@@ -292,7 +292,7 @@ void Text::generateText(const std::string& text)
 void Text::setScale(float scale)
 {
 	m_textScale = scale;
-	wipeGPU();
+	removeFromGraphicsBuffer();
 	generateText(m_string);
 
 	// A bit hacky...
@@ -327,7 +327,7 @@ bool Text::updateText(const std::string& text)
 
 void Text::update()
 {
-	wipeGPU();
+	removeFromGraphicsBuffer();
 	generateText(m_string);
 
 	// A bit hacky...

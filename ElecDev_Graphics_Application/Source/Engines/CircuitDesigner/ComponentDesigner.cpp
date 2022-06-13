@@ -17,17 +17,19 @@
 ComponentDesigner::ComponentDesigner()
 	: Base2DEngine()
 {
-	m_activeComponent = std::make_shared<Component2D>(nullptr);
-	m_activeComponent->title->updateText(m_activeComponent->equipType);
-	m_activeComponent->place(glm::vec2(0.f));
-	m_activeComponent->disableOutline();
-	//enableMenuBar();
+	// Engine setup.
 	enableOverlay();
 	enableTooltip();
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
+
+	// Create default component.
+	m_activeComponent = std::make_shared<Component2D>(nullptr);
+	m_activeComponent->title->updateText(m_activeComponent->equipType);
+	m_activeComponent->place(glm::vec2(0.f));
+	m_activeComponent->disableOutline();
 
 	// Load tooltip icons.
 	draw_clear_poly_icon = loadBitmapToGL(loadImageFromResource(DRAW_POLY_CLEAR_ICON));

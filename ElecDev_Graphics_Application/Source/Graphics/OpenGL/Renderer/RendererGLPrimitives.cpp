@@ -39,14 +39,13 @@ Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, Entity
 Polygon2D* Renderer::addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent)
 {
 	unsigned id = EntityManager::peakNextID();
-	s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_trianglesVAO.get(), parent, color) });
+	s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_trianglesBuffer.get(), parent, color) });
 	return dynamic_cast<Polygon2D*>(s_scene->m_primitives.at(id).get());
 }
 
 PolyLine* Renderer::addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness, Entity* parent, glm::vec4 colour)
 {
 	unsigned id = EntityManager::peakNextID();
-	//s_scene->m_primitives.insert({ id, std::make_unique<Polygon2D>(vertices, s_scene->m_linesBuffer.get(), parent) });
 	s_scene->m_primitives.insert({ id, std::make_unique<PolyLine>(vertices, s_scene->m_trianglesBuffer.get(), parent, thickness, true, colour) });
 	return dynamic_cast<PolyLine*>(s_scene->m_primitives.at(id).get());
 }

@@ -27,17 +27,14 @@ CircuitDesigner::CircuitDesigner()
 	// Engine setup.
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
 	enableOverlay();
-	enableDesignPalette();
+	enableMenuBar();
 
 	// Setup scene & grid.
-	getScene().getCamera().scale2D(100.f);
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setWidgetPosition(GridWidgetPosition::BOTTOM_RIGHT)
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
-	enableOverlay();
-	enableMenuBar();
 
 	// Setup gizmo.
 	LumenGizmo& gizmo = getGizmo();
