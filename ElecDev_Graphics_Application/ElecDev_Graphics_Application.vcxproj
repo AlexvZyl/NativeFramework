@@ -271,7 +271,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Circle.cpp" />
     <ClCompile Include="Source\Graphics\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Polygon.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Primitives\Vertex.cpp" />
     <ClCompile Include="Source\Graphics\Fonts\FontLoader.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine.cpp" />
     <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine.cpp" />

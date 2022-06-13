@@ -11,185 +11,180 @@ BufferLayout is used to setup the VAO.
 
 #include <vector>
 #include "GLM/glm.hpp"
+#include "External/GLAD/Includes/glad/glad.h"
+#include "OpenGL/ErrorHandlerGL.h"
 
 //=============================================================================================================================================//
 //  Vertex Specification.																													   //
 //=============================================================================================================================================//
 
-class Vertex
+class IVertexData
 {
 public:
+	// Returns a pointer to that data contained in the vertex.
+	inline constexpr const void* data() const { return (const void*)this; }
 
-	// ID associated with the vertex.
-	unsigned int entityID = 0;									
-	// Constructor.
-	inline Vertex() = default;
-
-	// --------- //
-	//  D A T A  //
-	// --------- //
-	
-	// Formats the data so that OpenGL can use it.
-	inline virtual const void* getData() = 0;
-	// Returns the ID in a format that OpenGL can use.
-	const void* getID() { return (const void*)&entityID; }			
+protected:
+	inline IVertexData() = default;
 };
 
 //=============================================================================================================================================//
 //  Basic vertex. 																															   //
 //=============================================================================================================================================//
 
-class VertexData : public Vertex
+class VertexData : public IVertexData
 {
-private: 
-	
-	// Sizes.
-	static int totalSizeVD;		// All of the data.
-	static int dataSizeVD;		// All of the color texture data.
-	static int idOffsetVD;		// Offset to the entity ID.
-	static int idSizeVD;		// Size of the entity ID.
-
 public:
 
-	// The vertex data.
-	union {
-		struct {
-			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
-			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
-			float outline = 0.f;
-		}data;
-		float rawData[8];
-	};
-
-	// Pointers to the data.
-	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
-	glm::vec4* color = &data.color;							// Color of the vertex.
-	float* outline = &data.outline;							
-
 	// Constructor.
-	VertexData(const glm::vec3& pos, const glm::vec4& clr, unsigned int eID);
-	
-	// Return the raw data for OpenGL to use.
-	virtual const void* getData() override;	
-	// The entire data size.
-	static int getTotalSize();	
-	// Size of the texture data (excluding the entity ID).
-	static int getDataSize();		
-	// Size of offset to the entity ID.
-	static int getIDOffset();		
-	// Size of the entity ID variable.			
-	static int getIDSize();		
-	// Sets the attributes according to the vertex data.
-	static void initVertexAttributes(unsigned vao);
+	inline VertexData(const glm::vec3& position, const glm::vec4& color, unsigned entityID = 0, float outline = 0.f)
+		: position(position), color(color), entityID(entityID), outline(outline)
+	{ }
+
+	// Set the VAO's vertex layout.
+	inline static void setVertexLayout(unsigned VAO)
+	{
+		constexpr static int vertexSize = sizeof(VertexData);
+		int offset = 0;
+
+		// Position.
+		GLCall(glEnableVertexArrayAttrib(VAO, 0));
+		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec3);
+		// Color.
+		GLCall(glEnableVertexArrayAttrib(VAO, 1));
+		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec4);
+		// Outline.
+		GLCall(glEnableVertexArrayAttrib(VAO, 2));
+		GLCall(glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Entity ID.
+		GLCall(glEnableVertexArrayAttrib(VAO, 3));
+		GLCall(glVertexAttribIPointer(3, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
+	}
+
+	// Data.
+	glm::vec3 position;		
+	glm::vec4 color;		
+	float outline;
+	unsigned entityID;
 };
 
 //=============================================================================================================================================//
 //  Textured basic vertex. 																													   //
 //=============================================================================================================================================//
 
-class VertexDataTextured : public Vertex
+class VertexDataTextured : public IVertexData
 {
-private:
-
-	// Sizes.
-	static int totalSizeVDT;	// All of the data.
-	static int dataSizeVDT;		// All of the color texture data.
-	static int idOffsetVDT;		// Offset to the entity ID.
-	static int idSizeVDT;		// Size of the entity ID.
-
 public:
 
-	// The vertex data.
-	union {
-		struct {
-			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
-			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
-			glm::vec2 textureCoords = { 0.f,0.f };			// Position
-			float outline = 0.f;
-			float textureID = 0.f;
-		}data;
-		float rawData[11];
-	};
-
-	// Pointers to the data.
-	glm::vec3* position = &data.position;					// Position of the vertex in 3D space.
-	glm::vec4* color = &data.color;							// Color of the vertex.
-	glm::vec2* textureCoords = &data.textureCoords;			// Position
-	float* textureID = &data.textureID;
-	float* outline = &data.outline;
-
 	// Constructor.
-	VertexDataTextured(const glm::vec3& pos, const glm::vec4& color, const glm::vec2& texCoords, float texID, unsigned int eID);
-	
-	// Return the raw data for OpenGL to use.
-	virtual const void* getData() override;	
-	// The entire data size.
-	static int getTotalSize();	
-	// Size of the texture data (excluding the entity ID).
-	static int getDataSize();
-	// Size of offset to the entity ID.
-	static int getIDOffset();
-	// Size of the entity ID variable.			
-	static int getIDSize();
-	// Sets the attributes according to the vertex data.
-	static void initVertexAttributes(unsigned vao);
+	inline VertexDataTextured(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoords, float textureID, unsigned int entityID = 0, float outline = 0.f)
+		: position(position), color(color), textureCoords(textureCoords), textureID(textureID), entityID(entityID), outline(outline)
+	{ }
+
+	// Set the VAO's vertex layout.
+	inline static void setVertexLayout(unsigned VAO) 
+	{
+		constexpr static int vertexSize = sizeof(VertexDataTextured);
+		int offset = 0;
+
+		// Position.
+		GLCall(glEnableVertexArrayAttrib(VAO, 0));
+		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec3);
+		// Color.
+		GLCall(glEnableVertexArrayAttrib(VAO, 1));
+		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec4);
+		// Texture coords.
+		GLCall(glEnableVertexArrayAttrib(VAO, 2));
+		GLCall(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec2);
+		// Outline value.
+		GLCall(glEnableVertexArrayAttrib(VAO, 3));
+		GLCall(glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Texture ID.
+		GLCall(glEnableVertexArrayAttrib(VAO, 4));
+		GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Entity ID.
+		GLCall(glEnableVertexArrayAttrib(VAO, 5));
+		GLCall(glVertexAttribIPointer(5, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
+	}
+
+	// Data.
+	glm::vec3 position;
+	glm::vec4 color;
+	glm::vec2 textureCoords;
+	float outline;
+	float textureID;
+	unsigned entityID;
 };
 
 //=============================================================================================================================================//
 //  Circle Vertex Data																														   //
 //=============================================================================================================================================//
 
-// The circle vertex data requires a local coordinate system.
-class VertexDataCircle : public Vertex
+class VertexDataCircle : public IVertexData
 {
-private:
-
-	// Data sizes.
-	static int totalSizeVDC;	// All of the data.
-	static int dataSizeVDC;		// All of the color texture data.
-	static int idOffsetVDC;		// Offset to the entity ID.
-	static int idSizeVDC;		// Size of the entity ID.
-
 public:
 
-	// The vertex data.
-	union {
-		struct {
-			glm::vec3 position = { 0.f, 0.f, 0.f };			// Position of the vertex in 3D space.
-			glm::vec4 color = { 0.f, 0.f, 0.f, 0.f };		// Color of the vertex.
-			float radius = 0.f;
-			glm::vec2 localCoords = { 0.f,0.f };			// Position
-			float outline = 0.f;
-			float thickness = 0.f;
-			float fade = 0.f;
-		}data;
-		float rawData[13];
-	};
+	// Constructor.
+	inline VertexDataCircle(const glm::vec3& position, const glm::vec2& localCoords, float radius, const glm::vec4& color, float thickness, float fade, unsigned int eID = 0, float outline = 0.f) 
+		: position(position), color(color), radius(radius), localCoords(localCoords), outline(outline), thickness(thickness), fade(fade), entityID(entityID)
+	{ }
 
-	// Pointers to the data.
-	glm::vec3* position = &data.position;			// Position of the vertex in 3D space.
-	glm::vec4* color = &data.color;					// Color of the vertex.
-	float* radius = &data.radius;
-	glm::vec2* localCoords = &data.localCoords;		// Position
-	float* thickness = &data.thickness;
-	float* fade = &data.fade;
-	float* outline = &data.outline;
+	// Set the VAO's vertex layout.
+	inline static void setVertexLayout(unsigned VAO)
+	{
+		static int vertexSize = sizeof(VertexDataCircle);
+		int offset = 0;
 
-	// Constructors.
-	VertexDataCircle(const glm::vec3& Position, const glm::vec2& local, float radius, const glm::vec4& Color, float Thickness, float Fade, unsigned int eID);
+		// Position.
+		GLCall(glEnableVertexArrayAttrib(VAO, 0));
+		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec3);
+		// Color.
+		GLCall(glEnableVertexArrayAttrib(VAO, 1));
+		GLCall(glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec4);
+		// Radius.
+		GLCall(glEnableVertexArrayAttrib(VAO, 2));
+		GLCall(glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Local coordinates.
+		GLCall(glEnableVertexArrayAttrib(VAO, 3));
+		GLCall(glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(glm::vec2);
+		// Outline value.
+		GLCall(glEnableVertexArrayAttrib(VAO, 4));
+		GLCall(glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Circle thickness.
+		GLCall(glEnableVertexArrayAttrib(VAO, 5));
+		GLCall(glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Circle fade.
+		GLCall(glEnableVertexArrayAttrib(VAO, 6));
+		GLCall(glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, vertexSize, (const void*)offset));
+		offset += sizeof(float);
+		// Entity ID.
+		GLCall(glEnableVertexArrayAttrib(VAO, 7));
+		GLCall(glVertexAttribIPointer(7, 1, GL_UNSIGNED_INT, vertexSize, (const void*)offset));
+	}
 
-	// Return the raw data for OpenGL to use.
-	virtual const void* getData() override;	
-	// The entire data size.
-	static int getTotalSize();	
-	// Size of the texture data (excluding the entity ID).
-	static int getDataSize();
-	// Size of offset to the entity ID.
-	static int getIDOffset();
-	// Size of the entity ID variable.			
-	static int getIDSize();
-	// Sets the attributes according to the vertex data.
-	static void initVertexAttributes(unsigned vao);
+	// Data.
+	glm::vec3 position;
+	glm::vec4 color;
+	float radius;
+	glm::vec2 localCoords;
+	float outline;
+	float thickness;
+	float fade;
+	unsigned entityID;
 };
 
 //=============================================================================================================================================//

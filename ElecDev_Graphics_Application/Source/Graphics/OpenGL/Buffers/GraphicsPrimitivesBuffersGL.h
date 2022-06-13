@@ -18,7 +18,6 @@ struct Int2
 	// Template.
 	typedef int VarType;
 	constexpr static inline int count() { return 2; }
-	constexpr static inline int size()  { return Int2::count() * sizeof(VarType); }
 };
 
 struct UInt2 
@@ -33,7 +32,6 @@ struct UInt2
 	// Template.
 	typedef unsigned VarType;
 	constexpr static inline int count() { return 2; }
-	constexpr static inline int size()  { return UInt2::count() * sizeof(VarType); }
 };
 
 struct Int3 
@@ -48,7 +46,6 @@ struct Int3
 	// Template.
 	typedef int VarType;
 	constexpr static inline int count() { return 3; }
-	constexpr static inline int size()  { return Int3::count() * sizeof(VarType); }
 };
 
 struct UInt3 
@@ -63,7 +60,6 @@ struct UInt3
 	// Template.
 	typedef unsigned VarType;
 	constexpr static inline int count() { return 3; }
-	constexpr static inline int size()  { return UInt3::count() * sizeof(VarType); }
 };
 
 class IGraphicsPrimitivesBuffer 
@@ -117,6 +113,7 @@ public:
 	// Push vertices and return the index in memory.  Vertices are copied.
 	inline int push(const VertexType* ptr, int size = 1)
 	{
+		// Ensure valid data.
 		if (!size) return -1;
 
 		// CPU.
@@ -134,6 +131,7 @@ public:
 	// was returned when pushing the vertices.
 	inline int push(const IndexType* ptr, int size, int offset)
 	{
+		// Ensure valid data.
 		if (!size) return -1;
 
 		// Load data to CPU and offset indices.
@@ -156,21 +154,22 @@ public:
 	// Erase the vertices given the position and size.
 	inline void eraseVertices(int index, int size)
 	{
-		// Ensure data is valid.
+		// Ensure valid data.
 		if (!size || index == -1) return;
 
 		// CPU.
 		m_vertexData.erase(index, size);
 		// Orphan the data.  Is this necessary?
-		getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), NULL);
+		//getVAO().getVBO().namedBufferSubData(index * VertexType::getTotalSize(), size * VertexType::getTotalSize(), NULL);
 	}
 
 	// Erase the indices given the position and size.
 	inline void eraseIndices(int index, int size)
 	{
-		// Ensure data is valid.
+		// Ensure valid data.
 		if (!size || index == -1) return;
 
+		// CPU.
 		m_indexData.erase(index, size);
 		indicesChanged();
 	}
@@ -202,8 +201,10 @@ public:
 	// Remove the primitive from the sync queue.
 	inline void removeFromSync(IPrimitive* primitive)
 	{
+		// Ensure primitive is in queue.
 		if (!primitive->m_queuedForSync) return;
 
+		// Find primitive in queue.
 		int index = 0;
 		for (auto p : m_primitivesToSync)
 		{
@@ -211,6 +212,7 @@ public:
 			index++;
 		}
 
+		// Remove from queue.
 		m_primitivesToSync.erase(m_primitivesToSync.begin() + index);
 		primitive->m_queuedForSync = false;
 	}
@@ -278,7 +280,7 @@ public:
 		int offset = 0;
 		for (auto it = m_indexData.begin(); it != m_indexData.end(); ++it)
 		{
-			ibo.bufferSubData(offset * IndexType::size(), it.m_elementsInMemoryRegion * IndexType::size(), (*it).data());
+			ibo.bufferSubData(offset * sizeof(IndexType), it.m_elementsInMemoryRegion * sizeof(IndexType), (*it).data());
 			offset += it.m_elementsInMemoryRegion;
 		}
 
@@ -333,8 +335,6 @@ template <typename VertexType>
 class GraphicsTrianglesBuffer : public GraphicsPrimitivesBuffer<VertexType, UInt3, FreeList, FreeList>
 { 
 public:
-
-	// Constructor.
 	inline GraphicsTrianglesBuffer() : GraphicsPrimitivesBuffer<VertexType, UInt3, FreeList, FreeList>()
 	{
 		this->getVAO().setType(GL_TRIANGLES);
@@ -345,8 +345,6 @@ template <typename VertexType>
 class GraphicsLinesBuffer : public GraphicsPrimitivesBuffer<VertexType, UInt2, FreeList, SEFreeList>
 { 
 public:
-
-	// Constructor.
 	inline GraphicsLinesBuffer() : GraphicsPrimitivesBuffer<VertexType, UInt2, FreeList, SEFreeList>()
 	{
 		this->getVAO().setType(GL_LINES);

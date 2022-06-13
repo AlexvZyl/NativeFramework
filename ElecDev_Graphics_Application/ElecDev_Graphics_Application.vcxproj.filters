@@ -19,7 +19,6 @@
     <ClCompile Include="Source\Graphics\Fonts\FontLoader.cpp" />
     <ClCompile Include="Source\Graphics\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Circle.cpp" />
-    <ClCompile Include="Source\Graphics\OpenGL\Primitives\Vertex.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Utilities.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner.cpp" />
