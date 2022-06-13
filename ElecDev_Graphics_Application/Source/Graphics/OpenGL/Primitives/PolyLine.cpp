@@ -68,25 +68,15 @@ void PolyLine::update()
 
 	// Clear current data.
 	removeFromGraphicsBuffer();
-
 	auto indices = mapbox::earcut<unsigned>(resultVec);
-	m_indexCount = indices.size();
-
 	std::vector<VertexData> vertexVector;
 	for (auto& path : resultVec) 
-	{
-		for (auto& vertex : path) vertexVector.emplace_back(vertex, m_colour, m_entityID);
-	}
-
-	m_vertexCount = vertexVector.size();
-
+		for (auto& vertex : path) 
+			vertexVector.emplace_back(vertex, m_colour, m_entityID);
 	// Push new data.
-	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size());
+	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size() / UInt3::count());
 	m_outlineEnabled = false;
-	if (outlined) 
-	{
-		enableOutline();
-	}
+	if (outlined) enableOutline();
 }
 
 void PolyLine::pushVertex(const glm::vec3& vertex)

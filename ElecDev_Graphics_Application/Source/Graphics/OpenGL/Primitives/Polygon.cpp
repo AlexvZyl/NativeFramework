@@ -80,7 +80,6 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 	currentVertices.emplace_back(vertex, m_colour, m_entityID);
 
 	// Update the data.
-	m_vertexCount++;
 	vertices.emplace_back(vertex);
 	std::vector<std::vector<glm::vec3>> vertices_with_holes;
 	vertices_with_holes.push_back(vertices);

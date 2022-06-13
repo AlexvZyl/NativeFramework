@@ -50,70 +50,50 @@ void ComponentDesigner::switchState(CompDesignState state)
 	switch (state)
 	{
 	case CompDesignState::DRAW_POLY:
-		//Add new polygon
+		// Add new polygon.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::DRAW_POLY;
 		break;
 
 	case CompDesignState::DRAW_LINE:
-		//Add new line
+		// Add new line.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::DRAW_LINE;
 		break;
 
 	case CompDesignState::DRAW_CIRCLE:
-		//Add new circle
+		// Add new circle.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::DRAW_CIRCLE;
 		break;
 
 	case CompDesignState::PLACE_PORT:
-		//Add new port
+		// Add new port.
 		switchState(CompDesignState::SELECT);
 		m_activePort = std::make_shared<Port>(getNearestGridVertex( { pixelToWorldCoords(getMouseLocalPosition()) }), next_port_type, m_activeComponent.get());
 		designerState = CompDesignState::PLACE_PORT;
 		break;
 
 	case CompDesignState::ADD_TEXT:
-		//Add new text
+		// Add new text.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::ADD_TEXT;
 		break;
+
 	case CompDesignState::SELECT:
-
-		if (m_activeText)
-		{
-			m_activeText->disableOutline();
-		}
-		if (m_activePoly)
-		{
-			m_activePoly->disableOutline();
-		}
-		if (m_activeLine)
-		{
-			m_activeLine->disableOutline();
-		}
-		if (m_activePort.get())
-		{
-			m_activePort->disableOutline();
-		}
-
+		// Disable outlines.
+		if (m_activeText) m_activeText->disableOutline();
+		if (m_activePoly) m_activePoly->disableOutline();
+		if (m_activeLine) m_activeLine->disableOutline();
+		if (m_activePort.get()) m_activePort->disableOutline();
+		// Remove primitives.
 		if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE) 
 		{
-			if (m_activeCircle) 
-			{
-				Renderer::remove(m_activeCircle);
-			}
-			if (m_activePoly) 
-			{
-				Renderer::remove(m_activePoly);
-			}
-			if (m_activeLine) 
-			{
-				Renderer::remove(m_activeLine);
-			}
+			if (m_activeCircle) Renderer::remove(m_activeCircle);
+			if (m_activePoly) Renderer::remove(m_activePoly);
+			if (m_activeLine) Renderer::remove(m_activeLine);
 		}
-
+		// Set state.
 		m_activeLine = nullptr;
 		m_activeText = nullptr;
 		m_activePoly = nullptr;
@@ -126,24 +106,15 @@ void ComponentDesigner::switchState(CompDesignState state)
 
 void ComponentDesigner::pushActivePrimitives()
 {
-	if (m_activeCircle) 
-	{
-		m_activeComponent->addCircle(m_activeCircle);
-	}
+	if (m_activeLine) m_activeComponent->addLine(m_activeLine);
+	if (m_activeCircle) m_activeComponent->addCircle(m_activeCircle);
 	if (m_activePoly) 
 	{
 		PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
-		if (polyline) {
-			m_activeComponent->addLine(polyline);
-		}
-		else {
-			m_activeComponent->addPoly(m_activePoly);
-		}
+		if (polyline) m_activeComponent->addLine(polyline);
+		else		  m_activeComponent->addPoly(m_activePoly);
 	}
-	if (m_activeLine) 
-	{
-		m_activeComponent->addLine(m_activeLine);
-	}
+	// Set state.
 	m_activeLine = nullptr;
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
@@ -151,27 +122,12 @@ void ComponentDesigner::pushActivePrimitives()
 
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
-	//Remove outline of current entity
-	if (m_activePoly) 
-	{
-		m_activePoly->disableOutline();
-	}
-	if (m_activeLine) 
-	{
-		m_activeLine->disableOutline();
-	}
-	if (m_activeCircle) 
-	{
-		m_activeCircle->disableOutline();
-	}
-	if (m_activeText) 
-	{
-		m_activeText->disableOutline();
-	}
-	if (m_activePort.get()) 
-	{
-		m_activePort->disableOutline();
-	}
+	// Remove outline of current entity.
+	if (m_activePoly) m_activePoly->disableOutline();
+	if (m_activeLine) m_activeLine->disableOutline();
+	if (m_activeCircle) m_activeCircle->disableOutline();
+	if (m_activeText) m_activeText->disableOutline();
+	if (m_activePort.get()) m_activePort->disableOutline();
 
 	// Remove previous selection.
 	m_activeLine = nullptr;
@@ -180,63 +136,57 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 	m_activePort = nullptr;
 	m_activeText = nullptr;
 
-	if ((eID == 0) || (eID == -1))
-	{
-		//Lumen::getApp().m_guiState->clickedZone.background = true;
-	}
+	if ((eID == 0) || (eID == -1)) { }
 	else 
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		if (!currentEntity) return;
+		// Entity is a primitive belonging to the component.
 		if (currentEntity->m_parent == m_activeComponent.get()) 
 		{
-			//Entity is a primitive belonging to the component
+			// Line.
 			if (dynamic_cast<PolyLine*>(currentEntity))
 			{
-				//Line
 				m_activeLine = dynamic_cast<PolyLine*>(currentEntity);
 				m_activeLine->enableOutline();
 			}
+			// Polygon.
 			else if (dynamic_cast<Polygon2D*>(currentEntity)) 
 			{
-				//Polygon
 				m_activePoly = dynamic_cast<Polygon2D*>(currentEntity);
 				m_activePoly->enableOutline();
 			}
+			// Circle.
 			else if (dynamic_cast<Circle*>(currentEntity)) 
 			{
-				//Circle
 				m_activeCircle = dynamic_cast<Circle*>(currentEntity);
 				m_activeCircle->enableOutline();
 			}
+			// Text.
 			else if (dynamic_cast<Text*>(currentEntity)) 
 			{
-				//Text
 				m_activeText = dynamic_cast<Text*>(currentEntity);
-				m_activeText->enableOutline();//We may want to rather outline the textbox in the future or change how text is highlighted.
+				m_activeText->enableOutline();
 			}
 		}
+		// Port.
 		else if (dynamic_cast<Port*>(currentEntity->m_parent)) 
 		{
-			//Port
+			// Port text is selected.
 			if (dynamic_cast<Text*>(currentEntity)) 
 			{
-				//Port text is selected
 				m_activeText = dynamic_cast<Text*>(currentEntity);
-				m_activeText->enableOutline();//We may want to rather outline the textbox in the future or change how text is highlighted.
+				m_activeText->enableOutline();
 			}
+			// Port body is selected.
 			else 
 			{
-				// Port body is selected.
 				Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
 				m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
 					{
 						return current.get() == cur;
 					});
-				if (m_activePort) 
-				{
-					m_activePort->enableOutline();
-				}
+				if (m_activePort) m_activePort->enableOutline();
 			}
 		}
 	}
@@ -271,51 +221,26 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 
 void ComponentDesigner::deleteActivePrimitive()
 {
+	// Disable outline.
+	if (m_activeText) m_activeText->disableOutline();
+	if (m_activePoly) m_activePoly->disableOutline();
+	if (m_activeLine) m_activeLine->disableOutline();
+	if (m_activePort.get()) m_activePort->disableOutline();
 
+	// Remove primitive.
+	if (m_activeLine) m_activeComponent->removeLine(m_activeLine);
+	if (m_activePoly) m_activeComponent->removePoly(m_activePoly);
+	if (m_activeCircle) m_activeComponent->removeCircle(m_activeCircle);
+	if (m_activePort) m_activeComponent->removePort(m_activePort);
 	if (m_activeText)
 	{
-		m_activeText->disableOutline();
-	}
-	if (m_activePoly)
-	{
-		m_activePoly->disableOutline();
-	}
-	if (m_activeLine)
-	{
-		m_activeLine->disableOutline();
-	}
-	if (m_activePort.get())
-	{
-		m_activePort->disableOutline();
-	}
-
-	if (m_activeLine)
-	{
-		m_activeComponent->removeLine(m_activeLine);
-	}
-	if (m_activePoly) 
-	{
-		m_activeComponent->removePoly(m_activePoly);
-	}
-	if (m_activeCircle) 
-	{
-		m_activeComponent->removeCircle(m_activeCircle);
-	}
-	if (m_activePort) 
-	{
-		m_activeComponent->removePort(m_activePort);
-	}
-	if (m_activeText)
-	{
-		//if the text belongs to a port, we can delete the whole port
+		// If the text belongs to a port, we can delete the whole port.
 		if (m_activeText->m_parent->m_type == EntityType::PORT) 
-		{
 			m_activeComponent->removePort(dynamic_cast<Port*>(m_activeText->m_parent));
-		}
 		m_activeComponent->removeText(m_activeText);
 	}
 
-	//remove previous selection
+	// Remove previous selection.
 	m_activeLine = nullptr;
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
