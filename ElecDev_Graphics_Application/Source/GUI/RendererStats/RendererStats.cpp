@@ -283,14 +283,14 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_linesBuffer->getVertexData().capacity());
+				ImGui::Text("%d", scene->m_linesBuffer->getVertexCapacity());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_linesBuffer->getIndexData().capacity());
+				ImGui::Text("%d", scene->m_linesBuffer->getIndexCapacity());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -345,14 +345,14 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_trianglesBuffer->getVertexData().capacity());
+				ImGui::Text("%d", scene->m_trianglesBuffer->getVertexCapacity());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_trianglesBuffer->getIndexData().capacity());
+				ImGui::Text("%d", scene->m_trianglesBuffer->getIndexCapacity());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -406,14 +406,14 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getVertexData().capacity());
+				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getVertexCapacity());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getIndexData().capacity());
+				ImGui::Text("%d", scene->m_texturedTrianglesBuffer->getIndexCapacity());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();
@@ -467,14 +467,14 @@ void RendererStats::onImGuiRender()
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Vertex Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_circlesBuffer->getVertexData().capacity());
+				ImGui::Text("%d", scene->m_circlesBuffer->getVertexCapacity());
 
 				// Index Buffer Capacity.
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
 				ImGui::Text("Index Buffer Capacity");
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%d", scene->m_circlesBuffer->getIndexData().capacity());
+				ImGui::Text("%d", scene->m_circlesBuffer->getIndexCapacity());
 
 				// VAO Memory usage.
 				ImGui::TableNextRow();

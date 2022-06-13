@@ -50,6 +50,8 @@ void Text::generateText(const std::string& text)
 {
 	// Init.
 	glm::vec3 cursorStart = m_trackedCenter;
+	m_vertexCount = 0;
+	m_indexCount = 0;
 
 	// If the text is empty send a box so that if still exists.
 	// Is this the best thing to do?...

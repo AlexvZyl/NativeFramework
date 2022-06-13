@@ -385,7 +385,6 @@ void ComponentDesigner::renderOverlay()
 		ImGui::SameLine();
 		if (designerState == CompDesignState::DRAW_LINE) 
 		{
-
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -473,34 +472,41 @@ void ComponentDesigner::renderOverlay()
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
-			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) 
+			{
 				ImGui::PopStyleColor(3);
-				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) {
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) 
+				{
 					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
 				ImGui::Text("Size");
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (m_activeText) {
+				if (m_activeText) 
+				{
 					int tempSizePt = std::round(m_activeText->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
 						m_activeText->setScale(tempSizePt / 2835.f);
 					}
 				}
-				else if (ImGui::InputInt("pt ", &sizePt)) {
+				else if (ImGui::InputInt("pt ", &sizePt)) 
+				{
 					textSize = sizePt / 2835.f;
 				}
 				ImGui::PopItemWidth();
 				ImGui::EndButtonDropDown();
 			}
-			else{
+			else
+			{
 				ImGui::PopStyleColor(3);
 			}
 		}
 		else {
-			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
-				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) {
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) 
+			{
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) 
+				{
 					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
 				ImGui::Text("Size");

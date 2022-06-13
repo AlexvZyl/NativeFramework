@@ -71,6 +71,8 @@ public:
 	inline virtual VertexArrayObject& getVAO() = 0;
 	inline virtual int getIndexCount() const = 0;
 	inline virtual int getVertexCount() const = 0;
+	inline virtual int getIndexCapacity() const = 0;
+	inline virtual int getVertexCapacity() const = 0;
 
 protected:
 
@@ -100,7 +102,7 @@ protected:
 		m_vertexData.iterateMemory();
 		m_indexData.iterateMemory();
 		m_vertexData.setCapacityIncrements(BUFFER_INCREMENTS);
-		m_indexData.setCapacityIncrements(BUFFER_INCREMENTS);
+		m_indexData.setCapacityIncrements(BUFFER_INCREMENTS / IndexType::count());
 		m_vertexData.setResizeThreshold(VERTEX_BUFFER_REDUCTION_SCALE);
 		m_indexData.setResizeThreshold(VERTEX_BUFFER_REDUCTION_SCALE);
 	};
@@ -222,6 +224,8 @@ public:
 	inline VertexType& getVertex(int index)				{ return m_vertexData[index]; }
 	inline virtual int getIndexCount() const override	{ return m_indexData.count() * IndexType::count(); }
 	inline virtual int getVertexCount() const override	{ return m_vertexData.count(); }
+	inline virtual int getIndexCapacity() const override { return m_indexData.capacity() * IndexType::count(); }
+	inline virtual int getVertexCapacity() const override { return m_vertexData.capacity(); }
 	inline float getResizeThreshold() const				{ return m_vertexData.getResizeThreshold(); }
 	inline int getCapacityIncrements() const			{ return m_vertexData.getCapacityIncrements(); }
 	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
