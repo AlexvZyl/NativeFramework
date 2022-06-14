@@ -33,13 +33,28 @@ void main()
     if(v_outline == 0.0f)
         return;
 
+    // Circle data.
     Output.Radius        = v_radius;
     Output.LocalPosition = v_localCoords;
     Output.Color         = v_color;
     Output.Thickness     = v_thickness;
     Output.Fade          = v_fade;
-    gl_Position = viewProjMatrix * vec4(v_pos, 1.0);
-    f_entityID = v_entityID;
+    f_entityID           = v_entityID;
+
+    // Manipulate the values so that the circle thickness adjusts 
+    // around the radius.
+    vec3 vPos = v_pos;
+    if(Output.Thickness != -1)
+    {
+        vPos.x += Output.LocalPosition.x * ( Output.Thickness / 2.f );
+        vPos.y += Output.LocalPosition.y * ( Output.Thickness / 2.f );
+        Output.Radius += Output.Thickness / 2.f;
+    }
+    else
+    {
+        Output.Thickness = Output.Radius;
+    }
+    gl_Position = viewProjMatrix * vec4(vPos, 1.0);
 }
 
 #shader fragment

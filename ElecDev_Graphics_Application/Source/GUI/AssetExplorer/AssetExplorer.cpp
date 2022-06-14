@@ -160,7 +160,7 @@ void AssetExplorer::onImGuiRender()
 		}
 	}
 	ImGui::EndChild();
-	ImGui::PopStyleVar();
+	//ImGui::PopStyleVar();
 
 	ImGui::SameLine();
 
@@ -178,6 +178,7 @@ void AssetExplorer::onImGuiRender()
 			loadDirectories();
 	}
 	ImGui::EndChild();
+	ImGui::PopStyleVar();
 
 	ImGui::SameLine();
 
@@ -192,7 +193,6 @@ void AssetExplorer::onImGuiRender()
 		filter.Draw("##AssetExplorerSearch", ImGui::GetWindowContentRegionWidth() - textSize);
 	}
 	ImGui::EndChild();
-
 	ImGui::Separator();
 
 	// Files & Folders.

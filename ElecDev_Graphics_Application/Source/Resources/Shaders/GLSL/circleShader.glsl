@@ -39,9 +39,16 @@ void main()
     // Manipulate the values so that the circle thickness adjusts 
     // around the radius.
     vec3 vPos = v_pos;
-    vPos.x += Output.LocalPosition.x * ( Output.Thickness * Output.Radius / 2.f );
-    vPos.y += Output.LocalPosition.y * ( Output.Thickness * Output.Radius / 2.f );
-    Output.Radius += Output.Thickness * Output.Radius / 2.f;
+    if(Output.Thickness != -1)
+    {
+        vPos.x += Output.LocalPosition.x * ( Output.Thickness / 2.f );
+        vPos.y += Output.LocalPosition.y * ( Output.Thickness / 2.f );
+        Output.Radius += Output.Thickness / 2.f;
+    }
+    else
+    {
+        Output.Thickness = Output.Radius;
+    }
     gl_Position = viewProjMatrix * vec4(vPos, 1.0);
 }
 

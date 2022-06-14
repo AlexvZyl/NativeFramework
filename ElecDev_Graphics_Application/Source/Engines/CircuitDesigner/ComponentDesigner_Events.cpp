@@ -80,7 +80,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				//start new circle
 				if (drawFilled) 
 				{
-					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, 1.0f, 0.f, m_activeComponent.get());
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, -1.0f, 0.f, m_activeComponent.get());
 				}
 				else 
 				{

@@ -37,7 +37,7 @@ Circle::Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gpb, const glm::vec3& 
 		{2, 3, 0}
 	};
 
-	// Add to VAO.
+	// Add to buffer.
 	pushToGraphicsBuffer(vertices, 4, indices, 2);
 } 
 
@@ -47,30 +47,36 @@ Circle::Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gpb, const glm::vec2& 
 
 void Circle::setRadius(float radius)
 {
-	// Set new radius.
 	m_radius = radius;
 
-	// Update the vertexdata.
+	// Update vertices.
 	getVertex(0).position = { m_trackedCenter.x - radius, m_trackedCenter.y + radius, m_trackedCenter.z };
 	getVertex(1).position = { m_trackedCenter.x + radius, m_trackedCenter.y + radius, m_trackedCenter.z };
 	getVertex(2).position = { m_trackedCenter.x + radius, m_trackedCenter.y - radius, m_trackedCenter.z };
 	getVertex(3).position = { m_trackedCenter.x - radius, m_trackedCenter.y - radius, m_trackedCenter.z };
 
-	// Sync.
+	// Update radius.
+	getVertex(0).radius = radius;
+	getVertex(1).radius = radius;
+	getVertex(2).radius = radius;
+	getVertex(3).radius = radius;
+
 	syncWithGPU();
 }
 
 void Circle::setThickness(float thickness)
 {
+	// Cannot set filled circle thickness.
+	if (m_thickness == -1) return;
+
 	m_thickness = thickness;
 
-	// Update the vertexdata.
+	// Update thickness.
 	getVertex(0).thickness = thickness;
 	getVertex(1).thickness = thickness;
 	getVertex(2).thickness = thickness;
 	getVertex(3).thickness = thickness;
 
-	// Sync.
 	syncWithGPU();
 }
 
