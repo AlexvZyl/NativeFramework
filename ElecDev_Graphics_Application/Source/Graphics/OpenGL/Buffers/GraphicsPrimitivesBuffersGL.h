@@ -211,6 +211,7 @@ public:
 			if (primitive == p) break;
 			index++;
 		}
+		LUMEN_DEBUG_ASSERT(index < m_primitivesToSync.size(), "Could not find primitive.");
 
 		// Remove from queue.
 		m_primitivesToSync.erase(m_primitivesToSync.begin() + index);
@@ -244,12 +245,20 @@ public:
 		// Check if resize required.
 		if (m_VAO.getVBO().capacity() != m_vertexData.allocated())
 		{
-			// Resize the VBO and reload the data.
-			getVAO().getVBO().namedBufferData(m_vertexData.allocated(), NULL);
 			reloadVertices();
-			// If the VBO was resized, the vertices were reloaded and
-			// there is no need to sync the remaining primitives.
-			m_primitivesToSync.resize(0);
+			return true;
+		}
+		// No resize ocurred.
+		return false;
+	}
+
+	// Check if the indices memory has to resize.
+	inline bool queryIndicesResize()
+	{
+		// Check if resize required.
+		if (m_VAO.getIBO().capacity() != m_indexData.allocated())
+		{
+			reloadIndices();
 			return true;
 		}
 		// No resize ocurred.
@@ -257,26 +266,35 @@ public:
 	}
 
 	// Load all of the vertex CPU data to the GPU.
+	// Does the resize if required, otherwise orphans the buffer.
 	inline void reloadVertices()
 	{
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
+
+		// Orphan / resize.
+		if (m_vertexData.allocated() == vbo.capacity()) vbo.orphan();
+		else vbo.bufferData(m_vertexData.allocated(), NULL);
+
+		// Reload the vertexdata.
 		for (auto it = m_vertexData.begin(); it != m_vertexData.end(); ++it)
-		{
 			vbo.bufferSubData(it.m_index * sizeof(VertexType), it.m_elementsInMemoryRegion * sizeof(VertexType), (*it).data());
-		}
+
+		// Primitives are synced when vertices are reloaded.
+		for (auto p : m_primitivesToSync) p->m_queuedForSync = false;
+		m_primitivesToSync.resize(0);
 	}
 
 	// Load all of the index CPU data to the GPU.
+	// Does the resize if required, otherwise orphans the buffer.
 	inline void reloadIndices()
 	{
 		IndexBufferObject& ibo = getVAO().getIBO();
 		ibo.bind();
 
-		// Orphan if no resize.
-		if (m_indexData.size() == ibo.capacity()) ibo.orphan();
-		// Resize.
-		else ibo.bufferData(m_indexData.size(), NULL);
+		// Orphan / resize.
+		if (m_indexData.allocated() == ibo.capacity()) ibo.orphan();
+		else ibo.bufferData(m_indexData.allocated(), NULL);
 
 		// Reload index data.
 		int offset = 0;
@@ -295,12 +313,14 @@ public:
 	{	
 		VertexBufferObject& vbo = getVAO().getVBO();
 		vbo.bind();
+
 		// Update primitives data.
 		for (auto primitive : m_primitivesToSync)
 		{
 			vbo.bufferSubData(primitive->m_vertexBufferPos * sizeof(VertexType), primitive->m_vertexCount * sizeof(VertexType), getVertex(primitive->m_vertexBufferPos).data());
 			primitive->m_queuedForSync = false;
 		}
+
 		// All primitives have been synced.
 		m_primitivesToSync.resize(0);
 	}

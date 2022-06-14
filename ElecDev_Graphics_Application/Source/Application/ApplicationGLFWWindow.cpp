@@ -217,6 +217,11 @@ void Application::glfwInitCallbacks()
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+
+            // If any buttons are being held we want the app to render the cursor.
+            // Otherwise the OS can take over.
+            if (s_heldButtons.size()) Lumen::getApp().setCursorMode(CursorMode::ImGui);
+            else Lumen::getApp().setCursorMode(CursorMode::OS);
         });
 
     // ----------------------------------- //
@@ -418,9 +423,8 @@ GLFWwindow* Application::glfwInitWindow()
     icon.width = bitmap.bmWidth;
     // Set icon.
     glfwSetWindowIcon(window, 1, &icon);
-
-    if (glfwRawMouseMotionSupported())
-        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+    // Enable raw mouse input.
+    if (glfwRawMouseMotionSupported()) glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
     // --------------------------- //
     //  O P E N G L   L O A D E R  //

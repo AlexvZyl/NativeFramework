@@ -55,7 +55,11 @@ Application::Application()
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigInputTrickleEventQueue = false;
+	io.MouseDrawCursor = true;
 	setGuiTheme();
+
+	// Default cursor mode.
+	setCursorMode(CursorMode::OS);
 
 	// Initialisation frame.
 	buildDocks();
@@ -124,6 +128,26 @@ void Application::setActiveEngine(EngineCore* engine)
 EngineCore* Application::getActiveEngine()
 {
 	return m_activeEngine;
+}
+
+void Application::setCursorMode(CursorMode mode) 
+{
+	switch (mode) 
+	{
+	case CursorMode::OS:
+		ImGui::GetIO().MouseDrawCursor = false;
+		glfwSetInputMode(getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		break;
+
+	case CursorMode::ImGui:
+		ImGui::GetIO().MouseDrawCursor = true;
+		glfwSetInputMode(getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		break;
+
+	default:
+		LUMEN_LOG_ERROR("Unknown cursor mode.", "Application");
+		break;
+	}
 }
 
 //==============================================================================================================================================//

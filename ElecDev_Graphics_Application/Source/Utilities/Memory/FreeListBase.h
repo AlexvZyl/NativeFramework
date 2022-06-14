@@ -535,12 +535,12 @@ protected:
 																																				 
 	// Slot utilities.																															 
 	inline void slotDestructor(int slotIndex)							{ getSlotElementPtr(slotIndex)->~T(); }									 // Call the destructor of the element in the slot.
-	inline int getSlotSize(int slotIndex) const							{ return *(getSlotDataPtr(slotIndex)); }								 // Get the size of the slot.
-	inline int getNextSlot(int slotIndex) const							{ return *(getSlotDataPtr(slotIndex) + 1); }							 // Get the next open slot.
-	virtual inline int getPrevSlot(int slotIndex) const					{ return *(getSlotDataPtr(slotIndex) + 2); }							 // Get the prev open slot.
-	inline void setSlotSize(int slotIndex, int size)					{ *(getSlotDataPtr(slotIndex)) = size; }								 // Set the size of the slot.
-	inline void setNextSlot(int slotIndex, int nextSlot)				{ *(getSlotDataPtr(slotIndex) + 1) = nextSlot; }						 // Set the next open slot.
-	virtual inline void setPrevSlot(int slotIndex, int prevSlot)		{ *(getSlotDataPtr(slotIndex) + 2) = prevSlot; }						 // Set the prev open slot.
+	inline int getSlotSize(int slotIndex) const							{ return getSlotDataPtr(slotIndex)[0]; }								 // Get the size of the slot.
+	inline int getNextSlot(int slotIndex) const							{ return getSlotDataPtr(slotIndex)[1]; }								 // Get the next open slot.
+	virtual inline int getPrevSlot(int slotIndex) const					{ return getSlotDataPtr(slotIndex)[2]; }								 // Get the prev open slot.
+	inline void setSlotSize(int slotIndex, int size)					{ getSlotDataPtr(slotIndex)[0] = size; }								 // Set the size of the slot.
+	inline void setNextSlot(int slotIndex, int nextSlot)				{ getSlotDataPtr(slotIndex)[1] = nextSlot; }							 // Set the next open slot.
+	virtual inline void setPrevSlot(int slotIndex, int prevSlot)		{ getSlotDataPtr(slotIndex)[2] = prevSlot; }							 // Set the prev open slot.
 	inline void increaseSlotSize(int slotIndex, int size)				{ setSlotSize(slotIndex, getSlotSize(slotIndex) + size); }				 // Increase the slot size.
 	inline bool hasNextSlot(int slotIndex) const						{ return getNextSlot(slotIndex) != -1; }								 // Check if the given slot has a next slot.
 	inline bool hasPrevSlot(int slotIndex) const						{ return getPrevSlot(slotIndex) != -1; }								 // Check if the given slot has a previous slot.

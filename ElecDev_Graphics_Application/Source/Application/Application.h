@@ -42,6 +42,7 @@ namespace YAML { class Node; }
 //  Data.																																		//
 //==============================================================================================================================================//
 
+// Where windows are docked.
 enum class LumenDockPanel
 {
 	Floating,	// Undocked windows.
@@ -56,12 +57,20 @@ enum class LumenDockPanel
 	Fixed,		// These panels are handled manually).
 };
 
+// The type of notification pushed to the app.
 enum class NotificationType
 {
 	Success,
 	Warning,
 	Error,
 	Info,
+};
+
+// Who has responsibility for rendering the cursor.
+enum class CursorMode 
+{
+	OS,
+	ImGui
 };
 
 //==============================================================================================================================================//
@@ -111,6 +120,9 @@ public:
 
 	// Get the asset viewer engine.
 	inline AssetViewer* getAssetViewerEngine() { return m_assetViewerEngine; };
+
+	// Switch who is responsible for rendering the cursor.
+	void setCursorMode(CursorMode mode);
 
 	// ------------- //
 	//  E V E N T S  //
