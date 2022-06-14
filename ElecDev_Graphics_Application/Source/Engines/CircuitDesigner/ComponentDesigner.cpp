@@ -313,12 +313,7 @@ void ComponentDesigner::deleteActivePrimitive()
 	}
 
 	//remove previous selection
-	m_activeLine = nullptr;
-	m_activePoly = nullptr;
-	m_activeCircle = nullptr;
-	m_activePort = nullptr;
-	m_activeVertexIdx = -1;
-	m_activeText = nullptr;
+	setActivePrimitives(0);
 }
 
 void ComponentDesigner::renderOverlay() 
@@ -679,12 +674,8 @@ void ComponentDesigner::renderOverlay()
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)
 {
-	m_activeComponent = nullptr;
-	m_activePoly = nullptr;
-	m_activeLine = nullptr;
-	m_activeCircle = nullptr;
-	m_activeText = nullptr;
-	m_activePort = nullptr;
+
+	setActivePrimitives(0);
 	m_activeComponent = std::make_shared<Component2D>(path, parent);
 	m_activeComponent->disableOutline();
 }
