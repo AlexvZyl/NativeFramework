@@ -4,9 +4,9 @@
 
 #include "OpenGL/Primitives/Circle.h"
 #include "OpenGL/Primitives/Vertex.h"
-#include "Graphics/Entities/EntityManager.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
+#include "Graphics/Entities/EntityManager.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -30,14 +30,12 @@ Circle::Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gpb, const glm::vec3& 
 		{ { center.x + radius, center.y - radius, center.z }, local3, m_radius, m_colour, m_thickness, m_fade, m_entityID },
 		{ { center.x - radius, center.y - radius, center.z }, local4, m_radius, m_colour, m_thickness, m_fade, m_entityID }
 	};
-	m_vertexCount = 4;
 
 	// Indices.
 	UInt3 indices[2] = {
 		{0, 1, 2},
 		{2, 3, 0}
 	};
-	m_indexCount = 2;
 
 	// Add to VAO.
 	pushToGraphicsBuffer(vertices, 4, indices, 2);

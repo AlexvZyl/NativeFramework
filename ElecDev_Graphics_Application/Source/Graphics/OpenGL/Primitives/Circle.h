@@ -23,10 +23,10 @@ class Circle : public Primitive<GraphicsTrianglesBuffer<VertexDataCircle>>
 public:
 
 	// Local texture coordinates for the circle shader.
-	static inline glm::vec2 local1 = { -1.f,  1.f };
-	static inline glm::vec2 local2 = {  1.f,  1.f };
-	static inline glm::vec2 local3 = {  1.f, -1.f };
-	static inline glm::vec2 local4 = { -1.f, -1.f };
+	static inline constexpr glm::vec2 local1 = { -1.f,  1.f };
+	static inline constexpr glm::vec2 local2 = {  1.f,  1.f };
+	static inline constexpr glm::vec2 local3 = {  1.f, -1.f };
+	static inline constexpr glm::vec2 local4 = { -1.f, -1.f };
 
 	// Circle data.
 	float m_thickness = 0;
