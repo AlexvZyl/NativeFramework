@@ -81,7 +81,7 @@ void CircuitEditor::onImGuiRender()
 				int componentCount = 0;
 				for (auto& [name, node] : engine->m_circuit->m_referenceComponents)
 				{
-					if (!componentsFilter.PassFilter(name.c_str())) continue;
+					if (!componentsFilter.PassFilter(std::filesystem::path(name).stem().string().c_str())) continue;
 
 					ImGui::PushID(componentCount++);
 					// Component image.
@@ -146,7 +146,7 @@ void CircuitEditor::onImGuiRender()
 				int cableCount = 0;
 				for (auto& [name, node] : engine->m_circuit->m_referenceCables)
 				{
-					if (!cablesFilter.PassFilter(name.c_str())) continue;
+					if (!componentsFilter.PassFilter(std::filesystem::path(name).stem().string().c_str())) continue;
 
 					ImGui::PushID(cableCount++);
 					if (ImGui::ImageButton((void*)s_cableIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
