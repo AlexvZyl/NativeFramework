@@ -37,6 +37,10 @@ private:
 	// Icons.
 	inline static unsigned s_cableIcon = NULL;
 	inline static unsigned s_componentFileIcon = NULL;
+
+	// Filters used for cables and components.
+	ImGuiTextFilter componentsFilter;
+	ImGuiTextFilter cablesFilter;
 };
 
 //=======================================================================================================================================//
