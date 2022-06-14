@@ -197,15 +197,12 @@ public:
 	{
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
-		VertexType& closestVertex = getVertex(0);
-		float minDistance = glm::abs(glm::distance(position, closestVertex.position));
+		float minDistance = glm::abs(glm::distance(position, getVertex(nearestVertexIndex).position));
 		// Find if any of the vertices are closer.
 		for (int i = 1; i < m_vertexCount; i++)
 		{
-			VertexType& currentVertex = getVertex(i);
-			float currentDistance = glm::abs(glm::distance(position, currentVertex.position));
+			float currentDistance = glm::abs(glm::distance(position, getVertex(i).position));
 			if (currentDistance > minDistance) continue;
-			closestVertex = currentVertex;
 			nearestVertexIndex = i;
 			minDistance = currentDistance;
 		}
@@ -223,15 +220,12 @@ public:
 	{
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
-		VertexType& closestVertex = getVertex(0);
-		float minDistance = glm::abs(glm::distance(position, glm::vec2(closestVertex.position)));
+		float minDistance = glm::abs(glm::distance(position, glm::vec2(getVertex(nearestVertexIndex).position)));
 		// Find if any of the vertices are closer.
 		for (int i = 1; i < m_vertexCount; i++)
 		{
-			VertexType& currentVertex = getVertex(i);
-			float currentDistance = glm::abs(glm::distance(position, glm::vec2(currentVertex.position)));
+			float currentDistance = glm::abs(glm::distance(position, glm::vec2(getVertex(i).position)));
 			if (currentDistance > minDistance) continue;
-			closestVertex = currentVertex;
 			nearestVertexIndex = i;
 			minDistance = currentDistance;
 		}

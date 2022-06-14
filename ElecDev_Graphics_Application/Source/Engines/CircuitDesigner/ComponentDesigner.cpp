@@ -253,7 +253,7 @@ void ComponentDesigner::renderOverlay()
 {
 	constexpr glm::vec2 button_size = { 35, 35 };
 	constexpr glm::vec2 dropdown_size = { 10, 10 };
-	
+
 	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_AlwaysUseWindowPadding)) 
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });

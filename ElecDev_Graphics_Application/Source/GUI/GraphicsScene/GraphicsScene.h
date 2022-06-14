@@ -69,12 +69,23 @@ public:
 		// Set flag for no menubar.
 		else removeImGuiWindowFlags(ImGuiWindowFlags_MenuBar);
 
+		// Create seperate channels for the overlay and the texture.
+		static ImDrawListSplitter splitter;
+		splitter.Split(ImGui::GetWindowDrawList(), 2);
+
+		// Render the gizmo.
+		splitter.SetCurrentChannel(ImGui::GetWindowDrawList(), 1);
+		LumenGizmo& gizmo = m_engine->getGizmo();
+		gizmo.setWindowPosition(ImGui::GetWindowPos());
+		gizmo.setWindowSize(m_contentRegionSize);
+		gizmo.render();
+
 		// Render engine scene.
 		m_engine->onRender();
 		if (!m_textureID) return;
+		splitter.SetCurrentChannel(ImGui::GetWindowDrawList(), 0);
 		ImGui::Image(m_textureID, m_contentRegionSize, { 0, 1 }, { 1, 0 });
 		// Check if image is hovered to allow blocking of events.
-		ImGui::SetItemAllowOverlap();
 		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
 		else						m_engine->m_isHovered = false;
 
@@ -88,15 +99,10 @@ public:
 		payloadNode.setDragAndDropTarget();
 		if (payloadNode.hasValidData()) m_engine->onEvent(YamlNodeDropEvent(payloadNode.getDataYamlNode()));
 
-		// Render the gizmo.
-		LumenGizmo& gizmo = m_engine->getGizmo();
-		gizmo.setWindowPosition(ImGui::GetWindowPos());
-		gizmo.setWindowSize(m_contentRegionSize);
-		gizmo.render();
-
 		// Render the overlay.
 		if (m_engine->hasOverlay())
 		{
+			splitter.SetCurrentChannel(ImGui::GetWindowDrawList(), 1);
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.f);
 			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0.f);
 			ImGui::SetCursorPos(ImGui::GetWindowContentRegionMin());
@@ -106,9 +112,10 @@ public:
 
 		// Render the tooltip.
 		if (m_engine->hasTooltip() && m_engine->m_isHovered)
-		{
 			m_engine->renderTooltip();
-		}
+
+		// Combine drawlist.
+		splitter.Merge(ImGui::GetWindowDrawList());
 	}
 
 	inline virtual void onImGuiEnd() override 
