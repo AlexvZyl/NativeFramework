@@ -8,7 +8,7 @@
 #include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Graphics/Entities/EntityManager.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 
 //=============================================================================================================================================//

@@ -12,7 +12,7 @@
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Graphics/Fonts/FontLoader.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
 #include "Engines/CircuitDesigner/ComponentDesigner.h"

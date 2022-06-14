@@ -16,7 +16,7 @@
 //  Forward Declerations.																														//
 //==============================================================================================================================================//
 
-class PrimitivePtr;
+class IPrimitive;
 class Scene;
 class Polygon2DTextured;
 class Circle;
@@ -29,12 +29,18 @@ class Entity;
 class VertexData;
 class VertexDataTextured;
 class VertexDataCircle;
-class VertexArrayObjectPtr;
+class IVertexArrayObject;
 class PolyLine;
+class FrameBufferObject;
+class VertexArrayObject;
+class IGraphicsPrimitivesBuffer;
 
 template<typename VertexType>
-class VertexArrayObject;
+class GraphicsTrianglesBuffer;
+template<typename VertexType>
+class GraphicsLinesBuffer;
 
+struct Ind3;
 struct Font;
 
 //==============================================================================================================================================//
@@ -77,7 +83,7 @@ public:
 	// Use the font provided.
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
-	static void remove(PrimitivePtr* primitive);
+	static void remove(IPrimitive* primitive);
 	// Clear the rendering context.
 	static void clearColor();
 	// Force the GPU commands.
@@ -121,9 +127,9 @@ public:
 	// Add a clear 2D polygon.
 	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f});
 	// Add a circle.
-	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
+	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = -1.f, float fade = 0.0f, Entity* parent = nullptr);
 	// Add a circle.
-	static Circle* addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness = 1, float fade = 0.001, Entity* parent = nullptr);
+	static Circle* addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness = -1.f, float fade = 0.0f, Entity* parent = nullptr);
 	// Add a singular line segment.
 	static LineSegment* addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
 	// Add a 2D text string.
@@ -187,12 +193,12 @@ private:
 	// --------------- //
 
 	// Buffers.
-	static void drawBufferIndexed(VertexArrayObjectPtr* vao);
-	static void drawBufferIndexedForcePrimitive(VertexArrayObjectPtr* vao, unsigned primitive);
+	static void drawBufferIndexed(IGraphicsPrimitivesBuffer& vao);
+	static void drawBufferIndexedForcePrimitive(IGraphicsPrimitivesBuffer& vao, unsigned primitive);
 
 	// Textures.
 	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
-	static std::unique_ptr<VertexArrayObject<VertexDataTextured>> s_unitQuad;
+	static std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> s_unitQuad;
 	static void createUnitQuad();
 
 	// ------------------- //

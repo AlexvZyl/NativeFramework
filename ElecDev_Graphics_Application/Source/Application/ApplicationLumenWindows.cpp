@@ -69,6 +69,9 @@ void Application::dockWindowToPanel(LumenWindow* window, LumenDockPanel panel)
 		// These have to be handled manually.
 		break;
 
+	// These cases should never be docked to more than once, so there is no need
+	// to manually update the window ID.
+
 	case LumenDockPanel::Ribbon:
 		ImGui::DockBuilderDockWindow(window->getImGuiName(), findLastActiveChildNode(m_ribbonPanelID));
 		break;
@@ -94,10 +97,10 @@ ImGuiID Application::findLargestChildNode(ImGuiID nodeID)
 
 	// Find the largest node.
 	ImGuiDockNode* largestNode = nodes[0];
-	float largestNodeArea = largestNode->Size.x * largestNode->Size.y;
-	for (auto* node : nodes) 
+	float largestNodeArea = largestNode->Rect().GetArea();
+	for (auto node : nodes) 
 	{
-		float nodeArea = node->Size.x * node->Size.y;
+		float nodeArea = node->Rect().GetArea();
 		if (nodeArea > largestNodeArea)
 		{
 			largestNode = node;
@@ -131,13 +134,11 @@ ImGuiID Application::findLastActiveChildNode(ImGuiID nodeID)
 void Application::findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDockNode*>& nodes)
 {
 	// Iterate over children.
-	for (auto* childNode : currentNode->ChildNodes) 
+	for (auto childNode : currentNode->ChildNodes) 
 	{
 		// If valid, find its children.
-		if (childNode)
-		{
-			findChildNodes(childNode, nodes);
-		}
+		if (childNode) findChildNodes(childNode, nodes);
+
 		// If any of the two children are NULL it means the current node is at the bottom.
 		else 
 		{

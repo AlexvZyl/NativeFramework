@@ -1,6 +1,6 @@
 #include "CircuitDesignerPopupModal.h"
 #include "Application/Application.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 

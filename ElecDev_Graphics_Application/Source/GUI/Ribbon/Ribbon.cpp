@@ -15,7 +15,7 @@
 #include <imgui/imgui_internal.h>
 #include "GUI/ComponentEditor/ComponentEditor.h"
 
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "GUI/CircuitEditor/CircuitEditor.h"

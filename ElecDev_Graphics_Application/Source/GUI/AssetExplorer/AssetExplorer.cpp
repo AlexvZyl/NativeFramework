@@ -4,7 +4,7 @@
 
 #include "Application/Application.h"
 #include "AssetExplorer.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Events/EventLog.h"
 #include "Utilities/Windows/WindowsUtilities.h"
 #include "Resources/ResourceHandler.h"
@@ -52,6 +52,8 @@ AssetExplorer::~AssetExplorer()
 
 void AssetExplorer::onImGuiBegin()
 {
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 0.f);
+	ImGui::PushStyleColor(ImGuiCol_ChildBg, { 0.f, 0.f, 0.f, 0.f });
 	ImGui::Begin(getImGuiName(), NULL, getImGuiWindowFlags());
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {2.f, 10.f});
 	ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 10.f);
@@ -78,7 +80,7 @@ void AssetExplorer::onImGuiRender()
 	static glm::vec2 headerSize(22, 22);
 
 	// Buttons.
-	if (ImGui::BeginChild("AssetButtons", { buttonsWidth, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("AssetButtons", { buttonsWidth, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding))
 	{
 		// Move back button.
 		ImGui::PushID("BACK_AB");
@@ -141,7 +143,8 @@ void AssetExplorer::onImGuiRender()
 	ImGui::SameLine();
 
 	// Current directory.
-	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.f);
+	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding))
 	{
 		ImGui::SetScrollX(ImGui::GetScrollMaxX());
 		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
@@ -157,11 +160,12 @@ void AssetExplorer::onImGuiRender()
 		}
 	}
 	ImGui::EndChild();
+	//ImGui::PopStyleVar();
 
 	ImGui::SameLine();
 
 	// Filter options.
-	if (ImGui::BeginChild("AssetFilter", { 210.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("AssetFilter", { 210.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding))
 	{
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 3.f);
 		if (ImGui::Checkbox(" .lmcp ", &m_displayComponents))
@@ -174,11 +178,12 @@ void AssetExplorer::onImGuiRender()
 			loadDirectories();
 	}
 	ImGui::EndChild();
+	ImGui::PopStyleVar();
 
 	ImGui::SameLine();
 
 	// Search bar.
-	if (ImGui::BeginChild("SearchBar", { 0.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (ImGui::BeginChild("SearchBar", { 0.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding))
 	{
 		static float textSize = ImGui::CalcTextSize("Search: ").x;
 		ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 6.f);
@@ -188,6 +193,7 @@ void AssetExplorer::onImGuiRender()
 		filter.Draw("##AssetExplorerSearch", ImGui::GetWindowContentRegionWidth() - textSize);
 	}
 	ImGui::EndChild();
+	ImGui::Separator();
 
 	// Files & Folders.
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 5.f, 5.f });
@@ -324,10 +330,11 @@ void AssetExplorer::onImGuiRender()
 
 void AssetExplorer::onImGuiEnd()
 {
-	ImGui::PopStyleVar();
-	ImGui::PopStyleVar();
+	ImGui::PopStyleVar(2);
 	ImGui::PopStyleColor();
 	ImGui::End();
+	ImGui::PopStyleVar();
+	ImGui::PopStyleColor();
 }
 
 void AssetExplorer::loadDirectories() 

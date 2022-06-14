@@ -12,7 +12,7 @@
 #include "OpenGL/SceneGL.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
 #include "glm/glm.hpp"
@@ -131,8 +131,8 @@ void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 	}
 
 	// Set the entity the gizmo has to edit.
-	if (m_activeComponent) getGizmo()->setEntity(m_activeComponent.get());
-	else				   getGizmo()->clearEntities();
+	if (m_activeComponent) getGizmo().setEntity(m_activeComponent.get());
+	else				   getGizmo().clearEntities();
 }
 
 //==============================================================================================================================================//

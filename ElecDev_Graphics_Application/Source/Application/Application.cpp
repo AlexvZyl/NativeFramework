@@ -19,7 +19,7 @@
 #include "GUI/Toolbar/toolbar.h"
 #include "GUI/AssetExplorer/AssetExplorer.h"
 #include "GUI/BottomBar/BottomBar.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Utilities/Profiler/Profiler.h"
 #include "Utilities/Lua/LuaInterpreter.h"
 #include "External/Misc/ConsoleColor.h"
@@ -39,6 +39,9 @@ Application::Application()
 	// Create GLFW window.
 	m_glfwWindow = Application::glfwInitWindow();
 
+	// Init renderer.
+	Renderer::initialise();
+
 	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
@@ -52,7 +55,11 @@ Application::Application()
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigInputTrickleEventQueue = false;
+	io.MouseDrawCursor = true;
 	setGuiTheme();
+
+	// Default cursor mode.
+	setCursorMode(CursorMode::OS);
 
 	// Initialisation frame.
 	buildDocks();
@@ -79,6 +86,9 @@ Application::~Application()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+
+	// Shutdown renderer.
+	Renderer::shutdown();
 
 	// GLFW cleanup.
 	glfwDestroyWindow(getGLFWWindow());
@@ -118,6 +128,26 @@ void Application::setActiveEngine(EngineCore* engine)
 EngineCore* Application::getActiveEngine()
 {
 	return m_activeEngine;
+}
+
+void Application::setCursorMode(CursorMode mode) 
+{
+	switch (mode) 
+	{
+	case CursorMode::OS:
+		ImGui::GetIO().MouseDrawCursor = false;
+		glfwSetInputMode(getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		break;
+
+	case CursorMode::ImGui:
+		ImGui::GetIO().MouseDrawCursor = true;
+		glfwSetInputMode(getGLFWWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		break;
+
+	default:
+		LUMEN_LOG_ERROR("Unknown cursor mode.", "Application");
+		break;
+	}
 }
 
 //==============================================================================================================================================//
@@ -331,8 +361,6 @@ void Application::setGuiTheme()
 
 	if (first)
 	{
-		first = false;
-
 		// Tell imgui that it does not own the font memory data.
 		ImFontConfig imFontConfig;
 		imFontConfig.FontDataOwnedByAtlas = false;
@@ -346,6 +374,8 @@ void Application::setGuiTheme()
 		// Init notify.
 		ImGui::MergeIconsWithLatestFont(16.f, false);
 	}
+
+	first = false;
 }
 
 //==============================================================================================================================================//

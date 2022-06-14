@@ -1,6 +1,6 @@
 #include "ComponentDesigner.h"
 #include "imgui/imgui.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
@@ -17,17 +17,19 @@
 ComponentDesigner::ComponentDesigner()
 	: Base2DEngine()
 {
-	m_activeComponent = std::make_shared<Component2D>(nullptr);
-	m_activeComponent->title->updateText(m_activeComponent->equipType);
-	m_activeComponent->place(glm::vec2(0.f));
-	m_activeComponent->disableOutline();
-	//enableMenuBar();
+	// Engine setup.
 	enableOverlay();
 	enableTooltip();
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
+
+	// Create default component.
+	m_activeComponent = std::make_shared<Component2D>(nullptr);
+	m_activeComponent->title->updateText(m_activeComponent->equipType);
+	m_activeComponent->place(glm::vec2(0.f));
+	m_activeComponent->disableOutline();
 
 	// Load tooltip icons.
 	draw_clear_poly_icon = loadBitmapToGL(loadImageFromResource(DRAW_POLY_CLEAR_ICON));
@@ -48,70 +50,50 @@ void ComponentDesigner::switchState(CompDesignState state)
 	switch (state)
 	{
 	case CompDesignState::DRAW_POLY:
-		//Add new polygon
+		// Add new polygon.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::DRAW_POLY;
 		break;
 
 	case CompDesignState::DRAW_LINE:
-		//Add new line
+		// Add new line.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::DRAW_LINE;
 		break;
 
 	case CompDesignState::DRAW_CIRCLE:
-		//Add new circle
+		// Add new circle.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::DRAW_CIRCLE;
 		break;
 
 	case CompDesignState::PLACE_PORT:
-		//Add new port
+		// Add new port.
 		switchState(CompDesignState::SELECT);
 		m_activePort = std::make_shared<Port>(getNearestGridVertex( { pixelToWorldCoords(getMouseLocalPosition()) }), next_port_type, m_activeComponent.get());
 		designerState = CompDesignState::PLACE_PORT;
 		break;
 
 	case CompDesignState::ADD_TEXT:
-		//Add new text
+		// Add new text.
 		switchState(CompDesignState::SELECT);
 		designerState = CompDesignState::ADD_TEXT;
 		break;
+
 	case CompDesignState::SELECT:
-
-		if (m_activeText)
-		{
-			m_activeText->disableOutline();
-		}
-		if (m_activePoly)
-		{
-			m_activePoly->disableOutline();
-		}
-		if (m_activeLine)
-		{
-			m_activeLine->disableOutline();
-		}
-		if (m_activePort.get())
-		{
-			m_activePort->disableOutline();
-		}
-
+		// Disable outlines.
+		if (m_activeText) m_activeText->disableOutline();
+		if (m_activePoly) m_activePoly->disableOutline();
+		if (m_activeLine) m_activeLine->disableOutline();
+		if (m_activePort.get()) m_activePort->disableOutline();
+		// Remove primitives.
 		if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE) 
 		{
-			if (m_activeCircle) 
-			{
-				Renderer::remove(m_activeCircle);
-			}
-			if (m_activePoly) 
-			{
-				Renderer::remove(m_activePoly);
-			}
-			if (m_activeLine) 
-			{
-				Renderer::remove(m_activeLine);
-			}
+			if (m_activeCircle) Renderer::remove(m_activeCircle);
+			if (m_activePoly) Renderer::remove(m_activePoly);
+			if (m_activeLine) Renderer::remove(m_activeLine);
 		}
-
+		// Set state.
 		m_activeLine = nullptr;
 		m_activeText = nullptr;
 		m_activePoly = nullptr;
@@ -124,24 +106,15 @@ void ComponentDesigner::switchState(CompDesignState state)
 
 void ComponentDesigner::pushActivePrimitives()
 {
-	if (m_activeCircle) 
-	{
-		m_activeComponent->addCircle(m_activeCircle);
-	}
+	if (m_activeLine) m_activeComponent->addLine(m_activeLine);
+	if (m_activeCircle) m_activeComponent->addCircle(m_activeCircle);
 	if (m_activePoly) 
 	{
 		PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
-		if (polyline) {
-			m_activeComponent->addLine(polyline);
-		}
-		else {
-			m_activeComponent->addPoly(m_activePoly);
-		}
+		if (polyline) m_activeComponent->addLine(polyline);
+		else		  m_activeComponent->addPoly(m_activePoly);
 	}
-	if (m_activeLine) 
-	{
-		m_activeComponent->addLine(m_activeLine);
-	}
+	// Set state.
 	m_activeLine = nullptr;
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
@@ -149,27 +122,12 @@ void ComponentDesigner::pushActivePrimitives()
 
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
-	//Remove outline of current entity
-	if (m_activePoly) 
-	{
-		m_activePoly->disableOutline();
-	}
-	if (m_activeLine) 
-	{
-		m_activeLine->disableOutline();
-	}
-	if (m_activeCircle) 
-	{
-		m_activeCircle->disableOutline();
-	}
-	if (m_activeText) 
-	{
-		m_activeText->disableOutline();
-	}
-	if (m_activePort.get()) 
-	{
-		m_activePort->disableOutline();
-	}
+	// Remove outline of current entity.
+	if (m_activePoly) m_activePoly->disableOutline();
+	if (m_activeLine) m_activeLine->disableOutline();
+	if (m_activeCircle) m_activeCircle->disableOutline();
+	if (m_activeText) m_activeText->disableOutline();
+	if (m_activePort.get()) m_activePort->disableOutline();
 
 	// Remove previous selection.
 	m_activeLine = nullptr;
@@ -178,62 +136,57 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 	m_activePort = nullptr;
 	m_activeText = nullptr;
 
-	if ((eID == 0) || (eID == -1))
-	{
-		//Lumen::getApp().m_guiState->clickedZone.background = true;
-	}
+	if ((eID == 0) || (eID == -1)) { }
 	else 
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (!currentEntity) return;
+		// Entity is a primitive belonging to the component.
 		if (currentEntity->m_parent == m_activeComponent.get()) 
 		{
-			//Entity is a primitive belonging to the component
+			// Line.
 			if (dynamic_cast<PolyLine*>(currentEntity))
 			{
-				//Line
 				m_activeLine = dynamic_cast<PolyLine*>(currentEntity);
 				m_activeLine->enableOutline();
 			}
+			// Polygon.
 			else if (dynamic_cast<Polygon2D*>(currentEntity)) 
 			{
-				//Polygon
 				m_activePoly = dynamic_cast<Polygon2D*>(currentEntity);
 				m_activePoly->enableOutline();
 			}
+			// Circle.
 			else if (dynamic_cast<Circle*>(currentEntity)) 
 			{
-				//Circle
 				m_activeCircle = dynamic_cast<Circle*>(currentEntity);
 				m_activeCircle->enableOutline();
 			}
+			// Text.
 			else if (dynamic_cast<Text*>(currentEntity)) 
 			{
-				//Text
 				m_activeText = dynamic_cast<Text*>(currentEntity);
-				m_activeText->enableOutline();//We may want to rather outline the textbox in the future or change how text is highlighted.
+				m_activeText->enableOutline();
 			}
 		}
+		// Port.
 		else if (dynamic_cast<Port*>(currentEntity->m_parent)) 
 		{
-			//Port
+			// Port text is selected.
 			if (dynamic_cast<Text*>(currentEntity)) 
 			{
-				//Port text is selected
 				m_activeText = dynamic_cast<Text*>(currentEntity);
-				m_activeText->enableOutline();//We may want to rather outline the textbox in the future or change how text is highlighted.
+				m_activeText->enableOutline();
 			}
+			// Port body is selected.
 			else 
 			{
-				// Port body is selected.
 				Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
 				m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
 					{
 						return current.get() == cur;
 					});
-				if (m_activePort) 
-				{
-					m_activePort->enableOutline();
-				}
+				if (m_activePort) m_activePort->enableOutline();
 			}
 		}
 	}
@@ -244,7 +197,7 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	m_activeVertexIdx = -1;
 	if (m_activePoly) 
 	{
-		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIdx(coords);
+		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
@@ -258,7 +211,7 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	}*/
 	else if (m_activeLine) 
 	{
-		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIdx(coords);
+		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
@@ -268,51 +221,26 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 
 void ComponentDesigner::deleteActivePrimitive()
 {
+	// Disable outline.
+	if (m_activeText) m_activeText->disableOutline();
+	if (m_activePoly) m_activePoly->disableOutline();
+	if (m_activeLine) m_activeLine->disableOutline();
+	if (m_activePort.get()) m_activePort->disableOutline();
 
+	// Remove primitive.
+	if (m_activeLine) m_activeComponent->removeLine(m_activeLine);
+	if (m_activePoly) m_activeComponent->removePoly(m_activePoly);
+	if (m_activeCircle) m_activeComponent->removeCircle(m_activeCircle);
+	if (m_activePort) m_activeComponent->removePort(m_activePort);
 	if (m_activeText)
 	{
-		m_activeText->disableOutline();
-	}
-	if (m_activePoly)
-	{
-		m_activePoly->disableOutline();
-	}
-	if (m_activeLine)
-	{
-		m_activeLine->disableOutline();
-	}
-	if (m_activePort.get())
-	{
-		m_activePort->disableOutline();
-	}
-
-	if (m_activeLine)
-	{
-		m_activeComponent->removeLine(m_activeLine);
-	}
-	if (m_activePoly) 
-	{
-		m_activeComponent->removePoly(m_activePoly);
-	}
-	if (m_activeCircle) 
-	{
-		m_activeComponent->removeCircle(m_activeCircle);
-	}
-	if (m_activePort) 
-	{
-		m_activeComponent->removePort(m_activePort);
-	}
-	if (m_activeText)
-	{
-		//if the text belongs to a port, we can delete the whole port
+		// If the text belongs to a port, we can delete the whole port.
 		if (m_activeText->m_parent->m_type == EntityType::PORT) 
-		{
 			m_activeComponent->removePort(dynamic_cast<Port*>(m_activeText->m_parent));
-		}
 		m_activeComponent->removeText(m_activeText);
 	}
 
-	//remove previous selection
+	// Remove previous selection.
 	m_activeLine = nullptr;
 	m_activePoly = nullptr;
 	m_activeCircle = nullptr;
@@ -325,7 +253,7 @@ void ComponentDesigner::renderOverlay()
 {
 	constexpr glm::vec2 button_size = { 35, 35 };
 	constexpr glm::vec2 dropdown_size = { 10, 10 };
-	
+
 	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_AlwaysUseWindowPadding)) 
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
@@ -457,7 +385,6 @@ void ComponentDesigner::renderOverlay()
 		ImGui::SameLine();
 		if (designerState == CompDesignState::DRAW_LINE) 
 		{
-
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
@@ -545,34 +472,41 @@ void ComponentDesigner::renderOverlay()
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
-			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) 
+			{
 				ImGui::PopStyleColor(3);
-				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) {
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) 
+				{
 					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
 				ImGui::Text("Size");
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (m_activeText) {
+				if (m_activeText) 
+				{
 					int tempSizePt = std::round(m_activeText->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
 						m_activeText->setScale(tempSizePt / 2835.f);
 					}
 				}
-				else if (ImGui::InputInt("pt ", &sizePt)) {
+				else if (ImGui::InputInt("pt ", &sizePt)) 
+				{
 					textSize = sizePt / 2835.f;
 				}
 				ImGui::PopItemWidth();
 				ImGui::EndButtonDropDown();
 			}
-			else{
+			else
+			{
 				ImGui::PopStyleColor(3);
 			}
 		}
 		else {
-			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) {
-				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) {
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) 
+			{
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) 
+				{
 					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
 				ImGui::Text("Size");

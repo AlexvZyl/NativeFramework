@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include "glm/glm.hpp"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
-#include "OpenGL/Buffers/VertexArrayObjectGL.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "Graphics/Camera/Camera.h"
@@ -77,7 +77,7 @@ private:
 	std::unique_ptr<Camera> m_camera;
 
 	// Map containing all of the different primitives.
-	std::unordered_map<unsigned, std::unique_ptr<PrimitivePtr>> m_primitives;
+	std::unordered_map<unsigned, std::unique_ptr<IPrimitive>> m_primitives;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();
@@ -88,12 +88,12 @@ private:
 
 	// Map containing all of the textures used in the scene.
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
-	// VAO's.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_backgroundVAO;
-	std::unique_ptr<VertexArrayObject<VertexData>> m_linesVAO;
-	std::unique_ptr<VertexArrayObject<VertexData>> m_trianglesVAO;
-	std::unique_ptr<VertexArrayObject<VertexDataCircle>> m_circlesVAO;
-	std::unique_ptr<VertexArrayObject<VertexDataTextured>> m_texturedTrianglesVAO;
+	// Graphics Buffers.
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_linesBuffer;
+	std::unique_ptr<GraphicsTrianglesBuffer<VertexData>> m_backgroundBuffer;
+	std::unique_ptr<GraphicsTrianglesBuffer<VertexData>> m_trianglesBuffer;
+	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataCircle>> m_circlesBuffer;
+	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> m_texturedTrianglesBuffer;
 	// FBO.
 	std::unique_ptr<FrameBufferObject> m_FBO;
 };

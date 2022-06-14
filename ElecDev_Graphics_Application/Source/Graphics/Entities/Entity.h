@@ -32,8 +32,6 @@ public:
 	// Destructor.
 	virtual ~Entity();
 
-	// Set the Context of this entity, and parents.
-	virtual void setContext();
 };
 
 //==============================================================================================================================================//

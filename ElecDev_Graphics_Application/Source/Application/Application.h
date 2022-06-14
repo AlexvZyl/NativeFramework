@@ -42,6 +42,7 @@ namespace YAML { class Node; }
 //  Data.																																		//
 //==============================================================================================================================================//
 
+// Where windows are docked.
 enum class LumenDockPanel
 {
 	Floating,	// Undocked windows.
@@ -56,12 +57,20 @@ enum class LumenDockPanel
 	Fixed,		// These panels are handled manually).
 };
 
+// The type of notification pushed to the app.
 enum class NotificationType
 {
 	Success,
 	Warning,
 	Error,
 	Info,
+};
+
+// Who has responsibility for rendering the cursor.
+enum class CursorMode 
+{
+	OS,
+	ImGui
 };
 
 //==============================================================================================================================================//
@@ -91,7 +100,7 @@ public:
 	// Get the delta time for the current frame.
 	// This is updated when a new frame start.
 	inline float getDeltaTime() const { return m_deltaTime; }
-	inline RendererData* getRendererData() { return m_rendererData.get(); }
+	inline RendererData& getRendererData() { return *m_rendererData.get(); }
 	
 	// --------------- //
 	//  W I N D O W S  //
@@ -100,7 +109,6 @@ public:
 	// Push a window onto Lumen's window stack.
 	template<class WindowType, class ... Args>
 	WindowType* pushWindow(LumenDockPanel panel, const Args& ... args);
-
 	// Push an engine onto Lumen's window stack.
 	template<class EngineType, class ... Args>
 	EngineType* pushEngine(LumenDockPanel panel, const std::string& name, const Args& ... args);
@@ -112,6 +120,9 @@ public:
 
 	// Get the asset viewer engine.
 	inline AssetViewer* getAssetViewerEngine() { return m_assetViewerEngine; };
+
+	// Switch who is responsible for rendering the cursor.
+	void setCursorMode(CursorMode mode);
 
 	// ------------- //
 	//  E V E N T S  //
@@ -166,6 +177,7 @@ public:
 	// Set the active engine.
 	void setActiveEngine(EngineCore* engine);
 	// Get the base pointer active engine.
+	// Returns nullptr if there is no active engine.
 	EngineCore* getActiveEngine();
 	// Get the active engine of a specific type.
 	// Returns nullptr if it is not the same type.
@@ -176,6 +188,7 @@ public:
 	//  A S S E T   V I E W I N G  //
 	// --------------------------- //
 
+	// I think this should beremoved...
 	void viewCircuit(const std::filesystem::path& path);
 	void viewCircuit(const YAML::Node& path);
 	void viewComponent(const std::filesystem::path& path);
@@ -187,6 +200,8 @@ private:
 	// Queue of scipts to be executed.
 	std::vector<std::string> m_luaScripts;
 
+	// Contains data and information regarding the renderer.
+	// (Draw calls, render passes, etc)
 	std::unique_ptr<RendererData> m_rendererData;
 
 	// --------------- //
@@ -227,10 +242,12 @@ private:
 	void updateFrametime();
 	// Checks if the frame has to be started based on the frametime.
 	bool startFrame();
+	//  Reset the frametime to 0 (udually on a frame start).
+	inline void resetFrametime() { m_totalFrameTime = 0; }
 
-	// ------------- //
-	//  W I N O W S  //
-	// ------------- //
+	// --------------- //
+	//  W I N D O W S  //
+	// --------------- //
 	
 	// The Windows in the application.
 	std::unique_ptr<WindowStack> m_windowStack = nullptr;
@@ -252,6 +269,7 @@ private:
 	void popWindows();
 	
 	// Functions used to get data regarding the docking child nodes.
+	// This is necessary for when we dock windows.
 	ImGuiID findLargestChildNode(ImGuiID nodeID);
 	ImGuiID findLastActiveChildNode(ImGuiID nodeID);
 	void findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDockNode*>& nodes);
@@ -260,10 +278,12 @@ private:
 	//  E V E N T S  //
 	// ------------- //
 
+	// Application events.
 	void onWindowResizeEvent(const WindowEvent& event);
 	void onFileDropEvent(const FileDropEvent& event);
 	void onFileLoadEvent(const FileLoadEvent& event);
 	void onFileSaveEvent(const FileSaveEvent& event);
+
 	// Update the ImGui state.
 	// Lumen controls some of the state changes (for optimisation).
 	void imguiOnUpdate();
@@ -276,13 +296,14 @@ private:
 	void onRenderInit();
 	// Cleanup after the frame has been rendered.
 	void onRenderCleanup();
-	// Render the Lumen Windows.
+	// Render the Lumen Windows and their content (and engines).
 	void onRender();
-	// Renders the initial frame that is required for the dock builder.
-	void buildDocks();
 	// Set the ImGUI theme.
+	// Can be called every frame for to update the theme when editing, but should only be
+	// called once normally.
 	void setGuiTheme();
 	// The default font used.
+	// (Default font for Lumen, not default font for ImGui)
 	ImFont* m_defaultFont = nullptr;
 
 	// --------------------- //
@@ -291,11 +312,15 @@ private:
 
 	std::unique_ptr<LumenWebSocket> m_webSocket = nullptr;
 
-	// --------------------- //
-	//  D O C K   N O D E S  //
-	// --------------------- //
+	// --------------- //
+	//  D O C K I N G  //
+	// --------------- //
+
+	// Renders the initial frame that is required for the dock builder.
+	void buildDocks();
 
 	// Dock space IDs.
+	// Do not hold on to the pointers, since they can be invalidated.
 	ImGuiID m_mainDockspaceID = NULL;
 	ImGuiID m_leftPanelID = NULL;
 	ImGuiID m_rightPanelID = NULL;

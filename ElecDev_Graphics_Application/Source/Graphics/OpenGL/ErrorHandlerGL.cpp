@@ -11,7 +11,7 @@
 #include <iostream>
 #include <External/Misc/ConsoleColor.h>
 #include <glad/glad.h>
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 
 //----------------------------------------------------------------------------------------------------------------------

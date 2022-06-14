@@ -9,7 +9,7 @@
 #include "Engines/EngineCore/EngineCore.h"
 #include "Application/Application.h"
 #include "Application/LumenWindow/LumenWindow.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
 
@@ -25,7 +25,6 @@ EngineCore::EngineCore()
 void EngineCore::onRender()
 {
 	Renderer::renderScene(m_scene.get());
-	getGizmo()->setCamera(getScene().getCamera());
 }
 
 EngineCore::~EngineCore() 
@@ -51,19 +50,19 @@ float EngineCore::getDeltaTime() const
 	return Lumen::getApp().getDeltaTime();
 }
 
-LumenGizmo* EngineCore::getGizmo() 
+LumenGizmo& EngineCore::getGizmo() 
 {
-	return m_lumenGizmo.get();
+	return *m_lumenGizmo.get();
 }
 
 void EngineCore::hideGizmo() 
 {
-	getGizmo()->hide();
+	getGizmo().hide();
 }
 
 void EngineCore::visibleGizmo()
 {
-	getGizmo()->visible();
+	getGizmo().visible();
 }
 
 //=============================================================================================================================================//

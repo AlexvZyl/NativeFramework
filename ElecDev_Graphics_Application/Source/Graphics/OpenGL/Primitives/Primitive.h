@@ -9,155 +9,380 @@ for a VAO to be able to render the entity to the screen.
 //  Includes.																																   //
 //=============================================================================================================================================//
 
+#include "OpenGL/Primitives/IPrimitive.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
+#include "Utilities/Assert/Assert.h"
+
+#include "glm/gtx/transform.hpp"
+
 #include <vector>
 #include <memory>
-#include "glm/glm.hpp"
-#include "Graphics/Entities/Entity.h"
-
-//=============================================================================================================================================//
-//  Forward declerations.																													   //
-//=============================================================================================================================================//
-
-template<typename VertexType>
-class VertexArrayObject;
-
-//=============================================================================================================================================//
-//  Primitive Pointer.																														   //
-//=============================================================================================================================================//
-
-class PrimitivePtr : public Entity
-{
-public:
-
-	unsigned m_vertexCount = 0;						// Counts the amount of vertices.
-	unsigned m_indexCount = 0;						// Counts the amount of indices.
-	unsigned m_vertexBufferPos = 0;					// The start position of the entity in the VAO.
-	unsigned m_indexBufferPos = 0;					// The position in the indices buffer.
-	unsigned m_primitiveBufferPos = 0;				// The primitive position in the VAO buffer.
-	bool	 m_queuedForSync = false;				// Has the primitive been synced?
-	glm::vec4 m_colour = { 0.f, 0.f, 0.f, 1.f };	// Saves the global color for the entity.
-	glm::vec3 m_trackedCenter = { 0.f,0.f,0.f };	// Gives the option to track the center of the entity.
-	bool m_outlineEnabled = false;
-
-	// Destructor.
-	virtual ~PrimitivePtr() = default;
-
-	// --------------------- //
-	//  A T T R I B U T E S  //
-	// --------------------- //
-
-	// Sets the color for all of the vertices.
-	inline virtual void setColor(const glm::vec4& color) = 0;
-	// Sets the entty ID of the entity.
-	inline virtual void setEntityID(unsigned int eID) = 0;
-	// Set the entity later.
-	inline virtual void setLayer(float layer) = 0;
-
-protected:
-
-	// Constructor.
-	PrimitivePtr(Entity* parent) 
-		: Entity(EntityType::PRIMITIVE, parent) 
-	{}
-};
 
 //=============================================================================================================================================//
 //  Primitive Class.																														   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
-class Primitive: public PrimitivePtr
+template<typename BufferType>
+class Primitive: public IPrimitive
 {
+protected:
+
+	// Template types.
+	typedef Primitive<BufferType> This;
+	typedef BufferType::t_vertexType VertexType;
+	typedef BufferType::t_indexType IndexType;
+
 public:
 
-	// ------------------- //
-	//  V A R I A B L E S  //
-	// ------------------- //
+	// Constructor.
+	inline Primitive(Entity* parent = nullptr) : IPrimitive(parent) { }
 
-	VertexArrayObject<VertexType>* m_VAO = nullptr;	// Pointer to the VAO that the entity is drawn to.
-	VertexType* m_verticesData = nullptr;		 	// Pointer to the first vertex in memory.
-
-	// ------------------------------------------------- //
-	//  C O N S T R U C T O R   &   D E S T R U C T O R  //
-	// ------------------------------------------------- //
-
-	// Constructor that sets the context as well.
-	Primitive(Entity* parent);
 	// Destructor.
-	~Primitive();
+	inline virtual ~Primitive() 
+	{ 
+		if (m_onGPU) removeFromGraphicsBuffer(); 
+	}
 
-	// ------------------- //
-	//  P R I M I T I V E  //
-	// ------------------- //
+	virtual void translate(const glm::vec3& translation) 
+	{
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).position += translation;
 
-	// Translate the entity by the given vector.
-	virtual void translate(const glm::vec3& translation);
-	// Translate the entity by the given vector.
-	virtual void translate(const glm::vec2& translation);
-	// Translate the entity to the given position.
-	virtual void translateTo(const glm::vec3& position);
-	//Translates the entity in the XY plane, keeping the same Z value.
-	virtual void translateTo(const glm::vec2& position);
-	// Rotates the entity by the given vector and center point.
-	virtual void rotate(float degrees, const glm::vec3& rotateNormal = {0.f, 0.f, 1.});
-	// Rotates the entity by the given vector and provided point.
-	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
-	// Apply a transform to the vertices.
-	virtual void transform(const glm::mat4& transform);
-	// Scales the entity by the given vector and center point.
-	virtual void scale(const glm::vec3& scaling);
+		m_trackedCenter += translation;
+		syncWithGPU();
+	}
 
-	// Outline the primitive by the given scale.
-	virtual void enableOutline();
-	// Remove the outline.
-	virtual void disableOutline();
+	virtual void translate(const glm::vec2& translation) 
+	{
+		This::translate(glm::vec3{ translation, 0.f });
+	}
+
+	virtual void translateTo(const glm::vec3& position) 
+	{
+		This::translate(position - m_trackedCenter);
+	}
+
+	virtual void translateTo(const glm::vec2& position) 
+	{
+		This::translateTo(glm::vec3{ position, m_trackedCenter.z });
+	}
+
+	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
+	{
+		// Rather call transform if a lot of these are going to be called sequentially.
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);
+		transform = glm::rotate(transform, glm::radians(degrees), rotateNormal);
+		transform = glm::translate(transform, -rotatePoint);
+
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).position = glm::vec3(transform * glm::vec4(getVertex(i).position, 1.f));
+
+		syncWithGPU();
+	}
+
+	virtual void rotate(float degrees, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. }) 
+	{
+		This::rotate(degrees, m_trackedCenter, rotateNormal);
+	}
+
+	virtual void transform(const glm::mat4& transform) 
+	{
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).position = glm::vec3(transform * glm::vec4(getVertex(i).position, 1.f));
+
+		// Not sure if this is correct (scaling?).
+		m_trackedCenter = glm::vec3(transform * glm::vec4(m_trackedCenter, 1.f));
+
+		syncWithGPU();
+	}
+
+	virtual void scale(const glm::vec3& scaling) 
+	{
+		// ...
+
+		syncWithGPU();
+	}
+
+	virtual void enableOutline(float value = 1.f) 
+	{
+		if (m_outlineEnabled) return;
+		m_outlineEnabled = true;
+		m_outlineValue = value;
+
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).outline = value;
+
+		syncWithGPU();
+	}
+
+	virtual void disableOutline() 
+	{
+		if (!m_outlineEnabled) return;
+		m_outlineEnabled = false;
+		m_outlineValue = 0.f;
+
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).outline = 0.f;
+
+		syncWithGPU();
+	}
 
 	// ------------- //
 	//  V E R T E X  //
 	// ------------- //
 
-	// Move a vertex
-	virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position);
-	// Move a vertex
-	virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position);
-	// Move a vertex
-	virtual void translateVertex(VertexType* vertex, const glm::vec3 translation);
-	// Move a vertex
-	virtual void translateVertex(VertexType* vertex, const glm::vec2 translation);
-	// Translation.
-	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation);
-	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation);
-	// Translate to.
-	virtual void translateToVertexAtIndex(unsigned index, const glm::vec3& position);
-	virtual void translateToVertexAtIndex(unsigned index, const glm::vec2& position);
-	// Set color.
-	virtual void setVertexColorAtIndex(unsigned index, const glm::vec4& color);
-	// Getting nearest vertex.
-	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec3& position);
-	virtual std::tuple<VertexType*, float> getNearestVertex(const glm::vec2& position);
-	// Getting nearest vertex index.
-	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec3& position);
-	virtual std::tuple<unsigned, float> getNearestVertexIdx(const glm::vec2& position);
-	
+	// Get the vertex belonging to this primitive (based on local index).
+	inline VertexType& getVertex(int index) 
+	{
+		LUMEN_DEBUG_ASSERT(index >= 0 && index < m_vertexCount, "Indexing out of range.");
+		return getGraphicsBuffer().getVertex(m_vertexBufferPos + index);
+	}
+
+	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec3 position) 
+	{
+		vertex->position = position;
+		syncWithGPU();
+	}
+
+	inline virtual void translateVertexTo(VertexType* vertex, const glm::vec2 position)
+	{
+		This::translateVertexTo(vertex, glm::vec3{ position, vertex->position.z });
+	}
+
+	inline virtual void translateVertex(VertexType* vertex, const glm::vec3 translation) 
+	{
+		vertex->position += translation;
+		syncWithGPU();
+	}
+
+	inline virtual void translateVertex(VertexType* vertex, const glm::vec2 translation) 
+	{
+		This::translateVertex(vertex, glm::vec3{ translation, 0.f });
+	}
+
+	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation)
+	{
+		This::translateVertex(&getVertex(index), translation);
+	}
+
+	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+	{
+		This::translateVertexAtIndex(index, glm::vec3{ translation, 0.f });
+	}
+
+	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
+	{
+		This::translateVertexTo(&getVertex(index), position);
+	}
+
+	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
+	{
+		This::translateVertexAtIndexTo(index, glm::vec3{ position, 0.f });
+	}
+
+	inline virtual void setVertexAtIndexColor(unsigned index, const glm::vec4& color)
+	{
+		getVertex(index).color = color;
+		syncWithGPU();
+	}
+
+	inline virtual std::tuple<VertexType&, float> getNearestVertex(const glm::vec3& position)
+	{
+		auto [index, distance] = getNearestVertexIndex(position);
+		return { getVertex(index), distance };
+	}
+
+	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position)
+	{
+		// Calculate the first vertex' distance.
+		int nearestVertexIndex = 0;
+		float minDistance = glm::abs(glm::distance(position, getVertex(nearestVertexIndex).position));
+		// Find if any of the vertices are closer.
+		for (int i = 1; i < m_vertexCount; i++)
+		{
+			float currentDistance = glm::abs(glm::distance(position, getVertex(i).position));
+			if (currentDistance > minDistance) continue;
+			nearestVertexIndex = i;
+			minDistance = currentDistance;
+		}
+		// Return the closest vertex, alongside the distance in world coordinates.
+		return { nearestVertexIndex, minDistance };
+	}
+
+	inline virtual std::tuple<VertexType&, float> getNearestVertex(const glm::vec2& position)
+	{
+		auto [index, distance] = getNearestVertexIndex(position);
+		return { getVertex(index), distance };
+	}
+
+	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position)
+	{
+		// Calculate the first vertex' distance.
+		int nearestVertexIndex = 0;
+		float minDistance = glm::abs(glm::distance(position, glm::vec2(getVertex(nearestVertexIndex).position)));
+		// Find if any of the vertices are closer.
+		for (int i = 1; i < m_vertexCount; i++)
+		{
+			float currentDistance = glm::abs(glm::distance(position, glm::vec2(getVertex(i).position)));
+			if (currentDistance > minDistance) continue;
+			nearestVertexIndex = i;
+			minDistance = currentDistance;
+		}
+		// Return the closest vertex, alongside the distance in world coordinates.
+		return { nearestVertexIndex, minDistance };
+	}
+
 	// --------------------- //
 	//  A T T R I B U T E S  //
 	// --------------------- //
 
-	// Sets the color for all of the vertices.
-	virtual void setColor(const glm::vec4& color);
-	// Sets the entty ID of the entity.
-	virtual void setEntityID(unsigned int eID);
-	// Set the entity later.
-	virtual void setLayer(float layer);
+	virtual void setColor(const glm::vec4& color) 
+	{
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).color = color;
+
+		m_colour = color;
+		syncWithGPU();
+	}
+
+	virtual void setEntityID(unsigned eID) 
+	{
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).entityID = eID;
+
+		m_entityID = eID;
+		syncWithGPU();
+	}
+
+	virtual void setLayer(float layer) 
+	{
+		for (int i = 0; i < m_vertexCount; i++)
+			getVertex(i).position.z = layer;
+
+		m_trackedCenter.z = layer;
+		syncWithGPU();
+	}	
 
 	// ------------- //
 	//  M E M O R Y  //
 	// ------------- //
 
-	// Deletes the primitive from the GPU but keeps it in the CPU.
-	virtual void wipeGPU();
-	// Sync the primitive data to the GPU.
-	virtual void syncWithGPU();
+	// Construct the vertices and pass them to the GraphicsBuffer.
+	// Do not keep a local copy.
+	inline virtual void constructVerticesOnGPU() { };
+
+	// Construct the vertices on the CPU without passing them to the GPU.
+	inline virtual void constructVerticesOnCPU() { };
+
+	// Set the GPU context that the primitive renders to.
+	inline virtual void setGraphicsBuffer(BufferType* buffer) { m_graphicsBuffer = buffer; }
+
+	// Remove the vertex & index data.
+	inline void removeFromGraphicsBuffer() 
+	{
+		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
+
+		// Remove from GPU.
+		getGraphicsBuffer().erase(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
+		m_onGPU = false;
+		getGraphicsBuffer().removeFromSync(this);
+		m_queuedForSync = false;
+		m_indexBufferPos = NULL;
+		m_vertexBufferPos = NULL;
+	}
+
+	// Push the vertex and index data to the graphics buffer.
+	// Also updates the required metadata.
+	inline void pushToGraphicsBuffer(const VertexType* vertices, int vertexCount, const IndexType* indices, int indexCount) 
+	{
+		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+
+		auto [vertexPos, indexPos] = getGraphicsBuffer().push(vertices, vertexCount, indices, indexCount);
+		m_vertexBufferPos = vertexPos;
+		m_indexBufferPos = indexPos;
+		m_onGPU = true;
+		m_vertexCount = vertexCount;
+		m_indexCount = indexCount;
+	}
+
+	// Move the vertex & index data from the Graphics Buffer.
+	inline void moveFromGraphicsBuffer() 
+	{
+		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
+
+		// Prepare memory.
+		m_vertexDataCPU.reserve(m_vertexCount);
+		m_indexDataCPU.reserve(m_indexCount);
+
+		// Copy vertices.
+		m_vertexDataCPU.insert(
+			m_vertexDataCPU.end(), 
+			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos,
+			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos + m_vertexCount
+		);
+
+		// Copy the indices.
+		m_indexDataCPU.insert(
+			m_indexDataCPU().end(),
+			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos,
+			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos + m_indexCount
+		);
+
+		// Offset the indices to original values.
+		if (m_vertexBufferPos) for (auto& ind : m_indexDataCPU) ind -= m_vertexBufferPos;
+
+		removeFromGraphicsBuffer();
+	}
+
+	// Move the vertex & index data to the Graphics buffer.
+	inline void moveToGraphicsBuffer() 
+	{
+		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+
+		pushToGraphicsBuffer(m_vertexDataCPU.data(), m_vertexDataCPU.size(), m_indexDataCPU.data(), m_indexDataCPU.size());
+		clearCPUData();
+	}
+
+	// Notify the GPU that the data has to be updated.
+	virtual void syncWithGPU() 
+	{
+		LUMEN_DEBUG_ASSERT(m_onGPU, "There is no data on the GPU to sync to.");
+
+		if (m_queuedForSync) return;
+		getGraphicsBuffer().sync(this);
+		m_queuedForSync = true;
+	}
+
+	// Clear the data on the CPU.
+	inline void clearCPUData() 
+	{
+		m_vertexDataCPU.clear();
+		m_vertexDataCPU.shrink_to_fit();
+		m_indexDataCPU.clear();
+		m_indexDataCPU.shrink_to_fit();
+	}
+
+	// Update the indices with a new array.
+	inline void updateIndices(IndexType* newIndices, int newIndexCount) 
+	{
+		m_indexBufferPos = getGraphicsBuffer().updateIndices(m_indexBufferPos, m_indexCount, m_vertexBufferPos, newIndices, newIndexCount);
+		m_indexCount = newIndexCount;
+	}
+
+protected:
+
+	// The GPB that the Primitive is contained in (if any).
+	BufferType* m_graphicsBuffer = nullptr;
+	inline BufferType& getGraphicsBuffer() { return *m_graphicsBuffer; }
+
+	// Local data.
+	// This is used when the primitive is constructed outside the context of a Graphics Buffer,
+	// of when the data has to be removed from the Graphics buffer but still has to be kept.
+	std::vector<VertexType> m_vertexDataCPU;
+	std::vector<IndexType> m_indexDataCPU;
+	// Is the data on the GPU?
+	bool m_onGPU = false;	
 };
 
 //=============================================================================================================================================//

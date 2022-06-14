@@ -19,19 +19,21 @@ const float* LumenGizmo::computeViewMatrix()
 
 void LumenGizmo::render()
 {
-	// Do not render if not enabled.
-	if (!isEnabled() || !hasActiveEntity() || !isVisible()) return;
-
-	// Setup the current gizmo.
+	// Set current gizmo.
 	ImGuizmo::SetID(getID());
-	ImGuizmo::SetDrawlist();
-	ImGuizmo::SetOrthographic(isOrthographic());
-	ImGuizmo::SetRect(m_windowPosition.x, m_windowPosition.y, m_windowSize.x, m_windowSize.y);
-	ImGuizmo::SetGizmoSizeClipSpace(m_size / m_camera->getTotalScale().x);
 
 	// Update state.
 	m_isUsing = ImGuizmo::IsUsing();
 	m_isOver = ImGuizmo::IsOver();
+
+	// Do not render if not enabled.
+	if (!isEnabled() || !hasActiveEntity() || !isVisible()) return;
+
+	// Set current gizmo data.
+	ImGuizmo::SetDrawlist();
+	ImGuizmo::SetOrthographic(isOrthographic());
+	ImGuizmo::SetRect(m_windowPosition.x, m_windowPosition.y, m_windowSize.x, m_windowSize.y);
+	ImGuizmo::SetGizmoSizeClipSpace(m_size / m_camera->getTotalScale().x);
 
 	// Render the gizmo.
 	Camera& camera = getCamera();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/Application.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Application/LumenWindow/WindowStack.h"
 #include "GUI/GraphicsScene/GraphicsScene.h"
