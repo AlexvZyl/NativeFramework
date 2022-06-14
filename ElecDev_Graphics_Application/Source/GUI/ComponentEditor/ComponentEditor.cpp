@@ -337,18 +337,18 @@ void ComponentEditor::onImGuiRender()
 		// Fetch all the component names.
 		auto& numComponents = design_engine->m_circuit->m_components;
 		auto& numCables = design_engine->m_circuit->m_cables;
-		const char* componentNames[100];
+		std::vector<std::string> componentNames;
 		int numCom = 0;
 		for (auto& key : numComponents)
 		{
-			componentNames[numCom] = key->designator->m_string.c_str();
+			componentNames.push_back(key->designator->m_string);
 			numCom++;
 		}
 
 		int numEquip = numCom;
 		for (auto& key : numCables)
 		{
-			componentNames[numCom] = key->m_titleString.c_str();
+			componentNames.push_back(key->m_titleString);
 			numCom++;
 		}
 
@@ -448,7 +448,7 @@ void ComponentEditor::onImGuiRender()
 			for (int num = 0; num < numCom; num++) 
 			{
 				equipmentSelector = num;
-				if (componentNames[num] == activeTitleString) 
+				if (componentNames.at(num) == activeTitleString) 
 				{
 					break;
 				}
@@ -463,7 +463,7 @@ void ComponentEditor::onImGuiRender()
 		{
 			for (auto& key : numComponents)
 			{
-				if (key->designator->m_string.c_str() == componentNames[equipmentSelector])
+				if (key->designator->m_string.c_str() == componentNames.at(equipmentSelector))
 				{
 					for (auto& [key2, val] : key->dataDict)
 					{
@@ -478,7 +478,7 @@ void ComponentEditor::onImGuiRender()
 		{
 			for (auto& key : numCables)
 			{
-				if (key->m_titleString.c_str() == componentNames[equipmentSelector]) 
+				if (key->m_titleString.c_str() == componentNames.at(equipmentSelector)) 
 				{
 					for (auto& [key2, val] : key->cableDict)
 					{
