@@ -92,7 +92,7 @@ void PopUpMenu::onImGuiRender()
             auto path = selectFile("Lumen Save Circuit", "", circuitEngine->m_circuit->m_label, "Save");
             if (path.string().size())
             {
-                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), circuitEngine, EventType_Application));
+                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string()));
                 circuitEngine->savedDocument();
             }
             closeWindow();
@@ -146,7 +146,7 @@ void PopUpMenu::onImGuiRender()
                 auto path = selectFile("Lumen Save Component", "", active_component->equipType, "Save");
                 if (path.string().size())
                 {
-                    EventLog::log<FileSaveEvent>(FileSaveEvent(path.string(), componentEngine, EventType_Application));
+                    EventLog::log<FileSaveEvent>(path.string());
                     componentEngine->savedDocument();
                 }
                 closeWindow();

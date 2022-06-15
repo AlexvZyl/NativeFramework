@@ -60,10 +60,7 @@ public:
 	unsigned m_hoveredID;
 	float clickTol = 15.0f;
 
-	// ------------- //
-	//  E V E N T S  //
-	// ------------- //
-
+	// Events.
 	virtual void onMouseButtonEvent(const MouseButtonEvent& event) override;
 	virtual void onMouseMoveEvent(const MouseMoveEvent& event) override;
 	virtual void onMouseScrollEvent(const MouseScrollEvent& event) override;
@@ -72,11 +69,9 @@ public:
 	virtual void onFileDropEvent(const FileDropEvent& event) override;
 	virtual void onNotifyEvent(const NotifyEvent& event) override;
 	virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) override;
+	virtual void onFileSaveEvent(const FileSaveEvent& event) override;
 
-	// ------------------- //
-	//  U T I L I T I E S  //
-	// ------------------- //
-
+	// Utilities.
 	void setActiveComponent(unsigned eID);
 	void setActiveCable(unsigned eID);
 	void ComponentPlaceMode(glm::vec2 screenCoords);

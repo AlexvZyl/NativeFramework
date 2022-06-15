@@ -319,29 +319,13 @@ class FileSaveEvent : public FileEvent
 
 public:
 
-	inline FileSaveEvent(const std::vector<std::filesystem::path>& files, EngineCore* engine, LumenEventID ID = 0)
-		: FileEvent(EventType_FileSave | ID, files), engine(engine)
+	inline FileSaveEvent(const std::vector<std::filesystem::path>& files, LumenEventID ID = 0)
+		: FileEvent(EventType_FileSave | ID, files)
 	{}
 
-	inline FileSaveEvent(const std::filesystem::path& file, EngineCore* engine, LumenEventID ID = 0)
-		: FileEvent(EventType_FileSave | ID, file), engine(engine)
+	inline FileSaveEvent(const std::filesystem::path& file, LumenEventID ID = 0)
+		: FileEvent(EventType_FileSave | ID, file)
 	{}
-
-	template<class EngineType>
-	inline EngineType* getEngine() const 
-	{
-		return dynamic_cast<EngineType*>(engine);
-	}
-
-	inline EngineCore* getEngine() const
-	{
-		return engine;
-	}
-
-private:
-
-	// The engine that is to be saved.
-	EngineCore* engine = nullptr;
 };
 
 // ------------------ //

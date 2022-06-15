@@ -20,6 +20,7 @@ class MouseDragEvent;
 class KeyEvent;
 class WindowEvent;
 class NotifyEvent;
+class FileSaveEvent;
 class FileDropEvent;
 class YamlNodeDropEvent;
 class LumenWindow;
@@ -105,6 +106,7 @@ public:
 	inline virtual void onDehoverEvent(const NotifyEvent& event) {}
 	inline virtual void onFileDropEvent(const FileDropEvent& event) {}
 	inline virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) {}
+	inline virtual void onFileSaveEvent(const FileSaveEvent& event) {}
 
 	// ----------------------- //
 	//  C O O R D I N A T E S  //

@@ -15,6 +15,7 @@
 #include "OpenGL/Primitives/Grid.h"
 #include "Peripherals/Component2D.h"
 #include "OpenGL/SceneGL.h"
+#include "Utilities/Serialisation/Serialiser.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
@@ -377,5 +378,19 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 			}
 		}
 		if (m_activePort)		   m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
+	}
+}
+
+void ComponentDesigner::onFileSaveEvent(const FileSaveEvent& event) 
+{
+	// Iterate through the paths.
+	for (auto& path : event.fileData)
+	{
+		// Check if operation did not fail.
+		if (path.string().size())
+		{
+			saveToYAML(m_activeComponent.get(), path);
+			setName(path.filename().stem().string());
+		}
 	}
 }

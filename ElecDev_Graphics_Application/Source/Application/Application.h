@@ -282,7 +282,6 @@ private:
 	void onWindowResizeEvent(const WindowEvent& event);
 	void onFileDropEvent(const FileDropEvent& event);
 	void onFileLoadEvent(const FileLoadEvent& event);
-	void onFileSaveEvent(const FileSaveEvent& event);
 
 	// Update the ImGui state.
 	// Lumen controls some of the state changes (for optimisation).

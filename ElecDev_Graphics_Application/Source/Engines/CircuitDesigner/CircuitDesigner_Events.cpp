@@ -18,6 +18,7 @@
 #include "glm/glm.hpp"
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
+#include "Utilities/Serialisation/Serialiser.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
@@ -337,6 +338,20 @@ void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
 		bool checkForOverwrite = true;
 		if (CircuitDesigner::s_engineUsedByCircuitEditor == this) checkForOverwrite = false;
 		if (file.extension() == ".lmcp") importComponent(node, true, checkForOverwrite);
+	}
+}
+
+void CircuitDesigner::onFileSaveEvent(const FileSaveEvent& event) 
+{
+	// Iterate through the paths.
+	for (auto& path : event.fileData)
+	{
+		// Check if operation did not fail.
+		if (path.string().size())
+		{
+			saveToYAML(m_circuit.get(), path);
+			setName(path.filename().stem().string());
+		}
 	}
 }
 

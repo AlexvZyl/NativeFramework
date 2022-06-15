@@ -79,7 +79,19 @@ void Toolbar::onImGuiRender()
             auto fsPath = selectFile("Lumen Load Circuit", "", "", "Load");
             if (fsPath.string().size())
             {
-                EventLog::log<FileLoadEvent>(FileLoadEvent(fsPath.string(), EventType_Application));
+                EventLog::log<FileLoadEvent>(fsPath.string(), EventType_Application);
+            }
+        }
+
+        // Save file.
+        if (ImGui::MenuItem("Save...", "Ctrl+S"))
+        {
+            // Create and log save event.
+            auto path = selectFile("Lumen Save Circuit", "", app.getActiveEngine()->m_parentWindow->getName(), "Save");
+            if (path.string().size())
+            {
+                EventLog::log<FileSaveEvent>(path.string());
+                app.getActiveEngine()->savedDocument();
             }
         }
 

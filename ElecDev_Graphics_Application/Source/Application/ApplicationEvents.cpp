@@ -69,6 +69,9 @@ void Application::onUpdate()
 			if (m_focusedWindow) m_focusedWindow->onEvent(*event.get());
 		}
 
+		// Pass save events to the active engine.
+		else if (event->isType(EventType_FileSave)) getActiveEngine()->onEvent(*event.get());
+
 		// Pass events to focused window.
 		else if (m_focusedWindow) m_focusedWindow->onEvent(*event.get());
 	}
@@ -180,7 +183,6 @@ void Application::onEvent(const Event& event)
 												 								 
 	// File events.					 								 
 	else if (event.isType(EventType_FileDrop))		{ onFileDropEvent(event.cast<FileDropEvent>()); }
-	else if (event.isType(EventType_FileSave))		{ onFileSaveEvent(event.cast<FileSaveEvent>()); }
 	else if (event.isType(EventType_FileLoad))		{ onFileLoadEvent(event.cast<FileLoadEvent>()); }
 
 	// Event unhandled.
@@ -207,28 +209,6 @@ void Application::onFileDropEvent(const FileDropEvent& event)
 	for (auto& path : event.fileData)
 	{
 		if (path.string().size()) loadFromYAML(path);
-	}
-}
-
-void Application::onFileSaveEvent(const FileSaveEvent& event) 
-{
-	// Iterate through the paths.
-	for (auto& path : event.fileData)
-	{
-		// Check if operation did not fail.
-		if (path.string().size())
-		{
-			if (auto designEngine = event.getEngine<CircuitDesigner>())
-			{
-				saveToYAML(designEngine->m_circuit.get(), path);
-				designEngine->setName(path.filename().stem().string());
-			}
-			else if (auto component_designer = event.getEngine<ComponentDesigner>())
-			{
-				saveToYAML(component_designer->m_activeComponent.get(), path);
-				component_designer->setName(path.filename().stem().string());
-			}
-		}
 	}
 }
 

@@ -71,14 +71,14 @@ public:
 
     void setComponent(const std::filesystem::path& path, Circuit* parent = nullptr);
 
-    // Mouse events.
+    // Events.
     virtual void onMouseButtonEvent(const MouseButtonEvent& event) override;
     virtual void onMouseMoveEvent(const MouseMoveEvent& event) override;
     virtual void onMouseScrollEvent(const MouseScrollEvent& event) override;
     virtual void onMouseDragEvent(const MouseDragEvent& event) override;
-    // Key events.
     virtual void onKeyEvent(const KeyEvent& event) override;
     virtual void onNotifyEvent(const NotifyEvent& event) override;
+    virtual void onFileSaveEvent(const FileSaveEvent& event) override;
 
     // Design palette.
     virtual void renderMenuBar() override;
