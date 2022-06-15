@@ -316,18 +316,24 @@ public:
 		m_indexDataCPU.reserve(m_indexCount);
 
 		// Copy vertices.
+		auto tmp = getGraphicsBuffer().getVertexData().getIteratorMode();
+		getGraphicsBuffer().getVertexData().iterateElements();
 		m_vertexDataCPU.insert(
 			m_vertexDataCPU.end(), 
 			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos,
 			getGraphicsBuffer().getVertexData().begin() + m_vertexBufferPos + m_vertexCount
 		);
+		getGraphicsBuffer().getVertexData().setIteratorMode(tmp);
 
 		// Copy the indices.
+		tmp = getGraphicsBuffer().getIndexData().getIteratorMode();
+		getGraphicsBuffer().getIndexData().iterateElements();
 		m_indexDataCPU.insert(
 			m_indexDataCPU().end(),
 			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos,
 			getGraphicsBuffer().getIndexData().begin() + m_indexBufferPos + m_indexCount
 		);
+		getGraphicsBuffer().getIndexData().setIteratorMode(tmp);
 
 		// Offset the indices to original values.
 		if (m_vertexBufferPos) for (auto& ind : m_indexDataCPU) ind -= m_vertexBufferPos;
