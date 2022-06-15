@@ -43,6 +43,7 @@ void BackgroundColorEditor::onImGuiRender()
 		ImGui::SameLine();
 		if (ImGui::ColorPicker4("##ColorEditor", &color[0], ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
 		{
+			scene->m_backgroundBuffer->getVertexData().iterateElements();
 			for (auto& vertex : scene->m_backgroundBuffer->getVertexData())
 			{
 				vertex.color[0] = color[0];
@@ -51,6 +52,7 @@ void BackgroundColorEditor::onImGuiRender()
 				vertex.color[3] = color[3];
 
 			}
+			scene->m_backgroundBuffer->getVertexData().iterateMemory();
 			scene->m_backgroundBuffer->reloadVertices();
 		}
 	}
