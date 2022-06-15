@@ -284,7 +284,6 @@
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\Component2D.cpp" />
     <ClCompile Include="External\GLAD\src\glad.c" />
-    <ClCompile Include="Source\Graphics\Vulkan\README.md" />
     <ClCompile Include="Source\GUI\AssetExplorer\AssetExplorer.cpp" />
     <ClCompile Include="Source\GUI\BottomBar\BottomBar.cpp" />
     <ClCompile Include="Source\GUI\CircuitEditor\CircuitEditor.cpp" />

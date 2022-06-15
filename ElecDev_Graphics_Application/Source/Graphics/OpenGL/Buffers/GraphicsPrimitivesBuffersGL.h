@@ -219,19 +219,19 @@ public:
 	}
 
 	// Utilities.
-	inline virtual VertexArrayObject& getVAO() override	{ return m_VAO; };
-	inline VertexContainer<VertexType>& getVertexData() { return m_vertexData; }
-	inline IndexContainer<IndexType>& getIndexData()	{ return m_indexData; }
-	inline VertexType& getVertex(int index)				{ return m_vertexData[index]; }
-	inline virtual int getIndexCount() const override	{ return m_indexData.count() * IndexType::count(); }
-	inline virtual int getVertexCount() const override	{ return m_vertexData.count(); }
-	inline virtual int getIndexCapacity() const override { return m_indexData.capacity() * IndexType::count(); }
-	inline virtual int getVertexCapacity() const override { return m_vertexData.capacity(); }
-	inline float getResizeThreshold() const				{ return m_vertexData.getResizeThreshold(); }
-	inline int getCapacityIncrements() const			{ return m_vertexData.getCapacityIncrements(); }
-	inline void setResizeThreshold(float value)			{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
-	inline void setCapacityIncrements(int value)		{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
-	inline void indicesChanged()						{ m_indicesChanged = true; }
+	inline virtual VertexArrayObject& getVAO() override		{ return m_VAO; };
+	inline VertexContainer<VertexType>& getVertexData()		{ return m_vertexData; }
+	inline IndexContainer<IndexType>& getIndexData()		{ return m_indexData; }
+	inline VertexType& getVertex(int index)					{ return m_vertexData[index]; }
+	inline virtual int getIndexCount() const override		{ return m_indexData.count() * IndexType::count(); }
+	inline virtual int getVertexCount() const override		{ return m_vertexData.count(); }
+	inline virtual int getIndexCapacity() const override	{ return m_indexData.capacity() * IndexType::count(); }
+	inline virtual int getVertexCapacity() const override	{ return m_vertexData.capacity(); }
+	inline float getResizeThreshold() const					{ return m_vertexData.getResizeThreshold(); }
+	inline int getCapacityIncrements() const				{ return m_vertexData.getCapacityIncrements(); }
+	inline void setResizeThreshold(float value)				{ m_vertexData.setResizeThreshold(value); m_indexData.setResizeThreshold(value); }
+	inline void setCapacityIncrements(int value)			{ m_indexData.setCapacityIncrements(value); m_vertexData.setCapacityIncrements(value); }
+	inline void indicesChanged()							{ m_indicesChanged = true; }
 
 	// Template types.
 	typedef VertexType t_vertexType;
