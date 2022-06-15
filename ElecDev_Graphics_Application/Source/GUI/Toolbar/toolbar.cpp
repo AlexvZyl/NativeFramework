@@ -84,7 +84,7 @@ void Toolbar::onImGuiRender()
         }
 
         // Save file.
-        if (ImGui::MenuItem("Save...", "Ctrl+S"))
+        if (ImGui::MenuItem("Save...", "Ctrl+S", nullptr, (bool)app.getActiveEngine()))
         {
             // Create and log save event.
             auto path = selectFile("Lumen Save Circuit", "", app.getActiveEngine()->m_parentWindow->getName(), "Save");
