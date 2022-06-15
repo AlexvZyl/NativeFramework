@@ -29,7 +29,7 @@ enum class FrameBufferTextureFilter : GLenum
 
 enum class FrameBufferAttachmentSlot : GLenum
 {
-	NONE = GL_NONE;
+	NONE = GL_NONE,
 
 	// Color.
 	COLOR_0 = GL_COLOR_ATTACHMENT0,
@@ -45,6 +45,25 @@ enum class FrameBufferAttachmentSlot : GLenum
 	COLOR_10 = GL_COLOR_ATTACHMENT10,
 	COLOR_11 = GL_COLOR_ATTACHMENT11,
 	COLOR_12 = GL_COLOR_ATTACHMENT12,
+	COLOR_13 = GL_COLOR_ATTACHMENT13,
+	COLOR_14 = GL_COLOR_ATTACHMENT14,
+	COLOR_15 = GL_COLOR_ATTACHMENT15,
+	COLOR_16 = GL_COLOR_ATTACHMENT16,
+	COLOR_17 = GL_COLOR_ATTACHMENT17,
+	COLOR_18 = GL_COLOR_ATTACHMENT18,
+	COLOR_19 = GL_COLOR_ATTACHMENT19,
+	COLOR_20 = GL_COLOR_ATTACHMENT20,
+	COLOR_21 = GL_COLOR_ATTACHMENT21,
+	COLOR_22 = GL_COLOR_ATTACHMENT22,
+	COLOR_23 = GL_COLOR_ATTACHMENT23,
+	COLOR_24 = GL_COLOR_ATTACHMENT24,
+	COLOR_25 = GL_COLOR_ATTACHMENT25,
+	COLOR_26 = GL_COLOR_ATTACHMENT26,
+	COLOR_27 = GL_COLOR_ATTACHMENT27,
+	COLOR_28 = GL_COLOR_ATTACHMENT28,
+	COLOR_29 = GL_COLOR_ATTACHMENT29,
+	COLOR_30 = GL_COLOR_ATTACHMENT30,
+	COLOR_31 = GL_COLOR_ATTACHMENT31,
 
 	// Other.
 	DEPTH = GL_DEPTH_ATTACHMENT,
@@ -71,10 +90,10 @@ enum class FrameBufferSamples : int
 struct FrameBufferAttachment 
 {
 	// Data.
+	FrameBufferAttachmentSlot slot = FrameBufferAttachmentSlot::COLOR_0;
 	FrameBufferAttachmentType type = FrameBufferAttachmentType::TEXTURE_STORAGE;
 	FrameBufferTextureFormat format = FrameBufferTextureFormat::RGBA;
 	FrameBufferTextureFormat internalFormat = FrameBufferTextureFormat::RGBA;
-	FrameBufferAttachmentSlot slot = FrameBufferAttachmentSlot::COLOR_0;
 	FrameBufferTextureFilter minFilter = FrameBufferTextureFilter::LINEAR;
 	FrameBufferTextureFilter magFilter = FrameBufferTextureFilter::LINEAR;
 	FrameBufferSamples samples = FrameBufferSamples::NORMAL;
@@ -82,8 +101,8 @@ struct FrameBufferAttachment
 	FrameBufferTextureWrap wrapS = FrameBufferTextureWrap::CLAMP_TO_EDGE;
 	FrameBufferTextureWrap wrapT = FrameBufferTextureWrap::CLAMP_TO_EDGE;
 	unsigned rendererID = NULL;
-
-	inline bool isMultiSample() const { return samples != FrameBufferSamples::NORMAL; }
+	// Utilities.
+	inline bool isMultiSample() const { return (int)samples > 1; }
 };
 
 struct FrameBufferSpecification 
@@ -113,7 +132,7 @@ public:
 
 	// Attachments.
 	void createAttachments();
-	void clearAttachments();
+	void clearAttachments(int value = 0);
 	void destroyAttachments();
 	void resizeAttachments();
 	void createAttachment(FrameBufferAttachment& attachment);
@@ -122,8 +141,8 @@ public:
 	void resizeAttachment(FrameBufferAttachmentSlot slot);
 	void addAttachment(const FrameBufferAttachment& attachment);
 	void removeAttachment(FrameBufferAttachmentSlot slot);
-	void clearAttachment(FrameBufferAttachmentSlot slot);
-	void clearAttachment(const FrameBufferAttachment& attachment);
+	void clearAttachment(FrameBufferAttachmentSlot slot, int value = 0);
+	void clearAttachment(const FrameBufferAttachment& attachment, int value = 0);
 	void destroyAttachment(FrameBufferAttachmentSlot slot);
 	void destroyAttachment(const FrameBufferAttachment& attachment);
 

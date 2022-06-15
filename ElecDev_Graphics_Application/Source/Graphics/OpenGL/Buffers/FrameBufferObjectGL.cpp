@@ -15,6 +15,7 @@ void FrameBufferObject::create()
 	m_isOnGPU = true;
 	bind();
 	createAttachments();
+	unbind();
 }
 
 void FrameBufferObject::destroy() 
@@ -73,6 +74,7 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		break;
 	default:
 		LUMEN_ASSERT(false, "Unknown attachment type.");
+		break;
 	}
 
 	// Texture attachment data.
@@ -107,6 +109,7 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_RENDERBUFFER, attachment.rendererID));
 	}
 
+	// Error.
 	else LUMEN_ASSERT(false, "Unknown attachment type.");
 }
 
@@ -134,17 +137,60 @@ void FrameBufferObject::destroyAttachment(const FrameBufferAttachment& attachmen
 	}
 }
 
-void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment) 
+void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment, int value) 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 
+	switch (attachment.type)
+	{
+	case FrameBufferAttachmentType::TEXTURE_BUFFER:
+		GLCall(glClearTexImage(attachment.rendererID, 0, (GLenum)attachment.format, GL_INT, &value));
+		break;
 
+	case FrameBufferAttachmentType::TEXTURE_STORAGE:
+		GLCall(glClearTexImage(attachment.rendererID, 0, (GLenum)attachment.format, GL_INT, &value));
+		break;
+
+	case FrameBufferAttachmentType::RENDER_BUFFER:
+		// ? 
+		break;
+
+	default:
+		LUMEN_ASSERT(false, "Unknown attachment type.");
+		break;
+	}
 }
 
 void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment) 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 
+	// Texture.
+	if (attachment.type != FrameBufferAttachmentType::RENDER_BUFFER)
+	{
+		// MSAA.
+		if (attachment.isMultiSample())
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
+			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.format, m_specification.width, m_specification.height, GL_FALSE));
+		}
+		// Normal.
+		else
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D, attachment.rendererID));
+			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, 0, (GLenum)attachment.format, GL_UNSIGNED_BYTE, nullptr));
+		}
+	}
+
+	// Render buffer.
+	else if (attachment.type == FrameBufferAttachmentType::RENDER_BUFFER)
+	{
+		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, attachment.rendererID));
+		GLCall(glRenderbufferStorage(GL_RENDERBUFFER, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+	}
+
+	// Error.
+	else LUMEN_ASSERT(false, "Unknown attachment type.");
 }
 
 void FrameBufferObject::bindDrawBuffers() 
@@ -183,14 +229,14 @@ void FrameBufferObject::destroyAttachment(FrameBufferAttachmentSlot slot)
 	destroyAttachment(m_attachments[slot]);
 }
 
-void FrameBufferObject::clearAttachments() 
+void FrameBufferObject::clearAttachments(int value)
 {
-	for (auto& [slot, attachment] : m_attachments) clearAttachment(attachment);
+	for (auto& [slot, attachment] : m_attachments) clearAttachment(attachment, value);
 }
 
-void FrameBufferObject::clearAttachment(FrameBufferAttachmentSlot slot) 
+void FrameBufferObject::clearAttachment(FrameBufferAttachmentSlot slot, int value) 
 {
-	clearAttachment(m_attachments[slot]);
+	clearAttachment(m_attachments[slot], value);
 }
 
 void FrameBufferObject::resizeAttachments() 
