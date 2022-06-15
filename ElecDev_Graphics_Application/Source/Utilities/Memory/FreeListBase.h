@@ -2,6 +2,8 @@
 
 #include "Utilities/Assert/Assert.h"
 #include <tuple>
+#include <cstdlib>
+#include <stdlib.h>
 
 // The base class for the two FreeList implementations.
 // Contains some utility functions that are shared between the implementations.
@@ -431,8 +433,16 @@ protected:
 			if(attemptConnection(prevSlot, nextSlot)) return;
 
 			// Update edge slots.
-			if(!curHasPrevSlot) m_firstFreeSlot = nextSlot;
-			if(!curHasNextSlot) m_lastFreeSlot = prevSlot;
+			if (!curHasPrevSlot)
+			{
+				m_firstFreeSlot = nextSlot;
+				setPrevSlot(m_firstFreeSlot, -1);
+			}
+			if (!curHasNextSlot)
+			{
+				m_lastFreeSlot = prevSlot;
+				setNextSlot(m_lastFreeSlot, -1);
+			}
 		}
 	}
 
