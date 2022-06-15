@@ -45,6 +45,8 @@ public:
 	virtual void translateVertex(VertexData* vertex, const glm::vec3 translation) override;
 	// Move a vertex
 	virtual void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
+
+	//virtual void highlightVertexAtIndex(unsigned index);
 };
 
 //=============================================================================================================================================//

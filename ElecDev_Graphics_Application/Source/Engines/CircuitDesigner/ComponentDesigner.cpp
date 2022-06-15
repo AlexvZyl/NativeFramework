@@ -6,6 +6,7 @@
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
 #include "Graphics/OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/Circle.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 #include "Graphics/Entities/EntityManager.h"
 #include "GUI/ComponentDesignerColorEditor.h"
 #include "OpenGL/Primitives/Grid.h"
@@ -622,6 +623,7 @@ void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit*
 	m_activeVertexIdx = -1;
 	m_activeComponent = std::make_shared<Component2D>(path, parent);
 	m_activeComponent->disableOutline();
+	savePath = path;
 }
 
 void ComponentDesigner::renderTooltip() 

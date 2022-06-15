@@ -10,6 +10,10 @@
 #include "Graphics/Entities/Entity.h"
 #include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Application/ApplicationTemplates.h"
+#include "Graphics/OpenGL/Primitives/Circle.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "Graphics/OpenGL/Primitives/Polygon.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -56,10 +60,6 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	else if (engine->m_activeText) 
 	{
 		activePrimitive = engine->m_activeText;
-	}
-	else if (engine->m_activeLine) 
-	{
-		activePrimitive = engine->m_activeLine;
 	}
 	else if(engine->m_activePort)
 	{

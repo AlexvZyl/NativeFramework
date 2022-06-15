@@ -15,6 +15,11 @@
 #include "GUI/CircuitDesignerPopupModal.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
 #include "glm/gtc/matrix_transform.hpp"
+#include "OpenGL/Primitives/Text.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "Graphics/OpenGL/Primitives/Circle.h"
 
 // Utility for comparing two vecs.
 bool compare(const glm::vec2& vec1, const glm::vec2& vec2, float tolerance = 1e-6);

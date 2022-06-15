@@ -5,10 +5,12 @@
 //=============================================================================================================================================//
 
 #include "Graphics/Entities/Entity.h"
-#include "Cable.h"
-#include "Component2D.h"
 #include "yaml-cpp/yaml.h"
 #include <filesystem>
+#include <unordered_map>
+
+class Cable;
+class Component2D;
 
 //=============================================================================================================================================//
 //  Circuit Class.    																														   //

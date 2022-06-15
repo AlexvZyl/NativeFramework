@@ -5,6 +5,7 @@
 #include "../Serialiser.h"
 #include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Graphics/Fonts/FontLoader.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 
 //=============================================================================================================================================//
 //  Single port.		     																												   //

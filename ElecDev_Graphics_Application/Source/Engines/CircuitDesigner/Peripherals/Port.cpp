@@ -16,6 +16,9 @@
 #include <iostream>
 #include "glm/gtc/matrix_transform.hpp"
 #include "Utilities/Serialisation/Serialiser.h"
+#include "OpenGL/Primitives/Circle.h"
+#include "OpenGL/Primitives/Vertex.h"
+#include "OpenGL/Primitives/Text.h"
 
 //==============================================================================================================================================//
 //  Methods.																																	//

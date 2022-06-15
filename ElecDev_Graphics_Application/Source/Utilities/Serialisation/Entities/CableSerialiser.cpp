@@ -6,6 +6,8 @@
 #include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "OpenGL/Primitives/Circle.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "OpenGL/Primitives/PolyLine.h"
 
 //=============================================================================================================================================//
 //  Cable serialiser.     																													   //

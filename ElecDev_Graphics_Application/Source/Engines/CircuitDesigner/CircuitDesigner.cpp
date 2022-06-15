@@ -51,7 +51,8 @@ CircuitDesigner::~CircuitDesigner()
 
 void CircuitDesigner::createCircuit(const std::filesystem::path& path) 
 {
-	m_circuit = std::make_shared<Circuit>(path);
+	m_circuit = std::make_shared<Circuit>(path); 
+	savePath = path;
 }
 
 void CircuitDesigner::renderOverlay() 

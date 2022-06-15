@@ -19,6 +19,7 @@
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
 #include "Utilities/Serialisation/Serialiser.h"
+#include "Utilities/Windows/WindowsUtilities.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//
@@ -353,9 +354,31 @@ void CircuitDesigner::onFileSaveEvent(const FileSaveEvent& event)
 			{
 				saveToYAML(m_circuit.get(), path);
 				setName(path.filename().stem().string());
+				if (path.filename().extension().string() != ".lmct")
+				{
+					path.extension() = ".lmct";
+				}
+				savePath = path;
+				savedDocument();
 			}
 		}
-		savedDocument();
+	}	
+	// Save to new file.
+	else {
+		if (!savePath.string().size()) {
+			// Get save path.
+			savePath = selectFile("Lumen Save Circuit", "", m_circuit->m_label, "Save"); 
+			if (savePath.filename().extension().string() != ".lmct")
+			{
+				savePath.extension() = ".lmct";
+			}
+		}
+		if (savePath.string().size())
+		{
+			saveToYAML(m_circuit.get(), savePath);
+			setName(savePath.filename().stem().string());
+			savedDocument();
+		}
 	}
 }
 

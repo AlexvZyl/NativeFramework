@@ -6,6 +6,10 @@
 #include "Circuit.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "Port.h"
+#include "OpenGL/Primitives/LineSegment.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "Component2D.h"
 
 unsigned Cable::cableID = 0;
 

@@ -16,6 +16,7 @@
 #include "Peripherals/Component2D.h"
 #include "OpenGL/SceneGL.h"
 #include "Utilities/Serialisation/Serialiser.h"
+#include "Utilities/Windows/WindowsUtilities.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
@@ -383,7 +384,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 
 void ComponentDesigner::onFileSaveEvent(const FileSaveEvent& event) 
 {
-	// Save to new file.
+	// Save to existing file.
 	if (event.saveAs)
 	{
 		// Iterate through the paths.
@@ -394,16 +395,30 @@ void ComponentDesigner::onFileSaveEvent(const FileSaveEvent& event)
 			{
 				saveToYAML(m_activeComponent.get(), path);
 				setName(path.filename().stem().string());
+				if (path.extension().string() != ".lmcp")
+				{
+					path.extension() = ".lmcp";
+				}
+				savePath = path;
+				savedDocument();
 			}
 		}
-		savedDocument();
 	}
-
-	// Save to existing file.
-	else 
-	{
-
-
-		savedDocument();
+	// Save to new file.
+	else {
+		if (!savePath.string().size()) {
+			// Get save path.
+			savePath = selectFile("Lumen Save Circuit", "", m_activeComponent->title->m_string, "Save"); 
+			if (savePath.extension().string() != ".lmcp")
+			{
+				savePath.extension() = ".lmcp";
+			}
+		}
+		if (savePath.string().size())
+		{
+			saveToYAML(m_activeComponent.get(), savePath);
+			setName(savePath.filename().stem().string());
+			savedDocument();
+		}
 	}
 }

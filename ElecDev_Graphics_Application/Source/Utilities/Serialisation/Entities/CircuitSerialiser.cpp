@@ -10,6 +10,8 @@
 #include "Graphics/Entities/EntityManager.h"
 #include "Lumen/Lumen.h"
 #include "Application/Application.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 
 //=============================================================================================================================================//
 //  Function declerations.			     																									   //

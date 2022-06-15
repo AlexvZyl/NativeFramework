@@ -136,6 +136,7 @@ void EngineCore::unsavedDocument()
 void EngineCore::savedDocument()
 {
 	m_parentWindow->savedDocument();
+	Lumen::getApp().pushNotification(NotificationType::Success, 1000, "File saved to " + savePath.string());
 }
 
 glm::vec2 EngineCore::localToGlobalCoords(const glm::vec2& coords) 
