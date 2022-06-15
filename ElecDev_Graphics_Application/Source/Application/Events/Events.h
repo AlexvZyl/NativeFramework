@@ -321,11 +321,17 @@ public:
 
 	inline FileSaveEvent(const std::vector<std::filesystem::path>& files, LumenEventID ID = 0)
 		: FileEvent(EventType_FileSave | ID, files)
-	{}
+	{ }
 
 	inline FileSaveEvent(const std::filesystem::path& file, LumenEventID ID = 0)
 		: FileEvent(EventType_FileSave | ID, file)
-	{}
+	{ }
+
+	inline FileSaveEvent(LumenEventID ID = 0)
+		: FileEvent(EventType_FileSave | ID, ""), saveAs(false)
+	{ }
+
+	bool saveAs = true;
 };
 
 // ------------------ //

@@ -93,7 +93,6 @@ void PopUpMenu::onImGuiRender()
             if (path.string().size())
             {
                 EventLog::log<FileSaveEvent>(FileSaveEvent(path.string()));
-                circuitEngine->savedDocument();
             }
             closeWindow();
         }
@@ -147,7 +146,6 @@ void PopUpMenu::onImGuiRender()
                 if (path.string().size())
                 {
                     EventLog::log<FileSaveEvent>(path.string());
-                    componentEngine->savedDocument();
                 }
                 closeWindow();
             }

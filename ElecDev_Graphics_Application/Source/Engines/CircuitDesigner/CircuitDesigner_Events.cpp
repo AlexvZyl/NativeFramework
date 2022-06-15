@@ -343,15 +343,19 @@ void CircuitDesigner::onYamlNodeDropEvent(const YamlNodeDropEvent& event)
 
 void CircuitDesigner::onFileSaveEvent(const FileSaveEvent& event) 
 {
-	// Iterate through the paths.
-	for (auto& path : event.fileData)
+	if (event.saveAs)
 	{
-		// Check if operation did not fail.
-		if (path.string().size())
+		// Iterate through the paths.
+		for (auto& path : event.fileData)
 		{
-			saveToYAML(m_circuit.get(), path);
-			setName(path.filename().stem().string());
+			// Check if operation did not fail.
+			if (path.string().size())
+			{
+				saveToYAML(m_circuit.get(), path);
+				setName(path.filename().stem().string());
+			}
 		}
+		savedDocument();
 	}
 }
 

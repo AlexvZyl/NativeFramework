@@ -383,14 +383,27 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 
 void ComponentDesigner::onFileSaveEvent(const FileSaveEvent& event) 
 {
-	// Iterate through the paths.
-	for (auto& path : event.fileData)
+	// Save to new file.
+	if (event.saveAs)
 	{
-		// Check if operation did not fail.
-		if (path.string().size())
+		// Iterate through the paths.
+		for (auto& path : event.fileData)
 		{
-			saveToYAML(m_activeComponent.get(), path);
-			setName(path.filename().stem().string());
+			// Check if operation did not fail.
+			if (path.string().size())
+			{
+				saveToYAML(m_activeComponent.get(), path);
+				setName(path.filename().stem().string());
+			}
 		}
+		savedDocument();
+	}
+
+	// Save to existing file.
+	else 
+	{
+
+
+		savedDocument();
 	}
 }
