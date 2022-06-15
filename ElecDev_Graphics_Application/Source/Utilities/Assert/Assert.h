@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include <assert.h>
 
 #ifdef LUMEN_ASSERTS

@@ -11,7 +11,7 @@
 #include "Application/Application.h"
 #include "Application/ApplicationTemplates.h"
 #include "Engines/Base2DEngine/Base2DEngine.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 
 //==============================================================================================================================================//
 //  Scenes.																																		//

@@ -30,8 +30,8 @@ public:
     glm::vec2 m_end;
 
     // Constructor.
-    LineSegment(const glm::vec2& start, const glm::vec2& end, VertexArrayObject<VertexData>* VAO, Entity* parent,
-        float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f });
+    LineSegment(const glm::vec2& start, const glm::vec2& end, GraphicsTrianglesBuffer<VertexData>* gtb, Entity* parent,
+                float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f });
 
     // Translate by the given vector.
     void translate(const glm::vec2& translation) override;
@@ -42,7 +42,7 @@ public:
     void translateVertexTo(VertexData* vertex, const glm::vec2 position) override;
     void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
 
-    void translateToVertexAtIndex(unsigned index, const glm::vec2& position) override;
+    void translateVertexAtIndexTo(unsigned index, const glm::vec2& position) override;
     void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
 };
 

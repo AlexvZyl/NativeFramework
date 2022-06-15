@@ -1,7 +1,7 @@
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "CircuitEditorPopup.h"
 #include "Application/Application.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 
 CircuitEditorPopup::CircuitEditorPopup(const std::string& name, int imguiWindowFlags) 
 	: LumenPopupWindow(name, imguiWindowFlags)

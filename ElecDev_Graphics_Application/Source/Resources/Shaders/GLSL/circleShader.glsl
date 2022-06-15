@@ -28,13 +28,28 @@ layout(location = 2) out VertexOutput Output;
 
 void main()
 {
+    // Circle data.
     Output.Radius        = v_radius;
     Output.LocalPosition = v_localCoords;
     Output.Color         = v_color;
     Output.Thickness     = v_thickness;
     Output.Fade          = v_fade;
-    gl_Position          = viewProjMatrix * vec4(v_pos, 1.0);
     f_entityID           = v_entityID;
+
+    // Manipulate the values so that the circle thickness adjusts 
+    // around the radius.
+    vec3 vPos = v_pos;
+    if(Output.Thickness != -1)
+    {
+        vPos.x += Output.LocalPosition.x * ( Output.Thickness / 2.f );
+        vPos.y += Output.LocalPosition.y * ( Output.Thickness / 2.f );
+        Output.Radius += Output.Thickness / 2.f;
+    }
+    else
+    {
+        Output.Thickness = Output.Radius;
+    }
+    gl_Position = viewProjMatrix * vec4(vPos, 1.0);
 }
 
 #shader fragment
@@ -66,8 +81,9 @@ void main()
     float distance = 1.0 - length(Input.LocalPosition);
     float circleAlpha = smoothstep(0.0, Input.Fade, distance);
     circleAlpha *= smoothstep(normalisedThickness + Input.Fade, normalisedThickness, distance);
-    if (circleAlpha < 0.5)  //  The 0.5 value should change based on the fade value of the circle.
-        discard;            //  If not the fade does not work properly.
+    //  The 0.5 value should change based on the fade value of the circle.
+    //  If not the fade does not work properly.
+    if (circleAlpha < 0.5) discard;            
 
     // Set output color
     o_color = Input.Color;

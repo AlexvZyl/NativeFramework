@@ -212,7 +212,7 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 void Cable::extendSegment(glm::vec2 nextPoint)
 {
 	// Extend the pevious segment. 
-	m_polyLine->translateToVertexAtIndex(m_polyLine->m_vertices.size() - 1, nextPoint);
+	m_polyLine->translateVertexAtIndexTo(m_polyLine->m_vertices.size() - 1, nextPoint);
 }
 
 void Cable::addSegment(glm::vec2 nextPoint)
@@ -254,13 +254,13 @@ void Cable::followPort(Port* movedPort)
 	if (movedPort == m_endPort)
 	{
 		// Extend the pevious segment. 
-		m_polyLine->translateToVertexAtIndex(m_polyLine->m_vertices.size() - 1, movedPort->centre);
+		m_polyLine->translateVertexAtIndexTo(m_polyLine->m_vertices.size() - 1, movedPort->centre);
 	}
 
 	else if (movedPort == m_startPort)
 	{
 		// Extend the first segment. 
-		m_polyLine->translateToVertexAtIndex(0, movedPort->centre);
+		m_polyLine->translateVertexAtIndexTo(0, movedPort->centre);
 	}
 }
 
@@ -285,7 +285,7 @@ void Cable::translateVertexAtIndexTo(unsigned vertexIdx, glm::vec2 position)
 		//Don't allow the ends to be moved off the port
 		return;
 	}
-	m_polyLine->translateToVertexAtIndex(vertexIdx, position);
+	m_polyLine->translateVertexAtIndexTo(vertexIdx, position);
 }
 
 void Cable::enableOutline()
@@ -435,7 +435,7 @@ void Cable::disableOutline()
 
 std::tuple<unsigned, float>  Cable::getNearestVertexIdx(glm::vec2 pos)
 {
-	return m_polyLine->getNearestVertexIdx(pos);
+	return m_polyLine->getNearestVertexIndex(pos);
 }
 
 //==============================================================================================================================================//

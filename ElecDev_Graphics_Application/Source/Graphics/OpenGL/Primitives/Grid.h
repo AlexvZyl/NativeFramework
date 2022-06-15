@@ -17,10 +17,10 @@
 //  Forward decleration.																													   //
 //=============================================================================================================================================//
 
-template<typename VertexType>
 class VertexArrayObject;
 
 class VertexData;
+struct IndexData2;
 
 //=============================================================================================================================================//
 //  Circle class.		 																													   //
@@ -278,9 +278,9 @@ private:
 	float m_scale = 1.f;
 
 	// VAO containing grid vertices.
-	std::unique_ptr<VertexArrayObject<VertexData>> m_fineVAO = nullptr;
-	std::unique_ptr<VertexArrayObject<VertexData>> m_coarseVAO = nullptr;
-	std::unique_ptr<VertexArrayObject<VertexData>> m_originVAO = nullptr;
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_fineBuffer = nullptr;
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_coarseBuffer = nullptr;
+	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_originBuffer = nullptr;
 
 	// Circle used to identify active vertex.
 	Circle* m_helperCircle = nullptr;

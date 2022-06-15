@@ -5,7 +5,7 @@
 //==============================================================================================================================================//
 
 #include "LumenWindow.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Application/Events/Events.h"
 #include "GLFW/glfw3.h"

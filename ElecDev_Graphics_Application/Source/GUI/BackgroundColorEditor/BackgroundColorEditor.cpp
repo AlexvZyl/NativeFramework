@@ -3,7 +3,7 @@
 //==============================================================================================================================================//
 
 #include "BackgroundColorEditor.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Component2D.h"
@@ -39,29 +39,24 @@ void BackgroundColorEditor::onImGuiRender()
 	// Open color editor.
 	if (scene)
 	{
-		glm::vec4 color;
-		color[0] = scene->m_backgroundVAO->m_vertexCPU[0].data.color[0];
-		color[1] = scene->m_backgroundVAO->m_vertexCPU[0].data.color[1];
-		color[2] = scene->m_backgroundVAO->m_vertexCPU[0].data.color[2];
-		color[3] = scene->m_backgroundVAO->m_vertexCPU[0].data.color[3];
+		glm::vec4 color = scene->m_backgroundBuffer->getVertex(0).color;
 		ImGui::SameLine();
 		if (ImGui::ColorPicker4("##ColorEditor", &color[0], ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
 		{
-			for (auto& vertex : scene->m_backgroundVAO->m_vertexCPU)
+			for (auto& vertex : scene->m_backgroundBuffer->getVertexData())
 			{
-				vertex.data.color[0] = color[0];
-				vertex.data.color[1] = color[1]; 
-				vertex.data.color[2] = color[2];
-				vertex.data.color[3] = color[3];
+				vertex.color[0] = color[0];
+				vertex.color[1] = color[1]; 
+				vertex.color[2] = color[2];
+				vertex.color[3] = color[3];
 
 			}
-			scene->m_backgroundVAO->m_vertexBufferSynced = false;
+			scene->m_backgroundBuffer->reloadVertices();
 		}
 	}
-	else 
-	{
-		ImGui::Text("No active scene.");
-	}
+
+	// No scene to change the color of.
+	else ImGui::Text("No active scene.");
 }
 
 void BackgroundColorEditor::onImGuiEnd()

@@ -9,81 +9,60 @@
 //  Methods.																															        //
 //==============================================================================================================================================//
 
-IOIndicator::IOIndicator(PortType type, PortPosition position, VertexArrayObject<VertexData>* VAO, Port* parent)
+IOIndicator::IOIndicator(PortType type, PortPosition position, GraphicsTrianglesBuffer<VertexData>* gtb, Port* parent)
 	: Primitive(parent),
 	  m_portType(type),
 	  m_portPosition(position)
 {
 	// General setup.
-	m_trackedCenter = glm::vec3(0.f, 0.f, 0.f);
-	m_colour = parent->indicatorColour;//glm::vec4(0.5f, 0.5f, 0.5f, 0.5f);
-	m_VAO = VAO;
+	m_colour = parent->indicatorColour;
+	setGraphicsBuffer(gtb);
 
 	// ----------------- //
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	std::vector<VertexData> vertexVector;
-	vertexVector.reserve(4);
-	std::vector<glm::vec3> vertices;
-	vertices.reserve(4);
-	vertices.emplace_back(glm::vec3(0.f, 0.008f, 0.9f));
-	vertices.emplace_back(glm::vec3(0.f, -0.008f, 0.9f));
-	vertices.emplace_back(glm::vec3(0.008f, 0.f, 0.9f));
-	vertices.emplace_back(glm::vec3(-0.008f, 0.f, 0.9f));
-	for (glm::vec3 vertex : vertices)
-		vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
-	m_vertexCount = vertexVector.size();
+	m_vertexCount = 4;
+	const VertexData vertices[4] = {
+		{ { 0.f, 0.008f, 0.9f  }, m_colour, m_entityID },
+		{ { 0.f, -0.008f, 0.9f }, m_colour, m_entityID },
+		{ { 0.008f, 0.f, 0.9f  }, m_colour, m_entityID },
+		{ { -0.008f, 0.f, 0.9f }, m_colour, m_entityID }
+	};
 
 	// --------------- //
 	//  I N D I C E S  //
 	// --------------- //
 
-	std::vector<unsigned> indices;
+	// Default indices.
+	m_indexCount = 2;
+	UInt3 indices[2] = {
+		{0, 1, 2},
+		{0, 2, 3}
+	};
 		
-	// Set the vertices based on the Port type and position.
-	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::RIGHT)) 
+	// In these cases we need different indices.
+	if ((m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_IN && m_portPosition == PortPosition::RIGHT)) 
 	{
-		// Draw a right pointing triangle.
-		indices.push_back(0);
-		indices.push_back(1);
-		indices.push_back(2);
+		indices[0] = { 0, 1, 3 };
 	}
-	else if ((m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_IN && m_portPosition == PortPosition::RIGHT)) 
+	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::TOP) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::BOTTOM)) 
 	{
-		// Draw a left pointing triangle.
-		indices.push_back(0);
-		indices.push_back(1);
-		indices.push_back(3);
-	}
-	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::BOTTOM) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::TOP)) 
-	{
-		// Draw a up pointing triangle.
-		indices.push_back(0);
-		indices.push_back(3);
-		indices.push_back(2);
-	}
-	else if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::TOP) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::BOTTOM)) 
-	{
-		// Draw a down pointing triangle.
-		indices.push_back(3);
-		indices.push_back(1);
-		indices.push_back(2);
+		indices[1] = { 3, 1, 2 };
 	}
 	else 
 	{
 		// Handle PORT_INOUT.
 	}
-	m_indexCount = indices.size();
-	translateTo(parent->centre);
 
-	m_VAO->pushPrimitive(this, vertexVector, indices);
+	// Push data and translate to correct position.
+	pushToGraphicsBuffer(vertices, 4, indices, 2);
+	translateTo(parent->centre);
 }
 
 void IOIndicator::setType(PortType type, PortPosition position)
 {
-	wipeGPU();
-
+	removeFromGraphicsBuffer();
 	m_portType = type;
 	m_portPosition = position;
 
@@ -91,58 +70,42 @@ void IOIndicator::setType(PortType type, PortPosition position)
 	//  V E R T I C E S  //
 	// ----------------- //
 
-	std::vector<VertexData> vertexVector;
-	std::vector<glm::vec3> vertices;
-	vertices.push_back(glm::vec3(0.f, 0.008f, 0.9f));
-	vertices.push_back(glm::vec3(0.f, -0.008f, 0.9f));
-	vertices.push_back(glm::vec3(0.008f, 0.f, 0.9f));
-	vertices.push_back(glm::vec3(-0.008f, 0.f, 0.9f));
-	for (glm::vec3 vertex : vertices)
-		vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
-	m_vertexCount = vertexVector.size();
+	m_vertexCount = 4;
+	const VertexData vertices[4] = {
+		{ { 0.f, 0.008f, 0.9f  }, m_colour, m_entityID },
+		{ { 0.f, -0.008f, 0.9f }, m_colour, m_entityID },
+		{ { 0.008f, 0.f, 0.9f  }, m_colour, m_entityID },
+		{ { -0.008f, 0.f, 0.9f }, m_colour, m_entityID }
+	};
 
 	// --------------- //
 	//  I N D I C E S  //
 	// --------------- //
 
-	std::vector<unsigned> indices;
-	indices.reserve(3);
+	// Default indices.
+	m_indexCount = 2;
+	UInt3 indices[2] = {
+		{0, 1, 2},
+		{0, 2, 3}
+	};
 
-	// Set the vertices based on the Port type and position
-	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::RIGHT)) 
+	// In these cases we need different indices.
+	if ((m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_IN && m_portPosition == PortPosition::RIGHT))
 	{
-		// Draw a right pointing triangle.
-		indices.push_back(0);
-		indices.push_back(1);
-		indices.push_back(2);
+		indices[0] = { 0, 1, 3 };
 	}
-	else if ((m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_IN && m_portPosition == PortPosition::RIGHT)) 
+	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::TOP) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::BOTTOM))
 	{
-		// Draw a left pointing triangle.
-		indices.push_back(0);
-		indices.push_back(1);
-		indices.push_back(3);
+		indices[1] = { 3, 1, 2 };
 	}
-	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::BOTTOM) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::TOP)) 
-	{
-		// Draw a up pointing triangle.
-		indices.push_back(0);
-		indices.push_back(3);
-		indices.push_back(2);
-	}
-	else if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::TOP) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::BOTTOM)) 
-	{
-		// Draw a down pointing triangle.
-		indices.push_back(3);
-		indices.push_back(1);
-		indices.push_back(2);
-	}
-	else 
+	else
 	{
 		// Handle PORT_INOUT.
 	}
-	m_indexCount = indices.size();
-	m_VAO->pushPrimitive(this, vertexVector, indices);
+
+	// Push data and translate to correct position.
+	pushToGraphicsBuffer(vertices, 4, indices, 2);
+	translateTo(dynamic_cast<Port*>(m_parent)->centre);
 }
 
 //==============================================================================================================================================//

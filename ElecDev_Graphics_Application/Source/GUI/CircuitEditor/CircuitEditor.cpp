@@ -3,7 +3,7 @@
 //=======================================================================================================================================//
 
 #include "CircuitEditor.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "Application/ApplicationTemplates.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"

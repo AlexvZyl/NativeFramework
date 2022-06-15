@@ -3,7 +3,8 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/Vertex.h"
 
-PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData>* VAO, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) :Polygon2D({}, VAO, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
+PolyLine::PolyLine(std::vector<glm::vec2> vertices, GraphicsTrianglesBuffer<VertexData>* gtb, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) 
+	: Polygon2D({}, gtb, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
@@ -36,6 +37,7 @@ PolyLine::PolyLine(std::vector<glm::vec2> vertices, VertexArrayObject<VertexData
 			});
 		resultVec.push_back(temp);
 	}*/
+
 	m_rounded = rounded;
 	if (!m_rounded) et = ClipperLib::etOpenButt;
 	update();
@@ -64,23 +66,17 @@ void PolyLine::update()
 		resultVec.push_back(temp);
 	}
 
-	m_VAO->popPrimitive(this);
-	std::vector<unsigned> indices = mapbox::earcut<unsigned>(resultVec);
-	m_indexCount = indices.size();
-
+	// Clear current data.
+	removeFromGraphicsBuffer();
+	auto indices = mapbox::earcut<unsigned>(resultVec);
 	std::vector<VertexData> vertexVector;
-	for (auto& path : resultVec) {
-		for (auto& vertex : path)
-			vertexVector.emplace_back(VertexData(vertex, m_colour, m_entityID));
-	}
-
-	m_vertexCount = vertexVector.size();
-	m_VAO->pushPrimitive(this, vertexVector, indices);
+	for (auto& path : resultVec) 
+		for (auto& vertex : path) 
+			vertexVector.emplace_back(vertex, m_colour, m_entityID);
+	// Push new data.
+	pushToGraphicsBuffer(vertexVector.data(), vertexVector.size(), (UInt3*)indices.data(), indices.size() / UInt3::count());
 	m_outlineEnabled = false;
-	if (outlined) 
-	{
-		enableOutline();
-	}
+	if (outlined) enableOutline();
 }
 
 void PolyLine::pushVertex(const glm::vec3& vertex)
@@ -106,12 +102,12 @@ void PolyLine::translateVertexAtIndex(unsigned index, const glm::vec2& translati
 	update();
 }
 
-void PolyLine::translateToVertexAtIndex(unsigned index, const glm::vec3& position)
+void PolyLine::translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
 {
-	translateToVertexAtIndex(index, glm::vec2{ position });
+	translateVertexAtIndexTo(index, glm::vec2{ position });
 }
 
-void PolyLine::translateToVertexAtIndex(unsigned index, const glm::vec2& position)
+void PolyLine::translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
 {
 	glm::vec2 translation = position - m_vertices.at(index);
 	translateVertexAtIndex(index, translation);
@@ -127,7 +123,7 @@ void PolyLine::translateVertexTo(VertexData* vertex, const glm::vec2 position)
 	float tol = m_thickness;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
-			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
+			return glm::length(vert - glm::vec2{ vertex->position }) < tol;
 		});
 	if (it == end(m_vertices)) {
 		LUMEN_LOG_WARN("Tried to move an invlaid vertex.", "PolyLine");
@@ -147,7 +143,7 @@ void PolyLine::translateVertex(VertexData* vertex, const glm::vec2 translation)
 	float tol = m_thickness*2;
 	auto it = std::find_if(begin(m_vertices), end(m_vertices), [&](glm::vec2 vert)
 		{
-			return glm::length(vert - glm::vec2{ vertex->data.position }) < tol;
+			return glm::length(vert - glm::vec2{ vertex->position }) < tol;
 		});
 
 	if (it == end(m_vertices)) 
@@ -169,8 +165,7 @@ void PolyLine::translate(const glm::vec3& translation)
 void PolyLine::translate(const glm::vec2& translation)
 {
 	Primitive::translate(translation);
-
-	//update the internal vertices
+	// Update the internal vertices.
 	for (auto& vert : m_vertices) 
 		vert += translation;
 }
@@ -185,10 +180,10 @@ void PolyLine::translateTo(const glm::vec2& position)
 	translate(position - glm::vec2(m_trackedCenter));
 }
 
-void PolyLine::enableOutline()
+void PolyLine::enableOutline(float value)
 {
 	outlined = true;
-	Polygon2D::enableOutline();
+	Polygon2D::enableOutline(value);
 }
 
 void PolyLine::disableOutline()
@@ -203,13 +198,15 @@ void PolyLine::setThickness(float thickness)
 	update();
 }
 
-std::tuple<unsigned, float> PolyLine::getNearestVertexIdx(const glm::vec2& position)
+std::tuple<unsigned, float> PolyLine::getNearestVertexIndex(const glm::vec2& position)
 {
 	unsigned i = 0;
 	unsigned idx = 0;
 	float min = INFINITY;
-	for (glm::vec2 vert : m_vertices) {
-		if (glm::length(vert - position) < min) {
+	for (glm::vec2 vert : m_vertices) 
+	{
+		if (glm::length(vert - position) < min) 
+		{
 			idx = i;
 			min = glm::length(vert - position);
 		}

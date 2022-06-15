@@ -3,7 +3,7 @@
 #include "Application/Events/Events.h"
 #include "Application/ApplicationTemplates.h"
 #include "GUI/PopUpMenu/PopUpMenu.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"
@@ -80,7 +80,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				//start new circle
 				if (drawFilled) 
 				{
-					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, 1.0f, 0.f, m_activeComponent.get());
+					m_activeCircle = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, -1.0f, 0.f, m_activeComponent.get());
 				}
 				else 
 				{
@@ -139,11 +139,11 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 			PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
 			if (polyline) {
 				//Polygon is clear, so we index with m_vertices (nodes)
-				polyline->translateToVertexAtIndex(polyline->m_vertices.size()-1, getNearestGridVertex(screenCoords));
+				polyline->translateVertexAtIndexTo(polyline->m_vertices.size()-1, getNearestGridVertex(screenCoords));
 			}
 			else {
 				//Polygon is filled, so we index like this (using the vertex count)
-				m_activePoly->translateToVertexAtIndex(m_activePoly->m_vertexCount - 1, getNearestGridVertex(screenCoords));
+				m_activePoly->translateVertexAtIndexTo(m_activePoly->m_vertexCount - 1, getNearestGridVertex(screenCoords));
 			}
 		}
 	}
@@ -152,7 +152,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		if (m_activeLine)
 		{
 			// Update the line end position.
-			m_activeLine->translateToVertexAtIndex(m_activeLine->m_vertices.size() - 1, getNearestGridVertex(screenCoords));
+			m_activeLine->translateVertexAtIndexTo(m_activeLine->m_vertices.size() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
@@ -361,15 +361,18 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 		if (m_activeVertexIdx != -1) 
 		{
-			if (m_activeLine) m_activeLine->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
-			else if (m_activePoly) {
+			if (m_activeLine) m_activeLine->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
+			else if (m_activePoly) 
+			{
 				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
-				if (polyline) {
-					//Polygon is clear, so we index with m_vertices (nodes)
-					polyline->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
+				if (polyline) 
+				{
+					// Polygon is clear, so we index with m_vertices (nodes).
+					polyline->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
 				}
-				else {
-					m_activePoly->translateToVertexAtIndex(m_activeVertexIdx, getNearestGridVertex(m_activePoly->m_VAO->m_vertexCPU[m_activePoly->m_vertexBufferPos + m_activeVertexIdx].data.position));
+				else 
+				{
+					m_activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position));
 				}
 			}
 		}

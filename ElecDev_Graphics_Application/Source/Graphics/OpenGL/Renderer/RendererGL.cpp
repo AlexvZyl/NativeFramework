@@ -13,6 +13,8 @@
 #include "OpenGL/SceneGL.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "Application/Application.h"
+#include "Utilities/Logger/Logger.h"
+#include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 
 //==============================================================================================================================================//
 //  Static Inisialisation.																														//
@@ -23,7 +25,7 @@ Scene* Renderer::s_scene = nullptr;
 std::vector<Scene*> Renderer::s_storedScenes;
 std::unique_ptr<Font> Renderer::s_defaultFont = nullptr;
 std::unique_ptr<Scene> Renderer::m_default2DScene = nullptr;
-std::unique_ptr<VertexArrayObject<VertexDataTextured>> Renderer::s_unitQuad = nullptr;
+std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> Renderer::s_unitQuad = nullptr;
 
 //==============================================================================================================================================//
 //  Setup.																																		//
@@ -39,6 +41,8 @@ void Renderer::shutdown()
 
 void Renderer::initialise()
 {
+	LUMEN_LOG_INFO("Initialising...", "OpenGL Renderer");
+
 	// OpenGL settings.
 	GLCall(glEnable(GL_MULTISAMPLE));                           // Enables MSAA.
 	GLCall(glEnable(GL_DEPTH_TEST));                            // Enables depth testing for the OpenGL scenes.
@@ -51,12 +55,15 @@ void Renderer::initialise()
 	// Initial setup.
 	Renderer::compileShaders();
 	Renderer::loadDefaultFont();
-	s_pipelineControls.insert({ "Background"		, true });
-	s_pipelineControls.insert({ "Geometry"			, true });
-	s_pipelineControls.insert({ "Outline"			, true });
-	s_pipelineControls.insert({ "OutlinePostProc"   , true });
-	s_pipelineControls.insert({ "Grid"				, true });
+	// Setup pipeline controls.
+	s_pipelineControls["Background"		] = true;
+	s_pipelineControls["Geometry"		] = true;
+	s_pipelineControls["Outline"		] = true;
+	s_pipelineControls["OutlinePostProc"] = true;
+	s_pipelineControls["Grid"			] = true;
 	Renderer::createUnitQuad();
+
+	LUMEN_LOG_INFO("Initialised.", "OpenGL Renderer");
 }
 
 void Renderer::loadDefaultFont()
@@ -66,17 +73,17 @@ void Renderer::loadDefaultFont()
 
 void Renderer::compileShaders()
 {
-	// Renderer shaders.
-	s_shaders.insert({ "BackgroundShader"		, std::make_unique<Shader>(BACKGROUND_SHADER) });
-	s_shaders.insert({ "BasicShader"			, std::make_unique<Shader>(BASIC_SHADER) });
-	s_shaders.insert({ "TextureShader"			, std::make_unique<Shader>(TEXTURE_SHADER) });
-	s_shaders.insert({ "CircleShader"			, std::make_unique<Shader>(CIRCLE_SHADER) });
-	s_shaders.insert({ "OutlineShader"			, std::make_unique<Shader>(OUTLINE_SHADER) });
-	s_shaders.insert({ "OutlineShaderTextures"	, std::make_unique<Shader>(OUTLINE_SHADER_TEXTURES) });
-	s_shaders.insert({ "OutlineShaderCircle"	, std::make_unique<Shader>(OUTLINE_SHADER_CIRCLE) });
-	s_shaders.insert({ "StaticTextureShader"	, std::make_unique<Shader>(STATIC_TEXTURE_SHADER) });
-	s_shaders.insert({ "OutlineBackgroundShader", std::make_unique<Shader>(OUTLINE_SHADER_BACKGROUND) });
-	s_shaders.insert({ "OutlinePostProc"		, std::make_unique<Shader>(OUTLINE_SHADER_POSTPROC) });
+	// Compile shaders.
+	s_shaders["BackgroundShader"		] = std::make_unique<Shader>(BACKGROUND_SHADER);
+	s_shaders["BasicShader"				] = std::make_unique<Shader>(BASIC_SHADER);
+	s_shaders["TextureShader"			] = std::make_unique<Shader>(TEXTURE_SHADER);
+	s_shaders["CircleShader"			] = std::make_unique<Shader>(CIRCLE_SHADER);
+	s_shaders["OutlineShader"			] = std::make_unique<Shader>(OUTLINE_SHADER);
+	s_shaders["OutlineShaderTextures"	] = std::make_unique<Shader>(OUTLINE_SHADER_TEXTURES);
+	s_shaders["OutlineShaderCircle"		] = std::make_unique<Shader>(OUTLINE_SHADER_CIRCLE);
+	s_shaders["StaticTextureShader"		] = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
+	s_shaders["OutlineBackgroundShader"	] = std::make_unique<Shader>(OUTLINE_SHADER_BACKGROUND);
+	s_shaders["OutlinePostProc"			] = std::make_unique<Shader>(OUTLINE_SHADER_POSTPROC);
 
 	Shader* shader;
 	int samplers[1] = { 0 };
@@ -97,22 +104,25 @@ void Renderer::compileShaders()
 void Renderer::createUnitQuad() 
 {
 	// Create VAO.
-	s_unitQuad = std::make_unique<VertexArrayObject<VertexDataTextured>>(GL_TRIANGLES);
-	s_unitQuad->setBufferIncrementSize(4);
+	s_unitQuad = std::make_unique<GraphicsTrianglesBuffer<VertexDataTextured>>();
+	s_unitQuad->setCapacityIncrements(2);
 
 	// Vertex data.
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(-1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 0.f), 0.f, 0));
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(-1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(0.f, 1.f), 0.f, 0));
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(1.f, 1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 1.f), 0.f, 0));
-	s_unitQuad->m_vertexCPU.emplace_back(VertexDataTextured(glm::vec3(1.f, -1.f, 0.f), glm::vec4(0.f, 0.f, 0.f, 0.f), glm::vec2(1.f, 0.f), 0.f, 0));
-	s_unitQuad->m_vertexCount += 4;
+	const VertexDataTextured vertices[4] = {
+		VertexDataTextured({ -1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 0.f }, 0.f, 0),
+		VertexDataTextured({ -1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 1.f }, 0.f, 0),
+		VertexDataTextured({  1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 1.f }, 0.f, 0),
+		VertexDataTextured({  1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 0.f }, 0.f, 0)
+	};
 
 	// Index data.
-	s_unitQuad->m_indexCPU.insert(s_unitQuad->m_indexCPU.end(), { 0,1,2, 2,3,0 });
-	s_unitQuad->m_indexCount += 6;
+	const UInt3 indices[2] = {
+		UInt3{ 0, 1, 2 },
+		UInt3{ 2, 3, 0 }
+	};
 
-	// Data will be loaded upon first resize.
-	s_unitQuad->queryBufferResize();
+	// Push data.
+	s_unitQuad->push(vertices, 4, indices, 2);
 }
 
 //==============================================================================================================================================//
@@ -148,9 +158,7 @@ void Renderer::loadTextures(Scene* scene)
 	std::vector<int> samplers = { 0 };
 	samplers.reserve(textureCount);
 	for (int i = 1; i < textureCount; i++) 
-	{ 
 		samplers.push_back(i); 
-	}
 
 	// Prepare shader.
 	GLCall(auto loc = glGetUniformLocation(s_shaders["TextureShader"]->m_rendererID, "f_textures"));
@@ -171,60 +179,17 @@ void Renderer::loadTextures(Scene* scene)
 //  Utilities.																																	//
 //==============================================================================================================================================//
 
-void Renderer::clearColor() 
-{
-	GLCall(glClear(GL_COLOR_BUFFER_BIT));
-}
-
-void Renderer::finish() 
-{
-	GLCall(glFinish());
-}
-
-void Renderer::flush() 
-{
-	GLCall(glFlush());
-}
-
-void Renderer::enable(unsigned attribute)
-{
-	GLCall(glEnable(attribute));
-}
-
-void Renderer::disable(unsigned attribute)
-{
-	GLCall(glDisable(attribute));
-}
-
-void Renderer::setDepthFunc(unsigned function) 
-{
-	GLCall(glDepthFunc(function));
-}
-
-void Renderer::setViewport(const glm::vec2& viewport)
-{
-	GLCall(glViewport(0, 0, (int)viewport.x, (int)viewport.y));
-}
-
-void Renderer::setViewport(const glm::vec4& viewport)
-{
-	GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3]));
-}
-
-void Renderer::setClearColor(const glm::vec4& color) 
-{
-	GLCall(glClearColor(color.r, color.g, color.b, color.a));
-}
-
-void Renderer::setLineSize(int size) 
-{
-	GLCall(glLineWidth((float)size));
-}
-
-void Renderer::clear(int bitplane)
-{
-	GLCall(glClear(bitplane));
-}
+void Renderer::clearColor()								{ GLCall(glClear(GL_COLOR_BUFFER_BIT)); }
+void Renderer::finish()									{ GLCall(glFinish()); }
+void Renderer::flush()									{ GLCall(glFlush()); }
+void Renderer::enable(unsigned attribute)				{ GLCall(glEnable(attribute)); }
+void Renderer::disable(unsigned attribute)				{ GLCall(glDisable(attribute)); }
+void Renderer::setDepthFunc(unsigned function)			{ GLCall(glDepthFunc(function)); }
+void Renderer::setViewport(const glm::vec2& viewport)	{ GLCall(glViewport(0, 0, (int)viewport.x, (int)viewport.y)); }
+void Renderer::setViewport(const glm::vec4& viewport)	{ GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3])); }
+void Renderer::setClearColor(const glm::vec4& color)	{ GLCall(glClearColor(color.r, color.g, color.b, color.a)); }
+void Renderer::setLineSize(int size)					{ GLCall(glLineWidth((float)size)); }
+void Renderer::clear(int bitplane)						{ GLCall(glClear(bitplane)); }
 
 //==============================================================================================================================================//
 //  EOF.																																		//

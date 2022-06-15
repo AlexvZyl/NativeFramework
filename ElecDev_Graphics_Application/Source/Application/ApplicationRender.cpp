@@ -25,24 +25,29 @@ void Application::run()
 	double waitRemainingTime = 0;
 	while (m_isRunning)
 	{
+		// Waiting for events prevents unneccesary polling.
 		if (m_waitForEvents)
 		{
+			// Time left to wait before the frame rendering should start.
 			waitRemainingTime = m_eventsTimeout - m_totalFrameTime;
-			// Wait for events if there is time left.
+			// If there is time left, wait the time.
 			if (waitRemainingTime > 0) glfwWaitEventsTimeout(waitRemainingTime);
-			// If there is no time left, poll so that we do not miss events.
+			// If there is no time left, quickly poll so that we do not miss events.
+			// This is especially important when we can't render fast enough and there
+			// is no time left.
 			else					   glfwPollEvents();
 		}
+		// This is very inefficient and should only be used for measurements.
 		else glfwPollEvents();
 
 		updateFrametime();
 
+		// Check if the frame should start (based on time passed).
+		// This is subject to change for when we get to multi-threading.
 		if (startFrame())
 		{
-			// Set the frametime 0 at the start of the frame so that the
-			// wait for events do not go over the fps.
-			m_totalFrameTime = 0;
-			renderFrame();
+			resetFrametime();	// Start measuring the frametime on a frame start.
+			renderFrame();		// LumenWindows & engines.
 			updateFrametime();
 		}
 	}
@@ -50,9 +55,11 @@ void Application::run()
 
 void Application::updateFrametime() 
 {
+	// Data.
 	static double previousTime = 0;
 	static double currentTime = 0;
 	
+	// Update the total frametime.
 	currentTime = glfwGetTime();
 	m_totalFrameTime += currentTime - previousTime;
 	previousTime = currentTime;
@@ -105,16 +112,16 @@ void Application::renderFrame()
 			imguiOnUpdate();
 
 			// Called before onUpdate so that ImGui::NewFrame() can be called
-			// before LumenWindow events are dispatched.
+			// and before LumenWindow events are dispatched.
 			onRenderInit();
 
-			// Updates Lumen state and LumenWindows.
+			// Updates states of LumenWindows & engines.
 			onUpdate();
 
-			// ImGui calls and engine rendering.
+			// Renders LumenWindows & engines.
 			onRender();
 
-			// Cleanup & imgui drawing.
+			// Cleanup & imgui rendering.
 			onRenderCleanup();
 		}
 
@@ -134,6 +141,9 @@ void Application::onRender()
 	// The order is not important, since dear imgui handles that.
 	for (auto& [ID, window] : m_windowStack->getWindows())
 		window->onRender();
+
+	// Pop the windows that are queued for removal from onRender.
+	popWindows();
 
 	// Push notificatons.
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8.f, 8.f});

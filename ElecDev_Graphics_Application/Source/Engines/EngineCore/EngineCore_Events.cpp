@@ -7,7 +7,7 @@
 #include "Application/Application.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "Utilities/Logger/Logger.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
@@ -64,14 +64,14 @@ void EngineCore::onFocusEventForce(const NotifyEvent& event)
 	m_isFocused = true;
 	Renderer::bindScene(m_scene.get());
 	Lumen::getApp().setActiveEngine(this);
-	getGizmo()->enable();
+	getGizmo().enable();
 	onFocusEvent(event);
 }
 
 void EngineCore::onDefocusEventForce(const NotifyEvent& event) 
 {
 	m_isFocused = false;
-	getGizmo()->disable();
+	getGizmo().disable();
 	// We not unbind the scene here, since focus can sometimes shift to 
 	// another window, but that window is editing things in this engine.
 	// By not unbinding here we always keep the latest focused engine's
@@ -98,7 +98,7 @@ void EngineCore::onMouseDragEventForce(const MouseDragEvent& event)
 {
 	if (   event.isType(EventType_MouseButtonMiddle)
 		|| event.isType(EventType_MouseButtonLeft | EventType_SpaceBar)
-		|| !getGizmo()->isOver())
+		|| !getGizmo().isOver())
 	{
 		onMouseDragEvent(event);
 	}
@@ -106,7 +106,7 @@ void EngineCore::onMouseDragEventForce(const MouseDragEvent& event)
 
 void EngineCore::onMouseButtonEventForce(const MouseButtonEvent& event) 
 {
-	if (!m_isHovered ||getGizmo()->isOver()) return;
+	if (!m_isHovered || getGizmo().isOver()) return;
 	onMouseButtonEvent(event);
 }
 

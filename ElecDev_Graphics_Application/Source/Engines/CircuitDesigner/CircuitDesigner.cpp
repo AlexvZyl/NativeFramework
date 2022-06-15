@@ -12,7 +12,7 @@ This is where the interactive 2D design engine is implemented.
 #include "Graphics/Camera/Camera.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include <iostream>
-#include "Lumen.h"
+#include "Lumen/Lumen.h"
 #include "Application/Application.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
@@ -24,18 +24,22 @@ This is where the interactive 2D design engine is implemented.
 CircuitDesigner::CircuitDesigner()
 	: Base2DEngine()
 {
+	// Engine setup.
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
+	enableOverlay();
+	enableMenuBar();
+
+	// Setup scene & grid.
 	getScene().getGrid()
 		.disableHelperCircle()
 		.setWidgetPosition(GridWidgetPosition::BOTTOM_RIGHT)
 		.setMajorGrid(GridUnit::MILLIMETER, 5);
 	getScene().getCamera().scale2D(100.f);
-	enableOverlay();
-	enableMenuBar();
 
-	LumenGizmo* gizmo = getGizmo();
-	gizmo->setSize(0.1f);
-	gizmo->enable();
+	// Setup gizmo.
+	LumenGizmo& gizmo = getGizmo();
+	gizmo.setSize(0.1f);
+	gizmo.enable();
 }
 
 CircuitDesigner::~CircuitDesigner()

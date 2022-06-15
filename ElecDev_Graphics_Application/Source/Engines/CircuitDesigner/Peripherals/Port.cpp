@@ -44,10 +44,9 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 		break;
 	}
 
-
-	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
-	border = Renderer::addCircle2D(centre, 1.1f*portSize, borderColour, 1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, 1.0f, 0.f, this);
+	body = Renderer::addCircle2D(centre, portSize, bodyColour, -1.0f, 0.0f, this);
+	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, -1.0f, 0.01f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, -1.0f, 0.f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -143,10 +142,10 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	centre = { node["Centre"][0].as<float>(),  node["Centre"][1].as<float>() };
 	//bodyColour = node["Body"]["Color"].as<glm::vec4>();
 	borderColour = node["Border"]["Color"].as<glm::vec4>();
-	body = Renderer::addCircle2D(centre, portSize, bodyColour, 1.0f, 0.0f, this);
-	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, 1.0f, 0.01f, this);
+	body = Renderer::addCircle2D(centre, portSize, bodyColour, -1.0f, 0.0f, this);
+	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, -1.0f, 0.01f, this);
 	title = Renderer::addText2D(node["Title"], this);
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize * indicatorFraction, indicatorColour, 1.0f, 0.f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize * indicatorFraction, indicatorColour, -1.0f, 0.f, this);
 	setLayer(portLayer);
 }
 

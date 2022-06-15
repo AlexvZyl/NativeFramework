@@ -21,15 +21,15 @@
 
 // Writes the text to the buffer based on the font loaded in the constructor.
 Text::Text(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, 
-		   VertexArrayObject<VertexDataTextured>* VAO, Font* font, Entity* parent,
+		   GraphicsTrianglesBuffer<VertexDataTextured>* gtb, Font* font, Entity* parent,
 		   const std::string& horizontalAlignment, const std::string& verticalAlignment)
-	: Primitive<VertexDataTextured>(parent)
+	: Primitive<GraphicsTrianglesBuffer<VertexDataTextured>>(parent)
 {
 	// ---------- //
 	// S E T U P  //
 	// ---------- //
 
-	m_VAO = VAO;
+	setGraphicsBuffer(gtb);
 	m_trackedCenter = position;  // This does not track the center, but rather the initial cursor position.
 								 // This does not affect functionality but the name does not make sense.
 	m_textScale = scale;
@@ -50,20 +50,25 @@ void Text::generateText(const std::string& text)
 {
 	// Init.
 	glm::vec3 cursorStart = m_trackedCenter;
+	m_vertexCount = 0;
+	m_indexCount = 0;
 
 	// If the text is empty send a box so that if still exists.
+	// Is this the best thing to do?...
 	if (!text.size()) 
 	{ 
+		UInt3 indices[2] = { {0, 1, 2}, {2, 3, 0} };
 		VertexDataTextured zero({ 0.f, 0.f, 0.f }, { 0.f, 0.f, 0.f, 0.f }, {0.f, 0.f}, 0.f, -1.f);
-		m_VAO->pushPrimitive(this, {zero, zero, zero, zero}, {0, 1, 2, 2, 3, 0});
+		VertexDataTextured vertices[4] = { zero, zero, zero, zero };
+		pushToGraphicsBuffer(vertices, 4, indices, 2);
 		return; 
 	}
 
 	// Create variables and reserve memory.
 	std::vector<VertexDataTextured> vertices;
-	std::vector<unsigned> indices;
+	std::vector<UInt3> indices;
 	int charCount = text.length();
-	indices.reserve((charCount + 1) * 6);	// Add one to the char count for
+	indices.reserve((charCount + 1) * 2);	// Add one to the char count for
 	vertices.reserve((charCount + 1) * 4);	// the text box.
 
 	// Calculate the string length with kerning. 
@@ -187,18 +192,12 @@ void Text::generateText(const std::string& text)
 	);
 	// -----------------------
 	// Indices.
-	indices.insert(indices.end(),
-		{
-			0 + m_vertexCount,
-			1 + m_vertexCount,
-			2 + m_vertexCount,
-			2 + m_vertexCount,
-			3 + m_vertexCount,
-			0 + m_vertexCount
-		});
+	indices.insert(indices.end(), {
+				{ 0 + (unsigned)m_vertexCount, 1 + (unsigned)m_vertexCount, 2 + (unsigned)m_vertexCount },
+				{ 2 + (unsigned)m_vertexCount, 3 + (unsigned)m_vertexCount, 0 + (unsigned)m_vertexCount }
+			});
 	// Increment counts.
 	m_vertexCount += 4;
-	m_indexCount += 6;
 	// -----------------------
 
 	// ----------------------------- //
@@ -277,31 +276,25 @@ void Text::generateText(const std::string& text)
 		);
 		// -----------------------
 		// Indices.
-		indices.insert(indices.end(),
-			{
-				0 + m_vertexCount,
-				1 + m_vertexCount,
-				2 + m_vertexCount,
-				2 + m_vertexCount,
-				3 + m_vertexCount,
-				0 + m_vertexCount
+		indices.insert(indices.end(), {
+				{ 0 + (unsigned)m_vertexCount, 1 + (unsigned)m_vertexCount, 2 + (unsigned)m_vertexCount },
+				{ 2 + (unsigned)m_vertexCount, 3 + (unsigned)m_vertexCount, 0 + (unsigned)m_vertexCount }
 			});
 		// Move cursor for next character.
 		totalAdvance += c.xAdvance + kerning;
 		// Increment counts.
 		m_vertexCount += 4;
-		m_indexCount += 6;
 		// -----------------------
 	}
 
-	// Write data to VAO.
-	m_VAO->pushPrimitive(this, vertices, indices);
+	// Push data to the buffer.
+	pushToGraphicsBuffer(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
 void Text::setScale(float scale)
 {
 	m_textScale = scale;
-	wipeGPU();
+	removeFromGraphicsBuffer();
 	generateText(m_string);
 
 	// A bit hacky...
@@ -321,7 +314,7 @@ bool Text::updateText(const std::string& text)
 	if (m_string == text) return false;
 
 	m_string = text;
-	wipeGPU();
+	removeFromGraphicsBuffer();
 	generateText(m_string);
 
 	// A bit hacky...
@@ -336,7 +329,7 @@ bool Text::updateText(const std::string& text)
 
 void Text::update()
 {
-	wipeGPU();
+	removeFromGraphicsBuffer();
 	generateText(m_string);
 
 	// A bit hacky...
@@ -351,7 +344,7 @@ bool Text::updateAlignment(const std::string& horizontalAlignment, const std::st
 {
 	if (horizontalAlignment == m_horizontalAlign && verticalAlignment == m_verticalAlign) return false;
 
-	wipeGPU();
+	removeFromGraphicsBuffer();
 	m_horizontalAlign = horizontalAlignment;
 	m_verticalAlign = verticalAlignment;
 	generateText(m_string);
@@ -369,8 +362,8 @@ bool Text::updateAlignment(const std::string& horizontalAlignment, const std::st
 void Text::setBoxColour(const glm::vec4& colour) 
 { 
 	m_boxColor = colour;
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++) 
-		m_VAO->m_vertexCPU[i].data.color = colour;
+	for (int i = 0; i < 4; i++)
+		getVertex(i).color = colour;
 
 	syncWithGPU();
 }
@@ -378,8 +371,8 @@ void Text::setBoxColour(const glm::vec4& colour)
 void Text::setColor(const glm::vec4& color) 
 {
 	m_colour = color;
-	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.color = color;
+	for (int i = 4; i < m_vertexCount; i++)
+		getVertex(i).color = color;
 
 	syncWithGPU();
 }
@@ -387,12 +380,12 @@ void Text::setColor(const glm::vec4& color)
 void Text::setLayer(float layer)
 {
 	// Text box.
-	for (int i = m_vertexBufferPos; i < m_vertexBufferPos + 4; i++)
-		m_VAO->m_vertexCPU[i].data.position.z = layer - 0.001;
+	for (int i = 0; i < 4; i++)
+		getVertex(i).position.z = layer - 0.001;
 
 	// Text.
-	for (int i = m_vertexBufferPos + 4; i < m_vertexBufferPos + m_vertexCount; i++)
-		m_VAO->m_vertexCPU[i].data.position.z = layer;
+	for (int i = 4; i < m_vertexCount; i++)
+		getVertex(i).position.z = layer;
 
 	m_trackedCenter.z = layer;
 	syncWithGPU();
