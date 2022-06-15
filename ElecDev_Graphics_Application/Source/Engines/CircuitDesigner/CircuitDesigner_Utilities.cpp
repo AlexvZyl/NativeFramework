@@ -579,8 +579,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 				for (auto cable : port->m_cables)
 				{
 					if (cable->m_startPort == port.get()) cable->m_startPort = newPort.get();
-					if (cable->m_endPort   == port.get()) cable->m_endPort = newPort.get();
-					newPort->attachCable(cable);
+					if (cable->m_endPort   == port.get()) cable->attach(newPort.get());
 				}
 				port->m_cables.clear();
 				break;
