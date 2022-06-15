@@ -2,8 +2,6 @@
 
 #include "Utilities/Assert/Assert.h"
 #include <tuple>
-#include <cstdlib>
-#include <stdlib.h>
 
 // The base class for the two FreeList implementations.
 // Contains some utility functions that are shared between the implementations.
@@ -242,13 +240,15 @@ protected:
 			LUMEN_ASSERT(m_data, "Could not allocate memory.");
 			memcpy(m_data, oldData, m_capacity * m_sizeOfElement);
 			free(oldData);
+			int oldCapacity = m_capacity;
+			m_capacity = newCapacity;
 			
 			// Setup the slots.
 			int prevLastSlot = m_lastFreeSlot;
-			setSlotData(m_capacity, newCapacity - m_capacity, -1, -1);
-			updateFreeSlots(m_capacity);
-			if(!attemptMerge(prevLastSlot, m_capacity))
-				attemptConnection(prevLastSlot, m_capacity);
+			setSlotData(oldCapacity, newCapacity - oldCapacity, -1, -1);
+			updateFreeSlots(oldCapacity);
+			if(!attemptMerge(prevLastSlot, oldCapacity))
+				attemptConnection(prevLastSlot, oldCapacity);
 		}
 
 		// Decrease allocated data.
@@ -257,7 +257,6 @@ protected:
 			// TODO: Decreasing capacity is more complex than increasing.
 			// Need to take care of data inside the removed capacity.
 			// Remove this functionality for now.
-			newCapacity = m_capacity; // Ignore resize for now.
 			return;
 
 			// Decrease capacity.
@@ -266,6 +265,7 @@ protected:
 			LUMEN_ASSERT(m_data, "Could not allocate memory.");
 			memcpy(m_data, oldData, newCapacity * m_sizeOfElement);
 			free(oldData);
+			m_capacity = newCapacity;
 		}
 
 		// Empty existing data.
@@ -273,6 +273,7 @@ protected:
 		{
 			callAllDestructors();
 			free(m_data);
+			m_capacity = newCapacity;
 			m_firstFreeSlot = -1;
 			m_lastFreeSlot = -1;
 			m_elementCount = 0;
@@ -284,6 +285,7 @@ protected:
 		{
 			m_data = (T*)malloc(newCapacity * m_sizeOfElement);
 			LUMEN_ASSERT(m_data, "Could not allocate memory.");
+			m_capacity = newCapacity;
 			setSlotData(0, newCapacity, -1, -1);
 			updateFreeSlots(0);
 		}
@@ -293,9 +295,6 @@ protected:
 
 		// Error.
 		else LUMEN_ASSERT(false, "Error with FreeList memory allocation.");
-
-		// Update capacity.
-		m_capacity = newCapacity;
 	}
 
 	inline void freeSlot(int slotIndex, int size = 1) 
@@ -436,12 +435,12 @@ protected:
 			if (!curHasPrevSlot)
 			{
 				m_firstFreeSlot = nextSlot;
-				setPrevSlot(m_firstFreeSlot, -1);
+				if(slotIsValid(m_firstFreeSlot)) setPrevSlot(m_firstFreeSlot, -1);
 			}
 			if (!curHasNextSlot)
 			{
 				m_lastFreeSlot = prevSlot;
-				setNextSlot(m_lastFreeSlot, -1);
+				if (slotIsValid(m_lastFreeSlot)) setNextSlot(m_lastFreeSlot, -1);
 			}
 		}
 	}
@@ -533,9 +532,21 @@ protected:
 		return true;
 	}
 
+	// Get an int pointer to the slot data.
+	inline int* getSlotDataPtr(int slotIndex) 							
+	{ 
+		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to access outside of the heap.");
+		return reinterpret_cast<int*>(m_data + slotIndex); 
+	}					 
+
+	// Get an const int pointer to the slot data.
+	inline const int* getSlotDataPtr(int slotIndex) const 					
+	{ 
+		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to access outside of the heap.");
+		return reinterpret_cast<int*>(m_data + slotIndex); 
+	}					 
+
     // Memory.
-	inline int* getSlotDataPtr(int slotIndex) 							{ return reinterpret_cast<int*>(m_data + slotIndex); }					 // Get an int pointer to the slot data.
-	inline const int* getSlotDataPtr(int slotIndex) const 				{ return reinterpret_cast<int*>(m_data + slotIndex); }					 // Get an const int pointer to the slot data.
 	inline T* getSlotElementPtr(int slotIndex) 							{ return m_data + slotIndex; }											 // Get a pointer to the slot as an element.
 	inline const T* getSlotElementPtr(int slotIndex) const				{ return m_data + slotIndex; }											 // Get a const pointer to the slot as an element.
 	inline void setSlotMemory(int slotIndex, int val = 0xCC)			{ setSlotsMemory(slotIndex, 1, val); }									 // Set the value of the slot memory.
