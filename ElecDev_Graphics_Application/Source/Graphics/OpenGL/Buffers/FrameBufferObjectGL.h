@@ -91,7 +91,7 @@ struct FrameBufferAttachment
 {
 	// Data.
 	FrameBufferAttachmentSlot slot = FrameBufferAttachmentSlot::COLOR_0;
-	FrameBufferAttachmentType type = FrameBufferAttachmentType::TEXTURE_STORAGE;
+	FrameBufferAttachmentType type = FrameBufferAttachmentType::TEXTURE_BUFFER;
 	FrameBufferTextureFormat format = FrameBufferTextureFormat::RGBA;
 	FrameBufferTextureFormat internalFormat = FrameBufferTextureFormat::RGBA;
 	FrameBufferTextureFilter minFilter = FrameBufferTextureFilter::LINEAR;
@@ -101,6 +101,7 @@ struct FrameBufferAttachment
 	FrameBufferTextureWrap wrapS = FrameBufferTextureWrap::CLAMP_TO_EDGE;
 	FrameBufferTextureWrap wrapT = FrameBufferTextureWrap::CLAMP_TO_EDGE;
 	unsigned rendererID = NULL;
+	bool created = false;
 	// Utilities.
 	inline bool isMultiSample() const { return (int)samples > 1; }
 };
@@ -130,22 +131,6 @@ public:
 	void bind();
 	void unbind();
 
-	// Attachments.
-	void createAttachments();
-	void clearAttachments(int value = 0);
-	void destroyAttachments();
-	void resizeAttachments();
-	void createAttachment(FrameBufferAttachment& attachment);
-	void createAttachment(FrameBufferAttachmentSlot slot);
-	void resizeAttachment(const FrameBufferAttachment& attachment);
-	void resizeAttachment(FrameBufferAttachmentSlot slot);
-	void addAttachment(const FrameBufferAttachment& attachment);
-	void removeAttachment(FrameBufferAttachmentSlot slot);
-	void clearAttachment(FrameBufferAttachmentSlot slot, int value = 0);
-	void clearAttachment(const FrameBufferAttachment& attachment, int value = 0);
-	void destroyAttachment(FrameBufferAttachmentSlot slot);
-	void destroyAttachment(const FrameBufferAttachment& attachment);
-
 	// Utilities.
 	inline auto& getSpecification() { return m_specification; }
 	inline auto& getAttachments()   { return m_attachments;   }
@@ -153,11 +138,28 @@ public:
 	inline void setSpecification(const FrameBufferSpecification& spec) { m_specification = spec; }
 	inline void setDrawBuffers(const std::initializer_list<FrameBufferAttachmentSlot>& buffers) { m_drawBuffers = buffers; }
 	inline void setReadBuffers(FrameBufferAttachmentSlot buffer) { m_readBuffer = buffer; }
+
+	// Attachments.
 	void bindDrawBuffers();
 	void bindReadBuffer();
+	void addAttachment(const FrameBufferAttachment& attachment);
+	void removeAttachment(FrameBufferAttachmentSlot slot);
+	void clearAttachments(int value = 0);
+	void clearAttachment(FrameBufferAttachmentSlot slot, int value = 0);
+	void clearAttachment(const FrameBufferAttachment& attachment, int value = 0);
 
 private:
 
+	// Attachments.
+	void createAttachments();
+	void destroyAttachments();
+	void resizeAttachments();
+	void createAttachment(FrameBufferAttachment& attachment);
+	void createAttachment(FrameBufferAttachmentSlot slot);
+	void resizeAttachment(const FrameBufferAttachment& attachment);
+	void resizeAttachment(FrameBufferAttachmentSlot slot);
+	void destroyAttachment(FrameBufferAttachmentSlot slot);
+	void destroyAttachment(FrameBufferAttachment& attachment);
 	inline void attachmentsChanged() { m_attachmentsChanged = true; }
 
 	// Data.

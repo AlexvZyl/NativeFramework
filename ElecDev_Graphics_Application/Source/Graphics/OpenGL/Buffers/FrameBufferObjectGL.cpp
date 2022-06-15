@@ -59,6 +59,7 @@ void FrameBufferObject::resize()
 void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment) 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	LUMEN_DEBUG_ASSERT(!attachment.created, "Attachment has already been created.");
 
 	// Generate.
 	switch (attachment.type) 
@@ -111,11 +112,14 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 
 	// Error.
 	else LUMEN_ASSERT(false, "Unknown attachment type.");
+
+	attachment.created = true;
 }
 
-void FrameBufferObject::destroyAttachment(const FrameBufferAttachment& attachment)
+void FrameBufferObject::destroyAttachment(FrameBufferAttachment& attachment)
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
 
 	switch (attachment.type)
 	{
@@ -135,11 +139,14 @@ void FrameBufferObject::destroyAttachment(const FrameBufferAttachment& attachmen
 		LUMEN_ASSERT(false, "Unknown attachment type.");
 		break;
 	}
+
+	attachment.created = false;
 }
 
 void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment, int value) 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
 
 	switch (attachment.type)
 	{
@@ -164,6 +171,7 @@ void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment,
 void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment) 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
 
 	// Texture.
 	if (attachment.type != FrameBufferAttachmentType::RENDER_BUFFER)
@@ -216,6 +224,7 @@ void FrameBufferObject::addAttachment(const FrameBufferAttachment& attachment)
 void FrameBufferObject::removeAttachment(FrameBufferAttachmentSlot slot)
 {
 	m_attachments.erase(slot);
+	if (m_attachments[slot].created) destroyAttachment(slot);
 	attachmentsChanged();
 }
 
@@ -252,6 +261,7 @@ void FrameBufferObject::resizeAttachment(FrameBufferAttachmentSlot slot)
 void FrameBufferObject::createAttachments()
 {
 	for (auto& [slot, attachment] : m_attachments) createAttachment(attachment);
+	m_attachmentsChanged = false;
 }
 
 void FrameBufferObject::createAttachment(FrameBufferAttachmentSlot slot) 
