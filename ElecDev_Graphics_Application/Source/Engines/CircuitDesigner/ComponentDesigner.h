@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engines/Base2DEngine/Base2DEngine.h"
-#include "Peripherals/Port.h"
 #include <filesystem>
 
 class Component2D;
@@ -9,8 +8,9 @@ class Circuit;
 class Polygon2D;
 class PolyLine;
 class Circle;
-class Text;
+class Text; 
 enum class PortType;
+class Port;
 
 enum class CompDesignState
 {
@@ -38,7 +38,7 @@ public:
     std::shared_ptr<Port> m_activePort;
     //VertexData* m_activeVertex;
     unsigned m_activeVertexIdx = -1;
-    PortType next_port_type = PortType::PORT_INOUT;
+    //PortType next_port_type = PortType::PORT_INOUT;
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;

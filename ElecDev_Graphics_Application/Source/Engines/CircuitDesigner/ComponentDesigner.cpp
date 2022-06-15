@@ -14,6 +14,7 @@
 #include "Peripherals/Component2D.h"
 #include "Application/ApplicationTemplates.h"
 #include "Resources/ResourceHandler.h"
+#include "Peripherals/Port.h"
 
 ComponentDesigner::ComponentDesigner()
 	: Base2DEngine()
@@ -71,7 +72,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 	case CompDesignState::PLACE_PORT:
 		// Add new port.
 		switchState(CompDesignState::SELECT);
-		m_activePort = std::make_shared<Port>(getNearestGridVertex( { pixelToWorldCoords(getMouseLocalPosition()) }), next_port_type, m_activeComponent.get());
+		m_activePort = std::make_shared<Port>(getNearestGridVertex( { pixelToWorldCoords(getMouseLocalPosition()) }), PortType::PORT_INOUT, m_activeComponent.get());
 		designerState = CompDesignState::PLACE_PORT;
 		break;
 

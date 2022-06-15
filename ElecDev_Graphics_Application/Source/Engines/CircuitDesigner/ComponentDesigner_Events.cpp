@@ -17,6 +17,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Utilities/Windows/WindowsUtilities.h"
+#include "Peripherals/Port.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
@@ -98,7 +99,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		}
 		else if (designerState == CompDesignState::PLACE_PORT) {
 			m_activeComponent->addPort(m_activePort);
-			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
+			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), PortType::PORT_INOUT, m_activeComponent.get());
 		}
 		else if (designerState == CompDesignState::ADD_TEXT)
 		{

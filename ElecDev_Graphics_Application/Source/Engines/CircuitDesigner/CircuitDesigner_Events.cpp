@@ -20,6 +20,7 @@
 #include "GUI/LumenGizmo/LumenGizmo.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Utilities/Windows/WindowsUtilities.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
 
 //==============================================================================================================================================//
 //  Mouse Button.																																//

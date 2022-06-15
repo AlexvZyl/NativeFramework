@@ -12,7 +12,6 @@
 #include "Graphics/Entities/Entity.h"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
 #include <filesystem>
-#include "Port.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -31,6 +30,8 @@ class Circuit;
 class Scene;
 class LineSegment;
 class PolyLine;
+class Port;
+enum class PortType;
 
 //=============================================================================================================================================//
 //  Class.																																	   //
