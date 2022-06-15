@@ -564,53 +564,72 @@ void ComponentEditor::onImGuiRender()
 
 				if (activeComponent) {
 					// Display tag number.
-					ImGui::Text("Tag Number: ");
+					ImGui::Text("Tag: ");
 					ImGui::SameLine();
 					ImGui::PushItemWidth(-1);
 					ImGui::InputText("##totagnumber", &activeComponent->m_toTagNumber);
 					ImGui::PopItemWidth();
 
-					// From tag number.
-					std::vector<std::string> fromTags;
-					//fromTags.push_back(activeComponent->m_fromTagNumber);
-					int currentItem = 0;
-					// Get all of the possible from tag numbers.
-					for (auto& port : activeComponent->ports)
-					{
-						// Find input ports.
-						if (port->m_type == PortType::PORT_IN || port->m_type == PortType::PORT_INOUT)
-						{
-							// Get the component on the other side.
-							for (auto& cable : port->m_cables)
-							{
-								// Find a valid port.
 
-								if (cable->m_endPort && cable->m_endPort != port.get())
-								{
-									fromTags.push_back((dynamic_cast<Component2D*>(cable->m_endPort->m_parent))->m_toTagNumber);
-									if (fromTags.back() == activeComponent->m_fromTagNumber) {
-										currentItem = fromTags.size() - 1;
-									}
-								}
-								else if (cable->m_startPort && cable->m_startPort != port.get())
-								{
-									fromTags.push_back((dynamic_cast<Component2D*>(cable->m_startPort->m_parent))->m_toTagNumber);
-									if (fromTags.back() == activeComponent->m_fromTagNumber) {
-										currentItem = fromTags.size() - 1;
-									}
-								}
-							}
-						}
-					}
-					// Display combo box.
-					ImGui::Text("From Tag Number: ");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(-1);
-					if (ImGui::Combo("##FromTagNumberCombo", &currentItem, fromTags))
+					ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+					if (ImGui::CollapsingHeader("Ports"))
 					{
-						activeComponent->m_fromTagNumber = fromTags[currentItem];
+						// Setup table.
+						ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
+						ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
+						ImGui::TableSetupColumn("I/O Type      ", ImGuiTableColumnFlags_WidthFixed);
+						ImGui::TableSetupColumn("FromTag      ", ImGuiTableColumnFlags_WidthFixed);
+						ImGui::TableSetupColumn("Voltage      ", ImGuiTableColumnFlags_WidthFixed);
+						ImGui::TableHeadersRow();
+
+						ImGui::TableNextRow();
+
+						int i = 0;
+						static std::string types[] = { "IN", "OUT", "IN/OUT" };
+						for (std::shared_ptr<Port> port : activeComponent->ports)
+						{
+							// Table labels.
+							char labelName[20];
+							sprintf_s(labelName, "##N%d", i);
+							char labelPos[20];
+							sprintf_s(labelPos, "##P%d", i);
+							char labelType[20];
+							sprintf_s(labelType, "##T%d", i);
+							char labelRemove[20];
+							sprintf_s(labelRemove, "Remove##%d", i++);
+
+							// Port entry in table.
+							ImGui::TableNextRow();
+							ImGui::TableNextColumn();
+
+							// Name.
+							ImGui::PushItemWidth(-1);
+							ImGui::Text(port->title->m_string.c_str());
+							ImGui::PopItemWidth();
+							ImGui::TableNextColumn();
+
+							// Type.
+							ImGui::PushItemWidth(-1);
+							int typeval = (int)port->m_type;
+							ImGui::Text(types[typeval].c_str());
+							ImGui::PopItemWidth();
+							ImGui::TableNextColumn();
+
+							// FromTag.
+							ImGui::PushItemWidth(-1);
+							if(port->fromTag)
+							ImGui::Text(port->fromTag->c_str());
+							else ImGui::Text("-");
+							ImGui::PopItemWidth();
+							ImGui::TableNextColumn();
+
+							// Voltage.
+							ImGui::PushItemWidth(-1);
+							ImGui::Text(std::to_string(port->voltage).c_str());
+							ImGui::PopItemWidth();
+						}
+						ImGui::EndTable();
 					}
-					ImGui::PopItemWidth();
 				}
 				// Data.
 				std::unordered_map<std::string, std::string>* dataDict = nullptr;
