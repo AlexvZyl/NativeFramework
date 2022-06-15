@@ -50,115 +50,140 @@ void CircuitEditor::onImGuiRender()
 		// Setup style.
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 5.f, 5.f });
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
+		ImGui::PushStyleColor(ImGuiCol_Header, ImGui::GetStyle().Colors[ImGuiCol_Separator]);
 
 		// --------------------- //
 		//  C O M P O N E N T S  //
 		// --------------------- //
 		
-		// Display components.
-		ImGui::Text("Components:");
-		if (ImGui::BeginChild("ImportedComponents", {0.f, m_contentRegionSize.y/2.f}, true))
+		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+		if (ImGui::CollapsingHeader("Components", NULL, ImGuiTreeNodeFlags_SpanFullWidth))
 		{
-			// Setup columns.
-			float iconSize = 75;
-			float padding = 7;
-			float cellSize = iconSize + 2 * padding;
-			int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
-			if (columns <= 0) columns = 1;
-			ImGui::Columns(columns, 0, false);
+			// Filter.
+			ImGui::Text("Search: ");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(-1);
+			componentsFilter.Draw("##CompFilter");
+			ImGui::PopItemWidth();
 
-			// Iterate and display components.
-			int componentCount = 0;
-			for (auto& [name, node] : engine->m_circuit->m_referenceComponents)
+			// Display components.
+			if (ImGui::BeginChild("ImportedComponents", { 0.f, m_contentRegionSize.y / 2.f }, true))
 			{
-				ImGui::PushID(componentCount++);
-				// Component image.
-				if (ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+				// Setup columns.
+				float iconSize = 75;
+				float padding = 7;
+				float cellSize = iconSize + 2 * padding;
+				int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
+				if (columns <= 0) columns = 1;
+				ImGui::Columns(columns, 0, false);
+
+				// Iterate and display components.
+				int componentCount = 0;
+				for (auto& [name, node] : engine->m_circuit->m_referenceComponents)
 				{
-					app.viewComponent(node);
+					if (!componentsFilter.PassFilter(std::filesystem::path(name).stem().string().c_str())) continue;
+
+					ImGui::PushID(componentCount++);
+					// Component image.
+					if (ImGui::ImageButton((void*)s_componentFileIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+					{
+						app.viewComponent(node);
+					}
+					if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+					{
+						auto* popup = app.pushWindow<CircuitEditorPopup>(LumenDockPanel::Floating, "");
+						popup->setComponent(name);
+					}
+
+					// Drag & drop.
+					LumenPayload payload(LumenPayloadType::YamlNode);
+					payload.setDragAndDropSource(node);
+
+					// Component name.
+					glm::vec2 stringSize = ImGui::CalcTextSize(name.c_str());
+					if (stringSize.x < cellSize)
+						ImGui::SetCursorPosX(ImGui::GetCursorPos().x + (cellSize / 2) - (stringSize.x / 2));
+					ImGui::TextWrapped(name.c_str());
+
+					ImGui::NextColumn();
+					ImGui::PopID();
 				}
-				if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) 
-				{
-					auto* popup = app.pushWindow<CircuitEditorPopup>(LumenDockPanel::Floating, "");
-					popup->setComponent(name);
-				}
-
-				// Drag & drop.
-				LumenPayload payload(LumenPayloadType::YamlNode);
-				payload.setDragAndDropSource(node);
-
-				// Component name.
-				glm::vec2 stringSize = ImGui::CalcTextSize(name.c_str());
-				if (stringSize.x < cellSize)
-					ImGui::SetCursorPosX(ImGui::GetCursorPos().x + (cellSize / 2) - (stringSize.x / 2));
-				ImGui::TextWrapped(name.c_str());
-
-				ImGui::NextColumn();
-				ImGui::PopID();
 			}
-		}
-		ImGui::EndChild();
+			ImGui::EndChild();
 
-		// Drag & drop.
-		LumenPayload payloadComp(LumenPayloadType::String);
-		payloadComp.setDragAndDropTarget();
-		if (payloadComp.hasValidData()) engine->importComponent(payloadComp.getDataString(), false);
+			// Drag & drop.
+			LumenPayload payloadComp(LumenPayloadType::String);
+			payloadComp.setDragAndDropTarget();
+			if (payloadComp.hasValidData()) engine->importComponent(payloadComp.getDataString(), false);
+		}
 
 		// ------------- //
 		//  C A B L E S  //
 		// ------------- //
 
-		// Display cables.
-		ImGui::Text("Cables:");
-		if (ImGui::BeginChild("ImportedCables", { 0.f, 0.f }, true))
+		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+		if (ImGui::CollapsingHeader("Cables", NULL, ImGuiTreeNodeFlags_SpanFullWidth))
 		{
-			// Setup columns.
-			float iconSize = 75;
-			float padding = 7;
-			float cellSize = iconSize + 2 * padding;
-			int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
-			if (columns <= 0) columns = 1;
-			ImGui::Columns(columns, 0, false);
 
-			// Iterate and display the cables.
-			int cableCount = 0;
-			for (auto& [name, node] : engine->m_circuit->m_referenceCables)
+			// Filter.
+			ImGui::Text("Search: ");
+			ImGui::SameLine();
+			ImGui::PushItemWidth(-1);
+			cablesFilter.Draw("##CablFilter");
+			ImGui::PopItemWidth();
+
+			// Display cables.
+			if (ImGui::BeginChild("ImportedCables", { 0.f, 0.f }, true))
 			{
-				ImGui::PushID(cableCount++);
-				if (ImGui::ImageButton((void*)s_cableIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+				float iconSize = 75;
+				float padding = 7;
+				float cellSize = iconSize + 2 * padding;
+				int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
+				if (columns <= 0) columns = 1;
+				ImGui::Columns(columns, 0, false);
+
+				// Iterate and display the cables.
+				int cableCount = 0;
+				for (auto& [name, node] : engine->m_circuit->m_referenceCables)
 				{
+					if (!componentsFilter.PassFilter(std::filesystem::path(name).stem().string().c_str())) continue;
 
+					ImGui::PushID(cableCount++);
+					if (ImGui::ImageButton((void*)s_cableIcon, { iconSize, iconSize }, { 0, 1 }, { 1, 0 }))
+					{
+
+					}
+					if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+					{
+						auto* popup = app.pushWindow<CircuitEditorPopup>(LumenDockPanel::Floating, "");
+						popup->setCable(name);
+					}
+
+					// Drag & drop.
+					LumenPayload payload(LumenPayloadType::YamlNode);
+					payload.setDragAndDropSource(node);
+
+					// Component name.
+					glm::vec2 stringSize = ImGui::CalcTextSize(name.c_str());
+					if (stringSize.x < cellSize)
+						ImGui::SetCursorPosX(ImGui::GetCursorPos().x + (cellSize / 2) - (stringSize.x / 2));
+					ImGui::TextWrapped(name.c_str());
+
+					ImGui::NextColumn();
+					ImGui::PopID();
 				}
-				if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
-				{
-					auto* popup = app.pushWindow<CircuitEditorPopup>(LumenDockPanel::Floating, "");
-					popup->setCable(name);
-				}
-
-				// Drag & drop.
-				LumenPayload payload(LumenPayloadType::YamlNode);
-				payload.setDragAndDropSource(node);
-
-				// Component name.
-				glm::vec2 stringSize = ImGui::CalcTextSize(name.c_str());
-				if (stringSize.x < cellSize)
-					ImGui::SetCursorPosX(ImGui::GetCursorPos().x + (cellSize / 2) - (stringSize.x / 2));
-				ImGui::TextWrapped(name.c_str());
-
-				ImGui::NextColumn();
-				ImGui::PopID();
 			}
-		}
-		ImGui::EndChild();
+			ImGui::EndChild();
 
-		// Drag & drop.
-		LumenPayload payloadCable(LumenPayloadType::String);
-		payloadCable.setDragAndDropTarget();
-		if (payloadCable.hasValidData()) engine->importCable(payloadCable.getDataString(), false);
+			// Drag & drop.
+			LumenPayload payloadCable(LumenPayloadType::String);
+			payloadCable.setDragAndDropTarget();
+			if (payloadCable.hasValidData()) engine->importCable(payloadCable.getDataString(), false);
+		}
 
 		// Done with style.
 		ImGui::PopStyleVar();
-		ImGui::PopStyleColor();
+		ImGui::PopStyleColor(2);
 	}
 
 	// No engine is active.
