@@ -114,7 +114,7 @@ void SettingsWidget::onImGuiRender()
 
     // Anti Aliasing.
     ImGui::Separator();
-    const char* AA = { "MSAA2\0MSAA4\0MSAA8\0MSAA16\0MSAA32" };
+    const char* AA = { "MSAA2\0MSAA4\0MSAA8\0MSAA16\0MSAA32\0" };
     static int currentItem = 2;
     ImGui::Text("Anti-Alisaing");
     ImGui::SameLine();

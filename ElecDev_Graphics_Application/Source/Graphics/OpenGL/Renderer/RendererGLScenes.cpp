@@ -144,32 +144,26 @@ void Renderer::gridPass(Scene* scene)
 
 void Renderer::renderingPipeline2D(Scene* scene) 
 {
+	// Render MSAA.
 	if (Renderer::s_pipelineControls["Background"])
-	{
 		Renderer::backgroundPass(scene);
-	}
 	
 	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
-	{
 		Renderer::gridPass(scene);
-	}
 
 	if (Renderer::s_pipelineControls["Geometry"])
-	{
 		Renderer::geometryPass2D(scene);
-	}
 
-	// Now resolve the MSAA.
+	// Resolve MSAA.
 	scene->m_renderFBO.bind();
 	scene->m_renderFBO.clear();
 	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
 	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_2, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_2, GL_LINEAR);
 	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
 
+	// Outline render.
 	if (Renderer::s_pipelineControls["Outline"])
-	{
 		Renderer::objectOutliningPass2D(scene);
-	}
 }
 
 void Renderer::geometryPass2D(Scene* scene)
