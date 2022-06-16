@@ -2,6 +2,7 @@
 #include "Utilities/Assert/Assert.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "Utilities/Logger/Logger.h"
+#include "OpenGL/Renderer/RendererGL.h"
 
 FrameBufferObject::~FrameBufferObject() 
 {
@@ -42,7 +43,7 @@ void FrameBufferObject::clear()
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
 	clearAttachments();
 }
 

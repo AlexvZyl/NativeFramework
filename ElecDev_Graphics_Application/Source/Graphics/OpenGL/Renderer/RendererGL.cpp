@@ -106,10 +106,10 @@ void Renderer::createUnitQuad()
 
 	// Vertex data.
 	const VertexDataTextured vertices[4] = {
-		VertexDataTextured({ -1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 0.f }, 0.f, 0),
-		VertexDataTextured({ -1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 0.f, 1.f }, 0.f, 0),
-		VertexDataTextured({  1.f,  1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 1.f }, 0.f, 0),
-		VertexDataTextured({  1.f, -1.f,  0.f }, { 0.f, 0.f, 0.f, 0.f }, { 1.f, 0.f }, 0.f, 0)
+		VertexDataTextured({ -1.f, -1.f,  0.f }, { 1.f, 0.f, 1.f, 1.f }, { 0.f, 0.f }, 0.f),
+		VertexDataTextured({ -1.f,  1.f,  0.f }, { 1.f, 0.f, 1.f, 1.f }, { 0.f, 1.f }, 0.f),
+		VertexDataTextured({  1.f,  1.f,  0.f }, { 1.f, 0.f, 1.f, 1.f }, { 1.f, 1.f }, 0.f),
+		VertexDataTextured({  1.f, -1.f,  0.f }, { 1.f, 0.f, 1.f, 1.f }, { 1.f, 0.f }, 0.f)
 	};
 
 	// Index data.

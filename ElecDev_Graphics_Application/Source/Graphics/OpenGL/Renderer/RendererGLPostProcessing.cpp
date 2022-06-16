@@ -3,11 +3,15 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/ShaderGL.h"
+#include "Lumen/Lumen.h"
+#include "Application/Application.h"
 
 #include "glad/glad.h"
 
 void Renderer::resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot) 
 {
+	LUMEN_RENDER_PASS();
+
 	// Setup shader.
 	int samples = (int)sourceFBO.getAttachment(sourceSlot).samples;
 	Shader& shader = *Renderer::s_shaders["MSAA"].get();

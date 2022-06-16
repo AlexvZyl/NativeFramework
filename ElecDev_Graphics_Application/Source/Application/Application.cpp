@@ -130,6 +130,28 @@ EngineCore* Application::getActiveEngine()
 	return m_activeEngine;
 }
 
+void Application::pushEngine(EngineCore* engine)
+{
+	m_engines.push_back(engine);
+}
+
+void Application::popEngine(EngineCore* engine) 
+{
+	int index = 0;
+	for(auto* e : getEnignes())
+	{
+		if (engine == e) break;
+		index++;
+	}
+	LUMEN_DEBUG_ASSERT(index < getEnignes().size(), "Could not find engine.");
+	m_engines.erase(m_engines.begin() + index);
+}
+
+std::vector<EngineCore*> Application::getEnignes()
+{
+	return m_engines;
+}
+
 void Application::setCursorMode(CursorMode mode) 
 {
 	switch (mode) 

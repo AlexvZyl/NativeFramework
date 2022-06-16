@@ -11,6 +11,7 @@
 #include <map>
 #include <unordered_map>
 #include "yaml-cpp/yaml.h"
+#include "OpenGL/Buffers/FrameBufferObjectGL.h"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -119,6 +120,8 @@ public:
 	static void storeAndBindScene(Scene* scene);
 	// Unbind the scene and bind the stored scene.
 	static void restoreAndUnbindScene();
+	// The set MSAA level.
+	inline static FrameBufferSamples MSAA = FrameBufferSamples::MSAA8;
 
 	// --------------------------- //
 	//  2 D   P R I M I T I V E S  //
@@ -201,7 +204,7 @@ private:
 	static void drawBufferIndexedForcePrimitive(IGraphicsPrimitivesBuffer& vao, unsigned primitive);
 
 	// Textures.
-	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
+	static void drawTextureOverFBOAttachment(FrameBufferObject& FBO, FrameBufferAttachmentSlot slot, unsigned texture, Shader* shader);
 	static std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> s_unitQuad;
 	static void createUnitQuad();
 

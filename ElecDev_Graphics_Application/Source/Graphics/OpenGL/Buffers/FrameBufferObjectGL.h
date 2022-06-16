@@ -216,6 +216,8 @@ public:
 
 private:
 
+	friend class SettingsWidget;
+
 	// Attachments.
 	void createAttachments();
 	void destroyAttachments();

@@ -26,6 +26,11 @@ void Application::popWindows()
 	m_windowStack->popWindows();
 }
 
+std::unordered_map<unsigned, std::unique_ptr<LumenWindow>>& Application::getWindows() 
+{
+	return m_windowStack->getWindows();
+}
+
 //==============================================================================================================================================//
 //  Docking nodes.																																//
 //==============================================================================================================================================//

@@ -72,6 +72,7 @@ private:
 	friend class Shader;
 	friend class RendererStats;
 	friend class BackgroundColorEditor;
+	friend class SettingsWidget;
 
 	// The camera.
 	std::unique_ptr<Camera> m_camera;

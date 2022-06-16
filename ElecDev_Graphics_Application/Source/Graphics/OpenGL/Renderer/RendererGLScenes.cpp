@@ -107,8 +107,6 @@ void Renderer::renderScene(Scene* scene)
 
 void Renderer::backgroundPass(Scene* scene) 
 {
-	LUMEN_RENDER_PASS();
-
 	// Setup.
 	Renderer::enable(GL_DEPTH_TEST);
 	
@@ -121,8 +119,6 @@ void Renderer::backgroundPass(Scene* scene)
 
 void Renderer::gridPass(Scene* scene) 
 {
-	LUMEN_RENDER_PASS();
-
 	// Setup.
 	Renderer::enable(GL_DEPTH_TEST);
 	Renderer::enable(GL_BLEND);
@@ -213,31 +209,25 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 {
 	LUMEN_RENDER_PASS();
 
-	Renderer::clear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	// The shader used in rendering.
-	Shader* shader = nullptr;
-	Camera& camera = scene->getCamera();
-
 	// Render outline with post processing.
 	Renderer::setDepthFunc(GL_ALWAYS);
 	if (Renderer::s_pipelineControls["OutlinePostProc"]) 
 	{
-		//int samples = (int)scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_0).samples;
-		int samples = (int)scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_0).samples;
+		Shader* shader = nullptr;
+		Camera& camera = scene->getCamera();
+		int samples = (int)scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_0).samples;
 		shader = s_shaders["OutlinePostProc"].get();
 		shader->bind();
 		shader->setFloat("width",  camera.getViewportSize().x * samples);
 		shader->setFloat("height", camera.getViewportSize().y * samples);
-		//Renderer::drawTextureOverFBOAttachment(&scene->m_msaaFBO, scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, (GLenum)FrameBufferAttachmentSlot::COLOR_0, shader);
-		Renderer::drawTextureOverFBOAttachment(&scene->m_renderFBO, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, (GLenum)FrameBufferAttachmentSlot::COLOR_0, shader);
+		Renderer::drawTextureOverFBOAttachment(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, shader);
 	}
 	// Render outline texture directly.
 	else
 	{
-		//Renderer::drawTextureOverFBOAttachment(&scene->m_msaaFBO, scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, (GLenum)FrameBufferAttachmentSlot::COLOR_0, s_shaders["StaticTextureShader"].get());
-		Renderer::drawTextureOverFBOAttachment(&scene->m_renderFBO, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, (GLenum)FrameBufferAttachmentSlot::COLOR_0, s_shaders["StaticTextureShader"].get());
+		Renderer::drawTextureOverFBOAttachment(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, s_shaders["StaticTextureShader"].get());
 	}
+
 	Renderer::setDepthFunc(GL_LESS);
 }
 
