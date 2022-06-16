@@ -34,11 +34,7 @@
 #define TEXTURE_SHADER 259
 #define STATIC_TEXTURE_SHADER 260
 #define CIRCLE_SHADER 261
-#define OUTLINE_SHADER 262
-#define OUTLINE_SHADER_TEXTURES 263
-#define OUTLINE_SHADER_CIRCLE 264
 #define OUTLINE_SHADER_POSTPROC 265
-#define OUTLINE_SHADER_BACKGROUND 266
 #define COMPONENT_PNG 268
 #define DRAW_CIRCUIT_BUCKETS_PNG 269
 #define DRAW_MCC_PNG 270
@@ -74,6 +70,7 @@
 #define PORT_ICON 301
 #define DROPDOWN_ICON 302
 #define PENCIL_ICON 303
+#define MSAA_SHADER 303
 
 /*=======================================================================================================================================*/
 /* Functions.                                                                                                                            */

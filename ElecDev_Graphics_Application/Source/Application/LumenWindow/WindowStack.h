@@ -57,6 +57,10 @@ public:
 	{
 		return m_windows;
 	}
+	inline std::unordered_map<unsigned, std::unique_ptr<LumenWindow>>& getWindows()
+	{
+		return m_windows;
+	}
 
 	// Clear the stack.
 	inline void clear() 

@@ -7,8 +7,8 @@ class VertexArrayObject
 public:
 
 	// Constructors.
-	inline VertexArrayObject(int type) : m_type(type) { }
 	inline VertexArrayObject() = default;
+	inline VertexArrayObject(int type) : m_type(type) { }
 	// Destructor.
 	inline ~VertexArrayObject() { if (m_existsOnGPU) destroy(); };
 
@@ -38,22 +38,13 @@ public:
 	// Unbind the array.
 	void unbind();
 
-	// Checks if the VAO exists on the GPU.
-	inline bool existsOnGPU() const { return m_existsOnGPU; }
-
-	// Get the VBO.
+	// Utilities.
+	inline bool existsOnGPU() const		{ return m_existsOnGPU; }
 	inline VertexBufferObject& getVBO() { return m_VBO; };
-
-	// Get the IBO.
-	inline IndexBufferObject& getIBO() { return m_IBO; }
-
-	inline int getID() const { return m_rendererID; }
-
-	// Get the VAO type.
-	inline int getType() const { return m_type; }
-
-	// Set the type of the VAO.
-	inline void setType(int type) { m_type = type; }
+	inline IndexBufferObject& getIBO()	{ return m_IBO; }
+	inline int getID() const			{ return m_rendererID; }
+	inline int getType() const			{ return m_type; }	
+	inline void setType(int type)		{ m_type = type; }
 
 private:
 

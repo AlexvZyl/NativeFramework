@@ -107,8 +107,6 @@ void Renderer::renderScene(Scene* scene)
 
 void Renderer::backgroundPass(Scene* scene) 
 {
-	LUMEN_RENDER_PASS();
-
 	// Setup.
 	Renderer::enable(GL_DEPTH_TEST);
 	
@@ -121,8 +119,6 @@ void Renderer::backgroundPass(Scene* scene)
 
 void Renderer::gridPass(Scene* scene) 
 {
-	LUMEN_RENDER_PASS();
-
 	// Setup.
 	Renderer::enable(GL_DEPTH_TEST);
 	Renderer::enable(GL_BLEND);
@@ -148,23 +144,26 @@ void Renderer::gridPass(Scene* scene)
 
 void Renderer::renderingPipeline2D(Scene* scene) 
 {
+	// Render MSAA.
 	if (Renderer::s_pipelineControls["Background"])
-	{
 		Renderer::backgroundPass(scene);
-	}
 	
 	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
-	{
 		Renderer::gridPass(scene);
-	}
 
 	if (Renderer::s_pipelineControls["Geometry"])
-	{
 		Renderer::geometryPass2D(scene);
-	}
 
+	// Resolve MSAA.	
+	scene->m_renderFBO.bind();
+	scene->m_renderFBO.clear();
+	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
+	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
+
+	// Outline render.
 	if (Renderer::s_pipelineControls["Outline"])
 	{
+		Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_2, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_2, GL_LINEAR);
 		Renderer::objectOutliningPass2D(scene);
 	}
 }
@@ -213,56 +212,23 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 {
 	LUMEN_RENDER_PASS();
 
-	// ----------- //
-	//  S E T U P  //
-	// ----------- //
-
-	Renderer::enable(GL_DEPTH_TEST);
-	Renderer::enable(GL_BLEND);
-	Renderer::clear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
-
-	// The shader used in rendering.
-	Shader* shader = nullptr;
-	Camera& camera = scene->getCamera();
-
-	// Draw basic primitives.
-	shader = s_shaders["OutlineShader"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(*scene->m_linesBuffer.get());
-	Renderer::drawBufferIndexed(*scene->m_trianglesBuffer.get());
-
-	// Draw Circles.
-	shader = s_shaders["OutlineShaderCircle"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(*scene->m_circlesBuffer.get());
-
-	// Draw textured primitives.
-	shader = s_shaders["OutlineShaderTextures"].get();
-	shader->bind();
-	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::loadTextures(scene);
-	Renderer::drawBufferIndexed(*scene->m_texturedTrianglesBuffer.get());
-
 	// Render outline with post processing.
 	Renderer::setDepthFunc(GL_ALWAYS);
 	if (Renderer::s_pipelineControls["OutlinePostProc"]) 
 	{
+		Shader* shader = nullptr;
+		Camera& camera = scene->getCamera();
 		shader = s_shaders["OutlinePostProc"].get();
 		shader->bind();
 		shader->setFloat("width",  camera.getViewportSize().x);
 		shader->setFloat("height", camera.getViewportSize().y);
-		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, shader);
+		Renderer::drawTextureOverFBOAttachment(scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, shader);
+
 	}
 	// Render outline texture directly.
 	else
 	{
-		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, s_shaders["StaticTextureShader"].get());
+		Renderer::drawTextureOverFBOAttachment(scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, s_shaders["StaticTextureShader"].get());
 	}
 	Renderer::setDepthFunc(GL_LESS);
 }

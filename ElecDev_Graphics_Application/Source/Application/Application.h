@@ -12,6 +12,7 @@
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "imgui/notify/imgui_notify.h"
 #include <filesystem>
+#include <unordered_map>
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -101,6 +102,11 @@ public:
 	// This is updated when a new frame start.
 	inline float getDeltaTime() const { return m_deltaTime; }
 	inline RendererData& getRendererData() { return *m_rendererData.get(); }
+
+	// Working with the engines.
+	void pushEngine(EngineCore* engine);
+	void popEngine(EngineCore* engine);
+	std::vector<EngineCore*> getEnignes();
 	
 	// --------------- //
 	//  W I N D O W S  //
@@ -123,6 +129,9 @@ public:
 
 	// Switch who is responsible for rendering the cursor.
 	void setCursorMode(CursorMode mode);
+
+	// Get all of the lumen windows.
+	std::unordered_map<unsigned, std::unique_ptr<LumenWindow>>& getWindows();
 
 	// ------------- //
 	//  E V E N T S  //
@@ -304,6 +313,9 @@ private:
 	// The default font used.
 	// (Default font for Lumen, not default font for ImGui)
 	ImFont* m_defaultFont = nullptr;
+
+	// A vector of all of the current engines.
+	std::vector<EngineCore*> m_engines;
 
 	// --------------------- //
 	//  C O N N E C T I O N  //

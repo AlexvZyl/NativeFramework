@@ -161,14 +161,13 @@ public:
 	// Get the gizmo used for manipulation.
 	LumenGizmo& getGizmo();
 
-	//Files and saving 
+	// Files and saving.
 	std::filesystem::path savePath;
-protected:
 
+protected:
 	// Protected gizmo controls.
 	void hideGizmo();
 	void visibleGizmo();
-
 private:
 
 	// Friends.

@@ -56,16 +56,13 @@ IDI_ICON1						ICON		                "Icons\\circuitIcon128.ico"
 ICON_PNG						RCDATA						"Icons\\circuitImage.png"
 //-------------------------------------------------------------------------------------------------
 // Shaders.
-BASIC_SHADER					TEXTFILE					"Shaders\\GLSL\\basicShader.glsl"
-BACKGROUND_SHADER				TEXTFILE					"Shaders\\GLSL\\backgroundShader.glsl"
-TEXTURE_SHADER					TEXTFILE					"Shaders\\GLSL\\textureShader.glsl"
+BASIC_SHADER					TEXTFILE					"Shaders\\GLSL\\BasicShader.glsl"
+BACKGROUND_SHADER				TEXTFILE					"Shaders\\GLSL\\BackgroundShader.glsl"
+TEXTURE_SHADER					TEXTFILE					"Shaders\\GLSL\\TextureShader.glsl"
 STATIC_TEXTURE_SHADER			TEXTFILE					"Shaders\\GLSL\\StaticTextureShader.glsl"
-CIRCLE_SHADER					TEXTFILE					"Shaders\\GLSL\\circleShader.glsl"
-OUTLINE_SHADER					TEXTFILE					"Shaders\\GLSL\\OutlineShader.glsl"
-OUTLINE_SHADER_TEXTURES			TEXTFILE					"Shaders\\GLSL\\OutlineShaderTextures.glsl"
-OUTLINE_SHADER_CIRCLE			TEXTFILE					"Shaders\\GLSL\\OutlineShaderCircle.glsl"
+CIRCLE_SHADER					TEXTFILE					"Shaders\\GLSL\\CircleShader.glsl"
 OUTLINE_SHADER_POSTPROC			TEXTFILE					"Shaders\\GLSL\\OutlinePostProcessing.glsl"
-OUTLINE_SHADER_BACKGROUND		TEXTFILE					"Shaders\\GLSL\\OutlineBackgroundShader.glsl"
+MSAA_SHADER						TEXTFILE					"Shaders\\GLSL\\MsaaShader.glsl"
 //-------------------------------------------------------------------------------------------------
 // ImGui images.
 COMPONENT_PNG					RCDATA						"Icons\\component.png"
@@ -78,7 +75,7 @@ CIRCUIT_CIRCLE_JPEG				RCDATA						"Textures\\CircuitCircle.jpg"
 //-------------------------------------------------------------------------------------------------
 // OpenGL Fonts. 
 ARIAL_BOLD_MSDF_PNG				RCDATA					    "Fonts\\Arial-Bold\\Arial-Bold.png"
-ARIAL_BOLD_MSDF_JSON			TEXTFILE				    "Fonts\\Arial-Bold\\Arial-Bold.json"
+ARIAL_BOLD_MSDF_JSON			TEXTFILE				    "Fonts\\Arial-Bold\\Arial-Bold.json"	
 ARIAL_NORMAL_PNG 				RCDATA						"Fonts\\Arial-Normal-2048\\Arial-Normal-2048.png"
 ARIAL_NORMAL_JSON				TEXTFILE					"Fonts\\Arial-Normal-2048\\Arial-Normal-2048.json"
 ARIAL_NORMAL_TTF 				FONT						"Fonts\\Arial-Normal-2048\\Arial-Normal.ttf"

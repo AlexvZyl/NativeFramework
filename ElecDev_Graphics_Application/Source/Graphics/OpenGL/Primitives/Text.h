@@ -61,6 +61,9 @@ public:
 
 	// Generates the textured quads.
 	void generateText(const std::string& text);
+
+	virtual void enableOutline(float value = 1.f) override;
+	virtual void disableOutline() override;
 };
 
 //=============================================================================================================================================//
