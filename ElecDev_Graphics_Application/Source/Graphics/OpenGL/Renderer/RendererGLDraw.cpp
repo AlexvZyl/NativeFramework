@@ -48,11 +48,10 @@ void Renderer::drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned tex
 	shader->bind();
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	GLCall(glBindTexture(GL_TEXTURE_2D, texture));
-	GLenum drawBuffers[1] = { attachment };
-	GLCall(glNamedFramebufferDrawBuffers(FBO->m_frameBufferID, 1, drawBuffers));
+	GLCall(glNamedFramebufferDrawBuffers(FBO->getID(), 1, &attachment));
 	Renderer::drawBufferIndexed(*s_unitQuad.get());
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-	FBO->setDrawBuffers();
+	FBO->bindDrawBuffers();
 }
 
 //==============================================================================================================================================//

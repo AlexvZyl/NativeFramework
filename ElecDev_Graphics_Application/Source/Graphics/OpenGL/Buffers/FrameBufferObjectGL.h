@@ -10,6 +10,7 @@ enum class FrameBufferTextureFormat : GLenum
 	RGBA = GL_RGBA,
 	RED_INTEGER = GL_RED_INTEGER,
 	DEPTH_24_STENCIL_8 = GL_DEPTH24_STENCIL8,
+	R32_UI = GL_R32UI,
 
 	// Defaults.
 	DEPTH = GL_DEPTH24_STENCIL8,
@@ -84,22 +85,23 @@ enum class FrameBufferSamples : int
 	MSAA2    = 2, 
 	MSAA4    = 4, 
 	MSAA8    = 8, 
-	MSAA16   = 16
+	MSAA16   = 16,
+	MSAA32	 = 32
 };
 
 struct FrameBufferAttachment 
 {
 	// Data.
-	FrameBufferAttachmentSlot slot = FrameBufferAttachmentSlot::COLOR_0;
 	FrameBufferAttachmentType type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	FrameBufferAttachmentSlot slot = FrameBufferAttachmentSlot::COLOR_0;
 	FrameBufferTextureFormat format = FrameBufferTextureFormat::RGBA;
 	FrameBufferTextureFormat internalFormat = FrameBufferTextureFormat::RGBA;
 	FrameBufferTextureFilter minFilter = FrameBufferTextureFilter::LINEAR;
 	FrameBufferTextureFilter magFilter = FrameBufferTextureFilter::LINEAR;
-	FrameBufferSamples samples = FrameBufferSamples::NORMAL;
 	FrameBufferTextureWrap wrapR = FrameBufferTextureWrap::CLAMP_TO_EDGE;
 	FrameBufferTextureWrap wrapS = FrameBufferTextureWrap::CLAMP_TO_EDGE;
 	FrameBufferTextureWrap wrapT = FrameBufferTextureWrap::CLAMP_TO_EDGE;
+	FrameBufferSamples samples = FrameBufferSamples::NORMAL;
 	unsigned rendererID = NULL;
 	bool created = false;
 	// Utilities.
@@ -118,15 +120,16 @@ public:
 
 	// Constructors.
 	inline FrameBufferObject() = default;
-	FrameBufferObject(const FrameBufferSpecification& spec) :m_specification(spec) { }
+	FrameBufferObject(const FrameBufferSpecification& spec) : m_specification(spec) { }
 
 	// Destructor.
 	~FrameBufferObject();
 
 	// FBO functions.
 	void create();
+	void clear();
+	void create(int width, int height);
 	void destroy();
-	void resize();
 	void resize(int width, int height);
 	void bind();
 	void unbind();
@@ -136,17 +139,18 @@ public:
 	inline auto& getAttachments()   { return m_attachments;   }
 	inline auto& getAttachment(FrameBufferAttachmentSlot slot) { return m_attachments[slot]; }
 	inline void setSpecification(const FrameBufferSpecification& spec) { m_specification = spec; }
-	inline void setDrawBuffers(const std::initializer_list<FrameBufferAttachmentSlot>& buffers) { m_drawBuffers = buffers; }
-	inline void setReadBuffers(FrameBufferAttachmentSlot buffer) { m_readBuffer = buffer; }
+	inline unsigned getID() const { return m_rendererID; }
 
 	// Attachments.
+	inline void setDrawBuffers(const std::initializer_list<FrameBufferAttachmentSlot>& buffers) { m_drawBuffers = buffers; }
+	inline void setReadBuffer(FrameBufferAttachmentSlot buffer) { m_readBuffer = buffer; }
 	void bindDrawBuffers();
 	void bindReadBuffer();
 	void addAttachment(const FrameBufferAttachment& attachment);
 	void removeAttachment(FrameBufferAttachmentSlot slot);
 	void clearAttachments(int value = 0);
 	void clearAttachment(FrameBufferAttachmentSlot slot, int value = 0);
-	void clearAttachment(const FrameBufferAttachment& attachment, int value = 0);
+	int readPixel(FrameBufferAttachmentSlot slot, int x, int y);
 
 private:
 
@@ -161,6 +165,7 @@ private:
 	void destroyAttachment(FrameBufferAttachmentSlot slot);
 	void destroyAttachment(FrameBufferAttachment& attachment);
 	inline void attachmentsChanged() { m_attachmentsChanged = true; }
+	void clearAttachment(const FrameBufferAttachment& attachment, int value = 0);
 
 	// Data.
 	FrameBufferSpecification m_specification;

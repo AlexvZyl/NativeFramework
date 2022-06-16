@@ -257,12 +257,12 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 		shader->bind();
 		shader->setFloat("width",  camera.getViewportSize().x);
 		shader->setFloat("height", camera.getViewportSize().y);
-		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, shader);
+		Renderer::drawTextureOverFBOAttachment(&scene->m_FBO, scene->m_FBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, (GLenum)FrameBufferAttachmentSlot::COLOR_0, shader);
 	}
 	// Render outline texture directly.
 	else
 	{
-		Renderer::drawTextureOverFBOAttachment(scene->m_FBO.get(), scene->m_FBO->m_outlineColorTextureID, GL_COLOR_ATTACHMENT0, s_shaders["StaticTextureShader"].get());
+		Renderer::drawTextureOverFBOAttachment(&scene->m_FBO, scene->m_FBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, (GLenum)FrameBufferAttachmentSlot::COLOR_0, s_shaders["StaticTextureShader"].get());
 	}
 	Renderer::setDepthFunc(GL_LESS);
 }

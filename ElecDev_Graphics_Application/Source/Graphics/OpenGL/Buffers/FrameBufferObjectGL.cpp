@@ -18,6 +18,22 @@ void FrameBufferObject::create()
 	unbind();
 }
 
+void FrameBufferObject::create(int width, int height)
+{
+	m_specification.width = width;
+	m_specification.height = height;
+	create();
+}
+
+void FrameBufferObject::clear() 
+{
+	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	
+	// Is this GL call necessary?
+	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+	clearAttachments();
+}
+
 void FrameBufferObject::destroy() 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
@@ -44,14 +60,10 @@ void FrameBufferObject::unbind()
 
 void FrameBufferObject::resize(int width, int height) 
 {
+	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+
 	m_specification.width = width;
 	m_specification.height = height;
-	resize();
-}
-
-void FrameBufferObject::resize() 
-{
-	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 
 	resizeAttachments();
 }
@@ -215,6 +227,20 @@ void FrameBufferObject::bindReadBuffer()
 	GLCall(glNamedFramebufferReadBuffer(m_rendererID, (GLenum)m_readBuffer));
 }
 
+int FrameBufferObject::readPixel(FrameBufferAttachmentSlot slot, int x, int y) 
+{
+	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	LUMEN_DEBUG_ASSERT(m_attachments[slot].created, "Attachment has not been created.");
+
+	// Shoud be careful with binding here?
+
+	bind();
+	GLCall(glReadBuffer((GLenum)slot));
+	int result;
+	GLCall(glReadPixels(x, y, 1, 1, (GLenum)m_attachments[slot].format, GL_INT, &result));
+	return result;
+}
+
 void FrameBufferObject::addAttachment(const FrameBufferAttachment& attachment)
 {
 	m_attachments[attachment.slot] = attachment;
@@ -223,8 +249,8 @@ void FrameBufferObject::addAttachment(const FrameBufferAttachment& attachment)
 
 void FrameBufferObject::removeAttachment(FrameBufferAttachmentSlot slot)
 {
-	m_attachments.erase(slot);
 	if (m_attachments[slot].created) destroyAttachment(slot);
+	m_attachments.erase(slot);
 	attachmentsChanged();
 }
 
