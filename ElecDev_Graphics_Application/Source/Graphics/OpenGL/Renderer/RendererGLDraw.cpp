@@ -46,15 +46,17 @@ void Renderer::drawBufferIndexedForcePrimitive(IGraphicsPrimitivesBuffer& gpb, u
 void Renderer::drawTextureOverFBOAttachment(FrameBufferObject& FBO, FrameBufferAttachmentSlot slot, unsigned texture, Shader* shader)
 {
 	FrameBufferAttachment& attachment = FBO.getAttachment(slot);
+	FBO.bind();
 	shader->bind();
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	if (attachment.isMultiSample()) { GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture)); }
 	else							{ GLCall(glBindTexture(GL_TEXTURE_2D, texture)); }
-	GLCall(glNamedFramebufferDrawBuffers(FBO.getID(), 1, (GLenum*)&slot));
+	GLCall(glNamedFramebufferDrawBuffer(FBO.getID(), (GLenum)slot));
 	Renderer::drawBufferIndexed(*s_unitQuad.get());
 	if (attachment.isMultiSample()) { GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0)); }
-	else							{ GLCall(glBindTexture(GL_TEXTURE_2D, texture)); }
+	else							{ GLCall(glBindTexture(GL_TEXTURE_2D, 0)); }
 	FBO.bindDrawBuffers();
+	FBO.unbind();
 }
 
 //==============================================================================================================================================//

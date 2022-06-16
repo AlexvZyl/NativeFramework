@@ -213,6 +213,7 @@ private:
 	// --------------------- //
 
 	static void resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot);
+	static void blit(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot, GLenum filter = GL_NEAREST);
 
 	// ------------------- //
 	//  U T I L I T I E S  //

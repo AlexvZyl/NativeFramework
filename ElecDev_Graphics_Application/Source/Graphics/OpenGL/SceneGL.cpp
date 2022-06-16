@@ -70,6 +70,12 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	attachment.internalFormat = FrameBufferTextureFormat::R32_UI;
 	attachment.format = FrameBufferTextureFormat::RED_INTEGER;
 	m_renderFBO.addAttachment(attachment);
+	// Outline.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_2;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::RGBA;
+	attachment.format = FrameBufferTextureFormat::RGBA;
+	m_renderFBO.addAttachment(attachment);
 	// Depth Stencil.
 	attachment.slot = FrameBufferAttachmentSlot::DEPTH_STENCIL;
 	attachment.type = FrameBufferAttachmentType::RENDER_BUFFER;
@@ -77,7 +83,7 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	attachment.format = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
 	m_renderFBO.addAttachment(attachment);
 	// Create the FBO with its attachments.
-	m_renderFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1 });
+	m_renderFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1, FrameBufferAttachmentSlot::COLOR_2 });
 	m_renderFBO.create();
 
 	// Camera.
@@ -131,32 +137,8 @@ void Scene::onRenderInit()
 
 void Scene::onRenderCleanup() 
 {
+	// Make sure the FBO is unbounded.
 	m_msaaFBO.unbind();
-
-	//Renderer::resolveMSAA(m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
-	//Renderer::resolveMSAA(m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
-
-	// BLIT HOM IN SY BEK
-
-	int width = getCamera().getViewport()[2];
-	int height = getCamera().getViewport()[3];
-
-	// Bind the buffers.
-	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_msaaFBO.getID()));
-	GLCall(glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_renderFBO.getID()));
-
-	// Blit color.
-	GLCall(glReadBuffer((GLenum)FrameBufferAttachmentSlot::COLOR_0));
-	GLCall(glDrawBuffer((GLenum)FrameBufferAttachmentSlot::COLOR_0));
-	GLCall(glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR));
-
-	// Blit ID.
-	GLCall(glReadBuffer((GLenum)FrameBufferAttachmentSlot::COLOR_1));
-	GLCall(glDrawBuffer((GLenum)FrameBufferAttachmentSlot::COLOR_1));
-	GLCall(glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST));
-
-	// Unbind.
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 unsigned Scene::getRenderTexture() 

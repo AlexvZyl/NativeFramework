@@ -159,6 +159,13 @@ void Renderer::renderingPipeline2D(Scene* scene)
 		Renderer::geometryPass2D(scene);
 	}
 
+	// Now resolve the MSAA.
+	scene->m_renderFBO.bind();
+	scene->m_renderFBO.clear();
+	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
+	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_2, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_2, GL_LINEAR);
+	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
+
 	if (Renderer::s_pipelineControls["Outline"])
 	{
 		Renderer::objectOutliningPass2D(scene);
@@ -215,17 +222,17 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	{
 		Shader* shader = nullptr;
 		Camera& camera = scene->getCamera();
-		int samples = (int)scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_0).samples;
 		shader = s_shaders["OutlinePostProc"].get();
 		shader->bind();
-		shader->setFloat("width",  camera.getViewportSize().x * samples);
-		shader->setFloat("height", camera.getViewportSize().y * samples);
-		Renderer::drawTextureOverFBOAttachment(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, shader);
+		shader->setFloat("width",  camera.getViewportSize().x);
+		shader->setFloat("height", camera.getViewportSize().y);
+		Renderer::drawTextureOverFBOAttachment(scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, shader);
+
 	}
 	// Render outline texture directly.
 	else
 	{
-		Renderer::drawTextureOverFBOAttachment(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_msaaFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, s_shaders["StaticTextureShader"].get());
+		Renderer::drawTextureOverFBOAttachment(scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, s_shaders["StaticTextureShader"].get());
 	}
 
 	Renderer::setDepthFunc(GL_LESS);
