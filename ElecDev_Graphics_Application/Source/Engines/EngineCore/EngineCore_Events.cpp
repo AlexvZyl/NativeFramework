@@ -12,6 +12,7 @@
 #include "Utilities/Logger/Logger.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
 #include "Application/LumenWindow/LumenWindow.h"
+#include "External/GLFW/Includes/GLFW/glfw3.h"
 
 //==============================================================================================================================================//
 //  On Event.																																	//
@@ -148,6 +149,10 @@ void EngineCore::onMouseScrollEventForce(const MouseScrollEvent& event)
 void EngineCore::onKeyEventForce(const KeyEvent& event) 
 {
 	// Do not pass event if ImGui is using the keyboard.
+	if (event.isType(EventType_LeftCtrl) && event.key == GLFW_KEY_S) {
+		onFileSaveEvent(FileSaveEvent());
+		return;
+	}
 	onKeyEvent(event);
 }
 

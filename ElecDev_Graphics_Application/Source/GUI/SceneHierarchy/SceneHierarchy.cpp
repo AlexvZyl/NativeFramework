@@ -7,8 +7,10 @@
 #include "Application/Application.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Engines/CircuitDesigner/Peripherals/Port.h"
 #include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 #include "Application/ApplicationTemplates.h"
 
 //==============================================================================================================================================//

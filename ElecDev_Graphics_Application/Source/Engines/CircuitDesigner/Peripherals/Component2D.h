@@ -8,7 +8,6 @@
 #include "glm/glm.hpp"
 #include <memory>
 #include <vector>
-#include "Port.h"
 #include <unordered_map>
 #include "Graphics/Entities/Entity.h"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
@@ -31,6 +30,8 @@ class Circuit;
 class Scene;
 class LineSegment;
 class PolyLine;
+class Port;
+enum class PortType;
 
 //=============================================================================================================================================//
 //  Class.																																	   //

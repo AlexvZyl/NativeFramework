@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 #include <string>
 #include <memory>
+#include <filesystem>
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -160,6 +161,8 @@ public:
 	// Get the gizmo used for manipulation.
 	LumenGizmo& getGizmo();
 
+	//Files and saving 
+	std::filesystem::path savePath;
 protected:
 
 	// Protected gizmo controls.
