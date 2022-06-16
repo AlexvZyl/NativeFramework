@@ -16,6 +16,8 @@
 #include "Application/Application.h"
 #include "Utilities/Logger/Logger.h"
 #include "Engines/CircuitDesigner/ComponentDesigner.h"
+#include "Engines/CircuitDesigner/Peripherals/Component2D.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 
 //=============================================================================================================================================//
 //  Serialisation.																															   //

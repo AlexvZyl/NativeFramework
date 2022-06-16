@@ -9,9 +9,6 @@
 #include "glm/glm.hpp"
 #include "yaml-cpp/yaml.h"
 #include "Graphics/Entities/Entity.h"
-#include "OpenGL/Primitives/Circle.h"
-#include "OpenGL/Primitives/Vertex.h"
-#include "OpenGL/Primitives/Text.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 
 //==============================================================================================================================================//
@@ -23,6 +20,9 @@ class Component2D;
 class Cable;
 class Scene;
 class IOIndicator;
+class Circle;
+class Vertex;
+class Text;
 
 struct Font;
 

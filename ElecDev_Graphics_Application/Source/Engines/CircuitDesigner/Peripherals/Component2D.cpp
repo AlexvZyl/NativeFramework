@@ -8,6 +8,7 @@
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "OpenGL/Primitives/Text.h"
+#include "OpenGL/Primitives/PolyLine.h"
 #include "Resources/ResourceHandler.h"
 #include "OpenGL/Primitives/Circle.h"
 #include <iostream>
@@ -17,6 +18,7 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Utilities/Logger/Logger.h"
 #include "Utilities/Serialisation/Serialiser.h"
+#include "Port.h"
 
 //=============================================================================================================================================//
 //  Variables.																																   //

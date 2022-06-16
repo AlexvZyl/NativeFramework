@@ -6,6 +6,10 @@
 #include "Circuit.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
+#include "Port.h"
+#include "OpenGL/Primitives/LineSegment.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "Component2D.h"
 
 unsigned Cable::cableID = 0;
 
@@ -183,10 +187,10 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 	// Attach the ports
 	m_startPort = startPort;
 	m_endPort = endPort;
-	if(m_startPort)
+	if (m_startPort) {
 		m_startPort->attachCable(this);
-	if (m_endPort) {
-		m_endPort->attachCable(this);
+		if (m_endPort) {
+			m_endPort->attachCable(this);
 			// Set fromTag(s)
 			if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
 				if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
@@ -194,10 +198,11 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 					m_startPort->voltage = m_endPort->voltage;
 				}
 			}
-		if (m_startPort->m_type == PortType::PORT_OUT || m_startPort->m_type == PortType::PORT_INOUT) {
-			if (m_endPort->m_type == PortType::PORT_IN || m_endPort->m_type == PortType::PORT_INOUT) {
-				m_endPort->fromTag = &dynamic_cast<Component2D*>(m_startPort->m_parent)->m_toTagNumber;
-				m_endPort->voltage = m_startPort->voltage;
+			if (m_startPort->m_type == PortType::PORT_OUT || m_startPort->m_type == PortType::PORT_INOUT) {
+				if (m_endPort->m_type == PortType::PORT_IN || m_endPort->m_type == PortType::PORT_INOUT) {
+					m_endPort->fromTag = &dynamic_cast<Component2D*>(m_startPort->m_parent)->m_toTagNumber;
+					m_endPort->voltage = m_startPort->voltage;
+				}
 			}
 		}
 	}

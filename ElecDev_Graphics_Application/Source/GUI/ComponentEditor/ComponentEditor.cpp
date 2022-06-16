@@ -18,6 +18,7 @@
 #include "Lumen/Lumen.h"
 #include "GUI/LumenPayload/LumenPayload.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */

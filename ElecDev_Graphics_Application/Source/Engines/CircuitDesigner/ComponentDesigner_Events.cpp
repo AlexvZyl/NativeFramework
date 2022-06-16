@@ -16,6 +16,8 @@
 #include "Peripherals/Component2D.h"
 #include "OpenGL/SceneGL.h"
 #include "Utilities/Serialisation/Serialiser.h"
+#include "Utilities/Windows/WindowsUtilities.h"
+#include "Peripherals/Port.h"
 
 void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 {
@@ -97,7 +99,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		}
 		else if (designerState == CompDesignState::PLACE_PORT) {
 			m_activeComponent->addPort(m_activePort);
-			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), next_port_type, m_activeComponent.get());
+			m_activePort = std::make_shared<Port>(getNearestGridVertex(screenCoords), PortType::PORT_INOUT, m_activeComponent.get());
 		}
 		else if (designerState == CompDesignState::ADD_TEXT)
 		{
@@ -183,6 +185,15 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 
 	else if (designerState == CompDesignState::SELECT)
 	{
+
+		if (m_activePoly || m_activeCircle || m_activeLine)
+		{
+			//If we already have an active primitive, we need to check for vertex selection.
+			//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
+			setHoveredVertex(screenCoords);
+
+		}
+
 		if (event.isNotType(EventType_MouseButtonLeft)) 
 		{
 			m_lastDragPos = screenCoords;
@@ -383,7 +394,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 
 void ComponentDesigner::onFileSaveEvent(const FileSaveEvent& event) 
 {
-	// Save to new file.
+	// Save to existing file.
 	if (event.saveAs)
 	{
 		// Iterate through the paths.
@@ -394,16 +405,30 @@ void ComponentDesigner::onFileSaveEvent(const FileSaveEvent& event)
 			{
 				saveToYAML(m_activeComponent.get(), path);
 				setName(path.filename().stem().string());
+				if (path.extension().string() != ".lmcp")
+				{
+					path.extension() = ".lmcp";
+				}
+				savePath = path;
+				savedDocument();
 			}
 		}
-		savedDocument();
 	}
-
-	// Save to existing file.
-	else 
-	{
-
-
-		savedDocument();
+	// Save to new file.
+	else {
+		if (!savePath.string().size()) {
+			// Get save path.
+			savePath = selectFile("Lumen Save Circuit", "", m_activeComponent->title->m_string, "Save"); 
+			if (savePath.extension().string() != ".lmcp")
+			{
+				savePath.extension() = ".lmcp";
+			}
+		}
+		if (savePath.string().size())
+		{
+			saveToYAML(m_activeComponent.get(), savePath);
+			setName(savePath.filename().stem().string());
+			savedDocument();
+		}
 	}
 }

@@ -32,6 +32,8 @@ public:
 	// Destructor.
 	virtual ~Entity();
 
+	void transferTo(Entity* newOwner);
+	void transferTo(unsigned newOwnerID);
 };
 
 //==============================================================================================================================================//

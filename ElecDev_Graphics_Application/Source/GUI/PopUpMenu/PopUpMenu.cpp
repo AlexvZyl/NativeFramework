@@ -89,11 +89,7 @@ void PopUpMenu::onImGuiRender()
         if (ImGui::MenuItem("Save Circuit...", "Ctrl+S"))
         {
             // Create and log save event.
-            auto path = selectFile("Lumen Save Circuit", "", circuitEngine->m_circuit->m_label, "Save");
-            if (path.string().size())
-            {
-                EventLog::log<FileSaveEvent>(FileSaveEvent(path.string()));
-            }
+            EventLog::log<FileSaveEvent>(FileSaveEvent());
             closeWindow();
         }
     }
@@ -142,11 +138,7 @@ void PopUpMenu::onImGuiRender()
             if (ImGui::MenuItem("Save Component...", "Ctrl+S"))
             {
                 // Create and log save event.
-                auto path = selectFile("Lumen Save Component", "", active_component->equipType, "Save");
-                if (path.string().size())
-                {
-                    EventLog::log<FileSaveEvent>(path.string());
-                }
+                EventLog::log<FileSaveEvent>();
                 closeWindow();
             }
         }
