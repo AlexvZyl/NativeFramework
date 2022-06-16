@@ -14,6 +14,7 @@ out vec4 f_color;
 out vec2 f_texCoord;
 out float f_texID;
 flat out uint f_entityID;
+out float f_outline;
 
 void main()
 {
@@ -22,6 +23,7 @@ void main()
 	f_texID = v_texID;
 	gl_Position = viewProjMatrix * vec4(pos, 1.0);
 	f_entityID = v_entityID;
+	f_outline = v_outline;
 }
 
 #shader fragment
@@ -35,6 +37,7 @@ in vec4 f_color;
 in vec2 f_texCoord;
 in float f_texID;
 flat in uint f_entityID;
+in float f_outline;
 
 const float width = 0.4;
 const float edge = 0.2;
@@ -78,4 +81,7 @@ void main()
 
 	// Output the entity ID.
 	o_entityID = f_entityID;
+
+	// Outlining logic.
+	if(f_outline != 0.0f) o_outline = vec4(vec3(f_color), f_outline);
 }

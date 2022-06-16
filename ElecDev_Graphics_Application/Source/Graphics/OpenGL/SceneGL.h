@@ -95,7 +95,8 @@ private:
 	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataCircle>> m_circlesBuffer;
 	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> m_texturedTrianglesBuffer;
 	// FBO.
-	FrameBufferObject m_FBO;
+	FrameBufferObject m_msaaFBO;
+	FrameBufferObject m_renderFBO;
 };
 
 //==============================================================================================================================================//

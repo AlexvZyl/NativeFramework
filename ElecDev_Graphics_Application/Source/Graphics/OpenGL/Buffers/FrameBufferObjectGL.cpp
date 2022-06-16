@@ -1,6 +1,7 @@
 #include "FrameBufferObjectGL.h"
 #include "Utilities/Assert/Assert.h"
 #include "OpenGL/ErrorHandlerGL.h"
+#include "Utilities/Logger/Logger.h"
 
 FrameBufferObject::~FrameBufferObject() 
 {
@@ -11,11 +12,23 @@ void FrameBufferObject::create()
 {
 	LUMEN_DEBUG_ASSERT(!m_isOnGPU, "Framebuffer already exists on the GPU.");
 
+	// Create FBO.
 	GLCall(glCreateFramebuffers(1, &m_rendererID));
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_rendererID));
 	m_isOnGPU = true;
-	bind();
+
+	// Create attachments.
 	createAttachments();
-	unbind();
+	bindReadBuffer();
+	bindDrawBuffers();
+
+#ifdef _DEBUG
+	// Error checking.
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		LUMEN_LOG_ERROR("Framebuffer not complete.", "Renderer");
+#endif
+	
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 void FrameBufferObject::create(int width, int height)
@@ -29,7 +42,6 @@ void FrameBufferObject::clear()
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	
-	// Is this GL call necessary?
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 	clearAttachments();
 }
@@ -66,6 +78,12 @@ void FrameBufferObject::resize(int width, int height)
 	m_specification.height = height;
 
 	resizeAttachments();
+
+#ifdef _DEBUG
+	// Error checking.
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		LUMEN_LOG_ERROR("Framebuffer resize failed.", "Renderer");
+#endif
 }
 
 void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment) 
@@ -83,21 +101,21 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		GLCall(glGenTextures(1, &attachment.rendererID));
 		break;
 	case FrameBufferAttachmentType::RENDER_BUFFER:
-		GLCall(glGenRenderbuffers(1, &attachment.rendererID));
+		GLCall(glCreateRenderbuffers(1, &attachment.rendererID));
 		break;
 	default:
 		LUMEN_ASSERT(false, "Unknown attachment type.");
 		break;
 	}
 
-	// Texture attachment data.
-	if (attachment.type != FrameBufferAttachmentType::RENDER_BUFFER)
+	// Texture buffer.
+	if (attachment.type == FrameBufferAttachmentType::TEXTURE_BUFFER)
 	{
 		// MSAA.
 		if (attachment.isMultiSample())
 		{
 			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
-			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.format, m_specification.width, m_specification.height, GL_FALSE));
+			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
 			GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID, 0));
 		}
 		// Normal.
@@ -114,19 +132,129 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		}
 	}
 
-	// Render buffer data.
+	// Texture storage.
+	else if (attachment.type == FrameBufferAttachmentType::TEXTURE_STORAGE) 
+	{
+		// MSAA.
+		if (attachment.isMultiSample())
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
+			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+			GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID, 0));
+		}
+		// Normal.
+		else
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D, attachment.rendererID));
+			GLCall(glTexStorage2D(GL_TEXTURE_2D, 1, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLenum)attachment.minFilter));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLenum)attachment.magFilter));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, (GLenum)attachment.wrapR));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLenum)attachment.wrapS));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLenum)attachment.wrapT));
+			GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_TEXTURE_2D, attachment.rendererID, 0));
+		}
+	}
+
+	// Render buffer.
 	else if (attachment.type == FrameBufferAttachmentType::RENDER_BUFFER)
 	{
-		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, attachment.rendererID));
-		GLCall(glRenderbufferStorage(GL_RENDERBUFFER, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+		// MSAA.
+		if (attachment.isMultiSample())
+		{
+			GLCall(glNamedRenderbufferStorageMultisample(attachment.rendererID, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+		}
+		// Normal.
+		else 
+		{
+			GLCall(glNamedRenderbufferStorage(attachment.rendererID, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+		}
 		GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_RENDERBUFFER, attachment.rendererID));
 	}
 
 	// Error.
 	else LUMEN_ASSERT(false, "Unknown attachment type.");
 
+#ifdef _DEBUG
+	// Error checking.
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+	{
+		std::string msg = "Framebuffer attachment creation failed: " + attachment.slotString();
+		LUMEN_LOG_ERROR(msg, "Renderer");
+	}
+#endif
+
 	attachment.created = true;
 }
+
+
+void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment)
+{
+	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
+
+	// Texture buffer.
+	if (attachment.type == FrameBufferAttachmentType::TEXTURE_BUFFER)
+	{
+		// MSAA.
+		if (attachment.isMultiSample())
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
+			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+		}
+		// Normal.
+		else
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D, attachment.rendererID));
+			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, 0, (GLenum)attachment.format, GL_UNSIGNED_BYTE, nullptr));
+		}
+	}
+
+	// Texture STORAGE.
+	else if (attachment.type == FrameBufferAttachmentType::TEXTURE_STORAGE)
+	{
+		// MSAA.
+		if (attachment.isMultiSample())
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
+			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+		}
+		// Normal.
+		else
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D, attachment.rendererID));
+			GLCall(glTexStorage2D(GL_TEXTURE_2D, 1, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+		}
+	}
+
+	// Render buffer.
+	else if (attachment.type == FrameBufferAttachmentType::RENDER_BUFFER)
+	{
+		// MSAA.
+		if (attachment.isMultiSample())
+		{
+			GLCall(glNamedRenderbufferStorageMultisample(attachment.rendererID, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+		}
+		// Normal.
+		else
+		{
+			GLCall(glNamedRenderbufferStorage(attachment.rendererID, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
+		}
+	}
+
+	// Error.
+	else LUMEN_ASSERT(false, "Unknown attachment type.");
+
+#ifdef _DEBUG
+	// Error checking.
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+	{
+		std::string msg = "Framebuffer attachment resizing failed: " + attachment.slotString();
+		LUMEN_LOG_ERROR(msg, "Renderer");
+	}
+#endif
+}
+
 
 void FrameBufferObject::destroyAttachment(FrameBufferAttachment& attachment)
 {
@@ -155,19 +283,22 @@ void FrameBufferObject::destroyAttachment(FrameBufferAttachment& attachment)
 	attachment.created = false;
 }
 
-void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment, int value) 
+void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment) 
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
 
+	// Unsure why this will not work.
+	if (attachment.internalFormat == FrameBufferTextureFormat::R32_UI) return;
+
 	switch (attachment.type)
 	{
 	case FrameBufferAttachmentType::TEXTURE_BUFFER:
-		GLCall(glClearTexImage(attachment.rendererID, 0, (GLenum)attachment.format, GL_INT, &value));
+		GLCall(glClearTexImage(attachment.rendererID, 0, (GLenum)attachment.format, attachment.dataType(), 0));
 		break;
 
 	case FrameBufferAttachmentType::TEXTURE_STORAGE:
-		GLCall(glClearTexImage(attachment.rendererID, 0, (GLenum)attachment.format, GL_INT, &value));
+		GLCall(glClearTexImage(attachment.rendererID, 0, (GLenum)attachment.format, attachment.dataType(), 0));
 		break;
 
 	case FrameBufferAttachmentType::RENDER_BUFFER:
@@ -178,39 +309,6 @@ void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment,
 		LUMEN_ASSERT(false, "Unknown attachment type.");
 		break;
 	}
-}
-
-void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment) 
-{
-	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
-	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
-
-	// Texture.
-	if (attachment.type != FrameBufferAttachmentType::RENDER_BUFFER)
-	{
-		// MSAA.
-		if (attachment.isMultiSample())
-		{
-			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
-			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.format, m_specification.width, m_specification.height, GL_FALSE));
-		}
-		// Normal.
-		else
-		{
-			GLCall(glBindTexture(GL_TEXTURE_2D, attachment.rendererID));
-			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, 0, (GLenum)attachment.format, GL_UNSIGNED_BYTE, nullptr));
-		}
-	}
-
-	// Render buffer.
-	else if (attachment.type == FrameBufferAttachmentType::RENDER_BUFFER)
-	{
-		GLCall(glBindRenderbuffer(GL_RENDERBUFFER, attachment.rendererID));
-		GLCall(glRenderbufferStorage(GL_RENDERBUFFER, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height));
-	}
-
-	// Error.
-	else LUMEN_ASSERT(false, "Unknown attachment type.");
 }
 
 void FrameBufferObject::bindDrawBuffers() 
@@ -232,12 +330,12 @@ int FrameBufferObject::readPixel(FrameBufferAttachmentSlot slot, int x, int y)
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	LUMEN_DEBUG_ASSERT(m_attachments[slot].created, "Attachment has not been created.");
 
-	// Shoud be careful with binding here?
-
-	bind();
+	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_rendererID));
 	GLCall(glReadBuffer((GLenum)slot));
 	int result;
 	GLCall(glReadPixels(x, y, 1, 1, (GLenum)m_attachments[slot].format, GL_INT, &result));
+	bindReadBuffer(); 
+	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	return result;
 }
 
@@ -264,14 +362,14 @@ void FrameBufferObject::destroyAttachment(FrameBufferAttachmentSlot slot)
 	destroyAttachment(m_attachments[slot]);
 }
 
-void FrameBufferObject::clearAttachments(int value)
+void FrameBufferObject::clearAttachments()
 {
-	for (auto& [slot, attachment] : m_attachments) clearAttachment(attachment, value);
+	for (auto& [slot, attachment] : m_attachments) clearAttachment(attachment);
 }
 
-void FrameBufferObject::clearAttachment(FrameBufferAttachmentSlot slot, int value) 
+void FrameBufferObject::clearAttachment(FrameBufferAttachmentSlot slot) 
 {
-	clearAttachment(m_attachments[slot], value);
+	clearAttachment(m_attachments[slot]);
 }
 
 void FrameBufferObject::resizeAttachments() 

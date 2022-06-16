@@ -78,12 +78,9 @@ void Renderer::compileShaders()
 	s_shaders["BasicShader"				] = std::make_unique<Shader>(BASIC_SHADER);
 	s_shaders["TextureShader"			] = std::make_unique<Shader>(TEXTURE_SHADER);
 	s_shaders["CircleShader"			] = std::make_unique<Shader>(CIRCLE_SHADER);
-	s_shaders["OutlineShader"			] = std::make_unique<Shader>(OUTLINE_SHADER);
-	s_shaders["OutlineShaderTextures"	] = std::make_unique<Shader>(OUTLINE_SHADER_TEXTURES);
-	s_shaders["OutlineShaderCircle"		] = std::make_unique<Shader>(OUTLINE_SHADER_CIRCLE);
 	s_shaders["StaticTextureShader"		] = std::make_unique<Shader>(STATIC_TEXTURE_SHADER);
-	s_shaders["OutlineBackgroundShader"	] = std::make_unique<Shader>(OUTLINE_SHADER_BACKGROUND);
 	s_shaders["OutlinePostProc"			] = std::make_unique<Shader>(OUTLINE_SHADER_POSTPROC);
+	s_shaders["MSAA"					] = std::make_unique<Shader>(MSAA_SHADER);
 
 	Shader* shader;
 	int samplers[1] = { 0 };

@@ -47,9 +47,11 @@ void Renderer::drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned tex
 {
 	shader->bind();
 	GLCall(glActiveTexture(GL_TEXTURE0));
+	//GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture));
 	GLCall(glBindTexture(GL_TEXTURE_2D, texture));
 	GLCall(glNamedFramebufferDrawBuffers(FBO->getID(), 1, &attachment));
 	Renderer::drawBufferIndexed(*s_unitQuad.get());
+	//GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0));
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	FBO->bindDrawBuffers();
 }

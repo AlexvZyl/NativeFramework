@@ -1,9 +1,11 @@
 #pragma once
 
-#include "Utilities/Memory/FreeList.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
 #include "OpenGL/Primitives/IPrimitive.h"
+#include "Utilities/Memory/FreeList.h"
+#include "OpenGL/Primitives/Vertex.h"
 #include "Lumen/Lumen.h"
+
 #include "imgui/imgui.h"
 
 struct Int2 

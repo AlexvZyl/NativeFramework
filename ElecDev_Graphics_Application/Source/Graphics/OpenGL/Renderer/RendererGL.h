@@ -43,6 +43,10 @@ class GraphicsLinesBuffer;
 struct Ind3;
 struct Font;
 
+typedef unsigned int GLenum;
+
+enum class FrameBufferAttachmentSlot : GLenum;
+
 //==============================================================================================================================================//
 //  Rendering.																																	//
 //==============================================================================================================================================//
@@ -63,9 +67,6 @@ struct RendererData
 		renderPasses = 0;
 	}
 };
-
-
-
 //==============================================================================================================================================//
 //  Renderer Class.																																//
 //==============================================================================================================================================//
@@ -203,6 +204,12 @@ private:
 	static void drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader);
 	static std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> s_unitQuad;
 	static void createUnitQuad();
+
+	// --------------------- //
+	//  P R O C E S S I N G  //
+	// --------------------- //
+
+	static void resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot);
 
 	// ------------------- //
 	//  U T I L I T I E S  //
