@@ -115,7 +115,7 @@ void SettingsWidget::onImGuiRender()
     // Anti Aliasing.
     ImGui::Separator();
     const char* AA = { "MSAA1\0MSAA2\0MSAA4\0MSAA8\0MSAA16\0MSAA32\0" };
-    static int currentItem = 2;
+    static int currentItem = 3;
     ImGui::Text("Anti-Alisaing");
     ImGui::SameLine();
     ImGui::Combo("##AA", &currentItem, AA);
@@ -162,6 +162,7 @@ void SettingsWidget::onImGuiRender()
             if (wasOnGPU) fbo.create();
         }
     }
+    ImGui::Text("Note: MSAA1 still uses a multi-sampled framebuffer.");
 }
 
 void SettingsWidget::onImGuiEnd()

@@ -58,11 +58,12 @@ Entity* EntityManager::getEntity(unsigned EID)
 		LUMEN_LOG_WARN("Entities with ID = -1 or 0 are not managed by the entity manager.", "Entity Manager");
 		return nullptr;
 	}
+
 	if (entityLog.contains(EID))
 	{
 		return entityLog.at(EID);
 	}
-	else 
+	else
 	{
 		LUMEN_LOG_WARN("Invalid entity ID.", "Entity Manager");
 		return nullptr;

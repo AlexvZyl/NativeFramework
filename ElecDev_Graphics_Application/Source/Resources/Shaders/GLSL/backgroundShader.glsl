@@ -25,5 +25,5 @@ void main()
 {
 	o_color = f_color;
 	o_entityID = -1;
-	o_outline = vec4(0.f, 0.f, 0.f, 0.0f);
+	o_outline = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 };

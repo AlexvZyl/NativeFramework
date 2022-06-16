@@ -154,7 +154,7 @@ void Renderer::renderingPipeline2D(Scene* scene)
 	if (Renderer::s_pipelineControls["Geometry"])
 		Renderer::geometryPass2D(scene);
 
-	// Resolve MSAA.
+	// Resolve MSAA.	
 	scene->m_renderFBO.bind();
 	scene->m_renderFBO.clear();
 	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
@@ -230,7 +230,6 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	{
 		Renderer::drawTextureOverFBOAttachment(scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, s_shaders["StaticTextureShader"].get());
 	}
-
 	Renderer::setDepthFunc(GL_LESS);
 }
 

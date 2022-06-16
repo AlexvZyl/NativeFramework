@@ -166,7 +166,7 @@ struct FrameBufferAttachment
 		case FrameBufferTextureFormat::RGBA8:				return GL_FLOAT;
 		case FrameBufferTextureFormat::DEPTH_24_STENCIL_8:	return GL_FLOAT;
 		case FrameBufferTextureFormat::R32_UI:				return GL_UNSIGNED_INT;
-		case FrameBufferTextureFormat::RED_INTEGER:			return GL_INT;
+		case FrameBufferTextureFormat::RED_INTEGER:			return GL_UNSIGNED_INT;
 		default: return 0;
 		}
 	}

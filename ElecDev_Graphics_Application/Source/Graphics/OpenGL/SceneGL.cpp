@@ -69,7 +69,7 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
 	attachment.internalFormat = FrameBufferTextureFormat::R32_UI;
 	attachment.format = FrameBufferTextureFormat::RED_INTEGER;
-	m_renderFBO.addAttachment(attachment);
+	m_renderFBO.addAttachment(attachment); 
 	// Outline.
 	attachment.slot = FrameBufferAttachmentSlot::COLOR_2;
 	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;

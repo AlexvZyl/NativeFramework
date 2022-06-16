@@ -334,7 +334,7 @@ int FrameBufferObject::readPixel(FrameBufferAttachmentSlot slot, int x, int y)
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_rendererID));
 	GLCall(glReadBuffer((GLenum)slot));
 	int result;
-	GLCall(glReadPixels(x, y, 1, 1, (GLenum)m_attachments[slot].format, GL_INT, &result));
+	GLCall(glReadPixels(x, y, 1, 1, (GLenum)m_attachments[slot].format, m_attachments[slot].dataType(), &result));
 	bindReadBuffer(); 
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	return result;
