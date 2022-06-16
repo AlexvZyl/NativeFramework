@@ -10,6 +10,8 @@
 
 void Renderer::resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot) 
 {
+	LUMEN_RENDER_PASS();
+
 	// Setup shader.
 	int sampler = 0;
 	int samples = (int)sourceFBO.getAttachment(sourceSlot).samples;
