@@ -83,7 +83,7 @@ enum class FrameBufferAttachmentType
 
 enum class FrameBufferSamples : int
 {
-	NORMAL   = 1, 
+	NORMAL   = 0, 
 	MSAA1	 = 1,
 	MSAA2    = 2, 
 	MSAA4    = 4, 
@@ -109,8 +109,8 @@ struct FrameBufferAttachment
 	bool created = false;
 
 	// Utilities.
-	//inline bool isMultiSample() const { return ((int)samples > 1) || (samples == FrameBufferSamples::MSAA1); }
-	inline bool isMultiSample() const { return (int)samples > 1; }
+	inline bool isMultiSample() const { return ((int)samples > 1) || (samples == FrameBufferSamples::MSAA1); }
+	//inline bool isMultiSample() const { return (int)samples > 1; }
 
 	// Get the slot as a string.
 	std::string slotString() const

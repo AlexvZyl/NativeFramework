@@ -114,7 +114,7 @@ void SettingsWidget::onImGuiRender()
 
     // Anti Aliasing.
     ImGui::Separator();
-    const char* AA = { "MSAA2\0MSAA4\0MSAA8\0MSAA16\0MSAA32\0" };
+    const char* AA = { "MSAA1\0MSAA2\0MSAA4\0MSAA8\0MSAA16\0MSAA32\0" };
     static int currentItem = 2;
     ImGui::Text("Anti-Alisaing");
     ImGui::SameLine();
@@ -132,29 +132,29 @@ void SettingsWidget::onImGuiRender()
                 // Change MSAA value for attachments.
                 switch (currentItem)
                 {
-                case 0:
+                case 1:
                     attachment.samples = FrameBufferSamples::MSAA2;
                     Renderer::MSAA = FrameBufferSamples::MSAA2;
                     break;
-                case 1:
+                case 2:
                     attachment.samples = FrameBufferSamples::MSAA4;
                     Renderer::MSAA = FrameBufferSamples::MSAA4;
                     break;
-                case 2:
+                case 3:
                     attachment.samples = FrameBufferSamples::MSAA8;
                     Renderer::MSAA = FrameBufferSamples::MSAA8;
                     break;
-                case 3:
+                case 4:
                     attachment.samples = FrameBufferSamples::MSAA16;
                     Renderer::MSAA = FrameBufferSamples::MSAA16;
                     break;
-                case 4:
+                case 5:
                     attachment.samples = FrameBufferSamples::MSAA32;
                     Renderer::MSAA = FrameBufferSamples::MSAA32;
                     break;
                 default:
-                    attachment.samples = FrameBufferSamples::MSAA8;
-                    Renderer::MSAA = FrameBufferSamples::MSAA8;
+                    attachment.samples = FrameBufferSamples::MSAA1;
+                    Renderer::MSAA = FrameBufferSamples::MSAA1;
                     break;
                 }
             }
