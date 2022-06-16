@@ -185,6 +185,15 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 
 	else if (designerState == CompDesignState::SELECT)
 	{
+
+		if (m_activePoly || m_activeCircle || m_activeLine)
+		{
+			//If we already have an active primitive, we need to check for vertex selection.
+			//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
+			setHoveredVertex(screenCoords);
+
+		}
+
 		if (event.isNotType(EventType_MouseButtonLeft)) 
 		{
 			m_lastDragPos = screenCoords;

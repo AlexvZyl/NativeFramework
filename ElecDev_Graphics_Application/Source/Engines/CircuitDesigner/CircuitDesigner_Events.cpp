@@ -176,17 +176,17 @@ void CircuitDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 			if (m_activeCable.get()) m_activeCable->extendSegment(getNearestGridVertex(screenCoords));
 			m_activeCable->enableOutline();
 		}
-		/*/else if (designerState == ENTITY_SELECT)
+		else if (designerState == ENTITY_SELECT)
 		{
-			if (event.isType(EventType_MouseButtonLeft))
-			{
-				//User is dragging a component.
-				glm::vec2 translation = screenCoords - m_lastDragPos;
-				if (m_activeComponent.get()) m_activeComponent->moveTo(getNearestGridVertex(screenCoords));
-				if (m_activeCable.get())     m_activeCable->moveActivePrimitiveTo(getNearestGridVertex(screenCoords));
+			if (m_activeCable.get()) {
+				auto [idx, distance] = m_activeCable->getNearestVertexIdx(screenCoords);
+				m_hoveredVertexIdx = -1;
+				if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
+				{
+					m_hoveredVertexIdx = idx;
+				}
 			}
 		}
-		*/
 	}
 
 	// Store state.

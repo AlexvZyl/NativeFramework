@@ -221,6 +221,33 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 	}
 }
 
+void ComponentDesigner::setHoveredVertex(glm::vec2 coords)
+{
+	m_hoveredVertexIdx = -1;
+	if (m_activePoly)
+	{
+		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIndex(coords);
+		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
+		{
+			m_hoveredVertexIdx = vertexIdx;
+		}
+	}
+	/*if (m_activeCircle) {
+		auto [vertexPtr, distance] = m_activeCircle->getNearestVertex(coords);
+		if (distance < clickTol) {
+			m_activeVertex = vertexPtr;
+		}
+	}*/
+	else if (m_activeLine)
+	{
+		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIndex(coords);
+		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
+		{
+			m_hoveredVertexIdx = vertexIdx;
+		}
+	}
+}
+
 void ComponentDesigner::deleteActivePrimitive()
 {
 	// Disable outline.
@@ -255,6 +282,22 @@ void ComponentDesigner::renderOverlay()
 {
 	constexpr glm::vec2 button_size = { 35, 35 };
 	constexpr glm::vec2 dropdown_size = { 10, 10 };
+
+	//Add indicator for hovered vertices.
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+	if (m_hoveredVertexIdx != -1) {
+
+		glm::vec2 pos;
+		if (m_activePoly) {
+			pos = localToGlobalCoords(worldToPixelCoords(m_activePoly->getVertex(m_hoveredVertexIdx).position));
+			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
+		}
+		if (m_activeLine) {
+			pos = localToGlobalCoords(worldToPixelCoords(m_activeLine->m_vertices.at(m_hoveredVertexIdx)));
+			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
+		}
+		draw_list->AddCircleFilled(pos, clickTol, ImColor(helperColour));
+	}
 
 	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_AlwaysUseWindowPadding)) 
 	{
@@ -487,7 +530,7 @@ void ComponentDesigner::renderOverlay()
 				ImGui::PushItemWidth(80.0f);
 				if (m_activeText) 
 				{
-					int tempSizePt = std::round(m_activeText->m_textScale * 2835);
+					int tempSizePt = (int)std::round(m_activeText->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
 						m_activeText->setScale(tempSizePt / 2835.f);
 					}
@@ -516,7 +559,7 @@ void ComponentDesigner::renderOverlay()
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
 				if (m_activeText) {
-					int tempSizePt = std::round(m_activeText->m_textScale * 2835);
+					int tempSizePt = (int)std::round(m_activeText->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
 						m_activeText->setScale(tempSizePt / 2835.f);
 					}

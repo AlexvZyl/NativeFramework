@@ -16,6 +16,9 @@ This is where the interactive 2D design engine is implemented.
 #include "Application/Application.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
+#include "Engines/CircuitDesigner/Peripherals/Cable.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //
@@ -57,6 +60,16 @@ void CircuitDesigner::createCircuit(const std::filesystem::path& path)
 
 void CircuitDesigner::renderOverlay() 
 {
+	//Add indicator for hovered vertices.
+	ImDrawList* draw_list = ImGui::GetWindowDrawList();
+	if (m_hoveredVertexIdx > 0) {
+		glm::vec2 pos;
+		if (m_activeCable && m_hoveredVertexIdx < m_activeCable->m_polyLine->m_vertices.size()-1) {
+			pos = localToGlobalCoords(worldToPixelCoords(m_activeCable->m_polyLine->m_vertices.at(m_hoveredVertexIdx)));
+			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
+		}
+		draw_list->AddCircleFilled(pos, clickTol, ImColor(helperColour));
+	}
 	getScene().getGrid().renderOverlay();
 }
 
