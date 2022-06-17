@@ -109,8 +109,7 @@ struct FrameBufferAttachment
 	bool created = false;
 
 	// Utilities.
-	inline bool isMultiSample() const { return ((int)samples > 1) || (samples == FrameBufferSamples::MSAA1); }
-	//inline bool isMultiSample() const { return (int)samples > 1; }
+	inline bool isMultiSample() const { return (int)samples > 0; }
 
 	// Get the slot as a string.
 	std::string slotString() const
