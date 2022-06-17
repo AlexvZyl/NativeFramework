@@ -140,7 +140,7 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		if (attachment.isMultiSample())
 		{
 			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
-			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+			GLCall(glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
 			GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID, 0));
 		}
 		// Normal.
@@ -157,7 +157,7 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		}
 	}
 
-	// Render buffer.
+	// Render buffer.glTexImage2DMultisample
 	else if (attachment.type == FrameBufferAttachmentType::RENDER_BUFFER)
 	{
 		// MSAA.
