@@ -20,8 +20,6 @@ void FrameBufferObject::create()
 
 	// Create attachments.
 	createAttachments();
-	bindReadBuffer();
-	bindDrawBuffers();
 
 #ifdef _DEBUG
 	// Error checking.
