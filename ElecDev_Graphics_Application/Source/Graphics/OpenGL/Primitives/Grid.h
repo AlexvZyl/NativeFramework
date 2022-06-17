@@ -264,7 +264,7 @@ private:
 	float m_fineIncrementSize = 0.1f;
 	glm::vec4 m_coarseGrid = { 1.f, 1.f, 1.f, 1.f };
 	glm::vec4 m_coarseGridColor = { 1.f, 1.f, 1.f, 0.9f };
-	glm::vec4 m_fineGridColor = { 1.f, 1.f, 1.f, 0.2f };
+	glm::vec4 m_fineGridColor = { 1.f, 1.f, 1.f, 0.5f };
 	glm::vec4 m_xAxisColor = { 0.f, 1.f, 0.f, 1.f };
 	glm::vec4 m_yAxisColor = {1.f, 0.f, 0.f, 1.f};
 	glm::vec4 m_helperCircleColor = {0.f, 0.f, 1.f, 1.f};

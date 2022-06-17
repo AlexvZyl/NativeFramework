@@ -24,6 +24,7 @@ struct VertexOutput
 
 // Output.
 flat out uint f_entityID;
+out float f_outline;
 layout(location = 2) out VertexOutput Output;
 
 void main()
@@ -35,6 +36,7 @@ void main()
     Output.Thickness     = v_thickness;
     Output.Fade          = v_fade;
     f_entityID           = v_entityID;
+    f_outline            = v_outline;
 
     // Manipulate the values so that the circle thickness adjusts 
     // around the radius.
@@ -66,11 +68,13 @@ struct VertexOutput
 
 // Input.
 flat in uint f_entityID;
+in float f_outline;
 layout(location = 2) in VertexOutput Input;
 
 // Output.
 layout(location = 0) out vec4 o_color;
 layout(location = 1) out uint o_entityID;
+layout(location = 2) out vec4 o_outline;
 
 void main()
 {
@@ -89,4 +93,7 @@ void main()
     o_color = Input.Color;
     o_color.a *= circleAlpha;
     o_entityID = f_entityID;
+
+    // Outlining logic.
+	if(f_outline != 0.0f) o_outline = vec4(vec3(Input.Color), f_outline);
 };

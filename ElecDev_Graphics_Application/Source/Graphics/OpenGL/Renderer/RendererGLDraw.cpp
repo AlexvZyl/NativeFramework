@@ -43,16 +43,20 @@ void Renderer::drawBufferIndexedForcePrimitive(IGraphicsPrimitivesBuffer& gpb, u
 //  Textures.																																	//
 //==============================================================================================================================================//
 
-void Renderer::drawTextureOverFBOAttachment(FrameBufferObject* FBO, unsigned texture, unsigned attachment, Shader* shader) 
+void Renderer::drawTextureOverFBOAttachment(FrameBufferObject& FBO, FrameBufferAttachmentSlot slot, unsigned texture, Shader* shader)
 {
+	FrameBufferAttachment& attachment = FBO.getAttachment(slot);
+	FBO.bind();
 	shader->bind();
 	GLCall(glActiveTexture(GL_TEXTURE0));
-	GLCall(glBindTexture(GL_TEXTURE_2D, texture));
-	GLenum drawBuffers[1] = { attachment };
-	GLCall(glNamedFramebufferDrawBuffers(FBO->m_frameBufferID, 1, drawBuffers));
+	if (attachment.isMultiSample()) { GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture)); }
+	else							{ GLCall(glBindTexture(GL_TEXTURE_2D, texture)); }
+	GLCall(glNamedFramebufferDrawBuffer(FBO.getID(), (GLenum)slot));
 	Renderer::drawBufferIndexed(*s_unitQuad.get());
-	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-	FBO->setDrawBuffers();
+	if (attachment.isMultiSample()) { GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0)); }
+	else							{ GLCall(glBindTexture(GL_TEXTURE_2D, 0)); }
+	FBO.bindDrawBuffers();
+	FBO.unbind();
 }
 
 //==============================================================================================================================================//

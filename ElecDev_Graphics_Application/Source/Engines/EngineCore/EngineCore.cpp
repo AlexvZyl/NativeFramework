@@ -20,11 +20,7 @@
 EngineCore::EngineCore() 
 {
 	m_lumenGizmo = std::make_unique<LumenGizmo>();
-}
-
-void EngineCore::onRender()
-{
-	Renderer::renderScene(m_scene.get());
+	Lumen::getApp().pushEngine(this);
 }
 
 EngineCore::~EngineCore() 
@@ -32,6 +28,12 @@ EngineCore::~EngineCore()
 	Application& app = Lumen::getApp();
 	if (this == app.getActiveEngine())
 		app.setActiveEngine(nullptr);
+	app.popEngine(this);
+}
+
+void EngineCore::onRender()
+{
+	Renderer::renderScene(m_scene.get());
 }
 
 void EngineCore::setName(const std::string& name) 

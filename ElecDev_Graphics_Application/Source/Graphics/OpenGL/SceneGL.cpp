@@ -14,6 +14,7 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/ErrorHandlerGL.h"
 #include "OpenGL/Primitives/Grid.h"
+#include "OpenGL/ShaderGL.h"
 #include "Application/Events/Events.h"
 #include "imgui/imgui.h"
 
@@ -23,8 +24,67 @@
 
 Scene::Scene(CameraType cameraType, const glm::vec2& size) 
 {
-	// FBO.
-	m_FBO					= std::make_unique<FrameBufferObject>((int)size.x, (int)size.y);
+	FrameBufferAttachment attachment;
+
+	// Start with MSAA FBO.
+	attachment.samples = Renderer::MSAA;
+	// Default color.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_0;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::RGBA;
+	attachment.format = FrameBufferTextureFormat::RGBA;
+	m_msaaFBO.addAttachment(attachment);
+	// Entity ID.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_1;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::R32_UI;
+	attachment.format = FrameBufferTextureFormat::RED_INTEGER;
+	m_msaaFBO.addAttachment(attachment);
+	// Outline.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_2;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::RGBA;
+	attachment.format = FrameBufferTextureFormat::RGBA;
+	m_msaaFBO.addAttachment(attachment);
+	// Depth Stencil.
+	attachment.slot = FrameBufferAttachmentSlot::DEPTH_STENCIL;
+	attachment.type = FrameBufferAttachmentType::RENDER_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
+	attachment.format = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
+	m_msaaFBO.addAttachment(attachment);
+	// Create the FBO with its attachments.
+	m_msaaFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1, FrameBufferAttachmentSlot::COLOR_2 });
+	m_msaaFBO.create();
+
+	// Normal FBO.
+	attachment.samples = FrameBufferSamples::NORMAL;
+	// Default color.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_0;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::RGBA;
+	attachment.format = FrameBufferTextureFormat::RGBA;
+	m_renderFBO.addAttachment(attachment);
+	// Entity ID.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_1;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::R32_UI;
+	attachment.format = FrameBufferTextureFormat::RED_INTEGER;
+	m_renderFBO.addAttachment(attachment); 
+	// Outline.
+	attachment.slot = FrameBufferAttachmentSlot::COLOR_2;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::RGBA;
+	attachment.format = FrameBufferTextureFormat::RGBA;
+	m_renderFBO.addAttachment(attachment);
+	// Depth Stencil.
+	attachment.slot = FrameBufferAttachmentSlot::DEPTH_STENCIL;
+	attachment.type = FrameBufferAttachmentType::RENDER_BUFFER;
+	attachment.internalFormat = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
+	attachment.format = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
+	m_renderFBO.addAttachment(attachment);
+	// Create the FBO with its attachments.
+	m_renderFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1, FrameBufferAttachmentSlot::COLOR_2 });
+	m_renderFBO.create();
 
 	// Camera.
 	m_camera				= std::make_unique<Camera>(cameraType, size);
@@ -47,7 +107,7 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 
 Scene::~Scene() 
 {
-	m_grid.reset();
+	m_grid = nullptr;
 	m_primitives.clear();
 	Renderer::doneSceneDestruction();
 }
@@ -68,37 +128,39 @@ Grid& Scene::getGrid()
 
 void Scene::onRenderInit() 
 {
-	m_FBO->bind();
-	m_FBO->clear();
+	m_msaaFBO.bind();
+	m_msaaFBO.clear();
+	m_msaaFBO.bindDrawBuffers();
+
 	getCamera().onUpdate();
-	Renderer::setViewport(getCamera().getViewport());
-	m_FBO->setDrawBuffers();
 }
 
 void Scene::onRenderCleanup() 
 {
-	m_FBO->unbind();
+	// Make sure the FBO is unbounded.
+	m_msaaFBO.unbind();
 }
 
 unsigned Scene::getRenderTexture() 
 { 
-	return m_FBO->getRenderTexture(); 
+	return m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_0).rendererID;
 }
 
 unsigned Scene::getEntityID(const glm::vec2& pixelCoords)
 {
-	// Adjust the pixel coords.
-	return m_FBO->getEntityID(pixelCoords);
+	return m_renderFBO.readPixel(FrameBufferAttachmentSlot::COLOR_1, (int)pixelCoords.x, (int)pixelCoords.y);
 }
 
 void Scene::deleteGPUResources() 
 {
-	m_FBO->deleteResources();
+	m_msaaFBO.destroy();
+	m_renderFBO.destroy();
 }
 
 void Scene::recreateGPUResources() 
 {
-	m_FBO->createResources(getCamera().getViewport()[2], getCamera().getViewport()[3]);
+	m_msaaFBO.create((int)getCamera().getViewport()[2], (int)getCamera().getViewport()[3]);
+	m_renderFBO.create((int)getCamera().getViewport()[2], (int)getCamera().getViewport()[3]);
 }
 
 //==============================================================================================================================================//
@@ -160,7 +222,8 @@ void Scene::create3DBackground()
 void Scene::resize(const glm::vec2& size) 
 {
 	getCamera().resize(size);
-	m_FBO->resize((int)size.x, (int)size.y);
+	m_renderFBO.resize((int)size.x, (int)size.y);
+	m_msaaFBO.resize((int)size.x, (int)size.y);
 }
 
 //==============================================================================================================================================//

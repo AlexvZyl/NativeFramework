@@ -391,6 +391,22 @@ void Text::setLayer(float layer)
 	syncWithGPU();
 }
 
+void Text::enableOutline(float value) 
+{
+	for (int i = 0; i < 4; i++) 
+		getVertex(i).outline = value;
+
+	syncWithGPU();
+}
+
+void Text::disableOutline() 
+{
+	for (int i = 0; i < 4; i++)
+		getVertex(i).outline = 0.f;
+
+	syncWithGPU();
+}
+
 //=============================================================================================================================================//
 //  EOF.																																	   //
 //=============================================================================================================================================//

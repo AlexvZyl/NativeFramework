@@ -72,6 +72,7 @@ private:
 	friend class Shader;
 	friend class RendererStats;
 	friend class BackgroundColorEditor;
+	friend class SettingsWidget;
 
 	// The camera.
 	std::unique_ptr<Camera> m_camera;
@@ -95,7 +96,8 @@ private:
 	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataCircle>> m_circlesBuffer;
 	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> m_texturedTrianglesBuffer;
 	// FBO.
-	std::unique_ptr<FrameBufferObject> m_FBO;
+	FrameBufferObject m_msaaFBO;
+	FrameBufferObject m_renderFBO;
 };
 
 //==============================================================================================================================================//
