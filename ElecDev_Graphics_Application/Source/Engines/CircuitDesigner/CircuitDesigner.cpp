@@ -62,13 +62,13 @@ void CircuitDesigner::renderOverlay()
 {
 	//Add indicator for hovered vertices.
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
-	if (m_hoveredVertexIdx > 0) {
+	if (m_hoveredVertexIdx != -1) {
 		glm::vec2 pos;
 		if (m_activeCable && m_hoveredVertexIdx < m_activeCable->m_polyLine->m_vertices.size()-1) {
 			pos = localToGlobalCoords(worldToPixelCoords(m_activeCable->m_polyLine->m_vertices.at(m_hoveredVertexIdx)));
 			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
+			draw_list->AddCircleFilled(pos, clickTol, ImColor(helperColour));
 		}
-		draw_list->AddCircleFilled(pos, clickTol, ImColor(helperColour));
 	}
 	getScene().getGrid().renderOverlay();
 }
