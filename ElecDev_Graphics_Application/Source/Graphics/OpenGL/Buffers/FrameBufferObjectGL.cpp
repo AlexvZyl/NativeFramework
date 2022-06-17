@@ -218,7 +218,7 @@ void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment
 		if (attachment.isMultiSample())
 		{
 			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
-			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+			GLCall(glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
 		}
 		// Normal.
 		else
@@ -335,7 +335,6 @@ int FrameBufferObject::readPixel(FrameBufferAttachmentSlot slot, int x, int y)
 	GLCall(glReadBuffer((GLenum)slot));
 	int result;
 	GLCall(glReadPixels(x, y, 1, 1, (GLenum)m_attachments[slot].format, m_attachments[slot].dataType(), &result));
-	bindReadBuffer(); 
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	return result;
 }
