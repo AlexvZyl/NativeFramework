@@ -1,15 +1,7 @@
-//==============================================================================================================================================//
-//  Includes.																																	//
-//==============================================================================================================================================//
-
 #include "Utilities/Logger/Logger.h"
 #include "Application/Application.h"
 #include "Application/LumenWindow/LumenWindow.h"
 #include "Application/LumenWindow/WindowStack.h"
-
-//==============================================================================================================================================//
-//  Windows																																		//
-//==============================================================================================================================================//
 
 void Application::queueWindowPop(LumenWindow* window)
 {
@@ -31,9 +23,34 @@ std::unordered_map<unsigned, std::unique_ptr<LumenWindow>>& Application::getWind
 	return m_windowStack->getWindows();
 }
 
-//==============================================================================================================================================//
-//  Docking nodes.																																//
-//==============================================================================================================================================//
+LumenWindow* Application::findHoveredWindow()
+{
+	// We do not have to worry about order, since dear imgui handles it.
+	for (auto& [ID, window] : m_windowStack->getWindows())
+	{
+		if (window->isHovered()) return window.get();
+	}
+	// No window is hovered.
+	return nullptr;
+}
+
+LumenWindow* Application::findFocusedWindow()
+{
+	for (auto& [ID, window] : m_windowStack->getWindows())
+	{
+		if (window->isFocused()) return window.get();
+	}
+	// No window is focused.
+	return nullptr;
+}
+
+void Application::resizeWindows() 
+{
+	for (auto& [ID, window] : m_windowStack->getWindows())
+	{
+		window->detectWindowResize();
+	}
+}
 
 void Application::dockWindowToPanel(LumenWindow* window, LumenDockPanel panel)
 {
@@ -152,7 +169,3 @@ void Application::findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDo
 		}
 	}
 }
-
-//==============================================================================================================================================//
-//  EOF.																																		//
-//==============================================================================================================================================//

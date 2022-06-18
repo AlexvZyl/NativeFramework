@@ -10,6 +10,8 @@
 
 void Renderer::resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot) 
 {
+	LUMEN_RENDER_PASS();
+
 	// Setup shader.
 	int sampler = 0;
 	int samples = (int)sourceFBO.getAttachment(sourceSlot).samples;
@@ -30,12 +32,28 @@ void Renderer::resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSl
 	Renderer::drawBufferIndexed(*s_unitQuad.get());
 }
 
-void Renderer::blit(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot, GLenum filter)
+void Renderer::blit(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot, GLenum filter, GLenum type)
 {
 	GLCall(glNamedFramebufferReadBuffer(sourceFBO.getID(), (GLenum)sourceSlot));
 	GLCall(glNamedFramebufferDrawBuffer(destFBO.getID(), (GLenum)destSlot));
 	GLCall(glBlitNamedFramebuffer(sourceFBO.getID(), destFBO.getID(), 
 								  0, 0, sourceFBO.getSpecification().width, sourceFBO.getSpecification().height, 
 								  0, 0, destFBO.getSpecification().width, destFBO.getSpecification().height, 
-								  GL_COLOR_BUFFER_BIT, filter));
+								  type, filter));
+}
+
+
+void Renderer::blitDepth(FrameBufferObject& sourceFBO, FrameBufferObject& destFBO)
+{
+	Renderer::blit(sourceFBO, FrameBufferAttachmentSlot::NONE, destFBO, FrameBufferAttachmentSlot::NONE, GL_NEAREST, GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::blitStencil(FrameBufferObject& sourceFBO, FrameBufferObject& destFBO)
+{
+	Renderer::blit(sourceFBO, FrameBufferAttachmentSlot::NONE, destFBO, FrameBufferAttachmentSlot::NONE, GL_NEAREST, GL_STENCIL_BUFFER_BIT);
+}
+
+void Renderer::blitDepthStencil(FrameBufferObject& sourceFBO, FrameBufferObject& destFBO) 
+{
+	Renderer::blit(sourceFBO, FrameBufferAttachmentSlot::NONE, destFBO, FrameBufferAttachmentSlot::NONE, GL_NEAREST, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }

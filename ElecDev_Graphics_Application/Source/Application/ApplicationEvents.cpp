@@ -109,27 +109,6 @@ void Application::onUpdate()
 	EventLog::clear();
 }
 
-LumenWindow* Application::findHoveredWindow()
-{
-	// We do not have to worry about order, since dear imgui handles it.
-	for (auto& [ID, window] : m_windowStack->getWindows())
-	{
-		if (window->isHovered()) return window.get();
-	}
-	// No window is hovered.
-	return nullptr;
-}
-
-LumenWindow* Application::findFocusedWindow()
-{
-	for (auto& [ID, window] : m_windowStack->getWindows())
-	{
-		if (window->isFocused()) return window.get();
-	}
-	// No window is focused.
-	return nullptr;
-}
-
 void Application::imguiOnUpdate() 
 {
 	LUMEN_PROFILE_SCOPE("ImGui OnUpdate");
