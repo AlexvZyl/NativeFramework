@@ -213,8 +213,8 @@ void Scene::create3DBackground()
 void Scene::resize(const glm::vec2& size) 
 {
 	getCamera().resize(size);
-	m_renderFBO.resize((int)size.x, (int)size.y);
-	m_msaaFBO.resize((int)size.x, (int)size.y);
+	if (m_renderFBO.isOnGPU())m_renderFBO.resize((int)size.x, (int)size.y);
+	if (m_msaaFBO.isOnGPU()) m_msaaFBO.resize((int)size.x, (int)size.y);
 }
 
 //==============================================================================================================================================//

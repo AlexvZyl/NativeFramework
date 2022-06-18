@@ -205,6 +205,7 @@ public:
 	inline auto& getSpecification() { return m_specification; }
 	inline void setSpecification(const FrameBufferSpecification& spec) { m_specification = spec; }
 	inline unsigned getID() const { return m_rendererID; }
+	inline bool isOnGPU() const { return m_isOnGPU; }
 
 	// Attachments.
 	void addAttachment(const FrameBufferAttachment& attachment);

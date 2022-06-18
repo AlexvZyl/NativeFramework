@@ -22,13 +22,11 @@ void Application::onUpdate()
 {
 	LUMEN_PROFILE_SCOPE("App OnUpdate");
 
-	//setGuiTheme();
-
-	// Execute the Lua scripts.
+	// Update subsystems.
+	resizeWindows();
 	executeLuaScriptQueue();
-
-	// Log messages.
 	Logger::flushQueue();
+	//setGuiTheme();
 
 	// Find the hovered window on a mouse move event.
 	if (EventLog::mouseMoveOccurred())
@@ -43,6 +41,12 @@ void Application::onUpdate()
 	// Dispatch GLFW events.
 	for (auto& event : EventLog::getEvents())
 	{
+		// Resize windows on a left release.
+		if (event->isType(EventType_MouseRelease))
+		{
+			startWindowResizing();
+		}
+
 		// Application events are dispatched explicitly (since it is not a part of the windows).
 		if (event->isType(EventType_Application))
 		{
@@ -70,10 +74,16 @@ void Application::onUpdate()
 		}
 
 		// Pass save events to the active engine.
-		else if (event->isType(EventType_FileSave)) getActiveEngine()->onEvent(*event.get());
+		else if (event->isType(EventType_FileSave))
+		{
+			getActiveEngine()->onEvent(*event.get());
+		}
 
 		// Pass events to focused window.
-		else if (m_focusedWindow) m_focusedWindow->onEvent(*event.get());
+		else if (m_focusedWindow)
+		{
+			m_focusedWindow->onEvent(*event.get());
+		}
 	}
 
 	// These mouse events are kept seperate to prevent handling events more than once per frame.
@@ -176,6 +186,8 @@ void Application::onWindowResizeEvent(const WindowEvent& event)
 {
 	// This should pass a scaled window resize event to all of the windows.  I think...
 	// This could help solve the multiple resolutions problem?
+
+	startWindowResizing();
 }
 
 //==============================================================================================================================================//
