@@ -119,7 +119,7 @@ public:
 	// Unbind the scene and bind the stored scene.
 	static void restoreAndUnbindScene();
 	// The set MSAA level.
-	inline static FrameBufferSamples MSAA = FrameBufferSamples::MSAA8;
+	inline static FrameBufferSamples MSAA = FrameBufferSamples::MSAA4;
 
 	// --------------------------- //
 	//  2 D   P R I M I T I V E S  //

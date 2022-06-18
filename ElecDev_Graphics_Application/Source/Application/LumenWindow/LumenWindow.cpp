@@ -49,7 +49,6 @@ void LumenWindow::onUpdate()
 	if (!shouldRender()) return;
 
 	detectWindowMove();
-	detectWindowResize();
 }
 
 //==============================================================================================================================================//
@@ -217,6 +216,8 @@ void LumenWindow::onWindowMoveEvent(const WindowEvent& event)
 
 void LumenWindow::detectWindowResize()
 {
+	if (!m_imguiWindow) return;
+
 	glm::vec2 contentRegionSize = m_imguiWindow->WorkRect.GetSize();
 	if (m_contentRegionSize.x != contentRegionSize.x || m_contentRegionSize.y != contentRegionSize.y)
 	{

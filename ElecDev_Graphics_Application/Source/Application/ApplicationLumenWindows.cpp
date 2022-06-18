@@ -46,10 +46,14 @@ LumenWindow* Application::findFocusedWindow()
 
 void Application::resizeWindows() 
 {
+	if (!m_resizeWindowsFrameCount) return;
+
 	for (auto& [ID, window] : m_windowStack->getWindows())
 	{
 		window->detectWindowResize();
 	}
+
+	m_resizeWindowsFrameCount--;
 }
 
 void Application::dockWindowToPanel(LumenWindow* window, LumenDockPanel panel)
