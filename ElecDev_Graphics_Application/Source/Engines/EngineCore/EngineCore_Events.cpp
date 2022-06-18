@@ -149,7 +149,7 @@ void EngineCore::onMouseScrollEventForce(const MouseScrollEvent& event)
 void EngineCore::onKeyEventForce(const KeyEvent& event) 
 {
 	// Do not pass event if ImGui is using the keyboard.
-	if (event.isType(EventType_LeftCtrl) && event.key == GLFW_KEY_S) {
+	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_S) {
 		onFileSaveEvent(FileSaveEvent());
 		return;
 	}
