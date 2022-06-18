@@ -62,6 +62,8 @@ void AssetExplorer::onImGuiBegin()
 
 void AssetExplorer::onImGuiRender()
 {
+	glm::vec2 contentRegionSize = ImGui::GetCurrentWindow()->WorkRect.GetSize();
+
 	// Filter.
 	static ImGuiTextFilter filter;
 	if (m_clearFilterOnFrameStart)
@@ -144,7 +146,7 @@ void AssetExplorer::onImGuiRender()
 
 	// Current directory.
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildBorderSize, 1.f);
-	if (ImGui::BeginChild("Dirctory", { (m_contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding))
+	if (ImGui::BeginChild("Dirctory", { (contentRegionSize.x - buttonsWidth) / 2.f, headerHeight }, true, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_AlwaysUseWindowPadding))
 	{
 		ImGui::SetScrollX(ImGui::GetScrollMaxX());
 		if (ImGui::Button(m_currentDirectory.string().c_str(), { 0.f, headerSize.y + 7.f}))
@@ -203,7 +205,7 @@ void AssetExplorer::onImGuiRender()
 		float iconSize = 75;
 		float padding = 7;
 		float cellSize = iconSize + 2 * padding;
-		int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
+		int columns = std::floor(contentRegionSize.x * 0.9 / cellSize);
 		if (columns <= 0) columns = 1;
 		ImGui::Columns(columns, 0, false);
 

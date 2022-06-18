@@ -227,6 +227,8 @@ void LumenWindow::detectWindowResize()
 
 void LumenWindow::detectWindowMove()
 {
+	if (!m_imguiWindow) return;
+
 	glm::vec2 contentRegionPos = m_imguiWindow->WorkRect.Min;
 	if (m_contentRegionPosition.x != contentRegionPos.x || m_contentRegionPosition.y != contentRegionPos.y)
 	{
