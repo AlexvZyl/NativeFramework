@@ -49,10 +49,6 @@ public:
 	// Resizes the scene based on a viewport change.
 	void resize(const glm::vec2& size);
 
-	// Events.
-	void onRenderInit();
-	void onRenderCleanup();
-
 	// Delete the resources to save on VRAM.
 	void deleteGPUResources();
 	// Recreate the resources once it has been deleted.

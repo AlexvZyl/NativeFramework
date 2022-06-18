@@ -4,6 +4,7 @@
 #include "glad/glad.h"
 #include <unordered_map>
 #include <string>
+#include "Utilities/Assert/Assert.h"
 
 enum class FrameBufferTextureFormat : GLenum
 {
@@ -13,9 +14,9 @@ enum class FrameBufferTextureFormat : GLenum
 	RED_INTEGER = GL_RED_INTEGER,
 	DEPTH_24_STENCIL_8 = GL_DEPTH24_STENCIL8,
 	R32_UI = GL_R32UI,
-
-	// Defaults.
-	DEPTH = GL_DEPTH24_STENCIL8,
+	DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
+	DEPTH_24 = GL_DEPTH_COMPONENT24,
+	DEPTH_32 = GL_DEPTH_COMPONENT32,
 };
 
 enum class FrameBufferTextureWrap : GLenum 
@@ -108,9 +109,8 @@ struct FrameBufferAttachment
 	unsigned rendererID = NULL;
 	bool created = false;
 
-	// Utilities.
-	inline bool isMultiSample() const { return ((int)samples > 1) || (samples == FrameBufferSamples::MSAA1); }
-	//inline bool isMultiSample() const { return (int)samples > 1; }
+	// Is it a multisampled attachment?
+	inline bool isMultiSample() const { return (int)samples > 0; }
 
 	// Get the slot as a string.
 	std::string slotString() const
@@ -153,11 +153,12 @@ struct FrameBufferAttachment
 		case FrameBufferAttachmentSlot::DEPTH:		   return "GL_DEPTH_ATTACHMENT";
 		case FrameBufferAttachmentSlot::STENCIL:	   return "GL_STENCIL_ATTACHMENT";
 		case FrameBufferAttachmentSlot::DEPTH_STENCIL: return "GL_DEPTH_STENCIL_ATTACHMENT";
-		default: return "Unknown";
+		default: LUMEN_ASSERT(false, "Unknown attachment.");
 		}
 	}
 
 	// Get the data type based one the format.
+	// TODO: FIX THIS!
 	GLenum dataType() const
 	{
 		switch (format) 
@@ -167,7 +168,10 @@ struct FrameBufferAttachment
 		case FrameBufferTextureFormat::DEPTH_24_STENCIL_8:	return GL_FLOAT;
 		case FrameBufferTextureFormat::R32_UI:				return GL_UNSIGNED_INT;
 		case FrameBufferTextureFormat::RED_INTEGER:			return GL_UNSIGNED_INT;
-		default: return 0;
+		case FrameBufferTextureFormat::DEPTH_COMPONENT:		return GL_DEPTH_COMPONENT;
+		case FrameBufferTextureFormat::DEPTH_24:		    return GL_UNSIGNED_INT;
+		case FrameBufferTextureFormat::DEPTH_32:		    return GL_UNSIGNED_INT;
+		default: LUMEN_ASSERT(false, "Unknown format.");
 		}
 	}
 };
@@ -189,38 +193,44 @@ public:
 	// Destructor.
 	~FrameBufferObject();
 
-	// FBO functions.
+	// General.
 	void create();
-	void clear();
 	void create(int width, int height);
-	void destroy();
 	void resize(int width, int height);
+	void destroy();
 	void bind();
 	void unbind();
 
 	// Utilities.
 	inline auto& getSpecification() { return m_specification; }
-	inline auto& getAttachments()   { return m_attachments;   }
-	inline auto& getAttachment(FrameBufferAttachmentSlot slot) { return m_attachments[slot]; }
 	inline void setSpecification(const FrameBufferSpecification& spec) { m_specification = spec; }
 	inline unsigned getID() const { return m_rendererID; }
 
 	// Attachments.
+	void addAttachment(const FrameBufferAttachment& attachment);
+	void removeAttachment(FrameBufferAttachmentSlot slot);
+	inline auto& getAttachments() { return m_attachments; }
+	inline auto& getAttachment(FrameBufferAttachmentSlot slot) { return m_attachments[slot]; }
 	inline void setDrawBuffers(const std::initializer_list<FrameBufferAttachmentSlot>& buffers) { m_drawBuffers = buffers; }
+	inline void setDrawBuffers(const std::vector<FrameBufferAttachmentSlot>& buffers) { m_drawBuffers = buffers; }
 	inline void setReadBuffer(FrameBufferAttachmentSlot buffer) { m_readBuffer = buffer; }
 	void bindDrawBuffers();
 	void bindReadBuffer();
-	void addAttachment(const FrameBufferAttachment& attachment);
-	void removeAttachment(FrameBufferAttachmentSlot slot);
-	void clearAttachments();
-	void clearAttachment(FrameBufferAttachmentSlot slot);
 	int readPixel(FrameBufferAttachmentSlot slot, int x, int y);
+
+	// For now refrain from using this function.  Clearing attachments is buggy.
+	// Rather use `Renderer::clearAll()` after binding.
+	void clear();
+	// For now refrain from using this function.  Clearing attachments is buggy.
+	// Rather use `Renderer::clearAll()` after binding.
+	void clearAttachment(FrameBufferAttachmentSlot slot);
 
 private:
 
 	friend class SettingsWidget;
 
 	// Attachments.
+	void clearAttachments();
 	void createAttachments();
 	void destroyAttachments();
 	void resizeAttachments();

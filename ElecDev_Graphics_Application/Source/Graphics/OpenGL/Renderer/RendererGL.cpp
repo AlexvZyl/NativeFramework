@@ -50,7 +50,7 @@ void Renderer::initialise()
 	GLCall(glDepthFunc(GL_LESS));                               // Set the function used with depth testing.
 	GLCall(glEnable(GL_BLEND));                                 // Enable blending for alpha channels.
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Set blend function.  This is the standard setting.
-	Renderer::setClearColor(Renderer::baseColor);
+	Renderer::setClearColor(Renderer::defaultClearColor);
 
 	// Initial setup.
 	Renderer::compileShaders();
@@ -176,7 +176,6 @@ void Renderer::loadTextures(Scene* scene)
 //  Utilities.																																	//
 //==============================================================================================================================================//
 
-void Renderer::clearColor()								{ GLCall(glClear(GL_COLOR_BUFFER_BIT)); }
 void Renderer::finish()									{ GLCall(glFinish()); }
 void Renderer::flush()									{ GLCall(glFlush()); }
 void Renderer::enable(unsigned attribute)				{ GLCall(glEnable(attribute)); }
@@ -184,9 +183,20 @@ void Renderer::disable(unsigned attribute)				{ GLCall(glDisable(attribute)); }
 void Renderer::setDepthFunc(unsigned function)			{ GLCall(glDepthFunc(function)); }
 void Renderer::setViewport(const glm::vec2& viewport)	{ GLCall(glViewport(0, 0, (int)viewport.x, (int)viewport.y)); }
 void Renderer::setViewport(const glm::vec4& viewport)	{ GLCall(glViewport((int)viewport[0], (int)viewport[1], (int)viewport[2], (int)viewport[3])); }
-void Renderer::setClearColor(const glm::vec4& color)	{ GLCall(glClearColor(color.r, color.g, color.b, color.a)); }
 void Renderer::setLineSize(int size)					{ GLCall(glLineWidth((float)size)); }
 void Renderer::clear(int bitplane)						{ GLCall(glClear(bitplane)); }
+void Renderer::setClearColor(const glm::vec4& color)	{ GLCall(glClearColor(color.r, color.g, color.b, color.a)); }
+void Renderer::clearColor()								{ Renderer::clear(GL_COLOR_BUFFER_BIT); }
+void Renderer::clearDepth()								{ Renderer::clear(GL_DEPTH_BUFFER_BIT); }
+void Renderer::clearStencil()							{ Renderer::clear(GL_STENCIL_BUFFER_BIT); }
+void Renderer::clearDepthStencil()						{ Renderer::clear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
+void Renderer::clearAll()								{ Renderer::clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); }
+void Renderer::clearWithColor(const glm::vec4& color)
+{
+	Renderer::setClearColor(color);
+	Renderer::clearColor();
+	Renderer::setClearColor(Renderer::defaultClearColor);
+}
 
 //==============================================================================================================================================//
 //  EOF.																																		//

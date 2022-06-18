@@ -276,6 +276,8 @@ private:
 	void dockWindowToPanel(LumenWindow* window, LumenDockPanel panel);
 	// Pop the Windows queued for removal.
 	void popWindows();
+	// Check all the windows and see if they should resize.
+	void resizeWindows();
 	
 	// Functions used to get data regarding the docking child nodes.
 	// This is necessary for when we dock windows.

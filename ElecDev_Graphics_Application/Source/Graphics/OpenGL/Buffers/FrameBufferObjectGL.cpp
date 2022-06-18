@@ -41,6 +41,8 @@ void FrameBufferObject::create(int width, int height)
 
 void FrameBufferObject::clear() 
 {
+	LUMEN_DISABLED_FUNCTION();
+
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
@@ -286,6 +288,8 @@ void FrameBufferObject::destroyAttachment(FrameBufferAttachment& attachment)
 
 void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment) 
 {
+	LUMEN_DISABLED_FUNCTION();
+
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
 
