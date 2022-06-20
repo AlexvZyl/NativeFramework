@@ -24,8 +24,10 @@ class Camera
 {
 public:
 
-	// Constructor.
+	// Constructors.
+	inline Camera() = default;
 	Camera(CameraType cameraType, const glm::vec2& size);
+
 	// Updates the camera components.
 	void onUpdate();
 	// Resize the camera by size.
@@ -45,6 +47,9 @@ public:
 	const glm::mat4& getProjectionMatrix();
 	const glm::mat4& getViewProjectionMatrix();
 	glm::vec3 getTotalScale();
+
+	// Setters.
+	inline void setType(CameraType type) { m_type = type; }
 
 	// ----------------- //
 	//  C O N T R O L S  //

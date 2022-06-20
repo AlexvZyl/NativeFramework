@@ -176,7 +176,7 @@ void Renderer::renderingPipeline2DMSAA(Scene* scene)
 void Renderer::backgroundPass(Scene* scene)
 {
 	s_shaders["BackgroundShader"]->bind();
-	Renderer::drawBufferIndexed(*scene->m_backgroundBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_backgroundBuffer);
 }
 
 void Renderer::gridPass(Scene* scene) 
@@ -189,9 +189,9 @@ void Renderer::gridPass(Scene* scene)
 	shader->setMat4("viewProjMatrix", grid.getViewProjectionMatrix(camera));
 
 	// Draw render.
-	Renderer::drawBufferIndexed(*grid.m_originBuffer.get());
-	Renderer::drawBufferIndexed(*grid.m_coarseBuffer.get());
-	Renderer::drawBufferIndexed(*grid.m_fineBuffer.get());
+	Renderer::drawBufferIndexed(grid.m_originBuffer);
+	Renderer::drawBufferIndexed(grid.m_coarseBuffer);
+	Renderer::drawBufferIndexed(grid.m_fineBuffer);
 }
 
 void Renderer::geometryPass2D(Scene* scene)
@@ -206,21 +206,21 @@ void Renderer::geometryPass2D(Scene* scene)
 	shader = s_shaders["BasicShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(*scene->m_linesBuffer.get());
-	Renderer::drawBufferIndexed(*scene->m_trianglesBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_linesBuffer);
+	Renderer::drawBufferIndexed(scene->m_trianglesBuffer);
 
 	// Draw Circles.
 	shader = s_shaders["CircleShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(*scene->m_circlesBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_circlesBuffer);
 
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
-	Renderer::drawBufferIndexed(*scene->m_texturedTrianglesBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_texturedTrianglesBuffer);
 }
 
 void Renderer::objectOutliningPass2D(Scene* scene) 
@@ -278,21 +278,21 @@ void Renderer::geometryPass3D(Scene* scene)
 	shader = s_shaders["BasicShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(*scene->m_linesBuffer.get());
-	Renderer::drawBufferIndexed(*scene->m_trianglesBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_linesBuffer);
+	Renderer::drawBufferIndexed(scene->m_trianglesBuffer);
 
 	// Draw textured primitives.
 	shader = s_shaders["TextureShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
 	Renderer::loadTextures(scene);
-	Renderer::drawBufferIndexed(*scene->m_texturedTrianglesBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_texturedTrianglesBuffer);
 
 	// Draw Circles.
 	shader = s_shaders["CircleShader"].get();
 	shader->bind();
 	shader->setMat4("viewProjMatrix", camera.getViewProjectionMatrix());
-	Renderer::drawBufferIndexed(*scene->m_circlesBuffer.get());
+	Renderer::drawBufferIndexed(scene->m_circlesBuffer);
 }
 
 //==============================================================================================================================================//

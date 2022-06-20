@@ -4,7 +4,6 @@
 
 #include "Utilities/Platform/Preprocessor.h"
 #include "Application/Application.h"
-#include "OpenGL/Renderer/RendererGL.h"
 
 //==============================================================================================================================================//
 //  Entrypoint.																																	//

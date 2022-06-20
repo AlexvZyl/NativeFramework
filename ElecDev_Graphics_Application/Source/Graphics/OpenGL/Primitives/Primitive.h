@@ -279,7 +279,7 @@ public:
 	inline virtual void setGraphicsBuffer(BufferType* buffer) { m_graphicsBuffer = buffer; }
 
 	// Remove the vertex & index data.
-	inline void removeFromGraphicsBuffer() 
+	inline virtual void removeFromGraphicsBuffer() override
 	{
 		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
 
@@ -294,9 +294,11 @@ public:
 
 	// Push the vertex and index data to the graphics buffer.
 	// Also updates the required metadata.
-	inline void pushToGraphicsBuffer(const VertexType* vertices, int vertexCount, const IndexType* indices, int indexCount) 
+	inline void pushToGraphicsBuffer(const VertexType* vertices, int vertexCount, const IndexType* indices, int indexCount, BufferType* buffer = nullptr) 
 	{
 		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+
+		if (buffer) setGraphicsBuffer(buffer);
 
 		auto [vertexPos, indexPos] = getGraphicsBuffer().push(vertices, vertexCount, indices, indexCount);
 		m_vertexBufferPos = vertexPos;
@@ -342,9 +344,11 @@ public:
 	}
 
 	// Move the vertex & index data to the Graphics buffer.
-	inline void moveToGraphicsBuffer() 
+	inline void moveToGraphicsBuffer(BufferType* buffer = nullptr)
 	{
 		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+
+		if (buffer) setGraphicsBuffer(buffer);
 
 		pushToGraphicsBuffer(m_vertexDataCPU.data(), m_vertexDataCPU.size(), m_indexDataCPU.data(), m_indexDataCPU.size());
 		clearCPUData();
@@ -356,6 +360,7 @@ public:
 		LUMEN_DEBUG_ASSERT(m_onGPU, "There is no data on the GPU to sync to.");
 
 		if (m_queuedForSync) return;
+
 		getGraphicsBuffer().sync(this);
 		m_queuedForSync = true;
 	}

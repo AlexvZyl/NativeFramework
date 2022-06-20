@@ -14,10 +14,6 @@
 
 Grid::Grid() 
 {
-	// Setup buffers.
-	m_fineBuffer   = std::make_unique<GraphicsLinesBuffer<VertexData>>();
-	m_coarseBuffer = std::make_unique<GraphicsLinesBuffer<VertexData>>();
-	m_originBuffer = std::make_unique<GraphicsLinesBuffer<VertexData>>();
 	// Add the circle used to display the nearest vertex.
 	m_helperCircle = Renderer::addCircle2D({ 0.f, 0.f, -0.99999 }, m_fineIncrementSize / 5.f, m_helperCircleColor);
 	createGrid();
@@ -52,11 +48,11 @@ Grid& Grid::createGrid()
 	int totalFineVerts = (int)std::floor(maxVertexCoord / m_fineIncrementSize) * 2 * 8;
 	float z = -0.99;
 	// Setup the Buffer's.
-	m_fineBuffer->setCapacityIncrements(totalFineVerts);
-	m_fineBuffer->setCapacityIncrements(totalFineVerts);
-	m_coarseBuffer->setCapacityIncrements(totalCoarseVerts);
-	m_coarseBuffer->setCapacityIncrements(totalCoarseVerts);
-	m_originBuffer->setCapacityIncrements(4);
+	m_fineBuffer.setCapacityIncrements(totalFineVerts);
+	m_fineBuffer.setCapacityIncrements(totalFineVerts);
+	m_coarseBuffer.setCapacityIncrements(totalCoarseVerts);
+	m_coarseBuffer.setCapacityIncrements(totalCoarseVerts);
+	m_originBuffer.setCapacityIncrements(4);
 	std::vector<VertexData> vertices;
 	vertices.reserve(totalFineVerts);
 	std::vector<UInt2> indices;
@@ -71,7 +67,7 @@ Grid& Grid::createGrid()
 	vertices.emplace_back(glm::vec3{ -maxVertexCoord, 0.f, z }, m_yAxisColor, 0);
 	indices.emplace_back(0, 1);
 	indices.emplace_back(2, 3);
-	m_originBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
+	m_originBuffer.push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	vertices.clear();
 	indices.clear();
 
@@ -105,7 +101,7 @@ Grid& Grid::createGrid()
 		vertexCount += 2;
 		currentPosition += m_coarseIncrementSize;
 	}
-	m_coarseBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
+	m_coarseBuffer.push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	vertices.clear();
 	indices.clear();
 
@@ -140,16 +136,16 @@ Grid& Grid::createGrid()
 		currentPosition += m_fineIncrementSize;
 	}
 
-	m_fineBuffer->push(vertices.data(), vertices.size(), indices.data(), indices.size());
+	m_fineBuffer.push(vertices.data(), vertices.size(), indices.data(), indices.size());
 	return *this;
 }
 
 Grid& Grid::destroyGrid() 
 {
 	disableHelperCircle();
-	/*m_coarseBuffer->;
-	m_fineBuffer->wipeAll();
-	m_originBuffer->wipeAll();*/
+	/*m_coarseBuffer.;
+	m_fineBuffer.wipeAll();
+	m_originBuffer.wipeAll();*/
 	return *this;
 }
 

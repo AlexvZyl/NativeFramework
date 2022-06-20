@@ -16,7 +16,7 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 //==============================================================================================================================================//
-//  Main loop.																																	//
+//  Rendering.																																	//
 //==============================================================================================================================================//
 
 void Application::run()
@@ -34,12 +34,13 @@ void Application::run()
 			if (waitRemainingTime > 0) glfwWaitEventsTimeout(waitRemainingTime);
 			// If there is no time left, quickly poll so that we do not miss events.
 			// This is especially important when we can't render fast enough and there
-			// is no time left.
-			else					   glfwPollEvents();
+			// is always no time left.
+			else glfwPollEvents();
 		}
 		// This is very inefficient and should only be used for measurements.
 		else glfwPollEvents();
 
+		// Time passed while polling events.
 		updateFrametime();
 
 		// Check if the frame should start (based on time passed).
@@ -47,8 +48,8 @@ void Application::run()
 		if (startFrame())
 		{
 			resetFrametime();	// Start measuring the frametime on a frame start.
-			renderFrame();		// LumenWindows & engines.
-			updateFrametime();
+			renderFrame();		// LumenWindows & ngines.
+			updateFrametime();	// Update time for event polling.
 		}
 	}
 }
@@ -69,10 +70,6 @@ bool Application::startFrame()
 {
 	return m_totalFrameTime >= m_targetFrameTime;
 }
-
-//==============================================================================================================================================//
-//  Rendering.																																	//
-//==============================================================================================================================================//
 
 void Application::onRenderInit()
 {
@@ -126,7 +123,7 @@ void Application::renderFrame()
 		}
 
 		{
-			// Keep this seperate, since it blocks.
+			// Keep this seperate, since it blocks and skews CPU results.
 			// TODO: Add to Frametime (GPU).
 			LUMEN_PROFILE_SCOPE("Swap Buffers");
 			glfwSwapBuffers(getGLFWWindow());
@@ -229,9 +226,9 @@ void Application::buildDocks()
 	m_ribbonPanelID = ImGui::DockBuilderSplitNode(m_mainDockspaceID, ImGuiDir_Left, 0.0375f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_ribbonPanelID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit | ImGuiDockNodeFlags_NoDockingOverMe
-		| ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
-		| ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_NoWindowMenuButton
-		| ImGuiDockNodeFlags_NoTabBar;
+						 | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
+						 | ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_NoWindowMenuButton
+						 | ImGuiDockNodeFlags_NoTabBar;
 
 	// Left Panel.
 	m_leftPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Left, 0.3f, NULL, &m_scenePanelID);
@@ -241,9 +238,9 @@ void Application::buildDocks()
 	m_bottomBarID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Down, 0.03f, NULL, &m_scenePanelID);
 	dockNode = ImGui::DockBuilderGetNode(m_bottomBarID);
 	dockNode->LocalFlags |= ImGuiDockNodeFlags_NoSplit | ImGuiDockNodeFlags_NoDockingOverMe
-		| ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
-		| ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_NoWindowMenuButton
-		| ImGuiDockNodeFlags_NoTabBar;
+					     | ImGuiDockNodeFlags_NoCloseButton | ImGuiDockNodeFlags_NoResize
+					     | ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_NoWindowMenuButton
+					     | ImGuiDockNodeFlags_NoTabBar;
 
 	// Right Panel.
 	m_rightPanelID = ImGui::DockBuilderSplitNode(m_scenePanelID, ImGuiDir_Right, 0.3f, NULL, &m_scenePanelID);

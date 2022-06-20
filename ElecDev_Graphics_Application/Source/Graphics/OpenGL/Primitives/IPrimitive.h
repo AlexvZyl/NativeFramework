@@ -29,6 +29,9 @@ public:
 
 protected:
 
+	friend class Renderer;
+	inline virtual void removeFromGraphicsBuffer() = 0;
+
 	// Constructor.
 	IPrimitive(Entity* parent) : Entity(EntityType::PRIMITIVE, parent) { }
 }; 

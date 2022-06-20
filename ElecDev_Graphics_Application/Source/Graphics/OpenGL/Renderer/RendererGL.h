@@ -125,37 +125,34 @@ public:
 	//  2 D   P R I M I T I V E S  //
 	// --------------------------- //
 
-	// Add a filled 2D polygon.
-	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
-	// Add a filled 2D polygon with color.
-	static Polygon2D* addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
-	// Add a clear 2D polygon.
-	static PolyLine* addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f});
-	// Add a circle.
-	static Circle* addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = -1.f, float fade = 0.0f, Entity* parent = nullptr);
-	// Add a circle.
-	static Circle* addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness = -1.f, float fade = 0.0f, Entity* parent = nullptr);
-	// Add a singular line segment.
-	static LineSegment* addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
-	// Add a 2D text string.
-	static Text* addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
-	// Add a 2D text string.
-	static Text* addText2D(const std::string& text, const glm::vec2& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
-	//Add a polyline
-	static PolyLine* addPolyLine(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, const glm::vec4& color = {0.f, 0.f, 0.f, 1.f}, bool rounded = true, Entity* parent = nullptr);
+	// Add primitives to the bound scene.
 
-	// Add text from a YAML file.
-	static Text* addText2D(const YAML::Node& node, Entity* parent = nullptr);
-	// Add line segment from a YAML file.
-	static LineSegment* addLineSegment2D(const YAML::Node& node, Entity* parent = nullptr);
-	// Add Polygon2D from a YAML file.
-	static Polygon2D* addPolygon2D(const YAML::Node& node, Entity* parent = nullptr);
-	// Add circle from a YAML file.
-	static Circle* addCircle2D(const YAML::Node& node, Entity* parent = nullptr);
-	// Add a polyline from a YAML file.
-	static PolyLine* addPolyLine(const YAML::Node& node, Entity* parent = nullptr);
+	static std::unique_ptr<Polygon2D>&& addPolygon2D(const std::vector<glm::vec3>& vertices, Entity* parent = nullptr);
+	static std::unique_ptr<Polygon2D>&& addPolygon2D(const std::vector<glm::vec3>& vertices, const glm::vec4& color, Entity* parent = nullptr);
+	static std::unique_ptr<PolyLine>&& addPolygon2DClear(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, Entity* parent = nullptr, glm::vec4 colour = {0.f, 0.f, 0.f, 1.f});
+	static std::unique_ptr<Circle>&& addCircle2D(const glm::vec3& center, float radius, const glm::vec4& color, float thickness = -1.f, float fade = 0.0f, Entity* parent = nullptr);
+	static std::unique_ptr<Circle>&& addCircle2D(const glm::vec2& center, float radius, const glm::vec4& color, float thickness = -1.f, float fade = 0.0f, Entity* parent = nullptr);
+	static std::unique_ptr<LineSegment>&& addLineSegment2D(const glm::vec2& start, const glm::vec2& end, float thickness = 0.001f, const glm::vec4& colour = { 0.f, 0.f, 0.f, 1.f }, Entity* parent = nullptr);
+	static std::unique_ptr<Text>&& addText2D(const std::string& text, const glm::vec3& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
+	static std::unique_ptr<Text>&& addText2D(const std::string& text, const glm::vec2& position, const glm::vec4& color, float scale, const std::string& horizontalAlignment = "L", const std::string& verticalAlignment = "B", Entity* parent = nullptr);
+	static std::unique_ptr<PolyLine>&& addPolyLine(const std::vector<glm::vec2>& vertices, float thickness = 0.014f, const glm::vec4& color = {0.f, 0.f, 0.f, 1.f}, bool rounded = true, Entity* parent = nullptr);
 
-	
+	// Add primitives from file.
+
+	static std::unique_ptr<Text>&& addText2D(const YAML::Node& node, Entity* parent = nullptr);
+	static std::unique_ptr<LineSegment>&& addLineSegment2D(const YAML::Node& node, Entity* parent = nullptr);
+	static std::unique_ptr<Polygon2D>&& addPolygon2D(const YAML::Node& node, Entity* parent = nullptr);
+	static std::unique_ptr<Circle>&& addCircle2D(const YAML::Node& node, Entity* parent = nullptr);
+	static std::unique_ptr<PolyLine>&& addPolyLine(const YAML::Node& node, Entity* parent = nullptr);
+
+	// Add primitives that already exist on CPU.
+
+	static void add(Polygon2D& polygon);
+	static void add(PolyLine& polyLine);
+	static void add(Circle& circle);
+	static void add(LineSegment lineSegment);
+	static void add(Text& text);
+
 	// --------------------------- //
 	//  3 D   P R I M I T I V E S  //
 	// --------------------------- //

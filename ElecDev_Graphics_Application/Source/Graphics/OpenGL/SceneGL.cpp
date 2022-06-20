@@ -92,14 +92,9 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	m_renderFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1, FrameBufferAttachmentSlot::COLOR_2 });
 	m_renderFBO.create();
 
-	// Camera.
-	m_camera				= std::make_unique<Camera>(cameraType, size);
-
-	// VAO's.
-	m_linesBuffer				= std::make_unique<GraphicsLinesBuffer<VertexData>>();
-	m_trianglesBuffer			= std::make_unique<GraphicsTrianglesBuffer<VertexData>>();
-	m_texturedTrianglesBuffer	= std::make_unique<GraphicsTrianglesBuffer<VertexDataTextured>>();
-	m_circlesBuffer				= std::make_unique<GraphicsTrianglesBuffer<VertexDataCircle>>();
+	// Setup camera.
+	m_camera.setType(cameraType);
+	m_camera.resize(size);
 
 	// Grid.
 	Renderer::storeAndBindScene(this);
@@ -114,18 +109,7 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 Scene::~Scene() 
 {
 	m_grid = nullptr;
-	m_primitives.clear();
 	Renderer::doneSceneDestruction();
-}
-
-Camera& Scene::getCamera()
-{
-	return *m_camera.get();
-}
-
-Grid& Scene::getGrid() 
-{
-	return *m_grid.get();
 }
 
 //==============================================================================================================================================//
@@ -180,8 +164,7 @@ void Scene::create2DBackground()
 	//			13 ---- 14 ---- 15 ---- 16
 	
 	// Create the VAO.
-	m_backgroundBuffer = std::make_unique<GraphicsTrianglesBuffer<VertexData>>();
-	m_backgroundBuffer->setCapacityIncrements(2);
+	m_backgroundBuffer.setCapacityIncrements(2);
 
 	// Vertices.
 	VertexData vertices[4] = {
@@ -198,7 +181,7 @@ void Scene::create2DBackground()
 	};
 
 	// Push data.
-	m_backgroundBuffer->push(vertices, 4, indices, 2);
+	m_backgroundBuffer.push(vertices, 4, indices, 2);
 }
 
 void Scene::create3DBackground() 

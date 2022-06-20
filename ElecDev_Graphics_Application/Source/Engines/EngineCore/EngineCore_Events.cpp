@@ -98,6 +98,8 @@ void EngineCore::onDehoverEventForce(const NotifyEvent& event)
 
 void EngineCore::onMouseDragEventForce(const MouseDragEvent& event) 
 {
+	if (!m_isHovered) return;
+
 	if (   event.isType(EventType_MouseButtonMiddle)
 		|| event.isType(EventType_MouseButtonLeft | EventType_SpaceBar)
 		|| !getGizmo().isOver())
@@ -148,8 +150,10 @@ void EngineCore::onMouseScrollEventForce(const MouseScrollEvent& event)
 
 void EngineCore::onKeyEventForce(const KeyEvent& event) 
 {
-	// Do not pass event if ImGui is using the keyboard.
-	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_S) {
+	// TODO: Do not pass event if ImGui is using the keyboard (inside text box, etc.)
+
+	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_S) 
+	{
 		onFileSaveEvent(FileSaveEvent());
 		return;
 	}

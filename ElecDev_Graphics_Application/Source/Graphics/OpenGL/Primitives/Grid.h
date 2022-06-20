@@ -278,9 +278,9 @@ private:
 	float m_scale = 1.f;
 
 	// VAO containing grid vertices.
-	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_fineBuffer = nullptr;
-	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_coarseBuffer = nullptr;
-	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_originBuffer = nullptr;
+	GraphicsLinesBuffer<VertexData> m_fineBuffer;
+	GraphicsLinesBuffer<VertexData> m_coarseBuffer;
+	GraphicsLinesBuffer<VertexData> m_originBuffer;
 
 	// Circle used to identify active vertex.
 	Circle* m_helperCircle = nullptr;

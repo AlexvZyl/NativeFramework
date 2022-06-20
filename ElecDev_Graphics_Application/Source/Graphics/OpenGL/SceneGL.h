@@ -4,15 +4,16 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include <vector>
-#include <memory>
-#include <unordered_map>
-#include "glm/glm.hpp"
 #include "OpenGL/Buffers/FrameBufferObjectGL.h"
 #include "OpenGL/Buffers/GraphicsPrimitivesBuffersGL.h"
 #include "OpenGL/Primitives/TextureGL.h"
 #include "OpenGL/Primitives/Primitive.h"
 #include "Graphics/Camera/Camera.h"
+
+#include <vector>
+#include <memory>
+#include <unordered_map>
+#include "glm/glm.hpp"
 
 //==============================================================================================================================================//
 //  Forward Declerations.																														//
@@ -22,9 +23,6 @@ class VertexData;
 class VertexDataTextured;
 class VertexDataCircle; 
 class Event;
-
-enum class CameraType;
-
 class Grid;
 
 //==============================================================================================================================================//
@@ -41,12 +39,16 @@ public:
 	// Destructor.
 	virtual ~Scene();
 
-	// Returns the rendered texture.
+	// Get the texture that has to be rendered to display the scene.
+	// Does not change based on MSAA / non-MSAA, but does change when resources
+	// gets destroyed.
 	unsigned getRenderTexture();
 
 	// Returns the ID of the entity at the coordinates.
 	unsigned getEntityID(const glm::vec2& pixelCoords);
-	// Resizes the scene based on a viewport change.
+
+	// Resize the scene.
+	// Passed on to the render targets and the camera.
 	void resize(const glm::vec2& size);
 
 	// Delete the resources to save on VRAM.
@@ -55,13 +57,10 @@ public:
 	void recreateGPUResources();
 
 	// Getters.
-	Camera& getCamera();
-	Grid& getGrid();
+	inline Camera& getCamera() { return m_camera; }
+	inline Grid& getGrid() { return *m_grid.get(); }
 
 private:
-
-	// The grid drawn on the scene.
-	std::unique_ptr<Grid> m_grid;
 
 	friend class EngineCore;
 	friend class Renderer;
@@ -69,12 +68,6 @@ private:
 	friend class RendererStats;
 	friend class BackgroundColorEditor;
 	friend class SettingsWidget;
-
-	// The camera.
-	std::unique_ptr<Camera> m_camera;
-
-	// Map containing all of the different primitives.
-	std::unordered_map<unsigned, std::unique_ptr<IPrimitive>> m_primitives;
 
 	// Creates the default background based on the camera type.
 	void createDefaultBackground();
@@ -84,14 +77,26 @@ private:
 	void create3DBackground();
 
 	// Map containing all of the textures used in the scene.
+	// TODO: This should rather be handled by a resource manager.
 	std::unordered_map<std::string, std::unique_ptr<Texture>> m_textures;
+
+	// The grid drawn on the scene.
+	// Can be disabled by the engine.
+	std::unique_ptr<Grid> m_grid;
+
+	// The camera.
+	Camera m_camera;
+
 	// Graphics Buffers.
-	std::unique_ptr<GraphicsLinesBuffer<VertexData>> m_linesBuffer;
-	std::unique_ptr<GraphicsTrianglesBuffer<VertexData>> m_backgroundBuffer;
-	std::unique_ptr<GraphicsTrianglesBuffer<VertexData>> m_trianglesBuffer;
-	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataCircle>> m_circlesBuffer;
-	std::unique_ptr<GraphicsTrianglesBuffer<VertexDataTextured>> m_texturedTrianglesBuffer;
-	// FBO.
+	// TODO: These have to be dynamic in some way.
+	// Just use vectors and iterate them?  Use RenderCommands?
+	GraphicsLinesBuffer<VertexData> m_linesBuffer;
+	GraphicsTrianglesBuffer<VertexData> m_backgroundBuffer;
+	GraphicsTrianglesBuffer<VertexData> m_trianglesBuffer;
+	GraphicsTrianglesBuffer<VertexDataCircle> m_circlesBuffer;
+	GraphicsTrianglesBuffer<VertexDataTextured> m_texturedTrianglesBuffer;
+
+	// Render targets.
 	FrameBufferObject m_msaaFBO;
 	FrameBufferObject m_renderFBO;
 };

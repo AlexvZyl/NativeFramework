@@ -21,6 +21,7 @@ public:
 	inline virtual ~EngineCore2D() override = default;
 
 	// Mouse event basic controls.
+	// Implements the basic camera controls that can be used by the children.
 	void onMouseDragEvent(const MouseDragEvent& event) override;
 	void onMouseScrollEvent(const MouseScrollEvent& event) override;
 };
