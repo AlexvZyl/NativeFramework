@@ -4,7 +4,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Engines/EngineCore2D/EngineCore2D.h"
 #include <iostream>
 #include "yaml-cpp/yaml.h"
 #include <filesystem>
@@ -34,7 +34,7 @@ enum designState
 	CABLE_PLACE
 };
 
-class CircuitDesigner : public Base2DEngine
+class CircuitDesigner : public EngineCore2D
 {
 
 public:

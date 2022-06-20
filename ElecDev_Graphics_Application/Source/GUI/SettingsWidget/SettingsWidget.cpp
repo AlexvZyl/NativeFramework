@@ -14,6 +14,7 @@
 #include "GLFW/glfw3.h"
 #include "GUI/GraphicsScene/GraphicsScene.h"
 #include "Engines/EngineCore/EngineCore.h"
+#include "Application/LumenWindow/LumenWindow.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
@@ -152,7 +153,7 @@ void SettingsWidget::onImGuiRender()
                 fbo.recreate();
             }
             // Create if switched to MSAA and should render.
-            else if (!fbo.isOnGPU() && newSamples != FrameBufferSamples::NORMAL && engine->getLumenWindow().shouldRender())
+            else if (!fbo.isOnGPU() && newSamples != FrameBufferSamples::NORMAL && engine->getLumenWindow()->shouldRender())
             {
                 fbo.create();
             }

@@ -4,7 +4,7 @@
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Engines/EngineCore2D/EngineCore2D.h"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
 #include <filesystem>
 
@@ -19,7 +19,7 @@ class Component2D;
 //  EngineCore Class.																														   //
 //=============================================================================================================================================//
 
-class AssetViewer : public Base2DEngine
+class AssetViewer : public EngineCore2D
 {
 public:
 

@@ -2,7 +2,7 @@
 ////  Includes.																																   //
 ////=============================================================================================================================================//
 //
-//#include "Engines/Base3DEngine/Base3DEngine.h"
+//#include "Engines/EngineCore3D/EngineCore3D.h"
 //#include "OpenGL/SceneGL.h"
 //#include <GLFW/glfw3.h>
 //
@@ -10,7 +10,7 @@
 ////  Mouse presses.																															   //
 ////=============================================================================================================================================//
 //
-//void Base3DEngine::mousePressLeft(float pixelCoords[2]) 
+//void EngineCore3D::mousePressLeft(float pixelCoords[2]) 
 //{
 //	// Store the new mouse pixel coordinates.
 //	m_prevMouseEventPixelCoords[0] = pixelCoords[0];
@@ -22,7 +22,7 @@
 //	m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
 //}
 //
-//void Base3DEngine::mousePressRight(float pixelCoords[2])
+//void EngineCore3D::mousePressRight(float pixelCoords[2])
 //{
 //	// Store the new mouse pixel coordinates.
 //	m_prevMouseEventPixelCoords[0] = pixelCoords[0];
@@ -34,7 +34,7 @@
 //	m_prevMouseEventWorldVec[2] = mouseWorldCoords[2];
 //}
 //
-//void Base3DEngine::mousePressMiddle(float pixelCoords[2])
+//void EngineCore3D::mousePressMiddle(float pixelCoords[2])
 //{
 //	// Store the new mouse pixel coordinates.
 //	m_prevMouseEventPixelCoords[0] = pixelCoords[0];
@@ -50,7 +50,7 @@
 ////  Mouse movement.																															   //
 ////=============================================================================================================================================//
 //
-//void Base3DEngine::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
+//void EngineCore3D::mouseMoveEvent(float pixelCoords[2], int buttonStateLeft, int buttonStateRight, int buttonStateMiddle)
 //{	
 //	// Implement rotation.
 //	if (buttonStateLeft == GLFW_PRESS) 
@@ -88,7 +88,7 @@
 ////  Mouse scrolling.																														   //
 ////=============================================================================================================================================//
 //
-//void Base3DEngine::mouseScrollEvent(float pixelCoords[2], float yOffset)
+//void EngineCore3D::mouseScrollEvent(float pixelCoords[2], float yOffset)
 //{
 //	// Calculate mouse world coordinates before moving forward..
 //	glm::vec3 mouseWorldCoordsPre = m_scene->pixelCoordsToCameraCoords(pixelCoords);
@@ -109,7 +109,7 @@
 ////  Key press.																																   //
 ////=============================================================================================================================================//
 //
-//void Base3DEngine::keyEvent(int key, int action) 
+//void EngineCore3D::keyEvent(int key, int action) 
 //{
 //
 //}
@@ -119,7 +119,7 @@
 //  Window events.																															   //
 //=============================================================================================================================================//
 
-//void Base3DEngine::resizeEvent(float width, float height) 
+//void EngineCore3D::resizeEvent(float width, float height) 
 //{
 //	//// Set new viewport values.
 //	//m_imGuiViewportDimensions[0] = width;

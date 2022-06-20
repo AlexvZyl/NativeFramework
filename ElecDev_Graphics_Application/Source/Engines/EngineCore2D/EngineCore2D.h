@@ -1,27 +1,29 @@
+#pragma once
+
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
 
-#include <iostream>
-#include "External/Misc/ConsoleColor.h"
-#include "GLM/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
 #include "Engines/EngineCore/EngineCore.h"
-#include "Engines/Base3DEngine/Base3DEngine.h"
-#include "OpenGL/SceneGL.h"
-#include "Graphics/Camera/Camera.h"
-#include "OpenGL/Renderer/RendererGL.h"
-#include "GUI/LumenGizmo/LumenGizmo.h"
 
 //=============================================================================================================================================//
-//  Constructor and Destructor.																												   //
+//  Base 2D Engine Class.																													   //
 //=============================================================================================================================================//
 
-Base3DEngine::Base3DEngine() 
-	: EngineCore()
+class EngineCore2D : public EngineCore
 {
-	m_scene = std::make_unique<Scene>(CameraType::Standard3D, glm::vec2(500, 500));
-}
+
+public:
+
+	// Contructor.
+	EngineCore2D();
+	// Destructor.
+	inline virtual ~EngineCore2D() override = default;
+
+	// Mouse event basic controls.
+	void onMouseDragEvent(const MouseDragEvent& event) override;
+	void onMouseScrollEvent(const MouseScrollEvent& event) override;
+};
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

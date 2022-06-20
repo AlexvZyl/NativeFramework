@@ -17,7 +17,7 @@
 #include "Peripherals/Port.h"
 
 ComponentDesigner::ComponentDesigner()
-	: Base2DEngine()
+	: EngineCore2D()
 {
 	// Engine setup.
 	enableOverlay();

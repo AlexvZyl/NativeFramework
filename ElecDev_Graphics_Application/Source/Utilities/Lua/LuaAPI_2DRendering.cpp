@@ -10,7 +10,7 @@
 #include "OpenGL/Primitives/Text.h"
 #include "Application/Application.h"
 #include "Application/ApplicationTemplates.h"
-#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Engines/EngineCore2D/EngineCore2D.h"
 #include "Lumen/Lumen.h"
 
 //==============================================================================================================================================//
@@ -23,7 +23,7 @@ int lua_BeginScene2D(lua_State* L)
 	std::string name = lua_tostring(L, 1);
 
 	// Execute function.
-	Lumen::getApp().pushEngine<Base2DEngine>(LumenDockPanel::Scene, name);
+	Lumen::getApp().pushEngine<EngineCore2D>(LumenDockPanel::Scene, name);
 
 	return 1;
 }

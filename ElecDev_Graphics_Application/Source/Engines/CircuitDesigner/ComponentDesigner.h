@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Engines/EngineCore2D/EngineCore2D.h"
 #include <filesystem>
 
 class Component2D;
@@ -24,7 +24,7 @@ enum class CompDesignState
 
 class ComponentDesignerColorEditor;
 
-class ComponentDesigner : public Base2DEngine
+class ComponentDesigner : public EngineCore2D
 {
 protected:
 

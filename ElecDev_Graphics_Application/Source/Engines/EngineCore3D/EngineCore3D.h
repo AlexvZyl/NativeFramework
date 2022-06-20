@@ -1,10 +1,5 @@
 #pragma once
 
-/*
-The 3D base engine is going to be a child of the 2D engine so that the same pointer can point to the 3D engine.
-Some modifications will have to be applied to the matrices and the mouse handling, but other than that the same principles should apply.
-*/
-
 //=============================================================================================================================================//
 //  Includes.																																   //
 //=============================================================================================================================================//
@@ -26,12 +21,12 @@ class KeyEvent;
 //=============================================================================================================================================//
 
 // Inherits from the 2D base engine.
-class Base3DEngine : public EngineCore
+class EngineCore3D : public EngineCore
 {
 public:
 
 	// Constructor
-	Base3DEngine();
+	EngineCore3D();
 
 	// ------------- //
 	//  E V E N T S  //

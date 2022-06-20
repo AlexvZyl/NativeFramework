@@ -206,7 +206,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 
 void ComponentDesigner::onMouseScrollEvent(const MouseScrollEvent& event)
 {
-	Base2DEngine::onMouseScrollEvent(event);
+	EngineCore2D::onMouseScrollEvent(event);
 	// Everything is in mm.
 	float currentCameraScale = (1.f / getScene().getCamera().getTotalScale().x) * 1000.f;
 	float currentGridSize = getScene().getGrid().getCoarseIncrementSize() * 1000.f;
@@ -306,7 +306,7 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 
 void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event) 
 {
-	Base2DEngine::onMouseDragEvent(event);
+	EngineCore2D::onMouseDragEvent(event);
 
 	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_SpaceBar))
 	{

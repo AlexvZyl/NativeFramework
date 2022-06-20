@@ -1,12 +1,12 @@
 # Engines
 
-The next step is to create an environment where we can manipulate, add and remove `Entities` contained in the `Scene`.  This is where `Engines` come in.  There are 3 `Engines` that are internal to Lumen, namely `EngineCore`, `Base2DEngine` and `Base3DEngine`.  The following examples shows how to set up a 2D engine.  An example `My2DEngine.h`:
+The next step is to create an environment where we can manipulate, add and remove `Entities` contained in the `Scene`.  This is where `Engines` come in.  There are 3 `Engines` that are internal to Lumen, namely `EngineCore`, `EngineCore2D` and `EngineCore3D`.  The following examples shows how to set up a 2D engine.  An example `My2DEngine.h`:
 
 ```C++
 
-#include "Engines/Base2DEngine/Base2DEngine.h"
+#include "Engines/EngineCore2D/EngineCore2D.h"
 
-class My2DEngine : public Base2DEngine
+class My2DEngine : public EngineCore2D
 {
 public:
 
@@ -32,7 +32,7 @@ private:
 
 ```
 
-We created an `Engine` that includes functionality already contained inside `EngineCore` and `Base2DEngine`.  The `Base2DEngine` comes with things such as a `Scene`, event dispatcher and basic 2D camera controls.  For more information on what these classes include, take a look at the [Engines](https://github.com/AlexEnerdyne/Lumen/tree/Main/ElecDev_Graphics_Application/Source/Engines).  An example `My2DEngine.cpp`:
+We created an `Engine` that includes functionality already contained inside `EngineCore` and `EngineCore2D`.  The `EngineCore2D` comes with things such as a `Scene`, event dispatcher and basic 2D camera controls.  For more information on what these classes include, take a look at the [Engines](https://github.com/AlexEnerdyne/Lumen/tree/Main/ElecDev_Graphics_Application/Source/Engines).  An example `My2DEngine.cpp`:
 
 ```C++
 
@@ -41,7 +41,7 @@ We created an `Engine` that includes functionality already contained inside `Eng
 #include "OpenGL/Entities/Circle.h"
 
 My2DEngine::My2DEngine()
-    : Base2DEngine()
+    : EngineCore2D()
 {
     // We do not have to bind the scene here, EngineCore does that for us.
     m_myCircle1 = Renderer::addCircle2D(...);
@@ -52,7 +52,7 @@ My2DEngine::My2DEngine()
 
 ## Events
 
-We have an engine that can draw to a `Scene`, now we need to be able to handle events.  And an example `My2DEngine_Events.cpp`can be seen below.  If we want complete custom controls we should implement them here.  However, `Base2DEngine` comes with basic 2D `Camera` controls, so we can just use them.
+We have an engine that can draw to a `Scene`, now we need to be able to handle events.  And an example `My2DEngine_Events.cpp`can be seen below.  If we want complete custom controls we should implement them here.  However, `EngineCore2D` comes with basic 2D `Camera` controls, so we can just use them.
 
 ```C++
 #include "Engines/My2DEngine/My2DEngine.h"
@@ -68,7 +68,7 @@ void My2DEngine::onMouseMoveEvent(const MouseMoveEvent& event)
 void My2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 {
     // Using predefined controls.
-    Base2DEngine::onMouseScrollEvent(event);
+    EngineCore2D::onMouseScrollEvent(event);
     
     // ...
 }
@@ -76,7 +76,7 @@ void My2DEngine::onMouseScrollEvent(const MouseScrollEvent& event)
 void My2DEngine::onMouseDragEvent(const MouseDragEvent& event)
 {
     // Using predefined controls.
-    Base2DEngine::onMouseDragEvent(event);
+    EngineCore2D::onMouseDragEvent(event);
     
     // ...
 }

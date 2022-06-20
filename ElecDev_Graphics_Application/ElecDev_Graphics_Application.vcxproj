@@ -219,7 +219,7 @@
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Application\ApplicationGLFWWindow.cpp" />
-    <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />
+    <ClCompile Include="Source\Engines\EngineCore2D\EngineCore2D_Events.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\ComponentDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
@@ -273,9 +273,9 @@
     <ClCompile Include="Source\Graphics\Entities\EntityManager.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Polygon.cpp" />
     <ClCompile Include="Source\Graphics\Fonts\FontLoader.cpp" />
-    <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine.cpp" />
-    <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine.cpp" />
-    <ClCompile Include="Source\Engines\Base3DEngine\Base3DEngine_Events.cpp" />
+    <ClCompile Include="Source\Engines\EngineCore2D\EngineCore2D.cpp" />
+    <ClCompile Include="Source\Engines\EngineCore3D\EngineCore3D.cpp" />
+    <ClCompile Include="Source\Engines\EngineCore3D\EngineCore3D_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\ErrorHandlerGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.cpp" />
@@ -747,8 +747,8 @@
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Primitive.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\Vertex.h" />
     <ClInclude Include="External\Misc\ConsoleColor.h" />
-    <ClInclude Include="Source\Engines\Base2DEngine\Base2DEngine.h" />
-    <ClInclude Include="Source\Engines\Base3DEngine\Base3DEngine.h" />
+    <ClInclude Include="Source\Engines\EngineCore2D\EngineCore2D.h" />
+    <ClInclude Include="Source\Engines\EngineCore3D\EngineCore3D.h" />
     <ClInclude Include="Source\Engines\EngineCore\EngineCore.h" />
     <ClInclude Include="Source\Graphics\OpenGL\ErrorHandlerGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\FrameBufferObjectGL.h" />

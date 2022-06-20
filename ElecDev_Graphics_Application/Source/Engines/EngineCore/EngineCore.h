@@ -116,9 +116,9 @@ public:
 	// Get the grid vertex nearest to the provided coordinates.
 	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
 
-	// Get the mouse position in the Lumen Window.
+	// Get the mouse position in the loval Lumen window.
 	glm::vec2 getMouseLocalPosition();
-	// Get the mouse position in the glfw window.
+	// Get the mouse position in the global GLFW window.
 	glm::vec2 getMouseGlobalPosition();
 
 	// Coorinate conversions.
@@ -128,8 +128,9 @@ public:
 	glm::vec2 worldToPixelCoords(const glm::vec3& worldCoords, bool useUpdatedView = false);
 	glm::vec2 worldToPixelCoords(const glm::vec2& worldCoords, bool useUpdatedView = false);
 
-	// Convert window coordinates.
+	// Convert window coordinates (Local Lumen window -> Global GLFW window).
 	glm::vec2 localToGlobalCoords(const glm::vec2& coords);
+	// Convert window coordinates (Global GLFW window -> Local Lumen window).
 	glm::vec2 globalToLocalCoords(const glm::vec2& coords);
 
 	// ----------------------- //
@@ -165,16 +166,18 @@ public:
 	std::filesystem::path savePath;
 
 protected:
-	// Protected gizmo controls.
+
+	// Gizmo controls.
 	void hideGizmo();
 	void visibleGizmo();
+
 private:
 
 	// Friends.
 	template <class EngineType>
 	friend class GraphicsScene;
-	friend class Base2DEngine;
-	friend class Base3DEngine;
+	friend class EngineCore2D;
+	friend class EngineCore3D;
 
 	// The scene rendered to.
 	std::unique_ptr<Scene> m_scene = nullptr;

@@ -25,7 +25,7 @@ This is where the interactive 2D design engine is implemented.
 //=============================================================================================================================================//
 
 CircuitDesigner::CircuitDesigner()
-	: Base2DEngine()
+	: EngineCore2D()
 {
 	// Engine setup.
 	m_circuit = std::make_shared<Circuit>("Test", "AE");
