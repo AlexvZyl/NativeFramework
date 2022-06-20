@@ -38,12 +38,15 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	switch (m_type) {
 	case PortType::PORT_IN:
 		indicatorColour = { 0.4f, 0.8f, 0.4f, 0.5f };
+		description = "Incommer";
 		break;
 	case PortType::PORT_OUT:
 		indicatorColour = { 0.8f, 0.4f, 0.4f, 0.5f };
+		description = "Feeder";
 		break;
 	case PortType::PORT_INOUT:
 		indicatorColour = { 0.4f, 0.4f, 0.8f, 0.5f };
+		description = "Control";
 		break;
 	}
 
@@ -128,17 +131,25 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 	if (type == "PORT_INOUT")
 	{
 		m_type = PortType::PORT_INOUT;
+		description = "Control";
 		indicatorColour = { 0.4f, 0.4f, 0.8f, 0.5f };
 	}
 	else if (type == "PORT_IN")
 	{
 		m_type = PortType::PORT_IN;
+		description = "Incommer";
 		indicatorColour = { 0.4f, 0.8f, 0.4f, 0.5f };
 	}
 	else if (type == "PORT_OUT")
 	{
 		m_type = PortType::PORT_OUT;
+		description = "Feeder";
 		indicatorColour = { 0.8f, 0.4f, 0.4f, 0.5f };
+	}
+
+	//get description from savefile if it exists
+	if (node["Description"].IsDefined()) {
+		description = node["Description"].as<std::string>();
 	}
 
 	// Add shapes.
@@ -319,6 +330,8 @@ void Port::updateType()
 		break;
 	}
 
+	updateDesctiption();
+
 	attachmentIndicator->setColor(indicatorColour);
 }
 
@@ -337,6 +350,31 @@ void Port::hideAttachIndicator()
 	{
 		indicatorColour.a = 0.5f;
 		attachmentIndicator->setColor(indicatorColour);
+	}
+}
+
+void Port::updateDesctiption(std::string newDescription)
+{
+	//if a string is passed, use this
+	if (newDescription != "") {
+		description = newDescription;
+	}
+	//else, set according to type (defaults)
+	else {
+		//Only overwrite default descriptions
+		if (description == "Incommer" || description == "Feeder" || description == "Control") {
+			switch (m_type) {
+			case PortType::PORT_IN:
+				description = "Incommer";
+				break;
+			case PortType::PORT_OUT:
+				description = "Feeder";
+				break;
+			case PortType::PORT_INOUT:
+				description = "Control";
+				break;
+			}
+		}
 	}
 }
 

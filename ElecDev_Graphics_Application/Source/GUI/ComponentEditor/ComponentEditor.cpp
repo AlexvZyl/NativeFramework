@@ -97,8 +97,9 @@ void ComponentEditor::onImGuiRender()
 		if (ImGui::BeginChild("PortsChild", { 0, m_contentRegionSize.y / 4.5f }, true))
 		{
 			// Setup table.
-			ImGui::BeginTable("Current ports", 3, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
+			ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
 			ImGui::TableSetupColumn("Port Name", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Description      ", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn("I/O Type      ", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn("Action      ", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableHeadersRow();
@@ -112,6 +113,8 @@ void ComponentEditor::onImGuiRender()
 					// Table labels.
 					char labelName[20];
 					sprintf_s(labelName, "##N%d", i);
+					char labelDesc[20];
+					sprintf_s(labelDesc, "##D%d", i);
 					char labelPos[20];
 					sprintf_s(labelPos, "##P%d", i);
 					char labelType[20];
@@ -127,6 +130,12 @@ void ComponentEditor::onImGuiRender()
 					ImGui::PushItemWidth(-1);
 					if (ImGui::InputText(labelName, &port->title->m_string))
 						port->title->update();
+					ImGui::PopItemWidth();
+					ImGui::TableNextColumn();
+
+					// Description
+					ImGui::PushItemWidth(-1);
+					ImGui::InputText(labelDesc, &port->description);
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
@@ -576,11 +585,12 @@ void ComponentEditor::onImGuiRender()
 					if (ImGui::CollapsingHeader("Ports"))
 					{
 						// Setup table.
-						ImGui::BeginTable("Current ports", 4, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
-						ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
-						ImGui::TableSetupColumn("I/O Type      ", ImGuiTableColumnFlags_WidthFixed);
-						ImGui::TableSetupColumn("FromTag      ", ImGuiTableColumnFlags_WidthFixed);
-						ImGui::TableSetupColumn("Voltage      ", ImGuiTableColumnFlags_WidthFixed);
+						ImGui::BeginTable("Current ports", 5, ImGuiTableFlags_Resizable | ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp);
+						ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_::ImGuiTableColumnFlags_WidthFixed);
+						ImGui::TableSetupColumn("Description", ImGuiTableColumnFlags_::ImGuiTableColumnFlags_WidthStretch);
+						ImGui::TableSetupColumn("I/O Type", ImGuiTableColumnFlags_WidthFixed);
+						ImGui::TableSetupColumn("FromTag", ImGuiTableColumnFlags_WidthFixed);
+						ImGui::TableSetupColumn("Voltage", ImGuiTableColumnFlags_WidthFixed);
 						ImGui::TableHeadersRow();
 
 						ImGui::TableNextRow();
@@ -592,6 +602,8 @@ void ComponentEditor::onImGuiRender()
 							// Table labels.
 							char labelName[20];
 							sprintf_s(labelName, "##N%d", i);
+							char labelDesc[20];
+							sprintf_s(labelDesc, "##D%d", i);
 							char labelPos[20];
 							sprintf_s(labelPos, "##P%d", i);
 							char labelType[20];
@@ -606,6 +618,12 @@ void ComponentEditor::onImGuiRender()
 							// Name.
 							ImGui::PushItemWidth(-1);
 							ImGui::Text(port->title->m_string.c_str());
+							ImGui::PopItemWidth();
+							ImGui::TableNextColumn();
+
+							// Description
+							ImGui::PushItemWidth(-1);
+							ImGui::Text(port->description.c_str());
 							ImGui::PopItemWidth();
 							ImGui::TableNextColumn();
 
@@ -626,7 +644,7 @@ void ComponentEditor::onImGuiRender()
 
 							// Voltage.
 							ImGui::PushItemWidth(-1);
-							ImGui::Text(std::to_string(port->voltage).c_str());
+							ImGui::Text(std::to_string(port->voltage).substr(0, std::to_string(port->voltage).find(".") + 3).c_str());
 							ImGui::PopItemWidth();
 						}
 						ImGui::EndTable();
