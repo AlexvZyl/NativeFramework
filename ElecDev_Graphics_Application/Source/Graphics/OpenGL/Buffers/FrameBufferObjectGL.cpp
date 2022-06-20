@@ -37,6 +37,23 @@ void FrameBufferObject::create(int width, int height)
 	create();
 }
 
+void FrameBufferObject::recreate() 
+{
+	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+
+	destroy();
+	create();
+}
+
+void FrameBufferObject::recreate(int width, int height)
+{
+	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
+
+	m_specification.width = width;
+	m_specification.height = height;
+	recreate();
+}
+
 void FrameBufferObject::clear() 
 {
 	LUMEN_DISABLED_FUNCTION();

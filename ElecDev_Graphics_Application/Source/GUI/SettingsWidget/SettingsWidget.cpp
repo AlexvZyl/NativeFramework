@@ -121,50 +121,46 @@ void SettingsWidget::onImGuiRender()
     ImGui::Combo("##AA", &currentItem, AA);
     if (ImGui::Button("Apply"))
     {
-        // Iterate windows.
+        // Change MSAA value for attachments.
+        FrameBufferSamples newSamples;
+        switch (currentItem)
+        {
+        case 1:  newSamples = FrameBufferSamples::MSAA1; break;
+        case 2:  newSamples = FrameBufferSamples::MSAA2; break;
+        case 3:  newSamples = FrameBufferSamples::MSAA4; break;
+        case 4:  newSamples = FrameBufferSamples::MSAA8; break;
+        case 5:  newSamples = FrameBufferSamples::MSAA16; break;
+        case 6:  newSamples = FrameBufferSamples::MSAA32; break;
+        default: newSamples = FrameBufferSamples::NORMAL; break;
+        }
+
+        // Update value renderer uses.
+        Renderer::MSAA = newSamples;
+
+        // Iterate engines.
         for (auto* engine : Lumen::getApp().getEnignes())
         {
+            // Update attachments in the FBO's.
             FrameBufferObject& fbo = engine->getScene().m_msaaFBO;
-            bool wasOnGPU = engine->getScene().m_renderFBO.m_isOnGPU;
-            if (fbo.m_isOnGPU) fbo.destroy();
             for (auto& [slot, attachment] : fbo.getAttachments())
             {
-                // Change MSAA value for attachments.
-                switch (currentItem)
-                {
-                case 1:
-                    attachment.samples = FrameBufferSamples::MSAA1;
-                    Renderer::MSAA = FrameBufferSamples::MSAA1;;
-                    break;
-                case 2:
-                    attachment.samples = FrameBufferSamples::MSAA2;
-                    Renderer::MSAA = FrameBufferSamples::MSAA2;
-                    break;
-                case 3:
-                    attachment.samples = FrameBufferSamples::MSAA4;
-                    Renderer::MSAA = FrameBufferSamples::MSAA4;
-                    break;
-                case 4:
-                    attachment.samples = FrameBufferSamples::MSAA8;
-                    Renderer::MSAA = FrameBufferSamples::MSAA8;
-                    break;
-                case 5:
-                    attachment.samples = FrameBufferSamples::MSAA16;
-                    Renderer::MSAA = FrameBufferSamples::MSAA16;
-                    break;
-                case 6:
-                    attachment.samples = FrameBufferSamples::MSAA32;
-                    Renderer::MSAA = FrameBufferSamples::MSAA32;
-                    break;
-                default:
-                    attachment.samples = FrameBufferSamples::NORMAL;
-                    Renderer::MSAA = FrameBufferSamples::NORMAL;
-                    break;
-                }
+                attachment.samples = newSamples;
             }
             // Recreate if using MSAA.
-            if (wasOnGPU && Renderer::MSAA != FrameBufferSamples::NORMAL) 
+            if (fbo.isOnGPU() && newSamples != FrameBufferSamples::NORMAL)
+            {
+                fbo.recreate();
+            }
+            // Create if switched to MSAA.
+            else if (!fbo.isOnGPU() && newSamples != FrameBufferSamples::NORMAL)
+            {
                 fbo.create();
+            }
+            // Destroy MSAA FBO if no longer using MSAA.
+            else if (fbo.isOnGPU() && newSamples == FrameBufferSamples::NORMAL)
+            {
+                fbo.destroy();
+            }
         }
     }
     ImGui::Text("Note: MSAA1 still uses a multi-sampled framebuffer.");

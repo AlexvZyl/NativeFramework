@@ -196,6 +196,8 @@ public:
 	// General.
 	void create();
 	void create(int width, int height);
+	void recreate();
+	void recreate(int width, int height);
 	void resize(int width, int height);
 	void destroy();
 	void bind();
