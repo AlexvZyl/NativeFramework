@@ -82,14 +82,16 @@ void Renderer::renderScene(Scene* scene)
 {
 	LUMEN_PROFILE_SCOPE("Render Scene");
 
-	// Prepare scene for rendering.
-	scene->onRenderInit();
+	// Update camera data.
+	scene->getCamera().onUpdate();
 
 	// Dispatch pipeline.
 	switch (scene->getCamera().getType())
 	{
 		case CameraType::Standard2D:
-			renderingPipeline2D(scene);
+			if (Renderer::MSAA == FrameBufferSamples::NORMAL) 
+				 renderingPipeline2D(scene);
+			else renderingPipeline2DMSAA(scene);
 			break;
 
 		case CameraType::Standard3D:
@@ -100,29 +102,85 @@ void Renderer::renderScene(Scene* scene)
 			LUMEN_LOG_ERROR("Scene has unknown camera type.", "Renderer");
 			return;
 	}
-
-	// Done with rendering.
-	scene->onRenderCleanup();
 }
 
-void Renderer::backgroundPass(Scene* scene) 
-{
-	// Setup.
-	Renderer::enable(GL_DEPTH_TEST);
-	
-	// Draw background.
-	s_shaders["BackgroundShader"]->bind();
-	Renderer::setDepthFunc(GL_ALWAYS);
-	Renderer::drawBufferIndexed(*scene->m_backgroundBuffer.get());
-	Renderer::setDepthFunc(GL_LESS);
-}
-
-void Renderer::gridPass(Scene* scene) 
+void Renderer::renderingPipeline2D(Scene* scene) 
 {
 	// Setup.
 	Renderer::enable(GL_DEPTH_TEST);
 	Renderer::enable(GL_BLEND);
+	Renderer::setDepthFunc(GL_LESS);
 
+	// FBO.
+	scene->m_renderFBO.bind();
+	scene->m_renderFBO.bindDrawBuffers();
+	Renderer::clearWithColor(Renderer::backgroundColor);
+	Renderer::clearDepthStencil();
+
+	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
+		Renderer::gridPass(scene);
+
+	if (Renderer::s_pipelineControls["Geometry"])
+		Renderer::geometryPass2D(scene);
+
+	if (Renderer::s_pipelineControls["Outline"])
+		Renderer::objectOutliningPass2D(scene);
+
+	// Unbind target.
+	scene->m_renderFBO.unbind();
+}
+
+void Renderer::renderingPipeline2DMSAA(Scene* scene)
+{
+	// Setup.
+	Renderer::enable(GL_DEPTH_TEST);
+	Renderer::enable(GL_BLEND);
+	Renderer::setDepthFunc(GL_LESS);
+
+	// MSAA FBO.
+	scene->m_msaaFBO.bind();
+	Renderer::clearWithColor(Renderer::backgroundColor);
+	Renderer::clearDepthStencil();
+
+	// MSAA pass.
+	scene->m_msaaFBO.bindDrawBuffers();
+	if (Renderer::s_pipelineControls["Geometry"])
+		Renderer::geometryPass2D(scene);
+
+	// Non MSAA FBO.
+	scene->m_renderFBO.bind();
+	Renderer::clearWithColor(Renderer::backgroundColor);
+	Renderer::clearDepthStencil();
+
+	// Resolve MSAA.
+	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
+	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
+	Renderer::blitDepthStencil(scene->m_msaaFBO, scene->m_renderFBO);
+
+	// Non MSAA pass.
+	scene->m_renderFBO.bindDrawBuffers();
+	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
+		Renderer::gridPass(scene);
+	
+	// Render outline.
+	if (Renderer::s_pipelineControls["Outline"])
+	{
+		Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_2, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_2, GL_LINEAR);
+		Renderer::objectOutliningPass2D(scene);
+	}
+
+	// Unbind target.
+	scene->m_renderFBO.unbind();
+}
+
+void Renderer::backgroundPass(Scene* scene)
+{
+	s_shaders["BackgroundShader"]->bind();
+	Renderer::drawBufferIndexed(*scene->m_backgroundBuffer.get());
+}
+
+void Renderer::gridPass(Scene* scene) 
+{
 	// Setup shader.
 	Shader* shader = s_shaders["BasicShader"].get();
 	Grid& grid = scene->getGrid();
@@ -130,58 +188,15 @@ void Renderer::gridPass(Scene* scene)
 	shader->bind();
 	shader->setMat4("viewProjMatrix", grid.getViewProjectionMatrix(camera));
 
-	// Draw grid.	
-	Renderer::setDepthFunc(GL_ALWAYS);
-	Renderer::drawBufferIndexed(*grid.m_fineBuffer.get());
-	Renderer::drawBufferIndexed(*grid.m_coarseBuffer.get());
+	// Draw render.
 	Renderer::drawBufferIndexed(*grid.m_originBuffer.get());
-	Renderer::setDepthFunc(GL_LESS);
-}
-
-// ----------------------- //
-//  2 D   P I P E L I N E  //
-// ----------------------- //
-
-void Renderer::renderingPipeline2D(Scene* scene) 
-{
-	// Render MSAA.
-	if (Renderer::s_pipelineControls["Background"])
-		Renderer::backgroundPass(scene);
-	
-	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
-		Renderer::gridPass(scene);
-
-	if (Renderer::s_pipelineControls["Geometry"])
-		Renderer::geometryPass2D(scene);
-
-	// Resolve MSAA.	
-	scene->m_renderFBO.bind();
-	scene->m_renderFBO.clear();
-	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
-	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
-
-	// Outline render.
-	if (Renderer::s_pipelineControls["Outline"])
-	{
-		Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_2, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_2, GL_LINEAR);
-		Renderer::objectOutliningPass2D(scene);
-	}
+	Renderer::drawBufferIndexed(*grid.m_coarseBuffer.get());
+	Renderer::drawBufferIndexed(*grid.m_fineBuffer.get());
 }
 
 void Renderer::geometryPass2D(Scene* scene)
 {
 	LUMEN_RENDER_PASS();
-
-	// ----------- //
-	//  S E T U P  //
-	// ----------- //
-
-	Renderer::enable(GL_DEPTH_TEST);
-	Renderer::enable(GL_BLEND);
-
-	// ------------------- //
-	//  R E N D E R I N G  //
-	// ------------------- //
 
 	// The shader used in rendering.
 	Shader* shader = nullptr;
@@ -213,7 +228,6 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	LUMEN_RENDER_PASS();
 
 	// Render outline with post processing.
-	Renderer::setDepthFunc(GL_ALWAYS);
 	if (Renderer::s_pipelineControls["OutlinePostProc"]) 
 	{
 		Shader* shader = nullptr;
@@ -230,7 +244,6 @@ void Renderer::objectOutliningPass2D(Scene* scene)
 	{
 		Renderer::drawTextureOverFBOAttachment(scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO.getAttachment(FrameBufferAttachmentSlot::COLOR_2).rendererID, s_shaders["StaticTextureShader"].get());
 	}
-	Renderer::setDepthFunc(GL_LESS);
 }
 
 // ----------------------- //

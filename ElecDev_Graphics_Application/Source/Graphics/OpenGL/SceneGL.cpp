@@ -48,9 +48,11 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	m_msaaFBO.addAttachment(attachment);
 	// Depth Stencil.
 	attachment.slot = FrameBufferAttachmentSlot::DEPTH_STENCIL;
-	attachment.type = FrameBufferAttachmentType::RENDER_BUFFER;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
 	attachment.internalFormat = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
-	attachment.format = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
+	attachment.format = FrameBufferTextureFormat::DEPTH_COMPONENT;
+	attachment.minFilter = FrameBufferTextureFilter::NEAREST;
+	attachment.magFilter = FrameBufferTextureFilter::NEAREST;
 	m_msaaFBO.addAttachment(attachment);
 	// Create the FBO with its attachments.
 	m_msaaFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1, FrameBufferAttachmentSlot::COLOR_2 });
@@ -58,6 +60,8 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 
 	// Normal FBO.
 	attachment.samples = FrameBufferSamples::NORMAL;
+	attachment.minFilter = FrameBufferTextureFilter::LINEAR;
+	attachment.magFilter = FrameBufferTextureFilter::LINEAR;
 	// Default color.
 	attachment.slot = FrameBufferAttachmentSlot::COLOR_0;
 	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
@@ -78,9 +82,11 @@ Scene::Scene(CameraType cameraType, const glm::vec2& size)
 	m_renderFBO.addAttachment(attachment);
 	// Depth Stencil.
 	attachment.slot = FrameBufferAttachmentSlot::DEPTH_STENCIL;
-	attachment.type = FrameBufferAttachmentType::RENDER_BUFFER;
+	attachment.type = FrameBufferAttachmentType::TEXTURE_BUFFER;
 	attachment.internalFormat = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
-	attachment.format = FrameBufferTextureFormat::DEPTH_24_STENCIL_8;
+	attachment.format = FrameBufferTextureFormat::DEPTH_COMPONENT;
+	attachment.minFilter = FrameBufferTextureFilter::NEAREST;
+	attachment.magFilter = FrameBufferTextureFilter::NEAREST;
 	m_renderFBO.addAttachment(attachment);
 	// Create the FBO with its attachments.
 	m_renderFBO.setDrawBuffers({ FrameBufferAttachmentSlot::COLOR_0, FrameBufferAttachmentSlot::COLOR_1, FrameBufferAttachmentSlot::COLOR_2 });
@@ -125,21 +131,6 @@ Grid& Scene::getGrid()
 //==============================================================================================================================================//
 //  FBO Methods.																															    //	
 //==============================================================================================================================================//
-
-void Scene::onRenderInit() 
-{
-	m_msaaFBO.bind();
-	m_msaaFBO.clear();
-	m_msaaFBO.bindDrawBuffers();
-
-	getCamera().onUpdate();
-}
-
-void Scene::onRenderCleanup() 
-{
-	// Make sure the FBO is unbounded.
-	m_msaaFBO.unbind();
-}
 
 unsigned Scene::getRenderTexture() 
 { 
@@ -222,8 +213,8 @@ void Scene::create3DBackground()
 void Scene::resize(const glm::vec2& size) 
 {
 	getCamera().resize(size);
-	m_renderFBO.resize((int)size.x, (int)size.y);
-	m_msaaFBO.resize((int)size.x, (int)size.y);
+	if (m_renderFBO.isOnGPU())m_renderFBO.resize((int)size.x, (int)size.y);
+	if (m_msaaFBO.isOnGPU()) m_msaaFBO.resize((int)size.x, (int)size.y);
 }
 
 //==============================================================================================================================================//

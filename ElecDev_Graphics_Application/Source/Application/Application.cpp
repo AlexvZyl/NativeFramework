@@ -45,11 +45,13 @@ Application::Application()
 	// Set this instance as the singleton.
 	Lumen::setApp(this);
 
+	// Give imgui some frames to startup.
+	startWindowResizing(60);
+
 	// App inits.
 	Application::glfwInitCallbacks();
 	EventLog::init();
 	m_windowStack = std::make_unique<WindowStack>();
-	m_rendererData = std::make_unique<RendererData>();
 
 	// ImGui Inits.
 	ImGuiIO& io = ImGui::GetIO(); 

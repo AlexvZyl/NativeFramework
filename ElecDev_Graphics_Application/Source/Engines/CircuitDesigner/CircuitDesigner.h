@@ -43,7 +43,7 @@ public:
 	CircuitDesigner();
 	// Destructor.
 	virtual ~CircuitDesigner() override;
-	
+
 	// ------------------ //
 	//  V A R I A B L E S //
 	// ------------------ //
@@ -54,7 +54,7 @@ public:
 	std::shared_ptr<Cable> m_activeCable;
 	unsigned m_activeVertexIdx = -1;
 	unsigned m_hoveredVertexIdx = -1;
-	glm::vec4 helperColour = { 0.5f, 0.5f, 0.5f, 0.5f };
+	glm::vec4 helperColour = { 0.18f, 0.30f, 0.67f, 0.85f };
 	std::shared_ptr<Circuit> m_circuit;
 	glm::vec2 m_lastDragPos = {0.f, 0.f};
 	unsigned int m_currentEntityID = 0;

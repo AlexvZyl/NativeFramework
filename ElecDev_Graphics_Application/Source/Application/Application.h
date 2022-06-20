@@ -4,6 +4,7 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
+#include "OpenGL/Renderer/RendererGL.h"
 #include <memory>
 #include <iostream>
 #include <vector>
@@ -34,7 +35,6 @@ class GraphicsScene;
 
 struct ImFont;
 struct GLFWwindow;
-struct RendererData;
 struct ProfileResult;
 
 namespace YAML { class Node; }
@@ -101,7 +101,7 @@ public:
 	// Get the delta time for the current frame.
 	// This is updated when a new frame start.
 	inline float getDeltaTime() const { return m_deltaTime; }
-	inline RendererData& getRendererData() { return *m_rendererData.get(); }
+	inline RendererData& getRendererData() { return m_rendererData; }
 
 	// Working with the engines.
 	void pushEngine(EngineCore* engine);
@@ -197,7 +197,7 @@ public:
 	//  A S S E T   V I E W I N G  //
 	// --------------------------- //
 
-	// I think this should beremoved...
+	// I think this should be removed...
 	void viewCircuit(const std::filesystem::path& path);
 	void viewCircuit(const YAML::Node& path);
 	void viewComponent(const std::filesystem::path& path);
@@ -211,7 +211,7 @@ private:
 
 	// Contains data and information regarding the renderer.
 	// (Draw calls, render passes, etc)
-	std::unique_ptr<RendererData> m_rendererData;
+	RendererData m_rendererData;
 
 	// --------------- //
 	//  G E N E R A L  //
@@ -276,12 +276,21 @@ private:
 	void dockWindowToPanel(LumenWindow* window, LumenDockPanel panel);
 	// Pop the Windows queued for removal.
 	void popWindows();
+	// Check all the windows and see if they should resize.
+	void resizeWindows();
+	// Start checking for resizes.
+	void startWindowResizing(int frames = 3) { m_resizeWindowsFrameCount = (frames > 0) ? frames : 0; }
 	
 	// Functions used to get data regarding the docking child nodes.
 	// This is necessary for when we dock windows.
 	ImGuiID findLargestChildNode(ImGuiID nodeID);
 	ImGuiID findLastActiveChildNode(ImGuiID nodeID);
 	void findChildNodes(ImGuiDockNode* currentNode, std::vector<ImGuiDockNode*>& nodes);
+	
+	// The amount of frames left the Lumen has to check for resizes.
+	// This is needed since checking once does not guarantee that imgui
+	// has updated the data.
+	int m_resizeWindowsFrameCount = 0;
 
 	// ------------- //
 	//  E V E N T S  //

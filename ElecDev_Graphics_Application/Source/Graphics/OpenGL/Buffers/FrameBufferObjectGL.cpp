@@ -20,8 +20,6 @@ void FrameBufferObject::create()
 
 	// Create attachments.
 	createAttachments();
-	bindReadBuffer();
-	bindDrawBuffers();
 
 #ifdef _DEBUG
 	// Error checking.
@@ -41,6 +39,8 @@ void FrameBufferObject::create(int width, int height)
 
 void FrameBufferObject::clear() 
 {
+	LUMEN_DISABLED_FUNCTION();
+
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
@@ -140,7 +140,7 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		if (attachment.isMultiSample())
 		{
 			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
-			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+			GLCall(glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
 			GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, (GLenum)attachment.slot, GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID, 0));
 		}
 		// Normal.
@@ -157,7 +157,7 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 		}
 	}
 
-	// Render buffer.
+	// Render buffer.glTexImage2DMultisample
 	else if (attachment.type == FrameBufferAttachmentType::RENDER_BUFFER)
 	{
 		// MSAA.
@@ -218,7 +218,7 @@ void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment
 		if (attachment.isMultiSample())
 		{
 			GLCall(glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, attachment.rendererID));
-			GLCall(glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
+			GLCall(glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)attachment.samples, (GLenum)attachment.internalFormat, m_specification.width, m_specification.height, GL_TRUE));
 		}
 		// Normal.
 		else
@@ -286,6 +286,8 @@ void FrameBufferObject::destroyAttachment(FrameBufferAttachment& attachment)
 
 void FrameBufferObject::clearAttachment(const FrameBufferAttachment& attachment) 
 {
+	LUMEN_DISABLED_FUNCTION();
+
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	LUMEN_DEBUG_ASSERT(attachment.created, "Attachment has not been created.");
 
@@ -335,7 +337,6 @@ int FrameBufferObject::readPixel(FrameBufferAttachmentSlot slot, int x, int y)
 	GLCall(glReadBuffer((GLenum)slot));
 	int result;
 	GLCall(glReadPixels(x, y, 1, 1, (GLenum)m_attachments[slot].format, m_attachments[slot].dataType(), &result));
-	bindReadBuffer(); 
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, 0));
 	return result;
 }

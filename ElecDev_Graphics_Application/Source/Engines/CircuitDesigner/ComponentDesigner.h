@@ -39,7 +39,7 @@ public:
     //VertexData* m_activeVertex;
     unsigned m_activeVertexIdx = -1;
     unsigned m_hoveredVertexIdx = -1;
-    glm::vec4 helperColour = { 0.5f, 0.5f, 0.5f, 0.75f };
+    glm::vec4 helperColour = { 0.18f, 0.30f, 0.67f, 0.85f };
     //PortType next_port_type = PortType::PORT_INOUT;
 
     glm::vec2 m_lastDragPos = { 0.f, 0.f };

@@ -89,8 +89,6 @@ public:
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
 	static void remove(IPrimitive* primitive);
-	// Clear the rendering context.
-	static void clearColor();
 	// Force the GPU commands.
 	static void finish();
 	// Flush the GPU commands.
@@ -121,7 +119,7 @@ public:
 	// Unbind the scene and bind the stored scene.
 	static void restoreAndUnbindScene();
 	// The set MSAA level.
-	inline static FrameBufferSamples MSAA = FrameBufferSamples::MSAA8;
+	inline static FrameBufferSamples MSAA = FrameBufferSamples::MSAA4;
 
 	// --------------------------- //
 	//  2 D   P R I M I T I V E S  //
@@ -213,7 +211,10 @@ private:
 	// --------------------- //
 
 	static void resolveMSAA(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot);
-	static void blit(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot, GLenum filter = GL_NEAREST);
+	static void blit(FrameBufferObject& sourceFBO, FrameBufferAttachmentSlot sourceSlot, FrameBufferObject& destFBO, FrameBufferAttachmentSlot destSlot, GLenum filter = GL_NEAREST, GLenum type = GL_COLOR_BUFFER_BIT);
+	static void blitDepth(FrameBufferObject& sourceFBO, FrameBufferObject& destFBO);
+	static void blitStencil(FrameBufferObject& sourceFBO, FrameBufferObject& destFBO);
+	static void blitDepthStencil(FrameBufferObject& sourceFBO, FrameBufferObject& destFBO);
 
 	// ------------------- //
 	//  U T I L I T I E S  //
@@ -238,10 +239,17 @@ private:
 	static void setViewport(const glm::vec4& viewport);
 	// Set the clear color.
 	static void setClearColor(const glm::vec4& color);
+	static void clearWithColor(const glm::vec4& color);
 	// Set the line width (in pixels) of a GL_LINE.
 	static void setLineSize(int size);
-	// Clears the bits set.
+	// Clear the frambuffers.
 	static void clear(int bitplane);
+	static void clearColor();
+	static void clearDepth();
+	static void clearStencil();
+	static void clearDepthStencil();
+	static void clearAll();
+	
 
 	// ------------- //
 	//  S C E N E S  //
@@ -253,6 +261,7 @@ private:
 	static std::vector<Scene*> s_storedScenes;
 	// The 2D Rendering pipeline.
 	static void renderingPipeline2D(Scene* scene);
+	static void renderingPipeline2DMSAA(Scene* scene);
 	// Render a 2D scene's gemeometry.
 	static void geometryPass2D(Scene* scene);
 	// Render the object outlining.
@@ -276,7 +285,7 @@ private:
 	static std::map<std::string, std::unique_ptr<Shader>> s_shaders;
 	// The default background color.
 	inline static glm::vec4 backgroundColor = { (float)66 / 255, (float)66 / 255, (float)68 / 255, 1.f };
-	inline static glm::vec4 baseColor = { 1.f, 0.f, 1.f, 1.f };
+	inline static glm::vec4 defaultClearColor = { 1.f, 0.f, 1.f, 1.f };
 
 	// ---------------------------- //
 	// D E F A U L T   S C E N E S  //
