@@ -138,7 +138,7 @@ void SettingsWidget::onImGuiRender()
         Renderer::MSAA = newSamples;
 
         // Iterate engines.
-        for (auto* engine : Lumen::getApp().getEnignes())
+        for (auto engine : Lumen::getApp().getEnignes())
         {
             // Update attachments in the FBO's.
             FrameBufferObject& fbo = engine->getScene().m_msaaFBO;
@@ -151,8 +151,8 @@ void SettingsWidget::onImGuiRender()
             {
                 fbo.recreate();
             }
-            // Create if switched to MSAA.
-            else if (!fbo.isOnGPU() && newSamples != FrameBufferSamples::NORMAL)
+            // Create if switched to MSAA and should render.
+            else if (!fbo.isOnGPU() && newSamples != FrameBufferSamples::NORMAL && engine->getLumenWindow().shouldRender())
             {
                 fbo.create();
             }
