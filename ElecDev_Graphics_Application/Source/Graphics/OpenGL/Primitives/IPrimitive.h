@@ -7,6 +7,30 @@ class IPrimitive : public Entity
 {
 public:
 
+	// Public API.	
+	inline virtual void setColor(const glm::vec4& color) = 0;
+	inline virtual void setEntityID(unsigned int eID) = 0;
+	inline virtual void setLayer(float layer) = 0;
+
+	// Getters.
+	inline bool isOutlined() const { return m_outlineEnabled; }
+	inline int getVertexCount() const { return m_vertexCount; }
+	inline int getIndexCount() const { return m_indexCount; }
+	inline int getVertexBufferPosition() const { return m_vertexBufferPos; }
+	inline int getIndexBufferPosition() const { return m_indexBufferPos; }
+	inline bool isQueuedForSync() const { return m_queuedForSync; }
+	inline float getOutlineValue() const { return m_outlineValue; }
+	inline const glm::vec4& getColor() const { return m_colour; }
+	inline const glm::vec3& getTrackedCenter() const { return m_trackedCenter; }
+	inline void setQueuedForSync(bool synced) { m_queuedForSync = synced; }
+
+	// Destructor.
+	virtual ~IPrimitive() = default;
+
+protected:
+
+	friend class Renderer;
+
 	// Data.
 	int m_vertexCount = 0;							// Counts the amount of vertices.
 	int m_indexCount = 0;							// Counts the amount of indices.
@@ -18,18 +42,7 @@ public:
 	bool m_outlineEnabled = false;					// Does the primitive has its outline enabled.
 	float m_outlineValue = 0.f;						// The alpha value (or bloom intensity?) of the outline.
 
-	// API.	
-	// Not quite sure if we need this.
-	inline virtual void setColor(const glm::vec4& color) = 0;
-	inline virtual void setEntityID(unsigned int eID) = 0;
-	inline virtual void setLayer(float layer) = 0;
-
-	// Destructor.
-	virtual ~IPrimitive() = default;
-
-protected:
-
-	friend class Renderer;
+	// Protected API.
 	inline virtual void removeFromGraphicsBuffer() = 0;
 
 	// Constructor.

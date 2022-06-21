@@ -19,11 +19,6 @@ Grid::Grid()
 	createGrid();
 }
 
-Grid::~Grid() 
-{
-	Renderer::remove(m_helperCircle);
-}
-
 glm::vec2 Grid::getNearestGridVertex(const glm::vec2& coords) 
 {
 	if (m_enabled)

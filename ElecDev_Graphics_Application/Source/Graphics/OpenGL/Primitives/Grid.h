@@ -55,7 +55,7 @@ public:
 	// Constructor.
 	Grid();
 	// Destructor.
-	~Grid();
+	inline ~Grid() = default;
 
 	// Setters
 	inline Grid& setFinePixelSize(int size) 
@@ -230,26 +230,31 @@ public:
 	}
 
 	// Getters.
-	inline int getFinePixelSize()			{ return m_coarseGridPixelSize; }
-	inline int getCoarsePixelSize()			{ return m_fineGridPixelSize; }
-	inline int getOriginPixelSize()			{ return m_originGridPixelSize; }
-	inline float getCoarseIncrementSize()	{ return m_coarseIncrementSize * m_scale; }
-	inline float getFineIncrementSize()		{ return m_fineIncrementSize * m_scale;}
-	inline glm::vec4& getFineColor()		{ return m_fineGridColor; }
-	inline glm::vec4& getCoarseColor()		{ return m_coarseGridColor; }
-	inline int getTotalCoarseLines()		{ return m_totalCoarseLines; }
-	inline bool isEnabled()					{ return m_enabled;	}
-	inline glm::vec4& getHelperCircleColor(){ return m_helperCircleColor; }
-
+	inline int getFinePixelSize() const					 { return m_coarseGridPixelSize; }
+	inline int getCoarsePixelSize() const				 { return m_fineGridPixelSize; }
+	inline int getOriginPixelSize()	const				 { return m_originGridPixelSize; }
+	inline float getCoarseIncrementSize() const			 { return m_coarseIncrementSize * m_scale; }
+	inline float getFineIncrementSize() const			 { return m_fineIncrementSize * m_scale;}
+	inline const glm::vec4& getFineColor() const		 { return m_fineGridColor; }
+	inline const glm::vec4& getCoarseColor() const		 { return m_coarseGridColor; }
+	inline int getTotalCoarseLines() const				 { return m_totalCoarseLines; }
+	inline bool isEnabled() const						 { return m_enabled;	}
+	inline const glm::vec4& getHelperCircleColor() const { return m_helperCircleColor; }
+	
 	// Utility functions.
 	void updateHelperCircle(const glm::vec2& coords);
 	Grid& createGrid();
 	Grid& destroyGrid();
 	// Find the grid vertex closest to the given coordinates.
 	glm::vec2 getNearestGridVertex(const glm::vec2& coords);
+
 	// This function should be called when data has been changed and needs to be updated.
-	//  TODO!
-	inline void updateGridData(){}
+	// This should also make the grid follow the camera.
+	// TODO!
+	inline void updateGridData() 
+	{
+		
+	}
 
 private:
 
@@ -277,23 +282,23 @@ private:
 	glm::vec2 m_widgetInternalPadding = {20.f, 20.f}; 
 	float m_scale = 1.f;
 
-	// VAO containing grid vertices.
+	// Data describing the grid.
 	GraphicsLinesBuffer<VertexData> m_fineBuffer;
 	GraphicsLinesBuffer<VertexData> m_coarseBuffer;
 	GraphicsLinesBuffer<VertexData> m_originBuffer;
 
 	// Circle used to identify active vertex.
-	Circle* m_helperCircle = nullptr;
+	std::unique_ptr<Circle> m_helperCircle;
 
 	// Internal utility functions.
 	inline Grid& hideHelperCircle()
 	{
-		m_helperCircle->setColor({ 0.f, 0.f, 0.f, 0.f, });
+		m_helperCircle->moveFromGraphicsBuffer();
 		return *this;
 	}
 	inline Grid& visibleHelperCircle()
 	{
-		m_helperCircle->setColor(m_helperCircleColor);
+		m_helperCircle->moveToGraphicsBuffer();
 		return *this;
 	}
 };

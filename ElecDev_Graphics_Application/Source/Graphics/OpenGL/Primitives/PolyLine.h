@@ -50,7 +50,7 @@ public:
 	virtual void disableOutline() override;
 	virtual void setThickness(float thickness);
 
-	virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) override;
+	virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) const override;
 
 protected:
 

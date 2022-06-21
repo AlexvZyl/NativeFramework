@@ -41,7 +41,7 @@ public:
 	// Destructor.
 	inline virtual ~Primitive() 
 	{ 
-		if (m_onGPU) removeFromGraphicsBuffer(); 
+		if (isOnGPU()) removeFromGraphicsBuffer(); 
 	}
 
 	virtual void translate(const glm::vec3& translation) 
@@ -51,6 +51,11 @@ public:
 
 		m_trackedCenter += translation;
 		syncWithGPU();
+	}
+
+	inline bool isOnGPU() const
+	{
+		return m_onGPU;
 	}
 
 	virtual void translate(const glm::vec2& translation) 
@@ -132,8 +137,13 @@ public:
 	//  V E R T E X  //
 	// ------------- //
 
-	// Get the vertex belonging to this primitive (based on local index).
+	// Get the vertex belonging to this primitive (based on local index, without position offset).
 	inline VertexType& getVertex(int index) 
+	{
+		LUMEN_DEBUG_ASSERT(index >= 0 && index < m_vertexCount, "Indexing out of range.");
+		return getGraphicsBuffer().getVertex(m_vertexBufferPos + index);
+	}
+	inline const VertexType& getVertex(int index) const
 	{
 		LUMEN_DEBUG_ASSERT(index >= 0 && index < m_vertexCount, "Indexing out of range.");
 		return getGraphicsBuffer().getVertex(m_vertexBufferPos + index);
@@ -193,7 +203,7 @@ public:
 		return { getVertex(index), distance };
 	}
 
-	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position)
+	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position) const
 	{
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
@@ -216,7 +226,7 @@ public:
 		return { getVertex(index), distance };
 	}
 
-	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position)
+	inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) const
 	{
 		// Calculate the first vertex' distance.
 		int nearestVertexIndex = 0;
@@ -281,7 +291,7 @@ public:
 	// Remove the vertex & index data.
 	inline virtual void removeFromGraphicsBuffer() override
 	{
-		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
+		LUMEN_DEBUG_ASSERT(isOnGPU(), "Data not on GPU.");
 
 		// Remove from GPU.
 		getGraphicsBuffer().erase(m_vertexBufferPos, m_vertexCount, m_indexBufferPos, m_indexCount);
@@ -296,7 +306,7 @@ public:
 	// Also updates the required metadata.
 	inline void pushToGraphicsBuffer(const VertexType* vertices, int vertexCount, const IndexType* indices, int indexCount, BufferType* buffer = nullptr) 
 	{
-		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+		LUMEN_DEBUG_ASSERT(!isOnGPU(), "Data already on GPU.");
 
 		if (buffer) setGraphicsBuffer(buffer);
 
@@ -311,7 +321,7 @@ public:
 	// Move the vertex & index data from the Graphics Buffer.
 	inline void moveFromGraphicsBuffer() 
 	{
-		LUMEN_DEBUG_ASSERT(m_onGPU, "Data not on GPU.");
+		LUMEN_DEBUG_ASSERT(isOnGPU(), "Data not on GPU.");
 
 		// Prepare memory.
 		m_vertexDataCPU.reserve(m_vertexCount);
@@ -346,7 +356,7 @@ public:
 	// Move the vertex & index data to the Graphics buffer.
 	inline void moveToGraphicsBuffer(BufferType* buffer = nullptr)
 	{
-		LUMEN_DEBUG_ASSERT(!m_onGPU, "Data already on GPU.");
+		LUMEN_DEBUG_ASSERT(!isOnGPU(), "Data already on GPU.");
 
 		if (buffer) setGraphicsBuffer(buffer);
 
@@ -357,12 +367,9 @@ public:
 	// Notify the GPU that the data has to be updated.
 	virtual void syncWithGPU() 
 	{
-		LUMEN_DEBUG_ASSERT(m_onGPU, "There is no data on the GPU to sync to.");
-
-		if (m_queuedForSync) return;
+		LUMEN_DEBUG_ASSERT(isOnGPU(), "There is no data on the GPU to sync to.");
 
 		getGraphicsBuffer().sync(this);
-		m_queuedForSync = true;
 	}
 
 	// Clear the data on the CPU.
@@ -383,13 +390,22 @@ public:
 
 protected:
 
-	// The GPB that the Primitive is contained in (if any).
+	// The Graphics Primitives Buffer that the Primitive is contained in (if any).
 	BufferType* m_graphicsBuffer = nullptr;
-	inline BufferType& getGraphicsBuffer() { return *m_graphicsBuffer; }
+	inline BufferType& getGraphicsBuffer() 
+	{ 
+		LUMEN_DEBUG_ASSERT(m_graphicsBuffer, "This primitive does not belong to any graphics buffer.");
+		return *m_graphicsBuffer; 
+	}
+	inline const BufferType& getGraphicsBuffer() const
+	{
+		LUMEN_DEBUG_ASSERT(m_graphicsBuffer, "This primitive does not belong to any graphics buffer.");
+		return *m_graphicsBuffer;
+	}
 
 	// Local data.
 	// This is used when the primitive is constructed outside the context of a Graphics Buffer,
-	// of when the data has to be removed from the Graphics buffer but still has to be kept.
+	// or when the data has to be removed from the Graphics buffer but still has to be kept.
 	std::vector<VertexType> m_vertexDataCPU;
 	std::vector<IndexType> m_indexDataCPU;
 	// Is the data on the GPU?

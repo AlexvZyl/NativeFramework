@@ -24,10 +24,10 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Port* port)
 	emitter << YAML::Key << "Type" << YAML::Value << port->m_type;
 
 	// Border.
-	emitter << YAML::Key << "Border" << YAML::Value << port->border;
+	emitter << YAML::Key << "Border" << YAML::Value << port->border.get();
 
 	// Body.
-	emitter << YAML::Key << "Body" << YAML::Value << port->body;
+	emitter << YAML::Key << "Body" << YAML::Value << port->body.get();
 
 	// Title.
 	emitter << YAML::Key << "Title" << YAML::Value << port->title;

@@ -41,25 +41,57 @@ class Component2D : public Entity
 {
 public:
 
-	// Creates a generic component centred at (0, 0).
+	inline static unsigned componentID = 0;
+
+	//  ---  Common  ---  //
+
+	// Constructors.
 	Component2D(Circuit* parent);
-	// Creates a generic component centred at the specified coordinates.
 	Component2D(const glm::vec2& centreCoords, Circuit* parent);
-	// Creates a component from a .lmcp file definition
 	Component2D(const std::filesystem::path& path, Circuit* parent = nullptr);
-	// Create a component from a YAML node.
 	Component2D(const YAML::Node& path, Circuit* parent = nullptr);
 
-	// Entites & Primitives describing the component.
-	std::vector<Polygon2D*> m_polygons;
-	std::vector<PolyLine*> m_lines;
-	std::vector<Circle*> m_circles;
-	std::vector<Text*> m_text;
-	Text* title;
-	Text* designator;
-	std::vector<std::shared_ptr<Port>> ports;
+	// Destructor.
+	inline ~Component2D() = default;
 
-	static unsigned componentID;
+	// Place the component.
+	void place(const glm::vec2& pos);
+	
+	// Manipulation.
+	void removePort(Port* port);
+	void rotate(float degrees);
+	void translateTitle(glm::vec2 translation);
+	void enableOutline();
+	void moveTo(const glm::vec2& pointerPos);
+	void move(const glm::vec2& translation);
+	void disableOutline();
+	void setLayer(float layer);
+	// Updates the component label.
+	void updateText();
+	// Updates the Component type, without a label (for component designer).
+	void updateTextWithoutLabel();
+	void setColour(const glm::vec4& colour);
+	
+	// Primitives.
+	void addPoly(std::unique_ptr<Polygon2D>&& poly);
+	void addCircle(std::unique_ptr<Circle>&& circle);
+	void addLine(std::unique_ptr<PolyLine>&& line);
+	void addPort(std::unique_ptr<Port>&& port);
+	void removePoly(Polygon2D* poly);
+	void removeCircle(Circle* circle);
+	void removeLine(PolyLine* line);
+	void removeText(Text* text);
+
+	//  ---  Data  --  //
+
+	// Entites & Primitives describing the component.
+	std::vector<std::unique_ptr<Polygon2D>> m_polygons;
+	std::vector<std::unique_ptr<PolyLine>> m_lines;
+	std::vector<std::unique_ptr<Circle>> m_circles;
+	std::vector<std::unique_ptr<Text>> m_text;
+	std::unique_ptr<Text> title;
+	std::unique_ptr<Text> designator;
+	std::vector<std::unique_ptr<Port>> ports;
 
 	// Specify the type of the equipment
 	std::string equipType = "Block";
@@ -84,73 +116,22 @@ public:
 	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
 	bool m_highlighted = false;
 
-	//title
-	static Font titleFont;
+	// Text.
 	glm::vec2 titleOffset = glm::vec2(0.01f, -0.001f);
 	glm::vec2 designatorOffset = glm::vec2(0.01f, 0.001f);
 	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	//std::string titleString;
 	float titleSize = 0.0018f;
 
-	//port specifications
-	unsigned n_ports_north = 0;
-	unsigned n_ports_south = 0;
-	unsigned n_ports_east = 0;
-	unsigned n_ports_west = 0;
 	glm::vec2 portOffset;
-
-	// Interaction attributes.
 	bool selected = true;
-
 	unsigned numPorts = 0;
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
 	glm::vec2 centre = {0.f, 0.f};
-
-	// Deconstructor.s
-	~Component2D();
-	//Move the component to a new positioned centred at the given coordinates
-	void moveTo(const glm::vec2& pointerPos);
-	//Move the component by the  given vector
-	void move(const glm::vec2& translation);
-	//Place the component.
-	void place(const glm::vec2& pos);
-	//Move the component to a new layer.
-	void setLayer(float layer);
-	//Highlight the component.
-	void enableOutline();
-	//Remove the component highlighting.
-	void disableOutline();
-	//Add a port with the given definition to the component.
-	//unsigned addPort(int side, PortType type, const std::string& name);
-	//remove a specified port from the component.
-	void removePort(std::shared_ptr<Port> port);
-	void removePort(Port* port);
-	//Update the positions(offsets) of each port. Note: Currently, all ports are updated by this regardless if they have been changed or not. This may lead to inefficiencies, and should be changed in the future.
-	//void updatePortPositions();
-	//move the title text relative to the component
-	void translateTitle(glm::vec2 translation);
-	//updates the Component label
-	void updateText();
-	//updates the Component type, without a label (for comp. designer)
-	void updateTextWithoutLabel();
-	//Set the colour of the polygons and circles belonging to the component
-	void setColour(const glm::vec4& colour);
-	//Adds a new polygon to the polygon list
-	void addPoly(Polygon2D* poly);
-	void addCircle(Circle* circle);
-	void addLine(PolyLine* line);
-	void addPort(std::shared_ptr<Port> port);
-
-	void removePoly(Polygon2D* poly);
-	void removeCircle(Circle* circle);
-	void removeLine(PolyLine* line);
-	void removeText(Text* text);
-	
-	void rotate(float degrees);
 	float m_rotation = 0.f;
 
 private:
+
 	PortType getPortType(YAML::Node node);
 };

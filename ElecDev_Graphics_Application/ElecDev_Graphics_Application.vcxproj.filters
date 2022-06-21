@@ -72,7 +72,6 @@
     <ClCompile Include="Source\Graphics\OpenGL\Renderer\RendererGL.cpp" />
     <ClCompile Include="Source\Graphics\Camera\Camera.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\SceneGL.cpp" />
-    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Application\ApplicationGLFWWindow.cpp" />
@@ -254,7 +253,6 @@
     <ClInclude Include="Source\Graphics\OpenGL\Renderer\RendererGL.h" />
     <ClInclude Include="Source\Graphics\OpenGL\SceneGL.h" />
     <ClInclude Include="Source\Graphics\Camera\Camera.h" />
-    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.h" />
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\Application\Events\EventLog.h" />

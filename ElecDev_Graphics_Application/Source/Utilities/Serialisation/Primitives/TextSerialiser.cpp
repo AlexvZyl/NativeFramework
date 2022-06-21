@@ -18,8 +18,8 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Text* text)
 
 	// Data.
 	emitter << YAML::Key << "String" << YAML::Value << text->m_string;
-	emitter << YAML::Key << "Position" << YAML::Value << text->m_trackedCenter;
-	emitter << YAML::Key << "Color" << YAML::Value << text->m_colour;
+	emitter << YAML::Key << "Position" << YAML::Value << text->getTrackedCenter();
+	emitter << YAML::Key << "Color" << YAML::Value << text->getColor();
 	emitter << YAML::Key << "Scale" << YAML::Value << text->m_textScale;
 	emitter << YAML::Key << "Font" << YAML::Value << text->m_font->name;
 	emitter << YAML::Key << "Horizontal Alignment" << YAML::Value << text->m_horizontalAlign;

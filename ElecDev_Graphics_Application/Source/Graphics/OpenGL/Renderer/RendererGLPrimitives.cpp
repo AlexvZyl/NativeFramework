@@ -78,9 +78,7 @@ std::unique_ptr<PolyLine>&& Renderer::addPolyLine(const std::vector<glm::vec2>& 
 	return std::move( std::make_unique<PolyLine>(vertices, &s_scene->m_trianglesBuffer, parent, thickness, false, color, rounded) );
 }
 
-//==============================================================================================================================================//
-//  Adding 2D Primitives from YAML.																												//
-//==============================================================================================================================================//
+// --- From file --- //
 
 std::unique_ptr<Text>&& Renderer::addText2D(const YAML::Node& node, Entity* parent)
 {
@@ -170,6 +168,35 @@ std::unique_ptr<PolyLine>&& Renderer::addPolyLine(const YAML::Node& node, Entity
 		//polyline->setColor(color);
 		return std::move(polyline);
 	}
+}
+
+//==============================================================================================================================================//
+//  Already on CPU.																																//
+//==============================================================================================================================================//
+
+void Renderer::add(Polygon2D& polygon) 
+{
+	polygon.moveToGraphicsBuffer(&getScene().m_trianglesBuffer);
+}
+
+void Renderer::add(PolyLine& polyLine) 
+{
+	polyLine.moveToGraphicsBuffer(&getScene().m_trianglesBuffer);
+}
+
+void Renderer::add(Circle& circle) 
+{
+	circle.moveToGraphicsBuffer(&getScene().m_circlesBuffer);
+}
+
+void Renderer::add(LineSegment lineSegment) 
+{
+	lineSegment.moveToGraphicsBuffer(&getScene().m_trianglesBuffer);
+}
+
+void Renderer::add(Text& text) 
+{
+	text.moveToGraphicsBuffer(&getScene().m_texturedTrianglesBuffer);
 }
 
 //==============================================================================================================================================//

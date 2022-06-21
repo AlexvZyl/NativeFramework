@@ -198,12 +198,12 @@ void PolyLine::setThickness(float thickness)
 	update();
 }
 
-std::tuple<unsigned, float> PolyLine::getNearestVertexIndex(const glm::vec2& position)
+std::tuple<unsigned, float> PolyLine::getNearestVertexIndex(const glm::vec2& position) const
 {
 	unsigned i = 0;
 	unsigned idx = 0;
 	float min = INFINITY;
-	for (glm::vec2 vert : m_vertices) 
+	for (auto& vert : m_vertices) 
 	{
 		if (glm::length(vert - position) < min) 
 		{

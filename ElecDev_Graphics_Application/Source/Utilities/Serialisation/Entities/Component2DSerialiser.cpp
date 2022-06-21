@@ -34,7 +34,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	int index = 0;
 	for (auto& poly : comp->m_polygons)
 	{
-		emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly;
+		emitter << YAML::Key << "Polygon " + std::to_string(index) << YAML::Value << poly.get();
 		index++;
 	}
 	emitter << YAML::EndMap;
@@ -45,7 +45,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	index = 0;
 	for (auto& line : comp->m_lines)
 	{
-		emitter << YAML::Key << "PolyLine " + std::to_string(index) << YAML::Value << line;
+		emitter << YAML::Key << "PolyLine " + std::to_string(index) << YAML::Value << line.get();
 		index++;
 	}
 	emitter << YAML::EndMap;
@@ -67,7 +67,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	index = 0;
 	for (auto& circle : comp->m_circles)
 	{
-		emitter << YAML::Key << "Circle " + std::to_string(index) << YAML::Value << circle;
+		emitter << YAML::Key << "Circle " + std::to_string(index) << YAML::Value << circle.get();
 		index++;
 	}
 	emitter << YAML::EndMap;

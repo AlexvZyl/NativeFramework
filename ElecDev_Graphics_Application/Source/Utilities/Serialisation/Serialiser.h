@@ -38,12 +38,10 @@ enum class PortType;
 //  Utilities.																																   //
 //=============================================================================================================================================//
 
-// Overloads the << operator so that YAML-cpp can accept glm::vec2.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec2& vec);
-// Overloads the << operator so that YAML-cpp can accept glm::vec3.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec3& vec);
-// Overloads the << operator so that YAML-cpp can accept glm::vec4.
-YAML::Emitter& operator<<(YAML::Emitter& emitter, glm::vec4& vec);
+// GLM overloads.
+YAML::Emitter& operator<<(YAML::Emitter& emitter, const glm::vec2& vec);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, const glm::vec3& vec);
+YAML::Emitter& operator<<(YAML::Emitter& emitter, const glm::vec4& vec);
 
 // Dictionaries.
 YAML::Emitter& operator<<(YAML::Emitter& emitter, std::unordered_map<std::string, std::string>& dict);

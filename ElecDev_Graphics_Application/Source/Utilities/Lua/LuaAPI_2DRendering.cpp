@@ -113,7 +113,7 @@ int lua_DrawRotatedQuad2D(lua_State* L)
 	));
 
 	// Draw.
-	Polygon2D* poly =  Renderer::addPolygon2D(vertices, color);
+	auto poly =  Renderer::addPolygon2D(vertices, color);
 	poly->rotate(degrees);
 
 	return 1;
@@ -155,7 +155,7 @@ int lua_DrawRotatedText2D(lua_State* L)
 	std::string text = lua_GetStringAndPop(L);
 
 	// Draw.
-	Text* textEnt = Renderer::addText2D(text, position, color, scale, horizontalAlignment, verticalAlignment);
+	auto textEnt = Renderer::addText2D(text, position, color, scale, horizontalAlignment, verticalAlignment);
 	textEnt->rotate(degrees);
 
 	return 1;

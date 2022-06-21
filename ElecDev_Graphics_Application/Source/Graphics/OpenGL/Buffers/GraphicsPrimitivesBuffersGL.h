@@ -196,15 +196,16 @@ public:
 	// Queue the primitive to be synced.
 	inline void sync(IPrimitive* primitive) 
 	{
+		if (primitive->isQueuedForSync()) return;
 		m_primitivesToSync.push_back(primitive);
-		primitive->m_queuedForSync = true;
+		primitive->setQueuedForSync(true);
 	}
 
 	// Remove the primitive from the sync queue.
 	inline void removeFromSync(IPrimitive* primitive)
 	{
 		// Ensure primitive is in queue.
-		if (!primitive->m_queuedForSync) return;
+		if (!primitive->isQueuedForSync()) return;
 
 		// Find primitive in queue.
 		int index = 0;
@@ -217,7 +218,7 @@ public:
 
 		// Remove from queue.
 		m_primitivesToSync.erase(m_primitivesToSync.begin() + index);
-		primitive->m_queuedForSync = false;
+		primitive->setQueuedForSync(false);
 	}
 
 	// Utilities.
@@ -225,6 +226,7 @@ public:
 	inline VertexContainer<VertexType>& getVertexData()		{ return m_vertexData; }
 	inline IndexContainer<IndexType>& getIndexData()		{ return m_indexData; }
 	inline VertexType& getVertex(int index)					{ return m_vertexData[index]; }
+	inline const VertexType& getVertex(int index) const		{ return m_vertexData[index]; }
 	inline virtual int getIndexCount() const override		{ return m_indexData.count() * IndexType::count(); }
 	inline virtual int getVertexCount() const override		{ return m_vertexData.count(); }
 	inline virtual int getIndexCapacity() const override	{ return m_indexData.capacity() * IndexType::count(); }
@@ -283,7 +285,7 @@ public:
 			vbo.bufferSubData(it.m_index * sizeof(VertexType), it.m_elementsInMemoryRegion * sizeof(VertexType), (*it).data());
 
 		// Primitives are synced when vertices are reloaded.
-		for (auto p : m_primitivesToSync) p->m_queuedForSync = false;
+		for (auto p : m_primitivesToSync) p->setQueuedForSync(false);
 		m_primitivesToSync.resize(0);
 	}
 
@@ -319,8 +321,8 @@ public:
 		// Update primitives data.
 		for (auto primitive : m_primitivesToSync)
 		{
-			vbo.bufferSubData(primitive->m_vertexBufferPos * sizeof(VertexType), primitive->m_vertexCount * sizeof(VertexType), getVertex(primitive->m_vertexBufferPos).data());
-			primitive->m_queuedForSync = false;
+			vbo.bufferSubData(primitive->getVertexBufferPosition() * sizeof(VertexType), primitive->getVertexCount() * sizeof(VertexType), getVertex(primitive->getVertexBufferPosition()).data());
+			primitive->setQueuedForSync(false);
 		}
 
 		// All primitives have been synced.

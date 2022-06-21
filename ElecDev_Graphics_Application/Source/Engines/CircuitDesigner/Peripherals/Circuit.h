@@ -24,12 +24,13 @@ public:
     Circuit(std::string label, std::string type);
     Circuit(const std::filesystem::path& path);
     Circuit(const YAML::Node& node);
+
     // Destructor.
     ~Circuit();
 
     // Entities.
-    std::vector<std::shared_ptr<Component2D>> m_components;
-    std::vector<std::shared_ptr<Cable>> m_cables;
+    std::vector<std::unique_ptr<Component2D>> m_components;
+    std::vector<std::unique_ptr<Cable>> m_cables;
 
     // Metadata.
     std::string m_label;
@@ -38,7 +39,6 @@ public:
     // Keep track of imported entities to be saved with the circuit.
     std::unordered_map<std::string, YAML::Node> m_referenceComponents;
     std::unordered_map<std::string, YAML::Node> m_referenceCables;
-
 };
 
 //=============================================================================================================================================//

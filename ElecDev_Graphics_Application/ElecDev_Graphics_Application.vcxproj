@@ -223,7 +223,6 @@
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\ComponentDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
-    <ClCompile Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.cpp" />
     <ClCompile Include="External\YAML-CPP\Source\binary.cpp" />
     <ClCompile Include="External\YAML-CPP\Source\contrib\graphbuilder.cpp" />
     <ClCompile Include="External\YAML-CPP\Source\contrib\graphbuilderadapter.cpp" />
@@ -671,7 +670,6 @@
     <ClInclude Include="Source\Utilities\Memory\FreeListBase.h" />
     <ClInclude Include="Source\Utilities\Memory\SEFreeList.h" />
     <ClInclude Include="Source\Utilities\Platform\Preprocessor.h" />
-    <ClInclude Include="Source\Engines\CircuitDesigner\Peripherals\IOIndicator.h" />
     <ClInclude Include="External\YAML-CPP\Includes\yaml-cpp\anchor.h" />
     <ClInclude Include="External\YAML-CPP\Includes\yaml-cpp\binary.h" />
     <ClInclude Include="External\YAML-CPP\Includes\yaml-cpp\contrib\anchordict.h" />

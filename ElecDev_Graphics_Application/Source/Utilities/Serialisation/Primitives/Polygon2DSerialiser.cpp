@@ -20,14 +20,14 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Polygon2D* polygon2D)
 	emitter << YAML::Key << "Vertices" << YAML::Value;
 	// Vertices.
 	emitter << YAML::BeginMap;
-	for (int i = 0; i < polygon2D->m_vertexCount; i++)
+	for (int i = 0; i < polygon2D->getVertexCount(); i++)
 	{
 		emitter << YAML::Key << "Vertex " + std::to_string(i) << YAML::Value << polygon2D->getVertex(i).position;
 	}
 	emitter << YAML::EndMap;
 	// Color.
-	emitter << YAML::Key << "Center" << YAML::Value << polygon2D->m_trackedCenter;
-	emitter << YAML::Key << "Color" << YAML::Value << polygon2D->m_colour;
+	emitter << YAML::Key << "Center" << YAML::Value << polygon2D->getTrackedCenter();
+	emitter << YAML::Key << "Color" << YAML::Value << polygon2D->getColor();
 
 	// End text data.
 	emitter << YAML::EndMap;

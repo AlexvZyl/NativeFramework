@@ -28,14 +28,12 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 	: Entity(EntityType::PORT, parent),
 	bodyColour(1.f, 1.f, 1.f, 1.f),
 	borderColour(0.f, 0.f, 0.f, 1.f),
-	// m_offset(offset),
 	centre(centre),
 	m_type(type)
 {
-	// --------------------- //
-	//  P R I M I T I V E S  //
-	// --------------------- //
-	switch (m_type) {
+	// Setup indicator.
+	switch (m_type) 
+	{
 	case PortType::PORT_IN:
 		indicatorColour = { 0.4f, 0.8f, 0.4f, 0.5f };
 		break;
@@ -47,80 +45,41 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 		break;
 	}
 
+	// Primitives.
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, -1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, -1.0f, 0.01f, this);
 	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, -1.0f, 0.f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
-
-	// Assign port label.
-	std::string labelLocal = label;
-	if (label == "default")
-		labelLocal = "Port " + std::to_string(parent->numPorts++);
-	//else m_label = label;
-
-	float textMargin = 0.0015;
-	//OLD DEPRECATED CODE
-	//infer the port position from the offset, and set the title
-	/*if (m_offset.y > 0.078)
-	{//top
-		m_position = PortPosition::TOP;
-		titleOffset = glm::vec2{ 0.f, -textMargin };
-		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
-		title->rotate(-90);
-	}
-	else if (m_offset.y < -0.078)
-	{//bottom
-		m_position = PortPosition::BOTTOM;
-		titleOffset = glm::vec2{ 0.f, textMargin };
-		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
-		title->rotate(90);
-	}
-	else if (m_offset.x > 0.078)
-	{//right
-		m_position = PortPosition::RIGHT;
-		titleOffset = glm::vec2{ -textMargin, 0.0f };
-		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "R", "C");
-	}
-	else if (m_offset.x < -0.078)
-	{//left
-		m_position = PortPosition::LEFT;
-		titleOffset = glm::vec2{ textMargin, 0.0f };
-		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(m_label, titlePos, titleColour, titleSize, "L", "C");
-	}
-	else {
-		//This should never happen. Print a warning!
-		LUMEN_LOG_ERROR("Invalid port offset.", "Design Engine");
-	}*/
-	//m_position = PortPosition::RIGHT;//deprecated
-	if (centre.x < 0){
-		titleOffset = glm::vec2{ -textMargin, 0.0f };
-		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "R", "B", this);
-	}
-	else {
-		titleOffset = glm::vec2{ textMargin, 0.0f };
-		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
-		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "L", "B", this);
-	}
 	body->setColor(bodyColour);
 	border->setColor(borderColour);
 	setLayer(portLayer);
 
-	if (parent->m_highlighted)
+	// Assign port label.
+	std::string labelLocal = label;
+	if (label == "default") labelLocal = "Port " + std::to_string(parent->numPorts++);
+	
+	// Title.
+	float textMargin = 0.0015;
+	if (centre.x < 0)
 	{
-		enableOutline();
+		titleOffset = glm::vec2{ -textMargin, 0.0f };
+		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
+		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "R", "B", this);
 	}
+	else 
+	{
+		titleOffset = glm::vec2{ textMargin, 0.0f };
+		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
+		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "L", "B", this);
+	}
+
+	if (parent->m_highlighted) enableOutline();
 }
 
 Port::Port(const YAML::Node& node, Component2D* parent)
 	: Entity(EntityType::PORT, parent), bodyColour(1.f, 1.f, 1.f, 1.f)
 {
 	// General data.
-	//m_label = node["Label"].as<std::string>();
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Set the port type.
@@ -141,9 +100,8 @@ Port::Port(const YAML::Node& node, Component2D* parent)
 		indicatorColour = { 0.8f, 0.4f, 0.4f, 0.5f };
 	}
 
-	// Add shapes.
+	// Add primitives.
 	centre = { node["Centre"][0].as<float>(),  node["Centre"][1].as<float>() };
-	//bodyColour = node["Body"]["Color"].as<glm::vec4>();
 	borderColour = node["Border"]["Color"].as<glm::vec4>();
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, -1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, -1.0f, 0.01f, this);
@@ -167,46 +125,36 @@ Port::~Port()
 				});
 
 			// Check that the cable is in the list.
-			if (toRemove != cableList.end())
-			{
-				cableList.erase(toRemove);
-			}
+			if (toRemove != cableList.end()) cableList.erase(toRemove);
 		}
 	}
-
-	// Remove the renderer primitives.
-	Renderer::remove(body);
-	Renderer::remove(border);
-	Renderer::remove(attachmentIndicator);
-	Renderer::remove(title);
 }
 
 void Port::moveTo(const glm::vec2& destination)
 {
-	//update the port centre
+	// Update the port centre.
 	title->translate(destination - centre);
 	centre = destination + m_offset;
 	glm::vec2 titlePos = centre + titleOffset;
-	//move each primative
+
+	// Move each primative.
 	body->translateTo(centre);
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
-	
-	for (Cable* cable: m_cables)
-		cable->followPort(this);
+	for (auto cable : m_cables) cable->followPort(this);
 }
 
 void Port::move(const glm::vec2& translation)
 {	
 	//update the port centre
 	centre += translation;
-	//move each primative
+
+	// Move each primative.
 	body->translate(translation);
 	border->translate(translation);
 	attachmentIndicator->translate(translation);
 	title->translate(translation);
-	for (Cable* cable : m_cables)
-		cable->followPort(this);
+	for (auto cable : m_cables) cable->followPort(this);
 }
 
 Port& Port::operator=(const Port& t)
@@ -248,8 +196,11 @@ void Port::setOffset(const glm::vec2& offset)
 void Port::attachCable(Cable* cable)
 {
 	m_cables.push_back(cable);	
-	if (cable->m_endPort) {
-		switch (cable->m_endPort->m_type) {
+
+	if (cable->m_endPort) 
+	{
+		switch (cable->m_endPort->m_type) 
+		{
 		case PortType::PORT_IN:
 
 			break;
@@ -262,7 +213,8 @@ void Port::attachCable(Cable* cable)
 		}
 	}
 	
-	switch (m_type) {
+	switch (m_type) 
+	{
 	case PortType::PORT_IN:
 		indicatorColour = { 0.f, 0.8f, 0.f, 1.f };
 		break;
@@ -273,6 +225,7 @@ void Port::attachCable(Cable* cable)
 		indicatorColour = { 0.f, 0.f, 0.8f, 1.f };
 		break;
 	}
+
 	attachmentIndicator->setColor(indicatorColour);
 }
 
@@ -282,12 +235,12 @@ void Port::detachCable(Cable* cable)
 	auto cableIt = std::find(m_cables.begin(), m_cables.end(), cable);
 
 	// Remove the cable if found in the list.
-	if (cableIt != m_cables.end()) 
-		m_cables.erase(cableIt);
+	if (cableIt != m_cables.end()) m_cables.erase(cableIt);
 
 	if (m_cables.empty()) 
 	{
-		switch (m_type) {
+		switch (m_type) 
+		{
 		case PortType::PORT_IN:
 			indicatorColour = { 0.4f, 0.6f, 0.4f, 0.5f };
 			break;
@@ -306,8 +259,9 @@ void Port::detachCable(Cable* cable)
 
 void Port::updateType()
 {
-	//assumes no hovered/attached ports (port types should only change in component designer)
-	switch (m_type) {
+	// Assumes no hovered/attached ports (port types should only change in component designer).
+	switch (m_type) 
+	{
 	case PortType::PORT_IN:
 		indicatorColour = { 0.4f, 0.6f, 0.4f, 0.5f };
 		break;
@@ -358,7 +312,7 @@ void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& 
 	centre = glm::vec2(transform * glm::vec4(centre, 0.f, 1.f));
 
 	// Update cables.
-	for (Cable* cable : m_cables) cable->followPort(this);
+	for (auto cable : m_cables) cable->followPort(this);
 }
 
 //==============================================================================================================================================//

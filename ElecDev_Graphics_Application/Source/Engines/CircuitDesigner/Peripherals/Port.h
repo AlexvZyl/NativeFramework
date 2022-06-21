@@ -47,43 +47,18 @@ enum class PortPosition
 class Port: public Entity
 {
 public:
-	
-	glm::vec2 titleOffset;
-	static Font titleFont;
-	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
-	float titleSize = 0.0018f;
-	float portSize = 0.0003f;
-	glm::vec2 centre;
-	static unsigned portID;
-	glm::vec4 bodyColour;
-	glm::vec4 borderColour;
-	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
-	float portLayer;
 
-	Circle* body;
-	Circle* border;
-	Circle* attachmentIndicator;
-	Text* title;
-	float indicatorFraction = 1.0f;
-
-	glm::vec2 m_offset = { 0, 0 };
-	PortPosition m_position;
-	PortType m_type;
-
-	std::vector<Cable*> m_cables;
-
-	std::string* fromTag = nullptr;
-	float voltage = 0.f;
-
-	// Constructor.
+	// Constructors.
 	Port(const glm::vec2& pos, PortType type, Component2D* parent, const std::string& label = "default");
 	Port(const YAML::Node& node, Component2D* parent = nullptr);
+
 	// Destructor.
 	~Port();
 
+	// Operator overloads.
 	Port& operator = (const Port &t);
 
-	// Helper methods.
+	// Common.
 	void moveTo(const glm::vec2& destination);
 	void move(const glm::vec2& translation);
 	void setLayer(float layer);
@@ -97,7 +72,32 @@ public:
 	void hideAttachIndicator();
 	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
 
+	// Data.
+	glm::vec2 titleOffset;
+	static Font titleFont;
+	glm::vec4 titleColour = glm::vec4(0.f, 0.f, 0.f, 1.f);
+	float titleSize = 0.0018f;
+	float portSize = 0.0003f;
+	glm::vec2 centre;
+	static unsigned portID;
+	glm::vec4 bodyColour;
+	glm::vec4 borderColour;
+	glm::vec4 indicatorColour = {0.5f, 0.5f, 0.5f, 0.f};
+	float portLayer;
+	float indicatorFraction = 1.0f;
+	glm::vec2 m_offset = { 0, 0 };
+	PortPosition m_position;
+	PortType m_type;
+	std::vector<Cable*> m_cables;
+	std::string* fromTag = nullptr;
+	float voltage = 0.f;
 	float m_rotation = 0.f;
+
+	// Primitives.
+	std::unique_ptr<Circle> body;
+	std::unique_ptr<Circle> border;
+	std::unique_ptr<Circle> attachmentIndicator;
+	std::unique_ptr<Text> title;
 };
 
 //==============================================================================================================================================//

@@ -125,10 +125,10 @@ void ComponentDesigner::pushActivePrimitives()
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
 	// Remove outline of current entity.
-	if (m_activePoly) m_activePoly->disableOutline();
-	if (m_activeLine) m_activeLine->disableOutline();
-	if (m_activeCircle) m_activeCircle->disableOutline();
-	if (m_activeText) m_activeText->disableOutline();
+	if (m_activePoly)		m_activePoly->disableOutline();
+	if (m_activeLine)		m_activeLine->disableOutline();
+	if (m_activeCircle)		m_activeCircle->disableOutline();
+	if (m_activeText)		m_activeText->disableOutline();
 	if (m_activePort.get()) m_activePort->disableOutline();
 
 	// Remove previous selection.

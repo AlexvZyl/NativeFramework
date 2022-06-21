@@ -76,15 +76,14 @@ static class Renderer
 {
 public:
 
-	// Clears resources.
-	static void shutdown();
-
 	// ------------------- //
 	//  U T I L I T I E S  //
 	// ------------------- //
 
-	// Set up the renderer.
+	// Set up the renderer and init resources.
 	static void initialise();
+	// Clears resources.
+	static void shutdown();
 	// Use the font provided.
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.
@@ -157,7 +156,7 @@ public:
 	//  3 D   P R I M I T I V E S  //
 	// --------------------------- //
 
-
+	// TODO!
 
 	// ----------------- //
 	//  T E X T U R E S  //
@@ -188,7 +187,7 @@ private:
 	friend class FrameBufferObject;
 
 	// Prevent instances from being created.
-	Renderer() {}
+	inline Renderer() = delete;
 
 	// --------------- //
 	//  D R A W I N G  //
@@ -239,14 +238,14 @@ private:
 	static void clearWithColor(const glm::vec4& color);
 	// Set the line width (in pixels) of a GL_LINE.
 	static void setLineSize(int size);
-	// Clear the frambuffers.
+
+	// Clearing.
 	static void clear(int bitplane);
 	static void clearColor();
 	static void clearDepth();
 	static void clearStencil();
 	static void clearDepthStencil();
 	static void clearAll();
-	
 
 	// ------------- //
 	//  S C E N E S  //
