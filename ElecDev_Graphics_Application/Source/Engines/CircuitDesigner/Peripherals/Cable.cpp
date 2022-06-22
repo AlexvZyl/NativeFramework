@@ -238,11 +238,14 @@ bool Cable::attach(Port* endPort)
 		endPort->attachCable(this);
 
 		// Set fromTag(s)
+
+
+		//In future, we want to track the port label here (fromTag = "<componentTag>.<portTag>")
+		//To do this, we need a system that keeps the fromTags updated when either of these values are changed.
+		//This can possibly be done by adding an 'updateFromTags' method to port.h. This can be enoked upon any change (notifying ports on either end).
 		if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
 			if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
 				m_startPort->fromTag = & dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
-				//In future, we want to track the port label here (fromTag = "<componentTag>.<portTag>")
-				//To do this, we need a system that keeps the fromTags updated when either of these values are changed.
 				m_startPort->voltage = m_endPort->voltage;
 			}
 		}
