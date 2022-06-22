@@ -10,6 +10,7 @@
 #include "OpenGL/Primitives/LineSegment.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
 #include "Component2D.h"
+#include "OpenGL/Primitives/Text.h"
 
 unsigned Cable::cableID = 0;
 
@@ -239,7 +240,9 @@ bool Cable::attach(Port* endPort)
 		// Set fromTag(s)
 		if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
 			if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
-				m_startPort->fromTag = &dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
+				m_startPort->fromTag = & dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
+				//In future, we want to track the port label here (fromTag = "<componentTag>.<portTag>")
+				//To do this, we need a system that keeps the fromTags updated when either of these values are changed.
 				m_startPort->voltage = m_endPort->voltage;
 			}
 		}
