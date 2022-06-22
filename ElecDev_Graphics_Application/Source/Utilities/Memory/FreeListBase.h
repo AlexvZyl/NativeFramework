@@ -91,7 +91,7 @@ public:
 
 		// Do in place copy construction.
 		for (int i = 0; i < size; i++) 
-			new (getSlotElementPtr(slotIndex+i)) T(*(elementPtr+i));
+			new (getSlotElementPtr(slotIndex+i)) T(elementPtr[i]);
 
 		// Return the index of the first element.
 		return slotIndex;
@@ -299,6 +299,7 @@ protected:
 
 	inline void freeSlot(int slotIndex, int size = 1) 
 	{
+		// Ensure valid data.
 		if (!size || !slotIsValid(slotIndex)) return;
 
 		// Find the slots next to the inserted one.
@@ -345,11 +346,11 @@ protected:
 		setIteratorMode(tmp);
 	}
 
+	// Find an open slot that is large enough, starting from the first free one.
+	// If there is no valid first slot, skip the initial search and resize.
+	// If no slot large enough is found the FreeList is resized to fit the element.
 	inline int commitSlotFirstFit(int slotSize = 1)
 	{
-		// Find an open slot that is large enough, starting from the first free one.
-		// If there is no valid first slot, skip the initial search and resize.
-
 		int prevSlot = -1;
 		int slotIndex = m_firstFreeSlot;
 		if (slotIsValid(slotIndex))
@@ -391,8 +392,7 @@ protected:
 			return slotIndex;
 		}
 
-		// An error occurred with finding a slot or resizing the list.
-		LUMEN_ASSERT(false);
+		LUMEN_ASSERT(false, "An error occurred with finding a slot or resizing the list.");
 		return 0;
 	}
 
@@ -406,9 +406,8 @@ protected:
 		int slotSize = getSlotSize(slotIndex);
 		bool curHasPrevSlot = slotIsValid(prevSlot);
 		bool curHasNextSlot = slotIsValid(nextSlot);
-
-        // Assert if the slot cannot hold the requested data.
-		LUMEN_ASSERT(slotSize >= size);
+		
+		LUMEN_ASSERT(slotSize >= size, "Slot is not large enough to hold requested data.");
 
 		// Slot is larger than the requested size.
 		if (slotSize > size)
@@ -429,18 +428,18 @@ protected:
 		else
 		{
 			// Try to connect.
-			if(attemptConnection(prevSlot, nextSlot)) return;
+			if (attemptConnection(prevSlot, nextSlot)) return;
 
 			// Update edge slots.
 			if (!curHasPrevSlot)
 			{
 				m_firstFreeSlot = nextSlot;
-				if(slotIsValid(m_firstFreeSlot)) setPrevSlot(m_firstFreeSlot, -1);
+				if (firstFreeSlotValid()) setPrevSlot(m_firstFreeSlot, -1);
 			}
 			if (!curHasNextSlot)
 			{
 				m_lastFreeSlot = prevSlot;
-				if (slotIsValid(m_lastFreeSlot)) setNextSlot(m_lastFreeSlot, -1);
+				if (lastFreeSlotValid()) setNextSlot(m_lastFreeSlot, -1);
 			}
 		}
 	}
@@ -535,18 +534,18 @@ protected:
 	// Get an int pointer to the slot data.
 	inline int* getSlotDataPtr(int slotIndex) 							
 	{ 
-		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to access outside of the heap.");
+		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to access outside of the allocated heap.");
 		return reinterpret_cast<int*>(m_data + slotIndex); 
 	}					 
 
 	// Get an const int pointer to the slot data.
 	inline const int* getSlotDataPtr(int slotIndex) const 					
 	{ 
-		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to access outside of the heap.");
+		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to access outside of the allocated heap.");
 		return reinterpret_cast<int*>(m_data + slotIndex); 
 	}					 
 
-    // Memory.
+    // Slot memory.
 	inline T* getSlotElementPtr(int slotIndex) 							{ return m_data + slotIndex; }											 // Get a pointer to the slot as an element.
 	inline const T* getSlotElementPtr(int slotIndex) const				{ return m_data + slotIndex; }											 // Get a const pointer to the slot as an element.
 	inline void setSlotMemory(int slotIndex, int val = 0xCC)			{ setSlotsMemory(slotIndex, 1, val); }									 // Set the value of the slot memory.
@@ -586,11 +585,10 @@ protected:
 	int m_sizeOfElement = sizeof(T);                      // The size (in bytes) of each open slot (each slot can hold one element).
 	int m_firstFreeSlot = -1;		                      // The indices of the slots.
 	int m_lastFreeSlot  = -1;		                      // -1 = no free slot.
+	int m_slotSize = NULL;								  // The size of the slot in bytes.
 	int m_capacityIncrements = 10;	                      // The amount of slots added/removed on resize.
 	float m_resizeThreshold = 1.1f;                       // The ratio that the freelist has to be reduced beyond the resize in increments to be reduced in size.
 									                      // This prevents the situation where resizes happens unneccesarily.
-	int m_slotSize = NULL;								  // The size of the slot in bytes.
-
 public:
 
 	// ----------------- //
