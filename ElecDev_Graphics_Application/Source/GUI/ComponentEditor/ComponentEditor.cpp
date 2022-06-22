@@ -578,18 +578,17 @@ void ComponentEditor::onImGuiRender()
 					// Display tag number.
 					ImGui::Text("Tag: ");
 					ImGui::SameLine();
-					ImGui::PushItemWidth(-1);
+					//ImGui::PushItemWidth(-1);
 					if (ImGui::InputText("##tag", &activeComponent->m_tag)) {
 						activeComponent->updateText();
 					}
-					ImGui::PopItemWidth();
 
 					ImGui::SameLine();
 					ImGui::BeginDisabled(activeComponent->m_tag == activeComponent->designatorSym + std::to_string(activeComponent->getDesignatorIdx()));
-						if (ImGui::Button("Reset Default")) {
-							activeComponent->setTag();
-						}
-						ImGui::EndDisabled();
+					if (ImGui::Button("Reset Default")) {
+						activeComponent->setTag();
+					}
+					ImGui::EndDisabled();
 
 					ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 					if (ImGui::CollapsingHeader("Ports"))
