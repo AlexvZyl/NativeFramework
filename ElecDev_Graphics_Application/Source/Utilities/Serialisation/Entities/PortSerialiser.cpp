@@ -22,6 +22,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Port* port)
 	emitter << YAML::Key << "Centre" << YAML::Value << port->centre;
 	emitter << YAML::Key << "Layer" << YAML::Value << port->portLayer;
 	emitter << YAML::Key << "Type" << YAML::Value << port->m_type;
+	emitter << YAML::Key << "Description" << YAML::Value << port->description;
 
 	// Border.
 	emitter << YAML::Key << "Border" << YAML::Value << port->border;

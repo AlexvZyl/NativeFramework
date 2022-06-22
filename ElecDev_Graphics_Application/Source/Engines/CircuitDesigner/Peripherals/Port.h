@@ -74,6 +74,7 @@ public:
 
 	std::string* fromTag = nullptr;
 	float voltage = 0.f;
+	std::string description;
 
 	// Constructor.
 	Port(const glm::vec2& pos, PortType type, Component2D* parent, const std::string& label = "default");
@@ -95,6 +96,7 @@ public:
 	void updateType();
 	void showAttachIndicator();
 	void hideAttachIndicator();
+	void updateDesctiption(std::string newDescription = "");
 	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. });
 
 	float m_rotation = 0.f;

@@ -70,8 +70,7 @@ public:
 	// Data for ElecDec software.
 	std::unordered_map<std::string, std::string> dataDict;
 	std::string m_internalCircuit;
-	std::string m_fromTagNumber = "None";
-	std::string m_toTagNumber = "None";
+	std::string m_tag = "None";
 
 	// Component shape attributes.
 	float height = 0.08f;
@@ -147,6 +146,9 @@ public:
 	void removeCircle(Circle* circle);
 	void removeLine(PolyLine* line);
 	void removeText(Text* text);
+	void setTag(const std::string& tag = "None");
+	int getDesignatorIdx();
+	void setDesignatorIdx(const int& idx);
 	
 	void rotate(float degrees);
 	float m_rotation = 0.f;

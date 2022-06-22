@@ -165,6 +165,7 @@ void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, c
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
+	m_activeComponent->setTag();
 	designerState = ENTITY_SELECT;
 	getGizmo().setEntity(m_activeComponent.get());
 }
@@ -176,6 +177,7 @@ void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::v
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(node, m_circuit.get()));
 	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
+	m_activeComponent->setTag();
 	designerState = ENTITY_SELECT;
 	getGizmo().setEntity(m_activeComponent.get());
 }
