@@ -13,7 +13,7 @@
 #define PROFILE_IMGUI_OVERHEAD
 #define LUMEN_PROFILING_FUNCTIONS
 #define LUMEN_DETAILED_LOGGING
-#define LUMEN_VERSION_STRING "v0.1.1"
+#define LUMEN_VERSION_STRING "v0.2.0"
 #define LUMEN_ASSERTS
 
 //==============================================================================================================================================//
