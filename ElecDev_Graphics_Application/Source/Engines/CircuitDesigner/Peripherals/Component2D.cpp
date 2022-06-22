@@ -104,11 +104,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		dataDict.insert({ node.first.as<std::string>(), node.second.as<std::string>() });
 	}
 
-	// Add tags.
+	/*/ Add tags.
 	if (componentNode["Tag"].IsDefined())
 		m_toTagNumber = componentNode["Tag"].as<std::string>();
 	if (componentNode["From Tag"].IsDefined())
 		m_fromTagNumber = componentNode["FromTag"].as<std::string>();
+	*/
 
 	// Add the equipmemnt type.
 	if (componentNode["Title"].IsDefined())
@@ -303,11 +304,11 @@ void Component2D::translateTitle(glm::vec2 translation)
 
 void Component2D::updateText()
 {
-	std::string textString = designatorSym + std::to_string(designatorIdx);
+	//std::string textString = designatorSym + std::to_string(designatorIdx);
 	if (title->updateText(equipType)) 
 		title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
 
-	if (designator->updateText(textString))
+	if (designator->updateText(m_tag))
 		designator->rotate(m_rotation, glm::vec3(centre, 0.f), {0.f, 0.f, 1.f});
 }
 
@@ -402,6 +403,33 @@ void Component2D::removeText(Text* text)
 	{
 		LUMEN_LOG_WARN("Attempted to remove a text object that is not a member of m_text. This can be expected when attempting to delete port or component names.", "Component2D");
 	}
+}
+
+void Component2D::setTag(const std::string& tag)
+{
+	if (tag == "None") {//Need to stop tag being re-set here if it has been manually set
+		m_tag = designatorSym + std::to_string(designatorIdx);
+	}
+	else {
+		m_tag = tag;
+	}
+
+	//update the text whenever the tag is updated
+	updateText();
+}
+
+int Component2D::getDesignatorIdx()
+{
+	return designatorIdx;
+}
+
+void Component2D::setDesignatorIdx(const int& idx)
+{
+	//when designator Idx changes, we need to update the default tag (do not overwrite manually edited tags)
+	if (m_tag == designatorSym + std::to_string(designatorIdx)) {
+		setTag(designatorSym + std::to_string(idx));
+	}
+	designatorIdx = idx;
 }
 
 void Component2D::rotate(float degrees)

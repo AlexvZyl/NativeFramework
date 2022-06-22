@@ -194,13 +194,13 @@ void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Por
 			// Set fromTag(s)
 			if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
 				if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
-					m_startPort->fromTag = &dynamic_cast<Component2D*>(m_endPort->m_parent)->m_toTagNumber;
+					m_startPort->fromTag = &dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
 					m_startPort->voltage = m_endPort->voltage;
 				}
 			}
 			if (m_startPort->m_type == PortType::PORT_OUT || m_startPort->m_type == PortType::PORT_INOUT) {
 				if (m_endPort->m_type == PortType::PORT_IN || m_endPort->m_type == PortType::PORT_INOUT) {
-					m_endPort->fromTag = &dynamic_cast<Component2D*>(m_startPort->m_parent)->m_toTagNumber;
+					m_endPort->fromTag = &dynamic_cast<Component2D*>(m_startPort->m_parent)->m_tag;
 					m_endPort->voltage = m_startPort->voltage;
 				}
 			}
@@ -239,13 +239,13 @@ bool Cable::attach(Port* endPort)
 		// Set fromTag(s)
 		if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
 			if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
-				m_startPort->fromTag = &dynamic_cast<Component2D*>(m_endPort->m_parent)->m_toTagNumber;
+				m_startPort->fromTag = &dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
 				m_startPort->voltage = m_endPort->voltage;
 			}
 		}
 		if (m_startPort->m_type == PortType::PORT_OUT || m_startPort->m_type == PortType::PORT_INOUT) {
 			if (m_endPort->m_type == PortType::PORT_IN || m_endPort->m_type == PortType::PORT_INOUT) {
-				m_endPort->fromTag = &dynamic_cast<Component2D*>(m_startPort->m_parent)->m_toTagNumber;
+				m_endPort->fromTag = &dynamic_cast<Component2D*>(m_startPort->m_parent)->m_tag;
 				m_endPort->voltage = m_startPort->voltage;
 			}
 		}

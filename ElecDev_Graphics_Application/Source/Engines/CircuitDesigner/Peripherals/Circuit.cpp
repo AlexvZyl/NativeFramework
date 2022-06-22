@@ -68,7 +68,7 @@ Circuit::Circuit(const YAML::Node& node)
 		}
 		else 
 		{
-			currentComponent->designatorIdx = 0;
+			currentComponent->designatorIdx = -1;
 			currentComponent->updateText();
 		}
 		
@@ -76,11 +76,10 @@ Circuit::Circuit(const YAML::Node& node)
 		if (componentNode["Rotation"].IsDefined())
 			currentComponent->rotate(componentNode["Rotation"].as<float>());
 
-		// Add tags.
-		if (componentNode["Tag"].IsDefined())
-			currentComponent->m_toTagNumber = componentNode["Tag"].as<std::string>();
-		if (componentNode["From Tag"].IsDefined())
-			currentComponent->m_fromTagNumber = componentNode["From Tag"].as<std::string>();
+		// Add tag.
+		if (componentNode["Tag"].IsDefined()) {
+			currentComponent->setTag(componentNode["Tag"].as<std::string>());
+		}
 	}
 
 	// Load cables.

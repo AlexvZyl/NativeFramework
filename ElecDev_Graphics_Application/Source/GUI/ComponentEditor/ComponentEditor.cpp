@@ -351,7 +351,7 @@ void ComponentEditor::onImGuiRender()
 		int numCom = 0;
 		for (auto& key : numComponents)
 		{
-			componentNames.push_back(key->designator->m_string);
+			componentNames.push_back(key->m_tag);
 			numCom++;
 		}
 
@@ -374,16 +374,18 @@ void ComponentEditor::onImGuiRender()
 		ImGui::PushID("CompGeneral");
 		if (activeComponent)
 		{
-			ImGui::Text(" Designator:\t");
+			ImGui::Text(" Designator Index:\t");
 			ImGui::SameLine();
-			ImGui::Text(activeComponent->designatorSym.c_str());
+			//ImGui::Text(activeComponent->designatorSym.c_str());
 
-			activeTitleString = activeComponent->designator->m_string;
+			activeTitleString = activeComponent->m_tag;
 
-			if (ImGui::InputInt("##designatorIdx", &activeComponent->designatorIdx)) 
-				activeComponent->updateText();
+			int designatorIdx = activeComponent->getDesignatorIdx();
+			if (ImGui::InputInt("##designatorIdx", &designatorIdx)) {
+				activeComponent->setDesignatorIdx(designatorIdx);
+			}
 
-			ImGui::Text((std::string(" Type:\t  ") + activeComponent->equipType).c_str());
+			ImGui::Text((std::string(" Description:\t  ") + activeComponent->equipType).c_str());
 		}
 
 		// ------------------------------- //
@@ -473,7 +475,7 @@ void ComponentEditor::onImGuiRender()
 		{
 			for (auto& key : numComponents)
 			{
-				if (key->designator->m_string.c_str() == componentNames.at(equipmentSelector))
+				if (key->m_tag.c_str() == componentNames.at(equipmentSelector))
 				{
 					for (auto& [key2, val] : key->dataDict)
 					{
@@ -527,7 +529,7 @@ void ComponentEditor::onImGuiRender()
 						m_copiedDict = activeComponent->dataDict;
 						m_copiedDictComponent = true;
 						m_copiedDictCable = false;
-						m_copiedDictFrom = activeComponent->designator->m_string;
+						m_copiedDictFrom = activeComponent->m_tag;
 						Lumen::getApp().pushNotification(NotificationType::Success, 2000, "Successfully copied data dictionary.", "Component Editor");
 					}
 					else if (activeCable)
@@ -577,9 +579,17 @@ void ComponentEditor::onImGuiRender()
 					ImGui::Text("Tag: ");
 					ImGui::SameLine();
 					ImGui::PushItemWidth(-1);
-					ImGui::InputText("##totagnumber", &activeComponent->m_toTagNumber);
+					if (ImGui::InputText("##tag", &activeComponent->m_tag)) {
+						activeComponent->updateText();
+					}
 					ImGui::PopItemWidth();
 
+					ImGui::SameLine();
+					ImGui::BeginDisabled(activeComponent->m_tag == activeComponent->designatorSym + std::to_string(activeComponent->getDesignatorIdx()));
+						if (ImGui::Button("Reset Default")) {
+							activeComponent->setTag();
+						}
+						ImGui::EndDisabled();
 
 					ImGui::SetNextItemOpen(false, ImGuiCond_Once);
 					if (ImGui::CollapsingHeader("Ports"))
