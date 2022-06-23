@@ -292,6 +292,9 @@ private:
 	// has updated the data.
 	int m_resizeWindowsFrameCount = 0;
 
+	// The current cursor mode.
+	CursorMode m_currentCursormode = CursorMode::OS;
+
 	// ------------- //
 	//  E V E N T S  //
 	// ------------- //

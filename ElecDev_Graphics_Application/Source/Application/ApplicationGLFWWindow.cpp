@@ -38,6 +38,13 @@ std::vector<LumenEventID> s_heldButtons;
 //  Helpers.																																	//
 //==============================================================================================================================================//
 
+inline bool draggingActive() 
+{
+    return s_buttonDragActive[EventType_MouseButtonLeft]   || 
+           s_buttonDragActive[EventType_MouseButtonMiddle] || 
+           s_buttonDragActive[EventType_MouseButtonRight];
+}
+
 inline bool isIdOfType(LumenEventID eventID, LumenEventID compareID) 
 {
     return (eventID & compareID) == compareID;
@@ -213,15 +220,14 @@ void Application::glfwInitCallbacks()
 
                 // Button is no longer held on a release.
                 removeHeldButton(currentButton);
+
+                // If no button is being held there is no dragging and the OS should
+                // render the cursor.
+                if (!s_heldButtons.size()) Lumen::getApp().setCursorMode(CursorMode::OS);
             }
 
             // Pass event to ImGUI.
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
-
-            // If any buttons are being held we want the app to render the cursor.
-            // Otherwise the OS can take over.
-            if (s_heldButtons.size()) Lumen::getApp().setCursorMode(CursorMode::ImGui);
-            else Lumen::getApp().setCursorMode(CursorMode::OS);
         });
 
     // ----------------------------------- //
@@ -251,7 +257,7 @@ void Application::glfwInitCallbacks()
                     // has already been dragging).
                     if (!s_buttonDragActive[currentButton])
                     {
-                        EventLog::logNotify(EventType_MouseDragStart | keyState | currentButton);
+                        EventLog::log<NotifyEvent>(EventType_MouseDragStart | keyState | currentButton);
                         s_buttonDragActive[currentButton] = true;
                         s_buttonDragInitialPos[currentButton] = s_latestMouseButtonPressPosition;
                     }
@@ -277,6 +283,11 @@ void Application::glfwInitCallbacks()
 
             // Store position.
             s_lastMouseMovePosition = mousePos;
+
+            // If any button is being dragged we want the app to render the cursor.
+            // Otherwise the OS can take over.
+            if (draggingActive()) Lumen::getApp().setCursorMode(CursorMode::ImGui);
+            else                  Lumen::getApp().setCursorMode(CursorMode::OS);
 
             // Do not pass to imgui, Lumen handles this.
         });
