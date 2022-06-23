@@ -42,6 +42,7 @@ public:
     glm::vec4 helperColour = { 0.18f, 0.30f, 0.67f, 0.85f };
     //PortType next_port_type = PortType::PORT_INOUT;
 
+    glm::vec2 m_dragStart;
     glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
     float clickTol = 15.0f;

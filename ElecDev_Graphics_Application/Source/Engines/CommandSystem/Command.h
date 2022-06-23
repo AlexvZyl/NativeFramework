@@ -26,6 +26,22 @@ private:
     Translatable* target;
 public:
     inline TranslateCommand(const glm::vec2& translation, Translatable* target) : translation({ translation, 0.f }), target(target) {};
+    inline TranslateCommand(const glm::vec3& translation, Translatable* target) : translation(translation), target(target) {};
+    void execute() {
+        if (target)
+            target->translate(translation);
+    }
+    void undo() {
+        target->translate(-translation);
+    }
+};
+
+class Translate2DCommand :public Command {
+private:
+    glm::vec2 translation;
+    Translatable2D* target;
+public:
+    inline Translate2DCommand(const glm::vec2& translation, Translatable2D* target) : translation(translation), target(target) {};
     void execute() {
         if (target)
             target->translate(translation);
@@ -85,7 +101,6 @@ class CommandLog
 private:
     // Probably want to put a max size on this in future.
     std::vector<std::unique_ptr<Command>> m_commandHistory;
-    //std::vector<std::unique_ptr<Command>>::iterator next_command_it = m_commandHistory.end();
     unsigned next_command_ixd = 0;
 
 public:
@@ -93,7 +108,6 @@ public:
     {
         if (next_command_ixd == 0) return;
 
-        //std::advance(next_command_it, -1);
         next_command_ixd--;
         m_commandHistory.at(next_command_ixd)->undo();
         
@@ -110,35 +124,19 @@ public:
     template <class CommandType, class ... Args>
     void log(const Args&... args)
     {   
-        if (next_command_ixd == m_commandHistory.size()) {
-            m_commandHistory.emplace_back(std::make_unique<CommandType>(args...));
-            /*if (m_commandHistory.size() == 1) {
-                next_command_it = m_commandHistory.begin();
-            }*/
+        if (next_command_ixd != m_commandHistory.size()) {
+            //subsequent entries become invalid at this point
+            m_commandHistory.resize(next_command_ixd);
         }
-        else m_commandHistory[next_command_ixd] = std::make_unique<CommandType>(args...);
-        m_commandHistory[next_command_ixd]->execute();
+        m_commandHistory.emplace_back(std::make_unique<CommandType>(args...));
         next_command_ixd++;
     };
-    /*
-    template <class CommandType>
-    void log(std::unique_ptr<CommandType> currentCommand)
-    {
-        std::advance(next_command_it, 1);
-        if (next_command_it >= m_commandHistory.end()) {
-            m_commandHistory.push_back(currentCommand);
-        }
-        else m_commandHistory.insert(next_command_it, currentCommand);
-
-        execute(std::prev(next_command_it)->get());
-    };*/
 
     template <class CommandType, class ... Args>
     void execute(const Args&... args)
     {
-        //std::unique_ptr<CommandType> currentCommand(std::make_unique<CommandType>(args...);
-        //command->execute();
         log<CommandType>(args...);
+        m_commandHistory[next_command_ixd-1]->execute();
     }
 
     const auto& getHistory()

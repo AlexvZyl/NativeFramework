@@ -214,7 +214,7 @@ void Component2D::translate(const glm::vec2& translation)
 	for (auto line : m_lines)		line->translate(translation);
 	for (auto circ : m_circles)	    circ->translate(translation);
 	for (auto text : m_text)        text->translate(translation);
-	for (auto& port : ports)		port->move(translation);
+	for (auto& port : ports)		port->translate(translation);
 	centre += translation;
 }
 

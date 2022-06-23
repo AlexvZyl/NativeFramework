@@ -10,6 +10,7 @@
 #include "yaml-cpp/yaml.h"
 #include "Graphics/Entities/Entity.h"
 #include "OpenGL/Buffers/VertexArrayObjectGL.h"
+#include "Engines/EntityComponents/Mutable.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.																														//
@@ -44,7 +45,7 @@ enum class PortPosition
 //  Port class.																																	//
 //==============================================================================================================================================//
 
-class Port: public Entity
+class Port: public Entity, public Translatable2D
 {
 public:
 	
@@ -85,8 +86,8 @@ public:
 	Port& operator = (const Port &t);
 
 	// Helper methods.
-	void moveTo(const glm::vec2& destination);
-	void move(const glm::vec2& translation);
+	void translateTo(const glm::vec2& destination);
+	void translate(const glm::vec2& translation);
 	void setLayer(float layer);
 	void enableOutline();
 	void disableOutline();

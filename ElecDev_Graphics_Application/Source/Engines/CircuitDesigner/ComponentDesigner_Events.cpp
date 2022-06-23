@@ -179,7 +179,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 				m_activePort->title->updateAlignment("L");
 			}
 			//update port location
-			m_activePort->moveTo(getNearestGridVertex(screenCoords));
+			m_activePort->translateTo(getNearestGridVertex(screenCoords));
 		}
 	}
 
@@ -356,7 +356,7 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 				}
 				if (m_activePort.get()) 
 				{
-					m_activePort->move(translation);
+					m_activePort->translate(translation);
 					m_lastDragPos = getNearestGridVertex(screenCoords);
 				}
 			}
@@ -366,11 +366,51 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
 {
-	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
+	if (event.isType(EventType_MouseDragStart | EventType_MouseButtonLeft))
 	{
-		if (m_activePoly)		   m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
-		if (m_activeLine)		   m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
-		if (m_activeCircle)		   m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
+		if (m_activePoly) {
+			m_dragStart = m_activePoly->m_trackedCenter;
+		}
+		if (m_activeLine) {
+			m_dragStart = m_activeLine->m_trackedCenter;
+		}
+		if (m_activeCircle) {
+			m_dragStart = m_activeCircle->m_trackedCenter;
+		}
+		if (m_activePort) {
+			m_dragStart = m_activePort->centre;
+		}
+		if (m_activeVertexIdx != -1) {
+			if (m_activeLine) m_activeLine->m_vertices.at(m_activeVertexIdx);
+			else if (m_activePoly)
+			{
+				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+				if (polyline)
+				{
+					// Polygon is clear, so we index with m_vertices (nodes).
+					m_dragStart = polyline->m_vertices.at(m_activeVertexIdx);
+				}
+				else
+				{
+					m_dragStart = m_activePoly->getVertex(m_activeVertexIdx).position;
+				}
+			}
+		}
+	}
+	else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
+	{
+		if (m_activePoly) {
+			m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
+			commandLog.log<TranslateCommand>(getNearestGridVertex(m_activePoly->m_trackedCenter) - m_dragStart, m_activePoly);
+		}
+		if (m_activeLine) {
+			m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
+			commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeLine->m_trackedCenter) - m_dragStart, m_activeLine);
+		}
+		if (m_activeCircle) {
+			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
+			commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeCircle->m_trackedCenter) - m_dragStart, m_activeCircle);
+		}
 		if (m_activeVertexIdx != -1) 
 		{
 			if (m_activeLine) m_activeLine->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
@@ -388,7 +428,10 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 				}
 			}
 		}
-		if (m_activePort)		   m_activePort->moveTo(getNearestGridVertex(m_activePort->centre));
+		if (m_activePort) {
+			m_activePort->translateTo(getNearestGridVertex(m_activePort->centre));
+			commandLog.log<Translate2DCommand>(getNearestGridVertex(m_activePort->centre) - m_dragStart, m_activePort.get());
+		}
 	}
 }
 

@@ -192,7 +192,7 @@ Port::~Port()
 	Renderer::remove(title);
 }
 
-void Port::moveTo(const glm::vec2& destination)
+void Port::translateTo(const glm::vec2& destination)
 {
 	//update the port centre
 	title->translate(destination - centre);
@@ -207,7 +207,7 @@ void Port::moveTo(const glm::vec2& destination)
 		cable->followPort(this);
 }
 
-void Port::move(const glm::vec2& translation)
+void Port::translate(const glm::vec2& translation)
 {	
 	//update the port centre
 	centre += translation;
@@ -251,7 +251,7 @@ void Port::disableOutline()
 void Port::setOffset(const glm::vec2& offset)
 {
 	// Move port to new offset (trust the math).
-	moveTo(centre - m_offset - m_offset + offset);
+	translateTo(centre - m_offset - m_offset + offset);
 	// Update internal offset.
 	m_offset = offset;
 }
