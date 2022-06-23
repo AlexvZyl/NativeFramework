@@ -4,6 +4,7 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include <vector>
 #include <memory>
+#include "Utilities/Logger/Logger.h"
 
 class Command
 {
@@ -30,9 +31,12 @@ public:
     void execute() {
         if (target)
             target->translate(translation);
+        else LUMEN_LOG_WARN("Tried to execute a translation on an invlaid target.", "Command");
     }
     void undo() {
+        if (target)
         target->translate(-translation);
+        else LUMEN_LOG_WARN("Tried to undo a translation on an invlaid target.", "Command");
     }
 };
 
@@ -57,7 +61,8 @@ private:
     glm::vec4 new_colour;
     IPrimitive* target;
 public:
-    inline SetColourCommand(const glm::vec4& new_colour, IPrimitive* target):new_colour(new_colour),old_colour(target->m_colour), target(target) {};
+    inline SetColourCommand(const glm::vec4& new_colour, IPrimitive* target) :new_colour(new_colour), old_colour(target->m_colour), target(target) {};
+    inline SetColourCommand(const glm::vec4& new_colour, IPrimitive* target, const glm::vec4& old_colour) :new_colour(new_colour), old_colour(old_colour), target(target) {};
     void execute() {
         if (target)
             target->setColor(new_colour);

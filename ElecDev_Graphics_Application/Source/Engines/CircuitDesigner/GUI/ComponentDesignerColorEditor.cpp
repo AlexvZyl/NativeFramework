@@ -82,12 +82,13 @@ void ComponentDesignerColorEditor::onImGuiRender()
 			}
 		}
 		lastActivePrimitive = activePrimitive;
+		oldColor = color;
 	}
 
 
 	// Open color editor.
 	ImGui::SameLine();
-	if (ImGui::ColorPicker4("##ColorEditor", &color.r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
+	if (ImGui::ColorPicker4("##ColorEditor", &color.r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf, &oldColor.r))
 	{
 
 		//No longer supported. To remove.
@@ -102,15 +103,30 @@ void ComponentDesignerColorEditor::onImGuiRender()
 			activePort->body->setColor(*color);
 		}*/
 
+
 		if(!activePrimitive) *m_target = color;
 	}
-	if (ImGui::Button("Apply")) {
+
+	if (ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Left)) {
+
+	}
+	else {
 		if (activePrimitive)
 		{
-			engine->commandLog.execute<SetColourCommand>(color, activePrimitive);
+			if (oldColor != color)
+				engine->commandLog.execute<SetColourCommand>(color, activePrimitive, oldColor);
 			//activePrimitive->setColor(*color);
 		}
+		oldColor = color;
 	}
+	/*if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left)) {
+		if (activePrimitive)
+		{
+			if(oldColor != color)
+			engine->commandLog.execute<SetColourCommand>(color, activePrimitive, oldColor);
+			//activePrimitive->setColor(*color);
+		}
+	}*/
 }
 
 void ComponentDesignerColorEditor::onImGuiEnd()

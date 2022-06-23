@@ -50,6 +50,7 @@ private:
 	glm::vec4* const m_target;
 	IPrimitive* lastActivePrimitive;
 	glm::vec4 color;
+	glm::vec4 oldColor;
 };
 
 //==============================================================================================================================================//

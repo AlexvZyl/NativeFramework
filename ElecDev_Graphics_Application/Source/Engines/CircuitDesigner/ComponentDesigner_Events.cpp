@@ -377,6 +377,9 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activeCircle) {
 			m_dragStart = m_activeCircle->m_trackedCenter;
 		}
+		if (m_activeText) {
+			m_dragStart = m_activeText->m_trackedCenter;
+		}
 		if (m_activePort) {
 			m_dragStart = m_activePort->centre;
 		}
@@ -410,6 +413,10 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		if (m_activeCircle) {
 			m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
 			commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeCircle->m_trackedCenter) - m_dragStart, m_activeCircle);
+		}
+		if (m_activeText) {
+			m_activeText->translateTo(getNearestGridVertex(m_activeText->m_trackedCenter));
+			commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeText->m_trackedCenter) - m_dragStart, m_activeText);
 		}
 		if (m_activeVertexIdx != -1) 
 		{
