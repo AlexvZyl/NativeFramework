@@ -18,7 +18,7 @@ This is where the interactive 2D design engine is implemented.
 #include "GUI/LumenGizmo/LumenGizmo.h"
 #include "Engines/CircuitDesigner/Peripherals/Cable.h"
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 
 //=============================================================================================================================================//
 //  Constructor & Destructor.																												   //

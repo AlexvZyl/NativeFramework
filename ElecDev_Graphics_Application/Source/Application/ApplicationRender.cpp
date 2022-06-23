@@ -10,8 +10,8 @@
 #include "Utilities/Profiler/Profiler.h"
 #include "imgui/notify/imgui_notify.h"
 #include "Application/Application.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
+#include "Application/Windows/LumenWindow.h"
+#include "Application/Windows/WindowStack.h"
 #include "GLFW/glfw3.h"
 #include "ImGuizmo/ImGuizmo.h"
 

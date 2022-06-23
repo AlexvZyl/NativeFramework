@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 
 class NotifyEvent;
 class Event;

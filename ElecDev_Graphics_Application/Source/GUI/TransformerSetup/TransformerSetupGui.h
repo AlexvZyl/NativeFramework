@@ -1,5 +1,5 @@
 #pragma once
-#include "Application/LumenWindow/LumenWebsocketWindow.h"
+#include "Application/Windows/LumenWebsocketWindow.h"
 class TransformerSetupGui :
     public LumenWebsocketWindow
 {

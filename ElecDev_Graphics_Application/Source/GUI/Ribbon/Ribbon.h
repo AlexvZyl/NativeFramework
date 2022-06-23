@@ -8,7 +8,7 @@
 #include <glad/glad.h>
 #include <imgui/imgui.h>
 #include <string>
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 #include "Resources/ResourceHandler.h"
 
 //==============================================================================================================================================//

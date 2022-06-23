@@ -12,7 +12,7 @@
 #include "OpenGL/Renderer/RendererGL.h"
 #include "OpenGL/SceneGL.h"
 #include "imgui/imgui.h"
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 
 //=============================================================================================================================================//
 //  Methods.																														           //

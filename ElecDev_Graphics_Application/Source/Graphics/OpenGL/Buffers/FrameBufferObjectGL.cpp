@@ -321,6 +321,8 @@ int FrameBufferObject::readPixel(FrameBufferAttachmentSlot slot, int x, int y)
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 	LUMEN_DEBUG_ASSERT(m_attachments[slot].created, "Attachment has not been created.");
+	LUMEN_DEBUG_ASSERT(x >= 0 && x < m_specification.width, "Trying to read outside of attachment width.");
+	LUMEN_DEBUG_ASSERT(y >= 0 && y < m_specification.height, "Trying to read outside of attachment height.");
 
 	GLCall(glBindFramebuffer(GL_READ_FRAMEBUFFER, m_rendererID));
 	GLCall(glReadBuffer((GLenum)slot));

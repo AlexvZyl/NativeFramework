@@ -132,25 +132,18 @@ void CircuitDesigner::setActiveCable(unsigned eID)
 
 Port* CircuitDesigner::getPort(unsigned eID)
 {
-	if ((eID == 0) || (eID == -1))
+	Entity* currentEntity = EntityManager::getEntity(eID);
+	if (!currentEntity) return nullptr;
+	while (currentEntity->m_type != EntityType::PORT)
 	{
-		return nullptr;
-	}
-	else
-	{
-		Entity* currentEntity = EntityManager::getEntity(eID);
+		currentEntity = currentEntity->m_parent;
 		if (!currentEntity) return nullptr;
-		while (currentEntity->m_type != EntityType::PORT)
-		{
-			currentEntity = currentEntity->m_parent;
-			if (!currentEntity) return nullptr;
-		}
-
-		// This cast remains valid provided all entities on screen are decendents of components. 
-		// If not, this needs to change.
-		Port* cur = dynamic_cast<Port*>(currentEntity);
-		return cur;
 	}
+
+	// This cast remains valid provided all entities on screen are decendents of components. 
+	// If not, this needs to change.
+	Port* cur = dynamic_cast<Port*>(currentEntity);
+	return cur;
 }
 
 void CircuitDesigner::setNameOfElements(const std::string& name)

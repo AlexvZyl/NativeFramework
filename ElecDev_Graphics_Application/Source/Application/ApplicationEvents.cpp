@@ -4,8 +4,8 @@
 
 #include "Application.h"
 #include "Events/EventLog.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
+#include "Application/Windows/LumenWindow.h"
+#include "Application/Windows/WindowStack.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/ComponentDesigner.h"
@@ -27,6 +27,14 @@ void Application::onUpdate()
 	executeLuaScriptQueue();
 	Logger::flushQueue();
 	//setGuiTheme();
+
+	// Dispatch the events that are handled by the windows.
+	// These include things such as window resizes and docking state changes.
+	// They are events that occur and GLFW is not aware of, since windows essentially 
+	// are their own windows.  This has to be done before GLFW events are dispatched to the 
+	// windows since some elements relie on some of these states being updated.
+	for (auto& [ID, window] : m_windowStack->getWindows())
+		window->onUpdate();
 
 	// Find the hovered window on a mouse move event.
 	if (EventLog::mouseMoveOccurred())
@@ -104,16 +112,6 @@ void Application::onUpdate()
 	// Pop windows that are queued from GLFW events.
 	// We pop them here so that they do not get dispatched for onUpdate.
 	popWindows();
-
-	// Dispatch the events that are handled by the windows.
-	// These include things such as window resizes and docking state changes.
-	// They are events that occur and GLFW is not aware of, since windows essentially 
-	// are their own windows.  Currently every window is checked every frame.  This is not 
-	// necessary.  The only thing preventing us from only updating only the focused window is 
-	// due to how resizing works when windows are docked.  They do not necessarily
-	// come into focus, missing the resize event.
-	for (auto& [ID, window] : m_windowStack->getWindows())
-		window->onUpdate();
 
 	// All of the GLFW events have been handled and the log can be cleared.
 	EventLog::clear();

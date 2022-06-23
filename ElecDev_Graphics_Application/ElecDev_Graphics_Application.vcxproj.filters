@@ -76,7 +76,7 @@
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\ApplicationEvents.cpp" />
     <ClCompile Include="Source\Application\ApplicationGLFWWindow.cpp" />
-    <ClCompile Include="Source\Application\LumenWindow\WindowStack.cpp" />
+    <ClCompile Include="Source\Application\Windows\WindowStack.cpp" />
     <ClCompile Include="Source\Engines\Base2DEngine\Base2DEngine_Events.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\CircuitDesigner_Events.cpp" />
     <ClCompile Include="Source\Engines\EngineCore\EngineCore_Events.cpp" />
@@ -131,10 +131,10 @@
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\PolyLine.cpp" />
     <ClCompile Include="External\Clipper\cpp\clipper.cpp" />
     <ClCompile Include="Source\GUI\CableCreator\CableCreator.cpp" />
-    <ClCompile Include="Source\Application\LumenWindow\LumenWindow.cpp" />
+    <ClCompile Include="Source\Application\Windows\LumenWindow.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
     <ClCompile Include="Source\GUI\LumenPayload\LumenPayload.cpp" />
-    <ClCompile Include="Source\Application\LumenWindow\LumenPopupWindow.cpp" />
+    <ClCompile Include="Source\Application\Windows\LumenPopupWindow.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
     <ClCompile Include="Source\GUI\TextEntryGUI\TextEntryGUI.cpp" />
     <ClCompile Include="Source\Utilities\Serialisation\Primitives\PolyLineSerialiser.cpp" />
@@ -146,7 +146,7 @@
     <ClCompile Include="Source\GUI\LumenGizmo\LumenGizmo.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
-    <ClCompile Include="Source\Application\LumenWindow\LumenWebsocketWindow.cpp" />
+    <ClCompile Include="Source\Application\Windows\LumenWebsocketWindow.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI_Gui.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -258,8 +258,8 @@
     <ClInclude Include="Source\Application\Events\Events.h" />
     <ClInclude Include="Source\Application\Application.h" />
     <ClInclude Include="Source\Application\Events\EventLog.h" />
-    <ClInclude Include="Source\Application\LumenWindow\LumenWindow.h" />
-    <ClInclude Include="Source\Application\LumenWindow\WindowStack.h" />
+    <ClInclude Include="Source\Application\Windows\LumenWindow.h" />
+    <ClInclude Include="Source\Application\Windows\WindowStack.h" />
     <ClInclude Include="Source\GUI\GraphicsScene\GraphicsScene.h" />
     <ClInclude Include="Source\GUI\Toolbar\Toolbar.h" />
     <ClInclude Include="Source\Lumen\Lumen.h" />
@@ -602,7 +602,7 @@
     <ClInclude Include="Source\GUI\PopupModal\PopupModal.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.h" />
     <ClInclude Include="Source\GUI\LumenPayload\LumenPayload.h" />
-    <ClInclude Include="Source\Application\LumenWindow\LumenPopupWindow.h" />
+    <ClInclude Include="Source\Application\Windows\LumenPopupWindow.h" />
     <ClInclude Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.h" />
     <ClInclude Include="Source\GUI\TextEntryGUI\TextEntryGUI.h" />
     <ClInclude Include="External\ImGuizmo\GraphEditor.h" />
@@ -623,7 +623,7 @@
     <ClInclude Include="Source\Utilities\Assert\Assert.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Primitives\IPrimitive.h" />
     <ClInclude Include="Source\Graphics\OpenGL\Buffers\GraphicsPrimitivesBuffersGL.h" />
-    <ClInclude Include="Source\Application\LumenWindow\LumenWebsocketWindow.h" />
+    <ClInclude Include="Source\Application\Windows\LumenWebsocketWindow.h" />
     <ClInclude Include="Source\Utilities\Assert\Assert.h" />
   </ItemGroup>
   <ItemGroup>

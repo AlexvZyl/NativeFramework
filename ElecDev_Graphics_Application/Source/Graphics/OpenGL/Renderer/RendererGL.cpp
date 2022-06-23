@@ -39,7 +39,7 @@ void Renderer::shutdown()
 	s_unitQuad.reset();
 }
 
-void Renderer::initialise()
+void Renderer::init()
 {
 	LUMEN_LOG_INFO("Initialising...", "OpenGL Renderer");
 

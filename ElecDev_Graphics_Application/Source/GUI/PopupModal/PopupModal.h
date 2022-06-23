@@ -1,7 +1,7 @@
 #pragma once
 
 // Includes.
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 
 class PopupModal : public LumenWindow
 {
