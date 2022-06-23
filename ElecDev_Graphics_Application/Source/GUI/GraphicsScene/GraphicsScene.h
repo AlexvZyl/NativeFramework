@@ -99,7 +99,7 @@ public:
 		// Render the gizmo.
 		splitter.SetCurrentChannel(ImGui::GetWindowDrawList(), 1);
 		LumenGizmo& gizmo = m_engine->getGizmo();
-		gizmo.setWindowPosition(ImGui::GetWindowPos());
+		gizmo.setWindowPosition(m_contentRegionPosition);
 		gizmo.setWindowSize(m_contentRegionSize);
 		gizmo.render();
 
