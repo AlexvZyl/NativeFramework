@@ -2,67 +2,42 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "EntityManager.h"
-#include <iostream>
 #include "Utilities/Logger/Logger.h"
-
-//==============================================================================================================================================//
-//  Static inits.																																//
-//==============================================================================================================================================//
-
-unsigned EntityManager::lastID = 0;
-std::vector<unsigned> EntityManager::freeIDs;
-std::unordered_map<unsigned, Entity*> EntityManager::entityLog = std::unordered_map<unsigned, Entity*>();
+#include "EntityManager.h"
 
 //==============================================================================================================================================//
 //  Methods.																																	//
 //==============================================================================================================================================//
 
+void EntityManager::init() 
+{
+	// Reserve slot 0 for `non` entities.
+	s_entityLog.emplace(nullptr, 0);
+}
+
 unsigned EntityManager::generateEID(Entity* entity)
 {
-	// Check to see if there are any freed (recycled) ID's.
-	if (!freeIDs.size())  
-	{
-		entityLog.insert({ ++lastID, entity });
-		return lastID;
-	}
-	else  // Recycle ID's.
-	{
-		unsigned freeID = freeIDs.back();
-		freeIDs.pop_back();
-		entityLog.insert({ freeID, entity });
-		return freeID;
-	}
+	return s_entityLog.emplace(entity, 0);
 }
 
 void EntityManager::freeEID(unsigned EID)
 {	
-	// To free the last EID, we can simply decrement LastID
-	if (EID == lastID) 
-	{ 
-		lastID--; 
-	}
-	// Remember to recycle this ID.
-	else			   
-	{ 
-		freeIDs.push_back(EID); 
-		// Consider invalidating pointers to deleted entities in the log here.
-	}
-	entityLog.erase(EID);
+	s_entityLog.erase(EID);
 }
 
 Entity* EntityManager::getEntity(unsigned EID)
 {
-	if ((EID == 0) || (EID == -1)) 
+	// Entity Manager does not handle these values.
+	// They are reserved for `non` entities.
+	if (EID == -1 || EID == 0) return nullptr;
+
+	// If the slot is used get the entity.
+	if (s_entityLog.isSlotUsed(EID))
 	{
-		LUMEN_LOG_WARN("Entities with ID = -1 or 0 are not managed by the entity manager.", "Entity Manager");
-		return nullptr;
+		return s_entityLog[EID].entity;
 	}
 
-	if (entityLog.contains(EID))
-	{
-		return entityLog.at(EID);
-	}
+	// Slot is not used and invalid entity ID.
 	else
 	{
 		LUMEN_LOG_WARN("Invalid entity ID.", "Entity Manager");
@@ -70,23 +45,16 @@ Entity* EntityManager::getEntity(unsigned EID)
 	}
 }
 
-unsigned EntityManager::getLastID() 
-{ 
-	return lastID; 
-}
-
 unsigned EntityManager::peakNextID() 
 {
-	// Check to see if there are any freed (recycled) ID's.
-	if (!freeIDs.size())
-	{
-		return lastID+1;
-	}
-	// Latest free ID.
-	else  
-	{
-		return freeIDs.back();
-	}
+	// If the Freelist is full, the next ID will be the capacity.
+	// Otherwise, the FreeList will always place it in the first open slot.
+
+	int firstFreeSlot = s_entityLog.getFirstFreeSlot();
+	// FreeList is not full.
+	if (firstFreeSlot != -1) return firstFreeSlot;
+	// Capacity is the next slot.
+	else return s_entityLog.capacity();
 }
 
 //==============================================================================================================================================//

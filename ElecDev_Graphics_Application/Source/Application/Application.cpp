@@ -6,8 +6,8 @@
 #include <iostream>
 #include <memory>
 #include "Application/Application.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
+#include "Application/Windows/LumenWindow.h"
+#include "Application/Windows/WindowStack.h"
 #include "Application/Events/EventLog.h"
 #include "Application/ApplicationTemplates.h"
 #include "imgui/imgui.h"
@@ -27,6 +27,7 @@
 #include "GLFW/glfw3.h"
 #include "Engines/AssetViewer/AssetViewer.h"
 #include "OpenGL/Renderer/RendererGL.h"
+#include "Graphics/Entities/EntityManager.h"
 
 //==============================================================================================================================================//
 //  Setup																																		//
@@ -39,34 +40,27 @@ Application::Application()
 	// Create GLFW window.
 	m_glfwWindow = Application::glfwInitWindow();
 
-	// Init renderer.
-	Renderer::initialise();
-
-	// Set this instance as the singleton.
-	Lumen::setApp(this);
-
-	// Give imgui some frames to startup.
-	startWindowResizing(60);
-
-	// App inits.
+	// Init systems.
+	Renderer::init();
+	EntityManager::init();
 	Application::glfwInitCallbacks();
 	EventLog::init();
+	Lumen::setApp(this);
+	// Give imgui some frames to startup.
+	startWindowResizing(120);
 	m_windowStack = std::make_unique<WindowStack>();
 
-	// ImGui Inits.
+	// ImGui setup.
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigInputTrickleEventQueue = false;
-	io.MouseDrawCursor = true;
 	setGuiTheme();
-
-	// Default cursor mode.
 	setCursorMode(CursorMode::OS);
 
 	// Initialisation frame.
 	buildDocks();
 
-	// Create the main GUI windows.
+	// Create the main (default) GUI windows.
 	Toolbar* toolbar = pushWindow<Toolbar>(LumenDockPanel::Fixed, "Main Toolbar");
 	auto* assetViewer = pushWindow<AssetExplorer>(LumenDockPanel::Bottom, "Asset Explorer");
 	toolbar->m_assetExplorerWindow = assetViewer;
@@ -76,7 +70,7 @@ Application::Application()
 
 	// Create web socket and give some time to setup.
 	m_webSocket = std::make_unique<LumenWebSocket>();
-	Sleep(10);
+	Sleep(10); // No
 }
 
 Application::~Application()
@@ -303,16 +297,16 @@ void Application::setGuiTheme()
 		colors[ImGuiCol_WindowBg] = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
 		colors[ImGuiCol_ChildBg] = ImVec4(0.15f, 0.15f, 0.16f, 1.00f);
 		colors[ImGuiCol_PopupBg] = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
-		colors[ImGuiCol_Border] = ImVec4(0.07f, 0.07f, 0.07f, 1.00f);
+		colors[ImGuiCol_Border] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f);
 		colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-		colors[ImGuiCol_FrameBg] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);
+		colors[ImGuiCol_FrameBg] = ImVec4(0.07f, 0.07f, 0.07f, 1.00f);
 		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.17f, 0.17f, 0.17f, 1.00f);
 		colors[ImGuiCol_FrameBgActive] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
 		colors[ImGuiCol_TitleBg] = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
 		colors[ImGuiCol_TitleBgActive] = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
 		colors[ImGuiCol_MenuBarBg] = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
-		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.07f, 0.07f, 0.07f, 0.60f);
+		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.05f, 0.05f, 0.05f, 0.60f);
 		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.45f, 0.45f, 0.49f, 1.00f);
 		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.52f, 0.52f, 0.57f, 1.00f);
 		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.61f, 0.61f, 0.65f, 1.00f);
@@ -325,8 +319,8 @@ void Application::setGuiTheme()
 		colors[ImGuiCol_Header] = ImVec4(0.18f, 0.19f, 0.23f, 0.00f);
 		colors[ImGuiCol_HeaderHovered] = ImVec4(0.32f, 0.33f, 0.39f, 1.00f);
 		colors[ImGuiCol_HeaderActive] = ImVec4(0.37f, 0.38f, 0.45f, 1.00f);
-		colors[ImGuiCol_Separator] = ImVec4(0.07f, 0.07f, 0.07f, 1.00f);
-		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.07f, 0.07f, 0.07f, 1.00f);
+		colors[ImGuiCol_Separator] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f);
+		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f);
 		colors[ImGuiCol_SeparatorActive] = ImVec4(0.18f, 0.30f, 0.67f, 1.00f);
 		colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 		colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
@@ -337,7 +331,7 @@ void Application::setGuiTheme()
 		colors[ImGuiCol_TabUnfocused] = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
 		colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.18f, 0.30f, 0.67f, 1.00f);
 		colors[ImGuiCol_DockingPreview] = ImVec4(0.18f, 0.30f, 0.67f, 1.00f);
-		colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.07f, 0.07f, 0.07f, 1.00f);
+		colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.00f);
 		colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
 		colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
 		colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);

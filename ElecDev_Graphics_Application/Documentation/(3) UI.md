@@ -3,7 +3,7 @@
 Creating a `GUI` is very similar to creating an `Engine` in Lumen.  Here is an example `MyGui.h`:
 
 ```C++
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 
 class MyGui : public LumenWindow
 {
@@ -19,7 +19,7 @@ public:
 }
 ```
 
-We have to inherit from `LumenWindow` that gives us all of the functionality we need to display a `GUI` in Lumen.  Al we have to do is overload the rendering functions and add the data we want.  We also have the option to add events, but this is rarely necessary for a `GUI`, since dear imgui handles the events.  Take a look at [LumenWindow.h](https://github.com/Alex-vZyl/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/LumenWindow/LumenWindow.h).  For some information on what functions are available, take a look at [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) (we use the docking branch!).  An example `MyGui.cpp`:
+We have to inherit from `LumenWindow` that gives us all of the functionality we need to display a `GUI` in Lumen.  Al we have to do is overload the rendering functions and add the data we want.  We also have the option to add events, but this is rarely necessary for a `GUI`, since dear imgui handles the events.  Take a look at [LumenWindow.h](https://github.com/Alex-vZyl/Lumen/blob/Main/ElecDev_Graphics_Application/Source/Application/Windows/LumenWindow.h).  For some information on what functions are available, take a look at [imgui.h](https://github.com/ocornut/imgui/blob/master/imgui.h) (we use the docking branch!).  An example `MyGui.cpp`:
 
 ```C++
 #include "GUI/MyGui/MyGui.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Application/LumenWindow/LumenPopupWindow.h"
+#include "Application/Windows/LumenPopupWindow.h"
 
 class CircuitEditorPopup : public LumenPopupWindow
 {

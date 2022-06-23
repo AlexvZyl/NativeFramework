@@ -1,7 +1,7 @@
 #include "Utilities/Logger/Logger.h"
 #include "Application/Application.h"
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
+#include "Application/Windows/LumenWindow.h"
+#include "Application/Windows/WindowStack.h"
 
 void Application::queueWindowPop(LumenWindow* window)
 {

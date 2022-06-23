@@ -5,7 +5,7 @@
 //==============================================================================================================================================//
 
 #include "Utilities/WebSocket/BoostWebsocket.h"
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 #include <memory>
 #include <boost/asio.hpp>
 #include <boost/asio/ts/buffer.hpp>

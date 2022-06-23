@@ -8,7 +8,7 @@
 #include "OpenGL/SceneGL.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "Application/Application.h"
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 #include "Lumen/Lumen.h"
 #include "OpenGL/Primitives/Grid.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
