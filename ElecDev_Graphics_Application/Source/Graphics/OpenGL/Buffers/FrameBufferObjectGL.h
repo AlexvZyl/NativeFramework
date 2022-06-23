@@ -243,6 +243,7 @@ private:
 	void destroyAttachment(FrameBufferAttachment& attachment);
 	inline void attachmentsChanged() { m_attachmentsChanged = true; }
 	void clearAttachment(const FrameBufferAttachment& attachment);
+	void setSize(int width, int height);
 
 	// Data.
 	FrameBufferSpecification m_specification;

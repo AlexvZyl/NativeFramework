@@ -156,6 +156,10 @@ std::vector<EngineCore*> Application::getEnignes()
 
 void Application::setCursorMode(CursorMode mode) 
 {
+	if (m_currentCursormode == mode) return;
+
+	m_currentCursormode = mode;
+
 	switch (mode) 
 	{
 	case CursorMode::OS:

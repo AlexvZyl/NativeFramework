@@ -21,19 +21,16 @@ void FrameBufferObject::create()
 	// Create attachments.
 	createAttachments();
 
-#ifdef _DEBUG
 	// Error checking.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		LUMEN_LOG_ERROR("Framebuffer not complete.", "Renderer");
-#endif
 	
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 void FrameBufferObject::create(int width, int height)
 {
-	m_specification.width = width;
-	m_specification.height = height;
+	setSize(width, height);
 	create();
 }
 
@@ -75,16 +72,12 @@ void FrameBufferObject::resize(int width, int height)
 {
 	LUMEN_DEBUG_ASSERT(m_isOnGPU, "Framebuffer is not on the GPU.");
 
-	m_specification.width = width;
-	m_specification.height = height;
-
+	setSize(width, height);
 	resizeAttachments();
 
-#ifdef _DEBUG
 	// Error checking.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		LUMEN_LOG_ERROR("Framebuffer resize failed.", "Renderer");
-#endif
 }
 
 void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment) 
@@ -176,14 +169,12 @@ void FrameBufferObject::createAttachment(FrameBufferAttachment& attachment)
 	// Error.
 	else LUMEN_ASSERT(false, "Unknown attachment type.");
 
-#ifdef _DEBUG
 	// Error checking.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
 	{
 		std::string msg = "Framebuffer attachment creation failed: " + attachment.slotString();
 		LUMEN_LOG_ERROR(msg, "Renderer");
 	}
-#endif
 
 	attachment.created = true;
 }
@@ -246,14 +237,12 @@ void FrameBufferObject::resizeAttachment(const FrameBufferAttachment& attachment
 	// Error.
 	else LUMEN_ASSERT(false, "Unknown attachment type.");
 
-#ifdef _DEBUG
 	// Error checking.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
 	{
 		std::string msg = "Framebuffer attachment resizing failed: " + attachment.slotString();
 		LUMEN_LOG_ERROR(msg, "Renderer");
 	}
-#endif
 }
 
 
@@ -393,4 +382,11 @@ void FrameBufferObject::createAttachments()
 void FrameBufferObject::createAttachment(FrameBufferAttachmentSlot slot) 
 {
 	createAttachment(m_attachments[slot]);
+}
+
+void FrameBufferObject::setSize(int width, int height) 
+{
+	// Ensure one of the dimensions is not set to 0.
+	m_specification.width = width ? width : 1;
+	m_specification.height = height ? height : 1;
 }
