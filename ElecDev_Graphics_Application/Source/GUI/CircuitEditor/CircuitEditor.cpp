@@ -37,6 +37,8 @@ void CircuitEditor::onImGuiRender()
 	AssetViewer* assetViewerEngine = app.getAssetViewerEngine();
 	CircuitDesigner::s_engineUsedByCircuitEditor = engine;
 
+	glm::vec2 contentRegionSize = ImGui::GetCurrentWindow()->WorkRect.GetSize();
+
 	if(engine)
 	{
 		// Circuit name.
@@ -67,13 +69,13 @@ void CircuitEditor::onImGuiRender()
 			ImGui::PopItemWidth();
 
 			// Display components.
-			if (ImGui::BeginChild("ImportedComponents", { 0.f, m_contentRegionSize.y / 2.f }, true))
+			if (ImGui::BeginChild("ImportedComponents", { 0.f, contentRegionSize.y / 2.f }, true))
 			{
 				// Setup columns.
 				float iconSize = 75;
 				float padding = 7;
 				float cellSize = iconSize + 2 * padding;
-				int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
+				int columns = std::floor(contentRegionSize.x * 0.9 / cellSize);
 				if (columns <= 0) columns = 1;
 				ImGui::Columns(columns, 0, false);
 
@@ -138,7 +140,7 @@ void CircuitEditor::onImGuiRender()
 				float iconSize = 75;
 				float padding = 7;
 				float cellSize = iconSize + 2 * padding;
-				int columns = std::floor(m_contentRegionSize.x * 0.9 / cellSize);
+				int columns = std::floor(contentRegionSize.x * 0.9 / cellSize);
 				if (columns <= 0) columns = 1;
 				ImGui::Columns(columns, 0, false);
 
