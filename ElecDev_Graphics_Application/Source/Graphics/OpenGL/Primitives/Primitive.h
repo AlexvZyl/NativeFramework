@@ -18,13 +18,14 @@ for a VAO to be able to render the entity to the screen.
 
 #include <vector>
 #include <memory>
+#include "Engines/EntityComponents/Mutable.h"
 
 //=============================================================================================================================================//
 //  Primitive Class.																														   //
 //=============================================================================================================================================//
 
 template<typename BufferType>
-class Primitive: public IPrimitive
+class Primitive: public IPrimitive, public Translatable, public Rotatable, public Transformable, public Scalable
 {
 protected:
 
@@ -44,7 +45,7 @@ public:
 		if (m_onGPU) removeFromGraphicsBuffer(); 
 	}
 
-	virtual void translate(const glm::vec3& translation) 
+	virtual void translate(const glm::vec3& translation) override
 	{
 		for (int i = 0; i < m_vertexCount; i++)
 			getVertex(i).position += translation;
@@ -53,22 +54,22 @@ public:
 		syncWithGPU();
 	}
 
-	virtual void translate(const glm::vec2& translation) 
+	virtual void translate(const glm::vec2& translation)  override
 	{
 		This::translate(glm::vec3{ translation, 0.f });
 	}
 
-	virtual void translateTo(const glm::vec3& position) 
+	virtual void translateTo(const glm::vec3& position)  override
 	{
 		This::translate(position - m_trackedCenter);
 	}
 
-	virtual void translateTo(const glm::vec2& position) 
+	virtual void translateTo(const glm::vec2& position)  override
 	{
 		This::translateTo(glm::vec3{ position, m_trackedCenter.z });
 	}
 
-	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
+	virtual void rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal)
 	{
 		// Rather call transform if a lot of these are going to be called sequentially.
 		glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);
@@ -81,12 +82,12 @@ public:
 		syncWithGPU();
 	}
 
-	virtual void rotate(float degrees, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. }) 
+	virtual void rotate(float degrees, const glm::vec3& rotateNormal = { 0.f, 0.f, 1. })  override
 	{
 		This::rotate(degrees, m_trackedCenter, rotateNormal);
 	}
 
-	virtual void transform(const glm::mat4& transform) 
+	virtual void transform(const glm::mat4& transform)  override
 	{
 		for (int i = 0; i < m_vertexCount; i++)
 			getVertex(i).position = glm::vec3(transform * glm::vec4(getVertex(i).position, 1.f));
@@ -97,14 +98,14 @@ public:
 		syncWithGPU();
 	}
 
-	virtual void scale(const glm::vec3& scaling) 
+	virtual void scale(const glm::vec3& scaling)  override
 	{
 		// ...
 
 		syncWithGPU();
 	}
 
-	virtual void enableOutline(float value = 1.f) 
+	virtual void enableOutline(float value = 1.f)
 	{
 		if (m_outlineEnabled) return;
 		m_outlineEnabled = true;

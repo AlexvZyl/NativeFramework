@@ -12,6 +12,7 @@
 #include "Graphics/Entities/Entity.h"
 #include "External/YAML-CPP/Includes/yaml-cpp/yaml.h"
 #include <filesystem>
+#include "Engines/EntityComponents/Mutable.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -37,7 +38,7 @@ enum class PortType;
 //  Class.																																	   //
 //=============================================================================================================================================//
 
-class Component2D : public Entity
+class Component2D : public Entity, public Translatable2D, public Rotatable
 {
 public:
 
@@ -110,9 +111,9 @@ public:
 	// Deconstructor.s
 	~Component2D();
 	//Move the component to a new positioned centred at the given coordinates
-	void moveTo(const glm::vec2& pointerPos);
+	void translateTo(const glm::vec2& pointerPos);
 	//Move the component by the  given vector
-	void move(const glm::vec2& translation);
+	void translate(const glm::vec2& translation);
 	//Place the component.
 	void place(const glm::vec2& pos);
 	//Move the component to a new layer.
@@ -155,4 +156,5 @@ public:
 
 private:
 	PortType getPortType(YAML::Node node);
+	void rotate(float degrees, const glm::vec3& rotateNormal);
 };

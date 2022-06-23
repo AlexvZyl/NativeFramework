@@ -73,6 +73,8 @@ enum EventType : LumenEventID
 	EventType_Dehover			=	(LumenEventID) 1 << 31,
 	EventType_MouseDragStart	=	(LumenEventID) 1 << 32,
 	EventType_MouseDragStop		=	(LumenEventID) 1 << 33,
+	EventType_Undo				=	(LumenEventID) 1 << 34,
+	EventType_Redo				=	(LumenEventID) 1 << 35,
 };
 
 //==============================================================================================================================================//

@@ -48,6 +48,8 @@ private:
 	// The position that the window starts up at.
 	glm::vec2 m_initialPosition;
 	glm::vec4* const m_target;
+	IPrimitive* lastActivePrimitive;
+	glm::vec4 color;
 };
 
 //==============================================================================================================================================//

@@ -83,7 +83,7 @@ Component2D::Component2D(Circuit* parent)
 Component2D::Component2D(const glm::vec2& centreCoords, Circuit* parent)
 	: Component2D(parent)
 {
-	moveTo(centreCoords);
+	translateTo(centreCoords);
 }
 
 Component2D::Component2D(const YAML::Node& node, Circuit* parent)
@@ -200,13 +200,13 @@ Component2D::~Component2D()
 //  Constructor & Destructor.																												   //
 //=============================================================================================================================================//
 
-void Component2D::moveTo(const glm::vec2& pointerPos)
+void Component2D::translateTo(const glm::vec2& pointerPos)
 {
 	glm::vec2 translation = pointerPos - centre;
-	move(translation);
+	translate(translation);
 }
 
-void Component2D::move(const glm::vec2& translation)
+void Component2D::translate(const glm::vec2& translation)
 {
 	title->translate(translation);
 	designator->translate(translation);
@@ -221,7 +221,7 @@ void Component2D::move(const glm::vec2& translation)
 void Component2D::place(const glm::vec2& pos)
 {	
 	// Ensure the component is at the desired position.
-	moveTo(pos);
+	translateTo(pos);
 	setLayer(0.0f);
 	title->setColor(titleColour);
 	for (auto poly : m_polygons) poly->setColor(shapeColour);
@@ -434,16 +434,8 @@ void Component2D::setDesignatorIdx(const int& idx)
 
 void Component2D::rotate(float degrees)
 {
-	m_rotation += degrees;
-	glm::vec3 rotationPoint = { centre.x, centre.y, 0.f };
-	glm::vec3 rotateNormal = {0.f, 0.f, 1.f};
-	title->rotate(degrees, rotationPoint, rotateNormal);
-	designator->rotate(degrees, rotationPoint, rotateNormal);
-	for (auto poly : m_polygons) poly->rotate(degrees, rotationPoint, rotateNormal);
-	for (auto line : m_lines)    line->rotate(degrees, rotationPoint, rotateNormal);
-	for (auto circ : m_circles)  circ->rotate(degrees, rotationPoint, rotateNormal);
-	for (auto text : m_text)     text->rotate(degrees, rotationPoint, rotateNormal);
-	for (auto& port : ports)	 port->rotate(degrees, rotationPoint, rotateNormal);
+	glm::vec3 rotateNormal = { 0.f, 0.f, 1.f };
+	rotate(degrees, rotateNormal);
 }
 
 //=============================================================================================================================================//
@@ -455,6 +447,19 @@ PortType Component2D::getPortType(YAML::Node node)
 	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PortType::PORT_IN; }
 	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PortType::PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
+}
+
+void Component2D::rotate(float degrees, const glm::vec3& rotateNormal)
+{
+	m_rotation += degrees;
+	glm::vec3 rotationPoint = { centre.x, centre.y, 0.f };
+	title->rotate(degrees, rotationPoint, rotateNormal);
+	designator->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto poly : m_polygons) poly->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto line : m_lines)    line->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto circ : m_circles)  circ->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto text : m_text)     text->rotate(degrees, rotationPoint, rotateNormal);
+	for (auto& port : ports)	 port->rotate(degrees, rotationPoint, rotateNormal);
 }
 
 //=============================================================================================================================================//

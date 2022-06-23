@@ -153,6 +153,14 @@ void EngineCore::onKeyEventForce(const KeyEvent& event)
 		onFileSaveEvent(FileSaveEvent());
 		return;
 	}
+	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_Z) {
+		onUndoEvent(NotifyEvent(EventType::EventType_Undo));
+		return;
+	}
+	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_Y) {
+		onRedoEvent(NotifyEvent(EventType::EventType_Redo));
+		return;
+	}
 	onKeyEvent(event);
 }
 

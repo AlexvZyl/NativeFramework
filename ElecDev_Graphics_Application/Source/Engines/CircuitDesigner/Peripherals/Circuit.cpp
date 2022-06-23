@@ -53,7 +53,7 @@ Circuit::Circuit(const YAML::Node& node)
 		// Update component.
 		auto& currentComponent = m_components.back();
 		currentComponent->disableOutline();
-		currentComponent->moveTo({ componentNode["Position"][0].as<float>(), componentNode["Position"][1].as<float>() });
+		currentComponent->translateTo({ componentNode["Position"][0].as<float>(), componentNode["Position"][1].as<float>() });
 		currentComponent->dataDict.clear();
 		YAML::Node dictNode = component.second["Dictionary"];
 		for (const auto& node : dictNode)

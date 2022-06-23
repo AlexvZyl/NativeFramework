@@ -163,7 +163,7 @@ void CircuitDesigner::loadAndPlaceComponent(const std::filesystem::path& path, c
 	if (m_activeComponent)
 		m_activeComponent->disableOutline();
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(path, m_circuit.get()));
-	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
+	m_circuit->m_components.back()->translate(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	m_activeComponent->setTag();
 	designerState = ENTITY_SELECT;
@@ -175,7 +175,7 @@ void CircuitDesigner::loadAndPlaceComponent(const YAML::Node& node, const glm::v
 	if(m_activeComponent)
 		m_activeComponent->disableOutline();
 	m_circuit->m_components.push_back(std::make_shared<Component2D>(node, m_circuit.get()));
-	m_circuit->m_components.back()->move(getNearestGridVertex(pixelToWorldCoords(mousePos)));
+	m_circuit->m_components.back()->translate(getNearestGridVertex(pixelToWorldCoords(mousePos)));
 	m_activeComponent = m_circuit->m_components.back();
 	m_activeComponent->setTag();
 	designerState = ENTITY_SELECT;
@@ -595,7 +595,7 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	portsVector = std::move(newPorts);
 
 	// Update component.
-	component->move(componentCentre);
+	component->translate(componentCentre);
 	component->rotate(componentRotation);
 }
 

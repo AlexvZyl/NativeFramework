@@ -50,7 +50,7 @@ Grid& Grid::createGrid()
 	float maxVertexCoord = (float)m_totalCoarseLines * (float)m_coarseIncrementSize;
 	int totalCoarseVerts = m_totalCoarseLines * 2 * 4;
 	int totalFineVerts = (int)std::floor(maxVertexCoord / m_fineIncrementSize) * 2 * 8;
-	float z = -0.99;
+	float z = -0.99f;
 	// Setup the Buffer's.
 	m_fineBuffer->setCapacityIncrements(totalFineVerts);
 	m_fineBuffer->setCapacityIncrements(totalFineVerts);

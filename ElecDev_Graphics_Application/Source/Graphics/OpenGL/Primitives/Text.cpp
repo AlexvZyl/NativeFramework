@@ -381,7 +381,7 @@ void Text::setLayer(float layer)
 {
 	// Text box.
 	for (int i = 0; i < 4; i++)
-		getVertex(i).position.z = layer - 0.001;
+		getVertex(i).position.z = layer - 0.001f;
 
 	// Text.
 	for (int i = 4; i < m_vertexCount; i++)

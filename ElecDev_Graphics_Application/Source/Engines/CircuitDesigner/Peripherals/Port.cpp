@@ -61,7 +61,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 		labelLocal = "Port " + std::to_string(parent->numPorts++);
 	//else m_label = label;
 
-	float textMargin = 0.0015;
+	float textMargin = 0.0015f;
 	//OLD DEPRECATED CODE
 	//infer the port position from the offset, and set the title
 	/*if (m_offset.y > 0.078)

@@ -318,6 +318,7 @@
     <ClCompile Include="Source\GUI\TextEntryGUI\TextEntryGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engines\CommandSystem\Command.h" />
     <ClInclude Include="External\Clipper\cpp\clipper.hpp" />
     <ClInclude Include="External\earcut\include\mapbox\earcut.hpp" />
     <ClInclude Include="External\ImGuizmo\GraphEditor.h" />
@@ -782,6 +783,7 @@
     <ClInclude Include="Source\Utilities\WebSocket\LumenWebSocket.h" />
     <ClInclude Include="Source\Utilities\Windows\WindowsUtilities.h" />
     <ClInclude Include="Source\GUI\TextEntryGUI\TextEntryGUI.h" />
+    <ClInclude Include="Source\Engines\EntityComponents\Mutable.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="External\lua\Windows\lua54.lib" />

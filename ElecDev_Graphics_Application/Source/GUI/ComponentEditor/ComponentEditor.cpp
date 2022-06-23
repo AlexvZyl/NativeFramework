@@ -171,7 +171,7 @@ void ComponentEditor::onImGuiRender()
 			{
 				std::unordered_map<std::string, std::string>& dataDict = activeComponent->dataDict;
 
-				const char* buffer[100];
+				const char* buffer[100]{};
 				int numKeys = 0;
 
 				if (activeComponent)
@@ -470,7 +470,7 @@ void ComponentEditor::onImGuiRender()
 			}
 		}
 
-		const char* possibleInformation[100];
+		const char* possibleInformation[100]{};
 
 		int posKeys = 0;
 
@@ -679,7 +679,7 @@ void ComponentEditor::onImGuiRender()
 				if (activeComponent) dataDict = &activeComponent->dataDict;
 				else if (activeCable) dataDict = &activeCable->cableDict;
 
-				const char* buffer[100];
+				const char* buffer[100]{};
 				int numKeys = 0;
 
 				if (activeComponent)

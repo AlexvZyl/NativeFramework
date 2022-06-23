@@ -101,11 +101,11 @@ void RendererStats::onImGuiRender()
 				}
 				else if (name == "Frametime (CPU)")
 				{
-					fpsCPU = 1.f / (time * 1e-3);
+					fpsCPU = 1.f / (time * 1e-3f);
 				}
 				else if (name == "Frametime (App)")
 				{
-					fpsApp = 1.f / (time * 1e-3);
+					fpsApp = 1.f / (time * 1e-3f);
 				}
 
 #ifdef PROFILE_IMGUI_OVERHEAD

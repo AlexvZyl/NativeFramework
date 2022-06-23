@@ -150,7 +150,7 @@ void CircuitDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 	if (designerState == COMPONENT_PLACE)
 	{
 		// Move the component.
-		m_activeComponent->moveTo(getNearestGridVertex(screenCoords));
+		m_activeComponent->translateTo(getNearestGridVertex(screenCoords));
 	}
 	else
 	{
@@ -238,7 +238,7 @@ void CircuitDesigner::onMouseDragEvent(const MouseDragEvent& event)
 		{
 			if (m_activeComponent.get())
 			{
-				m_activeComponent->move(translation);
+				m_activeComponent->translate(translation);
 			}
 			if (m_activeVertexIdx != -1) 
 			{
@@ -260,7 +260,7 @@ void CircuitDesigner::onNotifyEvent(const NotifyEvent& event)
 		{
 			glm::vec2 vert = getNearestGridVertex(m_activeComponent->centre);
 			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
-			m_activeComponent->moveTo(getNearestGridVertex(m_activeComponent->centre));
+			m_activeComponent->translateTo(getNearestGridVertex(m_activeComponent->centre));
 		}
 		if (m_activeVertexIdx != -1) 
 		{

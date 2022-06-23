@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <filesystem>
+#include "Engines/CommandSystem/Command.h"
 
 //=============================================================================================================================================//
 //  Forward declerations.																													   //
@@ -93,6 +94,9 @@ public:
 	//  E V E N T S  //
 	// ------------- //
 
+
+	CommandLog commandLog;
+
 	virtual void onEvent(const Event& event);
 	inline virtual void onMouseButtonEvent(const MouseButtonEvent& event) {}
 	inline virtual void onMouseMoveEvent(const MouseMoveEvent& event) {}
@@ -108,6 +112,8 @@ public:
 	inline virtual void onFileDropEvent(const FileDropEvent& event) {}
 	inline virtual void onYamlNodeDropEvent(const YamlNodeDropEvent& event) {}
 	inline virtual void onFileSaveEvent(const FileSaveEvent& event) {}
+	inline virtual void onUndoEvent(const NotifyEvent& event) { commandLog.undo(); }
+	inline virtual void onRedoEvent(const NotifyEvent& event) { commandLog.redo(); }
 
 	// ----------------------- //
 	//  C O O R D I N A T E S  //

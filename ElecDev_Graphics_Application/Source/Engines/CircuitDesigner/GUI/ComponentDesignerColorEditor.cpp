@@ -14,13 +14,14 @@
 #include "Graphics/OpenGL/Primitives/PolyLine.h"
 #include "Graphics/OpenGL/Primitives/Polygon.h"
 #include "Graphics/OpenGL/Primitives/Text.h"
+#include "Engines/CommandSystem/Command.h"
 
 //==============================================================================================================================================//
 //  Popup menu.																																	//
 //==============================================================================================================================================//
 
 ComponentDesignerColorEditor::ComponentDesignerColorEditor(std::string name, int imguiWindowFlags, glm::vec4* const target)
-	: LumenWindow(name, imguiWindowFlags), m_target(target)
+	: LumenWindow(name, imguiWindowFlags), m_target(target), color(*target)
 {
 	addImGuiWindowFlags(ImGuiWindowFlags_AlwaysAutoResize);
 }
@@ -71,44 +72,44 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 
 	// Set the color to be edited.
-	glm::vec4* color = m_target;
-	if (activePrimitive)
-	{
-		color = &activePrimitive->m_colour;
-	}
-	else if (activePort) 
-	{
-		color = &activePort->body->m_colour;
-	}
-	else if (activeCable)
-	{
-		color = &activeCable->m_colour;
-	}
-
-	// Open color editor.
-	if (color)
-	{
-		ImGui::SameLine();
-		if (ImGui::ColorPicker4("##ColorEditor", &color->r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
-		{
+	
+	if (activePrimitive != lastActivePrimitive) {
+		if (!activePrimitive) glm::vec4 color = *m_target;
+		else {
 			if (activePrimitive)
 			{
-				activePrimitive->setColor(*color);
-			}
-			else if (activeCable)
-			{
-				activeCable->m_colour = *color;
-				activeCable->setColour(*color);
-			}
-			else if (activePort) 
-			{
-				activePort->body->setColor(*color);
+				color = activePrimitive->m_colour;
 			}
 		}
+		lastActivePrimitive = activePrimitive;
 	}
-	else 
+
+
+	// Open color editor.
+	ImGui::SameLine();
+	if (ImGui::ColorPicker4("##ColorEditor", &color.r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf))
 	{
-		ImGui::Text("No active element.");
+
+		//No longer supported. To remove.
+		/*
+		else if (activeCable)
+		{
+			activeCable->m_colour = *color;
+			activeCable->setColour(*color);
+		}
+		else if (activePort)
+		{
+			activePort->body->setColor(*color);
+		}*/
+
+		if(!activePrimitive) *m_target = color;
+	}
+	if (ImGui::Button("Apply")) {
+		if (activePrimitive)
+		{
+			engine->commandLog.execute<SetColourCommand>(color, activePrimitive);
+			//activePrimitive->setColor(*color);
+		}
 	}
 }
 

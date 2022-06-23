@@ -67,7 +67,7 @@ void SettingsWidget::onImGuiRender()
 
         // Reduce timeout fps if larger than target.
         if (timeoutFPS > fps)
-            timeoutFPS == fps;
+            timeoutFPS = fps;
     }
 
     ImGui::Separator();
