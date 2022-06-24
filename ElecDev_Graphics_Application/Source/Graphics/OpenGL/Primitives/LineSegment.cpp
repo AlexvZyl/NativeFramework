@@ -90,7 +90,7 @@ void LineSegment::translateVertex(VertexData* vertex, const glm::vec2 translatio
 	}
 }
 
-void LineSegment::translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+void LineSegment::translateVertexAtIndex(const unsigned& index, const glm::vec2& translation)
 {
 	// Check if we should move the end or the start of the line.
 	if (glm::length(glm::vec2(getVertex(index).position) - m_end) < 
@@ -106,7 +106,7 @@ void LineSegment::translateVertexAtIndex(unsigned index, const glm::vec2& transl
 	}
 }
 
-void LineSegment::translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
+void LineSegment::translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position)
 {
 	// Check if we should move the end or the start of the line.
 	if (glm::length(glm::vec2(getVertex(index).position) - m_end) < 

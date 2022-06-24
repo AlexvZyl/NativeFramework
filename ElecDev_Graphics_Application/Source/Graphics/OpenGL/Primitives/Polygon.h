@@ -31,11 +31,11 @@ public:
 
 	// Adds a new vertex and handles the required manipulation of data.
 	virtual void pushVertex(const glm::vec3& vertex);
-	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation) override;
-	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
+	virtual void translateVertexAtIndex(const unsigned& index, const glm::vec3& translation) override;
+	virtual void translateVertexAtIndex(const unsigned& index, const glm::vec2& translation) override;
 	// Translate to.
-	virtual void translateVertexAtIndexTo(unsigned index, const glm::vec3& position) override;
-	virtual void translateVertexAtIndexTo(unsigned index, const glm::vec2& position) override;
+	virtual void translateVertexAtIndexTo(const unsigned& index, const glm::vec3& position) override;
+	virtual void translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position) override;
 	virtual void updateIndices();
 	// Move a vertex
 	virtual void translateVertexTo(VertexData* vertex, const glm::vec3 position) override;

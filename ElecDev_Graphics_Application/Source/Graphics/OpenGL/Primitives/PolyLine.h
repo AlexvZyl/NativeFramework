@@ -25,11 +25,11 @@ public:
     //Calculates the offset and runs the triangulation function
 	virtual void pushVertex(const glm::vec3& vertex) override;
 	virtual void pushVertex(const glm::vec2& vertex);
-	virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation) override;
-	virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
+	virtual void translateVertexAtIndex(const unsigned& index, const glm::vec3& translation) override;
+	virtual void translateVertexAtIndex(const unsigned& index, const glm::vec2& translation) override;
 	// Translate to.
-	virtual void translateVertexAtIndexTo(unsigned index, const glm::vec3& position) override;
-	virtual void translateVertexAtIndexTo(unsigned index, const glm::vec2& position) override;
+	virtual void translateVertexAtIndexTo(const unsigned& index, const glm::vec3& position) override;
+	virtual void translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position) override;
 	// Move a vertex
 	virtual void translateVertexTo(VertexData* vertex, const glm::vec3 position) override;
 	// Move a vertex

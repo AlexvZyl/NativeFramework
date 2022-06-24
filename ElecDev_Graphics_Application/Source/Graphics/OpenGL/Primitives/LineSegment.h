@@ -42,8 +42,8 @@ public:
     void translateVertexTo(VertexData* vertex, const glm::vec2 position) override;
     void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
 
-    void translateVertexAtIndexTo(unsigned index, const glm::vec2& position) override;
-    void translateVertexAtIndex(unsigned index, const glm::vec2& translation) override;
+    void translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position) override;
+    void translateVertexAtIndex(const unsigned& index, const glm::vec2& translation) override;
 };
 
 //==============================================================================================================================================//

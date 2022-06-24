@@ -101,19 +101,19 @@ void Polygon2D::pushVertex(const glm::vec3& vertex)
 	}*/
 }
 
-void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
+void Polygon2D::translateVertexAtIndex(const unsigned& index, const glm::vec3& translation)
 {
 	getVertex(index).position += translation;
 	updateIndices();
 	syncWithGPU();
 }
 
-void Polygon2D::translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+void Polygon2D::translateVertexAtIndex(const unsigned& index, const glm::vec2& translation)
 {
 	translateVertexAtIndex(index, { translation.x, translation.y, 0.f });
 }
 
-void Polygon2D::translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
+void Polygon2D::translateVertexAtIndexTo(const unsigned& index, const glm::vec3& position)
 {
 	glm::vec3* currentPosition = &getVertex(index).position;
 	*currentPosition += (position - *currentPosition);
@@ -121,7 +121,7 @@ void Polygon2D::translateVertexAtIndexTo(unsigned index, const glm::vec3& positi
 	syncWithGPU();
 }
 
-void Polygon2D::translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
+void Polygon2D::translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position)
 {
 	translateVertexAtIndexTo(index, { position.x, position.y, 0.f });
 }

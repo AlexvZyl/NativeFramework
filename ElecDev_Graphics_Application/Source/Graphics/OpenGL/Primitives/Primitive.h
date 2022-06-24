@@ -25,7 +25,7 @@ for a VAO to be able to render the entity to the screen.
 //=============================================================================================================================================//
 
 template<typename BufferType>
-class Primitive: public IPrimitive, public Translatable, public Rotatable, public Transformable, public Scalable
+class Primitive: public IPrimitive, public Translatable, public Rotatable, public Transformable, public Scalable, public Reshapable
 {
 protected:
 
@@ -162,27 +162,27 @@ public:
 		This::translateVertex(vertex, glm::vec3{ translation, 0.f });
 	}
 
-	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec3& translation)
+	inline virtual void translateVertexAtIndex(const unsigned& const index, const glm::vec3& translation)
 	{
 		This::translateVertex(&getVertex(index), translation);
 	}
 
-	inline virtual void translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+	inline virtual void translateVertexAtIndex(const unsigned& index, const glm::vec2& translation)
 	{
 		This::translateVertexAtIndex(index, glm::vec3{ translation, 0.f });
 	}
 
-	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
+	inline virtual void translateVertexAtIndexTo(const unsigned& index, const glm::vec3& position)
 	{
 		This::translateVertexTo(&getVertex(index), position);
 	}
 
-	inline virtual void translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
+	inline virtual void translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position)
 	{
 		This::translateVertexAtIndexTo(index, glm::vec3{ position, 0.f });
 	}
 
-	inline virtual void setVertexAtIndexColor(unsigned index, const glm::vec4& color)
+	inline virtual void setVertexAtIndexColor(const unsigned& index, const glm::vec4& color)
 	{
 		getVertex(index).color = color;
 		syncWithGPU();

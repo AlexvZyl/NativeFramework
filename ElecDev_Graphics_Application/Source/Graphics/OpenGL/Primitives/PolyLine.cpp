@@ -91,23 +91,23 @@ void PolyLine::pushVertex(const glm::vec2& vertex)
 	update();
 }
 
-void PolyLine::translateVertexAtIndex(unsigned index, const glm::vec3& translation)
+void PolyLine::translateVertexAtIndex(const unsigned& index, const glm::vec3& translation)
 {
 	translateVertexAtIndex(index, glm::vec2{ translation });
 }
 
-void PolyLine::translateVertexAtIndex(unsigned index, const glm::vec2& translation)
+void PolyLine::translateVertexAtIndex(const unsigned& index, const glm::vec2& translation)
 {
 	m_vertices.at(index) += translation;
 	update();
 }
 
-void PolyLine::translateVertexAtIndexTo(unsigned index, const glm::vec3& position)
+void PolyLine::translateVertexAtIndexTo(const unsigned& index, const glm::vec3& position)
 {
 	translateVertexAtIndexTo(index, glm::vec2{ position });
 }
 
-void PolyLine::translateVertexAtIndexTo(unsigned index, const glm::vec2& position)
+void PolyLine::translateVertexAtIndexTo(const unsigned& index, const glm::vec2& position)
 {
 	glm::vec2 translation = position - m_vertices.at(index);
 	translateVertexAtIndex(index, translation);

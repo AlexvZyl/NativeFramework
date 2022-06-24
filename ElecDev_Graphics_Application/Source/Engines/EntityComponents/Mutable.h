@@ -35,3 +35,9 @@ public:
     virtual void remove() = 0;
     virtual void restore() = 0;
 };
+
+class Reshapable {
+public:
+    virtual void translateVertexAtIndex(const unsigned& localIndex, const glm::vec2& translation) = 0;
+    virtual void translateVertexAtIndexTo(const unsigned& localIndex, const glm::vec2& position) = 0;
+};

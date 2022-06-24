@@ -101,6 +101,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 		m_activePoly = nullptr;
 		m_activeCircle = nullptr;
 		m_activePort = nullptr;
+		m_activeVertexIdx = -1;
 		designerState = CompDesignState::SELECT;
 		break;
 	}
