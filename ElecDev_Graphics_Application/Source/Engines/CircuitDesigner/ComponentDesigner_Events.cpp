@@ -307,57 +307,58 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event) 
 {
 	Base2DEngine::onMouseDragEvent(event);
-
-	if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_SpaceBar))
-	{
-		glm::vec2 pixelCoords = event.mousePosition;
-		glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
-		glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
-		if (designerState == CompDesignState::SELECT) 
+	if (designerState == CompDesignState::SELECT) {
+		if (event.isType(EventType_MouseButtonLeft) && event.isNotType(EventType_MouseButtonLeft | EventType_SpaceBar))
 		{
-			// User is dragging a component.
-			glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
-			if (m_activeVertexIdx != -1) 
+			glm::vec2 pixelCoords = event.mousePosition;
+			glm::vec3 WorldCoords = pixelToWorldCoords(pixelCoords);
+			glm::vec2 screenCoords = { WorldCoords.x, WorldCoords.y };
+			if (designerState == CompDesignState::SELECT)
 			{
-				// First check if we should move a vertex
-				// We need to move a vertex
-				if (m_activePoly) 
+				// User is dragging a component.
+				glm::vec2 translation = pixelToWorldDistance(event.currentFrameDelta);
+				if (m_activeVertexIdx != -1)
 				{
-					m_activePoly->translateVertexAtIndex(m_activeVertexIdx, translation);
+					// First check if we should move a vertex
+					// We need to move a vertex
+					if (m_activePoly)
+					{
+						m_activePoly->translateVertexAtIndex(m_activeVertexIdx, translation);
+					}
+					else if (m_activeLine)
+					{
+						m_activeLine->translateVertexAtIndex(m_activeVertexIdx, translation);
+					}
 				}
-				else if (m_activeLine) 
+				else
 				{
-					m_activeLine->translateVertexAtIndex(m_activeVertexIdx, translation);
-				}
-			}
-			else 
-			{
-				// If we are not moving a vertex, then check to move primitives
-				if (m_activePoly) 
-				{
-					m_activePoly->translate(translation);
-					m_lastDragPos = screenCoords;
-				}
-				if (m_activeLine) 
-				{
-					m_activeLine->translate(translation);
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-				if (m_activeCircle) 
-				{
-					m_activeCircle->translate(translation);
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-				if (m_activeText) 
-				{
-					// Consideration: Should we keep track of the text position in the parent port/component? If so, this should be updated here.
-					m_activeText->translate(translation);
-					m_lastDragPos = getNearestGridVertex(screenCoords);
-				}
-				if (m_activePort.get()) 
-				{
-					m_activePort->translate(translation);
-					m_lastDragPos = getNearestGridVertex(screenCoords);
+					// If we are not moving a vertex, then check to move primitives
+					if (m_activePoly)
+					{
+						m_activePoly->translate(translation);
+						m_lastDragPos = screenCoords;
+					}
+					if (m_activeLine)
+					{
+						m_activeLine->translate(translation);
+						m_lastDragPos = getNearestGridVertex(screenCoords);
+					}
+					if (m_activeCircle)
+					{
+						m_activeCircle->translate(translation);
+						m_lastDragPos = getNearestGridVertex(screenCoords);
+					}
+					if (m_activeText)
+					{
+						// Consideration: Should we keep track of the text position in the parent port/component? If so, this should be updated here.
+						m_activeText->translate(translation);
+						m_lastDragPos = getNearestGridVertex(screenCoords);
+					}
+					if (m_activePort.get())
+					{
+						m_activePort->translate(translation);
+						m_lastDragPos = getNearestGridVertex(screenCoords);
+					}
 				}
 			}
 		}
@@ -366,83 +367,85 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 
 void ComponentDesigner::onNotifyEvent(const NotifyEvent& event) 
 {
-	if (event.isType(EventType_MouseDragStart | EventType_MouseButtonLeft))
-	{
-		if (m_activePoly) {
-			m_dragStart = m_activePoly->m_trackedCenter;
-		}
-		if (m_activeLine) {
-			m_dragStart = m_activeLine->m_trackedCenter;
-		}
-		if (m_activeCircle) {
-			m_dragStart = m_activeCircle->m_trackedCenter;
-		}
-		if (m_activeText) {
-			m_dragStart = m_activeText->m_trackedCenter;
-		}
-		if (m_activePort) {
-			m_dragStart = m_activePort->centre;
-		}
-		if (m_activeVertexIdx != -1) {
-			if (m_activeLine) m_activeLine->m_vertices.at(m_activeVertexIdx);
-			else if (m_activePoly)
-			{
-				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
-				if (polyline)
-				{
-					// Polygon is clear, so we index with m_vertices (nodes).
-					m_dragStart = polyline->m_vertices.at(m_activeVertexIdx);
-				}
-				else
-				{
-					m_dragStart = m_activePoly->getVertex(m_activeVertexIdx).position;
-				}
-			}
-		}
-	}
-	else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
-	{
-
-		if (m_activeVertexIdx == -1) {//move primitives
+	if (designerState == CompDesignState::SELECT) {
+		if (event.isType(EventType_MouseDragStart | EventType_MouseButtonLeft))
+		{
 			if (m_activePoly) {
-				m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
-				commandLog.log<TranslateCommand>(getNearestGridVertex(m_activePoly->m_trackedCenter) - m_dragStart, m_activePoly);
+				m_dragStart = m_activePoly->m_trackedCenter;
 			}
 			if (m_activeLine) {
-				m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
-				commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeLine->m_trackedCenter) - m_dragStart, m_activeLine);
+				m_dragStart = m_activeLine->m_trackedCenter;
 			}
 			if (m_activeCircle) {
-				m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
-				commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeCircle->m_trackedCenter) - m_dragStart, m_activeCircle);
+				m_dragStart = m_activeCircle->m_trackedCenter;
 			}
 			if (m_activeText) {
-				m_activeText->translateTo(getNearestGridVertex(m_activeText->m_trackedCenter));
-				commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeText->m_trackedCenter) - m_dragStart, m_activeText);
+				m_dragStart = m_activeText->m_trackedCenter;
 			}
 			if (m_activePort) {
-				m_activePort->translateTo(getNearestGridVertex(m_activePort->centre));
-				commandLog.log<Translate2DCommand>(getNearestGridVertex(m_activePort->centre) - m_dragStart, m_activePort.get());
+				m_dragStart = m_activePort->centre;
+			}
+			if (m_activeVertexIdx != -1) {
+				if (m_activeLine) m_activeLine->m_vertices.at(m_activeVertexIdx);
+				else if (m_activePoly)
+				{
+					PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+					if (polyline)
+					{
+						// Polygon is clear, so we index with m_vertices (nodes).
+						m_dragStart = polyline->m_vertices.at(m_activeVertexIdx);
+					}
+					else
+					{
+						m_dragStart = m_activePoly->getVertex(m_activeVertexIdx).position;
+					}
+				}
 			}
 		}
-		else{//move vertices
-			if (m_activeLine) {
-				m_activeLine->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
-				commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)) - m_dragStart, m_activeLine);
-			}
-			else if (m_activePoly) 
-			{
-				PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
-				if (polyline) 
-				{
-					// Polygon is clear, so we index with m_vertices (nodes).
-					polyline->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
-					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)) - m_dragStart, polyline);
+		else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
+		{
+
+			if (m_activeVertexIdx == -1) {//move primitives
+				if (m_activePoly) {
+					m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
+					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activePoly->m_trackedCenter) - m_dragStart, m_activePoly);
 				}
-				else 
+				if (m_activeLine) {
+					m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
+					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeLine->m_trackedCenter) - m_dragStart, m_activeLine);
+				}
+				if (m_activeCircle) {
+					m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
+					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeCircle->m_trackedCenter) - m_dragStart, m_activeCircle);
+				}
+				if (m_activeText) {
+					m_activeText->translateTo(getNearestGridVertex(m_activeText->m_trackedCenter));
+					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeText->m_trackedCenter) - m_dragStart, m_activeText);
+				}
+				if (m_activePort) {
+					m_activePort->translateTo(getNearestGridVertex(m_activePort->centre));
+					commandLog.log<Translate2DCommand>(getNearestGridVertex(m_activePort->centre) - m_dragStart, m_activePort.get());
+				}
+			}
+			else {//move vertices
+				if (m_activeLine) {
+					m_activeLine->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
+					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)) - m_dragStart, m_activeLine);
+				}
+				else if (m_activePoly)
 				{
-					m_activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position));
-					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position) - m_dragStart, m_activePoly);
+					PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
+					if (polyline)
+					{
+						// Polygon is clear, so we index with m_vertices (nodes).
+						polyline->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
+						commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)) - m_dragStart, polyline);
+					}
+					else
+					{
+						m_activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position));
+						commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position) - m_dragStart, m_activePoly);
+					}
 				}
 			}
 		}

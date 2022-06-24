@@ -95,7 +95,7 @@ public:
 	// ------------- //
 
 
-	CommandLog commandLog;
+	CommandLog commandLog = this;
 
 	virtual void onEvent(const Event& event);
 	inline virtual void onMouseButtonEvent(const MouseButtonEvent& event) {}

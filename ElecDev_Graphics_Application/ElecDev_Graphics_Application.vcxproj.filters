@@ -148,6 +148,7 @@
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Application\Windows\LumenWebsocketWindow.cpp" />
     <ClCompile Include="Source\Utilities\Lua\LuaAPI_Gui.cpp" />
+    <ClCompile Include="Source\Engines\CommandSystem\CommandLog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\GLAD\Includes\glad\glad.h">

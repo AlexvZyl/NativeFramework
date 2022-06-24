@@ -199,6 +199,7 @@
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitDesignerPopupModal.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\ComponentDesignerColorEditor.cpp" />
     <ClCompile Include="Source\Engines\CircuitDesigner\GUI\CircuitEditorPopup.cpp" />
+    <ClCompile Include="Source\Engines\CommandSystem\CommandLog.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\BufferObjectsGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Buffers\VertexArrayObjectGL.cpp" />
     <ClCompile Include="Source\Graphics\OpenGL\Primitives\Grid.cpp" />

@@ -7,7 +7,6 @@
 #include "Utilities/Logger/Logger.h"
 #include "Application/Application.h"
 #include "Lumen/Lumen.h"
-#include "Engines\EngineCore\EngineCore.h"
 
 //typedef uint64_t LumenCommandID;
 enum class CommandType
@@ -215,6 +214,7 @@ public:
     }
 };
 
+class EngineCore;
 class CommandLog
 {
 private:
@@ -223,75 +223,12 @@ private:
     unsigned next_command_ixd = 0;
     EngineCore* parent;//Primarily used to notify the engine when a command is logged
 
+    void notifyParent();
+
 public:
-    void undo()
-    {
-        if (next_command_ixd == 0) return;
-
-        next_command_ixd--;
-        m_commandHistory.at(next_command_ixd)->undo();
-
-        switch (m_commandHistory.at(next_command_ixd)->commandType) {
-        case CommandType::CommandType_Remove:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo delete");
-            break;
-        case CommandType::CommandType_RemovePrimitive:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo delete");
-            break;
-        case CommandType::CommandType_SetColour:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo colour change");
-            break;
-        case CommandType::CommandType_Translate:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo translation");
-            break;
-        case CommandType::CommandType_Translate2D:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo translation");
-            break;
-        case CommandType::CommandType_ChangeValue:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo edit");
-            break;
-        case CommandType::CommandType_TranslateVertex:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo edit");
-            break;
-        default:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Undo action");
-            break;
-        }
-        
-    };
-
-    void redo()
-    {
-        if (next_command_ixd == m_commandHistory.size()) return;
-
-        m_commandHistory.at(next_command_ixd)->execute();
-        next_command_ixd++;
-
-        switch (m_commandHistory.at(next_command_ixd)->commandType) {
-        case CommandType::CommandType_Remove:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo delete");
-            break;
-        case CommandType::CommandType_RemovePrimitive:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo delete");
-            break;
-        case CommandType::CommandType_SetColour:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo colour change");
-            break;
-        case CommandType::CommandType_Translate:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo translation");
-            break;
-        case CommandType::CommandType_Translate2D:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo translation");
-            break;
-        case CommandType::CommandType_ChangeValue:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo edit");
-            break;
-        default:
-            Lumen::getApp().pushNotification(NotificationType::Success, 500, "Redo action");
-            break;
-        }
-
-    };
+    inline CommandLog(EngineCore* parent) :parent(parent) {};
+    void undo();
+    void redo();
     template <class CommandType, class ... Args>
     void log(const Args&... args)
     {   
@@ -302,8 +239,8 @@ public:
         m_commandHistory.emplace_back(std::make_unique<CommandType>(args...));
         next_command_ixd++;
 
-        //Notify engine of change
-        parent->unsavedDocument();
+        //Notify engine of logged change
+        notifyParent();
     };
 
     template <class CommandType, class ... Args>
