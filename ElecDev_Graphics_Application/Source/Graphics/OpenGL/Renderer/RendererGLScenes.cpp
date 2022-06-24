@@ -114,8 +114,14 @@ void Renderer::renderingPipeline2D(Scene* scene)
 	// FBO.
 	scene->m_renderFBO.bind();
 	scene->m_renderFBO.bindDrawBuffers();
-	Renderer::clearWithColor(Renderer::backgroundColor);
-	Renderer::clearDepthStencil();
+	Renderer::clearAll();
+
+	if (Renderer::s_pipelineControls["Background"])
+	{
+		Renderer::setDepthFunc(GL_ALWAYS);
+		Renderer::backgroundPass(scene);
+		Renderer::setDepthFunc(GL_LESS);
+	}
 
 	if (Renderer::s_pipelineControls["Grid"] && scene->m_grid->isEnabled())
 		Renderer::gridPass(scene);
@@ -144,18 +150,32 @@ void Renderer::renderingPipeline2DMSAA(Scene* scene)
 
 	// MSAA pass.
 	scene->m_msaaFBO.bindDrawBuffers();
+
+	if (Renderer::s_pipelineControls["Background"])
+	{
+		Renderer::setDepthFunc(GL_ALWAYS);
+		Renderer::backgroundPass(scene);
+		Renderer::setDepthFunc(GL_LESS);
+	}
+
 	if (Renderer::s_pipelineControls["Geometry"])
 		Renderer::geometryPass2D(scene);
 
 	// Non MSAA FBO.
 	scene->m_renderFBO.bind();
-	Renderer::clearWithColor(Renderer::backgroundColor);
-	Renderer::clearDepthStencil();
+	Renderer::clearAll();
+
+	if (Renderer::s_pipelineControls["Background"])
+	{
+		Renderer::setDepthFunc(GL_ALWAYS);
+		Renderer::backgroundPass(scene);
+		Renderer::setDepthFunc(GL_LESS);
+	}
 
 	// Resolve MSAA.
 	Renderer::resolveMSAA(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_0, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_0);
-	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
 	Renderer::blitDepthStencil(scene->m_msaaFBO, scene->m_renderFBO);
+	Renderer::blit(scene->m_msaaFBO, FrameBufferAttachmentSlot::COLOR_1, scene->m_renderFBO, FrameBufferAttachmentSlot::COLOR_1);
 
 	// Non MSAA pass.
 	scene->m_renderFBO.bindDrawBuffers();

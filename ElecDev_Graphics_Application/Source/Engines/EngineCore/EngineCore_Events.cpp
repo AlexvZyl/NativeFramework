@@ -11,7 +11,7 @@
 #include "OpenGL/Primitives/Grid.h"
 #include "Utilities/Logger/Logger.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 #include "External/GLFW/Includes/GLFW/glfw3.h"
 
 //==============================================================================================================================================//
@@ -125,6 +125,7 @@ void EngineCore::onMouseMoveEventForce(const MouseMoveEvent& event)
 {
 	if(getScene().getGrid().m_helperCircleEnabled)
 		getScene().getGrid().updateHelperCircle(pixelToWorldCoords(getMouseLocalPosition()));
+	if (!m_isHovered) return;
 	onMouseMoveEvent(event);
 }
 

@@ -148,6 +148,23 @@ public:
 		m_elementCount = 0;
 		setSlotData(0, m_capacity, -1, -1);
 	}
+
+	// Check if the slot is used.
+	inline bool isSlotUsed(int slotIndex) 
+	{
+		return !isSlotFree(slotIndex);
+	}
+
+	// Check if the slot is free.
+	inline bool isSlotFree(int slotIndex)
+	{
+		LUMEN_DEBUG_ASSERT(slotIndex >= 0 && slotIndex < m_capacity, "Trying to check outside of FreeList.");
+
+		auto [prevSlot, nextSlot] = findAdjacentSlots(slotIndex);
+		if (slotIsValid(prevSlot) && isSlotContained(prevSlot, slotIndex)) return false;
+		if (slotIsValid(nextSlot) && slotIndex != nextSlot)				   return false;
+		return true;
+	}
 	
 	// Utilities.
 	inline constexpr int capacity() const               { return m_capacity; }						  // Get the capacity in amount of elements.

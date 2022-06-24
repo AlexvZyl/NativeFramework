@@ -52,7 +52,7 @@ public:
 	void onRender();
 
 	// Called per frame to update the window and certain events. 
-	void onUpdate();
+	virtual void onUpdate();
 
 	// By defult LumenWindows do not need events to be dispatched, since
 	// dear imgui handles the events.  Is is provided to be able to pass
@@ -183,6 +183,9 @@ public:
 	// This information is not stored in the LumenWindow, since the docked window
 	// can be moved.  ImGui takes care of this information.
 	void dockWindow(LumenWindow* window, ImGuiDir direction = ImGuiDir_None);
+
+	// Get the ImGui window that the LumenWindow wraps.
+	inline ImGuiWindow& getImGuiWindow() { return *m_imguiWindow; }
 
 private:
 

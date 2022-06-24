@@ -5,7 +5,7 @@
 //==============================================================================================================================================//
 
 #include <memory>
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 #include "Engines/EngineCore/EngineCore.h"
 #include "OpenGL/SceneGL.h"
 #include "OpenGL/Renderer/RendererGL.h"
@@ -33,6 +33,29 @@ public:
 	inline virtual ~GraphicsScene() 
 	{
 		Renderer::initSceneDestruction(m_engine->m_scene.get());
+	}
+
+	// This override is required so that we can manually set the engine hover to false 
+	// when the mouse cursor goes outside of the texture.  If this is not done the hover is set
+	// too late (due to the state being updated in the render loop).
+	inline virtual void onUpdate() override
+	{
+		// Default functionality.
+		LumenWindow::onUpdate();
+		if (!findImGuiWindow()) return;
+
+		// Check if mouse left engine rect.
+		// TODO: See if there is a better way of doing this.
+		if (m_engine->m_isHovered)
+		{
+			auto rect = getImGuiWindow().WorkRect;
+			// Simulate 0 indexing.  Double check this.
+			rect.Min.y += 1.f;
+			rect.Max.x -= 1.f;
+			// Check if mouse is on texture.
+			if (!rect.Contains(ImGui::GetMousePos())) 
+				m_engine->m_isHovered = false;
+		}
 	}
 
 	inline virtual void onImGuiBegin() override 
@@ -76,7 +99,7 @@ public:
 		// Render the gizmo.
 		splitter.SetCurrentChannel(ImGui::GetWindowDrawList(), 1);
 		LumenGizmo& gizmo = m_engine->getGizmo();
-		gizmo.setWindowPosition(ImGui::GetWindowPos());
+		gizmo.setWindowPosition(m_contentRegionPosition);
 		gizmo.setWindowSize(m_contentRegionSize);
 		gizmo.render();
 
@@ -86,8 +109,8 @@ public:
 		splitter.SetCurrentChannel(ImGui::GetWindowDrawList(), 0);
 		ImGui::Image(m_textureID, m_contentRegionSize, { 0, 1 }, { 1, 0 });
 		// Check if image is hovered to allow blocking of events.
-		if (ImGui::IsItemHovered()) m_engine->m_isHovered = true;
-		else						m_engine->m_isHovered = false;
+		if (ImGui::IsItemHovered()) m_engine->onEvent(NotifyEvent(EventType_Hover));
+		else						m_engine->onEvent(NotifyEvent(EventType_Dehover));
 
 		// Drag & Drop files.
 		LumenPayload payloadFile(LumenPayloadType::String);
@@ -181,6 +204,10 @@ public:
 			));
 		}
 
+		// We do not want to pass hover events directly to the engine, since this is handled in the renderloop.
+		// (We need to know if an overlay is in front of the engine).
+		else if (event.isType(EventType_Hover) || event.isType(EventType_Dehover)) return;
+
 		// The other events do not need adjustments, since they do no contain mouse positions.
 		else m_engine->onEvent(event);
 	}
@@ -228,7 +255,7 @@ public:
 	inline void onWindowResizeEvent(const WindowEvent& event) override 
 	{
 		LumenWindow::onWindowResizeEvent(event);
-		m_engine->onWindowResizeEventForce(event);
+		m_engine->onEvent(event);
 	}
 
 private:

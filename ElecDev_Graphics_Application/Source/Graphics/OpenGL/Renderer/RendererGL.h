@@ -84,7 +84,7 @@ public:
 	// ------------------- //
 
 	// Set up the renderer.
-	static void initialise();
+	static void init();
 	// Use the font provided.
 	static void useFont(const Font& font);
 	// Remove the primitive from the scene.

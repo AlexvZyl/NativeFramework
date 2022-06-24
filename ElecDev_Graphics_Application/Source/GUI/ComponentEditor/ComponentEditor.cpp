@@ -7,7 +7,7 @@
 #include "ComponentEditor.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include "Application/Application.h"	
-#include "Application/LumenWindow/LumenWindow.h"
+#include "Application/Windows/LumenWindow.h"
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/ComponentDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"

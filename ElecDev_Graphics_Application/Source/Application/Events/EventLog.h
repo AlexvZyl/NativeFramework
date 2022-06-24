@@ -30,7 +30,7 @@ public:
 	// (i.e it should be dispatched ealier) it can using the template version.
 	inline static void logNotify(LumenEventID ID, const std::string& msg = "")
 	{
-		notifyEvents.emplace_back(NotifyEvent(ID, msg));
+		notifyEvents.emplace_back(ID, msg);
 	}
 
 	// Log a mouse move event.
@@ -71,6 +71,7 @@ public:
 		// Determine the scroll values.
 		// The amount of scroll is capped to prevent 'free' mouse
 		// wheels and track pads from going crazy.
+		
 		// X Offset.
 		if (mouseScroll.xOffset + xOffset < MAX_SCROLL_PER_FRAME)
 			mouseScroll.xOffset += xOffset;

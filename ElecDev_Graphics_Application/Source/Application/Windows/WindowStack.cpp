@@ -2,8 +2,8 @@
 //  Includes.																																	//
 //==============================================================================================================================================//
 
-#include "Application/LumenWindow/LumenWindow.h"
-#include "Application/LumenWindow/WindowStack.h"
+#include "Application/Windows/LumenWindow.h"
+#include "Application/Windows/WindowStack.h"
 #include "Lumen/Lumen.h"
 #include "Application/Application.h"
 
