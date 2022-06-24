@@ -132,6 +132,7 @@ glm::vec2 EngineCore::getMouseGlobalPosition()
 
 void EngineCore::unsavedDocument()
 {
+	engineLastModified = std::time(nullptr);
 	m_parentWindow->unsavedDocument();
 }
 

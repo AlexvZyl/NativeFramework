@@ -30,7 +30,7 @@ enum designState
 { 
 	COMPONENT_PLACE, 
 	ENTITY_SELECT, 
-	COMPONENT_MOVE, 
+	//COMPONENT_MOVE, 
 	CABLE_PLACE
 };
 
@@ -57,6 +57,7 @@ public:
 	glm::vec4 helperColour = { 0.18f, 0.30f, 0.67f, 0.85f };
 	std::shared_ptr<Circuit> m_circuit;
 	glm::vec2 m_lastDragPos = {0.f, 0.f};
+	glm::vec2 m_dragStart;
 	unsigned int m_currentEntityID = 0;
 	Port* m_hoveredPort = nullptr;
 	unsigned m_hoveredID;

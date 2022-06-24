@@ -386,7 +386,7 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 				m_dragStart = m_activePort->centre;
 			}
 			if (m_activeVertexIdx != -1) {
-				if (m_activeLine) m_activeLine->m_vertices.at(m_activeVertexIdx);
+				if (m_activeLine) m_dragStart = m_activeLine->m_vertices.at(m_activeVertexIdx);
 				else if (m_activePoly)
 				{
 					PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
@@ -408,29 +408,29 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 			if (m_activeVertexIdx == -1) {//move primitives
 				if (m_activePoly) {
 					m_activePoly->translateTo(getNearestGridVertex(m_activePoly->m_trackedCenter));
-					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activePoly->m_trackedCenter) - m_dragStart, m_activePoly);
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activePoly->m_trackedCenter } - m_dragStart, m_activePoly);
 				}
 				if (m_activeLine) {
 					m_activeLine->translateTo(getNearestGridVertex(m_activeLine->m_trackedCenter));
-					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeLine->m_trackedCenter) - m_dragStart, m_activeLine);
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activeLine->m_trackedCenter } - m_dragStart, m_activeLine);
 				}
 				if (m_activeCircle) {
 					m_activeCircle->translateTo(getNearestGridVertex(m_activeCircle->m_trackedCenter));
-					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeCircle->m_trackedCenter) - m_dragStart, m_activeCircle);
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activeCircle->m_trackedCenter } - m_dragStart, m_activeCircle);
 				}
 				if (m_activeText) {
 					m_activeText->translateTo(getNearestGridVertex(m_activeText->m_trackedCenter));
-					commandLog.log<TranslateCommand>(getNearestGridVertex(m_activeText->m_trackedCenter) - m_dragStart, m_activeText);
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activeText->m_trackedCenter } - m_dragStart, m_activeText);
 				}
 				if (m_activePort) {
 					m_activePort->translateTo(getNearestGridVertex(m_activePort->centre));
-					commandLog.log<Translate2DCommand>(getNearestGridVertex(m_activePort->centre) - m_dragStart, m_activePort.get());
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activePort->centre } - m_dragStart, m_activePort.get());
 				}
 			}
 			else {//move vertices
 				if (m_activeLine) {
 					m_activeLine->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)));
-					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(m_activeLine->m_vertices.at(m_activeVertexIdx)) - m_dragStart, m_activeLine);
+					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, m_activeLine->m_vertices.at(m_activeVertexIdx) - m_dragStart, m_activeLine);
 				}
 				else if (m_activePoly)
 				{
@@ -439,12 +439,12 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 					{
 						// Polygon is clear, so we index with m_vertices (nodes).
 						polyline->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)));
-						commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(polyline->m_vertices.at(m_activeVertexIdx)) - m_dragStart, polyline);
+						commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, polyline->m_vertices.at(m_activeVertexIdx) - m_dragStart, polyline);
 					}
 					else
 					{
 						m_activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position));
-						commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, getNearestGridVertex(m_activePoly->getVertex(m_activeVertexIdx).position) - m_dragStart, m_activePoly);
+						commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, glm::vec2{ m_activePoly->getVertex(m_activeVertexIdx).position } - m_dragStart, m_activePoly);
 					}
 				}
 			}

@@ -17,6 +17,7 @@
 #include "Utilities/Logger/Logger.h"
 #include "glm/glm.hpp"
 #include "OpenGL/Primitives/Grid.h"
+#include "OpenGL/Primitives/PolyLine.h"
 #include "GUI/LumenGizmo/LumenGizmo.h"
 #include "Utilities/Serialisation/Serialiser.h"
 #include "Utilities/Windows/WindowsUtilities.h"
@@ -254,18 +255,33 @@ void CircuitDesigner::onMouseDragEvent(const MouseDragEvent& event)
 
 void CircuitDesigner::onNotifyEvent(const NotifyEvent& event)
 {
-	if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
-	{
-		if (m_activeComponent.get()) 
+
+	glm::vec2 worldCoords = pixelToWorldCoords(getMouseLocalPosition());
+	if (designerState == designState::ENTITY_SELECT) {
+		if (event.isType(EventType_MouseDragStart | EventType_MouseButtonLeft))
 		{
-			glm::vec2 vert = getNearestGridVertex(m_activeComponent->centre);
-			LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
-			m_activeComponent->translateTo(getNearestGridVertex(m_activeComponent->centre));
+			if (m_activeComponent.get())
+			{
+				m_dragStart = m_activeComponent->centre;
+			}
+			if (m_activeVertexIdx != -1) {
+				m_dragStart = m_activeCable->m_polyLine->m_vertices.at(m_activeVertexIdx);
+			}
 		}
-		if (m_activeVertexIdx != -1) 
+		if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
 		{
-			glm::vec2 worldCoords = pixelToWorldCoords(getMouseLocalPosition());
-			m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(worldCoords));
+			if (m_activeComponent.get())
+			{
+				glm::vec2 vert = getNearestGridVertex(m_activeComponent->centre);
+				LUMEN_LOG_DEBUG(std::to_string(vert.x), "Component Designer Notify");
+				m_activeComponent->translateTo(getNearestGridVertex(m_activeComponent->centre));	
+				commandLog.log<Translate2DCommand>(glm::vec2{ m_activeComponent->centre } - m_dragStart, m_activeComponent.get());
+			}
+			if (m_activeVertexIdx != -1)
+			{
+				m_activeCable->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(worldCoords));
+				commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, m_activeCable->m_polyLine->m_vertices.at(m_activeVertexIdx) - m_dragStart, m_activeCable.get());
+			}
 		}
 	}
 }

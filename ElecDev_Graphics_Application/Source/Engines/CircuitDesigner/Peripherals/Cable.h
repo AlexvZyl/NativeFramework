@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "yaml-cpp/yaml.h"
 #include <glm/glm.hpp>
+#include "Engines/EntityComponents/Mutable.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.  																													    //
@@ -32,7 +33,7 @@ enum class LineOrientation
 //  Cable class.  																																//
 //==============================================================================================================================================//
 
-class Cable : public Entity
+class Cable : public Entity, public Reshapable
 {
 public:
 
@@ -82,8 +83,8 @@ public:
     bool attach(Port* endPort);
     void followPort(Port* movedPort);
     void setColour(glm::vec4 colour, bool save = true);
-    void translateVertexAtIndex(unsigned vertexIdx, glm::vec2 translation);
-    void translateVertexAtIndexTo(unsigned vertexIdx, glm::vec2 position);
+    void translateVertexAtIndex(const unsigned& vertexIdx, const glm::vec2& translation) override;
+    void translateVertexAtIndexTo(const unsigned& vertexIdx, const glm::vec2& position) override;
     void enableOutline();
     void disableOutline();
     std::tuple<unsigned, float>  getNearestVertexIdx(glm::vec2 pos);

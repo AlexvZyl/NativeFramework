@@ -281,7 +281,7 @@ void Cable::setColour(glm::vec4 colour, bool save)
 	m_polyLine->setColor(colour);
 }
 
-void Cable::translateVertexAtIndex(unsigned vertexIdx, glm::vec2 translation)
+void Cable::translateVertexAtIndex(const unsigned& vertexIdx, const glm::vec2& translation)
 {
 	if (vertexIdx == 0 || vertexIdx == m_polyLine->m_vertices.size() - 1) {
 		//Don't allow the ends to be moved off the port
@@ -290,7 +290,7 @@ void Cable::translateVertexAtIndex(unsigned vertexIdx, glm::vec2 translation)
 	m_polyLine->translateVertexAtIndex(vertexIdx, translation);
 }
 
-void Cable::translateVertexAtIndexTo(unsigned vertexIdx, glm::vec2 position)
+void Cable::translateVertexAtIndexTo(const unsigned& vertexIdx, const glm::vec2& position)
 {
 	if (vertexIdx == 0 || vertexIdx == m_polyLine->m_vertices.size() - 1) {
 		//Don't allow the ends to be moved off the port

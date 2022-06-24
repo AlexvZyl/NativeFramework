@@ -151,7 +151,7 @@ void EngineCore::onKeyEventForce(const KeyEvent& event)
 {
 	// Do not pass event if ImGui is using the keyboard.
 	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_S) {
-		onFileSaveEvent(FileSaveEvent());
+		onFileSaveEventForce(FileSaveEvent());
 		return;
 	}
 	if (event.isType(EventType_LeftCtrl | EventType_KeyPress) && event.key == GLFW_KEY_Z) {
@@ -163,6 +163,15 @@ void EngineCore::onKeyEventForce(const KeyEvent& event)
 		return;
 	}
 	onKeyEvent(event);
+}
+
+void EngineCore::onFileSaveEventForce(const FileSaveEvent& event)
+{
+	if (lastSaved < engineLastModified) {//only save if design has been modified.
+		onFileSaveEvent(event);
+		lastSaved = std::time(nullptr);//Consider setting = engineLastModified.
+	}
+	m_parentWindow->savedDocument();//we can remove unsaved tag regardless
 }
 
 //==============================================================================================================================================//

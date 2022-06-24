@@ -62,6 +62,9 @@ public:
 
 	// The window the engine is displayed in.
 	LumenWindow* m_parentWindow = nullptr;
+
+	std::time_t engineLastModified = 0;
+	std::time_t lastSaved = 0;
 	// Display window as a saved document.
 	void unsavedDocument();
 	// Display window as an unsaved document.
@@ -208,6 +211,7 @@ private:
 	virtual void onMouseButtonEventForce(const MouseButtonEvent& event);
 	virtual void onMouseScrollEventForce(const MouseScrollEvent& event);
 	virtual void onKeyEventForce(const KeyEvent& event);
+	virtual void onFileSaveEventForce(const FileSaveEvent& event);
 };
 
 //=============================================================================================================================================//
