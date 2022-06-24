@@ -244,6 +244,7 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		case GLFW_KEY_P:
 			//Add new polygon
 			switchState(CompDesignState::DRAW_POLY);
+			drawFilled = !drawFilled;
 			break;
 
 		case GLFW_KEY_L:
@@ -254,6 +255,7 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 		case GLFW_KEY_C:
 			//Add new circle
 			switchState(CompDesignState::DRAW_CIRCLE);
+			drawFilled = !drawFilled;
 			break;
 
 		case GLFW_KEY_O:
