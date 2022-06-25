@@ -604,7 +604,8 @@ void ComponentEditor::onImGuiRender()
 					}
 					if (ImGui::IsItemDeactivatedAfterEdit()) {
 						//log change
-						design_engine->commandLog.log<ChangeValueWithSetterCommand<std::string, Component2D>>(activeComponent->m_tag, activeComponent, strBeforeEdit, &Component2D::setTag);
+						design_engine->commandLog.log<ChangeValueWithSetterCommand<std::string, Component2D>>
+							(activeComponent->m_tag, activeComponent, strBeforeEdit, &Component2D::setTag);
 
 					}
 					ImGui::PopItemWidth();
@@ -614,7 +615,8 @@ void ComponentEditor::onImGuiRender()
 					ImGui::BeginDisabled(activeComponent->m_tag == activeComponent->designatorSym + std::to_string(activeComponent->getDesignatorIdx()));
 					//ImGui::PushItemWidth(-1);
 					if (ImGui::Button("Reset Default")) {
-						activeComponent->setTag();
+						design_engine->commandLog.log<ChangeValueWithSetterCommand<std::string, Component2D>>
+							("None", activeComponent, activeComponent->m_tag, &Component2D::setTag);
 					}
 					//ImGui::PopItemWidth();
 					ImGui::EndDisabled();
