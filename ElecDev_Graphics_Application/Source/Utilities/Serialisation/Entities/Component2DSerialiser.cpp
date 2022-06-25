@@ -6,6 +6,7 @@
 #include "Engines/CircuitDesigner/Peripherals/Component2D.h"
 #include "Graphics/Fonts/FontLoader.h"
 #include "OpenGL/Primitives/PolyLine.h"
+#include "OpenGL/Primitives/Text.h"
 
 //=============================================================================================================================================//
 //  Component 2D serialiser.   																												   //
@@ -17,7 +18,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Component2D* comp)
 	emitter << YAML::BeginMap;
 
 	// Component data.
-	emitter << YAML::Key << "Filename" << YAML::Value << comp->equipType + ".lmcp";
+	emitter << YAML::Key << "Filename" << YAML::Value << comp->title->m_string + ".lmcp";
 	emitter << YAML::Key << "Internal Circuit" << YAML::Value << "Test_AE_234.lmct";
 	emitter << YAML::Key << "Equipment Type" << YAML::Value << comp->title;
 	emitter << YAML::Key << "Designator" << YAML::Value << comp->designator;

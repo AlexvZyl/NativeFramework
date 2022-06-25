@@ -29,7 +29,7 @@ ComponentDesigner::ComponentDesigner()
 
 	// Create default component.
 	m_activeComponent = std::make_shared<Component2D>(nullptr);
-	m_activeComponent->title->updateText(m_activeComponent->equipType);
+	m_activeComponent->title->updateText(m_activeComponent->title->m_string);
 	m_activeComponent->place(glm::vec2(0.f));
 	m_activeComponent->disableOutline();
 

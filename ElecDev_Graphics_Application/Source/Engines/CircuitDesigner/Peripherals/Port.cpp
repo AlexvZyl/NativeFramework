@@ -315,8 +315,11 @@ void Port::detachCable(Cable* cable)
 	}
 }
 
-void Port::updateType()
+void Port::updateType(PortType type)
 {
+	if (type != (PortType)( - 1)) {
+		m_type = type;
+	}
 	//assumes no hovered/attached ports (port types should only change in component designer)
 	switch (m_type) {
 	case PortType::PORT_IN:

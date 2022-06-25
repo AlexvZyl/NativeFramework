@@ -115,12 +115,12 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	if (componentNode["Title"].IsDefined())
 	{
 		title = Renderer::addText2D(componentNode["Title"], this);
-		equipType = title->m_string;
+		//equipType = title->m_string;
 	}
 	else if (componentNode["Equipment Type"].IsDefined())
 	{
 		title = Renderer::addText2D(componentNode["Equipment Type"], this);
-		equipType = title->m_string;
+		//equipType = title->m_string;
 	}
 	// Default title.
 	else
@@ -305,8 +305,8 @@ void Component2D::translateTitle(glm::vec2 translation)
 void Component2D::updateText()
 {
 	//std::string textString = designatorSym + std::to_string(designatorIdx);
-	if (title->updateText(equipType)) 
-		title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
+	title->update();
+	title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
 
 	if (designator->updateText(m_tag))
 		designator->rotate(m_rotation, glm::vec3(centre, 0.f), {0.f, 0.f, 1.f});
@@ -314,8 +314,8 @@ void Component2D::updateText()
 
 void Component2D::updateTextWithoutLabel()
 {
-	if (title->updateText(equipType))
-		title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
+	title->update();
+	title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
 
 	if (designator->updateText(designatorSym))
 		designator->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });

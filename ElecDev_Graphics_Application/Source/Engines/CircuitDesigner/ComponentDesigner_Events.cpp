@@ -108,7 +108,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 				m_activeText = Renderer::addText2D(" ", screenCoords, textColour, textSize, "C", "B", m_activeComponent.get());
 				m_activeComponent->m_text.push_back(m_activeText);
 			
-				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText, &commandLog);
 				switchState(CompDesignState::SELECT);
 			}
 		}
@@ -124,7 +124,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 	{
 		if (designerState == CompDesignState::SELECT) 
 		{
-			if (m_activeText) Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText);
+			if (m_activeText) Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", m_activeText, &commandLog);
 		}
 	}
 }

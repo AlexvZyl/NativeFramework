@@ -19,6 +19,7 @@
 #include "GUI/LumenPayload/LumenPayload.h"
 #include "imgui/misc/cpp/imgui_stdlib.h"
 #include "Graphics/OpenGL/Primitives/Text.h"
+#include "Engines/CommandSystem/Command.h"
 
 /*=======================================================================================================================================*/
 /* Component Editor.																													 */
@@ -56,13 +57,15 @@ void ComponentEditor::onImGuiRender()
 		{
 			ImGui::Text(" Designator:\t  ");
 			ImGui::SameLine();
-			ImGui::InputText("##Designator", &activeComponent->designatorSym);
+			inputTextWithLog("##Designator Prefix", activeComponent->designatorSym, &component_designer->commandLog);
+			//ImGui::InputText("##Designator Prefix", &activeComponent->designatorSym);
 			ImGui::Text(" Name:\t  ");
 			ImGui::SameLine();
-			ImGui::InputText("##Equipment Type", &activeComponent->equipType);
+			//ImGui::InputText("##Equipment Type", &activeComponent->equipType);
+			inputTextWithLog("##description", activeComponent->title, &component_designer->commandLog);
 			ImGui::Text("Type: \t");
 			ImGui::SameLine();
-			static std::string types[] = { "Unspecified",
+			std::string types[] = { "Unspecified",
 									"Substation",
 									"Distribution Transformer",
 									"Mini Substation",
@@ -85,7 +88,8 @@ void ComponentEditor::onImGuiRender()
 				for (size_t i = 0; i < IM_ARRAYSIZE(types); i++)
 				{
 					if (ImGui::Selectable(types[i].c_str())) {
-						activeComponent->type = types[i];
+						component_designer->commandLog.execute<ChangeValueCommand<std::string>>(types[i], &(activeComponent->type));
+						//activeComponent->type = types[i];
 					}
 				}
 				ImGui::EndCombo();
@@ -128,22 +132,23 @@ void ComponentEditor::onImGuiRender()
 
 					// Name.
 					ImGui::PushItemWidth(-1);
-					if (ImGui::InputText(labelName, &port->title->m_string))
-						port->title->update();
+					inputTextWithLog(labelName, port->title, &component_designer->commandLog);
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
 					// Description
 					ImGui::PushItemWidth(-1);
-					ImGui::InputText(labelDesc, &port->description);
+					inputTextWithLog(labelDesc, port->description, &component_designer->commandLog);
+					//ImGui::InputText(labelDesc, &port->description);
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
 
 					// Type.
 					ImGui::PushItemWidth(-1);
-					int* typeval = (int*)&port->m_type;
-					if (ImGui::Combo(labelType, typeval, "IN\0OUT\0IN/OUT")) {
-						port->updateType();
+					PortType* typeval = &port->m_type;
+					PortType oldtype = port->m_type;
+					if (ImGui::Combo(labelType, (int*)typeval, "IN\0OUT\0IN/OUT")) {
+						component_designer->commandLog.log<ChangeValueWithSetterCommand<PortType, Port>>(*typeval, port.get(), oldtype, &Port::updateType);
 					}
 					ImGui::PopItemWidth();
 					ImGui::TableNextColumn();
@@ -383,12 +388,13 @@ void ComponentEditor::onImGuiRender()
 			ImGui::PushItemWidth(-1);
 			int designatorIdx = activeComponent->getDesignatorIdx();
 			if (ImGui::InputInt("##designatorIdx", &designatorIdx)) {
-				activeComponent->setDesignatorIdx(designatorIdx);
+				//activeComponent->setDesignatorIdx(designatorIdx);
+				design_engine->commandLog.execute<ChangeValueWithSetterCommand<int, Component2D>>(designatorIdx, activeComponent, activeComponent->getDesignatorIdx(), &Component2D::setDesignatorIdx);
 			}
 			ImGui::PopItemWidth();
 
 			ImGui::AlignTextToFramePadding();
-			ImGui::Text((std::string(" Description:\t  ") + activeComponent->equipType).c_str());
+			ImGui::Text((std::string(" Description:\t  ") + activeComponent->title->m_string).c_str());
 		}
 
 		// ------------------------------- //
@@ -588,8 +594,18 @@ void ComponentEditor::onImGuiRender()
 					ImGui::Text("Tag: ");
 					ImGui::TableNextColumn();
 					ImGui::PushItemWidth(-1);
-					if (ImGui::InputText("##tag", &activeComponent->m_tag)) {
+					ImGui::InputText("##tag", &activeComponent->m_tag);
+					if (ImGui::IsItemEdited()) {
 						activeComponent->updateText();
+					}
+					if (ImGui::IsItemActivated()) {
+						//save original data
+						strBeforeEdit = activeComponent->m_tag;
+					}
+					if (ImGui::IsItemDeactivatedAfterEdit()) {
+						//log change
+						design_engine->commandLog.log<ChangeValueWithSetterCommand<std::string, Component2D>>(activeComponent->m_tag, activeComponent, strBeforeEdit, &Component2D::setTag);
+
 					}
 					ImGui::PopItemWidth();
 
@@ -932,6 +948,36 @@ void ComponentEditor::onImGuiRender()
 void ComponentEditor::onImGuiEnd()
 {
 	ImGui::End();
+}
+
+void ComponentEditor::inputTextWithLog(const char* label, Text* textToUpdate, CommandLog* log)
+{
+	ImGui::InputText(label, &textToUpdate->m_string);
+	if (ImGui::IsItemEdited()) {
+		textToUpdate->update();
+	}
+	if (ImGui::IsItemActivated()) {
+		//save original data
+		strBeforeEdit = textToUpdate->m_string;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit()) {
+		//log change
+		log->log<EditTextCommand>(textToUpdate, textToUpdate->m_string, strBeforeEdit);
+	}
+}
+
+void ComponentEditor::inputTextWithLog(const char* label, std::string& stringToUpdate, CommandLog* log)
+{
+	ImGui::InputText(label, &stringToUpdate);
+	if (ImGui::IsItemActivated()) {
+		//save original data
+		strBeforeEdit = stringToUpdate;
+	}
+	if (ImGui::IsItemDeactivatedAfterEdit()) {
+		//log change
+		log->log<ChangeValueCommand<std::string>>(stringToUpdate, &stringToUpdate, strBeforeEdit);
+
+	}
 }
 
 /*=======================================================================================================================================*/

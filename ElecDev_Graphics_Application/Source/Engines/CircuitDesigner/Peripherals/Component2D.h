@@ -63,7 +63,7 @@ public:
 	static unsigned componentID;
 
 	// Specify the type of the equipment
-	std::string equipType = "Block";
+	//std::string equipType = "Block";
 	std::string type = "Unspecified";
 	std::string designatorSym = "?";
 	int designatorIdx = -1;

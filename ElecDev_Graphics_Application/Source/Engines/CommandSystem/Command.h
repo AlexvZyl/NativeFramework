@@ -1,12 +1,14 @@
 #pragma once
 #include "Engines/EntityComponents/Mutable.h"
 #include "Graphics/OpenGL/Primitives/Primitive.h"
+#include "Graphics/OpenGL/Primitives/Text.h"
 #include "OpenGL/Renderer/RendererGL.h"
 #include <vector>
 #include <memory>
 #include "Utilities/Logger/Logger.h"
 #include "Application/Application.h"
 #include "Lumen/Lumen.h"
+#include <functional>
 
 //typedef uint64_t LumenCommandID;
 enum class CommandType
@@ -164,6 +166,21 @@ public:
     }
 };
 
+class EditTextCommand :public Command {
+    const std::string oldString;
+    const std::string newString;
+    Text* const target;
+public:
+    inline EditTextCommand(Text* target, const std::string& newString, const std::string& oldString) :target(target), oldString(oldString), newString(newString) { commandType = CommandType::CommandType_ChangeValue; };
+    inline EditTextCommand(Text* target, const std::string& newString) : EditTextCommand(target, newString, target->m_string) {};
+    void execute() {
+        target->updateText(newString);
+    }
+    void undo() {
+        target->updateText(oldString);
+    }
+};
+
 class RemovePrimitveCommand:public Command {
 private:
     IPrimitive* const target;
@@ -188,14 +205,16 @@ public:
     }
 };
 
-template <class T>
-class ChangeValueCommand: Command{
+template <typename T>
+class ChangeValueCommand: public Command{
 private:
     const T oldVal;
     const T newVal;
     T* const target;
 public:
     inline ChangeValueCommand(const T& newValue, T* target) : oldVal(*target), newVal(newValue), target(target) { commandType = CommandType::CommandType_ChangeValue; };
+    template <typename T>
+    inline ChangeValueCommand(const T& newValue, T* target, const T& oldValue) : oldVal(oldValue), newVal(newValue), target(target) { commandType = CommandType::CommandType_ChangeValue; };
     inline void execute() {
         try {
             *target = newVal;
@@ -214,6 +233,38 @@ public:
     }
 };
 
+template <typename T, class C>
+class ChangeValueWithSetterCommand : public Command {
+private:
+    const T oldVal;
+    const T newVal;
+    C* const target;
+
+    std::function<void(C*, T)> setter;
+
+public:
+    inline ChangeValueWithSetterCommand(const T& newValue, C* target, const T& oldValue, std::function<void(C*, T)> setter) :
+        oldVal(oldValue), newVal(newValue), target(target), setter(setter) { commandType = CommandType::CommandType_ChangeValue; };
+    inline void execute() {
+        try {
+            setter(target, newVal);
+        }
+        catch (...) {
+            LUMEN_LOG_WARN("Tried to change the value of an invlaid target.", "Command");
+        }
+    }
+    inline void undo() {
+        try {
+            setter(target, oldVal);
+        }
+        catch (...) {
+            LUMEN_LOG_WARN("Tried to change the value of an invlaid target.", "Command");
+        }
+    }
+};
+
+
+
 class EngineCore;
 class CommandLog
 {
@@ -229,29 +280,29 @@ public:
     inline CommandLog(EngineCore* parent) :parent(parent) {};
     void undo();
     void redo();
-    template <class CommandType, class ... Args>
+    template <typename cType, class ... Args>
     void log(const Args&... args)
     {   
         if (next_command_ixd != m_commandHistory.size()) {
             //subsequent entries become invalid at this point
             m_commandHistory.resize(next_command_ixd);
         }
-        m_commandHistory.emplace_back(std::make_unique<CommandType>(args...));
+        m_commandHistory.emplace_back(std::make_unique<cType>(args...));
         next_command_ixd++;
 
         //Notify engine of logged change
         notifyParent();
     };
 
-    template <class CommandType, class ... Args>
+    template <class cType, class ... Args>
     void execute(const Args&... args)
     {
-        log<CommandType>(args...);
-        m_commandHistory[next_command_ixd-1]->execute();
-    }
+        log<cType>(args...);
+        m_commandHistory[next_command_ixd - 1]->execute();
+    };
 
     const auto& getHistory()
     {
         return m_commandHistory;
-    }
+    };
 };

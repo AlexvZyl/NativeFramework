@@ -94,7 +94,7 @@ public:
 	void setOffset(const glm::vec2& offset);
 	void attachCable(Cable* cable);
 	void detachCable(Cable* cable);
-	void updateType();
+	void updateType(PortType type = (PortType) (- 1));
 	void showAttachIndicator();
 	void hideAttachIndicator();
 	void updateDesctiption(std::string newDescription = "");

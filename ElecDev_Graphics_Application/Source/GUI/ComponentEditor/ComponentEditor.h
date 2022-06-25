@@ -13,6 +13,8 @@
 //=======================================================================================================================================//
 
 class Cable;
+class Text;
+class CommandLog;
 
 class ComponentEditor : public LumenWindow
 {
@@ -27,6 +29,9 @@ public:
 	virtual void onImGuiEnd() override;
 
 private:
+	//Vars saving original data while edit is in progress
+	//We can reuse these, as we can only have one active edit at a time.
+	std::string strBeforeEdit;
 
 	int fromSelector = 0;
 	int databaseSelector = 0;
@@ -57,6 +62,9 @@ private:
 	inline static bool m_copiedDictCable = false;
 	inline static bool m_copiedDictComponent = false;
 	inline static std::string m_copiedDictFrom = "";
+
+	void inputTextWithLog(const char* label, Text* textToUpdate, CommandLog* log);
+	void inputTextWithLog(const char* label, std::string& stringToUpdate, CommandLog* log);
 };
 
 //=======================================================================================================================================//

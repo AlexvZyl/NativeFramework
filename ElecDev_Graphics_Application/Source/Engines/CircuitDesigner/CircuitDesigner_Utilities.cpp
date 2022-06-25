@@ -352,7 +352,7 @@ int CircuitDesigner::getComponentCount(const std::string& type)
 	int count = 0;
 	for (auto& component : m_circuit->m_components)
 	{
-		if (component->equipType == componentType)
+		if (component->title->m_string == componentType)
 			count++;
 	}
 	return count;
@@ -400,7 +400,7 @@ void CircuitDesigner::removeImportedComponent(const std::string& name, bool chec
 		while (count < componentsVector.size())
 		{
 			Component2D* component = componentsVector[count].get();
-			if (component->equipType == componentType)
+			if (component->title->m_string == componentType)
 			{
 				if (m_activeComponent.get() == component) m_activeComponent = nullptr;
 				componentsVector.erase(componentsVector.begin() + count);
@@ -446,7 +446,7 @@ void CircuitDesigner::overwriteComponents(const std::string& type, const YAML::N
 	int overwriteCount = 0;
 	for (auto& component : m_circuit->m_components)
 	{
-		if (component->equipType == componentType)
+		if (component->title->m_string == componentType)
 		{
 			reloadComponent(component.get(), node);
 			overwriteCount++;
@@ -482,13 +482,13 @@ void CircuitDesigner::reloadComponent(Component2D* component, const YAML::Node& 
 	{
 		Renderer::remove(component->title);
 		component->title = Renderer::addText2D(node["Title"], component);
-		component->equipType = component->title->m_string;
+		component->title->m_string = component->title->m_string;
 	}
 	else if (node["Equipment Type"].IsDefined())
 	{
 		Renderer::remove(component->title);
 		component->title = Renderer::addText2D(node["Equipment Type"], component);
-		component->equipType = component->title->m_string;
+		component->title->m_string = component->title->m_string;
 	}
 
 	// Designator.
