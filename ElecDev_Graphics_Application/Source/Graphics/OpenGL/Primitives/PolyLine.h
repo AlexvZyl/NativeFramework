@@ -38,6 +38,8 @@ public:
 	virtual void translateVertex(VertexData* vertex, const glm::vec3 translation) override;
 	// Move a vertex
 	virtual void translateVertex(VertexData* vertex, const glm::vec2 translation) override;
+	inline virtual unsigned logicalVertexCount() override { return m_vertices.size(); };
+	inline virtual glm::vec2 getLogicalVertex(unsigned localIndex) { return m_vertices.at(localIndex); }
 	// Translate the entity by the given vector.
 	virtual void translate(const glm::vec3& translation) override;
 	// Translate the entity by the given vector.

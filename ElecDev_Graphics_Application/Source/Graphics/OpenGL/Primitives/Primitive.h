@@ -18,14 +18,13 @@ for a VAO to be able to render the entity to the screen.
 
 #include <vector>
 #include <memory>
-#include "Engines/EntityComponents/Mutable.h"
 
 //=============================================================================================================================================//
 //  Primitive Class.																														   //
 //=============================================================================================================================================//
 
 template<typename BufferType>
-class Primitive: public IPrimitive, public Translatable, public Rotatable, public Transformable, public Scalable, public Reshapable
+class Primitive: public IPrimitive
 {
 protected:
 
@@ -181,6 +180,10 @@ public:
 	{
 		This::translateVertexAtIndexTo(index, glm::vec3{ position, 0.f });
 	}
+
+	inline virtual unsigned logicalVertexCount() override { return m_vertexCount; }
+
+	inline virtual glm::vec2 getLogicalVertex(unsigned localIndex) { return glm::vec2{ getVertex(localIndex).position }; }
 
 	inline virtual void setVertexAtIndexColor(const unsigned& index, const glm::vec4& color)
 	{

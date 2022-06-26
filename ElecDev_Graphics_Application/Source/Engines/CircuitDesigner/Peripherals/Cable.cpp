@@ -299,10 +299,6 @@ void Cable::translateVertexAtIndexTo(const unsigned& vertexIdx, const glm::vec2&
 	m_polyLine->translateVertexAtIndexTo(vertexIdx, position);
 }
 
-void Cable::enableOutline()
-{
-	m_polyLine->enableOutline();
-}
 
 /*
 void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
@@ -438,16 +434,6 @@ void Cable::setActivePrimitive(Entity* primative)
 	m_activeNode = dynamic_cast<Circle*>(primative);
 }
 */
-
-void Cable::disableOutline()
-{
-	m_polyLine->disableOutline();
-}
-
-std::tuple<unsigned, float>  Cable::getNearestVertexIdx(glm::vec2 pos)
-{
-	return m_polyLine->getNearestVertexIndex(pos);
-}
 
 //==============================================================================================================================================//
 //  EOF.  																																		//

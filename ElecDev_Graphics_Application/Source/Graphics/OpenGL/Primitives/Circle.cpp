@@ -80,6 +80,12 @@ void Circle::setThickness(float thickness)
 	syncWithGPU();
 }
 
+void Circle::translateVertexAtIndexTo(const unsigned& localIndex, const glm::vec2& position)
+{
+	//localIndex can be ignored (circles have infinite logicalIndices)
+	setRadius(glm::distance(position, { m_trackedCenter }));
+}
+
 
 //=============================================================================================================================================//
 //  EOF.																																	   //

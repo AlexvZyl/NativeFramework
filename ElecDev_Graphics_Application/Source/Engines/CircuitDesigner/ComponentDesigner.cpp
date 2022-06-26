@@ -72,7 +72,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 	case CompDesignState::PLACE_PORT:
 		// Add new port.
 		switchState(CompDesignState::SELECT);
-		m_activePort = std::make_shared<Port>(getNearestGridVertex( { pixelToWorldCoords(getMouseLocalPosition()) }), PortType::PORT_INOUT, m_activeComponent.get());
+		m_activePort = std::make_shared<Port>(getNearestGridVertex({ pixelToWorldCoords(getMouseLocalPosition()) }), PortType::PORT_INOUT, m_activeComponent.get());
 		designerState = CompDesignState::PLACE_PORT;
 		break;
 
@@ -84,22 +84,15 @@ void ComponentDesigner::switchState(CompDesignState state)
 
 	case CompDesignState::SELECT:
 		// Disable outlines.
-		if (m_activeText) m_activeText->disableOutline();
-		if (m_activePoly) m_activePoly->disableOutline();
-		if (m_activeLine) m_activeLine->disableOutline();
+		if (m_activePrimitive) m_activePrimitive->disableOutline();
 		if (m_activePort.get()) m_activePort->disableOutline();
 		// Remove primitives.
-		if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE) 
+		if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE)
 		{
-			if (m_activeCircle) Renderer::remove(m_activeCircle);
-			if (m_activePoly) Renderer::remove(m_activePoly);
-			if (m_activeLine) Renderer::remove(m_activeLine);
+			if (m_activePrimitive) Renderer::remove(m_activePrimitive);
 		}
 		// Set state.
-		m_activeLine = nullptr;
-		m_activeText = nullptr;
-		m_activePoly = nullptr;
-		m_activeCircle = nullptr;
+		m_activePrimitive = nullptr;
 		m_activePort = nullptr;
 		m_activeVertexIdx = -1;
 		designerState = CompDesignState::SELECT;
@@ -109,81 +102,57 @@ void ComponentDesigner::switchState(CompDesignState state)
 
 void ComponentDesigner::pushActivePrimitives()
 {
-	if (m_activeLine) m_activeComponent->addLine(m_activeLine);
-	if (m_activeCircle) m_activeComponent->addCircle(m_activeCircle);
-	if (m_activePoly) 
-	{
-		PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePoly);
-		if (polyline) m_activeComponent->addLine(polyline);
-		else		  m_activeComponent->addPoly(m_activePoly);
-	}
+	//TODO: get rid of these nasty dynamic casts!!!
+	//This should perform checks to ensure that we are not pushing primitives multiple times
+	PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePrimitive);
+	Polygon2D* polygon = dynamic_cast<Polygon2D*>(m_activePrimitive);
+	Circle* circle = dynamic_cast<Circle*>(m_activePrimitive);
+
+	if (circle) m_activeComponent->addCircle(circle);
+
+	//need an if/else here to differentiate (polylines will be successfilly cast to both PolyLine and Polygon2D).
+	if (polyline) m_activeComponent->addLine(polyline);
+	else if (polygon) m_activeComponent->addPoly(polygon);
 	// Set state.
-	m_activeLine = nullptr;
-	m_activePoly = nullptr;
-	m_activeCircle = nullptr;
+	m_activePrimitive = nullptr;
 }
 
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
 	// Remove outline of current entity.
-	if (m_activePoly) m_activePoly->disableOutline();
-	if (m_activeLine) m_activeLine->disableOutline();
-	if (m_activeCircle) m_activeCircle->disableOutline();
-	if (m_activeText) m_activeText->disableOutline();
+	if (m_activePrimitive) m_activePrimitive->disableOutline();
 	if (m_activePort.get()) m_activePort->disableOutline();
 
 	// Remove previous selection.
-	m_activeLine = nullptr;
-	m_activePoly = nullptr;
-	m_activeCircle = nullptr;
+	m_activePrimitive = nullptr;
 	m_activePort = nullptr;
-	m_activeText = nullptr;
 
-	if ((eID == 0) || (eID == -1)) { }
-	else 
+	if ((eID == 0) || (eID == -1)) {}
+	else
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		if (!currentEntity) return;
 		// Entity is a primitive belonging to the component.
-		if (currentEntity->m_parent == m_activeComponent.get()) 
+		if (currentEntity->m_parent == m_activeComponent.get())
 		{
-			// Line.
-			if (dynamic_cast<PolyLine*>(currentEntity))
-			{
-				m_activeLine = dynamic_cast<PolyLine*>(currentEntity);
-				m_activeLine->enableOutline();
-			}
-			// Polygon.
-			else if (dynamic_cast<Polygon2D*>(currentEntity)) 
-			{
-				m_activePoly = dynamic_cast<Polygon2D*>(currentEntity);
-				m_activePoly->enableOutline();
-			}
-			// Circle.
-			else if (dynamic_cast<Circle*>(currentEntity)) 
-			{
-				m_activeCircle = dynamic_cast<Circle*>(currentEntity);
-				m_activeCircle->enableOutline();
-			}
-			// Text.
-			else if (dynamic_cast<Text*>(currentEntity)) 
-			{
-				m_activeText = dynamic_cast<Text*>(currentEntity);
-				m_activeText->enableOutline();
-			}
+			m_activePrimitive = dynamic_cast<IPrimitive*>(currentEntity);
+			m_activePrimitive->enableOutline();
 		}
 		// Port.
-		else if (dynamic_cast<Port*>(currentEntity->m_parent)) 
+		else if (dynamic_cast<Port*>(currentEntity->m_parent))
 		{
 			// Port text is selected.
-			if (dynamic_cast<Text*>(currentEntity)) 
+			//TODO: Get rid of this dynamic cast to check types!!
+			if (dynamic_cast<Text*>(currentEntity))
 			{
-				m_activeText = dynamic_cast<Text*>(currentEntity);
-				m_activeText->enableOutline();
+				m_activePrimitive = dynamic_cast<IPrimitive*>(currentEntity);
+				m_activePrimitive->enableOutline();
 			}
 			// Port body is selected.
-			else 
+			else
 			{
+				//This is a bit hacky. 
+				//TODO: Find a more elegant way of doing this
 				Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
 				m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
 					{
@@ -197,24 +166,12 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 
 void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 {
+	//Currently this only works properly for Polygons and PolyLines. Other primitives will return the index of the underlying graphical vertices (not logical)
+	//TODO: Fix this for other primitives
 	m_activeVertexIdx = -1;
-	if (m_activePoly) 
+	if (m_activePrimitive)
 	{
-		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIndex(coords);
-		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
-		{
-			m_activeVertexIdx = vertexIdx;
-		}
-	}
-	/*if (m_activeCircle) {
-		auto [vertexPtr, distance] = m_activeCircle->getNearestVertex(coords);
-		if (distance < clickTol) {
-			m_activeVertex = vertexPtr;
-		}
-	}*/
-	else if (m_activeLine) 
-	{
-		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIndex(coords);
+		auto [vertexIdx, distance] = m_activePrimitive->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
@@ -225,23 +182,9 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 void ComponentDesigner::setHoveredVertex(glm::vec2 coords)
 {
 	m_hoveredVertexIdx = -1;
-	if (m_activePoly)
+	if (m_activePrimitive)
 	{
-		auto [vertexIdx, distance] = m_activePoly->getNearestVertexIndex(coords);
-		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
-		{
-			m_hoveredVertexIdx = vertexIdx;
-		}
-	}
-	/*if (m_activeCircle) {
-		auto [vertexPtr, distance] = m_activeCircle->getNearestVertex(coords);
-		if (distance < clickTol) {
-			m_activeVertex = vertexPtr;
-		}
-	}*/
-	else if (m_activeLine)
-	{
-		auto [vertexIdx, distance] = m_activeLine->getNearestVertexIndex(coords);
+		auto [vertexIdx, distance] = m_activePrimitive->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_hoveredVertexIdx = vertexIdx;
@@ -252,34 +195,36 @@ void ComponentDesigner::setHoveredVertex(glm::vec2 coords)
 void ComponentDesigner::deleteActivePrimitive()
 {
 	// Disable outline.
-	if (m_activeText) m_activeText->disableOutline();
-	if (m_activePoly) m_activePoly->disableOutline();
-	if (m_activeLine) m_activeLine->disableOutline();
+	if (m_activePrimitive) m_activePrimitive->disableOutline();
 	if (m_activePort.get()) m_activePort->disableOutline();
 
-	// Remove primitive.
-	if (m_activeLine) m_activeComponent->removeLine(m_activeLine);
-	if (m_activePoly) m_activeComponent->removePoly(m_activePoly);
-	if (m_activeCircle) m_activeComponent->removeCircle(m_activeCircle);
+	// Remove primitives.
+	//TODO: Get rid of these dynamic casts!!!
+	PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePrimitive);
+	Polygon2D* polygon = dynamic_cast<Polygon2D*>(m_activePrimitive);
+	Circle* circle = dynamic_cast<Circle*>(m_activePrimitive);
+	Text* text = dynamic_cast<Text*>(m_activePrimitive);
+
+	if (polyline) m_activeComponent->removeLine(polyline);
+	else if (polygon) m_activeComponent->removePoly(polygon);//This line will throw some warnings without the else (Polyline is a child of Polygon)
+	if (circle) m_activeComponent->removeCircle(circle);
 	if (m_activePort) m_activeComponent->removePort(m_activePort);
-	if (m_activeText)
+	if (text)
 	{
 		// If the text belongs to a port, we can delete the whole port.
-		if (m_activeText->m_parent->m_type == EntityType::PORT) 
-			m_activeComponent->removePort(dynamic_cast<Port*>(m_activeText->m_parent));
-		m_activeComponent->removeText(m_activeText);
+		if (text->m_parent->m_type == EntityType::PORT)
+			m_activeComponent->removePort(dynamic_cast<Port*>(text->m_parent));
+		else m_activeComponent->removeText(text);
 	}
 
 	//remove previous selection
-	m_activePoly = nullptr;
-	m_activeLine = nullptr;
-	m_activeCircle = nullptr;
-	m_activeText = nullptr;
+	m_activePrimitive = nullptr;
 	m_activePort = nullptr;
 	m_activeVertexIdx = -1;
 }
 
-void ComponentDesigner::renderOverlay() 
+//TODO: move this to a seperate file
+void ComponentDesigner::renderOverlay()
 {
 	constexpr glm::vec2 button_size = { 35, 35 };
 	constexpr glm::vec2 dropdown_size = { 10, 10 };
@@ -289,18 +234,14 @@ void ComponentDesigner::renderOverlay()
 	if (m_hoveredVertexIdx != -1) {
 
 		glm::vec2 pos;
-		if (m_activePoly) {
-			pos = localToGlobalCoords(worldToPixelCoords(m_activePoly->getVertex(m_hoveredVertexIdx).position));
-			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
-		}
-		if (m_activeLine) {
-			pos = localToGlobalCoords(worldToPixelCoords(m_activeLine->m_vertices.at(m_hoveredVertexIdx)));
+		if (m_activePrimitive) {
+			pos = localToGlobalCoords(worldToPixelCoords(m_activePrimitive->getLogicalVertex(m_hoveredVertexIdx)));
 			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
 		}
 		draw_list->AddCircleFilled(pos, clickTol, ImColor(helperColour));
 	}
 
-	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_AlwaysUseWindowPadding)) 
+	if (ImGui::BeginChild("##designPalette", { 0.f, button_size.y + 8.f }, true, ImGuiWindowFlags_AlwaysUseWindowPadding))
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, { 0.f, 0.f, 0.f, 0.f });
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.f);
@@ -309,10 +250,10 @@ void ComponentDesigner::renderOverlay()
 		//ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, { -1.f, -1.f });
 
 		static float b = 0.8f; //  Temp colours. We should use standardised theme colours here.
-		static float c = 0.5f; 
+		static float c = 0.5f;
 		static float i = 4.4f;
 
-		if (designerState == CompDesignState::DRAW_POLY && !drawFilled) 
+		if (designerState == CompDesignState::DRAW_POLY && !drawFilled)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -323,7 +264,7 @@ void ComponentDesigner::renderOverlay()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)draw_clear_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
@@ -342,7 +283,7 @@ void ComponentDesigner::renderOverlay()
 		ImGui::SameLine();
 
 
-		if (designerState == CompDesignState::DRAW_POLY && drawFilled) 
+		if (designerState == CompDesignState::DRAW_POLY && drawFilled)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -353,7 +294,7 @@ void ComponentDesigner::renderOverlay()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)draw_filled_poly_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
@@ -361,7 +302,7 @@ void ComponentDesigner::renderOverlay()
 				drawFilled = true;
 			}
 		}
-		
+
 
 		if (ImGui::IsItemHovered())
 		{
@@ -373,7 +314,7 @@ void ComponentDesigner::renderOverlay()
 		ImGui::SameLine();
 
 
-		if (designerState == CompDesignState::DRAW_CIRCLE && !drawFilled) 
+		if (designerState == CompDesignState::DRAW_CIRCLE && !drawFilled)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -384,7 +325,7 @@ void ComponentDesigner::renderOverlay()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)draw_clear_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
@@ -401,7 +342,7 @@ void ComponentDesigner::renderOverlay()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::DRAW_CIRCLE && drawFilled) 
+		if (designerState == CompDesignState::DRAW_CIRCLE && drawFilled)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -412,7 +353,7 @@ void ComponentDesigner::renderOverlay()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)draw_filled_circle_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
@@ -429,7 +370,7 @@ void ComponentDesigner::renderOverlay()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::DRAW_LINE) 
+		if (designerState == CompDesignState::DRAW_LINE)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -440,7 +381,7 @@ void ComponentDesigner::renderOverlay()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)draw_line_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
@@ -456,7 +397,7 @@ void ComponentDesigner::renderOverlay()
 		}
 
 		ImGui::SameLine();
-		if (designerState == CompDesignState::PLACE_PORT) 
+		if (designerState == CompDesignState::PLACE_PORT)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
@@ -467,7 +408,7 @@ void ComponentDesigner::renderOverlay()
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)port_icon, button_size, { 0, 1 }, { 1, 0 }))
 			{
@@ -484,21 +425,24 @@ void ComponentDesigner::renderOverlay()
 
 		ImGui::SameLine();
 		glm::vec4 buttonCol = textColour;
-		if (m_activeText) {
-			buttonCol = m_activeText->m_colour;
+
+		//Dynamic cast is probably unavoidable here - we use the result for text specific functions later on.
+		Text* activeText = dynamic_cast<Text*>(m_activePrimitive);
+		if (activeText) {
+			buttonCol = activeText->m_colour;
 		}
-		if (designerState == CompDesignState::ADD_TEXT) 
+		if (designerState == CompDesignState::ADD_TEXT)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
-			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, {0.f, 0.f, 0.f, 0.f}, buttonCol))
+			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, buttonCol))
 			{
 				switchState(CompDesignState::SELECT);
 			}
 			ImGui::PopStyleColor(3);
 		}
-		else 
+		else
 		{
 			if (ImGui::ImageButton((void*)draw_text_icon, button_size, { 0, 1 }, { 1, 0 }, -1, { 0.f, 0.f, 0.f, 0.f }, buttonCol))
 			{
@@ -513,15 +457,15 @@ void ComponentDesigner::renderOverlay()
 			ImGui::EndTooltip();
 		}
 
-		if (designerState == CompDesignState::ADD_TEXT) 
+		if (designerState == CompDesignState::ADD_TEXT)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 7.0f, b, b));
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.9f, 0.9f));
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, c, c));
-			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) 
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f }))
 			{
 				ImGui::PopStyleColor(3);
-				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) 
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour"))
 				{
 					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
@@ -529,14 +473,14 @@ void ComponentDesigner::renderOverlay()
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (m_activeText) 
+				if (activeText)
 				{
-					int tempSizePt = (int)std::round(m_activeText->m_textScale * 2835);
+					int tempSizePt = (int)std::round(activeText->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
-						m_activeText->setScale(tempSizePt / 2835.f);
+						activeText->setScale(tempSizePt / 2835.f);
 					}
 				}
-				else if (ImGui::InputInt("pt ", &sizePt)) 
+				else if (ImGui::InputInt("pt ", &sizePt))
 				{
 					textSize = sizePt / 2835.f;
 				}
@@ -549,9 +493,9 @@ void ComponentDesigner::renderOverlay()
 			}
 		}
 		else {
-			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f })) 
+			if (ImGui::BeginButtonDropDown("##TextSettings", { 0.f, button_size.y + 7.f }))
 			{
-				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour")) 
+				if (ImGui::MenuItemEx(ICON_FA_PALETTE, "Colour"))
 				{
 					Lumen::getApp().pushWindow<ComponentDesignerColorEditor>(LumenDockPanel::Floating, "Color Editor", 0, &textColour)->setInitialPosition(getMouseGlobalPosition());
 				}
@@ -559,10 +503,10 @@ void ComponentDesigner::renderOverlay()
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (m_activeText) {
-					int tempSizePt = (int)std::round(m_activeText->m_textScale * 2835);
+				if (activeText) {
+					int tempSizePt = (int)std::round(activeText->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
-						m_activeText->setScale(tempSizePt / 2835.f);
+						activeText->setScale(tempSizePt / 2835.f);
 					}
 				}
 				else if (ImGui::InputInt("pt ", &sizePt)) {
@@ -572,7 +516,7 @@ void ComponentDesigner::renderOverlay()
 				ImGui::EndButtonDropDown();
 			}
 		}
-		
+
 
 		if (ImGui::IsItemHovered())
 		{
@@ -603,16 +547,19 @@ void ComponentDesigner::renderOverlay()
 		ImGui::PushItemWidth(100.0f);
 		//FIXME
 		ImGui::SetCursorPosY(16.f);
-		if (m_activeLine) {
-			float thickness = m_activeLine->m_thickness;
+
+		PolyLine* activePolyline = dynamic_cast<PolyLine*>(m_activePrimitive);
+		Circle* activeCircle = dynamic_cast<Circle*>(m_activePrimitive);
+		if (activePolyline) {
+			float thickness = activePolyline->m_thickness;
 			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
-				m_activeLine->setThickness(thickness);
+				activePolyline->setThickness(thickness);
 			}
 		}
-		else if(m_activeCircle) {
-			float thickness = m_activeCircle->m_thickness;
+		else if (activeCircle) {
+			float thickness = activeCircle->m_thickness;
 			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
-				m_activeCircle->setThickness(thickness);
+				activeCircle->setThickness(thickness);
 			}
 		}
 		else ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
@@ -630,7 +577,7 @@ void ComponentDesigner::renderOverlay()
 			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 46);
 
 		glm::vec4 delete_tint = { 0.2f, 0.2f, 0.2f, 1.0f };
-		if (designerState == CompDesignState::SELECT && (m_activeCircle || m_activeLine || m_activePoly || m_activeText || m_activePort)) {
+		if (designerState == CompDesignState::SELECT && (m_activePrimitive || m_activePort)) {
 			delete_tint = { 0.8f, 0.f, 0.f, 1.f };
 		}
 
@@ -645,7 +592,7 @@ void ComponentDesigner::renderOverlay()
 			ImGui::Text("Delete");
 			ImGui::EndTooltip();
 		}
-		
+
 		//ImGui::PopStyleVar();
 
 		ImGui::PopStyleColor();
@@ -660,10 +607,7 @@ void ComponentDesigner::renderOverlay()
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)
 {
 	m_activeComponent = nullptr;
-	m_activePoly = nullptr;
-	m_activeLine = nullptr;
-	m_activeCircle = nullptr;
-	m_activeText = nullptr;
+	m_activePrimitive = nullptr;
 	m_activePort = nullptr;
 	m_activeVertexIdx = -1;
 	m_activeComponent = std::make_shared<Component2D>(path, parent);
@@ -671,7 +615,7 @@ void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit*
 	savePath = path;
 }
 
-void ComponentDesigner::renderTooltip() 
+void ComponentDesigner::renderTooltip()
 {
 	bool disp_string = false;
 
@@ -679,9 +623,9 @@ void ComponentDesigner::renderTooltip()
 	ImGui::PushStyleVar(ImGuiStyleVar_PopupBorderSize, 0.f);
 	ImGui::PushStyleColor(ImGuiCol_PopupBg, glm::vec4(0.0, 0.0, 0.0, 0.0));
 	ImGui::BeginTooltipEx(ImGuiTooltipFlags_None, ImGuiWindowFlags_AlwaysAutoResize);
-	glm::vec2 icon_size = {30, 30};
+	glm::vec2 icon_size = { 30, 30 };
 	std::string toolString;
-	switch (designerState) 
+	switch (designerState)
 	{
 	case CompDesignState::SELECT:
 		toolString = "Select";
@@ -694,11 +638,11 @@ void ComponentDesigner::renderTooltip()
 		break;
 	case CompDesignState::DRAW_CIRCLE:
 		disp_string = false;
-		if (drawFilled) 
+		if (drawFilled)
 		{
 			ImGui::Image((void*)draw_filled_circle_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
-		else 
+		else
 		{
 			ImGui::Image((void*)draw_clear_circle_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
@@ -706,11 +650,11 @@ void ComponentDesigner::renderTooltip()
 	case CompDesignState::DRAW_POLY:
 		//toolString = "Place vertex";
 		//toolString = ICON_FA_DRAW_POLYGON;
-		if (drawFilled) 
+		if (drawFilled)
 		{
-			ImGui::Image((void*)draw_filled_poly_icon, icon_size, {0, 1}, {1, 0}, penColour);
+			ImGui::Image((void*)draw_filled_poly_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
-		else 
+		else
 		{
 			ImGui::Image((void*)draw_clear_poly_icon, icon_size, { 0, 1 }, { 1, 0 }, penColour);
 		}
@@ -734,7 +678,7 @@ void ComponentDesigner::renderTooltip()
 	ImGui::PopStyleVar();
 }
 
-void ComponentDesigner::renderMenuBar() 
+void ComponentDesigner::renderMenuBar()
 {
 
 }

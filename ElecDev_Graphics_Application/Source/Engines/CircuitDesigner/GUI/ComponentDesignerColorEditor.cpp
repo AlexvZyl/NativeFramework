@@ -43,33 +43,9 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 
 	// Get the active element.
-	IPrimitive* activePrimitive = nullptr;
-	Port* activePort = nullptr;
-	Cable* activeCable = nullptr;
-	if (engine->m_activeCircle)
-	{
-		activePrimitive = engine->m_activeCircle;
-	}
-	else if(engine->m_activeLine) 
-	{
-		activePrimitive = engine->m_activeLine;
-	}
-	else if (engine->m_activePoly) 
-	{
-		activePrimitive = engine->m_activePoly;
-	}
-	else if (engine->m_activeText) 
-	{
-		activePrimitive = engine->m_activeText;
-	}
-	else if(engine->m_activePort)
-	{
-		activePort = engine->m_activePort.get();
-	}
-	else if (false) 
-	{
-		// Should be the active cable.
-	}
+	IPrimitive* activePrimitive = engine->m_activePrimitive;
+	Port* activePort = engine->m_activePort.get();
+	//Cable* activeCable = nullptr;
 
 	// Set the color to be edited.
 	

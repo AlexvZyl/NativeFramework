@@ -38,6 +38,10 @@ public:
 	Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gtb, const glm::vec2& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent);
 	void setRadius(float radius);
 	void setThickness(float thickness);
+
+	//Overloads act on logical vertices (changing the radius)
+	//void translateVertexAtIndex(const unsigned& localIndex, const glm::vec2& translation);
+	void translateVertexAtIndexTo(const unsigned& localIndex, const glm::vec2& position);
 };
 
 //=============================================================================================================================================//

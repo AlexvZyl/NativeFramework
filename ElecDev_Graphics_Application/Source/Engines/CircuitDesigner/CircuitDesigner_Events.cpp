@@ -52,7 +52,7 @@ void CircuitDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			m_currentEntityID = getEntityID(coords);
 
 			if (m_activeCable.get()) {
-				auto [idx, distance] = m_activeCable->getNearestVertexIdx(screenCoords);
+				auto [idx, distance] = m_activeCable->getNearestVertexIndex(screenCoords);
 				m_activeVertexIdx = -1;
 				if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 				{
@@ -180,7 +180,7 @@ void CircuitDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		else if (designerState == ENTITY_SELECT)
 		{
 			if (m_activeCable.get()) {
-				auto [idx, distance] = m_activeCable->getNearestVertexIdx(screenCoords);
+				auto [idx, distance] = m_activeCable->getNearestVertexIndex(screenCoords);
 				m_hoveredVertexIdx = -1;
 				if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 				{

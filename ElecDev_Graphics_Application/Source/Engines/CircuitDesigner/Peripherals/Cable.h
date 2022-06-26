@@ -9,6 +9,7 @@
 #include "yaml-cpp/yaml.h"
 #include <glm/glm.hpp>
 #include "Engines/EntityComponents/Mutable.h"
+#include "Graphics/OpenGL/Primitives/PolyLine.h"
 
 //==============================================================================================================================================//
 //  Forward declerations.  																													    //
@@ -16,8 +17,6 @@
 
 class Circuit;
 class Port;
-class LineSegment;
-class PolyLine;
 
 //==============================================================================================================================================//
 //  Data.  																																        //
@@ -85,9 +84,12 @@ public:
     void setColour(glm::vec4 colour, bool save = true);
     void translateVertexAtIndex(const unsigned& vertexIdx, const glm::vec2& translation) override;
     void translateVertexAtIndexTo(const unsigned& vertexIdx, const glm::vec2& position) override;
-    void enableOutline();
-    void disableOutline();
-    std::tuple<unsigned, float>  getNearestVertexIdx(glm::vec2 pos);
+    inline unsigned logicalVertexCount() { return m_polyLine->logicalVertexCount(); };
+    inline glm::vec2 getLogicalVertex(unsigned localIndex) { return m_polyLine->getLogicalVertex(localIndex); };
+    inline std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position) { return m_polyLine->getNearestVertexIndex(position); };
+    inline std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) { return m_polyLine->getNearestVertexIndex(position); };
+    inline void enableOutline(){m_polyLine->enableOutline();};
+    inline void disableOutline(){ m_polyLine->disableOutline();};
 
     void constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort);
 };

@@ -31,10 +31,11 @@ protected:
 public:
 
     std::shared_ptr<Component2D> m_activeComponent;
-    Polygon2D* m_activePoly;
-    PolyLine* m_activeLine;
-    Circle* m_activeCircle;
-    Text* m_activeText;
+    IPrimitive* m_activePrimitive;
+    //Polygon2D* m_activePoly;
+    //PolyLine* m_activeLine;
+    //Circle* m_activeCircle;
+    //Text* m_activeText;
     std::shared_ptr<Port> m_activePort;
     //VertexData* m_activeVertex;
     unsigned m_activeVertexIdx = -1;
@@ -43,7 +44,7 @@ public:
     //PortType next_port_type = PortType::PORT_INOUT;
 
     glm::vec2 m_dragStart;
-    glm::vec2 m_lastDragPos = { 0.f, 0.f };
+    //glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
     float clickTol = 15.0f;
     bool drawFilled = true;

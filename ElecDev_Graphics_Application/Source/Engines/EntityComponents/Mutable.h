@@ -38,6 +38,11 @@ public:
 
 class Reshapable {
 public:
+    //All functions necessary for identifying and manupilating vertices.
     virtual void translateVertexAtIndex(const unsigned& localIndex, const glm::vec2& translation) = 0;
     virtual void translateVertexAtIndexTo(const unsigned& localIndex, const glm::vec2& position) = 0;
+    virtual unsigned logicalVertexCount() = 0;
+    virtual glm::vec2 getLogicalVertex(unsigned localIndex) = 0;
+    inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position) = 0;
+    inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) = 0;
 };
