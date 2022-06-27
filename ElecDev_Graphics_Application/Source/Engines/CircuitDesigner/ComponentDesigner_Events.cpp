@@ -68,7 +68,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			}
 			else
 			{
-				if(m_tempPoly)
+				if (m_tempPoly)
 					m_tempPoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 				else if (m_tempLine)
 					m_tempLine->pushVertex(getNearestGridVertex(screenCoords));

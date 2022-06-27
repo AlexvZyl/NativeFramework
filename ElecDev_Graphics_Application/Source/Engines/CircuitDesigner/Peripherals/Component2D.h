@@ -80,7 +80,7 @@ public:
 	std::vector<glm::vec3> vertices2;
 
 	// Colour attributes.
-	glm::vec4 shapeColour = { 14.f/255.f, 63.f/255.f, 174.f/255.f, 1.f };
+	glm::vec4 shapeColour = { 14.f / 255.f, 63.f / 255.f, 174.f / 255.f, 1.f };
 	glm::vec4 borderColour = { 0.f, 0.f, 0.f, 1.f };
 	bool m_highlighted = false;
 
@@ -106,7 +106,7 @@ public:
 	float componentLayer = 0.9f;
 	float borderLayerOffset = 0.01f;
 	float portLayerOffset = 0.02f;
-	glm::vec2 centre = {0.f, 0.f};
+	glm::vec2 centre = { 0.f, 0.f };
 
 	// Deconstructor.s
 	~Component2D();
@@ -150,7 +150,7 @@ public:
 	void setTag(const std::string& tag = "None");
 	int getDesignatorIdx();
 	void setDesignatorIdx(const int& idx);
-	
+
 	void rotate(float degrees);
 	float m_rotation = 0.f;
 

@@ -3,11 +3,11 @@
 #include "Application/Application.h"
 #include "Lumen/Lumen.h"
 
-CircuitEditorPopup::CircuitEditorPopup(const std::string& name, int imguiWindowFlags) 
+CircuitEditorPopup::CircuitEditorPopup(const std::string& name, int imguiWindowFlags)
 	: LumenPopupWindow(name, imguiWindowFlags)
 {}
 
-void CircuitEditorPopup::onImGuiRender() 
+void CircuitEditorPopup::onImGuiRender()
 {
 	Application& app = Lumen::getApp();
 	CircuitDesigner* engine = app.getActiveEngine<CircuitDesigner>();
@@ -22,7 +22,7 @@ void CircuitEditorPopup::onImGuiRender()
 	}
 }
 
-void CircuitEditorPopup::setCable(const std::string& cable) 
+void CircuitEditorPopup::setCable(const std::string& cable)
 {
 	m_entity = cable;
 	m_cable = true;

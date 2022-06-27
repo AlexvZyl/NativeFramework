@@ -52,7 +52,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 
 	body = Renderer::addCircle2D(centre, portSize, bodyColour, -1.0f, 0.0f, this);
 	border = Renderer::addCircle2D(centre, 1.1f * portSize, borderColour, -1.0f, 0.01f, this);
-	attachmentIndicator = Renderer::addCircle2D(centre, portSize* indicatorFraction, indicatorColour, -1.0f, 0.f, this);
+	attachmentIndicator = Renderer::addCircle2D(centre, portSize * indicatorFraction, indicatorColour, -1.0f, 0.f, this);
 	portLayer = parent->componentLayer + parent->portLayerOffset;
 
 	// Assign port label.
@@ -99,7 +99,7 @@ Port::Port(const glm::vec2& centre, PortType type, Component2D* parent, const st
 		LUMEN_LOG_ERROR("Invalid port offset.", "Design Engine");
 	}*/
 	//m_position = PortPosition::RIGHT;//deprecated
-	if (centre.x < 0){
+	if (centre.x < 0) {
 		titleOffset = glm::vec2{ -textMargin, 0.0f };
 		glm::vec3 titlePos = glm::vec3(centre + titleOffset, portLayer);
 		title = Renderer::addText2D(labelLocal, titlePos, titleColour, titleSize, "R", "B", this);
@@ -202,13 +202,13 @@ void Port::translateTo(const glm::vec2& destination)
 	body->translateTo(centre);
 	border->translateTo(centre);
 	attachmentIndicator->translateTo(centre);
-	
-	for (Cable* cable: m_cables)
+
+	for (Cable* cable : m_cables)
 		cable->followPort(this);
 }
 
 void Port::translate(const glm::vec2& translation)
-{	
+{
 	//update the port centre
 	centre += translation;
 	//move each primative
@@ -258,7 +258,7 @@ void Port::setOffset(const glm::vec2& offset)
 
 void Port::attachCable(Cable* cable)
 {
-	m_cables.push_back(cable);	
+	m_cables.push_back(cable);
 	if (cable->m_endPort) {
 		switch (cable->m_endPort->m_type) {
 		case PortType::PORT_IN:
@@ -272,7 +272,7 @@ void Port::attachCable(Cable* cable)
 			break;
 		}
 	}
-	
+
 	switch (m_type) {
 	case PortType::PORT_IN:
 		indicatorColour = { 0.f, 0.8f, 0.f, 1.f };
@@ -293,10 +293,10 @@ void Port::detachCable(Cable* cable)
 	auto cableIt = std::find(m_cables.begin(), m_cables.end(), cable);
 
 	// Remove the cable if found in the list.
-	if (cableIt != m_cables.end()) 
+	if (cableIt != m_cables.end())
 		m_cables.erase(cableIt);
 
-	if (m_cables.empty()) 
+	if (m_cables.empty())
 	{
 		switch (m_type) {
 		case PortType::PORT_IN:
@@ -317,7 +317,7 @@ void Port::detachCable(Cable* cable)
 
 void Port::updateType(PortType type)
 {
-	if (type != (PortType)( - 1)) {
+	if (type != (PortType)(-1)) {
 		m_type = type;
 	}
 	//assumes no hovered/attached ports (port types should only change in component designer)
@@ -340,7 +340,7 @@ void Port::updateType(PortType type)
 
 void Port::showAttachIndicator()
 {
-	if (m_cables.empty()) 
+	if (m_cables.empty())
 	{
 		indicatorColour.a = 1.f;
 		attachmentIndicator->setColor(indicatorColour);
@@ -349,7 +349,7 @@ void Port::showAttachIndicator()
 
 void Port::hideAttachIndicator()
 {
-	if (m_cables.empty()) 
+	if (m_cables.empty())
 	{
 		indicatorColour.a = 0.5f;
 		attachmentIndicator->setColor(indicatorColour);
@@ -381,7 +381,7 @@ void Port::updateDesctiption(std::string newDescription)
 	}
 }
 
-void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal) 
+void Port::rotate(float degrees, const glm::vec3& rotatePoint, const glm::vec3& rotateNormal)
 {
 	// Calculate the rotation transform.
 	glm::mat4 transform = glm::translate(glm::mat4(1.f), rotatePoint);

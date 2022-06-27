@@ -24,7 +24,7 @@ Circuit::Circuit(const std::filesystem::path& path)
 	: Circuit(YAML::LoadFile(path.string()))
 {}
 
-Circuit::Circuit(const YAML::Node& node) 
+Circuit::Circuit(const YAML::Node& node)
 	: Entity(EntityType::CIRCUIT)
 {
 	m_label = node["Circuit Info"]["Label"].as<std::string>();
@@ -66,12 +66,12 @@ Circuit::Circuit(const YAML::Node& node)
 			currentComponent->designatorIdx = componentNode["Designator Index"].as<int>();
 			currentComponent->updateText();
 		}
-		else 
+		else
 		{
 			currentComponent->designatorIdx = -1;
 			currentComponent->updateText();
 		}
-		
+
 		// Rotate the component.
 		if (componentNode["Rotation"].IsDefined())
 			currentComponent->rotate(componentNode["Rotation"].as<float>());

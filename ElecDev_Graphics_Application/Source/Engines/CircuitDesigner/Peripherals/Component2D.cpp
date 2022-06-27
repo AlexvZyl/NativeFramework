@@ -136,7 +136,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		designatorSym = designator->m_string;
 	}
 	// Default designator.
-	else 
+	else
 	{
 		designator = Renderer::addText2D("?", designatorOffset, titleColour, titleSize, "L", "B", this);
 		designatorSym = designator->m_string;
@@ -147,7 +147,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	{
 		type = componentNode["Type"].as<std::string>();
 	}
-	
+
 	// Add the lines.
 	for (const auto& line : componentNode["PolyLines"])
 	{
@@ -163,7 +163,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 	}
 
 	// Add circles.
-	for (const auto& circle : componentNode["Circles"]) 
+	for (const auto& circle : componentNode["Circles"])
 		m_circles.push_back(Renderer::addCircle2D(circle.second, this));
 
 	// Add ports.
@@ -175,7 +175,7 @@ Component2D::Component2D(const YAML::Node& node, Circuit* parent)
 		m_text.push_back(Renderer::addText2D(text.second, this));
 
 	// Rotate the component.
-	if(componentNode["Rotation"].IsDefined())
+	if (componentNode["Rotation"].IsDefined())
 		rotate(componentNode["Rotation"].as<float>());
 
 	enableOutline();
@@ -185,7 +185,7 @@ Component2D::Component2D(const std::filesystem::path& path, Circuit* parent)
 	: Component2D(YAML::LoadFile(path.string())["Component"], parent)
 {}
 
-Component2D::~Component2D() 
+Component2D::~Component2D()
 {
 	ports.clear();
 	Renderer::remove(title);
@@ -219,7 +219,7 @@ void Component2D::translate(const glm::vec2& translation)
 }
 
 void Component2D::place(const glm::vec2& pos)
-{	
+{
 	// Ensure the component is at the desired position.
 	translateTo(pos);
 	setLayer(0.0f);
@@ -267,7 +267,7 @@ void Component2D::disableOutline()
 void Component2D::removePort(std::shared_ptr<Port> port)
 {
 	auto port_to_remove = std::find(begin(ports), end(ports), port);
-	if (port_to_remove != end(ports)) 
+	if (port_to_remove != end(ports))
 	{
 		ports.erase(port_to_remove);
 		ports.shrink_to_fit();
@@ -309,7 +309,7 @@ void Component2D::updateText()
 	title->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
 
 	if (designator->updateText(m_tag))
-		designator->rotate(m_rotation, glm::vec3(centre, 0.f), {0.f, 0.f, 1.f});
+		designator->rotate(m_rotation, glm::vec3(centre, 0.f), { 0.f, 0.f, 1.f });
 }
 
 void Component2D::updateTextWithoutLabel()
@@ -352,12 +352,12 @@ void Component2D::addPort(std::shared_ptr<Port> port)
 void Component2D::removePoly(Polygon2D* poly)
 {
 	auto to_remove = std::find(begin(m_polygons), end(m_polygons), poly);
-	if (to_remove != m_polygons.end()) 
+	if (to_remove != m_polygons.end())
 	{
 		Renderer::remove(poly);
 		m_polygons.erase(to_remove);
 	}
-	else 
+	else
 	{
 		LUMEN_LOG_WARN("Attempted to remove a polygon that is not a member of m_polygons.", "Component2D");
 	}
@@ -366,12 +366,12 @@ void Component2D::removePoly(Polygon2D* poly)
 void Component2D::removeCircle(Circle* circle)
 {
 	auto to_remove = std::find(begin(m_circles), end(m_circles), circle);
-	if (to_remove != m_circles.end()) 
+	if (to_remove != m_circles.end())
 	{
 		Renderer::remove(circle);
 		m_circles.erase(to_remove);
 	}
-	else 
+	else
 	{
 		LUMEN_LOG_WARN("Attempted to remove a circle that is not a member of m_circles.", "Component2D");
 	}
@@ -380,12 +380,12 @@ void Component2D::removeCircle(Circle* circle)
 void Component2D::removeLine(PolyLine* line)
 {
 	auto to_remove = std::find(begin(m_lines), end(m_lines), line);
-	if (to_remove != m_lines.end()) 
+	if (to_remove != m_lines.end())
 	{
 		Renderer::remove(line);
 		m_lines.erase(to_remove);
 	}
-	else 
+	else
 	{
 		LUMEN_LOG_WARN("Attempted to remove a line that is not a member of m_lines.", "Component2D");
 	}
@@ -444,8 +444,8 @@ void Component2D::rotate(float degrees)
 
 PortType Component2D::getPortType(YAML::Node node)
 {
-	if		(node["Type"].as<std::string>() == "PORT_IN")	 { return PortType::PORT_IN; }
-	else if (node["Type"].as<std::string>() == "PORT_OUT")	 { return PortType::PORT_OUT; }
+	if (node["Type"].as<std::string>() == "PORT_IN") { return PortType::PORT_IN; }
+	else if (node["Type"].as<std::string>() == "PORT_OUT") { return PortType::PORT_OUT; }
 	else if (node["Type"].as<std::string>() == "PORT_INOUT") { return PortType::PORT_INOUT; }
 }
 

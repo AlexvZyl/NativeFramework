@@ -11,8 +11,8 @@
 
 IOIndicator::IOIndicator(PortType type, PortPosition position, GraphicsTrianglesBuffer<VertexData>* gtb, Port* parent)
 	: Primitive(parent),
-	  m_portType(type),
-	  m_portPosition(position)
+	m_portType(type),
+	m_portPosition(position)
 {
 	// General setup.
 	m_colour = parent->indicatorColour;
@@ -40,17 +40,17 @@ IOIndicator::IOIndicator(PortType type, PortPosition position, GraphicsTriangles
 		{0, 1, 2},
 		{0, 2, 3}
 	};
-		
+
 	// In these cases we need different indices.
-	if ((m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_IN && m_portPosition == PortPosition::RIGHT)) 
+	if ((m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::LEFT) || (m_portType == PortType::PORT_IN && m_portPosition == PortPosition::RIGHT))
 	{
 		indices[0] = { 0, 1, 3 };
 	}
-	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::TOP) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::BOTTOM)) 
+	if ((m_portType == PortType::PORT_IN && m_portPosition == PortPosition::TOP) || (m_portType == PortType::PORT_OUT && m_portPosition == PortPosition::BOTTOM))
 	{
 		indices[1] = { 3, 1, 2 };
 	}
-	else 
+	else
 	{
 		// Handle PORT_INOUT.
 	}

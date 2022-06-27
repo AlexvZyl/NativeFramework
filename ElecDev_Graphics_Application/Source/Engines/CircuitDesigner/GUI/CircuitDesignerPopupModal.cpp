@@ -4,23 +4,23 @@
 #include "Engines/CircuitDesigner/CircuitDesigner.h"
 #include "Engines/CircuitDesigner/Peripherals/Circuit.h"
 
-CircuitDesignerPopupModal::CircuitDesignerPopupModal(const std::string& name, int imguiWindowFlags) 
+CircuitDesignerPopupModal::CircuitDesignerPopupModal(const std::string& name, int imguiWindowFlags)
 	: PopupModal(name, imguiWindowFlags)
 {}
 
-void CircuitDesignerPopupModal::onImGuiRender() 
+void CircuitDesignerPopupModal::onImGuiRender()
 {
 	if (m_componentOverwrite || m_cableOverwrite)
 	{
 		overWriteModal();
 	}
-	else if (m_deleteCables || m_deleteComponents) 
+	else if (m_deleteCables || m_deleteComponents)
 	{
 		deleteModal();
 	}
 }
 
-void CircuitDesignerPopupModal::overWriteModal() 
+void CircuitDesignerPopupModal::overWriteModal()
 {
 	std::string msg;
 	if (!m_yamlNode)
@@ -71,7 +71,7 @@ void CircuitDesignerPopupModal::overWriteModal()
 
 			else if (m_yamlNode)
 			{
-				if (m_componentOverwrite) 
+				if (m_componentOverwrite)
 				{
 					engine->m_circuit->m_referenceComponents[m_entity] = m_node;
 					if (m_mousePosition.x != -1.f) engine->loadAndPlaceComponent(m_node, m_mousePosition);
@@ -91,7 +91,7 @@ void CircuitDesignerPopupModal::overWriteModal()
 	if (ImGui::Button("Cancel")) closeWindow();
 }
 
-void CircuitDesignerPopupModal::deleteModal() 
+void CircuitDesignerPopupModal::deleteModal()
 {
 	std::string msg;
 	if (m_deleteCables)     msg = "You are about to clear " + std::to_string(m_entityCount) + " cables and delete the reference.";

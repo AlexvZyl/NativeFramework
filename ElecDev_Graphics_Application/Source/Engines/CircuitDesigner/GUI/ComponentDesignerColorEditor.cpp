@@ -36,7 +36,7 @@ void ComponentDesignerColorEditor::onImGuiBegin()
 void ComponentDesignerColorEditor::onImGuiRender()
 {
 	ComponentDesigner* engine = Lumen::getApp().getActiveEngine<ComponentDesigner>();
-	if (!engine) 
+	if (!engine)
 	{
 		ImGui::Text("No active engine.");
 		return;
@@ -87,7 +87,7 @@ void ComponentDesignerColorEditor::onImGuiRender()
 		}*/
 
 
-		if(activePrimitives.empty()) *m_target = color;
+		if (activePrimitives.empty()) *m_target = color;
 	}
 
 	if (ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Left)) {
@@ -95,13 +95,13 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 	else {
 		// TODO: implement this with a batch command
-		for(int i = 0; i < activePrimitives.size(); i++)
+		for (int i = 0; i < activePrimitives.size(); i++)
 		{
 			if (oldColor.at(i) != color)
 				engine->commandLog.execute<SetColourCommand>(color, activePrimitives.at(i), oldColor.at(i));
 			//activePrimitive->setColor(*color);
 		}
-		for(auto& c : oldColor)
+		for (auto& c : oldColor)
 			c = color;
 	}
 	/*if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left)) {

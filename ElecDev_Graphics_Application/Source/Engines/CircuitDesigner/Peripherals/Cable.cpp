@@ -18,7 +18,7 @@ unsigned Cable::cableID = 0;
 //  Constructor & Destructor.  																													//
 //==============================================================================================================================================//
 
-Cable::Cable(Port* startPort, Circuit* parent) 
+Cable::Cable(Port* startPort, Circuit* parent)
 	: Entity(EntityType::CABLE, parent)
 {
 
@@ -103,7 +103,7 @@ Cable::Cable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort, Ci
 	constructCable(startPort, nodeList, endPort);
 }
 
-Cable::Cable(const YAML::Node& node, Circuit* parent) 
+Cable::Cable(const YAML::Node& node, Circuit* parent)
 	: Entity(EntityType::CABLE, parent)
 {
 	Port* startPort = nullptr;
@@ -118,7 +118,7 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 	int endPortIndex = node["End Port Index"].as<int>();
 	// Total components in the circuit.
 	int totalComponents = parent->m_components.size();
-	
+
 	// Start port.
 	if (startComponentIndex < totalComponents)
 	{
@@ -142,17 +142,17 @@ Cable::Cable(const YAML::Node& node, Circuit* parent)
 			endPort = parent->m_components[endComponentIndex]->ports[endPortIndex].get();
 		}
 	}
-	
+
 	// Load all of the nodes belonging to the cable.
 	std::vector<glm::vec2> nodeVector;
-	nodeVector.reserve(node["Nodes"].size()+2);
+	nodeVector.reserve(node["Nodes"].size() + 2);
 	for (const auto& nodeIt : node["Nodes"])
 	{
 		// Add to node vector.
 		glm::vec2 node = { nodeIt.second[0].as<float>(), nodeIt.second[1].as<float>() };
 		nodeVector.emplace_back(node);
 	}
-	
+
 	// Call constructor with data.
 	constructCable(startPort, nodeVector, endPort);
 
@@ -169,11 +169,11 @@ Cable::~Cable()
 {
 	// Remove the cable from the start and end ports.
 	if (m_startPort) m_startPort->detachCable(this);
-	if (m_endPort)   m_endPort->detachCable(this); 
+	if (m_endPort)   m_endPort->detachCable(this);
 
 	// Remove the renderer primitives.
 	Renderer::remove(m_polyLine);
-	
+
 	/*/
 	//remove title text
 	//Renderer::remove(m_title1);
@@ -183,7 +183,7 @@ Cable::~Cable()
 	*/
 }
 
-void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort) 
+void Cable::constructCable(Port* startPort, std::vector<glm::vec2> nodeList, Port* endPort)
 {
 	// Attach the ports
 	m_startPort = startPort;
@@ -245,7 +245,7 @@ bool Cable::attach(Port* endPort)
 		//This can possibly be done by adding an 'updateFromTags' method to port.h. This can be enoked upon any change (notifying ports on either end).
 		if (m_endPort->m_type == PortType::PORT_OUT || m_endPort->m_type == PortType::PORT_INOUT) {
 			if (m_startPort->m_type == PortType::PORT_IN || m_startPort->m_type == PortType::PORT_INOUT) {
-				m_startPort->fromTag = & dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
+				m_startPort->fromTag = &dynamic_cast<Component2D*>(m_endPort->m_parent)->m_tag;
 				m_startPort->voltage = m_endPort->voltage;
 			}
 		}
@@ -277,7 +277,7 @@ void Cable::followPort(Port* movedPort)
 
 void Cable::setColour(glm::vec4 colour, bool save)
 {
-	if(save) m_colour = colour;
+	if (save) m_colour = colour;
 	m_polyLine->setColor(colour);
 }
 
@@ -305,7 +305,7 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 {
 	// Add code to move necessary primatives around.
 	// Move line segment if user grabs a line.
-	if (m_activeLine) 
+	if (m_activeLine)
 	{
 		// First check that we are not moving the first or last line. At the monemt this is not supported, as it requires the line segments to be added.
 		// This should be fixed in the future.
@@ -313,7 +313,7 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 			{
 				return current == m_activeLine;
 			});
-		if (it == m_lines.begin() || it >= (m_lines.end() - 1)) 
+		if (it == m_lines.begin() || it >= (m_lines.end() - 1))
 		{
 			// The active line is the first or last line segment.
 			// Could print a warning to the user here for now. Ideally we should handle this by addin an additional segment. For now, just return.
@@ -323,12 +323,12 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 
 		// Get the line orientation -  We move horizontal lines vertically and we move vertical lines horizontally.
 		glm::vec2 translation = {};
-		if (m_activeLine->m_start.x == m_activeLine->m_end.x) 
+		if (m_activeLine->m_start.x == m_activeLine->m_end.x)
 		{
 			// Vertical line
 			translation = { screenCoords[0] - m_activeLine->m_start.x, 0.f };
 		}
-		else 
+		else
 		{
 			// Horizontal line
 			translation = { 0.f, screenCoords[1] - m_activeLine->m_start.y };
@@ -340,12 +340,12 @@ void Cable::moveActivePrimitiveTo(glm::vec2 screenCoords)
 		// Extend the adjacent lines.
 		(*std::prev(it))->setEnd(m_activeLine->m_start);
 		(*std::next(it))->setStart(m_activeLine->m_end);
-		
+
 		//Move the adjacent nodes
 		m_nodes.at(it - m_lines.begin() - 1)->translate(translation);
 		m_nodes.at(it - m_lines.begin())->translate(translation);
 	}
-	else if (m_activeNode) 
+	else if (m_activeNode)
 	{
 		// Handle node movement.
 

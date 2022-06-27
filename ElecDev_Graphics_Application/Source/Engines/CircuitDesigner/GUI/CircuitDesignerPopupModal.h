@@ -22,7 +22,7 @@ public:
 	bool m_componentOverwrite = false;
 
 	// Store the mouse position when the modal was opened.
-	glm::vec2 m_mousePosition = {-1.f,-1.f};
+	glm::vec2 m_mousePosition = { -1.f,-1.f };
 
 	bool m_deleteComponents = false;
 	bool m_deleteCables = false;
@@ -36,5 +36,5 @@ private:
 	// Different modals.
 	void overWriteModal();
 	void deleteModal();
-	
+
 };

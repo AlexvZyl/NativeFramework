@@ -30,13 +30,13 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 		yTot += vec.y;
 		zTot += vec.z;
 	}
-	m_trackedCenter = {xTot/m_vertexCount, yTot/m_vertexCount, zTot/m_vertexCount}; 
+	m_trackedCenter = {xTot/m_vertexCount, yTot/m_vertexCount, zTot/m_vertexCount};
 	*/
 
 	std::vector<VertexData> vertexVector;
 	vertexVector.reserve(m_vertexCount);
 	std::vector<unsigned> indices;
-	
+
 	// Vertices.
 	for (auto& vertex : vertices)
 		vertexVector.emplace_back(vertex, m_colour, m_entityID);
@@ -55,7 +55,7 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 	/*else if (getGraphicsBuffer().getVAO().getType() == GL_LINES)
 	{
 		indices.reserve(2 * m_vertexCount);
-		for (int i = 1; i < m_vertexCount; i++) 
+		for (int i = 1; i < m_vertexCount; i++)
 		{
 			indices.push_back(i -1);
 			indices.push_back(i);
@@ -65,13 +65,13 @@ Polygon2D::Polygon2D(const std::vector<glm::vec3>& vertices, GraphicsTrianglesBu
 	}*/
 }
 
-void Polygon2D::pushVertex(const glm::vec3& vertex) 
+void Polygon2D::pushVertex(const glm::vec3& vertex)
 {
 	// Copy the existing vertices.
 	std::vector<VertexData> currentVertices;
 	std::vector<glm::vec3> vertices;
 	currentVertices.reserve(m_vertexCount + 1);
-	for (int i = 0; i < m_vertexCount; i++) 
+	for (int i = 0; i < m_vertexCount; i++)
 	{
 		currentVertices.emplace_back(getVertex(i));
 		vertices.emplace_back((currentVertices.back().position));
@@ -129,7 +129,7 @@ void Polygon2D::translateVertexAtIndexTo(const unsigned& index, const glm::vec2&
 void Polygon2D::updateIndices()
 {
 	std::vector<glm::vec3> vertices;
-	for (int i = 0; i < m_vertexCount; i++) 
+	for (int i = 0; i < m_vertexCount; i++)
 		vertices.emplace_back((getVertex(i).position));
 	std::vector<std::vector<glm::vec3>> vertices_with_holes;
 	vertices_with_holes.push_back(vertices);
