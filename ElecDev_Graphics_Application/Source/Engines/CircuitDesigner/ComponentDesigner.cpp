@@ -85,7 +85,7 @@ void ComponentDesigner::switchState(CompDesignState state)
 
 	case CompDesignState::SELECT:
 		// Disable outlines.
-		for(auto primitive : m_activePrimitives) primitive->disableOutline();
+		for (auto primitive : m_activePrimitives) primitive->disableOutline();
 		if (m_activePort.get()) m_activePort->disableOutline();
 		// Remove temp primitives.
 		if (m_tempCircle) Renderer::remove(m_tempCircle);
@@ -115,8 +115,6 @@ void ComponentDesigner::pushTempPrimitives()
 	//Circle* circle = dynamic_cast<Circle*>(m_activePrimitive);
 
 	if (m_tempCircle) m_activeComponent->addCircle(m_tempCircle);
-
-	//need an if/else here to differentiate (polylines will be successfilly cast to both PolyLine and Polygon2D).
 	if (m_tempLine) m_activeComponent->addLine(m_tempLine);
 	if (m_tempPoly) m_activeComponent->addPoly(m_tempPoly);
 	// Set state.
@@ -127,7 +125,7 @@ void ComponentDesigner::pushTempPrimitives()
 
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
-	if ((eID == 0) || (eID == -1)) { 
+	if ((eID == 0) || (eID == -1)) {
 		// Remove outline of current entity.
 		for (IPrimitive* primitive : m_activePrimitives) {
 			primitive->disableOutline();
@@ -137,7 +135,7 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 		// Remove previous selection.
 		m_activePrimitives.clear();
 		m_activePort = nullptr;
-		}
+	}
 	else
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
@@ -268,7 +266,7 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 void ComponentDesigner::setHoveredVertex(glm::vec2 coords)
 {
 	m_hoveredVertexIdx = -1;
-	for(IPrimitive* primitive : m_activePrimitives)
+	for (IPrimitive* primitive : m_activePrimitives)
 	{
 		auto [vertexIdx, distance] = primitive->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
