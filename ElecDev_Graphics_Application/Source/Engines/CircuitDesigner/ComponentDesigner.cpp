@@ -127,22 +127,36 @@ void ComponentDesigner::pushTempPrimitives()
 
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
-	// Remove outline of current entity.
-	for (IPrimitive* primitive : m_activePrimitives) {
-		primitive->disableOutline();
-	}
-	if (m_activePort.get()) m_activePort->disableOutline();
+	if ((eID == 0) || (eID == -1)) { 
+		// Remove outline of current entity.
+		for (IPrimitive* primitive : m_activePrimitives) {
+			primitive->disableOutline();
+		}
+		if (m_activePort.get()) m_activePort->disableOutline();
 
-	// Remove previous selection.
-	m_activePrimitives.clear();
-	m_activePort = nullptr;
-
-	//ignore IDs that do not belong to the EntityManager
-	if ((eID == 0) || (eID == -1)) { return; }
+		// Remove previous selection.
+		m_activePrimitives.clear();
+		m_activePort = nullptr;
+		}
 	else
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
 		if (!currentEntity) return;
+
+		//If we are clicking on an already selected target, nothing should happen
+		if (std::find(m_activePrimitives.begin(), m_activePrimitives.end(), currentEntity) != m_activePrimitives.end()) return;
+
+		//Otherwise, switch active primitives
+		// Remove outline of current entity.
+		for (IPrimitive* primitive : m_activePrimitives) {
+			primitive->disableOutline();
+		}
+		if (m_activePort.get()) m_activePort->disableOutline();
+
+		// Remove previous selection.
+		m_activePrimitives.clear();
+		m_activePort = nullptr;
+
 		// Entity is a primitive belonging to the component.
 		if (currentEntity->m_parent == m_activeComponent.get())
 		{
@@ -295,10 +309,16 @@ void ComponentDesigner::deleteActivePrimitive()
 	}
 
 	//remove previous selection
-	/*m_activePrimitives.clear();
+	m_activePrimitives.clear();
+	m_tempCircle = nullptr;
+	m_tempLine = nullptr;
+	m_tempPoly = nullptr;
 	m_activePort = nullptr;
-	m_activeVertexIdx = -1;*/
-	switchState(CompDesignState::SELECT);
+	m_hoveredVertexIdx = -1;
+	m_activeVertexIdx = -1;
+	hoveredVertexOwner = nullptr;
+	activeVertexOwner = nullptr;
+	//switchState(CompDesignState::SELECT);
 }
 
 //TODO: move this to a seperate file

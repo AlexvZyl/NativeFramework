@@ -56,19 +56,22 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		else if (designerState == CompDesignState::DRAW_POLY)
 		{
 
-			if (!m_tempPoly)
+			if (!m_tempPoly && !m_tempLine)
 			{
 				if (drawFilled)
 				{
 					m_tempPoly = (Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, penColour, m_activeComponent.get()));
 				}
 				else {
-					m_tempPoly = (Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get(), penColour));
+					m_tempLine = (Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get(), penColour));
 				}
 			}
 			else
 			{
-				m_tempPoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
+				if(m_tempPoly)
+					m_tempPoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
+				else if (m_tempLine)
+					m_tempLine->pushVertex(getNearestGridVertex(screenCoords));
 			}
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
@@ -81,7 +84,8 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			}
 			else {
 				//end the line
-				m_activeComponent->addLine(m_tempLine);
+				//m_activeComponent->addLine(m_tempLine);
+				pushTempPrimitives();
 			}
 		}
 		else if (designerState == CompDesignState::DRAW_CIRCLE)
@@ -101,7 +105,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 			else
 			{
 				//add to the component
-				m_activeComponent->addCircle(m_tempCircle);
+				pushTempPrimitives();
 			}
 		}
 		else if (designerState == CompDesignState::PLACE_PORT) {
@@ -147,6 +151,11 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 		if (m_tempPoly)
 		{
 			m_tempPoly->translateVertexAtIndexTo(m_tempPoly->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
+		}
+		if (m_tempLine)
+		{
+			// Update the line end position.
+			m_tempLine->translateVertexAtIndexTo(m_tempLine->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)

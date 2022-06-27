@@ -54,8 +54,8 @@ void ComponentDesignerColorEditor::onImGuiRender()
 			oldColor.push_back(primitive->m_colour);
 	}
 	if (!activePrimitives.empty()) {
-		color = activePrimitives.front()->m_colour;
 		if (activePrimitives.front() != lastActivePrimitive) {
+			color = activePrimitives.front()->m_colour;
 			oldColor.clear();
 			for (auto primitive : activePrimitives)
 				oldColor.push_back(primitive->m_colour);
