@@ -46,3 +46,12 @@ public:
     inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec3& position) = 0;
     inline virtual std::tuple<unsigned, float> getNearestVertexIndex(const glm::vec2& position) = 0;
 };
+
+class HasThickness {
+protected:
+    float m_thickness;
+    inline HasThickness(float thickness) :m_thickness(thickness) {};
+public:
+    inline virtual float getThickness() { return m_thickness; }
+    virtual void setThickness(float thickness) = 0;
+};

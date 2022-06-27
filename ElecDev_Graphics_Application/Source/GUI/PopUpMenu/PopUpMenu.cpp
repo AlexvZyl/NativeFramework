@@ -102,7 +102,7 @@ void PopUpMenu::onImGuiRender()
             {
                 app.pushWindow<ComponentEditor>(LumenDockPanel::Left, "Component Editor");
             }
-            if (componentEngine->m_activePrimitive || componentEngine->m_activePort) 
+            if (!componentEngine->m_activePrimitives.empty() || componentEngine->m_activePort)
             {
                 if (ImGui::MenuItem("Delete", "DEL"))
                 {
@@ -146,7 +146,7 @@ void PopUpMenu::onImGuiRender()
         {
             if (ImGui::MenuItem("Done"))
             {
-                componentEngine->pushActivePrimitives();
+                componentEngine->pushTempPrimitives();
                 componentEngine->switchState(CompDesignState::SELECT);
                 closeWindow();
             }

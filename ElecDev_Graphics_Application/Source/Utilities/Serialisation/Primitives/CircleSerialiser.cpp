@@ -18,7 +18,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, Circle* circle)
 	emitter << YAML::Key << "Center" << YAML::Value << circle->m_trackedCenter;
 	emitter << YAML::Key << "Radius" << YAML::Value << circle->m_radius;
 	emitter << YAML::Key << "Fade" << YAML::Value << circle->m_fade;
-	emitter << YAML::Key << "Thickness" << YAML::Value << circle->m_thickness;
+	emitter << YAML::Key << "Thickness" << YAML::Value << circle->getThickness();
 	emitter << YAML::Key << "Color" << YAML::Value << circle->m_colour;
 
 	// End text data.

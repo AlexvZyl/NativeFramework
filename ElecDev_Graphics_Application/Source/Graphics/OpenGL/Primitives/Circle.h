@@ -18,7 +18,7 @@ class VertexDataCircle;
 //  Circle class.		 																													   //
 //=============================================================================================================================================//
 
-class Circle : public Primitive<GraphicsTrianglesBuffer<VertexDataCircle>>
+class Circle : public Primitive<GraphicsTrianglesBuffer<VertexDataCircle>>, public HasThickness
 {
 public:
 
@@ -29,7 +29,7 @@ public:
 	static inline constexpr glm::vec2 local4 = { -1.f, -1.f };
 
 	// Circle data.
-	float m_thickness = 0;
+	//float m_thickness = 0;
 	float m_fade = 0;
 	float m_radius = 0;
 

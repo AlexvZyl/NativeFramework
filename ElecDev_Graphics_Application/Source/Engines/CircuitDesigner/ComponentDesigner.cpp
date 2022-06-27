@@ -15,6 +15,7 @@
 #include "Application/ApplicationTemplates.h"
 #include "Resources/ResourceHandler.h"
 #include "Peripherals/Port.h"
+#include <algorithm>
 
 ComponentDesigner::ComponentDesigner()
 	: Base2DEngine()
@@ -84,50 +85,60 @@ void ComponentDesigner::switchState(CompDesignState state)
 
 	case CompDesignState::SELECT:
 		// Disable outlines.
-		if (m_activePrimitive) m_activePrimitive->disableOutline();
+		for(auto primitive : m_activePrimitives) primitive->disableOutline();
 		if (m_activePort.get()) m_activePort->disableOutline();
-		// Remove primitives.
-		if (designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_LINE)
-		{
-			if (m_activePrimitive) Renderer::remove(m_activePrimitive);
-		}
+		// Remove temp primitives.
+		if (m_tempCircle) Renderer::remove(m_tempCircle);
+		if (m_tempLine) Renderer::remove(m_tempLine);
+		if (m_tempPoly) Renderer::remove(m_tempPoly);
 		// Set state.
-		m_activePrimitive = nullptr;
+		m_activePrimitives.clear();
+		m_tempCircle = nullptr;
+		m_tempLine = nullptr;
+		m_tempPoly = nullptr;
 		m_activePort = nullptr;
+		m_hoveredVertexIdx = -1;
 		m_activeVertexIdx = -1;
+		hoveredVertexOwner = nullptr;
+		activeVertexOwner = nullptr;
 		designerState = CompDesignState::SELECT;
 		break;
 	}
 }
 
-void ComponentDesigner::pushActivePrimitives()
+void ComponentDesigner::pushTempPrimitives()
 {
 	//TODO: get rid of these nasty dynamic casts!!!
 	//This should perform checks to ensure that we are not pushing primitives multiple times
-	PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePrimitive);
-	Polygon2D* polygon = dynamic_cast<Polygon2D*>(m_activePrimitive);
-	Circle* circle = dynamic_cast<Circle*>(m_activePrimitive);
+	//PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePrimitive);
+	//Polygon2D* polygon = dynamic_cast<Polygon2D*>(m_activePrimitive);
+	//Circle* circle = dynamic_cast<Circle*>(m_activePrimitive);
 
-	if (circle) m_activeComponent->addCircle(circle);
+	if (m_tempCircle) m_activeComponent->addCircle(m_tempCircle);
 
 	//need an if/else here to differentiate (polylines will be successfilly cast to both PolyLine and Polygon2D).
-	if (polyline) m_activeComponent->addLine(polyline);
-	else if (polygon) m_activeComponent->addPoly(polygon);
+	if (m_tempLine) m_activeComponent->addLine(m_tempLine);
+	if (m_tempPoly) m_activeComponent->addPoly(m_tempPoly);
 	// Set state.
-	m_activePrimitive = nullptr;
+	m_tempCircle = nullptr;
+	m_tempLine = nullptr;
+	m_tempPoly = nullptr;
 }
 
 void ComponentDesigner::setActivePrimitives(unsigned eID)
 {
 	// Remove outline of current entity.
-	if (m_activePrimitive) m_activePrimitive->disableOutline();
+	for (IPrimitive* primitive : m_activePrimitives) {
+		primitive->disableOutline();
+	}
 	if (m_activePort.get()) m_activePort->disableOutline();
 
 	// Remove previous selection.
-	m_activePrimitive = nullptr;
+	m_activePrimitives.clear();
 	m_activePort = nullptr;
 
-	if ((eID == 0) || (eID == -1)) {}
+	//ignore IDs that do not belong to the EntityManager
+	if ((eID == 0) || (eID == -1)) { return; }
 	else
 	{
 		Entity* currentEntity = EntityManager::getEntity(eID);
@@ -135,8 +146,10 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 		// Entity is a primitive belonging to the component.
 		if (currentEntity->m_parent == m_activeComponent.get())
 		{
-			m_activePrimitive = dynamic_cast<IPrimitive*>(currentEntity);
-			m_activePrimitive->enableOutline();
+			//We should only every get primitives. 
+			LUMEN_DEBUG_ASSERT(currentEntity->m_type == EntityType::PRIMITIVE);
+			m_activePrimitives.push_back(dynamic_cast<IPrimitive*>(currentEntity));
+			m_activePrimitives.back()->enableOutline();
 		}
 		// Port.
 		else if (dynamic_cast<Port*>(currentEntity->m_parent))
@@ -145,8 +158,8 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 			//TODO: Get rid of this dynamic cast to check types!!
 			if (dynamic_cast<Text*>(currentEntity))
 			{
-				m_activePrimitive = dynamic_cast<IPrimitive*>(currentEntity);
-				m_activePrimitive->enableOutline();
+				m_activePrimitives.push_back(dynamic_cast<IPrimitive*>(currentEntity));
+				m_activePrimitives.back()->enableOutline();
 			}
 			// Port body is selected.
 			else
@@ -164,17 +177,76 @@ void ComponentDesigner::setActivePrimitives(unsigned eID)
 	}
 }
 
+void ComponentDesigner::toggleActivePrimitives(unsigned eID)
+{
+	// Remove outline of current entity.
+	//if (m_activePrimitive) m_activePrimitive->disableOutline();
+	//if (m_activePort.get()) m_activePort->disableOutline();
+
+	// Remove previous selection.
+	//m_activePrimitive = nullptr;
+	//m_activePort = nullptr;
+
+	if ((eID == 0) || (eID == -1)) { return; }//ignore IDs that do not belong to the EntityManager
+	else
+	{
+		Entity* currentEntity = EntityManager::getEntity(eID);
+		if (!currentEntity) return;
+		//First check to remove from active vector
+		auto removeActive = std::find(m_activePrimitives.begin(), m_activePrimitives.end(), currentEntity);
+		if (removeActive != m_activePrimitives.end()) {
+			(*removeActive)->disableOutline();
+			m_activePrimitives.erase(removeActive);
+		}
+		else {//add to active vector
+		// Entity is a primitive belonging to the component.
+			if (currentEntity->m_parent == m_activeComponent.get())
+			{
+				m_activePrimitives.push_back(dynamic_cast<IPrimitive*>(currentEntity));
+				m_activePrimitives.back()->enableOutline();
+			}
+			// Port.
+			else if (dynamic_cast<Port*>(currentEntity->m_parent))
+			{
+				// Port text is selected.
+				//TODO: Get rid of this dynamic cast to check types!!
+				if (dynamic_cast<Text*>(currentEntity))
+				{
+					m_activePrimitives.push_back(dynamic_cast<IPrimitive*>(currentEntity));
+					m_activePrimitives.back()->enableOutline();
+				}
+				// Port body is selected. For now, we ignore this.
+				/*
+				else
+				{
+					//This is a bit hacky.
+					//TODO: Find a more elegant way of doing this
+					Port* cur = dynamic_cast<Port*>(currentEntity->m_parent);
+					m_activePort = *std::find_if(begin(m_activeComponent->ports), end(m_activeComponent->ports), [&](std::shared_ptr<Port> current)
+						{
+							return current.get() == cur;
+						});
+					if (m_activePort) m_activePort->enableOutline();
+				}*/
+			}
+		}
+	}
+}
+
 void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 {
 	//Currently this only works properly for Polygons and PolyLines. Other primitives will return the index of the underlying graphical vertices (not logical)
 	//TODO: Fix this for other primitives
 	m_activeVertexIdx = -1;
-	if (m_activePrimitive)
-	{
-		auto [vertexIdx, distance] = m_activePrimitive->getNearestVertexIndex(coords);
+	for (IPrimitive* primitive : m_activePrimitives) {
+		auto [vertexIdx, distance] = primitive->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_activeVertexIdx = vertexIdx;
+			activeVertexOwner = primitive;
+			//we are only looking for one vertex, so we can set the active primitive and break here 
+			//(in future, we could select the nearest vertex, but this will do for now)
+			break;
 		}
 	}
 }
@@ -182,12 +254,15 @@ void ComponentDesigner::setActiveVertex(glm::vec2 coords)
 void ComponentDesigner::setHoveredVertex(glm::vec2 coords)
 {
 	m_hoveredVertexIdx = -1;
-	if (m_activePrimitive)
+	for(IPrimitive* primitive : m_activePrimitives)
 	{
-		auto [vertexIdx, distance] = m_activePrimitive->getNearestVertexIndex(coords);
+		auto [vertexIdx, distance] = primitive->getNearestVertexIndex(coords);
 		if (worldToPixelDistance({ distance, 0.f, 0.f }).x < clickTol)
 		{
 			m_hoveredVertexIdx = vertexIdx;
+			hoveredVertexOwner = primitive;
+			//we only want one selected vertex at a time, so we can break here
+			break;
 		}
 	}
 }
@@ -195,32 +270,35 @@ void ComponentDesigner::setHoveredVertex(glm::vec2 coords)
 void ComponentDesigner::deleteActivePrimitive()
 {
 	// Disable outline.
-	if (m_activePrimitive) m_activePrimitive->disableOutline();
 	if (m_activePort.get()) m_activePort->disableOutline();
+	for (auto primitive : m_activePrimitives) {
+		primitive->disableOutline();
 
-	// Remove primitives.
-	//TODO: Get rid of these dynamic casts!!!
-	PolyLine* polyline = dynamic_cast<PolyLine*>(m_activePrimitive);
-	Polygon2D* polygon = dynamic_cast<Polygon2D*>(m_activePrimitive);
-	Circle* circle = dynamic_cast<Circle*>(m_activePrimitive);
-	Text* text = dynamic_cast<Text*>(m_activePrimitive);
+		// Remove primitives.
+		//TODO: Get rid of these dynamic casts!!!
+		PolyLine* polyline = dynamic_cast<PolyLine*>(primitive);
+		Polygon2D* polygon = dynamic_cast<Polygon2D*>(primitive);
+		Circle* circle = dynamic_cast<Circle*>(primitive);
+		Text* text = dynamic_cast<Text*>(primitive);
 
-	if (polyline) m_activeComponent->removeLine(polyline);
-	else if (polygon) m_activeComponent->removePoly(polygon);//This line will throw some warnings without the else (Polyline is a child of Polygon)
-	if (circle) m_activeComponent->removeCircle(circle);
-	if (m_activePort) m_activeComponent->removePort(m_activePort);
-	if (text)
-	{
-		// If the text belongs to a port, we can delete the whole port.
-		if (text->m_parent->m_type == EntityType::PORT)
-			m_activeComponent->removePort(dynamic_cast<Port*>(text->m_parent));
-		else m_activeComponent->removeText(text);
+		if (polyline) m_activeComponent->removeLine(polyline);
+		else if (polygon) m_activeComponent->removePoly(polygon);//This line will throw some warnings without the else (Polyline is a child of Polygon)
+		if (circle) m_activeComponent->removeCircle(circle);
+		if (m_activePort) m_activeComponent->removePort(m_activePort);
+		if (text)
+		{
+			// If the text belongs to a port, we can delete the whole port.
+			if (text->m_parent->m_type == EntityType::PORT)
+				m_activeComponent->removePort(dynamic_cast<Port*>(text->m_parent));
+			else m_activeComponent->removeText(text);
+		}
 	}
 
 	//remove previous selection
-	m_activePrimitive = nullptr;
+	/*m_activePrimitives.clear();
 	m_activePort = nullptr;
-	m_activeVertexIdx = -1;
+	m_activeVertexIdx = -1;*/
+	switchState(CompDesignState::SELECT);
 }
 
 //TODO: move this to a seperate file
@@ -234,8 +312,8 @@ void ComponentDesigner::renderOverlay()
 	if (m_hoveredVertexIdx != -1) {
 
 		glm::vec2 pos;
-		if (m_activePrimitive) {
-			pos = localToGlobalCoords(worldToPixelCoords(m_activePrimitive->getLogicalVertex(m_hoveredVertexIdx)));
+		if (hoveredVertexOwner) {
+			pos = localToGlobalCoords(worldToPixelCoords(hoveredVertexOwner->getLogicalVertex(m_hoveredVertexIdx)));
 			pos = { pos.x, m_parentWindow->getMainViewportSize().y - pos.y };
 		}
 		draw_list->AddCircleFilled(pos, clickTol, ImColor(helperColour));
@@ -427,9 +505,13 @@ void ComponentDesigner::renderOverlay()
 		glm::vec4 buttonCol = textColour;
 
 		//Dynamic cast is probably unavoidable here - we use the result for text specific functions later on.
-		Text* activeText = dynamic_cast<Text*>(m_activePrimitive);
-		if (activeText) {
-			buttonCol = activeText->m_colour;
+		std::vector<Text*> activeText;
+		for (auto primitive : m_activePrimitives) {
+			Text* text = dynamic_cast<Text*>(primitive);
+			if (text) activeText.push_back(text);
+		}
+		if (!activeText.empty()) {
+			buttonCol = activeText.at(0)->m_colour;//we only need one colour
 		}
 		if (designerState == CompDesignState::ADD_TEXT)
 		{
@@ -473,11 +555,16 @@ void ComponentDesigner::renderOverlay()
 				ImGui::SameLine();
 				//Find a better way to set this width
 				ImGui::PushItemWidth(80.0f);
-				if (activeText)
+				if (!activeText.empty())
 				{
-					int tempSizePt = (int)std::round(activeText->m_textScale * 2835);
+					//we take the size of the first selected text
+					int tempSizePt = (int)std::round(activeText.at(0)->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
-						activeText->setScale(tempSizePt / 2835.f);
+						for (auto text : activeText) {
+							text->setScale(tempSizePt / 2835.f);
+							// TODO: fire this as a batch command
+							commandLog.execute<ChangeValueWithSetterCommand<float, Text>>(tempSizePt / 2835.f, text, text->m_textScale, &Text::setScale);
+						}
 					}
 				}
 				else if (ImGui::InputInt("pt ", &sizePt))
@@ -501,12 +588,18 @@ void ComponentDesigner::renderOverlay()
 				}
 				ImGui::Text("Size");
 				ImGui::SameLine();
-				//Find a better way to set this width
+				//Find a better way to set this width!
 				ImGui::PushItemWidth(80.0f);
-				if (activeText) {
-					int tempSizePt = (int)std::round(activeText->m_textScale * 2835);
+				if (!activeText.empty())
+				{
+					//we take the size of the first selected text
+					int tempSizePt = (int)std::round(activeText.at(0)->m_textScale * 2835);
 					if (ImGui::InputInt("pt ", &tempSizePt)) {
-						activeText->setScale(tempSizePt / 2835.f);
+						for (auto text : activeText) {
+							text->setScale(tempSizePt / 2835.f);
+							// TODO: fire this as a batch command
+							commandLog.execute<ChangeValueWithSetterCommand<float, Text>>(tempSizePt / 2835.f, text, text->m_textScale, &Text::setScale);
+						}
 					}
 				}
 				else if (ImGui::InputInt("pt ", &sizePt)) {
@@ -548,18 +641,20 @@ void ComponentDesigner::renderOverlay()
 		//FIXME
 		ImGui::SetCursorPosY(16.f);
 
-		PolyLine* activePolyline = dynamic_cast<PolyLine*>(m_activePrimitive);
-		Circle* activeCircle = dynamic_cast<Circle*>(m_activePrimitive);
-		if (activePolyline) {
-			float thickness = activePolyline->m_thickness;
-			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
-				activePolyline->setThickness(thickness);
-			}
+		// TODO: check this sideways cast works.
+		std::vector<HasThickness*> clearPrimitives;
+		for (auto primitive : m_activePrimitives) {
+			HasThickness* clearPrimitive = dynamic_cast<HasThickness*>(primitive);
+			if (clearPrimitive) clearPrimitives.push_back(clearPrimitive);
 		}
-		else if (activeCircle) {
-			float thickness = activeCircle->m_thickness;
+
+		if (!clearPrimitives.empty()) {
+			float thickness = clearPrimitives.at(0)->getThickness();
 			if (ImGui::SliderFloat("##Thickness", &thickness, 0.0001f, 0.005f, "%0.4f")) {
-				activeCircle->setThickness(thickness);
+				for (auto clearPrimitive : clearPrimitives) {
+					// TODO fire as batch command
+					commandLog.execute<ChangeValueWithSetterCommand<float, HasThickness>>(thickness, clearPrimitive, clearPrimitive->getThickness(), &HasThickness::setThickness);
+				}
 			}
 		}
 		else ImGui::SliderFloat("##Thickness", &penThickness, 0.0001f, 0.005f, "%0.4f");
@@ -577,7 +672,7 @@ void ComponentDesigner::renderOverlay()
 			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 46);
 
 		glm::vec4 delete_tint = { 0.2f, 0.2f, 0.2f, 1.0f };
-		if (designerState == CompDesignState::SELECT && (m_activePrimitive || m_activePort)) {
+		if (designerState == CompDesignState::SELECT && (!m_activePrimitives.empty() || m_activePort)) {
 			delete_tint = { 0.8f, 0.f, 0.f, 1.f };
 		}
 
@@ -606,10 +701,15 @@ void ComponentDesigner::renderOverlay()
 
 void ComponentDesigner::setComponent(const std::filesystem::path& path, Circuit* parent)
 {
-	m_activeComponent = nullptr;
-	m_activePrimitive = nullptr;
+	/*m_activeComponent = nullptr;
+	m_activePrimitives.clear();
+	m_tempCircle = nullptr;
+	m_tempLine = nullptr;
+	m_tempPoly = nullptr;
 	m_activePort = nullptr;
 	m_activeVertexIdx = -1;
+	*/
+	switchState(CompDesignState::SELECT);
 	m_activeComponent = std::make_shared<Component2D>(path, parent);
 	m_activeComponent->disableOutline();
 	savePath = path;

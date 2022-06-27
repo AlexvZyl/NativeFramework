@@ -31,10 +31,15 @@ protected:
 public:
 
     std::shared_ptr<Component2D> m_activeComponent;
-    IPrimitive* m_activePrimitive;
-    //Polygon2D* m_activePoly;
-    //PolyLine* m_activeLine;
-    //Circle* m_activeCircle;
+    //First element of m_activePrimitive is reserved for m_activePrimitive
+    std::vector<IPrimitive*> m_activePrimitives;
+    //alias for first element of m_activePrimitiveVec
+    //(IPrimitive*)& const m_activePrimitive = m_activePrimitiveVec.front();
+    Polygon2D* m_tempPoly = nullptr;
+    PolyLine* m_tempLine = nullptr;
+    Circle* m_tempCircle = nullptr;
+    IPrimitive* activeVertexOwner = nullptr;
+    IPrimitive* hoveredVertexOwner = nullptr;
     //Text* m_activeText;
     std::shared_ptr<Port> m_activePort;
     //VertexData* m_activeVertex;
@@ -43,7 +48,7 @@ public:
     glm::vec4 helperColour = { 0.18f, 0.30f, 0.67f, 0.85f };
     //PortType next_port_type = PortType::PORT_INOUT;
 
-    glm::vec2 m_dragStart;
+    std::vector<glm::vec2> m_dragStart;
     //glm::vec2 m_lastDragPos = { 0.f, 0.f };
     unsigned int m_currentEntityID = 0;
     float clickTol = 15.0f;
@@ -90,10 +95,11 @@ public:
     virtual void renderTooltip() override;
 
     void switchState(CompDesignState state);
-    void pushActivePrimitives();
+    void pushTempPrimitives();
     void setActiveVertex(glm::vec2 coords);
     void setHoveredVertex(glm::vec2 coords);
     void setActivePrimitives(unsigned eID);
+    void toggleActivePrimitives(unsigned eID);
     void deleteActivePrimitive();
     // Buttons state.
     bool m_polygon = false;

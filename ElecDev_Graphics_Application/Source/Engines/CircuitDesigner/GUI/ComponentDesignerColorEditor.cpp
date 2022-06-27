@@ -43,31 +43,38 @@ void ComponentDesignerColorEditor::onImGuiRender()
 	}
 
 	// Get the active element.
-	IPrimitive* activePrimitive = engine->m_activePrimitive;
-	Port* activePort = engine->m_activePort.get();
+	std::vector<IPrimitive*> activePrimitives = engine->m_activePrimitives;
+	//Port* activePort = engine->m_activePort.get();
 	//Cable* activeCable = nullptr;
 
 	// Set the color to be edited.
-	
-	if (activePrimitive != lastActivePrimitive) {
-		if (!activePrimitive) glm::vec4 color = *m_target;
-		else {
-			if (activePrimitive)
-			{
-				color = activePrimitive->m_colour;
-			}
+	if (activePrimitives.size() != oldColor.size()) {
+		oldColor.clear();
+		for (auto primitive : activePrimitives)
+			oldColor.push_back(primitive->m_colour);
+	}
+	if (!activePrimitives.empty()) {
+		color = activePrimitives.front()->m_colour;
+		if (activePrimitives.front() != lastActivePrimitive) {
+			oldColor.clear();
+			for (auto primitive : activePrimitives)
+				oldColor.push_back(primitive->m_colour);
 		}
-		lastActivePrimitive = activePrimitive;
-		oldColor = color;
+		lastActivePrimitive = activePrimitives.front();
+	}
+	else {
+		color = *m_target;
+		oldColor.clear();
+		oldColor.push_back(color);
 	}
 
 
 	// Open color editor.
 	ImGui::SameLine();
-	if (ImGui::ColorPicker4("##ColorEditor", &color.r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf, &oldColor.r))
+	if (ImGui::ColorPicker4("##ColorEditor", &color.r, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreviewHalf, &oldColor.front().r))
 	{
 
-		//No longer supported. To remove.
+		//No longer supported. TODO: remove.
 		/*
 		else if (activeCable)
 		{
@@ -80,20 +87,22 @@ void ComponentDesignerColorEditor::onImGuiRender()
 		}*/
 
 
-		if(!activePrimitive) *m_target = color;
+		if(activePrimitives.empty()) *m_target = color;
 	}
 
 	if (ImGui::IsMouseDown(ImGuiMouseButton_::ImGuiMouseButton_Left)) {
 
 	}
 	else {
-		if (activePrimitive)
+		// TODO: implement this with a batch command
+		for(int i = 0; i < activePrimitives.size(); i++)
 		{
-			if (oldColor != color)
-				engine->commandLog.execute<SetColourCommand>(color, activePrimitive, oldColor);
+			if (oldColor.at(i) != color)
+				engine->commandLog.execute<SetColourCommand>(color, activePrimitives.at(i), oldColor.at(i));
 			//activePrimitive->setColor(*color);
 		}
-		oldColor = color;
+		for(auto& c : oldColor)
+			c = color;
 	}
 	/*if (ImGui::IsMouseReleased(ImGuiMouseButton_::ImGuiMouseButton_Left)) {
 		if (activePrimitive)

@@ -31,77 +31,77 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		if (designerState == CompDesignState::SELECT)
 		{
 			m_currentEntityID = getEntityID(pixelCoords);
-			if (m_activePrimitive)
-			{
-				//If we already have an active primitive, we need to check for vertex selection.
-				//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
-				setActiveVertex(screenCoords);
+			if (event.isNotType(EventType_LeftCtrl)) {
+				// Single selection.
+				if (!m_activePrimitives.empty())
+				{
+					// If we already have an active primitive, we need to check for vertex selection.
+					// TODO: Move this to the start of a drag event.
+					// TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
+					setActiveVertex(screenCoords);
 
+				}
+				if (m_activeVertexIdx == -1)
+				{
+					//If we did not select a vertex, then we can check for a new primitive selection
+					setActivePrimitives(m_currentEntityID);
+				}
 			}
-			if (m_activeVertexIdx == -1)
-			{
-				//If we did not select a vertex, then we can check for a new primitive selection
-				setActivePrimitives(m_currentEntityID);
+			else {
+				//toggle primitives for multiple selection
+				toggleActivePrimitives(m_currentEntityID);
+
 			}
 		}
 		else if (designerState == CompDesignState::DRAW_POLY)
 		{
 
-			if (!m_activePrimitive)
+			if (!m_tempPoly)
 			{
 				if (drawFilled)
 				{
-					m_activePrimitive = Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, penColour, m_activeComponent.get());
+					m_tempPoly = (Renderer::addPolygon2D({ {getNearestGridVertex(screenCoords), 0.f},{getNearestGridVertex(screenCoords), 0.f} }, penColour, m_activeComponent.get()));
 				}
 				else {
-					m_activePrimitive = Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get(), penColour);
+					m_tempPoly = (Renderer::addPolygon2DClear({ getNearestGridVertex(screenCoords),getNearestGridVertex(screenCoords) }, penThickness, m_activeComponent.get(), penColour));
 				}
 			}
 			else
 			{
-				Polygon2D* activePoly = dynamic_cast<Polygon2D*>(m_activePrimitive);
-				if (activePoly)
-					activePoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
+				m_tempPoly->pushVertex({ getNearestGridVertex(screenCoords), 0.f });
 			}
 		}
 		else if (designerState == CompDesignState::DRAW_LINE)
 		{
-			if (!m_activePrimitive)
+			if (!m_tempLine)
 			{
 				//start new line
 				bool rounded = false;
-				m_activePrimitive = Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, penColour, rounded, m_activeComponent.get());
+				m_tempLine = (Renderer::addPolyLine({ getNearestGridVertex(screenCoords), getNearestGridVertex(screenCoords) }, penThickness, penColour, rounded, m_activeComponent.get()));
 			}
 			else {
 				//end the line
-				PolyLine* activeLine = dynamic_cast<PolyLine*>(m_activePrimitive);
-				if (activeLine)
-					m_activeComponent->addLine(activeLine);
-				m_activePrimitive = nullptr;
+				m_activeComponent->addLine(m_tempLine);
 			}
 		}
 		else if (designerState == CompDesignState::DRAW_CIRCLE)
 		{
-			if (!m_activePrimitive)
+			if (!m_tempCircle)
 			{
 				//start new circle
 				if (drawFilled)
 				{
-					m_activePrimitive = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, -1.0f, 0.f, m_activeComponent.get());
+					m_tempCircle = (Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, -1.0f, 0.f, m_activeComponent.get()));
 				}
 				else
 				{
-					m_activePrimitive = Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, penThickness, 0.f, m_activeComponent.get());
+					m_tempCircle = (Renderer::addCircle2D(getNearestGridVertex(screenCoords), 0.f, penColour, penThickness, 0.f, m_activeComponent.get()));
 				}
 			}
 			else
 			{
-				//set the circle radius
-
-				Circle* activeCircle = dynamic_cast<Circle*>(m_activePrimitive);
-				if (activeCircle)
-					m_activeComponent->addCircle(activeCircle);
-				m_activePrimitive = nullptr;
+				//add to the component
+				m_activeComponent->addCircle(m_tempCircle);
 			}
 		}
 		else if (designerState == CompDesignState::PLACE_PORT) {
@@ -111,13 +111,13 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 		else if (designerState == CompDesignState::ADD_TEXT)
 		{
 			// Create a popup GUI for the text entry.
-			if (!m_activePrimitive) {
-				Text* activeText = Renderer::addText2D(" ", screenCoords, textColour, textSize, "C", "B", m_activeComponent.get());
-				m_activeComponent->m_text.push_back(activeText);
+			//if (m_activePrimitives.empty()) {
+			Text* activeText = Renderer::addText2D(" ", screenCoords, textColour, textSize, "C", "B", m_activeComponent.get());
+			m_activeComponent->m_text.push_back(activeText);
 
-				TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", activeText, &commandLog);
-				switchState(CompDesignState::SELECT);
-			}
+			TextEntryGUI* menu = Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", activeText, &commandLog);
+			switchState(CompDesignState::SELECT);
+			//}
 		}
 	}
 
@@ -131,8 +131,7 @@ void ComponentDesigner::onMouseButtonEvent(const MouseButtonEvent& event)
 	{
 		if (designerState == CompDesignState::SELECT)
 		{
-
-			Text* activeText = dynamic_cast<Text*>(m_activePrimitive);
+			Text* activeText = dynamic_cast<Text*>(m_activePrimitives.at(0));
 			if (activeText) Lumen::getApp().pushWindow<TextEntryGUI>(LumenDockPanel::Floating, "Text Entry", activeText, &commandLog);
 		}
 	}
@@ -145,17 +144,17 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 	if (designerState == CompDesignState::DRAW_POLY)
 	{
 		// Move the back vertex.
-		if (m_activePrimitive)
+		if (m_tempPoly)
 		{
-			m_activePrimitive->translateVertexAtIndexTo(m_activePrimitive->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
+			m_tempPoly->translateVertexAtIndexTo(m_tempPoly->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_LINE)
 	{
-		if (m_activePrimitive)
+		if (m_tempLine)
 		{
 			// Update the line end position.
-			m_activePrimitive->translateVertexAtIndexTo(m_activePrimitive->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
+			m_tempLine->translateVertexAtIndexTo(m_tempLine->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
 		}
 	}
 	else if (designerState == CompDesignState::DRAW_CIRCLE)
@@ -169,10 +168,10 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 			activeCircle->setRadius(glm::length(glm::vec2(activeCircle->m_trackedCenter) - getNearestGridVertex(screenCoords)));
 		}
 		*/
-		if (m_activePrimitive)
+		if (m_tempCircle)
 		{
 			// Update circle.
-			m_activePrimitive->translateVertexAtIndexTo(m_activePrimitive->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
+			m_tempCircle->translateVertexAtIndexTo(m_tempCircle->logicalVertexCount() - 1, getNearestGridVertex(screenCoords));
 		}
 
 	}
@@ -196,7 +195,7 @@ void ComponentDesigner::onMouseMoveEvent(const MouseMoveEvent& event)
 	else if (designerState == CompDesignState::SELECT)
 	{
 
-		if (m_activePrimitive)
+		if (!m_activePrimitives.empty())
 		{
 			//If we already have an active primitive, we need to check for vertex selection.
 			//TODO: Ideally, we should highlight any hovered vertices as well to indicate possible selection.
@@ -275,10 +274,10 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 			break;
 
 		case GLFW_KEY_ESCAPE:
-			if ((designerState == CompDesignState::DRAW_POLY || designerState == CompDesignState::DRAW_CIRCLE || designerState == CompDesignState::DRAW_LINE) && m_activePrimitive) {
+			if (m_tempCircle || m_tempLine || m_tempPoly) {
 				switchState(designerState);
 			}
-			else { switchState(CompDesignState::SELECT); }
+			else { switchState(CompDesignState::SELECT); }//Consideration: Do we want to do this when we are already in the designer state?
 			break;
 
 		case GLFW_KEY_S:
@@ -309,7 +308,7 @@ void ComponentDesigner::onKeyEvent(const KeyEvent& event)
 
 		case GLFW_KEY_ENTER:
 			if (designerState != CompDesignState::SELECT) {
-				pushActivePrimitives();
+				pushTempPrimitives();
 				switchState(CompDesignState::SELECT);
 			}
 			break;
@@ -338,12 +337,12 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 					//TODO:Proper support for all types
 					//This is only properly supported for Polygons (and childeren including polylines)
 
-					Polygon2D* activePoly = dynamic_cast<Polygon2D*>(m_activePrimitive);
+					Polygon2D* activePoly = dynamic_cast<Polygon2D*>(activeVertexOwner);
 					if (activePoly)
 						activePoly->translateVertexAtIndex(m_activeVertexIdx, translation);
 
 					//Circles have support, but still should be handled differently (we only have 'translateVertexAtIndexTo()' to work with)
-					Circle* activeCircle = dynamic_cast<Circle*>(m_activePrimitive);
+					Circle* activeCircle = dynamic_cast<Circle*>(activeVertexOwner);
 					if (activeCircle)
 						activeCircle->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(screenCoords));
 
@@ -351,9 +350,11 @@ void ComponentDesigner::onMouseDragEvent(const MouseDragEvent& event)
 				else
 				{
 					// If we are not moving a vertex, then check to move primitives
-					if (m_activePrimitive)
+					if (!m_activePrimitives.empty())
 					{
-						m_activePrimitive->translate(translation);
+						for (auto primitive : m_activePrimitives) {
+							primitive->translate(translation);
+						}
 						//m_lastDragPos = screenCoords;
 					}
 					if (m_activePort.get())
@@ -374,14 +375,20 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 		{
 			//retain the starting positions of any primitives before they are dragged
 			//TODO: This will be obsolete once the undo system can properly correlate/combine sucessive translation commands to the same entity.
-			if (m_activePrimitive) {
-				m_dragStart = m_activePrimitive->m_trackedCenter;
-			}
-			if (m_activePort) {
-				m_dragStart = m_activePort->centre;
-			}
+			//clear drag start points
+			m_dragStart.clear();
+			//add start points for vertices
 			if (m_activeVertexIdx != -1) {
-				if (m_activePrimitive) m_dragStart = m_activePrimitive->getLogicalVertex(m_activeVertexIdx);
+				if (activeVertexOwner) m_dragStart.push_back(activeVertexOwner->getLogicalVertex(m_activeVertexIdx));
+			}
+			//add start points for primitives and ports
+			else {
+				for (int i = 0; i < m_activePrimitives.size(); i++) {
+					m_dragStart.push_back(m_activePrimitives.at(i)->m_trackedCenter);
+				}
+				if (m_activePort) {
+					m_dragStart.push_back(m_activePort->centre);
+				}
 			}
 		}
 		else if (event.isType(EventType_MouseDragStop | EventType_MouseButtonLeft))
@@ -389,33 +396,33 @@ void ComponentDesigner::onNotifyEvent(const NotifyEvent& event)
 
 			if (m_activeVertexIdx == -1) {
 				//move primitives
-				if (m_activePrimitive) {
-					m_activePrimitive->translateTo(getNearestGridVertex(m_activePrimitive->m_trackedCenter));
-					commandLog.log<Translate2DCommand>(glm::vec2{ m_activePrimitive->m_trackedCenter } - m_dragStart, m_activePrimitive);
+				for (int i = 0; i < m_activePrimitives.size(); i++) {
+					m_activePrimitives.at(i)->translateTo(getNearestGridVertex(m_activePrimitives.at(i)->m_trackedCenter));
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activePrimitives.at(i)->m_trackedCenter } - m_dragStart.at(i), m_activePrimitives.at(i));
 				}
 				if (m_activePort) {
 					m_activePort->translateTo(getNearestGridVertex(m_activePort->centre));
-					commandLog.log<Translate2DCommand>(glm::vec2{ m_activePort->centre } - m_dragStart, m_activePort.get());
+					commandLog.log<Translate2DCommand>(glm::vec2{ m_activePort->centre } - m_dragStart.front(), m_activePort.get());
 				}
 			}
 			else {
 				//move vertices
 
 				//Again, this is not yet fully supported for all primitives. For now, we need to do some dynamic casts
-				Polygon2D* activePoly = dynamic_cast<Polygon2D*>(m_activePrimitive);
+				Polygon2D* activePoly = dynamic_cast<Polygon2D*>(activeVertexOwner);
 				if (activePoly) {
 					activePoly->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(activePoly->getLogicalVertex(m_activeVertexIdx)));
-					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, activePoly->getLogicalVertex(m_activeVertexIdx) - m_dragStart, activePoly);
+					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, activePoly->getLogicalVertex(m_activeVertexIdx) - m_dragStart.front(), activePoly);
 				}
 
 				//Circles have support, but still should be handled differently (we only have 'translateVertexAtIndexTo()' to work with)
-				Circle* activeCircle = dynamic_cast<Circle*>(m_activePrimitive);
+				Circle* activeCircle = dynamic_cast<Circle*>(activeVertexOwner);
 				if (activeCircle) {
 					//Circles currently snap to grid coordinates, so it is not necessary to adjust the radius again here.
 					//activeCircle->translateVertexAtIndexTo(m_activeVertexIdx, getNearestGridVertex(screenCoords)); 
 
 					//Circle radius changes are logged, but currently buggy due to the incorrect behaviour of getLogicalVertex();
-					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, activeCircle->getLogicalVertex(m_activeVertexIdx) - m_dragStart, activeCircle);
+					commandLog.log<TranslateVertexCommand>(m_activeVertexIdx, activeCircle->getLogicalVertex(m_activeVertexIdx) - m_dragStart.front(), activeCircle);
 				}
 
 			}

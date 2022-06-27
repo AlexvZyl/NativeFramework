@@ -6,12 +6,12 @@
 
 class VertexData;
 
-class PolyLine : public Polygon2D
+class PolyLine : public Polygon2D, public HasThickness
 {
 
 public:
-
-    float m_thickness = 0.014f;
+	// TODO: make vars that need setters protected.
+    //float m_thickness = 0.014f;
     // We need to retain a copy of the raw vertices for editing.
     std::vector<glm::vec2> m_vertices;
 	float m_layer = 0.f;

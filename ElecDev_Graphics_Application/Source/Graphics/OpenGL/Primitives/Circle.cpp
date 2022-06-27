@@ -13,13 +13,12 @@
 //=============================================================================================================================================//
 
 Circle::Circle(GraphicsTrianglesBuffer<VertexDataCircle>* gpb, const glm::vec3& center, float radius, const glm::vec4& color, float thickness, float fade, Entity* parent)
-	: Primitive<GraphicsTrianglesBuffer<VertexDataCircle>>(parent)
+	: Primitive<GraphicsTrianglesBuffer<VertexDataCircle>>(parent), HasThickness(thickness)
 {
 	// Init.
 	setGraphicsBuffer(gpb);
 	m_trackedCenter = center;
 	m_colour = color;
-	m_thickness = thickness;
 	m_fade = fade;
 	m_radius = radius;
 

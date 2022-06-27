@@ -33,7 +33,7 @@ YAML::Emitter& operator<<(YAML::Emitter& emitter, PolyLine* polyline)
 	// Color.
 	emitter << YAML::Key << "Center" << YAML::Value << polyline->m_trackedCenter;
 	emitter << YAML::Key << "Color" << YAML::Value << polyline->m_colour;
-	emitter << YAML::Key << "Thickness" << YAML::Value << polyline->m_thickness;
+	emitter << YAML::Key << "Thickness" << YAML::Value << polyline->getThickness();
 
 	// End text data.
 	emitter << YAML::EndMap;

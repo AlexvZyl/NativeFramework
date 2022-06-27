@@ -4,7 +4,7 @@
 #include "OpenGL/Primitives/Vertex.h"
 
 PolyLine::PolyLine(std::vector<glm::vec2> vertices, GraphicsTrianglesBuffer<VertexData>* gtb, Entity* parent, float thickness, bool closed, glm::vec4 colour, bool rounded) 
-	: Polygon2D({}, gtb, parent, colour), m_vertices(vertices), m_closed(closed), m_thickness(thickness)
+	: Polygon2D({}, gtb, parent, colour), HasThickness(thickness), m_vertices(vertices), m_closed(closed)
 {
 	/*CVAC implementation (not working)
 	std::vector<cavc::PlineVertex<float>> verts;
