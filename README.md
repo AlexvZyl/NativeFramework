@@ -4,6 +4,14 @@ This project was developed as part of an engineering start-up, of which the expl
 
 This project is no longer in active development, but I would like to round some things off before archiving it.  This was extremely fun, and I hope to be able to work on something like this again.
 
-## Example implementation:
+### Example implementation:
 
 ![Lumen](https://user-images.githubusercontent.com/81622310/163559433-4111b588-9fdf-46b0-bbbe-ee3415ed7429.png)
+
+## Features
+
+*TODO*
+
+## Documentation
+
+See [this directory](https://github.com/AlexvZyl/Lumen/tree/Main/ElecDev_Graphics_Application/Documentation).
