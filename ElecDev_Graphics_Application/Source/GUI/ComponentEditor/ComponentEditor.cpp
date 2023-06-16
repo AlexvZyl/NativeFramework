@@ -374,17 +374,20 @@ void ComponentEditor::onImGuiRender()
 		ImGui::PushID("CompGeneral");
 		if (activeComponent)
 		{
+			ImGui::AlignTextToFramePadding();
 			ImGui::Text(" Designator Index:\t");
 			ImGui::SameLine();
 			//ImGui::Text(activeComponent->designatorSym.c_str());
 
 			activeTitleString = activeComponent->m_tag;
-
+			ImGui::PushItemWidth(-1);
 			int designatorIdx = activeComponent->getDesignatorIdx();
 			if (ImGui::InputInt("##designatorIdx", &designatorIdx)) {
 				activeComponent->setDesignatorIdx(designatorIdx);
 			}
+			ImGui::PopItemWidth();
 
+			ImGui::AlignTextToFramePadding();
 			ImGui::Text((std::string(" Description:\t  ") + activeComponent->equipType).c_str());
 		}
 
@@ -576,21 +579,33 @@ void ComponentEditor::onImGuiRender()
 
 				if (activeComponent) {
 					// Display tag number.
+					ImGui::BeginTable("##tagTable", 3, ImGuiTableFlags_SizingStretchProp);
+					ImGui::TableSetupColumn("1", ImGuiTableColumnFlags_::ImGuiTableColumnFlags_WidthFixed);
+					ImGui::TableSetupColumn("2", ImGuiTableColumnFlags_::ImGuiTableColumnFlags_WidthStretch);
+					ImGui::TableSetupColumn("3", ImGuiTableColumnFlags_WidthFixed);
+					ImGui::TableNextColumn();
+					ImGui::AlignTextToFramePadding();
 					ImGui::Text("Tag: ");
-					ImGui::SameLine();
-					//ImGui::PushItemWidth(-1);
+					ImGui::TableNextColumn();
+					ImGui::PushItemWidth(-1);
 					if (ImGui::InputText("##tag", &activeComponent->m_tag)) {
 						activeComponent->updateText();
 					}
+					ImGui::PopItemWidth();
 
-					ImGui::SameLine();
+					ImGui::TableNextColumn();
+
 					ImGui::BeginDisabled(activeComponent->m_tag == activeComponent->designatorSym + std::to_string(activeComponent->getDesignatorIdx()));
+					//ImGui::PushItemWidth(-1);
 					if (ImGui::Button("Reset Default")) {
 						activeComponent->setTag();
 					}
+					//ImGui::PopItemWidth();
 					ImGui::EndDisabled();
 
-					ImGui::SetNextItemOpen(false, ImGuiCond_Once);
+					ImGui::EndTable();
+
+					ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 					if (ImGui::CollapsingHeader("Ports"))
 					{
 						// Setup table.
@@ -739,6 +754,7 @@ void ComponentEditor::onImGuiRender()
 						// Dict data.
 						ImGui::TableSetColumnIndex(0);
 						ImGui::PushItemWidth(-1);
+						ImGui::AlignTextToFramePadding();
 						ImGui::Text(key.c_str());
 						ImGui::PopItemWidth();
 						ImGui::TableSetColumnIndex(1);

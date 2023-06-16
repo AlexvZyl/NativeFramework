@@ -42,6 +42,7 @@ void CircuitEditor::onImGuiRender()
 	if(engine)
 	{
 		// Circuit name.
+		ImGui::AlignTextToFramePadding();
 		ImGui::Text("Circuit Name: ");
 		ImGui::SameLine();
 		if (ImGui::InputText("##circuitName", &engine->m_circuit->m_label))
@@ -62,6 +63,7 @@ void CircuitEditor::onImGuiRender()
 		if (ImGui::CollapsingHeader("Components", NULL, ImGuiTreeNodeFlags_SpanFullWidth))
 		{
 			// Filter.
+			ImGui::AlignTextToFramePadding();
 			ImGui::Text("Search: ");
 			ImGui::SameLine();
 			ImGui::PushItemWidth(-1);
@@ -128,6 +130,7 @@ void CircuitEditor::onImGuiRender()
 		{
 
 			// Filter.
+			ImGui::AlignTextToFramePadding();
 			ImGui::Text("Search: ");
 			ImGui::SameLine();
 			ImGui::PushItemWidth(-1);
