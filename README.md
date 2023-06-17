@@ -10,8 +10,19 @@ This project is no longer in active development, but I would like to round some 
 
 ## Features
 
+- OpenGL renderer
+  - Supports MSAA
+  - Deferred rendering
+- Data structures
+  - Cache coherent freelist (single and double ended)
+- Event system
+
 *TODO*
 
 ## Documentation
 
 See [this directory](https://github.com/AlexvZyl/Lumen/tree/Main/ElecDev_Graphics_Application/Documentation).
+
+## Santisation
+
+See https://github.com/AlexvZyl/Lumen/issues/452.
