@@ -1,1 +1,0 @@
-msdfgen.exe -font C:\\Windows\\Fonts\\arial.ttf -imageout Arial-Normal-2048\Arial-Normal-2048.png -dimensions 2048 2048 -json Arial-Normal-2048\Arial-Normal-2048.json 
