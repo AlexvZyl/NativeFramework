@@ -10,12 +10,6 @@ The framework was going to be open-sourced and the specific application kept clo
 
 > TODO: Explain!
 
-## Example implementation
-
-> TODO: Describe this implementation
-
-![Lumen](https://user-images.githubusercontent.com/81622310/163559433-4111b588-9fdf-46b0-bbbe-ee3415ed7429.png)
-
 ## Features
 
 > TODO: Finish this list
