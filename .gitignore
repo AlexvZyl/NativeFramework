@@ -7,3 +7,4 @@ ElecDev_Graphics_Application/Tests/FreeList/.vscode/
 ElecDev_Graphics_Application/Tests/FreeList/build/
 ElecDev_Graphics_Application/Tests/Profiler/.vscode/
 .ccls-cache/
+__pycache__/
