@@ -1,4 +1,4 @@
-# 💡 Lumen - Application Framework
+# 💡 Native Framework
 
 This project was developed as part of an engineering start-up, of which the explicit context can not be shared.  The develoment was done under extreme time pressure and there are numerous things that I would love to correct.
 
